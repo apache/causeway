@@ -46,7 +46,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  *

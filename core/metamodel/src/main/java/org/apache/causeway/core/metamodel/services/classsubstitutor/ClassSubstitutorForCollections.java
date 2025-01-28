@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForCollections")
@@ -34,7 +34,7 @@ import lombok.NonNull;
 public class ClassSubstitutorForCollections implements ClassSubstitutor {
 
     @Override
-    public Substitution getSubstitution(@NonNull final Class<?> cls) {
+    public Substitution getSubstitution(final @NonNull Class<?> cls) {
 
         return CollectionSemantics.valueOf(cls)
             .map(CollectionSemantics::getContainerType)

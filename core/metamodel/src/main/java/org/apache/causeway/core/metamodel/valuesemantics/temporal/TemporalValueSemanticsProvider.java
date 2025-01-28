@@ -55,7 +55,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Time
 import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.TimeZoneTranslationFacet;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 import lombok.experimental.Accessors;
 

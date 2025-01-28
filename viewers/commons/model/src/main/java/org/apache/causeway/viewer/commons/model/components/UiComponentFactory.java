@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 public interface UiComponentFactory<B, C> {

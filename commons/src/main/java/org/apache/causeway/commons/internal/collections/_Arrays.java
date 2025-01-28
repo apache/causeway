@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

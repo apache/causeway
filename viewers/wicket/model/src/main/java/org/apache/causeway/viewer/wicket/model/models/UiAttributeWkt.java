@@ -42,7 +42,7 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 /**

@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Optionally hide or disable an object, property, collection or action

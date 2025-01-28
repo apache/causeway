@@ -24,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a mutable, but fixed size vector of Can<T>.

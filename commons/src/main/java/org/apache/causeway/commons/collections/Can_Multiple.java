@@ -52,7 +52,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record Can_Multiple<T>(List<T> elements) implements Can<T> {
 
@@ -121,7 +121,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public Can<T> sorted(@NonNull final Comparator<? super T> c) {
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
         var newElements = _Lists.<T>newArrayList(elements);
         newElements.sort(c);
         return new Can_Multiple<>(newElements);
@@ -135,7 +135,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public Can<T> distinct(@NonNull final BiPredicate<T, T> equality) {
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         final int initialSize = Math.min(1024, elements.size());
         var uniqueElements = _Lists.<T>newArrayList(initialSize);
         elements
@@ -182,14 +182,14 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public Can<T> reduce(@NonNull final BinaryOperator<T> accumulator) {
+    public Can<T> reduce(final @NonNull BinaryOperator<T> accumulator) {
         return this.stream().reduce(accumulator)
                 .<Can<T>>map(Can_Singleton::new)
                 .orElseGet(Can::empty);
     }
 
     @Override
-    public void forEach(@NonNull final Consumer<? super T> action) {
+    public void forEach(final @NonNull Consumer<? super T> action) {
         elements.forEach(action);
     }
 
@@ -211,7 +211,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public <R> void zip(@NonNull final Iterable<R> zippedIn, @NonNull final BiConsumer<? super T, ? super R> action) {
+    public <R> void zip(final @NonNull Iterable<R> zippedIn, final @NonNull BiConsumer<? super T, ? super R> action) {
         var zippedInIterator = zippedIn.iterator();
         stream().forEach(t->{
             action.accept(t, zippedInIterator.next());
@@ -219,13 +219,13 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public <R, Z> Can<R> zipMap(@NonNull final Iterable<Z> zippedIn, @NonNull final BiFunction<? super T, ? super Z, R> mapper) {
+    public <R, Z> Can<R> zipMap(final @NonNull Iterable<Z> zippedIn, final @NonNull BiFunction<? super T, ? super Z, R> mapper) {
         var zippedInIterator = zippedIn.iterator();
         return map(t->mapper.apply(t, zippedInIterator.next()));
     }
 
     @Override
-    public <R, Z> Stream<R> zipStream(@NonNull final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
+    public <R, Z> Stream<R> zipStream(final @NonNull Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
         var zippedInIterator = zippedIn.iterator();
         return stream()
                 .map(t->mapper.apply(t, zippedInIterator.next()))
@@ -464,7 +464,7 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
+    public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
         var set = _Sets.<T>newHashSet(); // serializable
         elements
         .forEach(s->{
@@ -476,53 +476,53 @@ record Can_Multiple<T>(List<T> elements) implements Can<T> {
     }
 
     @Override
-    public T[] toArray(@NonNull final Class<T> elementType) {
+    public T[] toArray(final @NonNull Class<T> elementType) {
         var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, size()));
         return elements.toArray(array);
     }
 
     @Override
     public <K> Map<K, T> toMap(
-            @NonNull final Function<? super T, ? extends K> keyExtractor) {
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
         Map<K, T> map = collect(Collectors.toMap(keyExtractor, UnaryOperator.identity()));
         return Collections.unmodifiableMap(map);
     }
     @Override
     public <K, M extends Map<K, T>> Map<K, T> toMap(
-            @NonNull final Function<? super T, ? extends K> keyExtractor,
-            @NonNull final BinaryOperator<T> mergeFunction,
-            @NonNull final Supplier<M> mapFactory) {
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
         Map<K, T> map = collect(Collectors.toMap(
                 keyExtractor, UnaryOperator.identity(), mergeFunction, mapFactory));
         return Collections.unmodifiableMap(map);
     }
 
     @Override
-    public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
+    public <R, A> R collect(final @NonNull Collector<? super T, A, R> collector) {
         return stream().collect(collector);
     }
 
     @Override
     public <K> Map<K, Can<T>> groupBy(
-            @NonNull final Function<? super T, ? extends K> classifier) {
+            final @NonNull Function<? super T, ? extends K> classifier) {
         return groupBy(classifier, HashMap::new);
     }
 
     @Override
     public <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
-            @NonNull final Function<? super T, ? extends K> classifier,
-            @NonNull final Supplier<M> mapFactory) {
+            final @NonNull Function<? super T, ? extends K> classifier,
+            final @NonNull Supplier<M> mapFactory) {
         var map = collect(Collectors.groupingBy(classifier, mapFactory, Can.toCan()));
         return Collections.unmodifiableMap(map);
     }
 
     @Override
-    public String join(@NonNull final String delimiter) {
+    public String join(final @NonNull String delimiter) {
         return join(Object::toString, delimiter);
     }
 
     @Override
-    public String join(@NonNull final Function<? super T, String> toStringFunction, @NonNull final String delimiter) {
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
         return stream()
                 .map(toStringFunction)
                 .filter(_NullSafe::isPresent)

@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**

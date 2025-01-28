@@ -23,7 +23,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 /**
@@ -57,7 +57,7 @@ implements
     // -- ID STRINGIFIER
 
     @Override
-    public String enstring(@NonNull final T value) {
+    public String enstring(final @NonNull T value) {
         return value.toString();
     }
 

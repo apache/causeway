@@ -57,7 +57,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public abstract class ValueFacetAbstract<T>
@@ -101,7 +101,7 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public boolean semanticEquals(@NonNull final Facet other) {
+    public boolean semanticEquals(final @NonNull Facet other) {
         return (other instanceof ValueFacetAbstract)
                 ? this.getAllValueSemantics().equals(((ValueFacetAbstract<?>)other).getAllValueSemantics())
                 : false;

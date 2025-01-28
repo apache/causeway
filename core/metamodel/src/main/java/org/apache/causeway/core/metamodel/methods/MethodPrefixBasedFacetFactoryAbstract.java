@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract
 extends FacetFactoryAbstract

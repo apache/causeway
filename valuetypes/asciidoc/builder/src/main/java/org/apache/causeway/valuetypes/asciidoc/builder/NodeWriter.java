@@ -47,7 +47,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleTable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

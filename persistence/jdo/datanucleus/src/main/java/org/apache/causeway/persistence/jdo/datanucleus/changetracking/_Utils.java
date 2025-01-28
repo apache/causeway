@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import lombok.experimental.UtilityClass;
 

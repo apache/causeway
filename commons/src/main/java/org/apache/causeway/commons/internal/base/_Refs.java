@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 

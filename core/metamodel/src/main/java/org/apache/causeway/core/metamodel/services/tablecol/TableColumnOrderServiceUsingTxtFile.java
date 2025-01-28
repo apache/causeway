@@ -38,7 +38,7 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**

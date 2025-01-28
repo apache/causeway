@@ -29,7 +29,7 @@ import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsReference;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.res.PdfJsWorkerReference;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A panel for rendering PDF documents inline in the page

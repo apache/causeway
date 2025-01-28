@@ -30,7 +30,7 @@ import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

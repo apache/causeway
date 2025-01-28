@@ -40,7 +40,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 final class _Xray {
 

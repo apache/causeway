@@ -23,7 +23,7 @@ import java.util.function.Function;
 
 import org.apache.causeway.commons.internal.base._Casts;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class MemberInteraction<T extends ManagedMember, H extends MemberInteraction<T, ?>> {
 
@@ -37,7 +37,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
 
     @NonNull protected InteractionRailway<T> railway;
 
-    protected MemberInteraction(@NonNull final InteractionRailway<T> railway) {
+    protected MemberInteraction(final @NonNull InteractionRailway<T> railway) {
         this.railway = railway;
     }
 

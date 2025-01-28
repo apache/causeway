@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

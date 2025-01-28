@@ -30,7 +30,7 @@ import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -417,7 +417,7 @@ public interface Try<T> {
         }
 
         @Override
-        public Try<T> orCall(@NonNull final Callable<T> fallback) {
+        public Try<T> orCall(final @NonNull Callable<T> fallback) {
             return this;
         }
 
@@ -552,7 +552,7 @@ public interface Try<T> {
         }
 
         @Override
-        public Try<T> orCall(@NonNull final Callable<T> fallback) {
+        public Try<T> orCall(final @NonNull Callable<T> fallback) {
             return Try.call(fallback);
         }
 

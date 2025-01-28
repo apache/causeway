@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionC
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**

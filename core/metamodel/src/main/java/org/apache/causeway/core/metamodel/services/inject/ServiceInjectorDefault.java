@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

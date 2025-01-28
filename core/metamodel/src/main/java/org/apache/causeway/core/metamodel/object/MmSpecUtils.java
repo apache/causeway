@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

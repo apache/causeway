@@ -32,7 +32,7 @@ import org.apache.causeway.testdomain.fixtures.BookView;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 

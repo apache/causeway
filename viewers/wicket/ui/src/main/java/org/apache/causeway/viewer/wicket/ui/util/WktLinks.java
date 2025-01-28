@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.Acti
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

@@ -45,7 +45,7 @@ import org.apache.causeway.commons.internal.collections._PrimitiveCollections.In
 import org.apache.causeway.commons.internal.primitives._Longs;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 

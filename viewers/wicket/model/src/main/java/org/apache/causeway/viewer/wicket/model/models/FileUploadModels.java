@@ -30,7 +30,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -104,7 +104,7 @@ public class FileUploadModels {
             super(attributeModel);
         }
         
-        abstract T toScalarValue(@NonNull final FileUpload fileUpload);
+        abstract T toScalarValue(final @NonNull FileUpload fileUpload);
         
         @Override
         protected final T toScalarValue(final @Nullable List<FileUpload> fileUploads) {

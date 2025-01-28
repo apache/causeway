@@ -24,7 +24,7 @@ import org.apache.causeway.commons.collections.Can;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 @Value @Builder
@@ -43,7 +43,7 @@ public final class Xref {
     private final @NonNull String friendlyName;  // as used for display
 
     @Getter(lazy = true)
-    private final @NonNull String xref = xref(); // full xref string
+    private final @lombok.NonNull /*failing to migrate to JSpecify*/ String xref = xref(); // full xref string
 
     private String xref() {
         var sb = new StringBuilder();

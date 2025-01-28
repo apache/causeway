@@ -41,7 +41,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -73,7 +73,7 @@ public class Wildcards {
                 : "*" + searchPattern + "*";
     }
 
-    private String wildToRegex(@NonNull final String pattern) {
+    private String wildToRegex(final @NonNull String pattern) {
         return pattern.replace("*", ".*").replace("?", ".");
     }
 

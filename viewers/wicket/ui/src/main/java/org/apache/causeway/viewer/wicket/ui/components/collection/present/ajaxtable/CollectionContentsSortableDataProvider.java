@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Part of the {@link AjaxFallbackDefaultDataTable} API.

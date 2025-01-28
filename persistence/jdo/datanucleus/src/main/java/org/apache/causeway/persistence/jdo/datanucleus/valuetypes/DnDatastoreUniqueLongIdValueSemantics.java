@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @implNote has no targetEntityClass support
@@ -42,7 +42,7 @@ extends ValueSemanticsBasedOnIdStringifierEntityAgnostic<DatastoreUniqueLongId> 
     }
 
     @Override
-    public DatastoreUniqueLongId destring(@NonNull final String stringified) {
+    public DatastoreUniqueLongId destring(final @NonNull String stringified) {
         return new DatastoreUniqueLongId(stringified);
     }
 

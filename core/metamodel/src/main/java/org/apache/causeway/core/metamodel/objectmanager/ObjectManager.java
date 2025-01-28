@@ -47,7 +47,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Bundles all domain object state related responsibilities:<br>

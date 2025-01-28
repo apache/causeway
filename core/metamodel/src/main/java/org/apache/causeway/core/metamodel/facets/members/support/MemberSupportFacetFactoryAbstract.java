@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class MemberSupportFacetFactoryAbstract
 extends MemberAndPropertySupportFacetFactoryAbstract {

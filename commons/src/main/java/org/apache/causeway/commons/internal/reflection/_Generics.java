@@ -32,7 +32,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>

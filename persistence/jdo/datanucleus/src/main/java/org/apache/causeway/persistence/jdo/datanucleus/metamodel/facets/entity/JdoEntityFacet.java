@@ -69,7 +69,7 @@ import org.apache.causeway.persistence.jdo.spring.integration.TransactionAwarePe
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 

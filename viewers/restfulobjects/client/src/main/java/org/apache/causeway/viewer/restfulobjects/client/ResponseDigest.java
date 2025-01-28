@@ -34,7 +34,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import lombok.extern.log4j.Log4j2;
 

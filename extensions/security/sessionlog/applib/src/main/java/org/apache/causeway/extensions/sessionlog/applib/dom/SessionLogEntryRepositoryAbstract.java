@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides supporting functionality for querying {@link SessionLogEntry session log entry} entities.

@@ -32,7 +32,7 @@ import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a local resource path, typically a relative path originating at this web-app's

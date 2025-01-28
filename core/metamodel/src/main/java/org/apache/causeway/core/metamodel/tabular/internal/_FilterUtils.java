@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -42,11 +42,11 @@ class _FilterUtils {
     @AllArgsConstructor
     static class FilterHandler {
 
-        @NonNull final Function<Object, Tokens> tokenizer;
-        @NonNull final BiPredicate<Tokens, String> tokenFilter;
-        @NonNull final String searchPromptPlaceholderText;
+        final @NonNull Function<Object, Tokens> tokenizer;
+        final @NonNull BiPredicate<Tokens, String> tokenFilter;
+        final @NonNull String searchPromptPlaceholderText;
 
-        @NonNull final BiPredicate<DataRow, String> getDataRowFilter() {
+        final @NonNull BiPredicate<DataRow, String> getDataRowFilter() {
             return (dataRow, searchArg) ->
                 tokenFilter.test(dataRow.filterTokens().orElse(null), searchArg);
         }

@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class LayoutGroupFacetForLayoutXml
 extends LayoutGroupFacetAbstract {

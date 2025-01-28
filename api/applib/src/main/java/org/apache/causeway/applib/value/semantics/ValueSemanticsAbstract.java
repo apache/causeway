@@ -56,7 +56,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.x {@index}
@@ -296,8 +296,8 @@ ValueSemanticsProvider<T> {
 
     protected DateTimeFormatter getTemporalNoZoneRenderingFormat(
             final @Nullable Context context,
-            final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-            final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
             final @NonNull FormatStyle dateFormatStyle,
             final @NonNull FormatStyle timeFormatStyle,
             final @Nullable String datePattern,
@@ -330,8 +330,8 @@ ValueSemanticsProvider<T> {
 
     protected Optional<DateTimeFormatter> getTemporalZoneOnlyRenderingFormat(
             final @Nullable ValueSemanticsProvider.Context context,
-            final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-            final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic) {
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
 
         switch (offsetCharacteristic) {
         case LOCAL:
@@ -349,8 +349,8 @@ ValueSemanticsProvider<T> {
 
     protected DateTimeFormatter getTemporalEditingFormat(
             final @Nullable ValueSemanticsProvider.Context context,
-            final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-            final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
             final @NonNull TimePrecision timePrecision,
             final @NonNull EditingFormatDirection direction,
             final @NonNull TemporalEditingPattern editingPattern) {
@@ -363,8 +363,8 @@ ValueSemanticsProvider<T> {
     }
 
     protected DateTimeFormatter getTemporalIsoFormat(
-            final @NonNull TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-            final @NonNull TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic) {
+            final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+            final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
 
         switch (temporalCharacteristic) {
         case DATE_TIME:

@@ -48,7 +48,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

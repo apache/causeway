@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

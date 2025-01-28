@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 

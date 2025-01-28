@@ -56,7 +56,7 @@ import org.apache.causeway.schema.common.v2.ValueDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

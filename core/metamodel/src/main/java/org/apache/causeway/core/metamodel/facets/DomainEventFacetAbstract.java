@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Base for any event-type holding facets,

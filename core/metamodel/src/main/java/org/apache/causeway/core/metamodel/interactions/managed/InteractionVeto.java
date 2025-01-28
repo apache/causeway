@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.consent.Veto;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Getter
@@ -56,7 +56,7 @@ public class InteractionVeto implements Serializable {
     @NonNull private final Consent vetoConsent;
 
     public static InteractionVeto notFound(
-            @NonNull final Identifier.Type memberType,
+            final Identifier.@NonNull Type memberType,
             @Nullable final String memberId) {
         var reason = String.format("member '%s' in %s either does not exist, is disabled or is not visible",
                 "" + memberId,
@@ -64,35 +64,35 @@ public class InteractionVeto implements Serializable {
         return of(VetoType.NOT_FOUND, new Veto(reason));
     }
 
-    public static InteractionVeto hidden(@NonNull final Consent vetoConsent) {
+    public static InteractionVeto hidden(final @NonNull Consent vetoConsent) {
         return of(VetoType.HIDDEN, vetoConsent);
     }
 
-    public static InteractionVeto readonly(@NonNull final Consent vetoConsent) {
+    public static InteractionVeto readonly(final @NonNull Consent vetoConsent) {
         return of(VetoType.READONLY, vetoConsent);
     }
 
-    public static InteractionVeto invalid(@NonNull final Consent vetoConsent) {
+    public static InteractionVeto invalid(final @NonNull Consent vetoConsent) {
         return of(VetoType.INVALID, vetoConsent);
     }
 
-    public static InteractionVeto actionNotSafe(@NonNull final ManagedAction action) {
+    public static InteractionVeto actionNotSafe(final @NonNull ManagedAction action) {
         var reason = String.format("Method not allowed; action '%s' does not have safe semantics",
                 action.getId());
         return of(VetoType.ACTION_NOT_SAFE, new Veto(reason));
     }
 
-    public static InteractionVeto actionNotIdempotent(@NonNull final ManagedAction action) {
+    public static InteractionVeto actionNotIdempotent(final @NonNull ManagedAction action) {
         var reason = String.format("Method not allowed; action '%s' does not have idempotent semantics",
                 action.getId());
         return of(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
     }
 
-    public static InteractionVeto actionParamInvalid(@NonNull final Consent vetoConsent) {
+    public static InteractionVeto actionParamInvalid(final @NonNull Consent vetoConsent) {
         return of(VetoType.ACTION_PARAM_INVALID, vetoConsent);
     }
 
-    public static InteractionVeto actionParamInvalid(@NonNull final String reason) {
+    public static InteractionVeto actionParamInvalid(final @NonNull String reason) {
         return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
     }
 

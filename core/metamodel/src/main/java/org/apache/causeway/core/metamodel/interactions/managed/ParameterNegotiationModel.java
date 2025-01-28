@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Model used to negotiate the parameter values of an action by means of an UI dialog.

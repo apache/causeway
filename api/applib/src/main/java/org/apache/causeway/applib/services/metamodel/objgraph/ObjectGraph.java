@@ -43,7 +43,7 @@ import org.apache.causeway.commons.io.DataSink;
 import org.apache.causeway.commons.io.DataSource;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.With;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
@@ -90,8 +90,8 @@ public class ObjectGraph {
     @lombok.Value @Accessors(fluent=true)
     public static class Relation {
         private final @With @NonNull RelationType relationType;
-        private final @With @NonNull ObjectGraph.Object from;
-        private final @With @NonNull ObjectGraph.Object to;
+        private final @With ObjectGraph.@NonNull Object from;
+        private final @With ObjectGraph.@NonNull Object to;
         private final @With @NonNull String description; // usually the middle label
         private final @With @NonNull String nearLabel;
         private final @With @NonNull String farLabel;
@@ -157,7 +157,7 @@ public class ObjectGraph {
     private final List<ObjectGraph.Object> objects = new ArrayList<>();
     private final List<ObjectGraph.Relation> relations = new ArrayList<>();
 
-    public static ObjectGraph create(final @NonNull ObjectGraph.Factory factory) {
+    public static ObjectGraph create(final ObjectGraph.@NonNull Factory factory) {
         return factory.create();
     }
 

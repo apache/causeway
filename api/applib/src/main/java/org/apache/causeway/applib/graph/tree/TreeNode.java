@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Fundamental building block for tree structures.

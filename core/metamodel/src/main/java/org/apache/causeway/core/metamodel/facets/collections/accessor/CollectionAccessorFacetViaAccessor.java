@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class CollectionAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract

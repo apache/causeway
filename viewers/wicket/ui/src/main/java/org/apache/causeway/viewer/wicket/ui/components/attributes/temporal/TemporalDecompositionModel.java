@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemant
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 

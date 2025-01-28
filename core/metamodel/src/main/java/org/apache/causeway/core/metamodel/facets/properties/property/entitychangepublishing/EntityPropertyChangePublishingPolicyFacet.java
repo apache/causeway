@@ -24,7 +24,7 @@ import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Indicates whether a property should be excluded from entity change publishing (auditing).

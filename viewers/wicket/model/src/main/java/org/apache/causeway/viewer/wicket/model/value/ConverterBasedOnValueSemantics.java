@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ConverterBasedOnValueSemantics<T>
 extends ValueSemanticsModelAbstract

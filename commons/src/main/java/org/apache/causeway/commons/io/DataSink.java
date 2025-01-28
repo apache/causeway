@@ -31,7 +31,7 @@ import org.springframework.util.function.ThrowingSupplier;
 
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -46,7 +46,7 @@ public interface DataSink {
      * Offers this {@link DataSink}'s {@link OutputStream} to the caller,
      * so it can write data to it.
      */
-    void writeAll(@NonNull final ThrowingConsumer<OutputStream> outputStreamConsumer);
+    void writeAll(final @NonNull ThrowingConsumer<OutputStream> outputStreamConsumer);
 
     // -- FACTORIES
 

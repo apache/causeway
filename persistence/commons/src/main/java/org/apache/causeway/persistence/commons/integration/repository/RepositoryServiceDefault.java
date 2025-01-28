@@ -58,7 +58,7 @@ import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

@@ -21,7 +21,7 @@ package org.apache.causeway.extensions.secman.applib.user.events;
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**

@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 /**

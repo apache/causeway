@@ -54,7 +54,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 

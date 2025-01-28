@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmSpecUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Indicates that this class is managed by a persistence context.

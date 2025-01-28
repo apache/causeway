@@ -54,7 +54,7 @@ import org.apache.causeway.core.security._testing.InteractionService_forTesting;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ConverterTester<T extends Serializable> {
 

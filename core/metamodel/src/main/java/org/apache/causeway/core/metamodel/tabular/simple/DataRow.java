@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a single domain object (typically an entity instance)

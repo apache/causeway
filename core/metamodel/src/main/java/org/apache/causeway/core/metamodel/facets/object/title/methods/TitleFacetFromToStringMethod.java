@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class TitleFacetFromToStringMethod
 extends TitleFacetAbstract

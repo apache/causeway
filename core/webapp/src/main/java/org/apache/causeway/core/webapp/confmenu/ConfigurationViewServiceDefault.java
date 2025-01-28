@@ -53,7 +53,7 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.util.ValueMaskingUtil;
 import org.apache.causeway.core.webapp.modules.WebModule;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

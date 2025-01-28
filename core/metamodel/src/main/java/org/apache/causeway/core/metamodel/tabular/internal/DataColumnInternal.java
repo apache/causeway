@@ -25,7 +25,7 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record DataColumnInternal(
     @NonNull String columnId,

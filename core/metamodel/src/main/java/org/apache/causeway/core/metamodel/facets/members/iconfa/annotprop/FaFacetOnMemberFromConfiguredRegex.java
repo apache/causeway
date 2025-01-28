@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConf
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Installed by {@link CssOnActionFromConfiguredRegexPostProcessor},

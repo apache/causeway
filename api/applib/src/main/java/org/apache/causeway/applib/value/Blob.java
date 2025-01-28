@@ -52,7 +52,7 @@ import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.commons.io.ZipUtils.ZipOptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

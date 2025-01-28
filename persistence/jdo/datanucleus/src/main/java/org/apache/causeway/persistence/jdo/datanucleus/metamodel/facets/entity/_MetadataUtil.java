@@ -33,7 +33,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceSta
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata.ColumnOrmMetadata;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 

@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParen
 import org.apache.causeway.core.metamodel.facets.object.navparent.NavigableParentFacetAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0

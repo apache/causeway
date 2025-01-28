@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Serializable key into the {@link ServiceRegistry} to lookup {@link ComponentFactory}s,

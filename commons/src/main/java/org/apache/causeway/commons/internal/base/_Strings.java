@@ -57,7 +57,7 @@ import static org.apache.causeway.commons.internal.base._NullSafe.size;
 import static org.apache.causeway.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 

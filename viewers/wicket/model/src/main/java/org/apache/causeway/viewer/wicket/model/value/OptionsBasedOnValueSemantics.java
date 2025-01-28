@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class OptionsBasedOnValueSemantics
 extends ValueSemanticsModelAbstract {

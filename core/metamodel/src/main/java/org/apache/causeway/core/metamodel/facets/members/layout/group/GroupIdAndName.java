@@ -31,7 +31,7 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 @Value(staticConstructor = "of")

@@ -59,7 +59,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectC
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Returns representations according to the

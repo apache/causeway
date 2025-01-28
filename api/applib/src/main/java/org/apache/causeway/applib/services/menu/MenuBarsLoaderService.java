@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Returns the {@link MenuBars} instance for the UI.

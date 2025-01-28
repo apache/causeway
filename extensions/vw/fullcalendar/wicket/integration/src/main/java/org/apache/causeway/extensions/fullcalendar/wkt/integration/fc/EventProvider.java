@@ -41,7 +41,7 @@ public interface EventProvider extends Serializable {
     }
 
 //
-//    default Collection<Event> getEvents(@NonNull final ImmutablePair<ZonedDateTime, ZonedDateTime> interval) {
+//    default Collection<Event> getEvents(final @NonNull ImmutablePair<ZonedDateTime, ZonedDateTime> interval) {
 //        return getEvents(interval.getLeft(), interval.getRight());
 //    }
 }

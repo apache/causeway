@@ -40,7 +40,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Embeddable
 @AllArgsConstructor @NoArgsConstructor
@@ -85,7 +85,7 @@ public class SessionLogEntryPK implements Serializable {
         }
 
         @Override
-        public boolean isValid(@NonNull final SessionLogEntryPK value) {
+        public boolean isValid(final @NonNull SessionLogEntryPK value) {
             return value.getSessionGuid()!=null;
         }
     }

@@ -37,7 +37,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 

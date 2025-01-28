@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
@@ -48,7 +48,7 @@ public class MenuItemDto {
         return of(name, cssClassFa, null, true);
     }
 
-    public static MenuItemDto subMenu(@NonNull final ManagedAction managedAction, final String named, final String cssClassFa) {
+    public static MenuItemDto subMenu(final @NonNull ManagedAction managedAction, final String named, final String cssClassFa) {
         var name = _Strings.isNotEmpty(named)
                 ? named
                 : managedAction.getFriendlyName();

@@ -107,7 +107,7 @@ import org.apache.causeway.core.security.authorization.manager.AuthorizationMana
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Singular;
 
 @Builder @Getter
@@ -580,7 +580,7 @@ extends MetaModelContext {
     // -- RECURSIVE INITIALIZATION FIX
 
     private final List<Runnable> postConstructRunnables = new ArrayList<>();
-    public void registerPostconstruct(@NonNull final Runnable postConstructRunnable) {
+    public void registerPostconstruct(final @NonNull Runnable postConstructRunnable) {
         postConstructRunnables.add(postConstructRunnable);
     }
     public void runPostconstruct() {

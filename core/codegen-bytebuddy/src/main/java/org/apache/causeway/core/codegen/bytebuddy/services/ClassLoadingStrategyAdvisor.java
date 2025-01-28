@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import net.bytebuddy.dynamic.loading.ClassInjector;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;

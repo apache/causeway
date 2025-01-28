@@ -50,7 +50,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -95,7 +95,7 @@ public class CausewayModuleValAsciidocApplib {
         private final @NonNull Asciidoctor asciidoctor;
         private final @NonNull Options options;
 
-        public AdocToHtmlConverter(@NonNull final Asciidoctor asciidoctor, @NonNull final Options options) {
+        public AdocToHtmlConverter(final @NonNull Asciidoctor asciidoctor, final @NonNull Options options) {
             super();
             this.asciidoctor = asciidoctor;
             this.options = options;

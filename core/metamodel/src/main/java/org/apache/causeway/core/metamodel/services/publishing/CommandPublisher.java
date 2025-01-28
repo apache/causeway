@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.services.publishing;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Notifies {@link CommandSubscriber}s.

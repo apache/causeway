@@ -31,7 +31,7 @@ import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.quer
 import org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.query.JdoQueryFacet;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class JdoQueryFacetAbstract
 extends FacetAbstract

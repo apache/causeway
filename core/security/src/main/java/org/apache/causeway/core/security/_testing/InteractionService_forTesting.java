@@ -33,7 +33,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -53,7 +53,7 @@ implements InteractionService {
     }
 
     @Override
-    public InteractionLayer openInteraction(@NonNull final InteractionContext interactionContext) {
+    public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
         return interactionLayers.push(
                 new InteractionLayer(interaction, interactionContext));
@@ -86,7 +86,7 @@ implements InteractionService {
     }
 
     @Override @SneakyThrows
-    public <R> R call(@NonNull final InteractionContext interactionContext, @NonNull final Callable<R> callable) {
+    public <R> R call(final @NonNull InteractionContext interactionContext, final @NonNull Callable<R> callable) {
         try {
             openInteraction(interactionContext);
             return callable.call();
@@ -96,7 +96,7 @@ implements InteractionService {
     }
 
     @Override @SneakyThrows
-    public void run(@NonNull final InteractionContext interactionContext, @NonNull final ThrowingRunnable runnable) {
+    public void run(final @NonNull InteractionContext interactionContext, final @NonNull ThrowingRunnable runnable) {
         try {
             openInteraction(interactionContext);
             runnable.run();
@@ -106,7 +106,7 @@ implements InteractionService {
     }
 
     @Override @SneakyThrows
-    public void runAnonymous(@NonNull final ThrowingRunnable runnable) {
+    public void runAnonymous(final @NonNull ThrowingRunnable runnable) {
         try {
             openInteraction();
             runnable.run();
@@ -116,7 +116,7 @@ implements InteractionService {
     }
 
     @Override @SneakyThrows
-    public <R> R callAnonymous(@NonNull final Callable<R> callable) {
+    public <R> R callAnonymous(final @NonNull Callable<R> callable) {
         try {
             openInteraction();
             return callable.call();

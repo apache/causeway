@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.Contributi
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /** package private utility */
 final class _SpecPredicates {

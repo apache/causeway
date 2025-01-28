@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterDefaultsFacetFromAssociatedCollection
 extends ActionParameterDefaultsFacetAbstract {
@@ -39,7 +39,7 @@ extends ActionParameterDefaultsFacetAbstract {
     }
 
     @Override
-    public Can<ManagedObject> getDefault(@NonNull final ParameterNegotiationModel pendingArgs) {
+    public Can<ManagedObject> getDefault(final @NonNull ParameterNegotiationModel pendingArgs) {
         return pendingArgs.getMultiselectChoices().getSelected();
     }
 

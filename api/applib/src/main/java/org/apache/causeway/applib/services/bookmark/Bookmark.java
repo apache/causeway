@@ -37,7 +37,7 @@ import org.apache.causeway.schema.common.v2.OidDto;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

@@ -22,7 +22,7 @@ import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiMod
 import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record HeaderUiModel(
         @NonNull BrandingUiModel branding,

@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 public interface Consent {
@@ -173,7 +173,7 @@ public interface Consent {
         public static VetoReason immutableIfNoReasonGivenByImmutableFacet() {
             return inferred("Immutable, no reason given by ImmutableFacet.");
         }
-        public static VetoReason delegatedTo(@NonNull final Class<? extends ImmutableFacet> cls) {
+        public static VetoReason delegatedTo(final @NonNull Class<? extends ImmutableFacet> cls) {
             return inferred("Calculated at runtime, delegating to ImmutableFacet " + cls + ".");
         }
     }

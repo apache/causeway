@@ -32,7 +32,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Proxy for a target JDO {@link javax.jdo.PersistenceManagerFactory},

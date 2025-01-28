@@ -51,7 +51,7 @@ import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;

@@ -40,7 +40,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.valuesemantics.EnumValueSemantics;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Service

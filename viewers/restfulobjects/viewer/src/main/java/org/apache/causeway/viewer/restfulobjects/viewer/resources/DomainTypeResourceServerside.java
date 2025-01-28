@@ -62,7 +62,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.util.UrlParserUtils;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import lombok.extern.log4j.Log4j2;
 

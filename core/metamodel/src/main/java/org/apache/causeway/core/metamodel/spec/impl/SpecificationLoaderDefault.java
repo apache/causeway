@@ -84,7 +84,7 @@ import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefau
 import org.apache.causeway.core.security.authorization.manager.ActionSemanticsResolver;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class MetaModelValidatorForMixinTypes {
 
@@ -37,7 +37,7 @@ public class MetaModelValidatorForMixinTypes {
     }
 
     public boolean ensureMixinType(
-            @NonNull final FacetHolder facetHolder,
+            final @NonNull FacetHolder facetHolder,
             final Class<?> candidateMixinType) {
 
         var mixinContructors = _Reflect

@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class CssClassFacetSimple
 extends CssClassFacetAbstract

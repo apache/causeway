@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -37,7 +37,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
     private final _ClassCache classCache = _ClassCache.getInstance();
 
     @Override
-    public final Substitution getSubstitution(@NonNull final Class<?> cls) {
+    public final Substitution getSubstitution(final @NonNull Class<?> cls) {
         var replacement = getReplacement(cls);
         if(Objects.equals(cls, replacement)) {
             return Substitution.passThrough(); // indifferent

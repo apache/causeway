@@ -25,7 +25,7 @@ import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

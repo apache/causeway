@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -102,7 +102,7 @@ implements ManagedObject {
                         : null);
     }
 
-    private ObjectMemento mementoForPacked(@NonNull final PackedManagedObject packedAdapter) {
+    private ObjectMemento mementoForPacked(final @NonNull PackedManagedObject packedAdapter) {
         var listOfMementos = packedAdapter.unpack().stream()
                 .map(this::mementoForScalar)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable

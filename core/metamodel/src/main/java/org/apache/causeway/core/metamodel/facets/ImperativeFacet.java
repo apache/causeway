@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A {@link Facet} implementation that ultimately wraps a {@link Method} or

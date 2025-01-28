@@ -51,7 +51,7 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 import java.util.List;
 import java.util.function.Consumer;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import lombok.experimental.UtilityClass;
 

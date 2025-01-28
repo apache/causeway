@@ -27,7 +27,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 final class _NamedQueryDefault<T> 
 extends _QueryAbstract<T>

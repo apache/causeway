@@ -49,7 +49,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 class _DomainResourceHelper {
 
@@ -203,7 +203,7 @@ class _DomainResourceHelper {
             final @NonNull AccessIntent intent,
             final @NonNull SemanticConstraint semanticConstraint,
             final @NonNull JsonRepresentation arguments,
-            final @NonNull ActionResultReprRenderer.SelfLink selfLink) {
+            final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
 
         var where = resourceContext.getWhere();
 

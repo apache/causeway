@@ -29,7 +29,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.core.metamodel.valuesemantics.ChangesDtoValueSemantics;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Component
 @Named(CausewayModuleValAsciidocApplib.NAMESPACE + "ChangesDtoValueSemanticsPrettyRender")
@@ -39,7 +39,7 @@ public class ChangesDtoValueSemanticsPrettyRender
 extends ChangesDtoValueSemantics {
 
     @Override
-    protected String renderXml(@NonNull final ValueSemanticsProvider.Context context, @NonNull final String xml) {
+    protected String renderXml(final ValueSemanticsProvider.@NonNull Context context, final @NonNull String xml) {
         return _XmlToHtml.toHtml(xml);
     }
 

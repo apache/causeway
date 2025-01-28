@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.datanucleus.enhancement.Persistable;
 
 import lombok.AccessLevel;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

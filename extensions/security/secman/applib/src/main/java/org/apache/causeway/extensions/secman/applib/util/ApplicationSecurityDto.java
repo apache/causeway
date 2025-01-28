@@ -44,7 +44,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
 import lombok.Data;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * In-memory model of users, roles and permissions.

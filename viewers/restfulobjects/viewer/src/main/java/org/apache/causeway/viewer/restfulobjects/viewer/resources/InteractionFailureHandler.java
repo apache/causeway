@@ -26,7 +26,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class InteractionFailureHandler {
 

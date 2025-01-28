@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.navchild.ObjectTreeAdapter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -55,7 +55,7 @@ class FactoryService_forTesting implements FactoryService {
     }
 
     @Override
-    public <T> T detachedEntity(@NonNull final T entity) {
+    public <T> T detachedEntity(final @NonNull T entity) {
         return entity;
     }
 

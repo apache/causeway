@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetA
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class DisabledFacetOnPropertyFromImmutable
 extends DisabledFacetAbstract {

@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 /**

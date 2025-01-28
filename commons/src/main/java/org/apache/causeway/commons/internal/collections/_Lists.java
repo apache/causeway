@@ -35,7 +35,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

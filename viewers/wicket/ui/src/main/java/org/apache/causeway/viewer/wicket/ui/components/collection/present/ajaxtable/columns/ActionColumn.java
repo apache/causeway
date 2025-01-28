@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class ActionColumn
 extends GenericColumnAbstract {
@@ -42,9 +42,9 @@ extends GenericColumnAbstract {
     private static final long serialVersionUID = 1L;
 
     public static Optional<ActionColumn> create(
-            @NonNull final Identifier featureId,
-            @NonNull final ObjectSpecification elementType,
-            @NonNull final Variant collectionVariant) {
+            final @NonNull Identifier featureId,
+            final @NonNull ObjectSpecification elementType,
+            final @NonNull Variant collectionVariant) {
         var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
         if(!wktConfig.isActionColumnEnabled()) return Optional.empty();
 

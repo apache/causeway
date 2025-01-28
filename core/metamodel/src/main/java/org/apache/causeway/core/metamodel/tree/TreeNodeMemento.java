@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Memento for a pair of {@link Bookmark} and {@link TreePath}.

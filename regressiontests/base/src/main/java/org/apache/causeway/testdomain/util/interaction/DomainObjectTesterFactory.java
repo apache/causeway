@@ -82,7 +82,7 @@ import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 @Service

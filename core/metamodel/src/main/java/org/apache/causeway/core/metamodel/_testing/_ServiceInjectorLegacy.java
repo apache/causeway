@@ -48,7 +48,7 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ToString;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

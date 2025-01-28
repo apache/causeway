@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**
@@ -121,7 +121,7 @@ public final class _Maps {
     }
 
     @SafeVarargs
-    public static <K, V> Map<K, V> unmodifiableEntries(final @NonNull Map.Entry<? extends K,? extends V>... entries) {
+    public static <K, V> Map<K, V> unmodifiableEntries(final Map.@NonNull Entry<? extends K,? extends V>... entries) {
         if(entries.length==0) {
             return Collections.emptyMap();
         }

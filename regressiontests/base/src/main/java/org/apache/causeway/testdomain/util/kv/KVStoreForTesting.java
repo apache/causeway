@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Maps;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.Value;
 

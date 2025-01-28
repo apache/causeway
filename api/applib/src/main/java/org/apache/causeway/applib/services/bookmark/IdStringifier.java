@@ -23,7 +23,7 @@ package org.apache.causeway.applib.services.bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
@@ -98,7 +98,7 @@ public interface IdStringifier<T> {
         T destring(@NonNull String stringified);
 
         @Override
-        default T destring(@NonNull final Class<?> targetEntityClass, @NonNull final String stringified) {
+        default T destring(final @NonNull Class<?> targetEntityClass, final @NonNull String stringified) {
             return destring(stringified);
         }
 
@@ -126,8 +126,8 @@ public interface IdStringifier<T> {
         private final String prefix;
 
         public AbstractWithPrefix(
-                @NonNull final Class<T> correspondingClass,
-                @NonNull final String typeCode) {
+                final @NonNull Class<T> correspondingClass,
+                final @NonNull String typeCode) {
             _Assert.assertFalse(correspondingClass.isPrimitive(),
                     ()->String.format("not allowed to be initialzed with a primitive class (%s), "
                             + "use the boxed variant instead",

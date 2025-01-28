@@ -28,7 +28,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record MenuAction (
         @NonNull Bookmark serviceBookmark,

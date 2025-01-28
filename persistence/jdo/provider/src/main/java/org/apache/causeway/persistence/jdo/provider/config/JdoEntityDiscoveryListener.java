@@ -25,7 +25,7 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.apache.causeway.core.config.DatanucleusConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Any implementations will be called during bootstrapping, after the {@link PersistenceManagerFactory} has been

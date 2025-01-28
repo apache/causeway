@@ -38,7 +38,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Testing the LocalDateTimeValueSemantics under the hood.
@@ -125,11 +125,11 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
         final ValueSemanticsAbstract<LocalDateTime> delegate =
                 new LocalDateTimeValueSemantics(metaModelContext) {
             @Override protected DateTimeFormatter getTemporalEditingFormat(final Context context,
-                    @NonNull final TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-                    @NonNull final TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-                    @NonNull final TimePrecision _timePrecision,
-                    @NonNull final EditingFormatDirection direction,
-                    @NonNull final TemporalEditingPattern editingPattern) {
+                    final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+                    final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
+                    final @NonNull TimePrecision _timePrecision,
+                    final @NonNull EditingFormatDirection direction,
+                    final @NonNull TemporalEditingPattern editingPattern) {
                 return super.getTemporalEditingFormat(context,
                         temporalCharacteristic, offsetCharacteristic, timePrecision, direction, editingPattern);}
         };

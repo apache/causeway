@@ -60,7 +60,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLine
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 

@@ -34,7 +34,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.tabular.TabularModel.TabularRow;
 import org.apache.causeway.extensions.tabular.excel.exporter.ExcelFileWriter.Options.CustomCellStyle;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record CellStyleProvider(
         @NonNull Workbook workbook,
@@ -47,7 +47,7 @@ record CellStyleProvider(
         @NonNull CellStyle[] indigoStyles,
         @NonNull CellStyle[] warningStyles,
         @NonNull CellStyle[] dangerStyles,
-        @NonNull ExcelFileWriter.Options options) {
+        ExcelFileWriter.@NonNull Options options) {
 
     static CellStyleProvider create(final Workbook wb, @Nullable final ExcelFileWriter.Options options) {
         var styleIndexList = new StyleIndexList();

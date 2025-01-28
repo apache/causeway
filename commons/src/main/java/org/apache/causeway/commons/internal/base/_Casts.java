@@ -23,7 +23,7 @@ import java.util.function.BiFunction;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>

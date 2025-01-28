@@ -55,7 +55,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 public abstract class SchemaValueMarshallerAbstract

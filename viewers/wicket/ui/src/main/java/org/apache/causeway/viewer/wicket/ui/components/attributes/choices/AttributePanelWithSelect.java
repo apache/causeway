@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class AttributePanelWithSelect
 extends AttributePanelWithFormField<ManagedObject> {

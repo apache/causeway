@@ -23,7 +23,7 @@ import java.util.List;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record MenuDropdownBuilder (
         @NonNull String name,

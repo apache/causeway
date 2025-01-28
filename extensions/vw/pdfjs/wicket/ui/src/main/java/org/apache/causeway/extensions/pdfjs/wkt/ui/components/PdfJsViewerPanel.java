@@ -49,7 +49,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 

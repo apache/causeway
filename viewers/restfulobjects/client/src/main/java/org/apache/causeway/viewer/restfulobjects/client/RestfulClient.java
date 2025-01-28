@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.AuthFilter;
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**

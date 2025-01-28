@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventT
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Simply a tuple of {event-type, {@link EventTypeOrigin}, post-able-flag}.

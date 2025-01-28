@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints.BiIntConsumer;
 import org.apache.causeway.commons.internal.primitives._Ints.BiIntFunction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
 

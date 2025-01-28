@@ -20,7 +20,7 @@ package org.apache.causeway.core.config.metamodel.facets;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class ParameterConfigOptions {
 

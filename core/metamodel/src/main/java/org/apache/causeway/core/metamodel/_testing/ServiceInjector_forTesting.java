@@ -23,7 +23,7 @@ import static java.util.Objects.requireNonNull;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -36,16 +36,16 @@ import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.ActionResu
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ObjectAndActionInvocation {
 
     public static ObjectAndActionInvocation of(
-            @NonNull final ActionInteraction.Result actionInteractionResult,
-            @NonNull final JsonRepresentation argsJsonRepr,
-            @NonNull final ActionResultReprRenderer.SelfLink selfLink) {
+            final ActionInteraction.@NonNull Result actionInteractionResult,
+            final @NonNull JsonRepresentation argsJsonRepr,
+            final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
         return new ObjectAndActionInvocation(
                 actionInteractionResult.getManagedAction().getOwner(),
                 actionInteractionResult.getManagedAction().getAction(),

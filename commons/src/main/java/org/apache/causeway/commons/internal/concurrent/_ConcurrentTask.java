@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>

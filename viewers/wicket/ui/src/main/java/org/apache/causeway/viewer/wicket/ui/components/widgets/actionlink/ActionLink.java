@@ -52,7 +52,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import static org.apache.causeway.commons.internal.base._Casts.castTo;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  *

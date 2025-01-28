@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringifierEntityAgnostic;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Supports {@code @PersistenceCapable(identityType=IdentityType.NONDURABLE)}

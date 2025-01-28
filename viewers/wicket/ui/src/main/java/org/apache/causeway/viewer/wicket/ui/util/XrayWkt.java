@@ -23,7 +23,7 @@ import java.util.Map;
 import org.springframework.lang.Nullable;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
 

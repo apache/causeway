@@ -26,7 +26,7 @@ import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 //@Log4j2
 abstract class InternalBidirectionalBinding<T>
@@ -105,7 +105,7 @@ implements ChangeListener<T>, InternalUtil.WeakListener {
 
     // -- HELPER
 
-    private static void checkParameters(@NonNull final Object left, @NonNull final Object right) {
+    private static void checkParameters(final @NonNull Object left, final @NonNull Object right) {
         if (left == right) {
             throw _Exceptions.illegalArgument("Cannot bind to self");
         }

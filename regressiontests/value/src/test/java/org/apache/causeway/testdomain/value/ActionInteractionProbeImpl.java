@@ -32,7 +32,7 @@ import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.ActionInteractionProbe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

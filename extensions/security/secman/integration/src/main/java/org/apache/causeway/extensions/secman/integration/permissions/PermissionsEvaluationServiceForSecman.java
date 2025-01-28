@@ -45,7 +45,7 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}

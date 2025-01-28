@@ -47,7 +47,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

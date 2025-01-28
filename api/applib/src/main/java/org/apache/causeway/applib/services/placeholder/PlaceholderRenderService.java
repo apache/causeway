@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -50,7 +50,7 @@ public interface PlaceholderRenderService {
      * as used for eg. titles and choice drop-downs.
      */
     String asText(@NonNull PlaceholderLiteral placeholderLiteral, @Nullable Map<String, String> vars);
-    default String asText(@NonNull final PlaceholderLiteral placeholderLiteral) {
+    default String asText(final @NonNull PlaceholderLiteral placeholderLiteral) {
         return asText(placeholderLiteral, null);
     }
 
@@ -59,7 +59,7 @@ public interface PlaceholderRenderService {
      * as used for rendering with the UI (when appropriate).
      */
     String asHtml(@NonNull PlaceholderLiteral placeholderLiteral, @Nullable Map<String, String> vars);
-    default String asHtml(@NonNull final PlaceholderLiteral placeholderLiteral) {
+    default String asHtml(final @NonNull PlaceholderLiteral placeholderLiteral) {
         return asHtml(placeholderLiteral, null);
     }
 
@@ -72,13 +72,13 @@ public interface PlaceholderRenderService {
     static PlaceholderRenderService fallback() {
         return new PlaceholderRenderService() {
             @Override public String asText(
-                    @NonNull final PlaceholderLiteral placeholderLiteral,
+                    final @NonNull PlaceholderLiteral placeholderLiteral,
                     @Nullable final Map<String, String> vars) {
                 return PlaceholderRenderService.interpolate(placeholderLiteral.getLiteral(), vars);
             }
 
             @Override public String asHtml(
-                    @NonNull final PlaceholderLiteral placeholderLiteral,
+                    final @NonNull PlaceholderLiteral placeholderLiteral,
                     @Nullable final Map<String, String> vars) {
                 return asText(placeholderLiteral, vars);
             }

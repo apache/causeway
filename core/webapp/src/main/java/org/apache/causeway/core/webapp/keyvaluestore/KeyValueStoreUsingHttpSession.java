@@ -32,7 +32,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Implementation that uses the {@link HttpSession}

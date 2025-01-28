@@ -49,7 +49,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides a list of links for selecting other views that support

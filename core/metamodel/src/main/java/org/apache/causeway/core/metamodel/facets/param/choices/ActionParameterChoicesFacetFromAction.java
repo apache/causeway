@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ActionParameterChoicesFacetFromAction
 extends ActionParameterChoicesFacetAbstract {

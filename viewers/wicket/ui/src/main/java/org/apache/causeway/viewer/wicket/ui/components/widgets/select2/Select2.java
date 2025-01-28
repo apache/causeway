@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.

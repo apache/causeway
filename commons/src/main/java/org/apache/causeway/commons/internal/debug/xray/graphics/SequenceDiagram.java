@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.debug.xray.graphics._Graphics.TextBl
 import org.apache.causeway.commons.internal.primitives._Ints;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public class SequenceDiagram {

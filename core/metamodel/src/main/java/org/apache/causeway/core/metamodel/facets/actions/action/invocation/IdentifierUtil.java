@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -55,7 +55,7 @@ public class IdentifierUtil {
     @SneakyThrows
     public Identifier memberIdentifierFor(
             final @NonNull SpecificationLoader specLoader,
-            final @NonNull Identifier.Type identifierType,
+            final Identifier.@NonNull Type identifierType,
             final @NonNull String logicalMemberIdentifier) {
 
         var stringCutter = TextUtils.cutter(logicalMemberIdentifier);

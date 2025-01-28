@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

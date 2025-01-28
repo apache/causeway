@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Indicates that details of the action invocation or property edit,

@@ -28,7 +28,7 @@ import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}

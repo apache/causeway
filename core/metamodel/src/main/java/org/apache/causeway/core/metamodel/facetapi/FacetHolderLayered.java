@@ -27,7 +27,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides a merged view of the <i>local</i> and the <i>shared</i> list of {@link Facet}s,
@@ -67,7 +67,7 @@ implements FacetHolder {
     }
 
     @Override
-    public void addFacet(@NonNull final Facet facet) {
+    public void addFacet(final @NonNull Facet facet) {
         // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
         var facetHolder = facet.isObjectTypeSpecific()
                 ? local

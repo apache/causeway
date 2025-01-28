@@ -26,7 +26,7 @@ import org.springframework.data.jpa.repository.JpaContext;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.commons.internal.html._BootstrapBadge;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Default implementation of {@link PlaceholderRenderService},
@@ -55,14 +55,14 @@ implements PlaceholderRenderService {
 
     @Override
     public String asText(
-            @NonNull final PlaceholderLiteral placeholderLiteral,
+            final @NonNull PlaceholderLiteral placeholderLiteral,
             @Nullable final Map<String, String> vars) {
         return "(" + translateAndInterpolate(placeholderLiteral, vars) + ")";
     }
 
     @Override
     public String asHtml(
-            @NonNull final PlaceholderLiteral placeholderLiteral,
+            final @NonNull PlaceholderLiteral placeholderLiteral,
             @Nullable final Map<String, String> vars) {
 
         var href = Optional.ofNullable(vars).map(map->map.get("href"));

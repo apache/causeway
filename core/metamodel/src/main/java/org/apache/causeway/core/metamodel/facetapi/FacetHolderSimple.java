@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides a (simple) list of {@link Facet}s.

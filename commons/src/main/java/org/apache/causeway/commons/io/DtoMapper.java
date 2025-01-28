@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface DtoMapper<T> {
 

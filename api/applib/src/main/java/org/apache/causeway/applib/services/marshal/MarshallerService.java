@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Supports marshaling and unmarshaling of the generic type T

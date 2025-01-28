@@ -43,7 +43,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -100,7 +100,7 @@ implements MenuBarsLoaderService {
     }
 
     @Override
-    public <T extends MenuBars> Optional<T> menuBars(@NonNull final MenuBarsMarshallerService<T> marshaller) {
+    public <T extends MenuBars> Optional<T> menuBars(final @NonNull MenuBarsMarshallerService<T> marshaller) {
         return marshaller.unmarshal(loadMenubarsLayoutResource(), menubarsLayoutMimeType)
             .ifFailure(failure->severeCannotLoad(menubarsLayoutResourceRef.get(), failure))
             .getValue();

@@ -30,7 +30,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanMetaData;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorForDomainObjects")
@@ -45,7 +45,7 @@ public class ClassSubstitutorForDomainObjects implements ClassSubstitutor {
     }
 
     @Override
-    public Substitution getSubstitution(@NonNull final Class<?> cls) {
+    public Substitution getSubstitution(final @NonNull Class<?> cls) {
         var notSubstitutable = causewayBeanTypeRegistry.lookupScannedType(cls)
             .map(CausewayBeanMetaData::beanSort)
             .map(BeanSort::policy)

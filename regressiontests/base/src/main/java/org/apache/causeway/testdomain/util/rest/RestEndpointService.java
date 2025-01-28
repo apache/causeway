@@ -47,7 +47,7 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.log4j.Log4j2;

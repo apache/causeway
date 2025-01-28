@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class AbstractObjectMemberReprRenderer<T extends ObjectMember>
 extends ReprRendererAbstract<ManagedMember> {

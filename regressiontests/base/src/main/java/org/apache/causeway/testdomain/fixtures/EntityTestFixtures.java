@@ -53,7 +53,7 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;

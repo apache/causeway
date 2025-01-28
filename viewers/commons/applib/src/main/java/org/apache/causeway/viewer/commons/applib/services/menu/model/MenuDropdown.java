@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record MenuDropdown (
         @NonNull String name,

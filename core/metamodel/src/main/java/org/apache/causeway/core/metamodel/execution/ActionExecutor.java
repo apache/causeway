@@ -52,7 +52,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

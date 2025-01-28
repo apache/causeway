@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#PACKED}

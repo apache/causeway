@@ -22,7 +22,7 @@ import java.util.Optional;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @FunctionalInterface
 public interface DisablingDecorator<T> {
@@ -33,12 +33,12 @@ public interface DisablingDecorator<T> {
 
     public record DisablingDecorationModel(@NonNull String reason) {
 
-        public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
+        public static Optional<DisablingDecorationModel> of(final @NonNull Optional<InteractionVeto> usabilityVeto) {
             return usabilityVeto
                     .map(veto->new DisablingDecorationModel(veto.getReasonAsString().orElse(null)));
         }
 
-        public static Optional<DisablingDecorationModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {
+        public static Optional<DisablingDecorationModel> of(final @NonNull MemberInteraction<?, ?> memberInteraction) {
             return of(memberInteraction.getInteractionVeto());
         }
 

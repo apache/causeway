@@ -25,7 +25,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class PropertyInteraction
 extends MemberInteraction<ManagedProperty, PropertyInteraction> {
@@ -48,7 +48,7 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
         return new PropertyInteraction(InteractionRailway.success(managedProperty));
     }
 
-    PropertyInteraction(@NonNull final InteractionRailway<ManagedProperty> railway) {
+    PropertyInteraction(final @NonNull InteractionRailway<ManagedProperty> railway) {
         super(railway);
     }
 

@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Rationale:

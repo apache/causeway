@@ -52,7 +52,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -22,7 +22,7 @@ import java.util.function.UnaryOperator;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Introduced, to allow for authenticated sessions to be amended with time-zone information

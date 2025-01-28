@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.query;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 final class _AllInstancesQueryDefault<T> 
 extends _QueryAbstract<T> 

@@ -84,7 +84,7 @@ public record TabularModel(
                     ? EMPTY
                     : new TabularCell(1, Either.left(value));
         }
-        public static TabularCell labeled(final int cardinality, @NonNull final Supplier<Stream<String>> labelSupplier) {
+        public static TabularCell labeled(final int cardinality, final @NonNull Supplier<Stream<String>> labelSupplier) {
             Objects.requireNonNull(labelSupplier);
             return new TabularCell(cardinality, Either.right(labelSupplier));
         }
@@ -93,7 +93,7 @@ public record TabularModel(
 
         public TabularCell(
                 final int cardinality,
-                @NonNull final Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
+                final @NonNull Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
             Objects.requireNonNull(eitherValueOrLabelSupplier);
             if(cardinality<0) throw _Exceptions.illegalArgument("cardinality cannot be negative: %d", cardinality);
             if(cardinality==0) {

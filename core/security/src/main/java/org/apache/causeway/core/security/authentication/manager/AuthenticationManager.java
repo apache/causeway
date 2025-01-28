@@ -48,7 +48,7 @@ import org.apache.causeway.core.security.authentication.standard.RandomCodeGener
 import org.apache.causeway.core.security.authentication.standard.Registrar;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Service
 @Named(AuthenticationManager.LOGICAL_TYPE_NAME)

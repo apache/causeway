@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a collection (a member) of a domain object.

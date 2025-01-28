@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This service provides a formal API into the framework's metamodel.

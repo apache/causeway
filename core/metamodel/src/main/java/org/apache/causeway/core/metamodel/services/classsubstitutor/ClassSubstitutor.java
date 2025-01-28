@@ -23,7 +23,7 @@ import java.util.function.UnaryOperator;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**

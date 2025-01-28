@@ -33,7 +33,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.resources._Serializables;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Used as a fallback if no other {@link ValueSemanticsProvider}
@@ -88,7 +88,7 @@ implements
 
     @Override
     public Serializable destring(
-            @NonNull final String stringified) {
+            final @NonNull String stringified) {
         return destringAs(stringified, Serializable.class);
     }
 

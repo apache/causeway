@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintIdProvider;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -38,7 +38,7 @@ public class MMHintUtils {
              : null;
     }
 
-    public Bookmark bookmarkElseFail(@NonNull final ManagedObject adapter) {
+    public Bookmark bookmarkElseFail(final @NonNull ManagedObject adapter) {
         var hintId = hintId(adapter);
         var bookmark = ManagedObjects.bookmarkElseFail(adapter);
         return hintId != null

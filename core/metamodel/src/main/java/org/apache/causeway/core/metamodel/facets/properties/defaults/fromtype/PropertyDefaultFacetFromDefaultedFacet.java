@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyDefaultFacetFromDefaultedFacet
 extends FacetAbstract

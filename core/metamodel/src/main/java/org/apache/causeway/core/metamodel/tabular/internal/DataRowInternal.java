@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record DataRowInternal(
     int rowIndex,

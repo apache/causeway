@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.base._Strings.KeyValuePair;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>

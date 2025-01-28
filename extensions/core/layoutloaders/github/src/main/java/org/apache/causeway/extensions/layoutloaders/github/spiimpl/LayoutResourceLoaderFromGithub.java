@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader
 import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub;
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Service
 @Named(CausewayModuleExtLayoutLoadersGithub.NAMESPACE + ".LayoutResourceLoaderFromGithub")

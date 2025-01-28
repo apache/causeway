@@ -28,7 +28,7 @@ import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Collects together methods for instantiating domain objects, also injecting
@@ -137,7 +137,7 @@ public interface FactoryService {
      * @apiNote forces the viewModelClass to be added to the meta-model if not already
      * @since 2.0
      */
-    default <T> T viewModel(@NonNull final Class<T> viewModelClass) {
+    default <T> T viewModel(final @NonNull Class<T> viewModelClass) {
         return viewModel(viewModelClass, (Bookmark)null);
     }
 

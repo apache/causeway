@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -146,7 +146,7 @@ class _BindingUtil {
             final @NonNull ObjectSpecification spec,
             final @NonNull _BindableAbstract<ManagedObject> bindableValue,
             final @NonNull Either<Renderer, Parser> eitherRendererOrParser,
-            final @NonNull ValueSemanticsProvider.Context context) {
+            final ValueSemanticsProvider.@NonNull Context context) {
 
         switch (format) {
         case TITLE: {

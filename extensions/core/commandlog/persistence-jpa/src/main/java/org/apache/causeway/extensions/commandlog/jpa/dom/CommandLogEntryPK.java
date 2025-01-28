@@ -39,7 +39,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @EqualsAndHashCode(of = {"interactionId"})
 @NoArgsConstructor
@@ -78,12 +78,12 @@ public class CommandLogEntryPK implements Serializable {
 
         @Override
         public CommandLogEntryPK destring(
-                @NonNull final String stringified) {
+                final @NonNull String stringified) {
             return new CommandLogEntryPK(UUID.fromString(stringified));
         }
 
         @Override
-        public boolean isValid(@NonNull final CommandLogEntryPK value) {
+        public boolean isValid(final @NonNull CommandLogEntryPK value) {
             return value.getInteractionId()!=null;
         }
 

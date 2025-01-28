@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.persistence.jdo.datanucleus.entities.DnStateManagerForCauseway;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.log4j.Log4j2;

@@ -56,7 +56,7 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class FacetFactoryTestAbstract
 implements HasMetaModelContext {

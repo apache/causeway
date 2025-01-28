@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 /**

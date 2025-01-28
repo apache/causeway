@@ -63,7 +63,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Default implementation of {@link MetaModelService}.

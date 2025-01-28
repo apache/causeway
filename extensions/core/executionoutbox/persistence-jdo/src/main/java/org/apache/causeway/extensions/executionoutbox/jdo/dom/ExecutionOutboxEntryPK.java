@@ -32,7 +32,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringi
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 @EqualsAndHashCode(of = {"interactionId", "sequence"})
@@ -80,7 +80,7 @@ public class ExecutionOutboxEntryPK implements Serializable {
         }
 
         @Override
-        public boolean isValid(@NonNull final ExecutionOutboxEntryPK value) {
+        public boolean isValid(final @NonNull ExecutionOutboxEntryPK value) {
             return value.getInteractionId()!=null;
         }
     }

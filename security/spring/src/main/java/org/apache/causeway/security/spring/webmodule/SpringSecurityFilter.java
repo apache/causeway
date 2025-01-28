@@ -41,7 +41,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserMemento.AuthenticationSource;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}

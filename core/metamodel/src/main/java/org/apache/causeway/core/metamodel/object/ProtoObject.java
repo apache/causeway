@@ -26,7 +26,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Pair of {@link ObjectSpecification} and {@link Bookmark}.

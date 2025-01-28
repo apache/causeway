@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class CollectionModelStandalone
 extends CollectionModelAbstract {

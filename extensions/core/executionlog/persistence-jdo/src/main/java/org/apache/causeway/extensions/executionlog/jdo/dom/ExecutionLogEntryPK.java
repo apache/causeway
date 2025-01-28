@@ -32,7 +32,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsBasedOnIdStringi
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 @EqualsAndHashCode(of = {"interactionId", "sequence"})

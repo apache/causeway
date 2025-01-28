@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 final class _Xray {
 

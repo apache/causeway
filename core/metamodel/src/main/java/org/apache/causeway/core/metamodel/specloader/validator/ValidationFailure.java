@@ -28,7 +28,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**
@@ -48,9 +48,9 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * Collects a new ValidationFailure with given origin and message.
      */
     public static void raise(
-            @NonNull final SpecificationLoader specLoader,
-            @NonNull final Identifier deficiencyOrigin,
-            @NonNull final String deficiencyMessage) {
+            final @NonNull SpecificationLoader specLoader,
+            final @NonNull Identifier deficiencyOrigin,
+            final @NonNull String deficiencyMessage) {
 
         specLoader.addValidationFailure(ValidationFailure.of(deficiencyOrigin, deficiencyMessage));
     }
@@ -59,8 +59,8 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * Collects a new ValidationFailure for given FacetHolder (that is the origin) using given message.
      */
     public static void raise(
-            @NonNull final FacetHolder facetHolder,
-            @NonNull final String deficiencyMessage) {
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull String deficiencyMessage) {
         raise(facetHolder.getSpecificationLoader(), facetHolder.getFeatureIdentifier(), deficiencyMessage);
     }
 
@@ -69,8 +69,8 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
      * (assembled from format and args).
      */
     public static void raiseFormatted(
-            @NonNull final FacetHolder facetHolder,
-            @NonNull final String messageFormat,
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull String messageFormat,
             final Object ...args) {
         raise(facetHolder, String.format(messageFormat, args));
     }

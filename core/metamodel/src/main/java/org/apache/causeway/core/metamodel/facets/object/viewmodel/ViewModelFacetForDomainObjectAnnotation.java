@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ViewModelFacetForDomainObjectAnnotation
 extends ViewModelFacetAbstract {
@@ -89,8 +89,8 @@ extends ViewModelFacetAbstract {
 
     @Override
     protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final Bookmark bookmark) {
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull Bookmark bookmark) {
 
         var viewmodel = viewmodelSpec.createObject();
 

@@ -29,7 +29,7 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Casts;
 
 import lombok.AccessLevel;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

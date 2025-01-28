@@ -102,7 +102,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUti
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Configuration
 @Import({

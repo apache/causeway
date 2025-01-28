@@ -43,7 +43,7 @@ import org.apache.causeway.commons.internal.debug.xray.graphics.SequenceDiagram;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public abstract class XrayDataModel extends HasIdAndLabel {

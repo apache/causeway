@@ -37,7 +37,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Default implementation of {@link ExceptionRecognizerService}.

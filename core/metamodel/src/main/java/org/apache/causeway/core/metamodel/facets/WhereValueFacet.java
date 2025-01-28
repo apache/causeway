@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface WhereValueFacet extends Facet {
 

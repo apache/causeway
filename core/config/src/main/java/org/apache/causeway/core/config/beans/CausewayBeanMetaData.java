@@ -24,7 +24,7 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record CausewayBeanMetaData(
         @NonNull LogicalType logicalType,

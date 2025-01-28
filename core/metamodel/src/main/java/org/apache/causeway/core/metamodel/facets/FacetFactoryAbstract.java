@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class FacetFactoryAbstract
 implements FacetFactory, HasMetaModelContext {

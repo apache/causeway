@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 1.x {@index}

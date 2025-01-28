@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Handles modifications for (non-mixed-in) properties and accompanied {@link PropertyDomainEvent}(s).

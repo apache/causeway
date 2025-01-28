@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ChoicesFacetFromEnum
 extends ChoicesFacetAbstract {

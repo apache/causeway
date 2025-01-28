@@ -23,7 +23,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;

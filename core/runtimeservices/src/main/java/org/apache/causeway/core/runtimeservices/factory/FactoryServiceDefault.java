@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Default implementation of {@link FactoryService}.

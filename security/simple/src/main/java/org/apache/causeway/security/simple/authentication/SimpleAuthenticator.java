@@ -37,7 +37,7 @@ import org.apache.causeway.core.security.authentication.Authenticator;
 import org.apache.causeway.security.simple.CausewayModuleSecuritySimple;
 import org.apache.causeway.security.simple.realm.SimpleRealm;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

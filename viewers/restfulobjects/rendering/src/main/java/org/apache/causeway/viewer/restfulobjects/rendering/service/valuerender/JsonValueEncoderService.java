@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Converts value representing {@link ManagedObject}s to their corresponding JSON representation

@@ -28,7 +28,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.causeway.valuetypes.asciidoc.applib.CausewayModuleValAsciidocApplib;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Component
 @Named(CausewayModuleValAsciidocApplib.NAMESPACE + ".InteractionDtoValueSemanticsPrettyRender")
@@ -38,7 +38,7 @@ public class InteractionDtoValueSemanticsPrettyRender
 extends InteractionDtoValueSemantics {
 
     @Override
-    protected String renderXml(@NonNull final Context context, @NonNull final String xml) {
+    protected String renderXml(final @NonNull Context context, final @NonNull String xml) {
         return _XmlToHtml.toHtml(xml);
     }
 

@@ -23,7 +23,7 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a standalone value (used for standalone value page).

@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface ValueSerializer<T> {
 

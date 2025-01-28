@@ -32,7 +32,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.ToString;
 
 class CommonDtoUtils_Test {

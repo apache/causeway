@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * For use by repository implementations, representing the values of a query.

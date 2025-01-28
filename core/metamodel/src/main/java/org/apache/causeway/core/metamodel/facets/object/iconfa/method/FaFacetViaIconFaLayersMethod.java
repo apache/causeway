@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class FaFacetViaIconFaLayersMethod
 extends FaImperativeFacetAbstract

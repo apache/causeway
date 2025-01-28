@@ -36,7 +36,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 

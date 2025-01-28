@@ -27,7 +27,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.ToString;
 import lombok.Value;
 

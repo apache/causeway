@@ -49,7 +49,7 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.Value;
@@ -92,7 +92,7 @@ public class ZipUtils {
         private final byte[] bytes;
 
         @Override
-        public <T> Try<T> tryReadAll(@NonNull final Function<InputStream, Try<T>> consumingMapper) {
+        public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
             try {
                 try(var bis = new ByteArrayInputStream(bytes)){
                     return consumingMapper.apply(bis);

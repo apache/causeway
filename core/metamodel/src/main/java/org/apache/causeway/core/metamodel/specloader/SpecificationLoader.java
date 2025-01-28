@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidato
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
@@ -114,7 +114,7 @@ public interface SpecificationLoader {
 
     Optional<LogicalType> lookupLogicalType(@Nullable String logicalTypeName);
 
-    default LogicalType lookupLogicalTypeElseFail(@NonNull final String logicalTypeName) {
+    default LogicalType lookupLogicalTypeElseFail(final @NonNull String logicalTypeName) {
         return lookupLogicalType(logicalTypeName)
         .orElseThrow(()->_Exceptions.unrecoverable(
                 "Lookup of logical-type-name '%s' failed, also found no matching fully qualified "

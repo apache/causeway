@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class IconFacetFromProjectionFacet
 extends IconFacetAbstract {

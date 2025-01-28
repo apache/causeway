@@ -51,7 +51,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRest
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import lombok.extern.log4j.Log4j2;
 

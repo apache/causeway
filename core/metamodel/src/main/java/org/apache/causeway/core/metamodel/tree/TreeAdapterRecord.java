@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Wraps a non-serializable {@link TreeAdapter} using a serializable record.

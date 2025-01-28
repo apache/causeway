@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

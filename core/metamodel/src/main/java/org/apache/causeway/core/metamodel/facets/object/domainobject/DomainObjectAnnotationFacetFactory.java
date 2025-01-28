@@ -82,7 +82,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

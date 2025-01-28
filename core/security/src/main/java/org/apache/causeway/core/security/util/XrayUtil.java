@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.debug.xray.graphics.SequenceDiagram;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 public final class XrayUtil {

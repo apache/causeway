@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class ActionInvocationFacetAbstract
 extends DomainEventFacetAbstract<ActionDomainEvent<?>>

@@ -23,7 +23,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record ObjectMementoEmpty(
         @NonNull LogicalType logicalType)

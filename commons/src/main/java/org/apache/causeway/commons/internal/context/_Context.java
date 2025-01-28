@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>

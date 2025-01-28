@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -63,7 +63,7 @@ public class JaxbServiceDefault extends Simple {
 
     @SneakyThrows
     @Override
-    protected JAXBContext jaxbContextForList(@NonNull final DomainObjectList domainObjectList) {
+    protected JAXBContext jaxbContextForList(final @NonNull DomainObjectList domainObjectList) {
         var elementType = specLoader
                 .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
                 .map(ObjectSpecification::getCorrespondingClass)

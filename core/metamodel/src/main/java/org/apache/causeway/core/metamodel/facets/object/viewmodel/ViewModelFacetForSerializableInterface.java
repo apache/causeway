@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -59,8 +59,8 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     @Override
     protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final Bookmark bookmark) {
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull Bookmark bookmark) {
         return ManagedObject.bookmarked(
                         viewmodelSpec,
                         deserialize(viewmodelSpec, bookmark.getIdentifier()),
@@ -84,8 +84,8 @@ extends ViewModelFacetAbstract {
 
     @SneakyThrows
     private Object deserialize(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final String memento) {
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull String memento) {
         var bytes = _Bytes.ofUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8));
         try(var ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
             var viewModelPojo = ois.readObject();

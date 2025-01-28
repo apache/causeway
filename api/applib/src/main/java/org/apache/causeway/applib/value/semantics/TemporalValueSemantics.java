@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.

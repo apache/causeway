@@ -40,7 +40,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Default implementation of {@link SerializingAdapter}, intended as an 'internal' service.

@@ -29,7 +29,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.security.spring.authconverters.AuthenticationConverter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Applies if {@link Authentication} holds a principal of type {@link OAuth2User}.

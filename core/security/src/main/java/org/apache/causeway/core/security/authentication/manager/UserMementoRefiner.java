@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * SPI provided by the internal {@link AuthenticationManager}, allowing the {@link UserMemento} representing an

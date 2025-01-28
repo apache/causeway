@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 @lombok.Value(staticConstructor = "of")
@@ -46,7 +46,7 @@ public class RequestParams {
         QUERY_STRING
     }
 
-    private final @NonNull RequestParams.Nature nature;
+    private final RequestParams.@NonNull Nature nature;
     private final @Nullable String raw;
 
     public static RequestParams ofRequestBody(final InputStream is) {

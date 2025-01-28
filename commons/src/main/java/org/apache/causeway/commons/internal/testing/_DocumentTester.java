@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.codec._DocumentFactories;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 

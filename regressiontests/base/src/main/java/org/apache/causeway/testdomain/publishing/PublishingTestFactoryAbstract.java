@@ -51,7 +51,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 

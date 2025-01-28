@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(staticName = "of")

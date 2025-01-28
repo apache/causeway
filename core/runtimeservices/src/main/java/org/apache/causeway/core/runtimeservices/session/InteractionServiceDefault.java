@@ -67,7 +67,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

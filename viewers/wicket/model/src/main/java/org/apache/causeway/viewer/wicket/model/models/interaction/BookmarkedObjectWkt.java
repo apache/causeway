@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class BookmarkedObjectWkt
 extends ModelAbstract<ManagedObject> {

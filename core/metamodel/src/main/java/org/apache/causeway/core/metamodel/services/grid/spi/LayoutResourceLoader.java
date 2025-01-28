@@ -24,7 +24,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A simpler SPI for {@link GridLoaderServiceDefault}.

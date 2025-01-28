@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import static org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract.FormatUsageFor.PARSING;
 

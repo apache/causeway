@@ -46,7 +46,7 @@ import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
 import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

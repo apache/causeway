@@ -31,7 +31,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Holds discovered domain types grouped by bean-sort.
@@ -144,7 +144,7 @@ public class CausewayBeanTypeRegistry {
                 .map(CausewayBeanMetaData::getBeanName);
     }
 
-    public boolean containsManagedBeansContributing(@NonNull final Class<?> type) {
+    public boolean containsManagedBeansContributing(final @NonNull Class<?> type) {
         return domainServices.containsKey(type);
     }
     

@@ -25,7 +25,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class CollectionInteraction
 extends MemberInteraction<ManagedCollection, CollectionInteraction> {
@@ -44,7 +44,7 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
         return new CollectionInteraction(railway);
     }
 
-    CollectionInteraction(@NonNull final InteractionRailway<ManagedCollection> railway) {
+    CollectionInteraction(final @NonNull InteractionRailway<ManagedCollection> railway) {
         super(railway);
     }
 

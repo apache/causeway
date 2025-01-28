@@ -42,7 +42,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

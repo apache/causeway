@@ -29,7 +29,7 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that

@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Synchronized;
 
 abstract class ValueSemanticsModelAbstract

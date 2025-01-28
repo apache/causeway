@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A low-level service to programmatically &quot;connect&quot; (or create a

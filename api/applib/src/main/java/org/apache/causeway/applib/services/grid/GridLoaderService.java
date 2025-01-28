@@ -27,7 +27,7 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.

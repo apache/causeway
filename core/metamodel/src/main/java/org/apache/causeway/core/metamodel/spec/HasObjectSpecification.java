@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Introduced as a shortcut provider.

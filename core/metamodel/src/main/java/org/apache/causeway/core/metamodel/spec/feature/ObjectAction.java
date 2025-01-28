@@ -56,7 +56,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface ObjectAction extends ObjectMember {
 

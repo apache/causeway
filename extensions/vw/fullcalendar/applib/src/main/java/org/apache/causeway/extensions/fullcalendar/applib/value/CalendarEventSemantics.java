@@ -55,7 +55,7 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.experimental.Accessors;

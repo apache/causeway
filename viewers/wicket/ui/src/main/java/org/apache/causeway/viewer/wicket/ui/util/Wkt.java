@@ -125,7 +125,7 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoP
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;

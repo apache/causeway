@@ -29,7 +29,7 @@ import org.apache.causeway.commons.binding.InvalidationListener;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 /**

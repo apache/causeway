@@ -62,7 +62,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 abstract class ObjectMemberAbstract
 implements

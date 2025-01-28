@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.OptionalDouble;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

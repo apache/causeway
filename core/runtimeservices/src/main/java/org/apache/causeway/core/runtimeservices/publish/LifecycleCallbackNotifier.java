@@ -56,7 +56,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.transaction.changetracking.events.PostStoreEvent;
 import org.apache.causeway.core.transaction.changetracking.events.PreStoreEvent;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

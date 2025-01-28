@@ -28,7 +28,7 @@ import org.springframework.util.function.ThrowingConsumer;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * General purpose byte data peer that acts as source and sink at the same time.
@@ -47,13 +47,13 @@ public interface DataPeer extends DataSink, DataSource {
 
         return new DataPeer() {
             @Override
-            public <T> Try<T> tryReadAll(@NonNull final Function<InputStream, Try<T>> consumingMapper) {
+            public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {
                 var in = DataSource.ofBytes(bytes());
                 return in.tryReadAll(consumingMapper);
             }
 
             @Override
-            public void writeAll(@NonNull final ThrowingConsumer<OutputStream> outputStreamConsumer) {
+            public void writeAll(final @NonNull ThrowingConsumer<OutputStream> outputStreamConsumer) {
                 if(!byteArrayHolder.isEmpty()) {
                     throw _Exceptions.illegalState("Cannot writeAll to an in-memory DataPeer, that was already written to.");
                 }

@@ -29,7 +29,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.

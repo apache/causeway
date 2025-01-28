@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

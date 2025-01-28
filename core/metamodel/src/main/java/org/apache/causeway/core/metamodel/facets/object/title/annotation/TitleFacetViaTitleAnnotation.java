@@ -49,7 +49,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

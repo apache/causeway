@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSnapshot;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

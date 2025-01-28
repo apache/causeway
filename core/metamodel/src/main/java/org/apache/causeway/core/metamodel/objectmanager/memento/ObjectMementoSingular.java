@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.object.MMHintUtils;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record ObjectMementoSingular(
         @NonNull LogicalType logicalType,

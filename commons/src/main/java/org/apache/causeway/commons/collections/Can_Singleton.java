@@ -47,7 +47,7 @@ import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record Can_Singleton<T>(T element) implements Can<T> {
 
@@ -110,7 +110,7 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public Can<T> sorted(@NonNull final Comparator<? super T> c) {
+    public Can<T> sorted(final @NonNull Comparator<? super T> c) {
         return this;
     }
 
@@ -120,7 +120,7 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public Can<T> distinct(@NonNull final BiPredicate<T, T> equality) {
+    public Can<T> distinct(final @NonNull BiPredicate<T, T> equality) {
         return this;
     }
 
@@ -135,12 +135,12 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public Can<T> reduce(@NonNull final BinaryOperator<T> accumulator) {
+    public Can<T> reduce(final @NonNull BinaryOperator<T> accumulator) {
         return this; // reduction of singleton acts as identity operation
     }
 
     @Override
-    public void forEach(@NonNull final Consumer<? super T> action) {
+    public void forEach(final @NonNull Consumer<? super T> action) {
         action.accept(this.element);
     }
 
@@ -168,7 +168,7 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public <R, Z> Stream<R> zipStream(@NonNull final Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
+    public <R, Z> Stream<R> zipStream(final @NonNull Iterable<Z> zippedIn, final BiFunction<? super T, ? super Z, R> mapper) {
         var next = mapper.apply(element, zippedIn.iterator().next());
         return next!=null
                 ? Stream.of(next)
@@ -394,12 +394,12 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public Set<T> toSet(@NonNull final Consumer<T> onDuplicated) {
+    public Set<T> toSet(final @NonNull Consumer<T> onDuplicated) {
         return Collections.singleton(element); // serializable and immutable
     }
 
     @Override
-    public T[] toArray(@NonNull final Class<T> elementType) {
+    public T[] toArray(final @NonNull Class<T> elementType) {
         var array = _Casts.<T[]>uncheckedCast(Array.newInstance(elementType, 1));
         array[0] = element;
         return array;
@@ -407,19 +407,19 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public <K> Map<K, T> toMap(
-            @NonNull final Function<? super T, ? extends K> keyExtractor) {
+            final @NonNull Function<? super T, ? extends K> keyExtractor) {
         return Map.of(keyExtractor.apply(element), element);
     }
     @Override
     public <K, M extends Map<K, T>> Map<K, T> toMap(
-            @NonNull final Function<? super T, ? extends K> keyExtractor,
-            @NonNull final BinaryOperator<T> mergeFunction,
-            @NonNull final Supplier<M> mapFactory) {
+            final @NonNull Function<? super T, ? extends K> keyExtractor,
+            final @NonNull BinaryOperator<T> mergeFunction,
+            final @NonNull Supplier<M> mapFactory) {
         return toMap(keyExtractor);
     }
 
     @Override
-    public <R, A> R collect(@NonNull final Collector<? super T, A, R> collector) {
+    public <R, A> R collect(final @NonNull Collector<? super T, A, R> collector) {
         var container = collector.supplier().get();
         collector.accumulator().accept(container, element);
         return collector.finisher().apply(container);
@@ -427,19 +427,19 @@ record Can_Singleton<T>(T element) implements Can<T> {
 
     @Override
     public <K> Map<K, Can<T>> groupBy(
-            @NonNull final Function<? super T, ? extends K> classifier) {
+            final @NonNull Function<? super T, ? extends K> classifier) {
         return Map.of(classifier.apply(element), this);
     }
 
     @Override
     public <K, M extends Map<K, Can<T>>> Map<K, Can<T>> groupBy(
-            @NonNull final Function<? super T, ? extends K> classifier,
-            @NonNull final Supplier<M> mapFactory) {
+            final @NonNull Function<? super T, ? extends K> classifier,
+            final @NonNull Supplier<M> mapFactory) {
         return groupBy(classifier);
     }
 
     @Override
-    public String join(@NonNull final String delimiter) {
+    public String join(final @NonNull String delimiter) {
         var str = element.toString();
         return str!=null
                 ? str
@@ -447,7 +447,7 @@ record Can_Singleton<T>(T element) implements Can<T> {
     }
 
     @Override
-    public String join(@NonNull final Function<? super T, String> toStringFunction, @NonNull final String delimiter) {
+    public String join(final @NonNull Function<? super T, String> toStringFunction, final @NonNull String delimiter) {
         var str = toStringFunction.apply(element);
         return str!=null
                 ? str

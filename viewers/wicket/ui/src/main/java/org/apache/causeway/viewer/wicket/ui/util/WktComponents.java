@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FluentException;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.jquery.util.Strings2;

@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.user.UserMemento;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Applies if {@link Authentication} holds a principal of type {@link AuthenticatedPrincipal}.

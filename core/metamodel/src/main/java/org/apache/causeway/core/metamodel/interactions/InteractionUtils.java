@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 

@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
@@ -117,7 +117,7 @@ extends ViewModelFacetAbstract {
 
     @Override
     protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec) {
+            final @NonNull ObjectSpecification viewmodelSpec) {
         return ManagedObject.viewmodel(
                 viewmodelSpec,
                 deserialize(viewmodelSpec, null),
@@ -127,8 +127,8 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     @Override
     protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final Bookmark bookmark) {
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull Bookmark bookmark) {
         return ManagedObject.bookmarked(
                         viewmodelSpec,
                         deserialize(viewmodelSpec, bookmark.getIdentifier()),
@@ -180,7 +180,7 @@ extends ViewModelFacetAbstract {
 
     @SneakyThrows
     private Object deserialize(
-            @NonNull final ObjectSpecification viewmodelSpec,
+            final @NonNull ObjectSpecification viewmodelSpec,
             @Nullable final String mementoEncoded) {
 
         _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "

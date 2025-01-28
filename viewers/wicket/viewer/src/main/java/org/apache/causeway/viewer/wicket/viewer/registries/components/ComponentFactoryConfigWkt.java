@@ -86,7 +86,7 @@ import org.apache.causeway.viewer.wicket.ui.components.voidreturn.VoidReturnPane
 import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.objectsimplelink.ObjectLinkSimplePanelFactory;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**

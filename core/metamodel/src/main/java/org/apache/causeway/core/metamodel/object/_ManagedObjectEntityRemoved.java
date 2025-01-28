@@ -22,7 +22,7 @@ import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * (package private) specialization corresponding to a removed {@link Specialization#ENTITY}

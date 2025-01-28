@@ -34,7 +34,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -48,8 +48,8 @@ record CausewayComponentCollector(
         Map<Class<?>, CausewayBeanMetaData> introspectableTypes) {
 
     CausewayComponentCollector(
-            @NonNull final BeanDefinitionRegistry registry,
-            @NonNull final CausewayBeanTypeClassifier causewayBeanTypeClassifier) {
+            final @NonNull BeanDefinitionRegistry registry,
+            final @NonNull CausewayBeanTypeClassifier causewayBeanTypeClassifier) {
         this(registry, causewayBeanTypeClassifier, _Maps.newConcurrentHashMap());
     }
 

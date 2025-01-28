@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
 

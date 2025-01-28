@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatCo
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -43,7 +43,7 @@ public final class ActionSupport {
     @Value @Builder
     public static class ActionSupportingMethodSearchRequest {
 
-        @NonNull FacetFactory.ProcessMethodContext processMethodContext;
+        FacetFactory.@NonNull ProcessMethodContext processMethodContext;
         @Getter @NonNull MethodFinder methodFinder;
         @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
 

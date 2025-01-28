@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Combines {@link LogicalType} and member identification (from properties, collections or actions),

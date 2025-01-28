@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class SelectOperationChooser extends Panel {
     private static final long serialVersionUID = 1L;

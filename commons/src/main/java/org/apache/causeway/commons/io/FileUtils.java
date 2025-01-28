@@ -47,7 +47,7 @@ import org.springframework.util.function.ThrowingFunction;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -170,7 +170,7 @@ public class FileUtils {
      * @return prefix removed from {@code absolutePath}, if {@code commonPath} appears to be a prefix
      * of {@code absolutePath}, otherwise returns the {@code absolutePath} unmodified.
      */
-    public String toRelativePath(@NonNull final String commonPath, @NonNull final String absolutePath) {
+    public String toRelativePath(final @NonNull String commonPath, final @NonNull String absolutePath) {
         if(absolutePath.startsWith(commonPath)) {
             return absolutePath.substring(commonPath.length());
         }

@@ -36,7 +36,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Component
 @Named("causeway.metamodel.value.UUIDValueSemantics")

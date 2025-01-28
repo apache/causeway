@@ -50,7 +50,7 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.Bread
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**

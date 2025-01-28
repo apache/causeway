@@ -44,7 +44,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -146,8 +146,8 @@ extends SchemaValueMarshallerAbstract {
 
     @Override
     protected ManagedObject recoverScalarValue(
-            @NonNull final Context<?> context,
-            @NonNull final ValueWithTypeDto valueDto) {
+            final @NonNull Context<?> context,
+            final @NonNull ValueWithTypeDto valueDto) {
 
         var elementSpec = context.getElementType();
 

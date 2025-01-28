@@ -28,7 +28,7 @@ import org.apache.causeway.commons.functional.Railway.HasRailway;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 

@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyDomainEventFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>

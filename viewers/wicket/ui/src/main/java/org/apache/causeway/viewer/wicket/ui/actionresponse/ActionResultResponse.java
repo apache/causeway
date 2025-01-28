@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * The response to provide as a result of interpreting the response;

@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class WhereValueFacetAbstract
 extends FacetAbstract
@@ -46,7 +46,7 @@ implements WhereValueFacet {
             final @NonNull Class<? extends Facet> facetType,
             final @NonNull FacetHolder holder,
             final @NonNull Where where,
-            final @NonNull Facet.Precedence precedence) {
+            final Facet.@NonNull Precedence precedence) {
 
         super(facetType, holder, precedence);
         this.where = where;

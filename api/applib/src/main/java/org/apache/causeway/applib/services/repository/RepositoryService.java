@@ -28,7 +28,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Collects together methods for creating, persisting and searching for

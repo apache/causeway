@@ -28,7 +28,7 @@ import javax.swing.tree.MutableTreeNode;
 import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class HasNounFacetAbstract
 extends FacetAbstract

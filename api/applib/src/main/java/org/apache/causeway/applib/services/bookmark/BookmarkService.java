@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This service provides a serializable 'bookmark' for any entity, and
@@ -88,7 +88,7 @@ public interface BookmarkService {
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-    default <T> Optional<T> lookup(@Nullable final Bookmark bookmark, @NonNull final Class<T> cls) {
+    default <T> Optional<T> lookup(@Nullable final Bookmark bookmark, final @NonNull Class<T> cls) {
         return lookup(bookmark)
                 .map(t->cls.cast(t));
     }

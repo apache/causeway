@@ -30,7 +30,7 @@ import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Wraps a {@link UiParameterWkt}.

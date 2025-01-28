@@ -79,7 +79,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

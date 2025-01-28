@@ -24,7 +24,7 @@ import org.apache.causeway.core.config.messages.MessageRegistry;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @FunctionalInterface
 public interface ConfirmDecorator<T> {

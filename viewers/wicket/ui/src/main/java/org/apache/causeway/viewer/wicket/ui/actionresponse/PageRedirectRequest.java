@@ -29,7 +29,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record PageRedirectRequest<T extends IRequestablePage>(
     @NonNull Class<T> pageClass,

@@ -44,7 +44,7 @@ import org.apache.causeway.persistence.querydsl.applib.util.Wildcards;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Dynamically generate an auto complete query on runtime using Query DSL.
@@ -58,11 +58,11 @@ public class AutoCompleteGeneratedDslQuery {
     /**
      * Query DSL is used to dynamically generate the query on runtime
      */
-    @NonNull final protected QueryDslSupport queryDslSupport;
+    final @NonNull protected QueryDslSupport queryDslSupport;
     /**
      * the entity for which to generate the auto complete query
      */
-    @NonNull final protected Class<?> entity;
+    final @NonNull protected Class<?> entity;
 
     @lombok.Value
     static class SearchableProperty {
@@ -82,7 +82,7 @@ public class AutoCompleteGeneratedDslQuery {
     /**
      * The properties to use in the generated query (using <code>OR</code>).
      */
-    @NonNull final protected List<SearchableProperty> searchableProperties;
+    final @NonNull protected List<SearchableProperty> searchableProperties;
     /**
      * Add additional criteria that can be added to the autocomplete method in form:
      * <pre>

@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 public final class ActionInteraction
@@ -107,7 +107,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         return metamodel.map(ObjectAction::getFeatureIdentifier);
     }
 
-    public ActionInteraction checkSemanticConstraint(@NonNull final SemanticConstraint semanticConstraint) {
+    public ActionInteraction checkSemanticConstraint(final @NonNull SemanticConstraint semanticConstraint) {
 
         railway = railway.chain(action->{
 

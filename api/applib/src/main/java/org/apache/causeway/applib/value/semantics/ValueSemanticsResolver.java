@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.0 {@index}

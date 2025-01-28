@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.interactions.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class MustSatisfySpecificationFacetAbstract
 extends FacetAbstract

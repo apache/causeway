@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ViewModelFacetForXmlRootElementAnnotation
 extends ViewModelFacetAbstract {
@@ -52,8 +52,8 @@ extends ViewModelFacetAbstract {
 
     @Override
     protected ManagedObject createViewmodel(
-            @NonNull final ObjectSpecification viewmodelSpec,
-            @NonNull final Bookmark bookmark) {
+            final @NonNull ObjectSpecification viewmodelSpec,
+            final @NonNull Bookmark bookmark) {
         final String xmlStr = getUrlEncodingService().decodeToString(bookmark.getIdentifier());
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{

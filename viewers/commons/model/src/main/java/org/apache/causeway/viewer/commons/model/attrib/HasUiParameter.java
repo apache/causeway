@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @FunctionalInterface
 public interface HasUiParameter extends UiParameter {

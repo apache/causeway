@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class RemoveAnnotatedMethodsFacetFactory
 extends FacetFactoryAbstract {

@@ -24,7 +24,7 @@ import org.apache.wicket.model.ChainingModel;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class MenuablesModel
 extends ChainingModel<Can<? extends Menuable>> {

@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 

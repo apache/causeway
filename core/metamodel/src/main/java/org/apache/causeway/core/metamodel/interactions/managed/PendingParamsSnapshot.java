@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * In the event of serialization memoizes all the current pending parameter values

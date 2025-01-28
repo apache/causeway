@@ -44,7 +44,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 class TemporalValueSemanticsProviderTest {
 
@@ -103,11 +103,11 @@ class TemporalValueSemanticsProviderTest {
             return null;}
 
         @Override public DateTimeFormatter getTemporalEditingFormat(final Context context,
-                @NonNull final TemporalValueSemantics.TemporalCharacteristic temporalCharacteristic,
-                @NonNull final TemporalValueSemantics.OffsetCharacteristic offsetCharacteristic,
-                @NonNull final TimePrecision timePrecision,
-                @NonNull final EditingFormatDirection direction,
-                @NonNull final TemporalEditingPattern editingPattern) {
+                final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
+                final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
+                final @NonNull TimePrecision timePrecision,
+                final @NonNull EditingFormatDirection direction,
+                final @NonNull TemporalEditingPattern editingPattern) {
             return super.getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic, timePrecision, direction,
                     editingPattern); }
 

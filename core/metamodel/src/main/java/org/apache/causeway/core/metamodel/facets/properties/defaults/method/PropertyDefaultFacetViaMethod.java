@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyDefaultFacetViaMethod
 extends PropertyDefaultFacetAbstract

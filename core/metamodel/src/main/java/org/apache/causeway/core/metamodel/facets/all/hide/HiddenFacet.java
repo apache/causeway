@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Hide a property, collection or action.

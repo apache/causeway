@@ -38,7 +38,7 @@ import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.primitives._Ints;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 public class _Images {

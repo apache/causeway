@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 @Component

@@ -41,7 +41,7 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 /**
@@ -78,7 +78,7 @@ implements GridMarshallerService<BSGrid> {
     }
 
     @Override
-    public String marshal(final @NonNull BSGrid grid, @NonNull final CommonMimeType format) {
+    public String marshal(final @NonNull BSGrid grid, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
@@ -94,7 +94,7 @@ implements GridMarshallerService<BSGrid> {
     }
 
     @Override
-    public Try<BSGrid> unmarshal(final String content, @NonNull final CommonMimeType format) {
+    public Try<BSGrid> unmarshal(final String content, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{

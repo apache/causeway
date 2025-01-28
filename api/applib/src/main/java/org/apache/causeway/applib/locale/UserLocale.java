@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**

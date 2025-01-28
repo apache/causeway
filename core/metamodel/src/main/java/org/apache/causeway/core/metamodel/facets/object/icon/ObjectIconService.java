@@ -23,7 +23,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Creates {@link ObjectIcon}(s), which are class-path resource references.

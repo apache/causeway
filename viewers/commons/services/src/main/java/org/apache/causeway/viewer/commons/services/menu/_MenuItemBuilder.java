@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -120,8 +120,8 @@ final class _MenuItemBuilder {
         }
 
         public void addSubMenu(
-                @NonNull final BSMenuSection menuSection,
-                @NonNull final ManagedAction managedAction,
+                final @NonNull BSMenuSection menuSection,
+                final @NonNull ManagedAction managedAction,
                 final boolean isFirstInSection,
                 final ServiceActionLayoutData actionLayoutData) {
 

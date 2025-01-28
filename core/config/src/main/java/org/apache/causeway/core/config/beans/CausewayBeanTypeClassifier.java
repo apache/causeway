@@ -41,7 +41,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceSta
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeProgrammaticMarker;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Programmatic
 public record CausewayBeanTypeClassifier(
@@ -74,7 +74,7 @@ public record CausewayBeanTypeClassifier(
      *
      * @param logicalType with name as either forced by Causeway or suggested by Spring
      */
-    public CausewayBeanMetaData classify(@NonNull final LogicalType logicalType, final DiscoveredBy discoveredBy) {
+    public CausewayBeanMetaData classify(final @NonNull LogicalType logicalType, final DiscoveredBy discoveredBy) {
 
         var type = logicalType.correspondingClass();
 

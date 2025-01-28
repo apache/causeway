@@ -50,7 +50,7 @@ import org.apache.causeway.core.runtimeservices.spring.SpringBeansService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 import lombok.Data;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

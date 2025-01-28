@@ -57,7 +57,7 @@ import org.apache.causeway.testing.fixtures.applib.personas.BuilderScriptAbstrac
 import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderScript;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 

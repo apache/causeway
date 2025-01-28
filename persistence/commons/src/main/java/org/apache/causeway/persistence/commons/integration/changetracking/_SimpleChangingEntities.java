@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
 import org.apache.causeway.schema.chg.v2.ChangesDto;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.ToString;
 
 /**

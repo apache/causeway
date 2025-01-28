@@ -34,7 +34,7 @@ import org.apache.causeway.valuetypes.vega.applib.jaxb.VegaJaxbAdapter;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 

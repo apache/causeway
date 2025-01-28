@@ -30,7 +30,7 @@ import java.util.zip.Inflater;
 
 import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -250,7 +250,7 @@ public final class _Bytes {
      * @param input
      * @return null if {@code input} is null
      */
-    public static final byte[] encodeToBase64(final @NonNull Base64.Encoder encoder, final @Nullable byte[] input) {
+    public static final byte[] encodeToBase64(final Base64.@NonNull Encoder encoder, final @Nullable byte[] input) {
         return input!=null ? encoder.encode(input) : null;
     }
 
@@ -261,7 +261,7 @@ public final class _Bytes {
      * @param base64
      * @return null if {@code base64} is null
      */
-    public static final byte[] decodeBase64(final @NonNull Base64.Decoder decoder, final @Nullable byte[] base64) {
+    public static final byte[] decodeBase64(final Base64.@NonNull Decoder decoder, final @Nullable byte[] base64) {
         return base64!=null ? decoder.decode(base64) : null;
     }
 

@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public final class CollectionModelParented
 extends CollectionModelAbstract

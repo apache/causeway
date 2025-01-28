@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a collection of domain objects (typically entity instances).

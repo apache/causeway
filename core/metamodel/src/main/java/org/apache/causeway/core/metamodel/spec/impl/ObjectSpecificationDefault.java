@@ -113,7 +113,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -134,11 +134,11 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private final IntrospectionPolicy introspectionPolicy;
 
     public ObjectSpecificationDefault(
-            @NonNull final CausewayBeanMetaData typeMeta,
-            @NonNull final MetaModelContext mmc,
-            @NonNull final FacetProcessor facetProcessor,
-            @NonNull final PostProcessor postProcessor,
-            @NonNull final ClassSubstitutorRegistry classSubstitutorRegistry) {
+            final @NonNull CausewayBeanMetaData typeMeta,
+            final @NonNull MetaModelContext mmc,
+            final @NonNull FacetProcessor facetProcessor,
+            final @NonNull PostProcessor postProcessor,
+            final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry) {
 
         this.correspondingClass = typeMeta.getCorrespondingClass();
         this.logicalType = typeMeta.logicalType();

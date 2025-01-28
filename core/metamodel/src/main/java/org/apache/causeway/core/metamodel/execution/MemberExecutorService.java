@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
@@ -68,13 +68,13 @@ public interface MemberExecutorService {
     }
 
     default ManagedObject invokeAction(
-            @NonNull final FacetHolder facetHolder,
-            @NonNull final InteractionInitiatedBy interactionInitiatedBy,
-            @NonNull final InteractionHead head,
+            final @NonNull FacetHolder facetHolder,
+            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
+            final @NonNull InteractionHead head,
             // action specifics
-            @NonNull final Can<ManagedObject> argumentAdapters,
-            @NonNull final ObjectAction owningAction,
-            @NonNull final ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
+            final @NonNull Can<ManagedObject> argumentAdapters,
+            final @NonNull ObjectAction owningAction,
+            final @NonNull ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
         var actionExecutor = ActionExecutor.forAction(
                 facetHolder,
                 interactionInitiatedBy,

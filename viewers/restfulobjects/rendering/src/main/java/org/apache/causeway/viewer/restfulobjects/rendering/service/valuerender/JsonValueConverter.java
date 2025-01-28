@@ -37,7 +37,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender._JsonValueConverters.DefaultFormat;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface JsonValueConverter {
 

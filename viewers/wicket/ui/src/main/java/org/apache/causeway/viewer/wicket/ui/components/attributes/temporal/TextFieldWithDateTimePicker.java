@@ -34,7 +34,7 @@ import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.components.text.TextFieldWithConverter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import de.agilecoders.wicket.core.util.Attributes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;

@@ -41,7 +41,7 @@ import org.springframework.util.ReflectionUtils;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * {@link InvocationHandler} for an {@link Annotation} that Spring has

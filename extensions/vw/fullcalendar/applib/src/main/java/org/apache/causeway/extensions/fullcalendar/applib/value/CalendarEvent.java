@@ -36,7 +36,7 @@ import org.apache.causeway.extensions.fullcalendar.applib.CausewayModuleExtFullC
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.ToString;
 import lombok.With;
 

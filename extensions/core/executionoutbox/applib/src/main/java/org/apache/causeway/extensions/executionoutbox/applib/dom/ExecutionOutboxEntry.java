@@ -65,7 +65,7 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -120,7 +120,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
 
     @Inject BookmarkService bookmarkService;
 
-    public ExecutionOutboxEntry(@NonNull final Execution<? extends MemberExecutionDto,?> execution) {
+    public ExecutionOutboxEntry(final @NonNull Execution<? extends MemberExecutionDto,?> execution) {
         init(execution);
     }
 

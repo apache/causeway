@@ -24,7 +24,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class BooleanModel
 extends ChainingModel<Boolean> {

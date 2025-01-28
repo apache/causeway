@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface ProgrammingModel
 extends HasMetaModelContext {

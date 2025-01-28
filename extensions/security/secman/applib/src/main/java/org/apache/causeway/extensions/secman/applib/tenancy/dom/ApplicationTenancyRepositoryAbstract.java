@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  *

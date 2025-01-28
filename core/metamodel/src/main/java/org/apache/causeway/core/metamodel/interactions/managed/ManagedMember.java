@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -153,7 +153,7 @@ implements ManagedFeature {
 
     protected static <T extends ObjectMember> Optional<T> lookup(
             final @NonNull ManagedObject owner,
-            final @NonNull Identifier.Type memberType,
+            final Identifier.@NonNull Type memberType,
             final @NonNull String memberId) {
 
         var onwerSpec = owner.getSpecification();

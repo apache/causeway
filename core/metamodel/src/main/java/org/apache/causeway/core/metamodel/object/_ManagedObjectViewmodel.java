@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#VIEWMODEL}

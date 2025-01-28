@@ -25,7 +25,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @Deprecated
 public interface ActionLinkUiComponentFactoryWkt

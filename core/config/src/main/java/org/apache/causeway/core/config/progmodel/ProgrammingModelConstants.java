@@ -65,7 +65,7 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public final class ProgrammingModelConstants {

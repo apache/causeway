@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.commons.model.layout.UiPlacementDirection;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.ExtendedPopoverConfig.PopoverBoundary;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.PopoverBehavior;

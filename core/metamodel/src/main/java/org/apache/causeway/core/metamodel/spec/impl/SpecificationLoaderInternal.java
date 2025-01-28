@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionState;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 interface SpecificationLoaderInternal extends SpecificationLoader {
     /**

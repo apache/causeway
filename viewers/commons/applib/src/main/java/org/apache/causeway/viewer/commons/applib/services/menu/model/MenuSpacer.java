@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public record MenuSpacer(@NonNull String label) implements MenuEntry {
 

@@ -60,5 +60,5 @@ public interface ScalarMarshaller<K> {
      */
     K unmarshal(
             final Object graphValue,
-            @NonNull final Class<?> targetType);
+            final @NonNull Class<?> targetType);
 }

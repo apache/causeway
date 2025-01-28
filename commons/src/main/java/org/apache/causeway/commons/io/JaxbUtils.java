@@ -61,7 +61,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Singular;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

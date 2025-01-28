@@ -28,7 +28,7 @@ import org.apache.causeway.commons.binding.ChangeListener;
 import org.apache.causeway.commons.binding.InvalidationListener;
 import org.apache.causeway.commons.binding.Observable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 abstract class InternalUtil<T> {
 

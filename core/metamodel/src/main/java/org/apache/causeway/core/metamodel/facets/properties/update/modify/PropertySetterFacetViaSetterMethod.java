@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class PropertySetterFacetViaSetterMethod
 extends PropertySetterFacetAbstract

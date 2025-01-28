@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.sudo;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Allows the {@link SudoService} to notify other {@link org.springframework.stereotype.Service}s or

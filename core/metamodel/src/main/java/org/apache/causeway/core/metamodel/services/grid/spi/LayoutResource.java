@@ -20,12 +20,12 @@ package org.apache.causeway.core.metamodel.services.grid.spi;
 
 import org.apache.causeway.applib.value.NamedWithMimeType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 @Value
 public class LayoutResource {
     private final @NonNull String resourceName;
-    private final @NonNull NamedWithMimeType.CommonMimeType format;
+    private final NamedWithMimeType.@NonNull CommonMimeType format;
     private final @NonNull String content;
 }

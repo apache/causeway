@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -64,7 +64,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public Bookmark validateBookmark(@NonNull final Bookmark bookmark) {
+    public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
         return bookmark;
     }
 

@@ -55,7 +55,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescri
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 public class ResourceContext

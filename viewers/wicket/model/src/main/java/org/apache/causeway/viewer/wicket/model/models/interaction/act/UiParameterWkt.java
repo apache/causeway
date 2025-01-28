@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * <i>Action Parameter Interaction</i> model bound to its owner {@link ActionInteractionWkt}.

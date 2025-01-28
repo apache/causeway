@@ -27,14 +27,14 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
     private final @NonNull Class<? extends Facet> facetType;
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
+    @Getter(onMethod_ = {@Override}) private final Facet.@NonNull Precedence precedence;
 
     @Getter(onMethod_ = {@Override})
     private final @NonNull FacetHolder facetHolder;

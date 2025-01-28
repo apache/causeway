@@ -48,14 +48,14 @@ import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.Standalon
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.causeway.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 class _ResponseUtil {
 
     ActionResultResponse determineAndInterpretResult(
-            @NonNull final ActionModel actionModel,
+            final @NonNull ActionModel actionModel,
             @Nullable final AjaxRequestTarget ajaxTarget,
             @Nullable final ManagedObject resultAdapterIfAny) {
 
@@ -82,9 +82,9 @@ class _ResponseUtil {
     // -- HELPER
 
     private ActionResultResponse actionResultResponse(
-            @NonNull final ActionModel actionModel,
+            final @NonNull ActionModel actionModel,
             @Nullable final AjaxRequestTarget ajaxTarget,
-            @NonNull final ActionResultModel actionResultModel) {
+            final @NonNull ActionResultModel actionResultModel) {
 
         final ActionResultResponseType responseType = actionResultModel.responseType();
         final ManagedObject resultAdapter = actionResultModel.resultAdapter();

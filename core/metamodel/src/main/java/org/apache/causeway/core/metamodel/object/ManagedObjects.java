@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 

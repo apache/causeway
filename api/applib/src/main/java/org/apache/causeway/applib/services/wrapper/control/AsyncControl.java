@@ -35,7 +35,7 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

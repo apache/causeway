@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class CollectionDomainEventFacet
 extends DomainEventFacetAbstract<CollectionDomainEvent<?, ?>>

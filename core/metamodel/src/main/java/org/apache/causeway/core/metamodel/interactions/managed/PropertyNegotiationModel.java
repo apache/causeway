@@ -38,7 +38,7 @@ import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class PropertyNegotiationModel implements ManagedValue {
 

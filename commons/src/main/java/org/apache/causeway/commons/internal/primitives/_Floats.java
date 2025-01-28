@@ -21,7 +21,7 @@ package org.apache.causeway.commons.internal.primitives;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

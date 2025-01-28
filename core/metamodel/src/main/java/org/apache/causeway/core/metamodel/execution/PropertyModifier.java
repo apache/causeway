@@ -43,7 +43,7 @@ import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 

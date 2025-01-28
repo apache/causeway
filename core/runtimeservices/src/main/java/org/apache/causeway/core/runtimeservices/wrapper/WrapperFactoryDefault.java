@@ -109,7 +109,7 @@ import static org.apache.causeway.applib.services.wrapper.control.SyncControl.co
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

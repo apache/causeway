@@ -35,7 +35,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -60,7 +60,7 @@ public final class FacetRanking {
 
     @Getter @Accessors(fluent = true) private final @NonNull Class<? extends Facet> facetType;
 
-    private final @NonNull _Multimaps.ListMultimap<Facet.Precedence, Facet> facetsByPrecedence
+    private final _Multimaps.@NonNull ListMultimap<Facet.Precedence, Facet> facetsByPrecedence
             = _Multimaps.newSortedConcurrentListMultimap();
 
     private final @NonNull AtomicReference<Facet> eventFacetRef = new AtomicReference<>();

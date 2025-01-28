@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 /**

@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatCo
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -51,7 +51,7 @@ public final class ParameterSupport {
     @Value @Builder
     public static class ParamSupportingMethodSearchRequest {
 
-        @NonNull FacetFactory.ProcessMethodContext processMethodContext;
+        FacetFactory.@NonNull ProcessMethodContext processMethodContext;
         @NonNull Can<IntFunction<String>> paramIndexToMethodNameProviders;
         @NonNull Can<SearchAlgorithm> searchAlgorithms;
         @NonNull ReturnTypePattern returnTypePattern;

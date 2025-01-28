@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**

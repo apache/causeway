@@ -33,7 +33,7 @@ import org.apache.causeway.commons.internal.factory._InstanceUtil;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Implementation for application-defined primary keys.

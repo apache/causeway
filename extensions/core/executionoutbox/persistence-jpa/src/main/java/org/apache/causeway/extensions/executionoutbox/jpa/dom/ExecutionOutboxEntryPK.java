@@ -38,7 +38,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 @EqualsAndHashCode(of = {"interactionId", "sequence"})
 @NoArgsConstructor
@@ -91,7 +91,7 @@ public class ExecutionOutboxEntryPK implements Serializable {
         }
 
         @Override
-        public boolean isValid(@NonNull final ExecutionOutboxEntryPK value) {
+        public boolean isValid(final @NonNull ExecutionOutboxEntryPK value) {
             return value.getInteractionId()!=null;
         }
 

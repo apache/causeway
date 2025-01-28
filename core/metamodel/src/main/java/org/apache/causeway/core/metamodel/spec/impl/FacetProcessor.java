@@ -54,7 +54,7 @@ import org.apache.causeway.core.metamodel.methods.MethodPrefixBasedFacetFactory;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 record FacetProcessor(
         ProgrammingModel programmingModel,
@@ -100,7 +100,7 @@ record FacetProcessor(
 implements HasMetaModelContext {
 
     public FacetProcessor(
-            @NonNull final ProgrammingModel programmingModel) {
+            final @NonNull ProgrammingModel programmingModel) {
         this(programmingModel, programmingModel.streamFactories()
                 .map(programmingModel.getMetaModelContext().getServiceInjector()::injectServicesInto)
                 .collect(Can.toCan()));

@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class ActionDomainEventFacet
 extends DomainEventFacetAbstract<ActionDomainEvent<?>>

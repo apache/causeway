@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.attributes;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public interface AttributeModelChangeDispatcher {
 

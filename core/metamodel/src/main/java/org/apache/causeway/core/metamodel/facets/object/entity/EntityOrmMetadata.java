@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 // record candidate

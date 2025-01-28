@@ -26,7 +26,7 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class XmlValueSemanticsAbstract<T>
 extends ValueSemanticsAbstract<T>

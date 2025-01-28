@@ -48,7 +48,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationU
 import org.apache.causeway.extensions.secman.applib.user.events.UserCreatedEvent;
 import org.apache.causeway.extensions.secman.applib.util.RegexReplacer;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  *
@@ -207,7 +207,7 @@ implements ApplicationUserRepository {
 
     @Override
     public ApplicationUser newUser(
-            @NonNull final String username,
+            final @NonNull String username,
             @Nullable final AccountType accountType,
             final Consumer<ApplicationUser> beforePersist) {
 

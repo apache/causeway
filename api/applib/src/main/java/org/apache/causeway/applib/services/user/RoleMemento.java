@@ -35,7 +35,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Value;
 
 /**

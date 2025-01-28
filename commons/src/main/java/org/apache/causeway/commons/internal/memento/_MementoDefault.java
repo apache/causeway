@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
 import org.apache.causeway.commons.internal.memento._Mementos.Memento;
 import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  *

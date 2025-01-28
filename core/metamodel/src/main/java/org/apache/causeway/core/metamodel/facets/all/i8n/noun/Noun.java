@@ -25,7 +25,7 @@ import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Immutable value object that holds the null-able literal (String) for a noun.

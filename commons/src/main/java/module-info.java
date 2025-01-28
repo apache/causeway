@@ -67,6 +67,7 @@ module org.apache.causeway.commons {
     requires transitive java.xml;
     requires transitive org.apache.logging.log4j;
     requires transitive org.jdom2;
+    requires transitive org.jspecify;
     requires transitive org.jsoup;
     requires transitive org.yaml.snakeyaml;
     requires transitive spring.beans;

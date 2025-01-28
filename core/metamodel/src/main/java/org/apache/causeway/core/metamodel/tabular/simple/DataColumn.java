@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a single association of a domain object type (typically an entity type).

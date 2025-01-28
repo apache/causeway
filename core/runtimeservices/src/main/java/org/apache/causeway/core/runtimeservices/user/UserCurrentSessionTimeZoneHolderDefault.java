@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.user.UserCurrentSessionTimeZoneHolder;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Default implementation of {@link UserCurrentSessionTimeZoneHolder}.

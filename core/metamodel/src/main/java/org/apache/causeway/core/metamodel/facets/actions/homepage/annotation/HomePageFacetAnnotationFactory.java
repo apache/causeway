@@ -45,7 +45,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.functions._Predicates.not;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 public class HomePageFacetAnnotationFactory
 extends FacetFactoryAbstract

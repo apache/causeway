@@ -26,7 +26,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * @param <T> foreign type

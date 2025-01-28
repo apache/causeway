@@ -48,7 +48,7 @@ import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleRow;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleSection;
 import org.apache.causeway.valuetypes.asciidoc.builder.ast.SimpleTable;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Provides convenient factory methods to build a (AsciiDoc) Document Model.
@@ -173,13 +173,13 @@ public class AsciiDocFactory {
         return openBlock;
     }
 
-    public static Block listingBlock(final StructuralNode parent, @NonNull final String source) {
+    public static Block listingBlock(final StructuralNode parent, final @NonNull String source) {
         var listingBlock = block(parent, source);
         listingBlock.setStyle("listing");
         return listingBlock;
     }
 
-    public static Block sourceBlock(final StructuralNode parent, @Nullable final String language, @NonNull final String source) {
+    public static Block sourceBlock(final StructuralNode parent, @Nullable final String language, final @NonNull String source) {
         var sourceBlock = block(parent, source);
         sourceBlock.setStyle("source");
         if(_Strings.isNotEmpty(language)) {
@@ -188,7 +188,7 @@ public class AsciiDocFactory {
         return sourceBlock;
     }
 
-    public static Block htmlPassthroughBlock(final StructuralNode parent, @NonNull final String html) {
+    public static Block htmlPassthroughBlock(final StructuralNode parent, final @NonNull String html) {
         var block = block(parent, html);
         block.setStyle("passthrough");
         return block;
@@ -196,9 +196,9 @@ public class AsciiDocFactory {
 
     public static Block diagramBlock(
             final StructuralNode parent,
-            @NonNull final String diagramType,
-            @NonNull final Can<String> diagramOptions,
-            @NonNull final String source) {
+            final @NonNull String diagramType,
+            final @NonNull Can<String> diagramOptions,
+            final @NonNull String source) {
 
         var diagramBlock = block(parent, source);
 
@@ -225,13 +225,13 @@ public class AsciiDocFactory {
         return calloutList;
     }
 
-    public static ListItem callout(final org.asciidoctor.ast.List parent, @NonNull final String source) {
+    public static ListItem callout(final org.asciidoctor.ast.List parent, final @NonNull String source) {
         return listItem(parent, source);
     }
 
     // -- COLLAPSIBLE
 
-    public static Block collapsibleBlock(final StructuralNode parent, @NonNull final String source) {
+    public static Block collapsibleBlock(final StructuralNode parent, final @NonNull String source) {
         var collapsibleBlock = block(parent, source);
         collapsibleBlock.setStyle("example");
         collapsibleBlock.setAttribute("collapsible-option", "1", true);
@@ -328,9 +328,9 @@ public class AsciiDocFactory {
     public static class SourceFactory {
 
         public static Block sourceBlock(
-                @NonNull final Document doc,
-                @NonNull final String languageAndOptions,
-                @NonNull final String source,
+                final @NonNull Document doc,
+                final @NonNull String languageAndOptions,
+                final @NonNull String source,
                 @Nullable final String title) {
 
             var sourceBlock = AsciiDocFactory.sourceBlock(doc,
@@ -360,29 +360,29 @@ public class AsciiDocFactory {
 //        }
 //        ----
         public static Block java(
-                @NonNull final Document doc,
-                @NonNull final String javaSource,
+                final @NonNull Document doc,
+                final @NonNull String javaSource,
                 @Nullable final String title) {
             return sourceBlock(doc, "java", javaSource, title);
         }
 
         public static Block json(
-                @NonNull final Document doc,
-                @NonNull final String jsonSource,
+                final @NonNull Document doc,
+                final @NonNull String jsonSource,
                 @Nullable final String title) {
             return sourceBlock(doc, "json", jsonSource, title);
         }
 
         public static Block xml(
-                @NonNull final Document doc,
-                @NonNull final String xmlSource,
+                final @NonNull Document doc,
+                final @NonNull String xmlSource,
                 @Nullable final String title) {
             return sourceBlock(doc, "xml", xmlSource, title);
         }
 
         public static Block yaml(
-                @NonNull final Document doc,
-                @NonNull final String yamlSource,
+                final @NonNull Document doc,
+                final @NonNull String yamlSource,
                 @Nullable final String title) {
             return sourceBlock(doc, "yaml", yamlSource, title);
         }
@@ -392,10 +392,10 @@ public class AsciiDocFactory {
     public static class DiagramFactory {
 
         public static Block diagramBlock(
-                @NonNull final Document doc,
-                @NonNull final String diagramType,
-                @NonNull final Can<String> diagramOptions,
-                @NonNull final String source,
+                final @NonNull Document doc,
+                final @NonNull String diagramType,
+                final @NonNull Can<String> diagramOptions,
+                final @NonNull String source,
                 @Nullable final String title) {
 
             var sourceBlock = AsciiDocFactory.diagramBlock(doc,
@@ -418,17 +418,17 @@ public class AsciiDocFactory {
 //      @enduml
 //      ----
         public static Block plantumlPng(
-                @NonNull final Document doc,
-                @NonNull final String plantumlSource,
-                @NonNull final String diagramKey,
+                final @NonNull Document doc,
+                final @NonNull String plantumlSource,
+                final @NonNull String diagramKey,
                 @Nullable final String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "png"), plantumlSource, title);
         }
 
         public static Block plantumlSvg(
-                @NonNull final Document doc,
-                @NonNull final String plantumlSource,
-                @NonNull final String diagramKey,
+                final @NonNull Document doc,
+                final @NonNull String plantumlSource,
+                final @NonNull String diagramKey,
                 @Nullable final String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "svg"), plantumlSource, title);
         }

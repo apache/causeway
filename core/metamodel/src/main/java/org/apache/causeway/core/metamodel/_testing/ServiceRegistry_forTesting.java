@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 

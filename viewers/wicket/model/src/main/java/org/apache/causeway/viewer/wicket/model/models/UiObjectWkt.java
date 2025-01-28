@@ -55,7 +55,7 @@ import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.Getter;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.Synchronized;
 import lombok.extern.log4j.Log4j2;
@@ -90,7 +90,7 @@ implements
 
     public static UiObjectWkt ofAdapterForCollection(
             final ManagedObject adapter,
-            final @NonNull CollectionModel.Variant variant) {
+            final CollectionModel.@NonNull Variant variant) {
         return new UiObjectWkt(BookmarkedObjectWkt.ofAdapter(adapter),
                 ViewOrEditMode.VIEWING, variant.getTitleColumnRenderingHint());
     }
