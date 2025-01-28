@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
@@ -241,7 +241,7 @@ public record ObjectManager(
                     _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
     }
 
-    public ManagedObject demementify(@Nullable final ObjectMemento memento) {
+    public ManagedObject demementify(final @Nullable ObjectMemento memento) {
         if(memento==null) return null;
         var spec = mmc.getSpecificationLoader()
                         .specForLogicalType(memento.logicalType())

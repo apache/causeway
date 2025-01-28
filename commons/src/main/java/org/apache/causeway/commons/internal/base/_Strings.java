@@ -45,7 +45,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;

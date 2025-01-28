@@ -46,7 +46,7 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;

@@ -28,7 +28,7 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status.Family;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;

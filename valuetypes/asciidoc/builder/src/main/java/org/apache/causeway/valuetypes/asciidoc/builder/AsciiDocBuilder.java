@@ -59,17 +59,17 @@ public class AsciiDocBuilder {
 //
 //    // -- BLOCKS
 //
-//    public AsciiDocBuilder javaBlockWithTitle(final String source, @Nullable final String title) {
+//    public AsciiDocBuilder javaBlockWithTitle(final String source, final @Nullable String title) {
 //        AsciiDocFactory.SourceFactory.java(doc, source, title);
 //        return this;
 //    }
 //
-//    public AsciiDocBuilder xmlBlockWithTitle(final String source, @Nullable final String title) {
+//    public AsciiDocBuilder xmlBlockWithTitle(final String source, final @Nullable String title) {
 //        AsciiDocFactory.SourceFactory.xml(doc, source, title);
 //        return this;
 //    }
 //
-//    public AsciiDocBuilder yamlBlockWithTitle(final String source, @Nullable final String title) {
+//    public AsciiDocBuilder yamlBlockWithTitle(final String source, final @Nullable String title) {
 //        AsciiDocFactory.SourceFactory.yaml(doc, source, title);
 //        return this;
 //    }

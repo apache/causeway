@@ -27,7 +27,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.services.user.UserMemento;

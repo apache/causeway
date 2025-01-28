@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.context;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.i18n.TranslationService;

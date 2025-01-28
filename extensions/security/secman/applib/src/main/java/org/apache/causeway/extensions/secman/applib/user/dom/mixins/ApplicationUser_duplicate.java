@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.secman.applib.user.dom.mixins;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;

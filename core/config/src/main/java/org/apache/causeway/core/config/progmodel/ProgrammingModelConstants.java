@@ -36,7 +36,7 @@ import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.Identifier;

@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.actionresponse;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

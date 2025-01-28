@@ -24,7 +24,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;

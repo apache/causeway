@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.factory;
 
 import java.util.NoSuchElementException;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;

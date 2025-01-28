@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.PathBuilder;
@@ -67,10 +67,10 @@ public class AutoCompleteUsingQueryDslFacet extends FacetAbstract implements Aut
     public AutoCompleteUsingQueryDslFacet(
             final Class<?> entity,
             final FacetHolder facetHolder,
-            @Nullable final Object additionalPredicateRepository,
-            @Nullable final Method additionalPredicateMethod,
-            @Nullable final Integer limit,
-            @Nullable final Integer minLength,
+            final @Nullable Object additionalPredicateRepository,
+            final @Nullable Method additionalPredicateMethod,
+            final @Nullable Integer limit,
+            final @Nullable Integer minLength,
             final QueryDslSupport queryDslSupport
     ) {
         super(AutoCompleteFacet.class, facetHolder);

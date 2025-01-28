@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;

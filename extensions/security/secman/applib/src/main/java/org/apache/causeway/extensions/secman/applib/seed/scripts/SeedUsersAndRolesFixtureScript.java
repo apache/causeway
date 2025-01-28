@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -250,8 +250,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     // -- HELPER
 
-    @Nullable
-    private java.util.Locale parseLocale(final @Nullable String input) {
+    private java.util.@Nullable Locale parseLocale(final @Nullable String input) {
         return localeSemantics.getParser().parseTextRepresentation(null, input);
     }
 

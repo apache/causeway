@@ -21,7 +21,7 @@ package org.apache.causeway.security.spring.authconverters;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 

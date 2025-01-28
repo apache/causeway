@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.function.ThrowingSupplier;
 
 import org.apache.causeway.commons.functional.Try;

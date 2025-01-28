@@ -21,7 +21,7 @@ package org.apache.causeway.commons.internal.collections;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -110,8 +110,8 @@ public final class _Streams {
      * @return null for null
      */
     public static <T> Stream<T> sortConditionally(
-        @Nullable final Stream<T> input,
-        @Nullable final Comparator<? super T> comparator) {
+        final @Nullable Stream<T> input,
+        final @Nullable Comparator<? super T> comparator) {
         if(comparator==null) return input;
         if(input==null) return null;
         return input.sorted(comparator);

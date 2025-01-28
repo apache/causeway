@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.Identifier;
@@ -48,7 +48,7 @@ public class SimpleRealm {
         public boolean grantsChange() {
             return this==CHANGE;
         }
-        public static Grant valueOf(@Nullable final Grant grant) {
+        public static Grant valueOf(final @Nullable Grant grant) {
             return grant!=null
                     ? grant
                     : Grant.NONE;
@@ -80,13 +80,13 @@ public class SimpleRealm {
         return this;
     }
 
-    public final Optional<Role> lookupRoleByName(@Nullable final String roleName) {
+    public final Optional<Role> lookupRoleByName(final @Nullable String roleName) {
         return _Strings.isNullOrEmpty(roleName)
                 ? Optional.empty()
                 : Optional.ofNullable(roles.get(roleName));
     }
 
-    public final Optional<User> lookupUserByName(@Nullable final String userName) {
+    public final Optional<User> lookupUserByName(final @Nullable String userName) {
         return _Strings.isNullOrEmpty(userName)
                 ? Optional.empty()
                 : Optional.ofNullable(users.get(userName));

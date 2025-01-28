@@ -27,7 +27,7 @@ import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.query.Criteria;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.Query;
@@ -161,7 +161,7 @@ implements EntityFacet {
 
     @SuppressWarnings("unchecked")
     @Override @Nullable
-    public <T> T refresh(@Nullable final T pojo) {
+    public <T> T refresh(final @Nullable T pojo) {
         return primaryKey(pojo)
             .<T>map(pkPojo->(T)jdbcAggregateTemplate.findById(pkPojo, entityClass))
             .orElse(pojo);

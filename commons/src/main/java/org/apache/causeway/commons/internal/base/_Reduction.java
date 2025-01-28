@@ -23,7 +23,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.jspecify.annotations.NonNull;
 

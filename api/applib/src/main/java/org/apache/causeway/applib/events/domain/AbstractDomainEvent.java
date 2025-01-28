@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.EventObjectBase;

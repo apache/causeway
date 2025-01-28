@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Comparator;
 import java.util.Objects;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Objects;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;

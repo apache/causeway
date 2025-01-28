@@ -25,7 +25,7 @@ import java.util.Objects;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;

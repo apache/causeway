@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;

@@ -35,7 +35,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
@@ -467,7 +467,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaUtilDate(final @Nullable java.util.Date i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaUtilDate(final java.util.@Nullable Date i) {
         setSomeJavaUtilDate(i);
         return this;
     }
@@ -482,7 +482,7 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJavaSqlDate(final @Nullable java.sql.Date i) {
+    public FakeDataDemoObjectWithAll updateSomeJavaSqlDate(final java.sql.@Nullable Date i) {
         setSomeJavaSqlDate(i);
         return this;
     }

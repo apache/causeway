@@ -30,7 +30,7 @@ import jakarta.inject.Inject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;

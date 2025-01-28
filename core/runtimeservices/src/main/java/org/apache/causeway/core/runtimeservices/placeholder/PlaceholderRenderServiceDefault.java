@@ -26,7 +26,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -56,14 +56,14 @@ implements PlaceholderRenderService {
     @Override
     public String asText(
             final @NonNull PlaceholderLiteral placeholderLiteral,
-            @Nullable final Map<String, String> vars) {
+            final @Nullable Map<String, String> vars) {
         return "(" + translateAndInterpolate(placeholderLiteral, vars) + ")";
     }
 
     @Override
     public String asHtml(
             final @NonNull PlaceholderLiteral placeholderLiteral,
-            @Nullable final Map<String, String> vars) {
+            final @Nullable Map<String, String> vars) {
 
         var href = Optional.ofNullable(vars).map(map->map.get("href"));
 

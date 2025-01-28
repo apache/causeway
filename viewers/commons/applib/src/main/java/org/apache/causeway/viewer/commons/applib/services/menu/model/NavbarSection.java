@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
 import java.util.Locale;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.commons.collections.Can;

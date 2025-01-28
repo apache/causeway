@@ -21,7 +21,7 @@ package org.apache.causeway.applib.events;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;

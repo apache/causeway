@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
@@ -79,7 +79,7 @@ public record TabularModel(
         private static TabularCell EMPTY = new TabularCell(0, Either.right(Stream::empty));
         public static TabularCell empty() { return EMPTY; }
 
-        public static TabularCell single(@Nullable final Object value) {
+        public static TabularCell single(final @Nullable Object value) {
             return value==null
                     ? EMPTY
                     : new TabularCell(1, Either.left(value));

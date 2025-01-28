@@ -24,7 +24,7 @@ import java.time.ZoneOffset;
 import java.time.temporal.Temporal;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Either;
 

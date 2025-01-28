@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.security.authentication.manager;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;

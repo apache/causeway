@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -262,7 +262,7 @@ public class GraphUtils {
     @FunctionalInterface
     public interface NodeFormatter<T> {
         String format(int nodeIndex, T node);
-        public static <T> NodeFormatter<T> of(@Nullable final Function<T, String> toStringFunction) {
+        public static <T> NodeFormatter<T> of(final @Nullable Function<T, String> toStringFunction) {
             return toStringFunction!=null
                 ? (i, node)->toStringFunction.apply(node)
                 : (i, node)->node.toString();
@@ -292,7 +292,7 @@ public class GraphUtils {
         // -- TRAVERSAL
 
         public void visitNeighbors(final int nodeIndex,
-                @Nullable final Consumer<T> nodeVisitor) {
+                final @Nullable Consumer<T> nodeVisitor) {
             kernel()
                 .streamNeighbors(nodeIndex)
                 .forEach(neighborIndex->
@@ -300,8 +300,8 @@ public class GraphUtils {
         }
 
         public void visitNeighbors(final int nodeIndex,
-                @Nullable final EdgeFilter edgeFilter,
-                @Nullable final Consumer<T> nodeVisitor) {
+                final @Nullable EdgeFilter edgeFilter,
+                final @Nullable Consumer<T> nodeVisitor) {
             if(nodeVisitor==null) return;
             var stream = kernel()
                 .streamNeighbors(nodeIndex);
@@ -314,8 +314,8 @@ public class GraphUtils {
         }
 
         public void visitEdges(final int nodeIndex,
-                @Nullable final EdgeFilter edgeFilter,
-                @Nullable final EdgeConsumer<T> edgeConsumer) {
+                final @Nullable EdgeFilter edgeFilter,
+                final @Nullable EdgeConsumer<T> edgeConsumer) {
             if(edgeConsumer==null) return;
             var fromNode = nodes.getElseFail(nodeIndex);
             var stream = kernel()
@@ -331,7 +331,7 @@ public class GraphUtils {
         }
 
         public void visitNeighborsIndexed(final int nodeIndex,
-                @Nullable final IndexedConsumer<T> nodeVisitor) {
+                final @Nullable IndexedConsumer<T> nodeVisitor) {
             if(nodeVisitor==null) return;
             kernel()
                 .streamNeighbors(nodeIndex)
@@ -445,13 +445,13 @@ public class GraphUtils {
         }
 
         public String toString(
-                @Nullable final Function<T, String> nodeFormatter) {
+                final @Nullable Function<T, String> nodeFormatter) {
             return toString(NodeFormatter.of(nodeFormatter), null);
         }
 
         public String toString(
-                @Nullable final NodeFormatter<T> nodeFormatter,
-                @Nullable final Function<Object, String> edgeAttributeFormatter) {
+                final @Nullable NodeFormatter<T> nodeFormatter,
+                final @Nullable Function<Object, String> edgeAttributeFormatter) {
 
             var isDirected = !kernel().isUndirected();
             var hasEdgeAttributes = !edgeAttributeByPackedEdgeIndex.isEmpty();
@@ -546,7 +546,7 @@ public class GraphUtils {
          * Variant of {@link #addEdge(int, int)}, that stores an arbitrary attribute with the edge.
          * @see #addEdge(int, int)
          */
-        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex, @Nullable final Object edgeAttribute) {
+        public GraphBuilder<T> addEdge(final int fromIndex, final int toIndex, final @Nullable Object edgeAttribute) {
             addEdge(fromIndex, toIndex);
             final long packedEdgeIndex = isUndirected
                     ? _Longs.pack(Math.min(fromIndex, toIndex), Math.max(fromIndex, toIndex))
@@ -570,7 +570,7 @@ public class GraphUtils {
          * Variant of {@link #addEdge(Object, Object)}, that stores an arbitrary attribute with the edge.
          * @see #addEdge(Object, Object)
          */
-        public GraphBuilder<T> addEdge(final T from, final T to, @Nullable final Object edgeAttribute) {
+        public GraphBuilder<T> addEdge(final T from, final T to, final @Nullable Object edgeAttribute) {
             final int fromIndex = indexOfWithAdd(from);
             final int toIndex = indexOfWithAdd(to);
             addEdge(fromIndex, toIndex, edgeAttribute);

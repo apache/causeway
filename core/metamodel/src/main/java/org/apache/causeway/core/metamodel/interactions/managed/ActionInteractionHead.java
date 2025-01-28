@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.List;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -87,7 +87,7 @@ implements HasMetaModel<ObjectAction> {
      * The size of the tuple corresponds to the number of parameters.
      * @param pojoArgList - argument pojos
      */
-    public Can<ManagedObject> getPopulatedParameterValues(@Nullable final List<Object> pojoArgList) {
+    public Can<ManagedObject> getPopulatedParameterValues(final @Nullable List<Object> pojoArgList) {
         var params = getMetaModel().getParameters();
 
         _Assert.assertEquals(params.size(), _NullSafe.size(pojoArgList));

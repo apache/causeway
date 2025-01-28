@@ -26,7 +26,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceUnitUtil;
 
 import org.springframework.data.jpa.repository.JpaContext;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
@@ -203,7 +203,7 @@ class JpaEntityFacet
     }
 
     @Override @Nullable
-    public <T> T refresh(@Nullable final T pojo) {
+    public <T> T refresh(final @Nullable T pojo) {
         if (pojo == null) return pojo; // nothing to do
 
         // guard against misuse

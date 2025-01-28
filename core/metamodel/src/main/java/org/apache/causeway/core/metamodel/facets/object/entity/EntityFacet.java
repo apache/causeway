@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.query.Query;

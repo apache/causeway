@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.bookmark;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -88,7 +88,7 @@ public interface BookmarkService {
     /**
      * As {@link #lookup(Bookmark)}, but down-casting to the specified type.
      */
-    default <T> Optional<T> lookup(@Nullable final Bookmark bookmark, final @NonNull Class<T> cls) {
+    default <T> Optional<T> lookup(final @Nullable Bookmark bookmark, final @NonNull Class<T> cls) {
         return lookup(bookmark)
                 .map(t->cls.cast(t));
     }

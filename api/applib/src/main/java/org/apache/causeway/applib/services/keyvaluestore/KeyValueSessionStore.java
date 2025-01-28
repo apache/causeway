@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.keyvaluestore;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.jspecify.annotations.NonNull;
 

@@ -21,7 +21,7 @@ package org.apache.causeway.core.transaction.changetracking;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

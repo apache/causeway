@@ -23,7 +23,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

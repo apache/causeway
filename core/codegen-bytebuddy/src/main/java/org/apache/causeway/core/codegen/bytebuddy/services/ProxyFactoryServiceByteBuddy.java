@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.stereotype.Service;
 
@@ -105,7 +105,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
             // -- HELPER (create with initialize)
 
-            private Object createUsingConstructor(final InvocationHandler invocationHandler, @Nullable final Object[] constructorArgs)
+            private Object createUsingConstructor(final InvocationHandler invocationHandler, final @Nullable Object[] constructorArgs)
                     throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
                 final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
                 return proxyClass

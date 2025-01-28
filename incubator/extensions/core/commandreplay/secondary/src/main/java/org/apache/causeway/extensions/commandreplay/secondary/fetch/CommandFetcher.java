@@ -27,7 +27,7 @@ import jakarta.inject.Named;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;

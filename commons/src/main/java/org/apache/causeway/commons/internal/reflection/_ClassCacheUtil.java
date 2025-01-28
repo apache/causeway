@@ -23,7 +23,7 @@ import java.util.Locale;
 import jakarta.inject.Named;
 
 import org.springframework.core.annotation.MergedAnnotations;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 
@@ -82,7 +82,7 @@ class _ClassCacheUtil {
     }
 
     @Nullable
-    private String nameFromPersistenceTable(final Class<?> type, @Nullable final String schema, @Nullable final String table) {
+    private String nameFromPersistenceTable(final Class<?> type, final @Nullable String schema, final @Nullable String table) {
         if(_Strings.isEmpty(schema)) return null;
         return "%s.%s".formatted(schema, _Strings.nonEmpty(table)
                 .orElseGet(type::getSimpleName));

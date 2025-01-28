@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.services.objectlifecycle;
 
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.commons.collections.Can;

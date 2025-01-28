@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

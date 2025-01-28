@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

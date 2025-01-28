@@ -23,7 +23,7 @@ import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;

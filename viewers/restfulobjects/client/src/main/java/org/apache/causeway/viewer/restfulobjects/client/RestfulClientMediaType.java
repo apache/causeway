@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 import jakarta.ws.rs.core.MediaType;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.commons.internal.base._NullSafe;

@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
@@ -54,7 +54,7 @@ implements HasCommonContext {
         this(id, null);
     }
 
-    public PanelBase(final String id, @Nullable final IModel<T> model) {
+    public PanelBase(final String id, final @Nullable IModel<T> model) {
         super(id, model);
     }
 

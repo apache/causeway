@@ -28,7 +28,7 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 

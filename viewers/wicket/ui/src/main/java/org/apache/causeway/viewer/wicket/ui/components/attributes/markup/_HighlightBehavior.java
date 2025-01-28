@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.attributes.markup;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;

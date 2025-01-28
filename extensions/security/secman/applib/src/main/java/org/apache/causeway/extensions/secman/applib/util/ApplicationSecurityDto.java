@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;

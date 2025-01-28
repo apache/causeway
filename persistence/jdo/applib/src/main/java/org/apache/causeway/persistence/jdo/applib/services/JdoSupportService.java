@@ -30,7 +30,7 @@ import javax.jdo.query.BooleanExpression;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Primarily provides access to the current thread's {@link PersistenceManagerFactory} and

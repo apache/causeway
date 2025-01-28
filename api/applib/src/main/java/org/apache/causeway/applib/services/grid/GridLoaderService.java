@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.grid;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;

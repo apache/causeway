@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

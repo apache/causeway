@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.placeholder;
 
 import java.util.Map;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 
@@ -63,7 +63,7 @@ public interface PlaceholderRenderService {
         return asHtml(placeholderLiteral, null);
     }
 
-    static String interpolate(final String raw, @Nullable final Map<String, String> vars) {
+    static String interpolate(final String raw, final @Nullable Map<String, String> vars) {
         return vars!=null
                 ? new _StringInterpolation(vars).applyTo(raw)
                 : raw;
@@ -73,13 +73,13 @@ public interface PlaceholderRenderService {
         return new PlaceholderRenderService() {
             @Override public String asText(
                     final @NonNull PlaceholderLiteral placeholderLiteral,
-                    @Nullable final Map<String, String> vars) {
+                    final @Nullable Map<String, String> vars) {
                 return PlaceholderRenderService.interpolate(placeholderLiteral.getLiteral(), vars);
             }
 
             @Override public String asHtml(
                     final @NonNull PlaceholderLiteral placeholderLiteral,
-                    @Nullable final Map<String, String> vars) {
+                    final @Nullable Map<String, String> vars) {
                 return asText(placeholderLiteral, vars);
             }
         };

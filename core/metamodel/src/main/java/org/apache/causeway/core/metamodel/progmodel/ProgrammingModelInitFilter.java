@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.progmodel;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
@@ -69,7 +69,7 @@ public interface ProgrammingModelInitFilter {
         return _Predicates.alwaysTrue();
     }
 
-    public static Predicate<ProgrammingModel.Marker[]> excluding(@Nullable final EnumSet<ProgrammingModel.Marker> excludingMarkers) {
+    public static Predicate<ProgrammingModel.Marker[]> excluding(final @Nullable EnumSet<ProgrammingModel.Marker> excludingMarkers) {
         if(excludingMarkers==null)  return excludingNone();
 
         return markersOnFactory -> {

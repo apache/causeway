@@ -34,7 +34,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
@@ -110,7 +110,7 @@ ValueSemanticsProvider<T> {
      * @param context - nullable in support of JUnit testing
      * @return {@link Locale} from given context or else system's default
      */
-    protected UserLocale getUserLocale(final @Nullable ValueSemanticsProvider.Context context) {
+    protected UserLocale getUserLocale(final ValueSemanticsProvider.@Nullable Context context) {
         return Optional.ofNullable(context)
                 .map(ValueSemanticsProvider.Context::getInteractionContext)
                 .map(InteractionContext::getLocale)
@@ -199,12 +199,12 @@ ValueSemanticsProvider<T> {
      */
     @SuppressWarnings("javadoc")
     protected DecimalFormat getNumberFormat(
-            final @Nullable ValueSemanticsProvider.Context context) {
+            final ValueSemanticsProvider.@Nullable Context context) {
         return getNumberFormat(context, FormatUsageFor.RENDERING);
     }
 
     protected DecimalFormat getNumberFormat(
-            final @Nullable ValueSemanticsProvider.Context context,
+            final ValueSemanticsProvider.@Nullable Context context,
             final @NonNull FormatUsageFor usedFor) {
         var format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
@@ -214,7 +214,7 @@ ValueSemanticsProvider<T> {
     }
 
     protected Optional<BigInteger> parseInteger(
-            final @Nullable ValueSemanticsProvider.Context context,
+            final ValueSemanticsProvider.@Nullable Context context,
             final @Nullable String text) {
         var input = _Strings.blankToNullOrTrim(text);
         if(input==null) {
@@ -329,7 +329,7 @@ ValueSemanticsProvider<T> {
     }
 
     protected Optional<DateTimeFormatter> getTemporalZoneOnlyRenderingFormat(
-            final @Nullable ValueSemanticsProvider.Context context,
+            final ValueSemanticsProvider.@Nullable Context context,
             final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
             final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic) {
 
@@ -348,7 +348,7 @@ ValueSemanticsProvider<T> {
     // -- TEMPORAL FORMATTING/PARSING
 
     protected DateTimeFormatter getTemporalEditingFormat(
-            final @Nullable ValueSemanticsProvider.Context context,
+            final ValueSemanticsProvider.@Nullable Context context,
             final TemporalValueSemantics.@NonNull TemporalCharacteristic temporalCharacteristic,
             final TemporalValueSemantics.@NonNull OffsetCharacteristic offsetCharacteristic,
             final @NonNull TimePrecision timePrecision,

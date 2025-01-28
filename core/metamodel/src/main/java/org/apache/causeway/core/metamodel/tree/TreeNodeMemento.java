@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.tree;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.graph.tree.TreePath;

@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.docgen.help.topics.domainobjects;
 
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.LogicalType;

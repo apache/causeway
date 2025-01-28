@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;

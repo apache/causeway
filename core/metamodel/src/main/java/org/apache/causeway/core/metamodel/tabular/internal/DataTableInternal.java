@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
@@ -251,8 +251,7 @@ implements DataTableInteractive {
                     .test(dataRow, searchArgumentBindable.getValue());
     }
 
-    @Nullable
-    private CollectionFilterService.Tokens tokens(final ManagedObject element){
+    private CollectionFilterService.@Nullable Tokens tokens(final ManagedObject element){
         return filterHandler.isEmpty()
                 ? null
                 : filterHandler.get().tokenizer.apply(element.getPojo());
@@ -433,7 +432,7 @@ implements DataTableInteractive {
 
         private @Nullable String searchArgument;
         private @NonNull Set<Integer> selectedRowIndexes;
-        private @Nullable DataTableInteractive.ColumnSort columnSort;
+        private DataTableInteractive.@Nullable ColumnSort columnSort;
 
         @Override
         public DataTableInternal getDataTableModel(final ManagedObject owner) {

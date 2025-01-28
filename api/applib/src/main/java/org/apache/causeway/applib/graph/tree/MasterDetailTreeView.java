@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.graph.tree;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.LabelPosition;

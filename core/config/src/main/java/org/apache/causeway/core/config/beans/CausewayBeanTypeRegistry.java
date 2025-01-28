@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -130,7 +130,7 @@ public class CausewayBeanTypeRegistry {
     public Stream<Class<?>> streamMixinTypes() { return mixinTypes.keySet().stream(); }
     public Stream<Class<?>> streamValueTypes() { return valueTypes.keySet().stream(); }
     public Stream<Class<?>> streamEntityTypes() { return streamEntityTypes(persistenceStack); }
-    public Stream<Class<?>> streamEntityTypes(@Nullable final PersistenceStack selectedStack) {
+    public Stream<Class<?>> streamEntityTypes(final @Nullable PersistenceStack selectedStack) {
         if(selectedStack==null || !selectedStack.isPresent()) return Stream.empty();
         return entities.stream()
                 .filter(typeMeta->typeMeta.persistenceStack()==selectedStack)

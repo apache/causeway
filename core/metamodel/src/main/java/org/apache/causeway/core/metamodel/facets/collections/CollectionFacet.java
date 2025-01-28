@@ -38,7 +38,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -102,13 +102,13 @@ public interface CollectionFacet extends Facet {
 
     // -- UTILS
 
-    public static Optional<CollectionFacet> lookup(@Nullable final ManagedObject container) {
+    public static Optional<CollectionFacet> lookup(final @Nullable ManagedObject container) {
         return container!=null
             ? container.getSpecification().lookupFacet(CollectionFacet.class)
             : Optional.empty();
     }
 
-    public static int elementCount(@Nullable final ManagedObject container) {
+    public static int elementCount(final @Nullable ManagedObject container) {
         return container instanceof PackedManagedObject packedManagedObject
             ? packedManagedObject.unpack().size()
             : lookup(container)
@@ -116,7 +116,7 @@ public interface CollectionFacet extends Facet {
                 .orElse(0);
     }
 
-    public static Stream<ManagedObject> streamAdapters(@Nullable final ManagedObject container) {
+    public static Stream<ManagedObject> streamAdapters(final @Nullable ManagedObject container) {
         return container instanceof PackedManagedObject packedManagedObject
             ? packedManagedObject.unpack().stream()
             : lookup(container)
@@ -124,7 +124,7 @@ public interface CollectionFacet extends Facet {
                 .orElse(Stream.empty());
     }
 
-    public static Object[] toArrayOfPojos(@Nullable final ManagedObject container) {
+    public static Object[] toArrayOfPojos(final @Nullable ManagedObject container) {
         var elementAdapters = streamAdapters(container)
                 .collect(Collectors.toList());
         return MmUnwrapUtils.multipleAsArray(elementAdapters);

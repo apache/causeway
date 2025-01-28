@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;

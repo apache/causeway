@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.valuesemantics;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;

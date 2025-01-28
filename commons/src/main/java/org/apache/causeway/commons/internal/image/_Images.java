@@ -32,7 +32,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._NullSafe;

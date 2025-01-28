@@ -30,7 +30,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.LoaderOptions;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
 

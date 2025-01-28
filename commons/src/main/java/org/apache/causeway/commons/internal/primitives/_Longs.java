@@ -21,7 +21,7 @@ package org.apache.causeway.commons.internal.primitives;
 import java.util.OptionalLong;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints.BiIntConsumer;

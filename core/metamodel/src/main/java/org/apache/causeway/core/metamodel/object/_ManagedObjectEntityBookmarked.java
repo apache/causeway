@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

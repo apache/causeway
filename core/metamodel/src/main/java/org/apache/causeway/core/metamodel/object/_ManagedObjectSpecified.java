@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -93,7 +93,7 @@ implements ManagedObject {
                 : Optional.ofNullable(mementoForScalar(this));
     }
 
-    private ObjectMemento mementoForScalar(@Nullable final ManagedObject adapter) {
+    private ObjectMemento mementoForScalar(final @Nullable ManagedObject adapter) {
         MmAssertionUtils.assertPojoIsScalar(adapter);
         return ObjectMemento.singular(adapter)
                 .orElseGet(()->

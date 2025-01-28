@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.LogicalType;
@@ -107,12 +107,12 @@ record CausewayComponentCollector(
         return typeMeta;
     }
 
-    private static Optional<Class<?>> loadClass(@Nullable final BeanDefinition beanDefinition) {
+    private static Optional<Class<?>> loadClass(final @Nullable BeanDefinition beanDefinition) {
         return Optional.ofNullable(beanDefinition.getBeanClassName())
                 .flatMap(CausewayComponentCollector::loadClass);
     }
 
-    private static Optional<Class<?>> loadClass(@Nullable final String className) {
+    private static Optional<Class<?>> loadClass(final @Nullable String className) {
         if(className==null) return Optional.empty();
         return Try.<Class<?>>call(()->_Context.loadClass(className))
             .mapFailureToSuccess(ex->{

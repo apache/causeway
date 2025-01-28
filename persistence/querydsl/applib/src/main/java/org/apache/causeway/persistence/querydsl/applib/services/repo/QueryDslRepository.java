@@ -40,7 +40,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.EntityPathBase;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.repository.RepositoryService;
@@ -267,7 +267,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @see #findAnyUsingDefaultOrder(Function...)
      */
     public Optional<T> findAny(
-            @Nullable final Function<Q, Predicate>[] predicates,
+            final @Nullable Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return Optional.ofNullable(queryDslSupport
@@ -327,7 +327,7 @@ public abstract class QueryDslRepository<T extends Comparable, Q extends EntityP
      * @see #findFirst(Function, Function[])
      */
     public Optional<T> findFirst(
-            @Nullable final Function<Q, Predicate>[] predicates,
+            final @Nullable Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return Optional.ofNullable(queryDslSupport
@@ -391,7 +391,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> List<F> findFieldsDistinct(
             final Function<Q, Expression<F>> projection,
-            @Nullable final Function<Q, Predicate>[] predicates,
+            final @Nullable Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return queryDslSupport
                 .select(projection.apply(getEntityPath()))
@@ -422,7 +422,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> List<F> findFieldsDistinct(
             final Function<Q, Expression<F>> projection,
-            @Nullable final Function<Q, Predicate> predicate,
+            final @Nullable Function<Q, Predicate> predicate,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers) {
         return findFieldsDistinct(projection, asArray(predicate), orderSpecifiers);
     }
@@ -450,7 +450,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> List<F> findFieldsDistinctUsingDefaultOrder(
             final Function<Q, Expression<F>> projection,
-            @Nullable final Function<Q, Predicate>... predicates
+            final @Nullable Function<Q, Predicate>... predicates
     ) {
         return queryDslSupport
                 .select(projection.apply(getEntityPath()))
@@ -479,7 +479,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> Optional<F> findFirstFields(
             final Function<Q, Expression<F>> projection,
-            @Nullable final Function<Q, Predicate>[] predicates,
+            final @Nullable Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return Optional.ofNullable(queryDslSupport
@@ -509,7 +509,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> Optional<F> findFirstFields(
             final Function<Q, Expression<F>> projection,
-            @Nullable final Function<Q, Predicate> predicate,
+            final @Nullable Function<Q, Predicate> predicate,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return findFirstFields(projection, asArray(predicate), orderSpecifiers);
@@ -537,7 +537,7 @@ s     * @see #findFirst(Function[], Function[])
      */
     public <F> Optional<F> findFirstFieldsUsingDefaultOrder(
             final Function<Q, Expression<F>> projection,
-            @Nullable final Function<Q, Predicate>... predicates
+            final @Nullable Function<Q, Predicate>... predicates
     ) {
         return findFirstFields(projection, predicates, getDefaultOrdersAsArray());
     }
@@ -573,7 +573,7 @@ s     * @see #findFirst(Function[], Function[])
      * @see #findUsingDefaultOrder(Function[])
      */
     public List<T> find(
-            @Nullable final Function<Q, Predicate>[] predicates,
+            final @Nullable Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return queryDslSupport
@@ -595,7 +595,7 @@ s     * @see #findFirst(Function[], Function[])
      * @see #findUsingDefaultOrder(Function[])
      */
     public List<T> find(
-            @Nullable final Function<Q, Predicate> predicate,
+            final @Nullable Function<Q, Predicate> predicate,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return find(asArray(predicate), orderSpecifiers);
@@ -636,7 +636,7 @@ s     * @see #findFirst(Function[], Function[])
     public <B> List<B> findAsBean(
             final Function<Q, Expression<?>>[] projections,
             final Class<? extends B> bean,
-            @Nullable final Function<Q, Predicate>[] predicates,
+            final @Nullable Function<Q, Predicate>[] predicates,
             final Function<Q, OrderSpecifier<?>>... orderSpecifiers
     ) {
         return (List<B>) queryDslSupport
@@ -659,7 +659,7 @@ s     * @see #findFirst(Function[], Function[])
      * @return the information defined by the projections as ordered beans
      */
     public <B> List<B> findAsBean(
-            @Nullable final Function<Q, Predicate> predicate,
+            final @Nullable Function<Q, Predicate> predicate,
             final Function<Q, OrderSpecifier<?>> orderSpecifier,
             final Class<? extends B> bean,
             final Function<Q, Expression<?>>... projections) {

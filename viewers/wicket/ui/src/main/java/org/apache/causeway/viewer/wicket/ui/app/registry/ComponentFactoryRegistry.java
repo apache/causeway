@@ -29,7 +29,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Refs;

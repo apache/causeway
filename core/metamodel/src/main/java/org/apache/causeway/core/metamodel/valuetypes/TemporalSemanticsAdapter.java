@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.semantics.TemporalCharacteristicsProvider;
 import org.apache.causeway.applib.value.semantics.TemporalSupport;

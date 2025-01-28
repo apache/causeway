@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;

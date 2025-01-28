@@ -44,7 +44,7 @@ import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;

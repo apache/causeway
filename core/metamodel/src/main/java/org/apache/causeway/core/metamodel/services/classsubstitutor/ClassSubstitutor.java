@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.services.classsubstitutor;
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.jspecify.annotations.NonNull;
 import lombok.Value;

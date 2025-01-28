@@ -26,7 +26,7 @@ import jakarta.ws.rs.client.Entity;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.Blob;

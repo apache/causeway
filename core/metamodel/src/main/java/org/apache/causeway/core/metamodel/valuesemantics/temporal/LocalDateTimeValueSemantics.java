@@ -26,7 +26,7 @@ import jakarta.inject.Named;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.value.semantics.OrderRelation;

@@ -25,7 +25,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.applib.value.OpenUrlStrategy;
@@ -56,8 +56,8 @@ class _ResponseUtil {
 
     ActionResultResponse determineAndInterpretResult(
             final @NonNull ActionModel actionModel,
-            @Nullable final AjaxRequestTarget ajaxTarget,
-            @Nullable final ManagedObject resultAdapterIfAny) {
+            final @Nullable AjaxRequestTarget ajaxTarget,
+            final @Nullable ManagedObject resultAdapterIfAny) {
 
         var actionResultModel = ActionResultModel.determineFor(actionModel, resultAdapterIfAny, ajaxTarget);
         var response = actionResultResponse(actionModel, ajaxTarget, actionResultModel);
@@ -83,7 +83,7 @@ class _ResponseUtil {
 
     private ActionResultResponse actionResultResponse(
             final @NonNull ActionModel actionModel,
-            @Nullable final AjaxRequestTarget ajaxTarget,
+            final @Nullable AjaxRequestTarget ajaxTarget,
             final @NonNull ActionResultModel actionResultModel) {
 
         final ActionResultResponseType responseType = actionResultModel.responseType();

@@ -26,7 +26,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.id.LogicalType;
@@ -154,7 +154,7 @@ public final class Bookmark implements Oid {
     /**
      * there is only one use-case, that is, if a bookmark itself needs to be encoded (eg. page params)
      */
-    public static Optional<Bookmark> parseUrlEncoded(@Nullable final String urlEncodedStr) {
+    public static Optional<Bookmark> parseUrlEncoded(final @Nullable String urlEncodedStr) {
         return _Strings.isEmpty(urlEncodedStr)
                 ? Optional.empty()
                 : parse(UrlUtils.urlDecodeUtf8(urlEncodedStr));

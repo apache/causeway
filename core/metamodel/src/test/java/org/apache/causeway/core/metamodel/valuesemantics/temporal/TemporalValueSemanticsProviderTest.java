@@ -30,7 +30,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.locale.UserLocale;

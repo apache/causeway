@@ -39,7 +39,7 @@ import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Collection;
@@ -95,12 +95,12 @@ public abstract class ValueTypeExample<T> {
     public abstract T getUpdateValue();
 
     @Action
-    public final void updateValue(@Parameter @Nullable final T value) {
+    public final void updateValue(@Parameter final @Nullable T value) {
         setValue(value);
     }
 
     @Action
-    public abstract T sampleAction(@Parameter @Nullable final T value);
+    public abstract T sampleAction(@Parameter final @Nullable T value);
 
     @Programmatic
     public final T invokeSampleActionUsingWrapper(final WrapperFactory wrapper, final @Nullable T value) {
@@ -192,7 +192,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Boolean updateValue = Boolean.FALSE;
         @Action @Override
-        public Boolean sampleAction(@Parameter @Nullable final Boolean value) { return value; }
+        public Boolean sampleAction(@Parameter final @Nullable Boolean value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleCharacter")
@@ -205,7 +205,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Character updateValue = 'b';
         @Action @Override
-        public Character sampleAction(@Parameter @Nullable final Character value) { return value; }
+        public Character sampleAction(@Parameter final @Nullable Character value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleString")
@@ -218,7 +218,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private String updateValue = "anotherString";
         @Action @Override
-        public String sampleAction(@Parameter @Nullable final String value) { return value; }
+        public String sampleAction(@Parameter final @Nullable String value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExamplePassword")
@@ -231,7 +231,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Password updateValue = Password.of("anotherPassword");
         @Action @Override
-        public Password sampleAction(@Parameter @Nullable final Password value) { return value; }
+        public Password sampleAction(@Parameter final @Nullable Password value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBufferedImage")
@@ -244,7 +244,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private BufferedImage updateValue = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
         @Action @Override
-        public BufferedImage sampleAction(@Parameter @Nullable final BufferedImage value) { return value; }
+        public BufferedImage sampleAction(@Parameter final @Nullable BufferedImage value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBlob")
@@ -257,7 +257,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Blob updateValue = Blob.of("anotherBlob", CommonMimeType.BIN, new byte[] {3, 4});
         @Action @Override
-        public Blob sampleAction(@Parameter @Nullable final Blob value) { return value; }
+        public Blob sampleAction(@Parameter final @Nullable Blob value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleClob")
@@ -270,7 +270,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Clob updateValue = Clob.of("anotherClob", CommonMimeType.TXT, "ef");
         @Action @Override
-        public Clob sampleAction(@Parameter @Nullable final Clob value) { return value; }
+        public Clob sampleAction(@Parameter final @Nullable Clob value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalResourcePath")
@@ -283,7 +283,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private LocalResourcePath updateValue = new LocalResourcePath("img/b");
         @Action @Override
-        public LocalResourcePath sampleAction(@Parameter @Nullable final LocalResourcePath value) { return value; }
+        public LocalResourcePath sampleAction(@Parameter final @Nullable LocalResourcePath value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleUrl")
@@ -300,7 +300,7 @@ public abstract class ValueTypeExample<T> {
             return new URL(url);
         }
         @Action @Override
-        public URL sampleAction(@Parameter @Nullable final URL value) { return value; }
+        public URL sampleAction(@Parameter final @Nullable URL value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleMarkup")
@@ -325,7 +325,7 @@ public abstract class ValueTypeExample<T> {
                 );
         }
         @Action @Override
-        public Markup sampleAction(@Parameter @Nullable final Markup value) { return value; }
+        public Markup sampleAction(@Parameter final @Nullable Markup value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleVega")
@@ -339,7 +339,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Vega updateValue = vegaSemantics.getExamples().getElseFail(1);
         @Action @Override
-        public Vega sampleAction(@Parameter @Nullable final Vega value) { return value; }
+        public Vega sampleAction(@Parameter final @Nullable Vega value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleUuid")
@@ -352,7 +352,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private UUID updateValue = UUID.randomUUID();
         @Action @Override
-        public UUID sampleAction(@Parameter @Nullable final UUID value) { return value; }
+        public UUID sampleAction(@Parameter final @Nullable UUID value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocale")
@@ -365,7 +365,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Locale updateValue = Locale.GERMAN;
         @Action @Override
-        public Locale sampleAction(@Parameter @Nullable final Locale value) { return value; }
+        public Locale sampleAction(@Parameter final @Nullable Locale value) { return value; }
     }
 
     // -- EXAMPLES - NUMBERS
@@ -380,7 +380,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Byte updateValue = 0;
         @Action @Override
-        public Byte sampleAction(@Parameter @Nullable final Byte value) { return value; }
+        public Byte sampleAction(@Parameter final @Nullable Byte value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleShort")
@@ -393,7 +393,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Short updateValue = 0;
         @Action @Override
-        public Short sampleAction(@Parameter @Nullable final Short value) { return value; }
+        public Short sampleAction(@Parameter final @Nullable Short value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleInteger")
@@ -406,7 +406,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Integer updateValue = 0;
         @Action @Override
-        public Integer sampleAction(@Parameter @Nullable final Integer value) { return value; }
+        public Integer sampleAction(@Parameter final @Nullable Integer value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLong")
@@ -419,7 +419,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Long updateValue = 0L;
         @Action @Override
-        public Long sampleAction(@Parameter @Nullable final Long value) { return value; }
+        public Long sampleAction(@Parameter final @Nullable Long value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleFloat")
@@ -438,7 +438,7 @@ public abstract class ValueTypeExample<T> {
             return Can.of(value, updateValue);
         }
         @Action @Override
-        public Float sampleAction(@Parameter @Nullable final Float value) { return value; }
+        public Float sampleAction(@Parameter final @Nullable Float value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleDouble")
@@ -457,7 +457,7 @@ public abstract class ValueTypeExample<T> {
             return Can.of(value, updateValue);
         }
         @Action @Override
-        public Double sampleAction(@Parameter @Nullable final Double value) { return value; }
+        public Double sampleAction(@Parameter final @Nullable Double value) { return value; }
     }
 
     // -- BIG INTEGER
@@ -472,7 +472,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private BigInteger updateValue = BigInteger.ZERO;
         @Action @Override
-        public BigInteger sampleAction(@Parameter @Nullable final BigInteger value) { return value; }
+        public BigInteger sampleAction(@Parameter final @Nullable BigInteger value) { return value; }
     }
 
     // -- BIG DECIMAL
@@ -487,7 +487,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private BigDecimal updateValue = BigDecimal.ZERO;
         @Action @Override
-        public BigDecimal sampleAction(@Parameter @Nullable final BigDecimal value) { return value; }
+        public BigDecimal sampleAction(@Parameter final @Nullable BigDecimal value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleBigDecimal_fixedFractionalDigits")
@@ -544,7 +544,7 @@ public abstract class ValueTypeExample<T> {
         }
 
         @Action @Override
-        public BigDecimal sampleAction(@Parameter @Nullable final BigDecimal value) { return value; }
+        public BigDecimal sampleAction(@Parameter final @Nullable BigDecimal value) { return value; }
 
     }
 
@@ -560,7 +560,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private java.util.Date updateValue = new java.util.Date(0L);
         @Action @Override
-        public java.util.Date sampleAction(@Parameter @Nullable final java.util.Date value) { return value; }
+        public java.util.Date sampleAction(@Parameter final java.util.@Nullable Date value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaSqlDate")
@@ -573,7 +573,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private java.sql.Date updateValue = new java.sql.Date(0L);
         @Action @Override
-        public java.sql.Date sampleAction(@Parameter @Nullable final java.sql.Date value) { return value; }
+        public java.sql.Date sampleAction(@Parameter final java.sql.@Nullable Date value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJavaSqlTime")
@@ -586,7 +586,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private java.sql.Time updateValue = new java.sql.Time(0L);
         @Action @Override
-        public java.sql.Time sampleAction(@Parameter @Nullable final java.sql.Time value) { return value; }
+        public java.sql.Time sampleAction(@Parameter final java.sql.@Nullable Time value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleTimestamp")
@@ -599,7 +599,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Timestamp updateValue = new Timestamp(0L);
         @Action @Override
-        public Timestamp sampleAction(@Parameter @Nullable final Timestamp value) { return value; }
+        public Timestamp sampleAction(@Parameter final @Nullable Timestamp value) { return value; }
     }
 
     // -- EXAMPLES - TEMPORAL - JAVA TIME
@@ -614,7 +614,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private LocalDate updateValue = getValue().plusDays(2);
         @Action @Override
-        public LocalDate sampleAction(@Parameter @Nullable final LocalDate value) { return value; }
+        public LocalDate sampleAction(@Parameter final @Nullable LocalDate value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalDateTime")
@@ -627,7 +627,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private LocalDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
         @Action @Override
-        public LocalDateTime sampleAction(@Parameter @Nullable final LocalDateTime value) { return value; }
+        public LocalDateTime sampleAction(@Parameter final @Nullable LocalDateTime value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleLocalTime")
@@ -641,7 +641,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private LocalTime updateValue = getValue().plusSeconds(15);
         @Action @Override
-        public LocalTime sampleAction(@Parameter @Nullable final LocalTime value) { return value; }
+        public LocalTime sampleAction(@Parameter final @Nullable LocalTime value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleOffsetDateTime")
@@ -654,7 +654,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private OffsetDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
         @Action @Override
-        public OffsetDateTime sampleAction(@Parameter @Nullable final OffsetDateTime value) { return value; }
+        public OffsetDateTime sampleAction(@Parameter final @Nullable OffsetDateTime value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleOffsetTime")
@@ -667,7 +667,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private OffsetTime updateValue = OffsetTime.now().plusSeconds(15);
         @Action @Override
-        public OffsetTime sampleAction(@Parameter @Nullable final OffsetTime value) { return value; }
+        public OffsetTime sampleAction(@Parameter final @Nullable OffsetTime value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleZonedDateTime")
@@ -680,7 +680,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private ZonedDateTime updateValue = getValue().plusDays(2).plusSeconds(15);
         @Action @Override
-        public ZonedDateTime sampleAction(@Parameter @Nullable final ZonedDateTime value) { return value; }
+        public ZonedDateTime sampleAction(@Parameter final @Nullable ZonedDateTime value) { return value; }
     }
 
     // -- EXAMPLES - TEMPORAL - JODA TIME
@@ -695,7 +695,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private org.joda.time.DateTime updateValue = org.joda.time.DateTime.now().plusDays(2).plusSeconds(15);
         @Action @Override
-        public org.joda.time.DateTime sampleAction(@Parameter @Nullable final org.joda.time.DateTime value) { return value; }
+        public org.joda.time.DateTime sampleAction(@Parameter final org.joda.time.@Nullable DateTime value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime")
@@ -708,7 +708,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private org.joda.time.LocalDateTime updateValue = org.joda.time.LocalDateTime.now().plusDays(2).plusSeconds(15);
         @Action @Override
-        public org.joda.time.LocalDateTime sampleAction(@Parameter @Nullable final org.joda.time.LocalDateTime value) { return value; }
+        public org.joda.time.LocalDateTime sampleAction(@Parameter final org.joda.time.@Nullable LocalDateTime value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDate")
@@ -721,7 +721,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private org.joda.time.LocalDate updateValue = org.joda.time.LocalDate.now().plusDays(2);
         @Action @Override
-        public org.joda.time.LocalDate sampleAction(@Parameter @Nullable final org.joda.time.LocalDate value) { return value; }
+        public org.joda.time.LocalDate sampleAction(@Parameter final org.joda.time.@Nullable LocalDate value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalTime")
@@ -734,7 +734,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private org.joda.time.LocalTime updateValue = org.joda.time.LocalTime.now().plusSeconds(15);
         @Action @Override
-        public org.joda.time.LocalTime sampleAction(@Parameter @Nullable final org.joda.time.LocalTime value) { return value; }
+        public org.joda.time.LocalTime sampleAction(@Parameter final org.joda.time.@Nullable LocalTime value) { return value; }
     }
 
     // -- EXAMPLES - META MODEL
@@ -749,7 +749,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private ApplicationFeatureId updateValue = new ApplicationFeatureIdValueSemantics().getExamples().getElseFail(1);
         @Action @Override
-        public ApplicationFeatureId sampleAction(@Parameter @Nullable final ApplicationFeatureId value) { return value; }
+        public ApplicationFeatureId sampleAction(@Parameter final @Nullable ApplicationFeatureId value) { return value; }
     }
 
     // -- EXAMPLES - DATA STRUCTURE
@@ -764,7 +764,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private TreePath updateValue = TreePath.of(0, 1, 2, 3, 4);
         @Action @Override
-        public TreePath sampleAction(@Parameter @Nullable final TreePath value) { return value; }
+        public TreePath sampleAction(@Parameter final @Nullable TreePath value) { return value; }
     }
     
     //TODO    TreeNode
@@ -785,7 +785,7 @@ public abstract class ValueTypeExample<T> {
                 return Stream.empty(); }
         }
         @Action @Override
-        public TreeNode<String> sampleAction(@Parameter @Nullable final TreeNode<String> value) { return value; }
+        public TreeNode<String> sampleAction(@Parameter final @Nullable TreeNode<String> value) { return value; }
 
     }
 
@@ -805,7 +805,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private ExampleEnum updateValue = ExampleEnum.WORLD;
         @Action @Override
-        public ExampleEnum sampleAction(@Parameter @Nullable final ExampleEnum value) { return value; }
+        public ExampleEnum sampleAction(@Parameter final @Nullable ExampleEnum value) { return value; }
     }
 
     // -- EXAMPLES - COMPOSITES
@@ -820,7 +820,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private CalendarEvent updateValue = new CalendarEventSemantics().getExamples().getElseFail(1);
         @Action @Override
-        public CalendarEvent sampleAction(@Parameter @Nullable final CalendarEvent value) { return value; }
+        public CalendarEvent sampleAction(@Parameter final @Nullable CalendarEvent value) { return value; }
     }
 
     // -- EXAMPLES - DATA STRUCTURE
@@ -837,7 +837,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private Bookmark updateValue = Bookmark.parseElseFail("c:d");
         @Action @Override
-        public Bookmark sampleAction(@Parameter @Nullable final Bookmark value) { return value; }
+        public Bookmark sampleAction(@Parameter final @Nullable Bookmark value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleOidDto")
@@ -850,7 +850,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private OidDto updateValue = Bookmark.parseElseFail("c:d").toOidDto();
         @Action @Override
-        public OidDto sampleAction(@Parameter @Nullable final OidDto value) { return value; }
+        public OidDto sampleAction(@Parameter final @Nullable OidDto value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleChangesDto")
@@ -863,7 +863,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private ChangesDto updateValue = new ChangesDto();
         @Action @Override
-        public ChangesDto sampleAction(@Parameter @Nullable final ChangesDto value) { return value; }
+        public ChangesDto sampleAction(@Parameter final @Nullable ChangesDto value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleCommandDto")
@@ -876,7 +876,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private CommandDto updateValue = new CommandDto();
         @Action @Override
-        public CommandDto sampleAction(@Parameter @Nullable final CommandDto value) { return value; }
+        public CommandDto sampleAction(@Parameter final @Nullable CommandDto value) { return value; }
     }
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleInteractionDto")
@@ -889,7 +889,7 @@ public abstract class ValueTypeExample<T> {
         @Getter
         private InteractionDto updateValue = new InteractionDto();
         @Action @Override
-        public InteractionDto sampleAction(@Parameter @Nullable final InteractionDto value) { return value; }
+        public InteractionDto sampleAction(@Parameter final @Nullable InteractionDto value) { return value; }
     }
 
 }

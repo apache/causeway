@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;

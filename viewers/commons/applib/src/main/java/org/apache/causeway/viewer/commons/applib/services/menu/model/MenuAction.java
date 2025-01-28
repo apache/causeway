@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;

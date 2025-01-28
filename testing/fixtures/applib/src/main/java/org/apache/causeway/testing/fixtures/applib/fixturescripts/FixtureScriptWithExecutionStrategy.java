@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.testing.fixtures.applib.fixturescripts;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 
@@ -40,6 +40,5 @@ public interface FixtureScriptWithExecutionStrategy {
      * When returning {@code null}, does not override the default.
      */
     @Programmatic
-    @Nullable
-    FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy();
+    FixtureScripts.@Nullable MultipleExecutionStrategy getMultipleExecutionStrategy();
 }

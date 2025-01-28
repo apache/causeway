@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.model.components;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.commons.internal.base._Strings;

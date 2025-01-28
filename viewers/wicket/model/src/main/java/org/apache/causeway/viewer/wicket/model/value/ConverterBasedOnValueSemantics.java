@@ -23,7 +23,7 @@ import java.util.Locale;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.assertions._Assert;

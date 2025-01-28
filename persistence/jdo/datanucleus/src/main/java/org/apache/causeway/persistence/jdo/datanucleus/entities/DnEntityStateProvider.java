@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.repository.EntityState;

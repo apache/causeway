@@ -35,7 +35,7 @@ import java.util.function.UnaryOperator;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.annotation.TimeZoneTranslation;
@@ -381,7 +381,7 @@ implements TemporalValueSemantics<T> {
 
         static DateAndTimeFormatStyle forContext(
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
-                final @Nullable ValueSemanticsProvider.Context context) {
+                final ValueSemanticsProvider.@Nullable Context context) {
 
             var featureIfAny = Optional.ofNullable(mmc)
                     .map(MetaModelContext::getSpecificationLoader)

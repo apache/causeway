@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

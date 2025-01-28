@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.specloader;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;

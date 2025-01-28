@@ -20,7 +20,7 @@ package org.apache.causeway.applib.query;
 
 import java.util.Map;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.jspecify.annotations.NonNull;
 

@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.query.QueryRange;

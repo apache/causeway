@@ -33,7 +33,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.wicketstuff.select2.JQuery;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;

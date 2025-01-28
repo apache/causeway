@@ -22,7 +22,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -211,7 +211,7 @@ public class WktTooltips {
         return textMode;
     }
 
-    private static String preprocess(@Nullable final String string) {
+    private static String preprocess(final @Nullable String string) {
         return _Strings.nonEmpty(string)
             .map(s->getTooltipTextMode().isHtml()
                     ? replaceNewlineWithHtmlBR(s)

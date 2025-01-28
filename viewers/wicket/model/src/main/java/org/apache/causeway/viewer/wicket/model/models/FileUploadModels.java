@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;

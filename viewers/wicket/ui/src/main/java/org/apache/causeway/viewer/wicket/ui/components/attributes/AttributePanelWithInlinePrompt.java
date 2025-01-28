@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;

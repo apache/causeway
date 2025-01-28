@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;

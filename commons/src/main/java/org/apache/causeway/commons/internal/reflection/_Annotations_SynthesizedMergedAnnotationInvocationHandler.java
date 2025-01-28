@@ -33,7 +33,7 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 //import org.springframework.core.annotation.SynthesizedAnnotation;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;

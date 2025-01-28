@@ -31,7 +31,7 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Refs;
@@ -179,7 +179,7 @@ public class AsciiDocFactory {
         return listingBlock;
     }
 
-    public static Block sourceBlock(final StructuralNode parent, @Nullable final String language, final @NonNull String source) {
+    public static Block sourceBlock(final StructuralNode parent, final @Nullable String language, final @NonNull String source) {
         var sourceBlock = block(parent, source);
         sourceBlock.setStyle("source");
         if(_Strings.isNotEmpty(language)) {
@@ -331,7 +331,7 @@ public class AsciiDocFactory {
                 final @NonNull Document doc,
                 final @NonNull String languageAndOptions,
                 final @NonNull String source,
-                @Nullable final String title) {
+                final @Nullable String title) {
 
             var sourceBlock = AsciiDocFactory.sourceBlock(doc,
                     languageAndOptions,
@@ -362,28 +362,28 @@ public class AsciiDocFactory {
         public static Block java(
                 final @NonNull Document doc,
                 final @NonNull String javaSource,
-                @Nullable final String title) {
+                final @Nullable String title) {
             return sourceBlock(doc, "java", javaSource, title);
         }
 
         public static Block json(
                 final @NonNull Document doc,
                 final @NonNull String jsonSource,
-                @Nullable final String title) {
+                final @Nullable String title) {
             return sourceBlock(doc, "json", jsonSource, title);
         }
 
         public static Block xml(
                 final @NonNull Document doc,
                 final @NonNull String xmlSource,
-                @Nullable final String title) {
+                final @Nullable String title) {
             return sourceBlock(doc, "xml", xmlSource, title);
         }
 
         public static Block yaml(
                 final @NonNull Document doc,
                 final @NonNull String yamlSource,
-                @Nullable final String title) {
+                final @Nullable String title) {
             return sourceBlock(doc, "yaml", yamlSource, title);
         }
 
@@ -396,7 +396,7 @@ public class AsciiDocFactory {
                 final @NonNull String diagramType,
                 final @NonNull Can<String> diagramOptions,
                 final @NonNull String source,
-                @Nullable final String title) {
+                final @Nullable String title) {
 
             var sourceBlock = AsciiDocFactory.diagramBlock(doc,
                     diagramType,
@@ -421,7 +421,7 @@ public class AsciiDocFactory {
                 final @NonNull Document doc,
                 final @NonNull String plantumlSource,
                 final @NonNull String diagramKey,
-                @Nullable final String title) {
+                final @Nullable String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "png"), plantumlSource, title);
         }
 
@@ -429,7 +429,7 @@ public class AsciiDocFactory {
                 final @NonNull Document doc,
                 final @NonNull String plantumlSource,
                 final @NonNull String diagramKey,
-                @Nullable final String title) {
+                final @Nullable String title) {
             return diagramBlock(doc, "plantuml", Can.of(diagramKey, "svg"), plantumlSource, title);
         }
 

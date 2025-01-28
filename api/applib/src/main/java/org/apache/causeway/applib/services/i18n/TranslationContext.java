@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.i18n;
 
 import java.io.Serializable;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;

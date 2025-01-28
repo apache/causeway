@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel._testing;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -65,7 +65,7 @@ class FactoryService_forTesting implements FactoryService {
     }
 
     @Override
-    public <T> T viewModel(final Class<T> viewModelClass, @Nullable final Bookmark bookmark) {
+    public <T> T viewModel(final Class<T> viewModelClass, final @Nullable Bookmark bookmark) {
         throw new IllegalArgumentException("Not yet supported");
     }
 

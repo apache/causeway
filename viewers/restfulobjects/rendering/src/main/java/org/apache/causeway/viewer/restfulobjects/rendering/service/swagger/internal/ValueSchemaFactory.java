@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 

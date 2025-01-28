@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.services.commanddto.processor.spi;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.Property;

@@ -98,7 +98,7 @@ import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;

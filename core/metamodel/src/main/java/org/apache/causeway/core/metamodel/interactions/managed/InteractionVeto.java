@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.io.Serializable;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -57,7 +57,7 @@ public class InteractionVeto implements Serializable {
 
     public static InteractionVeto notFound(
             final Identifier.@NonNull Type memberType,
-            @Nullable final String memberId) {
+            final @Nullable String memberId) {
         var reason = String.format("member '%s' in %s either does not exist, is disabled or is not visible",
                 "" + memberId,
                 memberType.name().toLowerCase());

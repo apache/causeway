@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.services.i18n.TranslationContext;

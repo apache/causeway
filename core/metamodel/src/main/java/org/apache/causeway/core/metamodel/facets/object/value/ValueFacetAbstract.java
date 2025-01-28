@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;

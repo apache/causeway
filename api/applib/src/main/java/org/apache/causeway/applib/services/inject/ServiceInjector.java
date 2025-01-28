@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.services.inject;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Resolves injection points using the

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;

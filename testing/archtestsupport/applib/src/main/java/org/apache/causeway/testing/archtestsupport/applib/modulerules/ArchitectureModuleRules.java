@@ -35,7 +35,7 @@ import com.tngtech.archunit.library.Architectures;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import lombok.experimental.UtilityClass;
 
@@ -226,7 +226,7 @@ public class ArchitectureModuleRules {
         return packageIdentifierFor(moduleClass, null);
     }
 
-    static String packageIdentifierFor(final Class<?> moduleClass, @Nullable final Subpackage subpackage) {
+    static String packageIdentifierFor(final Class<?> moduleClass, final @Nullable Subpackage subpackage) {
         return moduleClass.getPackage().getName() +
                 (subpackage != null ? subpackage.packageIdentifier(): "..");
     }

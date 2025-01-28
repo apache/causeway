@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;

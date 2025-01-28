@@ -22,7 +22,7 @@ import java.beans.Introspector;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;

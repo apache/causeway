@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.util;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
@@ -35,7 +35,7 @@ public final class JsonWriterUtil {
         return JsonMapper.instance(prettyPrinting).write(object);
     }
 
-    public String jsonFor(final Object object, @Nullable final CausewaySystemEnvironment systemEnvironment) {
+    public String jsonFor(final Object object, final @Nullable CausewaySystemEnvironment systemEnvironment) {
         var prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
                 ? JsonMapper.PrettyPrinting.ENABLE
                 : JsonMapper.PrettyPrinting.DISABLE;

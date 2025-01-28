@@ -20,7 +20,7 @@ package org.apache.causeway.commons.internal.compare;
 
 import java.util.StringTokenizer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Ints;

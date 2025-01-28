@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.tablecol;
 
 import java.util.List;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides the ability to reorder columns in both parented- and

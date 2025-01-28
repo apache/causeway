@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.postprocessors.object;
 
 import jakarta.inject.Inject;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;

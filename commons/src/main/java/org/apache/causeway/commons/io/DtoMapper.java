@@ -21,7 +21,7 @@ package org.apache.causeway.commons.io;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
 

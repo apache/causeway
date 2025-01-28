@@ -31,7 +31,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -73,7 +73,7 @@ public record ExcelFileWriter(@Nullable Options options) {
             WARNING,
             DANGER;
             public boolean isDefault() { return this == CustomCellStyle.DEFAULT; }
-            static CustomCellStyle nullToDefault(@Nullable final CustomCellStyle customCellStyle) {
+            static CustomCellStyle nullToDefault(final @Nullable CustomCellStyle customCellStyle) {
                 return customCellStyle!=null
                         ? customCellStyle
                         : DEFAULT;

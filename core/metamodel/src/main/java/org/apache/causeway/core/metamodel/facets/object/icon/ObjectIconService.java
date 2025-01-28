@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

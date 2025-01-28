@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.core.metamodel.tabular.DataRow;

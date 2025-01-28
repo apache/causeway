@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
 import org.apache.causeway.applib.services.filter.CollectionFilterService.Tokens;

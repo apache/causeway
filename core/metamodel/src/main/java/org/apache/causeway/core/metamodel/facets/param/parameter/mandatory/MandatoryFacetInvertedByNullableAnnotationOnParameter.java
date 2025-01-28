@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.facets.param.parameter.mandatory;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;

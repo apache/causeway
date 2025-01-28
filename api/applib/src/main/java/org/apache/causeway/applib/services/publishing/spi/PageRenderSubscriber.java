@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.publishing.spi;
 import java.util.List;
 import java.util.function.Supplier;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.having.HasEnabling;

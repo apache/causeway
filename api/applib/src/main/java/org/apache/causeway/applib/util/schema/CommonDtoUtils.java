@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.jaxb.JavaTimeXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.value.Blob;

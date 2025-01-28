@@ -35,7 +35,7 @@ import org.datanucleus.api.jdo.JDOQuery;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
@@ -325,7 +325,7 @@ implements EntityFacet {
     }
 
     @Override @Nullable
-    public <T> T refresh(@Nullable final T pojo) {
+    public <T> T refresh(final @Nullable T pojo) {
         if(pojo==null) return pojo; // nothing to do
 
         // guard against misuse

@@ -31,7 +31,7 @@ import java.util.SortedSet;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableCollection;
@@ -141,7 +141,7 @@ public enum CollectionSemantics {
     public boolean isSetAny() {return isSet() || isSortedSet(); }
 
     @Nullable
-    public static Object toIterable(@Nullable final Object pojo) {
+    public static Object toIterable(final @Nullable Object pojo) {
         return pojo instanceof Map map
                 ? map.values()
                 : pojo;
@@ -269,13 +269,13 @@ enum MethodSets implements InvocationHandlingPolicy {
     }
 
     @Override
-    public boolean intercepts(@Nullable final Method method) {
+    public boolean intercepts(final @Nullable Method method) {
         return method!=null
                 ? intercepted.containsKey(method.getName())
                 : false;
     }
     @Override
-    public boolean vetoes(@Nullable final Method method) {
+    public boolean vetoes(final @Nullable Method method) {
         return method!=null
                 ? vetoed.containsKey(method.getName())
                 : false;

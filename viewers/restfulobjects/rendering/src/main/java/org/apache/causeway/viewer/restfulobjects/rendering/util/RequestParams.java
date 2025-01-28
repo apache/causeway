@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;

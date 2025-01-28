@@ -25,7 +25,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import lombok.experimental.UtilityClass;
 
@@ -37,13 +37,13 @@ public final class JodaTimeConverters {
 
     // -- INSTANT
 
-    @Nullable public Instant toJoda(final @Nullable java.time.Instant input) {
+    @Nullable public Instant toJoda(final java.time.@Nullable Instant input) {
         return input!=null
                 ? new Instant(input.toEpochMilli())
                 : null;
     }
 
-    @Nullable public java.time.Instant fromJoda(final @Nullable Instant input) {
+    public java.time.@Nullable Instant fromJoda(final @Nullable Instant input) {
         return input!=null
                 ? java.time.Instant.ofEpochMilli(input.getMillis())
                 : null;
@@ -51,7 +51,7 @@ public final class JodaTimeConverters {
 
     // -- LOCAL TIME
 
-    @Nullable public LocalTime toJoda(final @Nullable java.time.LocalTime input) {
+    @Nullable public LocalTime toJoda(final java.time.@Nullable LocalTime input) {
         return input!=null
                 ? new LocalTime(
                         input.getHour(), input.getMinute(), input.getSecond(),
@@ -59,7 +59,7 @@ public final class JodaTimeConverters {
                 : null;
     }
 
-    @Nullable public java.time.LocalTime fromJoda(final @Nullable LocalTime input) {
+    public java.time.@Nullable LocalTime fromJoda(final @Nullable LocalTime input) {
         return input!=null
                 ? java.time.LocalTime.of(
                         input.getHourOfDay(), input.getMinuteOfHour(), input.getSecondOfMinute(),
@@ -69,14 +69,14 @@ public final class JodaTimeConverters {
 
     // -- LOCAL DATE
 
-    @Nullable public LocalDate toJoda(final @Nullable java.time.LocalDate input) {
+    @Nullable public LocalDate toJoda(final java.time.@Nullable LocalDate input) {
         return input!=null
                 ? new LocalDate(
                         input.getYear(), input.getMonthValue(), input.getDayOfMonth())
                 : null;
     }
 
-    @Nullable public java.time.LocalDate fromJoda(final @Nullable LocalDate input) {
+    public java.time.@Nullable LocalDate fromJoda(final @Nullable LocalDate input) {
         return input!=null
                 ? java.time.LocalDate.of(
                         input.getYear(), input.getMonthOfYear(), input.getDayOfMonth())
@@ -85,7 +85,7 @@ public final class JodaTimeConverters {
 
     // -- LOCAL DATE TIME
 
-    @Nullable public LocalDateTime toJoda(final @Nullable java.time.LocalDateTime input) {
+    @Nullable public LocalDateTime toJoda(final java.time.@Nullable LocalDateTime input) {
         return input!=null
                 ? new LocalDateTime(
                         input.getYear(), input.getMonthValue(), input.getDayOfMonth(),
@@ -94,7 +94,7 @@ public final class JodaTimeConverters {
                 : null;
     }
 
-    @Nullable public java.time.LocalDateTime fromJoda(final @Nullable LocalDateTime input) {
+    public java.time.@Nullable LocalDateTime fromJoda(final @Nullable LocalDateTime input) {
         return input!=null
                 ? java.time.LocalDateTime.of(
                         input.getYear(), input.getMonthOfYear(), input.getDayOfMonth(),
@@ -105,7 +105,7 @@ public final class JodaTimeConverters {
 
     // -- DATE TIME WITH TIME ZONE DATA
 
-    @Nullable public DateTime toJoda(final @Nullable java.time.ZonedDateTime input) {
+    @Nullable public DateTime toJoda(final java.time.@Nullable ZonedDateTime input) {
         return input!=null
                 ? new DateTime(
                         input.getYear(), input.getMonthValue(), input.getDayOfMonth(),
@@ -115,7 +115,7 @@ public final class JodaTimeConverters {
                 : null ;
     }
 
-    @Nullable public java.time.ZonedDateTime fromJoda(final @Nullable DateTime input) {
+    public java.time.@Nullable ZonedDateTime fromJoda(final @Nullable DateTime input) {
         return input!=null
                 ? java.time.ZonedDateTime.of(
                         input.getYear(), input.getMonthOfYear(), input.getDayOfMonth(),
@@ -127,13 +127,13 @@ public final class JodaTimeConverters {
 
     // -- TIME ZONE
 
-    @Nullable public DateTimeZone toJoda(final @Nullable java.time.ZoneId input) {
+    @Nullable public DateTimeZone toJoda(final java.time.@Nullable ZoneId input) {
         return input!=null
                 ? DateTimeZone.forTimeZone(java.util.TimeZone.getTimeZone(input))
                 : null;
     }
 
-    @Nullable public java.time.ZoneId fromJoda(final @Nullable DateTimeZone input) {
+    public java.time.@Nullable ZoneId fromJoda(final @Nullable DateTimeZone input) {
         return input!=null
                 ? input.toTimeZone().toZoneId()
                 : null;

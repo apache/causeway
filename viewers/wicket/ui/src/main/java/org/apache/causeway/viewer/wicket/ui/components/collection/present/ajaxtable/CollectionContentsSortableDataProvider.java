@@ -28,7 +28,7 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvider;
 import org.apache.wicket.model.IModel;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;

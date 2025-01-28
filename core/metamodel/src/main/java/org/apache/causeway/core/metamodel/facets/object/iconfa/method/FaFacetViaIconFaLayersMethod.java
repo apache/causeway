@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.iconfa.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;

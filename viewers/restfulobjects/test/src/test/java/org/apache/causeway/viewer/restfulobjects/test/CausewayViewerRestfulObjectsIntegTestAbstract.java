@@ -42,7 +42,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.applib.services.xactn.TransactionService;

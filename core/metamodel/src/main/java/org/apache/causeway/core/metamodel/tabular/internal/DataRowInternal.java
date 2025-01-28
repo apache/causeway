@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
@@ -48,7 +48,7 @@ record DataRowInternal(
             final int rowIndex,
             final @NonNull DataTableInternal parentTable,
             final @NonNull ManagedObject rowElement,
-            final @Nullable CollectionFilterService.Tokens filterTokens) {
+            final CollectionFilterService.@Nullable Tokens filterTokens) {
         this(rowIndex, rowElement, _Bindables.forBoolean(false), parentTable, Optional.ofNullable(filterTokens));
         selectToggleBindable.addListener((event, old, neW)->parentTable.handleRowSelectToggle());
     }

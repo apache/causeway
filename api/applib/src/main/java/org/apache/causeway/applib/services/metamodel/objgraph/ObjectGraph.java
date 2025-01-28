@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -167,31 +167,31 @@ public class ObjectGraph {
      * <p>
      * Hence transformers are not required to create defensive copies.
      */
-    public ObjectGraph transform(final @Nullable ObjectGraph.Transformer transfomer) {
+    public ObjectGraph transform(final ObjectGraph.@Nullable Transformer transfomer) {
         return transfomer!=null
                 ? transfomer.transform(this.copy())
                 : this;
     }
 
-    public String render(final @Nullable ObjectGraph.Renderer renderer) {
+    public String render(final ObjectGraph.@Nullable Renderer renderer) {
         if(renderer==null) return "";
         var sb = new StringBuilder();
         renderer.render(sb, this);
         return sb.toString();
     }
-    public DataSource asDiagramDslSource(final @Nullable ObjectGraph.Renderer renderer) {
+    public DataSource asDiagramDslSource(final ObjectGraph.@Nullable Renderer renderer) {
         var dsl = render(renderer);
         return dsl==null
                 ? DataSource.empty()
                 : DataSource.ofStringUtf8(dsl);
     }
-    public void writeDiagramDsl(final @Nullable ObjectGraph.Renderer renderer, final DataSink sink) {
+    public void writeDiagramDsl(final ObjectGraph.@Nullable Renderer renderer, final DataSink sink) {
         var dsl = render(renderer);
         if(dsl==null) return;
         sink.writeAll(os->
             os.write(dsl.getBytes(StandardCharsets.UTF_8)));
     }
-    public void writeDiagramDsl(final @Nullable ObjectGraph.Renderer renderer, final File destinationDslFile) {
+    public void writeDiagramDsl(final ObjectGraph.@Nullable Renderer renderer, final File destinationDslFile) {
         var dsl = render(renderer);
         if(dsl==null) return;
         DataSink.ofFile(destinationDslFile)

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;

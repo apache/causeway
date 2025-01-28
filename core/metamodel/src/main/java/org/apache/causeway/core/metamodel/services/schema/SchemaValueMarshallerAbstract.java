@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.services.schema;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.Identifier.Type;

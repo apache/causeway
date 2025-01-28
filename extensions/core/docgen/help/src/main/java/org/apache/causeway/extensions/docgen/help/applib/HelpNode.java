@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;

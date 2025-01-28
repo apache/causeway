@@ -47,7 +47,7 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.SchemaOutputResolver;
 import jakarta.xml.bind.Unmarshaller;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -419,7 +419,7 @@ public class JaxbUtils {
 
     // -- ENHANCE EXCEPTION MESSAGE IF POSSIBLE
 
-    private static RuntimeException verboseException(final String doingWhat, @Nullable final Class<?> dtoClass, final Throwable cause) {
+    private static RuntimeException verboseException(final String doingWhat, final @Nullable Class<?> dtoClass, final Throwable cause) {
 
         var dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
 

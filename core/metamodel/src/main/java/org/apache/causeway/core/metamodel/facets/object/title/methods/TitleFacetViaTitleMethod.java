@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.title.methods;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.commons.internal.proxy;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Replaces the former ProxyFactoryPlugin

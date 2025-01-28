@@ -20,7 +20,7 @@ package org.apache.causeway.core.metamodel.commons;
 
 import java.util.function.Function;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class ClassFunctions {
 

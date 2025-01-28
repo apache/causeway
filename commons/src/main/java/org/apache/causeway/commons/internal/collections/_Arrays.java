@@ -26,7 +26,7 @@ import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;

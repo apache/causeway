@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;

@@ -29,7 +29,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.tabular.TabularModel.TabularRow;
 import org.apache.causeway.extensions.tabular.excel.exporter.ExcelFileWriter.Options.CustomCellStyle;
@@ -49,7 +49,7 @@ record CellStyleProvider(
         @NonNull CellStyle[] dangerStyles,
         ExcelFileWriter.@NonNull Options options) {
 
-    static CellStyleProvider create(final Workbook wb, @Nullable final ExcelFileWriter.Options options) {
+    static CellStyleProvider create(final Workbook wb, final ExcelFileWriter.@Nullable Options options) {
         var styleIndexList = new StyleIndexList();
         return new CellStyleProvider(wb,
             createPrimaryHeaderRowStyle(wb),

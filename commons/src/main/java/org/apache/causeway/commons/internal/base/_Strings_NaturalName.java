@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.commons.internal.base;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import lombok.experimental.UtilityClass;
 

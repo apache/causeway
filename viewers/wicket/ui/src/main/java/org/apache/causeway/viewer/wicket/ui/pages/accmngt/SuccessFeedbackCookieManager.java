@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 
 import org.apache.wicket.util.cookies.CookieUtils;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Functions;

@@ -25,7 +25,7 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreeConverter;

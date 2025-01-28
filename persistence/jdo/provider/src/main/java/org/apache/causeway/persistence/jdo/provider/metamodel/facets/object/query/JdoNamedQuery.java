@@ -20,7 +20,7 @@ package org.apache.causeway.persistence.jdo.provider.metamodel.facets.object.que
 
 import javax.jdo.annotations.Query;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelExportSupport;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

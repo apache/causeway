@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
 import org.apache.causeway.commons.internal.base._Strings;

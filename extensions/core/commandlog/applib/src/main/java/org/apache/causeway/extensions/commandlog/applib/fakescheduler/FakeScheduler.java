@@ -28,7 +28,7 @@ import jakarta.inject.Inject;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
 import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 

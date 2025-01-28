@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.marshal;
 
 import java.util.EnumSet;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;

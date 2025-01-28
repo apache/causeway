@@ -33,7 +33,7 @@ import java.util.function.Function;
 import javax.imageio.ImageIO;
 
 import org.springframework.core.io.Resource;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 import org.springframework.util.function.ThrowingSupplier;

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintIdProvider;
@@ -29,7 +29,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class MMHintUtils {
 
-    public String hintId(@Nullable final ManagedObject adapter) {
+    public String hintId(final @Nullable ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) return null;
         var spec = adapter.getSpecification();
         return (spec.isIdentifiable() || spec.isParented())

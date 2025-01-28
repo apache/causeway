@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract.EventTypeOrigin;

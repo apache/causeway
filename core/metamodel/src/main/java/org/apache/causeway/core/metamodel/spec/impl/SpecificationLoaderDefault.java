@@ -41,7 +41,7 @@ import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
@@ -215,7 +215,7 @@ implements
                     new ArrayList<>(), new ArrayList<>());
         }
 
-        public void collect(@Nullable final ObjectSpecificationMutable spec) {
+        public void collect(final @Nullable ObjectSpecificationMutable spec) {
             if(spec==null) return; // might be vetoed
             knownSpecs.add(spec);
             switch (spec.getBeanSort()) {

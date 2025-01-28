@@ -27,7 +27,7 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.graph.Edge;
 import org.apache.causeway.applib.graph.SimpleEdge;

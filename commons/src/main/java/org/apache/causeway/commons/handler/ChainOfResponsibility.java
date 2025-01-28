@@ -23,7 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -58,7 +58,7 @@ public record ChainOfResponsibility<X, R>(
         R handle(X request);
     }
 
-    public ChainOfResponsibility(@Nullable final String name, @Nullable final Can<? extends Handler<X, R>> handlers) {
+    public ChainOfResponsibility(final @Nullable String name, final @Nullable Can<? extends Handler<X, R>> handlers) {
         this.name = _Strings.nonEmpty(name).orElse("unnamed chain");
         this.handlers = handlers!=null
                 ? handlers
@@ -66,11 +66,11 @@ public record ChainOfResponsibility<X, R>(
     }
 
     // could be widened to SequencedCollection once available
-    public ChainOfResponsibility(final String name, @Nullable final List<? extends Handler<X, R>> handlers) {
+    public ChainOfResponsibility(final String name, final @Nullable List<? extends Handler<X, R>> handlers) {
         this(name, Can.ofCollection(handlers));
     }
 
-    public ChainOfResponsibility(final String name, @Nullable final Handler<X, R>[] handlers) {
+    public ChainOfResponsibility(final String name, final @Nullable Handler<X, R>[] handlers) {
         this(name, Can.ofArray(handlers));
     }
 

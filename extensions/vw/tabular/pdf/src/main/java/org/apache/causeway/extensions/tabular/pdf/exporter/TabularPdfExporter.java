@@ -20,7 +20,7 @@ package org.apache.causeway.extensions.tabular.pdf.exporter;
 
 import java.io.File;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.tabular.TabularExporter;
@@ -42,7 +42,7 @@ implements TabularExporter {
     public void export(
             final TabularModel.TabularSheet tabularSheet,
             final File tempFile,
-            @Nullable final PdfFactory.Options options) {
+            final PdfFactory.@Nullable Options options) {
         new PdfFileWriter(new PdfFactory(options))
             .write(new TabularModel(tabularSheet), tempFile);
     }

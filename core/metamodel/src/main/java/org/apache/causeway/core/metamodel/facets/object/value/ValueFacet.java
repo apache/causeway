@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;

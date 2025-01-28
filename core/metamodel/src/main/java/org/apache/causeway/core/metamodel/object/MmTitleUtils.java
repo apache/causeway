@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;

@@ -24,7 +24,7 @@ import java.net.URLEncoder;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -181,7 +181,7 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     private Object deserialize(
             final @NonNull ObjectSpecification viewmodelSpec,
-            @Nullable final String mementoEncoded) {
+            final @Nullable String mementoEncoded) {
 
         _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
                 + "this can only happen, if we try to deserialize an abstract type");

@@ -33,7 +33,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;

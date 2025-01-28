@@ -21,7 +21,7 @@ package org.apache.causeway.persistence.querydsl.applib.util;
 
 import java.util.regex.Pattern;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
@@ -50,7 +50,7 @@ public class Wildcards {
     }
 
     public String wildcardToRegex(
-            @Nullable final String searchPattern,
+            final @Nullable String searchPattern,
             final CaseSensitivity caseSensitivity
     ) {
         var searchPatternWithWildcards = withWildcards(searchPattern);
@@ -64,7 +64,7 @@ public class Wildcards {
         }
     }
 
-    private String withWildcards(@Nullable final String searchPattern) {
+    private String withWildcards(final @Nullable String searchPattern) {
         if(searchPattern == null || searchPattern.isEmpty()) {
             return "*";
         }

@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.OptionalLong;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.LongAdder;
 
 import jakarta.ws.rs.core.Response;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;

@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.core.MethodParameter;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;

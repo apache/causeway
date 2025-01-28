@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Arrays;

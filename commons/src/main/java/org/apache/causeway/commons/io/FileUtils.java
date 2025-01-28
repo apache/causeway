@@ -40,7 +40,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
@@ -152,7 +152,7 @@ public class FileUtils {
      * is not {@code null} and the 'file I/O system' can handle this call without
      * throwing an exception.
      */
-    public Optional<String> canonicalPath(@Nullable final File file) {
+    public Optional<String> canonicalPath(final @Nullable File file) {
         if(file==null) {
             return Optional.empty();
         }
@@ -182,7 +182,7 @@ public class FileUtils {
      * @param file - the file to be deleted (null-able)
      */
     @SneakyThrows
-    public void deleteFile(@Nullable final File file) {
+    public void deleteFile(final @Nullable File file) {
         if(file==null
                 || !file.exists()
                 || file.isDirectory()) {

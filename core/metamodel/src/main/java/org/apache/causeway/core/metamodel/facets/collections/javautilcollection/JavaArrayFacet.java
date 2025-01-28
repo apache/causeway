@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.collections.javautilcollection
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;

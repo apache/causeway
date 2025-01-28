@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -84,7 +84,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override @Nullable
-    public <T> T refresh(@Nullable final T pojo) {
+    public <T> T refresh(final @Nullable T pojo) {
         throw _Exceptions.unsupportedOperation();
     }
 

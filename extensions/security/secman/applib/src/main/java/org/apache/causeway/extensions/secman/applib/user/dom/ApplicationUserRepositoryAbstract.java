@@ -29,7 +29,7 @@ import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.apache.causeway.applib.query.Query;
@@ -208,7 +208,7 @@ implements ApplicationUserRepository {
     @Override
     public ApplicationUser newUser(
             final @NonNull String username,
-            @Nullable final AccountType accountType,
+            final @Nullable AccountType accountType,
             final Consumer<ApplicationUser> beforePersist) {
 
         var user = newApplicationUser();

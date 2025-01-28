@@ -31,7 +31,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
@@ -124,7 +124,7 @@ public class DomainModelValidator {
         return validationFailures.getFailures(); // already wrapped unmodifiable
     }
 
-    public Stream<ValidationFailure> streamFailures(@Nullable final Predicate<Identifier> filter) {
+    public Stream<ValidationFailure> streamFailures(final @Nullable Predicate<Identifier> filter) {
         if(validationFailures==null) {
             return Stream.empty();
         }

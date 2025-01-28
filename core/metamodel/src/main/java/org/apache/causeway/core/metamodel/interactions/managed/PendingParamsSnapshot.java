@@ -23,7 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

@@ -30,7 +30,7 @@ import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Refs;

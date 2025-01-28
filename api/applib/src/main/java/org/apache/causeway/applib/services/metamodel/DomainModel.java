@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.metamodel;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Multimaps;
 

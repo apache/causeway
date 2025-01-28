@@ -24,7 +24,7 @@ import java.util.Optional;
 import jakarta.inject.Named;
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;

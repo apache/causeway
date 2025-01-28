@@ -24,7 +24,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.binding.Bindable;

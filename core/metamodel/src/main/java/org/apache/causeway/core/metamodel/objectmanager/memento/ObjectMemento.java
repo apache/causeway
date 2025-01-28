@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -62,7 +62,7 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
     static ObjectMemento empty(final LogicalType logicalType) {
         return new ObjectMementoEmpty(logicalType);
     }
-    static Optional<ObjectMemento> singular(@Nullable final ManagedObject adapter) {
+    static Optional<ObjectMemento> singular(final @Nullable ManagedObject adapter) {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
                 : Optional.of(ObjectMementoSingular.create(adapter));

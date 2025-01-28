@@ -23,7 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.Model;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -80,7 +80,7 @@ implements Menuable {
     }
 
     private CssMenuItem(final String name, final Menuable.Kind menuableKind,
-            @Nullable final ActionLink actionLink) {
+            final @Nullable ActionLink actionLink) {
         this.name = name;
         this.menuableKind = menuableKind;
         this.actionLink = actionLink;

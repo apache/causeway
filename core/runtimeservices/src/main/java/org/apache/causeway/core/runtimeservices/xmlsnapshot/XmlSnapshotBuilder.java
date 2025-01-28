@@ -20,7 +20,7 @@ package org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
 import java.util.List;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

@@ -33,7 +33,7 @@ import org.jdom2.input.SAXBuilder;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;

@@ -28,7 +28,7 @@ import jakarta.inject.Inject;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
@@ -119,7 +119,7 @@ public class ApplicationUserAutoCreationService {
         return !isEmpty(initialRoleNames);
     }
 
-    private static boolean isEmpty(@Nullable final Collection<?> collection) {
+    private static boolean isEmpty(final @Nullable Collection<?> collection) {
         return collection == null || collection.isEmpty();
     }
 
