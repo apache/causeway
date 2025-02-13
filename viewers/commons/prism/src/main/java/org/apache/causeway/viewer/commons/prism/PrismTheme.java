@@ -50,10 +50,7 @@ public enum PrismTheme {
     public List<String> cssFiles() {
         return cssOverrideFile()
                 .map(cssOverride->List.of(cssPrimaryFile(), cssOverride))
-                .orElse(List.of(cssPrimaryFile()));
+                .orElseGet(()->List.of(cssPrimaryFile()));
     }
-
-    public String jsFile() {
-        return "prism/prism.js";
-    }
+    
 }

@@ -18,16 +18,17 @@
  */
 package org.apache.causeway.viewer.wicket.ui.util;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import org.apache.causeway.viewer.commons.prism.PrismTheme;
 import org.apache.causeway.viewer.commons.prism.PrismLanguage;
+import org.apache.causeway.viewer.commons.prism.PrismTheme;
 
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
@@ -46,16 +47,25 @@ public final class PrismResourcesWkt{
     }
 
     /**
-     * Returns the main Prism JS resources for selected theme + most common languages
+     * Returns the main Prism JS resource
      */
-    public List<JavaScriptResourceReference> jsResources(final PrismTheme theme) {
-        final List<JavaScriptResourceReference> resources = PrismLanguage.mostCommon().stream()
-                .map(PrismLanguage::jsFile)
-                .map(WebjarsJavaScriptResourceReference::new)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        resources.add(0, new WebjarsJavaScriptResourceReference(theme.jsFile()));
-        return resources;
+    public JavaScriptResourceReference jsResourceMain() {
+        return new WebjarsJavaScriptResourceReference("prism/prism.js");
+    }
+    
+    /**
+     * Returns the Prism JS resources for selected language
+     */
+    public JavaScriptResourceReference jsResource(String languageId) {
+        return new WebjarsJavaScriptResourceReference(new PrismLanguage(languageId).jsFile());
+    }
+    
+    @SneakyThrows
+    public Optional<String> read(JavaScriptResourceReference jsRef) {
+        var resourceStream = jsRef.getResource().getResourceStream();
+        return resourceStream!=null 
+            ? Optional.of(new String(resourceStream.getInputStream().readAllBytes()))
+            : Optional.empty();
     }
 
 }

@@ -17,8 +17,6 @@
  *  under the License.
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes.markup;
-
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.wicket.request.IRequestHandler;
@@ -33,7 +31,7 @@ import org.apache.wicket.request.resource.ResourceReference;
  */
 class MarkupComponent_reloadJs {
 
-    public static CharSequence decorate(final CharSequence htmlContent, final Iterable<JavaScriptResourceReference> jsRefs) {
+    public static String decorate(final CharSequence htmlContent, final Iterable<JavaScriptResourceReference> jsRefs) {
         var targetId = UUID.randomUUID().toString();
 
         var sb = new StringBuilder()
@@ -44,10 +42,6 @@ class MarkupComponent_reloadJs {
             sb.append("<script type=\"text/javascript\" src=\""+getUrl(jsRef)+"\" defer></script>\n");
         }
         return sb.toString();
-    }
-
-    public static CharSequence decorate(final CharSequence htmlContent, final JavaScriptResourceReference jsRef) {
-        return decorate(htmlContent, List.of(jsRef));
     }
 
     private static String getUrl(final ResourceReference jsRef) {
