@@ -27,7 +27,6 @@ import java.util.function.UnaryOperator;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.graalvm.polyglot.Context;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -66,7 +65,7 @@ record HighlightBehavior(
     private static final Map<SyntaxHighlighter, HighlightBehavior> cache = new ConcurrentHashMap<>();
     
     private HighlightBehavior(PrismTheme theme) {
-        this(theme, PrismResourcesWkt.cssResources(theme), new PrismHighlighter(PrismResourcesWkt.jsResourceMain()));
+        this(theme, PrismResourcesWkt.cssResources(theme), new PrismHighlighter(PrismResourcesWkt.jsResourceMain().orElseThrow()));
     }
         
     void renderHead(final IHeaderResponse response) {
@@ -83,11 +82,6 @@ record HighlightBehavior(
     @Log4j2
     record PrismHighlighter(String prismJs) implements UnaryOperator<String> {
         
-        PrismHighlighter(JavaScriptResourceReference jsResourceReference) {
-            this(PrismResourcesWkt.read(jsResourceReference).orElseThrow());
-            System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
-        }
-        
         /**
          * Returns the highlighted HTML.
          * @param htmlContent code to be highlighted
@@ -103,10 +97,11 @@ record HighlightBehavior(
                 public void head(Node node, int depth) {
                     if(node instanceof Element element
                         && "code".equals(node.nodeName())) {
+                        
                         var prismLanguage = PrismLanguage.parseFromCssClass(node.attr("class")).orElse(null);
                         if(prismLanguage==null) return;
-                        var grammarJs = PrismResourcesWkt.read(PrismResourcesWkt.jsResource(prismLanguage.languageId()))
-                            .orElse(null);
+                        
+                        var grammarJs = PrismResourcesWkt.jsResource(prismLanguage).orElse(null);
                         if(grammarJs==null) {
                             log.warn("grammarJs not found for {}", prismLanguage);
                             return;

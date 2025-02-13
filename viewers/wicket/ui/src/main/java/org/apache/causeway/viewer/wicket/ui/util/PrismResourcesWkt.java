@@ -47,21 +47,21 @@ public final class PrismResourcesWkt{
     }
 
     /**
-     * Returns the main Prism JS resource
+     * Returns the Prism main JS source
      */
-    public JavaScriptResourceReference jsResourceMain() {
-        return new WebjarsJavaScriptResourceReference("prism/prism.js");
+    public Optional<String> jsResourceMain() {
+        return read(new WebjarsJavaScriptResourceReference("prism/prism.js"));
     }
     
     /**
-     * Returns the Prism JS resources for selected language
+     * Returns the Prism grammar JS source for selected language
      */
-    public JavaScriptResourceReference jsResource(String languageId) {
-        return new WebjarsJavaScriptResourceReference(new PrismLanguage(languageId).jsFile());
+    public Optional<String> jsResource(final PrismLanguage prismLanguage) {
+        return read(new WebjarsJavaScriptResourceReference(prismLanguage.jsFile()));
     }
     
     @SneakyThrows
-    public Optional<String> read(JavaScriptResourceReference jsRef) {
+    private Optional<String> read(JavaScriptResourceReference jsRef) {
         var resourceStream = jsRef.getResource().getResourceStream();
         return resourceStream!=null 
             ? Optional.of(new String(resourceStream.getInputStream().readAllBytes()))
