@@ -53,6 +53,7 @@ public record PrismHighlighter() implements UnaryOperator<String> {
                 }
                 
                 var newNode = new PrismNodeHighlighter(prismLanguage, ()->{
+                    System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
                     var context = Context.create("js");
                     context.eval("js", prismJs);
                     context.eval("js", grammarJs);

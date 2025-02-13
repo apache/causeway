@@ -31,6 +31,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PrismUtils {
     
+    {
+        suppressPolyglotFallbackWarning();
+    }
+    
     /**
      * Returns the Prism main JS source
      */
@@ -56,11 +60,15 @@ public class PrismUtils {
     private Optional<String> read(String jsRef) {
         String resourcePath = "META-INF/resources/webjars/" + jsRef;
         
-        // Get the InputStream using the class loader
         InputStream inputStream = _Context.getDefaultClassLoader().getResourceAsStream(resourcePath);
         return inputStream!=null 
             ? Optional.of(new String(inputStream.readAllBytes()))
             : Optional.empty();
+    }
+    
+    void suppressPolyglotFallbackWarning() {
+        //The polyglot engine uses a fallback runtime that does not support runtime compilation to native code.
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
     }
     
 }
