@@ -19,20 +19,15 @@
 package org.apache.causeway.viewer.wicket.ui.util;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import org.apache.causeway.viewer.commons.prism.PrismLanguage;
 import org.apache.causeway.viewer.commons.prism.PrismTheme;
 
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 @UtilityClass
 public final class PrismResourcesWkt{
@@ -44,28 +39,6 @@ public final class PrismResourcesWkt{
         return theme.cssFiles().stream()
                 .map(WebjarsCssResourceReference::new)
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Returns the Prism main JS source
-     */
-    public Optional<String> jsResourceMain() {
-        return read(new WebjarsJavaScriptResourceReference("prism/prism.js"));
-    }
-    
-    /**
-     * Returns the Prism grammar JS source for selected language
-     */
-    public Optional<String> jsResource(final PrismLanguage prismLanguage) {
-        return read(new WebjarsJavaScriptResourceReference(prismLanguage.jsFile()));
-    }
-    
-    @SneakyThrows
-    private Optional<String> read(JavaScriptResourceReference jsRef) {
-        var resourceStream = jsRef.getResource().getResourceStream();
-        return resourceStream!=null 
-            ? Optional.of(new String(resourceStream.getInputStream().readAllBytes()))
-            : Optional.empty();
     }
 
 }

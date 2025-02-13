@@ -24,4 +24,5 @@ module org.apache.causeway.viewer.commons.prism {
     requires spring.core;
     requires org.jsoup;
     requires org.graalvm.polyglot;
+    requires org.apache.causeway.commons;
 }

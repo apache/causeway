@@ -39,6 +39,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.prism.PrismLanguage;
 import org.apache.causeway.viewer.commons.prism.PrismNodeHighlighter;
 import org.apache.causeway.viewer.commons.prism.PrismTheme;
+import org.apache.causeway.viewer.commons.prism.PrismUtils;
 import org.apache.causeway.viewer.wicket.ui.util.PrismResourcesWkt;
 
 import lombok.extern.log4j.Log4j2;
@@ -65,7 +66,7 @@ record HighlightBehavior(
     private static final Map<SyntaxHighlighter, HighlightBehavior> cache = new ConcurrentHashMap<>();
     
     private HighlightBehavior(PrismTheme theme) {
-        this(theme, PrismResourcesWkt.cssResources(theme), new PrismHighlighter(PrismResourcesWkt.jsResourceMain().orElseThrow()));
+        this(theme, PrismResourcesWkt.cssResources(theme), new PrismHighlighter(PrismUtils.jsResourceMain().orElseThrow()));
     }
         
     void renderHead(final IHeaderResponse response) {
@@ -101,7 +102,7 @@ record HighlightBehavior(
                         var prismLanguage = PrismLanguage.parseFromCssClass(node.attr("class")).orElse(null);
                         if(prismLanguage==null) return;
                         
-                        var grammarJs = PrismResourcesWkt.jsResource(prismLanguage).orElse(null);
+                        var grammarJs = PrismUtils.jsResource(prismLanguage).orElse(null);
                         if(grammarJs==null) {
                             log.warn("grammarJs not found for {}", prismLanguage);
                             return;
