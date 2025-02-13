@@ -26,7 +26,10 @@ import org.graalvm.polyglot.Value;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
-public record PrismNodeHighlighter(
+/**
+ * Processes a single {@literal <code>} node. 
+ */
+record PrismNodeHighlighter(
     PrismLanguage prismLanguage,
     /**
      * Expects the supplier to load the prism main JS and also the grammar JS associated with the given language. 
