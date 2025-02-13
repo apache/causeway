@@ -41,13 +41,17 @@ record HighlightBehavior(
     ) {
 
     public static Optional<HighlightBehavior> lookup(final @Nullable SyntaxHighlighter syntaxHighlighter) {
-        if(syntaxHighlighter==null) return Optional.empty();
-        return switch(syntaxHighlighter) {
-            case NONE -> Optional.empty();
-            case PRISM_DEFAULT -> Optional.of(cache.computeIfAbsent(syntaxHighlighter, key->new HighlightBehavior(PrismTheme.DEFAULT)));
-            case PRISM_COY -> Optional.of(cache.computeIfAbsent(syntaxHighlighter, key->new HighlightBehavior(PrismTheme.COY)));
-            default -> throw _Exceptions.unmatchedCase(syntaxHighlighter);
-        };
+        if(syntaxHighlighter==null
+                || syntaxHighlighter==SyntaxHighlighter.NONE) {
+            return Optional.empty();
+        }
+        return Optional.of(cache.computeIfAbsent(syntaxHighlighter, key->
+            switch(syntaxHighlighter) {
+                case PRISM_DEFAULT -> new HighlightBehavior(PrismTheme.DEFAULT);
+                case PRISM_COY -> new HighlightBehavior(PrismTheme.COY);
+                default -> throw _Exceptions.unmatchedCase(syntaxHighlighter);
+            }    
+        ));
     }
     
     private static final Map<SyntaxHighlighter, HighlightBehavior> cache = new ConcurrentHashMap<>();
