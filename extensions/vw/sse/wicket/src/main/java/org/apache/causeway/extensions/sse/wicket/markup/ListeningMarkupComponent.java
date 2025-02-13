@@ -54,15 +54,13 @@ public class ListeningMarkupComponent extends MarkupComponent {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        var htmlContent = htmlContent().orElse("");
         replaceComponentTagBody(
                 markupStream,
                 openTag,
-
                 observing!=null
                     ? ListeningMarkupComponent_observing.decorate(htmlContent, observing, webAppContextPath)
                     : htmlContent
-
                 );
     }
 

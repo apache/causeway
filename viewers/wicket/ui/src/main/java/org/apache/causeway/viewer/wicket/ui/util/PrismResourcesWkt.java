@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
-import org.apache.causeway.viewer.commons.prism.Prism;
+import org.apache.causeway.viewer.commons.prism.PrismTheme;
 import org.apache.causeway.viewer.commons.prism.PrismLanguage;
 
 import lombok.experimental.UtilityClass;
@@ -39,7 +39,7 @@ public final class PrismResourcesWkt{
     /**
      * Returns the main Prism CSS resource for selected theme
      */
-    public List<CssResourceReference> cssResources(final Prism theme) {
+    public List<CssResourceReference> cssResources(final PrismTheme theme) {
         return theme.cssFiles().stream()
                 .map(WebjarsCssResourceReference::new)
                 .collect(Collectors.toList());
@@ -48,7 +48,7 @@ public final class PrismResourcesWkt{
     /**
      * Returns the main Prism JS resources for selected theme + most common languages
      */
-    public List<JavaScriptResourceReference> jsResources(final Prism theme) {
+    public List<JavaScriptResourceReference> jsResources(final PrismTheme theme) {
         final List<JavaScriptResourceReference> resources = PrismLanguage.mostCommon().stream()
                 .map(PrismLanguage::jsFile)
                 .map(WebjarsJavaScriptResourceReference::new)

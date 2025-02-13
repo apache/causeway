@@ -27,6 +27,9 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -54,23 +57,21 @@ public class MarkupComponent extends WebComponent {
             return Options.builder().build();
         }
 
-        private _HighlightBehavior highlightBehavior() {
-            return _HighlightBehavior.valueOf(getSyntaxHighlighter());
-        }
-
     }
 
     // -- CONSTRUCTION
 
     private final Options options;
 
-    public MarkupComponent(final String id, final IModel<?> model, final Options options) {
+    public MarkupComponent(final String id, final IModel<?> model, final @Nullable Options options) {
         super(id, model);
-        this.options = options;
+        this.options = options == null 
+            ? Options.defaults() 
+            : options;
     }
 
     public MarkupComponent(final String id, final IModel<?> model) {
-        this(id, model, Options.defaults());
+        this(id, model, null);
     }
 
     // --
@@ -78,14 +79,19 @@ public class MarkupComponent extends WebComponent {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        options.highlightBehavior().renderHead(response);
+        highlightBehavior()
+            .ifPresent(highlighter->highlighter.renderHead(response));
     }
 
     @Override
-    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        var htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
-        replaceComponentTagBody(markupStream, openTag,
-                options.highlightBehavior().htmlContentPostProcess(htmlContent));
+    public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+        htmlContent()
+            .ifPresentOrElse(html -> {
+                replaceComponentTagBody(markupStream, openTag, 
+                    highlightBehavior().map(highlighter->highlighter.htmlContentPostProcess(html)).orElse(html));        
+            }, ()->{
+                replaceComponentTagBody(markupStream, openTag, "");
+            });
     }
 
     @Override
@@ -95,36 +101,44 @@ public class MarkupComponent extends WebComponent {
     }
 
     // -- HELPER
+    
+    private Optional<HighlightBehavior> highlightBehavior() {
+        return HighlightBehavior.lookup(options.getSyntaxHighlighter());
+    }
 
-    protected CharSequence extractHtmlOrElse(final Object modelObject, final String fallback) {
+    /**
+     * Optionally returns the underlying model's HTML representation,
+     * based on whether it is available and has length. 
+     */
+    protected Optional<String> htmlContent() {
+        var modelObject = getDefaultModelObject();
+        
+        if(modelObject==null) return Optional.empty();
 
-        if(modelObject==null) {
-            return fallback;
+        if(modelObject instanceof ManagedObject managedObj) {
+            var feature = lookupObjectFeatureIn().orElse(null);
+            var asHtml = MmValueUtils.htmlStringForValueType(feature, managedObj);
+            return StringUtils.hasLength(asHtml)
+                ? Optional.of(asHtml)
+                : Optional.empty();
         }
 
-        if(modelObject instanceof ManagedObject) {
-            var adapter = (ManagedObject) modelObject;
-            var feature = lookupObjectFeatureIn(getDefaultModel()).orElse(null);
-            var asHtml = MmValueUtils.htmlStringForValueType(feature, adapter);
-            return asHtml != null
-                ? asHtml
-                : fallback;
-        }
-
-        return modelObject.toString();
+        return Optional.ofNullable(modelObject.toString());
     }
 
     // -- HELPER
 
-    protected Optional<ObjectFeature> lookupObjectFeatureIn(final IModel<?> model) {
-        if(model instanceof PropertyModel) {
-            return Optional.of(((PropertyModel)model).getMetaModel());
+    protected Optional<ObjectFeature> lookupObjectFeatureIn() {
+        var model = getDefaultModel();
+        
+        if(model instanceof PropertyModel propertyModel) {
+            return Optional.of(propertyModel.getMetaModel());
         }
-        if(model instanceof UiParameter) {
-            return Optional.of(((UiParameter)model).getMetaModel());
+        if(model instanceof UiParameter uiParameter) {
+            return Optional.of(uiParameter.getMetaModel());
         }
-        if(model instanceof ValueModel) {
-            return Optional.ofNullable(((ValueModel)model).getActionModelHint())
+        if(model instanceof ValueModel valueModel) {
+            return Optional.ofNullable(valueModel.getActionModelHint())
                     .map(act->act.getAction());
         }
         return Optional.empty();

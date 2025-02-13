@@ -24,7 +24,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum Prism {
+public enum PrismTheme {
     DEFAULT("", false),
     COY("-coy", true),
     DARK("-dark", false),
@@ -54,6 +54,6 @@ public enum Prism {
     }
 
     public String jsFile() {
-        return "prism/prism" + ".js";
+        return "prism/prism.js";
     }
 }
