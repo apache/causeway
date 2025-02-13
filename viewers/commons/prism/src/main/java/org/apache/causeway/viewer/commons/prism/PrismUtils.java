@@ -31,7 +31,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PrismUtils {
     
-    {
+    static {
         suppressPolyglotFallbackWarning();
     }
     
@@ -66,7 +66,7 @@ public class PrismUtils {
             : Optional.empty();
     }
     
-    void suppressPolyglotFallbackWarning() {
+    private void suppressPolyglotFallbackWarning() {
         //The polyglot engine uses a fallback runtime that does not support runtime compilation to native code.
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
     }

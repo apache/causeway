@@ -27,10 +27,14 @@ import org.springframework.util.StringUtils;
 
 public record PrismLanguage(String languageId) {
     
+    public String cssClass() {
+        return "language-" + languageId;
+    }
+
     public String jsFile() {
         return "prism/components/prism-" + languageId + ".min.js";
     }
-
+    
     /**
      * eg. {@code class='language-ruby'} results in {@code languageId=ruby}
      */

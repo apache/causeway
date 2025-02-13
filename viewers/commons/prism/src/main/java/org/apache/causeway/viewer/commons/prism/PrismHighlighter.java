@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.prism;
 
+import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import org.graalvm.polyglot.Context;
@@ -38,6 +39,7 @@ public record PrismHighlighter() implements UnaryOperator<String> {
     public String apply(String htmlContent) {
         var prismJs = PrismUtils.jsResourceMain().orElseThrow();
         var doc = Jsoup.parseBodyFragment(htmlContent);
+        var runLater = new ArrayList<Runnable>();
         
         doc.traverse((Node node, int depth)->{
             if(node instanceof Element element
@@ -53,16 +55,18 @@ public record PrismHighlighter() implements UnaryOperator<String> {
                 }
                 
                 var newNode = new PrismNodeHighlighter(prismLanguage, ()->{
-                    System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
                     var context = Context.create("js");
                     context.eval("js", prismJs);
                     context.eval("js", grammarJs);
                     return context;
                 }).apply(element);
                 
-                node.replaceWith(newNode);
+                //TODO[causeway-viewer-commons-prism-CAUSEWAY-3857] this is a bit of a hack, as we actually are replacing the parent <pre> node
+                runLater.add(()->node.parent().replaceWith(newNode));
             }
         });
+        
+        runLater.forEach(Runnable::run);
         
         return doc.body().html();
     }

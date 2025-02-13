@@ -47,7 +47,13 @@ record PrismNodeHighlighter(
             Value language = prism.getMember("languages").getMember(prismLanguage.languageId());
             String highlightedCode = highlight.execute(codeNode.html(), language, prismLanguage.languageId()).asString();
             
-            var doc = Jsoup.parseBodyFragment("<code class=\"" + codeNode.attr("class") + "\">" + highlightedCode + "</code>");
+            var pre = """
+                <pre class="highlight language-%s" tabindex="0">
+                    <code class="language-%s" data-lang="%s">%s</code>
+                </pre>"""
+                .formatted(prismLanguage.languageId(), prismLanguage.languageId(), prismLanguage.languageId(), highlightedCode);
+            
+            var doc = Jsoup.parseBodyFragment(pre);
             return doc.body().child(0);
         }
     }
