@@ -108,7 +108,9 @@ function buildDockerImage() {
 
 if [ ! -z "$REVISION" ]; then
 
-  # backup the supplemental-model artifact pom, as it must be fixed at version 1.0
+  # backup the supplemental-model artifact pom, as it must be fixed at version 1.0 
+  # as referenced from the bom via a hardcoded version
+  echo "backup the supplemental-model artifact pom before version:set"
   cd $PROJECT_ROOT_PATH
   cp supplemental-model/pom.xml supplemental-model/pom.xml~
 
@@ -129,6 +131,8 @@ if [ ! -z "$REVISION" ]; then
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
   # restore the supplemental-model artifact pom, as it must be fixed at version 1.0
+  # as referenced from the bom via a hardcoded version
+  echo "restore the supplemental-model artifact pom after version:set"
   cd $PROJECT_ROOT_PATH
   mv supplemental-model/pom.xml~ supplemental-model/pom.xml
 
