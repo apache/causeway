@@ -25,6 +25,7 @@ import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 
 /**
  * Processes a single {@literal <code>} node.
@@ -40,16 +41,26 @@ record PrismNodeHighlighter(
     @Override
     public Element apply(final Element codeNode) {
         try (Context context = contextSupplier.get()) {
-            // Get the highlight function and execute it
+            // get the highlight function and execute it later
             Value prism = context.getBindings("js").getMember("Prism");
             Value highlight = prism.getMember("highlight");
-
             Value language = prism.getMember("languages").getMember(prismLanguage.languageId());
-            String highlightedCode = highlight.execute(codeNode.html(), language, prismLanguage.languageId()).asString();
+
+            var html = new StringBuilder();
+
+            codeNode.traverse((node, depth)->{
+                if(depth!=1) return;
+                if(node instanceof TextNode textNode) {
+                    String highlightedCode = highlight.execute(textNode.getWholeText(), language, prismLanguage.languageId()).asString();
+                    html.append(highlightedCode);
+                } else {
+                    html.append(node.outerHtml());
+                }
+            });
 
             var code = """
                     <code class="language-%s" data-lang="%s">%s</code>"""
-                    .formatted(prismLanguage.languageId(), prismLanguage.languageId(), highlightedCode);
+                    .formatted(prismLanguage.languageId(), prismLanguage.languageId(), html.toString());
 
             var doc = Jsoup.parseBodyFragment(code);
             return doc.body().child(0);
