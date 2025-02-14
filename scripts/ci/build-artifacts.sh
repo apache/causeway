@@ -108,9 +108,8 @@ function buildDockerImage() {
 
 if [ ! -z "$REVISION" ]; then
 
-  cd $PROJECT_ROOT_PATH
-
   # backup the supplemental-model artifact pom, as it must be fixed at version 1.0
+  cd $PROJECT_ROOT_PATH
   cp supplemental-model/pom.xml supplemental-model/pom.xml~
 
   echo ""
@@ -118,6 +117,7 @@ if [ ! -z "$REVISION" ]; then
   echo ">>> mvn versions:set -DnewVersion=$REVISION ..."
   echo ""
   echo ""
+  cd $PROJECT_ROOT_PATH
   mvn versions:set \
       -DprocessAllModules \
       -DnewVersion=$REVISION \
@@ -128,6 +128,10 @@ if [ ! -z "$REVISION" ]; then
       | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
       | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
 
+  # restore the supplemental-model artifact pom, as it must be fixed at version 1.0
+  cd $PROJECT_ROOT_PATH
+  mv supplemental-model/pom.xml~ supplemental-model/pom.xml
+
   echo ""
   echo ""
   echo ">>> sed'ing version in starters and parent ..."
@@ -136,9 +140,6 @@ if [ ! -z "$REVISION" ]; then
   cd $PROJECT_ROOT_PATH/starters
   CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
   sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
-  
-  # restore the supplemental-model artifact pom, as it must be fixed at version 1.0
-  mv supplemental-model/pom.xml~ supplemental-model/pom.xml
 
   # -- debug the version rewriting --
   # 1) add an exit statement after the fi below
