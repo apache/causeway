@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.internal.context._Context;
 
@@ -30,45 +31,55 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class PrismUtils {
-    
+
     static {
         suppressPolyglotFallbackWarning();
     }
-    
+
     /**
      * Returns the Prism main JS source
      */
     public Optional<String> jsResourceMain() {
         return lookup("prism/prism.js");
     }
-    
+
     /**
      * Returns the Prism grammar JS source for selected language
      */
     public Optional<String> jsResource(final PrismLanguage prismLanguage) {
         return lookup(prismLanguage.jsFile());
     }
-    
+
+    @Deprecated
+    public String mostCommonGrammerAsJs() {
+        return PrismLanguage.mostCommon()
+            .stream()
+            .map(PrismUtils::jsResource)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .collect(Collectors.joining("\n\n"));
+    }
+
     // -- HELPER
-    
+
     private static final Map<String, Optional<String>> resourceCache = new ConcurrentHashMap<>();
-    private Optional<String> lookup(String jsRef) {
+    private Optional<String> lookup(final String jsRef) {
         return resourceCache.computeIfAbsent(jsRef, PrismUtils::read);
     }
-    
+
     @SneakyThrows
-    private Optional<String> read(String jsRef) {
+    private Optional<String> read(final String jsRef) {
         String resourcePath = "META-INF/resources/webjars/" + jsRef;
-        
+
         InputStream inputStream = _Context.getDefaultClassLoader().getResourceAsStream(resourcePath);
-        return inputStream!=null 
+        return inputStream!=null
             ? Optional.of(new String(inputStream.readAllBytes()))
             : Optional.empty();
     }
-    
+
     private void suppressPolyglotFallbackWarning() {
         //The polyglot engine uses a fallback runtime that does not support runtime compilation to native code.
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
     }
-    
+
 }

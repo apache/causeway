@@ -27,35 +27,33 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 /**
- * Processes a single {@literal <code>} node. 
+ * Processes a single {@literal <code>} node.
  */
 record PrismNodeHighlighter(
     PrismLanguage prismLanguage,
     /**
-     * Expects the supplier to load the prism main JS and also the grammar JS associated with the given language. 
+     * Expects the supplier to load the prism main JS and also the grammar JS associated with the given language.
      */
     Supplier<Context> contextSupplier
     ) implements UnaryOperator<Element> {
 
     @Override
-    public Element apply(Element codeNode) {
+    public Element apply(final Element codeNode) {
         try (Context context = contextSupplier.get()) {
             // Get the highlight function and execute it
             Value prism = context.getBindings("js").getMember("Prism");
             Value highlight = prism.getMember("highlight");
-            
+
             Value language = prism.getMember("languages").getMember(prismLanguage.languageId());
             String highlightedCode = highlight.execute(codeNode.html(), language, prismLanguage.languageId()).asString();
-            
-            var pre = """
-                <pre class="highlight language-%s" tabindex="0">
-                    <code class="language-%s" data-lang="%s">%s</code>
-                </pre>"""
-                .formatted(prismLanguage.languageId(), prismLanguage.languageId(), prismLanguage.languageId(), highlightedCode);
-            
-            var doc = Jsoup.parseBodyFragment(pre);
+
+            var code = """
+                    <code class="language-%s" data-lang="%s">%s</code>"""
+                    .formatted(prismLanguage.languageId(), prismLanguage.languageId(), highlightedCode);
+
+            var doc = Jsoup.parseBodyFragment(code);
             return doc.body().child(0);
         }
     }
-    
+
 }

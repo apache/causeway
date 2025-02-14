@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.commons.prism;
 
-import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import org.graalvm.polyglot.Context;
@@ -27,47 +26,45 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
 import lombok.extern.log4j.Log4j2;
-
 @Log4j2
 public record PrismHighlighter() implements UnaryOperator<String> {
-    
+
     /**
      * Returns the highlighted HTML.
      * @param htmlContent code to be highlighted
      */
     @Override
-    public String apply(String htmlContent) {
+    public String apply(final String htmlContent) {
         var prismJs = PrismUtils.jsResourceMain().orElseThrow();
         var doc = Jsoup.parseBodyFragment(htmlContent);
-        var runLater = new ArrayList<Runnable>();
-        
-        doc.traverse((Node node, int depth)->{
+
+        doc.traverse((final Node node, final int depth)->{
             if(node instanceof Element element
                 && "code".equals(node.nodeName())) {
-                
+
                 var prismLanguage = PrismLanguage.parseFromCssClass(node.attr("class")).orElse(null);
                 if(prismLanguage==null) return;
-                
+
                 var grammarJs = PrismUtils.jsResource(prismLanguage).orElse(null);
                 if(grammarJs==null) {
                     log.warn("grammarJs not found for {}", prismLanguage);
                     return;
                 }
-                
+
                 var newNode = new PrismNodeHighlighter(prismLanguage, ()->{
                     var context = Context.create("js");
                     context.eval("js", prismJs);
                     context.eval("js", grammarJs);
                     return context;
                 }).apply(element);
-                
-                //TODO[causeway-viewer-commons-prism-CAUSEWAY-3857] this is a bit of a hack, as we actually are replacing the parent <pre> node
-                runLater.add(()->node.parent().replaceWith(newNode));
+
+                //<pre class="highlight language-%s">
+                node.parent().attr("class", "highlight language-%s".formatted(prismLanguage.languageId()));
+
+                node.replaceWith(newNode);
             }
         });
-        
-        runLater.forEach(Runnable::run);
-        
+
         return doc.body().html();
     }
 
