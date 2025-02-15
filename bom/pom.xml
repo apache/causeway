@@ -128,6 +128,7 @@ identified
         <error_prone_annotations.version>2.36.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+        <graaljs.version>24.1.2</graaljs.version>
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
         <guava.version>33.4.0-jre</guava.version>
 
@@ -168,6 +169,8 @@ identified
         <pdfbox.version>3.0.4</pdfbox.version>
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.4.0</poi.version>
+
+        <prismjs.version>1.29.0</prismjs.version>
 
         <quartz-scheduler.version>2.5.0</quartz-scheduler.version>
         <querydsl.version>5.1.0</querydsl.version>
@@ -1897,11 +1900,28 @@ identified
                 <artifactId>poi-ooxml</artifactId>
                 <version>${poi.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml-lite</artifactId>
                 <version>${poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars.bowergithub.prismjs</groupId>
+                <artifactId>prism</artifactId>
+                <version>${prismjs.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.graalvm.polyglot</groupId>
+                <artifactId>polyglot</artifactId>
+                <version>${graaljs.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.graalvm.polyglot</groupId>
+                <artifactId>js</artifactId>
+                <version>${graaljs.version}</version>
+                <type>pom</type>
             </dependency>
 
             <dependency>

@@ -18,27 +18,25 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes.markup;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.semantics.Renderer.SyntaxHighlighter;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.viewer.commons.prism.PrismHighlighter;
 import org.apache.causeway.viewer.commons.prism.PrismTheme;
 import org.apache.causeway.viewer.wicket.ui.util.PrismResourcesWkt;
 
 record HighlightBehavior(
     PrismTheme theme,
-    Iterable<CssResourceReference> cssResourceReferences,
-    Iterable<JavaScriptResourceReference> jsResourceReferences
-    ) {
+    List<CssResourceReference> cssResourceReferences) {
 
     public static Optional<HighlightBehavior> lookup(final @Nullable SyntaxHighlighter syntaxHighlighter) {
         if(syntaxHighlighter==null
@@ -57,20 +55,18 @@ record HighlightBehavior(
     private static final Map<SyntaxHighlighter, HighlightBehavior> cache = new ConcurrentHashMap<>();
     
     private HighlightBehavior(PrismTheme theme) {
-        this(theme, PrismResourcesWkt.cssResources(theme), PrismResourcesWkt.jsResources(theme));
+        this(theme, PrismResourcesWkt.cssResources(theme));
     }
         
     void renderHead(final IHeaderResponse response) {
         for(CssResourceReference cssRef : cssResourceReferences()) {
             response.render(CssHeaderItem.forReference(cssRef));
         }
-        for(JavaScriptResourceReference jsRef : jsResourceReferences()) {
-            response.render(JavaScriptHeaderItem.forReference(jsRef));
-        }
     }
     
-    CharSequence htmlContentPostProcess(final CharSequence htmlContent) {
-        return MarkupComponent_reloadJs.decorate(htmlContent, jsResourceReferences());
+    String htmlContentPostProcess(final String htmlContent) {
+        var highlighted = new PrismHighlighter().apply(htmlContent);
+        return highlighted;
     }
     
 }

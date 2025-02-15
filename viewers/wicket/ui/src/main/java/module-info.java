@@ -154,5 +154,6 @@ module org.apache.causeway.viewer.wicket.ui {
     requires de.agilecoders.wicket.webjars;
     requires org.wicketstuff.select2;
     requires de.agilecoders.wicket.jquery;
+    requires org.graalvm.polyglot;
 
 }

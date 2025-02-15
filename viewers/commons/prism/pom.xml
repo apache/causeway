@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor 
+	license agreements. See the NOTICE file distributed with this work for
+additional 
 	information regarding copyright ownership. The ASF licenses this file to 
 	you under the Apache License, Version 2.0 (the "License"); you may not use 
 	this file except in compliance with the License. You may obtain a copy of 
@@ -10,31 +12,43 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.viewer</groupId>
-    	<artifactId>causeway-viewer-commons</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway.viewer</groupId>
+        <artifactId>causeway-viewer-commons</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>causeway-viewer-commons-prism</artifactId>
-	<name>Apache Causeway Commons - Prism</name>
-	<description>Client Side Syntax Highlighting</description>
+    <artifactId>causeway-viewer-commons-prism</artifactId>
+    <name>Apache Causeway Commons - Prism</name>
+    <description>Client Side Syntax Highlighting</description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.viewer.commons.prism</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/viewer/commons/prism</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.commons.prism</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/viewer/commons/prism</git-plugin.propertiesDir>
+    </properties>
 
-	<dependencies>
-		<dependency>
-		    <groupId>org.webjars.bowergithub.prismjs</groupId>
-		    <artifactId>prism</artifactId>
-		    <version>1.29.0</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.causeway.commons</groupId>
+            <artifactId>causeway-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bowergithub.prismjs</groupId>
+            <artifactId>prism</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>polyglot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.polyglot</groupId>
+            <artifactId>js</artifactId>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
 
 </project>
