@@ -20,14 +20,14 @@ package org.apache.causeway.viewer.commons.prism;
 
 import java.util.function.UnaryOperator;
 
-import org.graalvm.polyglot.Context;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 
 import lombok.extern.log4j.Log4j2;
 @Log4j2
-public record PrismHighlighter() implements UnaryOperator<String> {
+public record PrismHighlighter(
+        ) implements UnaryOperator<String> {
 
     /**
      * Returns the highlighted HTML.
@@ -35,8 +35,10 @@ public record PrismHighlighter() implements UnaryOperator<String> {
      */
     @Override
     public String apply(final String htmlContent) {
-        var prismJs = PrismUtils.jsResourceMain().orElseThrow();
+
         var doc = Jsoup.parseBodyFragment(htmlContent);
+
+        //var tt = org.apache.causeway.commons.internal.base._Timing.now();
 
         doc.traverse((final Node node, final int depth)->{
             if(node instanceof Element element
@@ -52,8 +54,7 @@ public record PrismHighlighter() implements UnaryOperator<String> {
                 }
 
                 var newNode = new PrismNodeHighlighter(prismLanguage, ()->{
-                    var context = Context.create("js");
-                    context.eval("js", prismJs);
+                    var context = PrismUtils.createPrismContext();
                     context.eval("js", grammarJs);
                     return context;
                 }).apply(element);
@@ -64,6 +65,8 @@ public record PrismHighlighter() implements UnaryOperator<String> {
                 node.replaceWith(newNode);
             }
         });
+
+        //tt.stop();System.err.printf("context took %s%n", tt);
 
         return doc.body().html();
     }

@@ -24,13 +24,18 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
+import org.graalvm.polyglot.Source;
+
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.context._Context;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class PrismUtils {
+class PrismUtils {
 
     static {
         suppressPolyglotFallbackWarning();
@@ -51,7 +56,7 @@ public class PrismUtils {
     }
 
     @Deprecated
-    public String mostCommonGrammerAsJs() {
+    String mostCommonGrammerAsJs() {
         return PrismLanguage.mostCommon()
             .stream()
             .map(PrismUtils::jsResource)
@@ -60,7 +65,17 @@ public class PrismUtils {
             .collect(Collectors.joining("\n\n"));
     }
 
+    @SneakyThrows
+    Context createPrismContext() {
+        var context = Context.newBuilder().engine(ENGINE.get()). build();
+        context.eval(PRISM_SOURCE.get());
+        return context;
+    }
+
     // -- HELPER
+
+    private static final _Lazy<Engine> ENGINE = _Lazy.threadSafe(Engine::create);
+    private static final _Lazy<Source> PRISM_SOURCE = _Lazy.threadSafe(()->Source.create("js", PrismUtils.jsResourceMain().orElseThrow()));
 
     private static final Map<String, Optional<String>> resourceCache = new ConcurrentHashMap<>();
     private Optional<String> lookup(final String jsRef) {
