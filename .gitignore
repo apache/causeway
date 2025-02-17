@@ -58,6 +58,7 @@ logs/
 tmp/
 .temp-*
 *.stackdump
+.approval_tests_temp
 
 JArchitectOut/
 *.jdproj
