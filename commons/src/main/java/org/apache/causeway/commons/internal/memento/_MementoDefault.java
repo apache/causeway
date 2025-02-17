@@ -44,31 +44,19 @@ import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter
 import org.jspecify.annotations.NonNull;
 
 /**
- *
- * package private mixin for utility class {@link _Mementos}
+ * package private helper for utility class {@link _Mementos}
  *
  * Memento default implementation.
- *
  */
-class _MementoDefault implements _Mementos.Memento {
-
-    private final EncoderDecoder codec;
-    private final SerializingAdapter serializer;
-
-    private final HashMap<String, Serializable> valuesByKey; // we need a Serializable Map
+record _MementoDefault(
+        EncoderDecoder codec,
+        SerializingAdapter serializer,
+        // we need a Serializable Map
+        HashMap<String, Serializable> valuesByKey
+        ) implements _Mementos.Memento {
 
     _MementoDefault(final EncoderDecoder codec, final SerializingAdapter serializer) {
         this(codec, serializer, _Maps.newHashMap());
-    }
-
-    private _MementoDefault(
-            final @NonNull EncoderDecoder codec,
-            final @NonNull SerializingAdapter serializer,
-            final @NonNull HashMap<String, Serializable> valuesByKey) { // we need a Serializable Map
-
-        this.codec = codec;
-        this.serializer = serializer;
-        this.valuesByKey = valuesByKey;
     }
 
     @Override

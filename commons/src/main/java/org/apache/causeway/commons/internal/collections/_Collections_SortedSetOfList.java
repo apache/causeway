@@ -26,23 +26,15 @@ import java.util.NoSuchElementException;
 import java.util.SortedSet;
 
 /**
- *
- * package private mixin for utility class {@link _Collections}
- *
+ * package private helper for utility class {@link _Collections}
  */
-class _Collections_SortedSetOfList<T> implements SortedSet<T> {
+record _Collections_SortedSetOfList<T>(List<T> list) implements SortedSet<T> {
 
     private static final String JUST_AN_ADAPTER =
             "this set is just an adapter, it has no information about the intended comparator";
 
-    static <T> _Collections_SortedSetOfList<T> of(List<T> list){
+    static <T> _Collections_SortedSetOfList<T> of(final List<T> list){
         return new _Collections_SortedSetOfList<>(list);
-    }
-
-    private final List<T> list;
-
-    private _Collections_SortedSetOfList(List<T> list) {
-        this.list = list;
     }
 
     @Override
@@ -56,7 +48,7 @@ class _Collections_SortedSetOfList<T> implements SortedSet<T> {
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
         throw new UnsupportedOperationException(JUST_AN_ADAPTER);
     }
 
@@ -71,37 +63,37 @@ class _Collections_SortedSetOfList<T> implements SortedSet<T> {
     }
 
     @Override
-    public <X> X[] toArray(X[] a) {
+    public <X> X[] toArray(final X[] a) {
         return list.toArray(a);
     }
 
     @Override
-    public boolean add(T e) {
+    public boolean add(final T e) {
         throw new UnsupportedOperationException("unmodifiable");
     }
 
     @Override
-    public boolean remove(Object o) {
+    public boolean remove(final Object o) {
         throw new UnsupportedOperationException("unmodifiable");
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(final Collection<?> c) {
         throw new UnsupportedOperationException(JUST_AN_ADAPTER);
     }
 
     @Override
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(final Collection<? extends T> c) {
         throw new UnsupportedOperationException("unmodifiable");
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(final Collection<?> c) {
         throw new UnsupportedOperationException("unmodifiable");
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(final Collection<?> c) {
         throw new UnsupportedOperationException("unmodifiable");
     }
 
@@ -119,17 +111,17 @@ class _Collections_SortedSetOfList<T> implements SortedSet<T> {
     }
 
     @Override
-    public SortedSet<T> subSet(T fromElement, T toElement) {
+    public SortedSet<T> subSet(final T fromElement, final T toElement) {
         throw new UnsupportedOperationException(JUST_AN_ADAPTER);
     }
 
     @Override
-    public SortedSet<T> headSet(T toElement) {
+    public SortedSet<T> headSet(final T toElement) {
         throw new UnsupportedOperationException(JUST_AN_ADAPTER);
     }
 
     @Override
-    public SortedSet<T> tailSet(T fromElement) {
+    public SortedSet<T> tailSet(final T fromElement) {
         throw new UnsupportedOperationException(JUST_AN_ADAPTER);
     }
 

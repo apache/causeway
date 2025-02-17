@@ -30,21 +30,14 @@ import java.util.stream.Collector;
 import org.apache.causeway.commons.internal.base._Casts;
 
 /**
- *
- * package private mixin for utility class {@link _Arrays}
+ * package private helper for utility class {@link _Arrays}
  *
  * Collector for Arrays.
- *
  */
-class _Arrays_Collector<T> implements Collector<T, _Arrays_Collector.FastList<T>, T[]> {
-
-    private final Class<T> componentType;
-    private final int size;
-
-    _Arrays_Collector(Class<T> componentType, int size) {
-        this.componentType = componentType;
-        this.size = size;
-    }
+record _Arrays_Collector<T>(
+        Class<T> componentType,
+        int size
+        ) implements Collector<T, _Arrays_Collector.FastList<T>, T[]> {
 
     @Override
     public Supplier<FastList<T>> supplier() {
@@ -58,7 +51,7 @@ class _Arrays_Collector<T> implements Collector<T, _Arrays_Collector.FastList<T>
 
     @Override
     public BinaryOperator<FastList<T>> combiner() {
-        return (a,b)->a.addAll(b);
+        return (a, b)->a.addAll(b);
     }
 
     @Override
@@ -77,13 +70,13 @@ class _Arrays_Collector<T> implements Collector<T, _Arrays_Collector.FastList<T>
         private final T[] buffer;
         private int offset=0;
 
-        public FastList(Class<T> componentType, int size) {
+        public FastList(final Class<T> componentType, final int size) {
             this.buffer = _Casts.uncheckedCast(Array.newInstance(componentType, size));
         }
-        public void add(T x){
+        public void add(final T x){
             buffer[offset++]=x;
         }
-        public FastList<T> addAll(FastList<T> x){
+        public FastList<T> addAll(final FastList<T> x){
             System.arraycopy(x.buffer, 0, buffer, offset, x.offset);
             return this;
         }

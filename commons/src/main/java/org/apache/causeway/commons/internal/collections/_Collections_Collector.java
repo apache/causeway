@@ -27,24 +27,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import org.jspecify.annotations.NonNull;
-
 /**
- *
- * package private mixin for utility class {@link _Collections}
+ * package private helper for utility class {@link _Collections}
  *
  * Collector for Collections.
- *
  */
-class _Collections_Collector<T, C extends Collection<T>> implements Collector<T, C, C> {
-
-    private final Supplier<C> supplier;
-    private final Function<C, C> finisher;
-
-    _Collections_Collector(final @NonNull Supplier<C> supplier, final @NonNull Function<C, C> finisher) {
-        this.supplier = supplier;
-        this.finisher = finisher;
-    }
+record _Collections_Collector<T, C extends Collection<T>>(
+        Supplier<C> supplier,
+        Function<C, C> finisher
+        ) implements Collector<T, C, C> {
 
     @Override
     public Supplier<C> supplier() {

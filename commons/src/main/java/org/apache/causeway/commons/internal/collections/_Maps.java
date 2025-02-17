@@ -34,15 +34,13 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
 /**
  * <h1>- internal use only -</h1>
@@ -253,10 +251,9 @@ public final class _Maps {
 
     // -- ALIAS MAP
 
-    @Value(staticConstructor = "of")
-    private static final class KeyPair<K> {
-        K key;
-        Can<K> aliasKeys;
+    private record KeyPair<K>(
+            K key,
+            Can<K> aliasKeys) {
     }
 
     public static <K, V> AliasMap<K, V> newAliasMap(
@@ -330,7 +327,7 @@ public final class _Maps {
 
             private void putAliasKeys(final K key, final Can<K> aliasKeys, final boolean remap) {
                 if(aliasKeys.isNotEmpty()) {
-                    var keyPair = KeyPair.of(key, aliasKeys);
+                    var keyPair = new KeyPair<>(key, aliasKeys);
                     for(var aliasKey : aliasKeys) {
 
                         var existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
@@ -347,7 +344,7 @@ public final class _Maps {
             private V getByAliasKey(final Object aliasKey) {
                 var keyPair = pairByAliasKey.get(aliasKey);
                 if(keyPair!=null) {
-                    return delegate.get(keyPair.getKey());
+                    return delegate.get(keyPair.key());
                 }
                 return null;
             }
@@ -361,7 +358,7 @@ public final class _Maps {
                 pairByAliasKey.entrySet()
                 .removeIf(entry->{
                     var keyPair = entry.getValue();
-                    return keyPair.getKey().equals(key);
+                    return keyPair.key().equals(key);
                 });
 
             }
