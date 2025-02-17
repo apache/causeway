@@ -222,7 +222,7 @@ implements
         final Stack<InteractionLayer> interactionLayers = interactionLayerStack.get();
         return interactionLayers.isEmpty()
     			? new CausewayInteraction(interactionIdGenerator.interactionId())
-				: _Casts.uncheckedCast(interactionLayers.firstElement().getInteraction());
+				: _Casts.uncheckedCast(interactionLayers.firstElement().interaction());
     }
 
     @Override
@@ -363,7 +363,7 @@ implements
                     cause.getMessage());
             return;
         }
-        var interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).getInteraction());
+        var interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).interaction());
         transactionServiceSpring.requestRollback(interaction);
     }
 
@@ -446,7 +446,7 @@ implements
                 if(isAtTopLevel()) {
                     // keep the stack unmodified yet, to allow for callbacks to properly operate
 
-                    preInteractionClosed(_Casts.uncheckedCast(stack.peek().getInteraction()));
+                    preInteractionClosed(_Casts.uncheckedCast(stack.peek().interaction()));
                 }
                 _Xray.closeInteractionLayer(stack);
                 stack.pop();

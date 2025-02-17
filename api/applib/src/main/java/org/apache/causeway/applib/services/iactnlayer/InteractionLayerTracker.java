@@ -65,7 +65,7 @@ extends InteractionProvider {
     @Override
     default Optional<InteractionContext> currentInteractionContext() {
         return currentInteractionLayer()
-                .map(InteractionLayer::getInteractionContext);
+                .map(InteractionLayer::interactionContext);
     }
 
     // -- INTERACTION
@@ -77,7 +77,7 @@ extends InteractionProvider {
     @Override
     default Optional<Interaction> currentInteraction(){
     	return currentInteractionLayer()
-    	        .map(InteractionLayer::getInteraction);
+    	        .map(InteractionLayer::interaction);
     }
 
 }

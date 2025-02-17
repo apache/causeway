@@ -19,48 +19,17 @@
 package org.apache.causeway.applib.clock;
 
 import java.time.Instant;
-import java.util.Objects;
 
-import lombok.RequiredArgsConstructor;
+record VirtualClock_frozen(Instant frozenInstant) implements VirtualClock {
 
-@RequiredArgsConstructor
-final class VirtualClock_frozen implements VirtualClock {
-
-    private static final long serialVersionUID = -2589204298085221985L;
-    
-    private final Instant frozenInstant;
-    
     @Override
     public Instant nowAsInstant() {
         return frozenInstant;
     }
-    
-    // -- TO STRING, EQUALS, HASHCODE
-    
+
     @Override
     public String toString() {
         return String.format("%s: %s", this.getClass().getSimpleName(), nowAsXmlGregorianCalendar());
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if(obj==null) {
-            return false;
-        }
-        // equal if same class and same frozenInstant
-        if(!Objects.equals(this.getClass(), obj.getClass())) {
-            return false;
-        }
-        if(!Objects.equals(this.frozenInstant, ((VirtualClock_frozen)obj).frozenInstant)) {
-            return false;
-        }
-        return true;
-    }
-    
-    @Override
-    public int hashCode() {
-        // equal if same class and same frozenInstant
-        return Objects.hash(this.getClass(), frozenInstant);
     }
 
 }

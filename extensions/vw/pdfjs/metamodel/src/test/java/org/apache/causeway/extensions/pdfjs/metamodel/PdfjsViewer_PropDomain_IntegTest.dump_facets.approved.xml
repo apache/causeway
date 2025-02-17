@@ -2,14 +2,14 @@
   <mml:domainClassDto id="org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel">
     <mml:facets>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#)"/>
+        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#]"/>
         <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
         <mml:attr name="originalText" value="Some View Model"/>
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="translated" value="Some View Model"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized">
-        <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#)"/>
+        <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#]"/>
         <mml:attr name="facet" value="ObjectNamedFacetSynthesized"/>
         <mml:attr name="hasNoun" value="true"/>
         <mml:attr name="originalText" value="Optional[Some View Model]"/>
@@ -108,7 +108,7 @@
       <mml:prop id="pdf" mixedIn="false">
         <mml:facets>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.fallback.NamedFacetFallbackFromMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#pdf)"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.extensions.pdfjs.metamodel.domains.prop.SomeViewModel#pdf]"/>
             <mml:attr name="facet" value="NamedFacetFallbackFromMemberName"/>
             <mml:attr name="originalText" value="Pdf"/>
             <mml:attr name="precedence" value="FALLBACK"/>
@@ -256,14 +256,14 @@
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads all the .columnOrder.txt files for this object and its collections, as a zip file"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads all the .columnOrder.txt files for this object and its collections, as a zip file"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.NamedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act()]"/>
             <mml:attr name="facet" value="NamedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Download .columnOrder.txt files (ZIP)"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -320,7 +320,7 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.services.columnorder.Object_downloadColumnOrderTxtFilesAsZip#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="File Name"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -416,14 +416,14 @@
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads the Xxx.layout... layout file effective/inferred for this object"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads the Xxx.layout... layout file effective/inferred for this object"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Download Layout"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -480,14 +480,14 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name extension can be omitted."/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="File name extension can be omitted."/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -532,7 +532,7 @@
           <mml:param id="style" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="Style"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -577,7 +577,7 @@
           <mml:param id="format" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.name.NamedFacetForParameterUsingReflection">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.layout.Object_downloadLayout#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterUsingReflection"/>
                 <mml:attr name="originalText" value="Format"/>
                 <mml:attr name="precedence" value="LOW"/>
@@ -680,14 +680,14 @@
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Downloads a representation of the framework's internal metamodel for this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Downloads a representation of the framework's internal metamodel for this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Download Metamodel Xml"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -744,14 +744,14 @@
           <mml:param id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="mml:scalarParam">
             <mml:facets>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.ParamDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.ParamDescribedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
                 <mml:attr name="facet" value="ParamDescribedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name extension can be omitted."/>
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="File name extension can be omitted."/>
               </mml:facet>
               <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.ParamNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation">
-                <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act())"/>
+                <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_downloadMetamodelXml#act()]"/>
                 <mml:attr name="facet" value="NamedFacetForParameterLayoutAnnotation"/>
                 <mml:attr name="originalText" value="File name"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -847,14 +847,14 @@
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Open up a view of the metamodel of this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Open up a view of the metamodel of this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Inspect Metamodel"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -961,14 +961,14 @@
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Opens up a view of this object as represented in the (Restful Objects) REST API"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Opens up a view of this object as represented in the (Restful Objects) REST API"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.rest.Object_openRestApi#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Open Rest Api"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1075,14 +1075,14 @@
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
             <mml:attr name="originalText" value="Rebuilds the framework's internal metamodel of this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="translated" value="Rebuilds the framework's internal metamodel of this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
-            <mml:attr name="context" value="TranslationContext(name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act())"/>
+            <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberNamedFacetForStaticMemberName"/>
             <mml:attr name="originalText" value="Rebuild Metamodel"/>
             <mml:attr name="precedence" value="DEFAULT"/>

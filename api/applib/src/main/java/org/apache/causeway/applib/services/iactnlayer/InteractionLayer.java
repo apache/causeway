@@ -20,9 +20,6 @@ package org.apache.causeway.applib.services.iactnlayer;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
  * an {@link InteractionContext} (&quot;who&quot; is executing, &quot;when&quot; and &quot;where&quot;).
@@ -40,18 +37,29 @@ import lombok.RequiredArgsConstructor;
  *
  * @since 2.0 {@index}
  */
-@RequiredArgsConstructor
-public class InteractionLayer {
+public record InteractionLayer(
+        /**
+         * Current thread's {@link Interaction} : &quot;what&quot; is being executed
+         */
+        Interaction interaction,
 
-	/**
-	 * Current thread's {@link Interaction} : &quot;what&quot; is being executed
-	 */
-	@Getter private final Interaction interaction;
+        /**
+         * &quot;who&quot; is performing this {@link #getInteraction()}, also
+         * &quot;when&quot; and &quot;where&quot;.
+         */
+        InteractionContext interactionContext
+        ) {
 
-	/**
-	 * &quot;who&quot; is performing this {@link #getInteraction()}, also
-	 * &quot;when&quot; and &quot;where&quot;.
-	 */
-	@Getter private final InteractionContext interactionContext;
+    /**
+     * @deprecated use {@link #interaction()} instead
+     */
+    @Deprecated
+    public Interaction getInteraction() { return interaction; }
+
+    /**
+     * @deprecated use {@link #interactionContext()} instead
+     */
+    @Deprecated
+    public InteractionContext getInteractionContext() { return interactionContext; }
 
 }

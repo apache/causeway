@@ -18,48 +18,48 @@
  */
 package org.apache.causeway.applib.query;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-
-final class _NamedQueryDefault<T> 
-extends _QueryAbstract<T>
-implements NamedQuery<T> {
-
-    private static final long serialVersionUID = 1L;
-
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull String name;
-    
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull Map<String, Object> parametersByName;
+record _NamedQueryDefault<T>(
+        @NonNull Class<T> resultType,
+        @NonNull String name,
+        @NonNull QueryRange range,
+        @NonNull Map<String, Object> parametersByName
+        ) implements NamedQuery<T>, Serializable {
 
     protected _NamedQueryDefault(
-            final @NonNull Class<T> resultType, 
-            final @NonNull String queryName, 
+            final @NonNull Class<T> resultType,
+            final @NonNull String name,
             final @NonNull QueryRange range,
             final @Nullable Map<String, Object> parametersByName) {
-        super(resultType, range);
-        this.name = queryName;
-        this.parametersByName = parametersByName==null 
+        this.resultType = resultType;
+        this.range = range;
+        this.name = name;
+        this.parametersByName = parametersByName==null
                 ? Collections.emptyMap()
                 : Collections.unmodifiableMap(parametersByName);
     }
+
+    @Override public String getName() { return name; }
+    @Override public Map<String, Object> getParametersByName() { return parametersByName; }
+    @Override public Class<T> getResultType() { return resultType; }
+    @Override public QueryRange getRange() { return range; }
 
     @Override
     public String getDescription() {
         return getName() + " with " + getParametersByName();
     }
-    
+
     // -- WITHERS
-    
+
     @Override
     public _NamedQueryDefault<T> withRange(final @NonNull QueryRange range) {
         return new _NamedQueryDefault<>(getResultType(),  getName(), range, getParametersByName());
@@ -67,12 +67,12 @@ implements NamedQuery<T> {
 
     @Override
     public NamedQuery<T> withParameter(
-            final @NonNull String parameterName, 
+            final @NonNull String parameterName,
             final @Nullable Object parameterValue) {
         if(parameterName.isEmpty()) {
             throw _Exceptions.illegalArgument("require parameterName to be non empty, got '%s'", parameterName);
         }
-        var params = parametersByName==null 
+        var params = parametersByName==null
                 ? new HashMap<String, Object>()
                 : new HashMap<String, Object>(getParametersByName());
         params.put(parameterName, parameterValue);

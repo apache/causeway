@@ -18,19 +18,17 @@
  */
 package org.apache.causeway.applib.query;
 
+import java.io.Serializable;
+
 import org.jspecify.annotations.NonNull;
 
-final class _AllInstancesQueryDefault<T> 
-extends _QueryAbstract<T> 
-implements AllInstancesQuery<T> {
+record _AllInstancesQueryDefault<T>(
+        @NonNull Class<T> resultType,
+        @NonNull QueryRange range
+        ) implements AllInstancesQuery<T>, Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    protected _AllInstancesQueryDefault(
-            final @NonNull Class<T> type, 
-            final @NonNull QueryRange range) {
-        super(type, range);
-    }
+    @Override public Class<T> getResultType() { return resultType; }
+    @Override public QueryRange getRange() { return range; }
 
     @Override
     public String getDescription() {
@@ -38,7 +36,7 @@ implements AllInstancesQuery<T> {
     }
 
     // -- WITHERS
-    
+
     @Override
     public _AllInstancesQueryDefault<T> withRange(final @NonNull QueryRange range) {
         return new _AllInstancesQueryDefault<>(getResultType(), range);

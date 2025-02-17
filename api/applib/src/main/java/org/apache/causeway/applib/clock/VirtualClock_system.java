@@ -20,38 +20,16 @@ package org.apache.causeway.applib.clock;
 
 import java.time.Instant;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-final class VirtualClock_system implements VirtualClock {
-
-    private static final long serialVersionUID = 4019699893189814294L;
+record VirtualClock_system() implements VirtualClock {
 
     @Override
     public Instant nowAsInstant() {
         return Instant.now();
     }
 
-    // -- TO STRING, EQUALS, HASHCODE
-    
     @Override
     public String toString() {
         return String.format("%s: %s", this.getClass().getSimpleName(), nowAsXmlGregorianCalendar());
-    }
-    
-    @Override
-    public boolean equals(Object obj) {
-        if(obj==null) {
-            return false;
-        }
-        // equal if same class
-        return this.getClass().equals(obj.getClass());
-    }
-    
-    @Override
-    public int hashCode() {
-        // equal if same class
-        return this.getClass().hashCode();
     }
 
 }

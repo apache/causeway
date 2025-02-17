@@ -71,7 +71,7 @@ implements InteractionService {
 
     @Override public Optional<UUID> getInteractionId() {
         return currentInteractionLayer()
-                .map(InteractionLayer::getInteraction)
+                .map(InteractionLayer::interaction)
                 .map(Interaction::getInteractionId);
     }
 

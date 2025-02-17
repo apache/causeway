@@ -382,7 +382,7 @@ implements WrapperFactory, HasMetaModelContext {
             final AsyncControl<R> asyncControl) {
 
         var interactionLayer = currentInteractionLayer();
-        var interactionContext = interactionLayer.getInteractionContext();
+        var interactionContext = interactionLayer.interactionContext();
         var asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
 
         var parentCommand = getInteractionService().currentInteractionElseFail().getCommand();

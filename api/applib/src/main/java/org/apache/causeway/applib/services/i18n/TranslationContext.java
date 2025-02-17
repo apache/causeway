@@ -25,19 +25,15 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 
-import lombok.Getter;
-import lombok.Value;
-
 /**
  * @since 2.x {@index}
  */
-@Value(staticConstructor = "named")
-public final class TranslationContext
+public record TranslationContext(String name)
 implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    public static TranslationContext named(final String name) { return new TranslationContext(name); }
 
-    @Getter private final String name;
+    public String getName() { return name; }
 
     //XXX no logical type name supported
     public static TranslationContext forClassName(

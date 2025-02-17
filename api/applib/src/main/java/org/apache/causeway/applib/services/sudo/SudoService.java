@@ -97,7 +97,7 @@ public class SudoService {
             final @NonNull Callable<T> callable) {
 
         var currentInteractionLayer = interactionLayerTracker.currentInteractionLayerElseFail();
-        var currentInteractionContext = currentInteractionLayer.getInteractionContext();
+        var currentInteractionContext = currentInteractionLayer.interactionContext();
         var sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
         try {

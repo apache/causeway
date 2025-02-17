@@ -33,8 +33,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 @Domain.Exclude
 public final class TranslatableString {
 
-    // -- tr, trn (factory methods); constructor
-
     /**
      * A translatable string with a single pattern for both singular and plural forms.
      *
@@ -45,12 +43,9 @@ public final class TranslatableString {
             final String pattern,
             final Object... paramArgs) {
 
-        if(pattern == null) {
-            return null;
-        }
-        return new TranslatableString(Type.TR, pattern, null, 1, asMap(paramArgs));
+        if(pattern == null) return null;
 
-        // ...
+        return new TranslatableString(Type.TR, pattern, null, 1, asMap(paramArgs));
     }
 
     /**

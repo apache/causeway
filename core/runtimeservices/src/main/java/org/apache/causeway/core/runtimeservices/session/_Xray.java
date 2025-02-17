@@ -38,8 +38,8 @@ final class _Xray {
 
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.size();
-        var interactionId = afterEnter.peek().getInteraction().getInteractionId();
-        var executionContext = afterEnter.peek().getInteractionContext();
+        var interactionId = afterEnter.peek().interaction().getInteractionId();
+        var executionContext = afterEnter.peek().interactionContext();
 
         _XrayEvent.interactionOpen("open interaction %s", interactionId);
 
@@ -93,7 +93,7 @@ final class _Xray {
         }
 
         final int authStackSize = beforeClose.size();
-        var interactionId = beforeClose.peek().getInteraction().getInteractionId();
+        var interactionId = beforeClose.peek().interaction().getInteractionId();
         var sequenceId = XrayUtil.sequenceId(interactionId);
 
         _XrayEvent.interactionClose("close interaction %s", interactionId);
