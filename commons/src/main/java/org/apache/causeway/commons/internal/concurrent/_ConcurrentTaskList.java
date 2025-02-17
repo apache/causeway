@@ -49,7 +49,7 @@ public class _ConcurrentTaskList {
     private final List<_ConcurrentTask<?>> tasks = _Lists.newArrayList();
     private final AtomicBoolean wasStarted = new AtomicBoolean();
     private final CountDownLatch allFinishedLatch = new CountDownLatch(1);
-    private final AwaitableLatch awaitableLatch = AwaitableLatch.of(allFinishedLatch);
+    private final AwaitableLatch awaitableLatch = new AwaitableLatch(allFinishedLatch);
     private final LongAdder tasksExecuted = new LongAdder();
     private long executionTimeNanos;
 
@@ -111,7 +111,7 @@ public class _ConcurrentTaskList {
         var futures = new ArrayList<Future<?>>(tasks.size());
 
         for(_ConcurrentTask<?> task : tasks) {
-            futures.add(context.executorService.submit(task));
+            futures.add(context.executorService().submit(task));
         }
 
         // now wait for all futures to complete on a separate thread
@@ -180,7 +180,7 @@ public class _ConcurrentTaskList {
             }
         }
 
-        if(!context.enableExecutionLogging) {
+        if(!context.enableExecutionLogging()) {
             return;
         }
 

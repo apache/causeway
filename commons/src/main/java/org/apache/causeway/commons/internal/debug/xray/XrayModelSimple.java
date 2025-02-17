@@ -25,17 +25,19 @@ import java.util.Stack;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.internal.collections._Maps;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
+record XrayModelSimple(
+        MutableTreeNode rootNode,
+        Map<String, MutableTreeNode> nodesById,
+        Map<String, Stack<MutableTreeNode>> nodeStacksById) implements XrayModel {
 
-@RequiredArgsConstructor
-final class XrayModelSimple implements XrayModel {
-
-    @Getter(onMethod_ = {@Override})
-    private final MutableTreeNode rootNode;
+    XrayModelSimple(
+            final MutableTreeNode rootNode){
+        this(rootNode, _Maps.newConcurrentHashMap(), _Maps.newConcurrentHashMap());
+    }
 
     @Override
     public MutableTreeNode addContainerNode(
@@ -65,8 +67,6 @@ final class XrayModelSimple implements XrayModel {
         return dataModel;
     }
 
-    private final Map<String, MutableTreeNode> nodesById = _Maps.newConcurrentHashMap();
-
     @Override
     public Optional<MutableTreeNode> lookupNode(final String id) {
         return Optional.ofNullable(nodesById.get(id)) ;
@@ -77,8 +77,6 @@ final class XrayModelSimple implements XrayModel {
         var hasId = (HasIdAndLabel) ((DefaultMutableTreeNode)node).getUserObject();
         nodesById.remove(hasId.getId());
     }
-
-    private final Map<String, Stack<MutableTreeNode>> nodeStacksById = _Maps.newConcurrentHashMap();
 
     @Override
     public Stack<MutableTreeNode> getNodeStack(final String id) {

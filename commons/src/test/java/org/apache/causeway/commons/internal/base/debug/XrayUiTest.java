@@ -64,7 +64,7 @@ class XrayUiTest {
 
     private static void populate(final XrayModel model) {
 
-        var root = model.getRootNode();
+        var root = model.rootNode();
 
         var keyValueData = model.addDataNode(
                 root, new XrayDataModel.KeyValue("id1", "KeyValue", Stickiness.CANNOT_DELETE_NODE));

@@ -123,7 +123,7 @@ public interface _IocContainer {
     // -- FACTORIES
 
     static _IocContainer spring(final ApplicationContext springContext) {
-        return _IocContainer_Spring.of(springContext);
+        return new _IocContainer_Spring(springContext);
     }
 
 }

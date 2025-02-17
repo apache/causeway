@@ -49,10 +49,10 @@ import org.jspecify.annotations.NonNull;
  * Memento default implementation.
  */
 record _MementoDefault(
-        EncoderDecoder codec,
-        SerializingAdapter serializer,
+        @NonNull EncoderDecoder codec,
+        @NonNull SerializingAdapter serializer,
         // we need a Serializable Map
-        HashMap<String, Serializable> valuesByKey
+        @NonNull HashMap<String, Serializable> valuesByKey
         ) implements _Mementos.Memento {
 
     _MementoDefault(final EncoderDecoder codec, final SerializingAdapter serializer) {

@@ -38,14 +38,12 @@ class _Strings_HtmlEscaper {
     };
 
     String htmlEscape(final String input) {
-        if(_Strings.isEmpty(input)) {
-            return input;
-        }
+        if(_Strings.isEmpty(input)) return input;
 
         String output = input;
 
         for(_Strings.KeyValuePair replacement : replacements) {
-            output = output.replace(replacement.getKey(), replacement.getValue());
+            output = output.replace(replacement.key(), replacement.value());
         }
 
         return output;

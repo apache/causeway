@@ -81,14 +81,14 @@ public class ApprovalsOptions {
                         _Strings.parseKeyValuePair(attrLiteral, '=')
                                 .orElseGet(()->_Strings.pair(attrLiteral, null))
                 )
-                .forEach(attr->attrs.put(attr.getKey(), attr));
+                .forEach(attr->attrs.put(attr.key(), attr));
 
         // collect all chunks
         attrs.values()
                 .forEach(attr->chunks.add(
-                        attr.getValue()!=null
-                                ? " " + attr.getKey() + "=" + attr.getValue()
-                                : " " + attr.getKey()));
+                        attr.value()!=null
+                                ? " " + attr.key() + "=" + attr.value()
+                                : " " + attr.key()));
         chunks.add(magicSuffix);
 
         // reassemble line

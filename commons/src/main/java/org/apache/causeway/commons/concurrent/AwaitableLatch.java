@@ -21,22 +21,18 @@ package org.apache.causeway.commons.concurrent;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.jspecify.annotations.NonNull;
 
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Provides a read-only view on a {@link CountDownLatch}.
  * @since 2.0
- *
  */
-@RequiredArgsConstructor(staticName = "of")
-public final class AwaitableLatch {
-
-    private final CountDownLatch countDownLatch;
+public record AwaitableLatch(@NonNull CountDownLatch countDownLatch) {
 
     public static AwaitableLatch unlocked() {
-        return of(new CountDownLatch(0));
+        return new AwaitableLatch(new CountDownLatch(0));
     }
 
     /**

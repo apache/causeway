@@ -89,11 +89,13 @@ public final class _Strings {
 
     // -- PAIR OF STRINGS
 
-    public static interface KeyValuePair extends Map.Entry<String, String> {
+    public static interface KeyValuePair {
+        String key();
+        String value();
     }
 
     public static KeyValuePair pair(final String key, final String value){
-        return _Strings_KeyValuePair.of(key, value);
+        return new _Strings_KeyValuePair(key, value);
     }
 
     /**

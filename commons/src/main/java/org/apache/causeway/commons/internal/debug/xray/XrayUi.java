@@ -22,8 +22,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -157,28 +155,13 @@ public class XrayUi extends JFrame {
         var popupMenu = new JPopupMenu();
 
         var clearThreadsAction = popupMenu.add(new JMenuItem("Clear Threads"));
-        clearThreadsAction.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                doClearThreads();
-            }
-        });
+        clearThreadsAction.addActionListener(e -> doClearThreads());
 
         var callStackMergeAction = popupMenu.add(new JMenuItem("Merge Logged Call-Stack"));
-        callStackMergeAction.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                doMergeCallStacksOnSelectedNodes();
-            }
-        });
+        callStackMergeAction.addActionListener(e -> doMergeCallStacksOnSelectedNodes());
 
         var deleteAction = popupMenu.add(new JMenuItem("Delete"));
-        deleteAction.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                doRemoveSelectedNodes();
-            }
-        });
+        deleteAction.addActionListener(e -> doRemoveSelectedNodes());
 
         tree.setCellRenderer(new XrayTreeCellRenderer(
                 (DefaultTreeCellRenderer) tree.getCellRenderer(),
@@ -220,7 +203,7 @@ public class XrayUi extends JFrame {
 
         // report key bindings to the UI
         {
-            var root = xrayModel.getRootNode();
+            var root = xrayModel.rootNode();
             var env = xrayModel.addDataNode(root,
                     new XrayDataModel.KeyValue("causeway-xray-keys", "X-ray Keybindings", Stickiness.CANNOT_DELETE_NODE));
             env.getData().put("F5", "Clear Threads");

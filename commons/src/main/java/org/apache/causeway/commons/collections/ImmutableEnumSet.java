@@ -22,21 +22,16 @@ import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 /**
  * Immutable variant of {@link EnumSet}
  *
  * @since 2.0
  */
-public final class ImmutableEnumSet<E extends Enum<E>>
-implements Iterable<E>, java.io.Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final EnumSet<E> delegate;
-
-    private ImmutableEnumSet(final EnumSet<E> delegate) {
-        this.delegate = delegate;
-    }
+public record ImmutableEnumSet<E extends Enum<E>>(
+        @NonNull EnumSet<E> delegate
+        ) implements Iterable<E>, java.io.Serializable {
 
     public static <E extends Enum<E>> ImmutableEnumSet<E> from(final EnumSet<E> delegate) {
         return new ImmutableEnumSet<>(delegate);

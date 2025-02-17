@@ -20,23 +20,13 @@ package org.apache.causeway.commons.internal.base;
 
 import java.util.Optional;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import lombok.Value;
-
 /**
  * package private utility for {@link _Strings}
  */
-@Value(staticConstructor = "of")
-final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
-
-    private final String key;
-    private final String value;
-
-    @Override
-    public String setValue(final String value) {
-        throw _Exceptions.notImplemented();
-    }
+record _Strings_KeyValuePair(
+        String key,
+        String value
+        ) implements _Strings.KeyValuePair {
 
     @Override
     public String toString() {
@@ -66,7 +56,7 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
                 ? ""
                 : keyValueLiteral.substring(equalsIndex + 1);
 
-        return Optional.of(of(aKey, aValue));
+        return Optional.of(new _Strings_KeyValuePair(aKey, aValue));
     }
 
 }

@@ -131,7 +131,7 @@ public enum RepresentationTypeSimplifiedV2 {
         .filter(s->s.startsWith("repr-type"))
         .map(s->_Strings.parseKeyValuePair(s, '=').orElse(null))
         .filter(Objects::nonNull)
-        .map(KeyValuePair::getValue)
+        .map(KeyValuePair::value)
         .filter(_Strings::isNotEmpty)
         .findAny()
         .map(RepresentationTypeSimplifiedV2::trimQuotesIfAny);

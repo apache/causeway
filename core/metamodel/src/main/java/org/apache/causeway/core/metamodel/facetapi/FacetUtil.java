@@ -149,7 +149,7 @@ public final class FacetUtil {
 
     public static String attributesAsString(final Facet facet) {
         return streamAttributes(facet)
-                .filter(kv->!kv.getKey().equals("facet")) // skip superfluous attribute
+                .filter(kv->!kv.key().equals("facet")) // skip superfluous attribute
                 .map(_Strings.KeyValuePair::toString)
                 .collect(Collectors.joining("; "));
     }

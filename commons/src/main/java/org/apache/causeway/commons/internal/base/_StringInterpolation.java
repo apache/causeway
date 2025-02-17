@@ -44,18 +44,12 @@ import org.jspecify.annotations.NonNull;
  *
  * @since 2.0
  */
-public final class _StringInterpolation {
-
-    final Map<String, String> variables;
+public record _StringInterpolation(Map<String, String> variables) {
 
     public _StringInterpolation(final @NonNull KeyValuePair ... kvPairs) {
-        this.variables = new HashMap<>();
+        this(new HashMap<>());
         stream(kvPairs)
-        .forEach(kvPair->variables.put(kvPair.getKey(), kvPair.getValue()));
-    }
-
-    public _StringInterpolation(final @NonNull Map<String, String> variables) {
-        this.variables = variables;
+            .forEach(kvPair->variables.put(kvPair.key(), kvPair.value()));
     }
 
     /**

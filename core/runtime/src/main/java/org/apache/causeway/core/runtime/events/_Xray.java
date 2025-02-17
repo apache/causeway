@@ -30,7 +30,7 @@ final class _Xray {
 
         XrayUi.updateModel(model->{
 
-            var root = model.getRootNode();
+            var root = model.rootNode();
 
             var env = model.addDataNode(
                     root, new XrayDataModel.KeyValue("causeway-env", "Environment", Stickiness.CANNOT_DELETE_NODE));

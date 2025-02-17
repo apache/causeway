@@ -36,20 +36,19 @@ import lombok.Singular;
  *
  * @since 2.0
  */
-@lombok.Value @Builder
-public class _BootstrapBadge {
-
-    final String caption;
-    final String faIcon;
-    final String href;
-    final String tooltip;
-    final String nestedCaption;
-
-    @Singular
-    final List<String> cssClasses;
+@Builder
+public record _BootstrapBadge(
+        String caption,
+        String faIcon,
+        String href,
+        String tooltip,
+        String nestedCaption,
+        @Singular
+        List<String> cssClasses
+        ) {
 
     public String toHtml() {
-        return _Strings.isNotEmpty(getHref())
+        return _Strings.isNotEmpty(href())
                 ? link()
                 : noLink();
     }
@@ -70,24 +69,24 @@ public class _BootstrapBadge {
         .append("\"");
 
         // optional tooltip
-        if(_Strings.isNotEmpty(getTooltip())) {
+        if(_Strings.isNotEmpty(tooltip())) {
             sb.append(" data-bs-container=\"body\" "
                 + "data-bs-toggle=\"tooltip\" "
-                + "title=\""+getTooltip()+"\"");
+                + "title=\""+tooltip()+"\"");
         }
 
         sb.append(">"); // end span open tag
 
         // optional fa-icon
-        if(_Strings.isNotEmpty(getFaIcon())) {
+        if(_Strings.isNotEmpty(faIcon())) {
             sb
             .append("<i class=\"")
-            .append(getFaIcon())
+            .append(faIcon())
             .append("\"></i>");
         }
 
         sb
-        .append(getCaption())
+        .append(caption())
         .append("</span>");
 
         return sb.toString();
@@ -108,7 +107,7 @@ public class _BootstrapBadge {
         .append(classesLiteral("btn", "btn-sm", "bg-light"))
         .append("\"")
         .append(" href=\"")
-        .append(getHref())
+        .append(href())
         .append("\"")
         .append(" target=\"")
         .append("_blank")
@@ -117,11 +116,11 @@ public class _BootstrapBadge {
         sb.append(">"); // end a open tag
 
         sb
-        .append(getCaption());
+        .append(caption());
 
         // optional nested badge
-        if(_Strings.isNotEmpty(getNestedCaption())) {
-            sb.append(String.format(" <span class=\"badge text-sm text-bg-secondary\">%s</span>", getNestedCaption()));
+        if(_Strings.isNotEmpty(nestedCaption())) {
+            sb.append(String.format(" <span class=\"badge text-sm text-bg-secondary\">%s</span>", nestedCaption()));
         }
 
         sb

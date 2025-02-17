@@ -40,11 +40,12 @@ public interface XrayModel {
         boolean isCanDeleteNode() { return this == CAN_DELETE_NODE; }
     }
 
-    MutableTreeNode getRootNode();
+    MutableTreeNode rootNode();
+
     default MutableTreeNode getThreadNode(final ThreadMemento threadMemento) {
         return lookupNode(threadMemento.getId())
                 .orElseGet(()->addContainerNode(
-                        getRootNode(),
+                        rootNode(),
                         threadMemento.getLabel(),
                         threadMemento.getId(),
                         Stickiness.CAN_DELETE_NODE));

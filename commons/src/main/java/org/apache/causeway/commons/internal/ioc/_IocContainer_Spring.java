@@ -25,10 +25,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Primary;
-import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.collections.Can;
@@ -36,18 +38,13 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Spring specific implementation of _IocContainer (package private)
  * @since 2.0
- *
  */
-@RequiredArgsConstructor(staticName = "of")
-final class _IocContainer_Spring implements _IocContainer {
-
-    @NonNull private final ApplicationContext springContext;
+record _IocContainer_Spring(
+        @NonNull ApplicationContext springContext
+        ) implements _IocContainer {
 
     @Override
     public <T> Optional<T> get(final @NonNull Class<T> requiredType) {
