@@ -102,12 +102,12 @@ public class AuthorizorSecman implements Authorizor {
             final Identifier identifier,
             final ApplicationPermissionMode permissionMode) {
 
-        var userName = authentication.getUser().getName();
+        var userName = authentication.getUser().name();
         var permissionSetIfAny = cache.get()
                 .computeIfAbsent(userName, ()->
-                applicationUserRepository
-                .findByUsername(userName)
-                .map(ApplicationUser::getPermissionSet));
+                    applicationUserRepository
+                    .findByUsername(userName)
+                    .map(ApplicationUser::getPermissionSet));
 
         return permissionSetIfAny
         .map(permissionSet->permissionSet.grants(

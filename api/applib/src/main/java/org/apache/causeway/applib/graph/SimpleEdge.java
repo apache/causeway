@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.applib.graph;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.Value;
+import org.apache.causeway.applib.annotation.Programmatic;
 
 /**
  * Fundamental building block for graph structures.
@@ -30,12 +27,9 @@ import org.apache.causeway.applib.annotation.Value;
  *
  * @param <T> type constraint for values contained by this edge's vertices
  */
-@lombok.Value(staticConstructor = "of")
-@Named(CausewayModuleApplib.NAMESPACE + ".graph.SimpleEdge")
-@Value
-public class SimpleEdge<T> implements Edge<T> {
-
-    Vertex<T> from;
-    Vertex<T> to;
+@Programmatic
+public record SimpleEdge<T>(
+    Vertex<T> from,
+    Vertex<T> to) implements Edge<T> {
 
 }

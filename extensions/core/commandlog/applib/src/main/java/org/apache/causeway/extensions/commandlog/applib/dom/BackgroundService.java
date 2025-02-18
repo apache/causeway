@@ -134,7 +134,7 @@ public class BackgroundService {
             var timestamp = interactionContext.getClock().nowAsJavaSqlTimestamp();
             commandDto.setTimestamp(gregorianCalendarAdapter.marshal(timestamp));
 
-            var username = interactionContext.getUser().getName();
+            var username = interactionContext.getUser().name();
             commandDto.setUsername(username);
 
             var periodDto = new PeriodDto();

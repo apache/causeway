@@ -46,7 +46,6 @@ public interface TransactionalProcessor {
      * @param def - transaction definition, in particular whether to use existing or start new transaction.  Requires only a single {@link org.springframework.transaction.PlatformTransactionManager} to be configured (unless a {@link org.springframework.transaction.support.TransactionTemplate} is provided which wraps a specific {@link org.springframework.transaction.PlatformTransactionManager}.
      * @param callable - the work to be performed within the transaction.
      * @return {@link Try} of calling given {@code callable}
-     * @return {@link Try} of calling given {@code callable}
      */
     <T> Try<T> callTransactional(TransactionDefinition def, Callable<T> callable);
 

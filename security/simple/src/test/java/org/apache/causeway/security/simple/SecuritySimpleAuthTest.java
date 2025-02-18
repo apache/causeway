@@ -143,7 +143,7 @@ class SecuritySimpleAuthTest {
 
         // happy case
         assertValid(new AuthenticationRequestPassword(scenario.userName(), scenario.plainPass()), interactionContext->{
-            assertEquals(scenario.userName(), interactionContext.getUser().getName());
+            assertEquals(scenario.userName(), interactionContext.getUser().name());
         });
     }
 

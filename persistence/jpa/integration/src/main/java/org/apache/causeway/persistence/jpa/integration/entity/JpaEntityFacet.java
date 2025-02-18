@@ -98,7 +98,7 @@ class JpaEntityFacet
 
     @Override
     public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
-        _Assert.assertNotNull(primaryKeyType.destring(bookmark.getIdentifier()));
+        _Assert.assertNotNull(primaryKeyType.destring(bookmark.identifier()));
         return bookmark;
     }
 
@@ -107,7 +107,7 @@ class JpaEntityFacet
 
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        var primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
+        var primaryKey = primaryKeyType.destring(bookmark.identifier());
 
         var entityManager = getEntityManager();
         var entityPojo = entityManager.find(entityClass, primaryKey);

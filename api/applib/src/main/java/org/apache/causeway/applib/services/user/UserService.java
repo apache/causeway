@@ -143,7 +143,7 @@ public class UserService {
      * {@link UserMemento}.
      */
     public Optional<String> currentUserName() {
-        return currentUser().map(UserMemento::getName);
+        return currentUser().map(UserMemento::name);
     }
 
     /**

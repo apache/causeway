@@ -61,7 +61,7 @@ implements ViewModelFacet {
             final Optional<Bookmark> bookmarkIfAny) {
 
         var bookmark = bookmarkIfAny.orElse(null);
-        var isBookmarkAvailable = bookmarkIfAny.map(Bookmark::getIdentifier)
+        var isBookmarkAvailable = bookmarkIfAny.map(Bookmark::identifier)
                 .map(_Strings::isNotEmpty)
                 .orElse(false);
 

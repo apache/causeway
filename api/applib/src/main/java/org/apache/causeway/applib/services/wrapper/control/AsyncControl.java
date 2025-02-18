@@ -223,9 +223,9 @@ public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
             buf.append(" ").append(getMethod().getName()).append(" ");
             if(getBookmark() != null) {
                 buf.append(" on '")
-                        .append(getBookmark().getLogicalTypeName())
+                        .append(getBookmark().logicalTypeName())
                         .append(":")
-                        .append(getBookmark().getIdentifier())
+                        .append(getBookmark().identifier())
                         .append("'");
             }
         }

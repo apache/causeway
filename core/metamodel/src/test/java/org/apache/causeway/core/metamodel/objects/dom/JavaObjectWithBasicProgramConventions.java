@@ -85,7 +85,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
 
     // field two should be hidden for the user
     public static boolean hideFieldTwo(final UserMemento user) {
-        assertEquals("unit tester", user.getName());
+        assertEquals("unit tester", user.name());
         return true;
     }
 
@@ -224,7 +224,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
     }
 
     public static boolean hideHiddenToUser(final UserMemento user) {
-        assertEquals("unit tester", user.getName());
+        assertEquals("unit tester", user.name());
         return true;
     }
 

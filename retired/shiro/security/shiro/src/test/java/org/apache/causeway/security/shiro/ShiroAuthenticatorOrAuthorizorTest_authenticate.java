@@ -84,8 +84,8 @@ class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         var authentication = authenticator.authenticate(ar, "test code");
 
         assertThat(authentication, is(not(nullValue())));
-        assertThat(authentication.getUser().getName(), is("lonestarr"));
-        assertThat(authentication.getUser().getAuthenticationCode(), is("test code"));
+        assertThat(authentication.getUser().name(), is("lonestarr"));
+        assertThat(authentication.getUser().authenticationCode(), is("test code"));
 
         Identifier changeAddressIdentifier = Identifier.actionIdentifier(
                 TypeIdentifierTestFactory.customer(), "changeAddress", String.class, String.class);

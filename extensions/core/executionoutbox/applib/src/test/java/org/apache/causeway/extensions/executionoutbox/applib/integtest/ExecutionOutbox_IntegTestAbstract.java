@@ -253,7 +253,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
     void test_all_the_repository_methods() {
 
         // given
-        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
         interactionService.closeInteractionLayers();    // to flush

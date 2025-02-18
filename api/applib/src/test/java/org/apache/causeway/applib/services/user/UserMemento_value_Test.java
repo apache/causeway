@@ -32,14 +32,14 @@ class UserMemento_value_Test extends ValueTypeContractTestAbstract<UserMemento> 
 
     private UserMemento.UserMementoBuilder baseline() {
         return
-                UserMemento.builder().name("Joe")
+                UserMemento.builder("Joe")
                         .authenticationSource(UserMemento.AuthenticationSource.DEFAULT)
                         .authenticationCode("123")
                         .multiTenancyToken("/UK")
                         .roles(Can.of(
                                 RoleMemento.builder().name("role-1").build(),
                                 RoleMemento.builder().name("role-2").build()))
-                        .impersonating(false)
+                        .isImpersonating(false)
                 ;
     }
 

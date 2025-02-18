@@ -38,10 +38,10 @@ class UserMemento_Test {
             var userMemento = UserMemento.ofName("fredflintstone");
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(0);
-            Assertions.assertThat(userMemento.getRealName()).isNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(0);
+            Assertions.assertThat(userMemento.realName()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
 
         @Test
@@ -51,12 +51,12 @@ class UserMemento_Test {
             var userMemento = UserMemento.ofNameAndRoleNames("fredflintstone", "CAVEMAN", "HUSBAND");
 
             // then
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getRealName()).isNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.realName()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
     }
 
@@ -75,18 +75,18 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento2.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento2.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento2.realName()).isEqualTo("Fred Flintstone");
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getRealName()).isNull();
+            Assertions.assertThat(userMemento.realName()).isNull();
         }
 
         @Test
@@ -102,20 +102,20 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento2.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento2.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-            Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento2.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.realName()).isEqualTo("Fred Flintstone");
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-            Assertions.assertThat(userMemento.getRealName()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.realName()).isNull();
         }
     }
 
@@ -135,18 +135,18 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento2.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento2.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
 
         @Test
@@ -162,20 +162,20 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento2.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento2.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-            Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento2.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.realName()).isEqualTo("Fred Flintstone");
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.realName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
     }
 
@@ -195,15 +195,15 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(3);
+            Assertions.assertThat(userMemento2.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento2.roles().size()).isEqualTo(3);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("WICKET_ROLE"));
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
         }
@@ -248,10 +248,10 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getMultiTenancyToken()).isEqualTo("/ITA");
+            Assertions.assertThat(userMemento2.multiTenancyToken()).isEqualTo("/ITA");
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getMultiTenancyToken()).isNull();
+            Assertions.assertThat(userMemento.multiTenancyToken()).isNull();
         }
     }
 
@@ -271,12 +271,12 @@ class UserMemento_Test {
                     ;
 
             // then
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-            Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.realName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento.isImpersonating()).isFalse();
 
             // and when
@@ -286,24 +286,24 @@ class UserMemento_Test {
             Assertions.assertThat(userMemento2).isNotSameAs(userMemento);
 
             // then copy correct
-            Assertions.assertThat(userMemento2.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento2.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento2.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento2.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento2.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento2.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-            Assertions.assertThat(userMemento2.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento2.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento2.realName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento2.isImpersonating()).isTrue();
-            Assertions.assertThat(userMemento2.getMultiTenancyToken()).isEqualTo("/USA/Bedrock");
+            Assertions.assertThat(userMemento2.multiTenancyToken()).isEqualTo("/USA/Bedrock");
 
             // then original unchanged
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fredflintstone");
-            Assertions.assertThat(userMemento.getRoles().size()).isEqualTo(2);
+            Assertions.assertThat(userMemento.name()).isEqualTo("fredflintstone");
+            Assertions.assertThat(userMemento.roles().size()).isEqualTo(2);
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("CAVEMAN"));
             Assertions.assertThat(userMemento.streamRoleNames()).anyMatch(x -> x.equals("HUSBAND"));
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-            Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(url("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
+            Assertions.assertThat(userMemento.realName()).isEqualTo("Fred Flintstone");
             Assertions.assertThat(userMemento.isImpersonating()).isFalse();
-            Assertions.assertThat(userMemento.getMultiTenancyToken()).isEqualTo("/USA/Bedrock");
+            Assertions.assertThat(userMemento.multiTenancyToken()).isEqualTo("/USA/Bedrock");
 
         }
     }

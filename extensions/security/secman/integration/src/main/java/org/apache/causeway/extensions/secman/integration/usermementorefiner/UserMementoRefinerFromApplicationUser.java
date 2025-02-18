@@ -38,7 +38,7 @@ public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner
 
     @Override
     public UserMemento refine(final UserMemento userMemento) {
-        var applicationUserIfAny = applicationUserRepositoryProvider.get().findByUsername(userMemento.getName());
+        var applicationUserIfAny = applicationUserRepositoryProvider.get().findByUsername(userMemento.name());
         if (applicationUserIfAny.isEmpty()) {
             return userMemento;
         }

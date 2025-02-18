@@ -148,14 +148,14 @@ implements Vertex<T> {
     @Override
     public Stream<Edge<T>> streamIncoming() {
         return lookupParent()
-            .map(parentNode->SimpleEdge.<T>of(parentNode, this))
+            .map(parentNode->new SimpleEdge<T>(parentNode, this))
             .map(Stream::<Edge<T>>of)
             .orElseGet(Stream::empty);
     }
     @Override
     public Stream<Edge<T>> streamOutgoing() {
         return streamChildren()
-                .map(to->SimpleEdge.<T>of(this, to));
+                .map(to->new SimpleEdge<T>(this, to));
     }
 
     // -- RESOLUTION

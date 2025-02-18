@@ -81,8 +81,8 @@ public class BookmarkServiceDefault implements BookmarkService {
     public List<Bookmark> bookmarksFor(final Object domainObject) {
         return bookmarkFor(domainObject)
                 .map(bookmark -> {
-                    Can<LogicalType> logicalTypes = metaModelService.logicalTypeAndAliasesFor(bookmark.getLogicalTypeName());
-                    String id = bookmark.getIdentifier();
+                    Can<LogicalType> logicalTypes = metaModelService.logicalTypeAndAliasesFor(bookmark.logicalTypeName());
+                    String id = bookmark.identifier();
                     return logicalTypes.stream()
                             .map(x -> Bookmark.forLogicalTypeAndIdentifier(x, id))
                             .collect(Collectors.toList());

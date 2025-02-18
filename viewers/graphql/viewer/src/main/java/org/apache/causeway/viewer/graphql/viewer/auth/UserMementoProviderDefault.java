@@ -61,8 +61,7 @@ public class UserMementoProviderDefault implements UserMementoProvider {
 
         var fallbackRoles = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getRoles();
         var roles = Can.ofStream(fallbackRoles.stream().map(roleName -> RoleMemento.builder().name(roleName).build()));
-        return UserMemento.builder()
-                .name(fallbackUsername)
+        return UserMemento.builder(fallbackUsername)
                 .roles(roles)
                 .build();
 

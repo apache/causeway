@@ -33,7 +33,7 @@ public class UtilStr {
      * String representation of bookmark for entities (otherwise empty string is returned).
      */
     public static String entityAsStr(Bookmark bookmark, SpecificationLoader specificationLoader) {
-        var logicalTypeName = bookmark.getLogicalTypeName();
+        var logicalTypeName = bookmark.logicalTypeName();
         var isEntity = specificationLoader
                             .lookupLogicalType(logicalTypeName)
                             .flatMap(specificationLoader::specForLogicalType)

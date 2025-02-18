@@ -63,7 +63,7 @@ extends ViewModelFacetAbstract {
             final @NonNull Bookmark bookmark) {
         return ManagedObject.bookmarked(
                         viewmodelSpec,
-                        deserialize(viewmodelSpec, bookmark.getIdentifier()),
+                        deserialize(viewmodelSpec, bookmark.identifier()),
                         bookmark);
     }
 

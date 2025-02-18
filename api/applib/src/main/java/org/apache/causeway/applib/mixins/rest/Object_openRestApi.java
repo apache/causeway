@@ -64,8 +64,8 @@ public class Object_openRestApi {
 
     @MemberSupport public LocalResourcePath act() {
         var bookmark = bookmarkService.bookmarkForElseFail(holder);
-        var logicalTypeName = bookmark.getLogicalTypeName();
-        var objId = bookmark.getIdentifier();
+        var logicalTypeName = bookmark.logicalTypeName();
+        var objId = bookmark.identifier();
 
         var restfulPathIfAny = restfulPathProvider.getRestfulPath();
 

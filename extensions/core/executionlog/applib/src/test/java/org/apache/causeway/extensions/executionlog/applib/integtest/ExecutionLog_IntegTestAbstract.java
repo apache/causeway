@@ -239,7 +239,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
     void test_all_the_repository_methods() {
 
         // given
-        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
 
@@ -255,7 +255,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         counter1 = counterRepository.findByName("counter-1");
         sudoService.run(
                 InteractionContext.switchUser(
-                        UserMemento.builder().name("user-2").build()),
+                        UserMemento.builder("user-2").build()),
                 () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
         );
         interactionService.nextInteraction();
@@ -273,7 +273,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         final UUID[] executionTarget1User1YesterdayIdHolder = new UUID[1];
         sudoService.run(
                 InteractionContext.switchUser(
-                        UserMemento.builder().name("user-1").build()),
+                        UserMemento.builder("user-1").build()),
                 () -> {
                     var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
                     sudoService.run(
@@ -292,7 +292,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
 
         // given (same user, different target, same day)
         counter2 = counterRepository.findByName("counter-2");
-        sudoService.run(InteractionContext.switchUser(UserMemento.builder().name("user-1").build()), () -> {
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
         });
         interactionService.nextInteraction();

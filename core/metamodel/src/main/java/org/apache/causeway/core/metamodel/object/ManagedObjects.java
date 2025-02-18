@@ -225,7 +225,7 @@ public final class ManagedObjects {
             final @Nullable ManagedObject managedObject,
             final @NonNull String separator) {
         return bookmark(managedObject)
-                .map(oid->oid.getLogicalTypeName() + separator + oid.getIdentifier());
+                .map(oid->oid.logicalTypeName() + separator + oid.identifier());
     }
 
     public String stringifyElseFail(

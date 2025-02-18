@@ -621,7 +621,7 @@ public abstract class ApplicationUser
 
     @Programmatic public boolean isForSelf() {
         var currentUser = currentUser();
-        var currentUserName = currentUser.getName();
+        var currentUserName = currentUser.name();
         var forSelf = Objects.equals(getUsername(), currentUserName);
         return forSelf;
     }
@@ -630,17 +630,14 @@ public abstract class ApplicationUser
         var currentUser = currentUser();
         var adminRoleName = getAdminRoleName(); // is guarded to not be empty
         var adminRoleSuffix = ":" + adminRoleName;
-        for (final RoleMemento role : currentUser.getRoles()) {
-            final String roleName = role.getName();
-            if(adminRoleName.equals(roleName)) {
-                return true;
-            }
+        for (final RoleMemento role : currentUser.roles()) {
+            final String roleName = role.name();
+            if(adminRoleName.equals(roleName)) return true;
+            
             // format could also be realmName:roleName, eg. with Shiro
             // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
             // simply check that the last part matches the role name.
-            if(roleName.endsWith(adminRoleSuffix)) {
-                return true;
-            }
+            if(roleName.endsWith(adminRoleSuffix)) return true;
         }
         return false;
     }

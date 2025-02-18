@@ -72,9 +72,9 @@ class ExceptionRecognizerForDataAccessExceptionTest {
 
         var recognized = recognizerForDae.recognize(dae).orElse(null);
         assertNotNull(recognized);
-        assertNotNull(recognized.getReason());
-        assertTrue(recognized.getReason().length()>10);
-        assertEquals(category, recognized.getCategory());
+        assertNotNull(recognized.reason());
+        assertTrue(recognized.reason().length()>10);
+        assertEquals(category, recognized.category());
     }
 
 }

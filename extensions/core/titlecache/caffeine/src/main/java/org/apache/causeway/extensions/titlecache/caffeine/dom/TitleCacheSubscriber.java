@@ -105,7 +105,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
      */
     @Override
     public void entityTitleIs(final Bookmark bookmark, final String title) {
-        var cache = cacheByLogicalTypeName.get(bookmark.getLogicalTypeName());
+        var cache = cacheByLogicalTypeName.get(bookmark.logicalTypeName());
         if(cache == null) {
             return;
         }
@@ -136,7 +136,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
                 .filter(bookmark -> isCached(bookmark, ev))
                 .ifPresent(bookmark -> {
                     var cache = cacheByLogicalTypeName.computeIfAbsent(
-                        bookmark.getLogicalTypeName(), ltn -> addCache(ev, ltn)
+                        bookmark.logicalTypeName(), ltn -> addCache(ev, ltn)
                     );
                     var valueWrapper = cache.get(bookmark);
                     setTitleOnEventFromCacheValue(valueWrapper, ev, bookmark);
@@ -185,7 +185,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
     }
 
     private Boolean isCached(final Bookmark bookmark, final CausewayModuleApplib.TitleUiEvent<?> ev) {
-        return isCached(bookmark.getLogicalTypeName(), ev);
+        return isCached(bookmark.logicalTypeName(), ev);
     }
 
     private Boolean isCached(

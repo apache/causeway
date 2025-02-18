@@ -67,7 +67,7 @@ record ObjectLoaderFactory() {
                 var valueFacet = spec.valueFacetElseFail();
 
                 var bookmark = objectLoadRequest.getBookmark();
-                var valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.getIdentifier());
+                var valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.identifier());
 
                 return ManagedObject.value(spec, valuePojoIfAny);
             }

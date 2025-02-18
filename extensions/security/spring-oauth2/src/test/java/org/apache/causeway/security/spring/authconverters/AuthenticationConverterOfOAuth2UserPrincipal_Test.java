@@ -75,8 +75,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getName()).isEqualTo("freddy");
-
+            Assertions.assertThat(userMemento.name()).isEqualTo("freddy");
         }
 
         @Test
@@ -101,8 +100,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getName()).isEqualTo("fred");
-
+            Assertions.assertThat(userMemento.name()).isEqualTo("fred");
         }
     }
 
@@ -131,8 +129,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
-
+            Assertions.assertThat(userMemento.avatarUrl()).isEqualTo(new java.net.URL("https://upload.wikimedia.org/wikipedia/en/a/ad/Fred_Flintstone.png"));
         }
 
         @Test
@@ -157,7 +154,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
 
         @Test
@@ -182,7 +179,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getAvatarUrl()).isNull();
+            Assertions.assertThat(userMemento.avatarUrl()).isNull();
         }
 
     }
@@ -212,7 +209,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getRealName()).isEqualTo("Fred Flintstone");
+            Assertions.assertThat(userMemento.realName()).isEqualTo("Fred Flintstone");
         }
 
         @Test
@@ -237,7 +234,7 @@ class AuthenticationConverterOfOAuth2UserPrincipal_Test {
 
             // then
             Assertions.assertThat(userMemento).isNotNull();
-            Assertions.assertThat(userMemento.getRealName()).isNull();
+            Assertions.assertThat(userMemento.realName()).isNull();
         }
 
     }

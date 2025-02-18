@@ -72,7 +72,7 @@ public class Object_logicalTypeName {
 
     @MemberSupport public String prop() {
         var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        return bookmark.getLogicalTypeName();
+        return bookmark.logicalTypeName();
     }
 
     @MemberSupport public boolean hideProp() {

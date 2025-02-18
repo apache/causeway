@@ -171,7 +171,7 @@ public class ActionParameterListBuilder {
     }
 
     private String asRelativeHref(Bookmark bookmark) {
-        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
+        return String.format("objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier());
     }
 
     public <T> ActionParameterListBuilder addActionParameter(

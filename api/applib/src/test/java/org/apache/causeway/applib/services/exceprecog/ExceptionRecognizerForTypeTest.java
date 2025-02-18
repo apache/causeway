@@ -49,7 +49,7 @@ public class ExceptionRecognizerForTypeTest {
     @Test
     public void whenRecognized() {
         ersForType = new ExceptionRecognizerForType(FooException.class);
-        assertThat(ersForType.recognize(new FooException()).get().getReason(), is("foo"));
+        assertThat(ersForType.recognize(new FooException()).get().reason(), is("foo"));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ExceptionRecognizerForTypeTest {
     @Test
     public void whenRecognizedWithMessageParser() {
         ersForType = new ExceptionRecognizerForType(FooException.class, rootCauseMessageFormatter);
-        assertThat(ersForType.recognize(new FooException()).get().getReason(), is("pre: foo"));
+        assertThat(ersForType.recognize(new FooException()).get().reason(), is("pre: foo"));
     }
 
 }

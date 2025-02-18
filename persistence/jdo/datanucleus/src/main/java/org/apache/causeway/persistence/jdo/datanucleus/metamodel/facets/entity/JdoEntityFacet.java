@@ -181,7 +181,7 @@ implements EntityFacet {
 
     @Override
     public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
-        _Assert.assertNotNull(primaryKeyTypeForDecoding().destring(bookmark.getIdentifier()));
+        _Assert.assertNotNull(primaryKeyTypeForDecoding().destring(bookmark.identifier()));
         return bookmark;
     }
 
@@ -194,7 +194,7 @@ implements EntityFacet {
         try {
 
             var persistenceManager = getPersistenceManager();
-            var primaryKey = primaryKeyTypeForDecoding().destring(bookmark.getIdentifier());
+            var primaryKey = primaryKeyTypeForDecoding().destring(bookmark.identifier());
 
             var fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
@@ -204,7 +204,7 @@ implements EntityFacet {
 
             var recognition = exceptionRecognizerService.recognize(e);
             if(recognition.isPresent()) {
-                if(recognition.get().getCategory() == Category.NOT_FOUND) {
+                if(recognition.get().category() == Category.NOT_FOUND) {
                     return Optional.empty();
                 }
             }

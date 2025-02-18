@@ -71,6 +71,6 @@ public class UserProfileUiModel implements Serializable {
         return Optional.ofNullable(getUserMemento());
     }
     public Optional<URL> avatarUrl() {
-        return userMemento().map(UserMemento::getAvatarUrl);
+        return userMemento().map(UserMemento::avatarUrl);
     }
 }

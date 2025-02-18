@@ -174,7 +174,7 @@ extends ViewModelFacetAbstract {
 
     private _Mementos.Memento parseMemento(final Bookmark bookmark) {
         ensureDependenciesInited();
-        return _Mementos.parse(codec, serializer, bookmark.getIdentifier());
+        return _Mementos.parse(codec, serializer, bookmark.identifier());
     }
 
 }

@@ -107,8 +107,8 @@ implements
         var o1 = this;
 
         // sort by entity type
-        var typeName1 = o1.getBookmark().getLogicalTypeName();
-        var typeName2 = o2.getBookmark().getLogicalTypeName();
+        var typeName1 = o1.getBookmark().logicalTypeName();
+        var typeName2 = o2.getBookmark().logicalTypeName();
 
         final int typeNameComparison = typeName1.compareTo(typeName2);
         if(typeNameComparison != 0) {

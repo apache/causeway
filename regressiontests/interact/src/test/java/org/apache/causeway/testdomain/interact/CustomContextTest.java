@@ -63,7 +63,7 @@ class CustomContextTest extends CausewayIntegrationTestAbstract {
         var iaCtx = interactionService.currentInteractionContextElseFail();
 
         assertThat(iaCtx.getUser().hasSudoAccessAllRole()).isFalse();
-        assertEquals(Locale.getDefault(), iaCtx.getLocale().getLanguageLocale());
+        assertEquals(Locale.getDefault(), iaCtx.getLocale().languageLocale());
         assertTrue(
                 Duration
                     .between(LocalDateTime.now(), iaCtx.getClock().nowAsLocalDateTime())
@@ -80,8 +80,8 @@ class CustomContextTest extends CausewayIntegrationTestAbstract {
 
         var iaCtx = interactionService.currentInteractionContextElseFail();
 
-        assertEquals("sven", iaCtx.getUser().getName());
-        assertEquals(Locale.FRANCE.getLanguage(), iaCtx.getLocale().getLanguageLocale().getLanguage());
+        assertEquals("sven", iaCtx.getUser().name());
+        assertEquals(Locale.FRANCE.getLanguage(), iaCtx.getLocale().languageLocale().getLanguage());
         assertEquals(
                 DateTimeFormat.CANONICAL.parseDateTime("2022-07-13 13:02:04 Z").toInstant(),
                 iaCtx.getClock().nowAsInstant());

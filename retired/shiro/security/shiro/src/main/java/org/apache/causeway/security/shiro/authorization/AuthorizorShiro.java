@@ -54,12 +54,12 @@ public class AuthorizorShiro implements Authorizor {
 
     @Override
     public boolean isVisible(final InteractionContext authentication, final Identifier identifier) {
-        return isPermitted(authentication.getUser().getName(), identifier, "r");
+        return isPermitted(authentication.getUser().name(), identifier, "r");
     }
 
     @Override
     public boolean isUsable(final InteractionContext authentication, final Identifier identifier) {
-        return isPermitted(authentication.getUser().getName(), identifier, "w");
+        return isPermitted(authentication.getUser().name(), identifier, "w");
     }
 
     private boolean isPermitted(final String userName, final Identifier identifier, final String qualifier) {

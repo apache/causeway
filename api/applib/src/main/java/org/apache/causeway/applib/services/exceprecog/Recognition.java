@@ -20,43 +20,22 @@ package org.apache.causeway.applib.services.exceprecog;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
-
 /**
  * Represents a user-friendly representation of an exception that has been
  * recognised by an available implementation of an {@link ExceptionRecognizer}.
- *
  * <p>
  * Returned by {@link ExceptionRecognizer#recognize(Throwable)} when the
  * exception recognizer has recognised the exception
  *
  * @since 1.x {@index}
  */
-@Value
-public class Recognition {
-
-    /**
-     * @return optionally a recognition of the specified type, based on a whether given reason is non-null
-     */
-    public static Optional<Recognition> of(
-            final @Nullable Category category,
-            final @Nullable String reason) {
-
-        if (reason == null) {
-            return Optional.empty();
-        }
-
-        var nonNullCategory = category != null ? category : Category.OTHER;
-        return Optional.of(new Recognition(nonNullCategory, reason));
-        // ...
-    }
-
+public record Recognition(
     /**
      * Categorises the exception as per {@link Category}.
      *
@@ -75,8 +54,7 @@ public class Recognition {
      *
      * @see #toMessage(TranslationService)
      */
-    @NonNull
-    Category category;
+    @NonNull Category category,
 
     /**
      * The untranslated user-friendly reason for the exception.
@@ -92,37 +70,48 @@ public class Recognition {
      * @see #toMessage(TranslationService)
      * @see #toMessageNoCategory(TranslationService)
      */
-    @NonNull
-    String reason;
+    @NonNull String reason) {
 
     /**
-     * Translates the {@link #getReason() reason} and prepends with a
-     * translation of {@link #getCategory() category}, using the provided
+     * @return optionally a recognition of the specified type, based on a whether given reason is non-null
+     */
+    public static Optional<Recognition> of(
+            final @Nullable Category category,
+            final @Nullable String reason) {
+
+        if (reason == null) {
+            return Optional.empty();
+        }
+
+        var nonNullCategory = category != null ? category : Category.OTHER;
+        return Optional.of(new Recognition(nonNullCategory, reason));
+    }
+
+    /**
+     * Translates the {@link #reason() reason} and prepends with a
+     * translation of {@link #category() category}, using the provided
      * {@link TranslationService}..
      *
      * @param translationService
      */
     public String toMessage(@Nullable TranslationService translationService) {
 
-        var categoryLiteral = translate(getCategory().getFriendlyName(), translationService);
-        var reasonLiteral = translate(getReason(), translationService);
+        var categoryLiteral = translate(category().getFriendlyName(), translationService);
+        var reasonLiteral = translate(reason(), translationService);
 
         return String.format("[%s]: %s", categoryLiteral, reasonLiteral);
-        // ...
     }
 
     /**
-     * Translates the {@link #getReason() reason} alone (ignoring the
-     * {@link #getCategory() category}, using the provided
+     * Translates the {@link #reason() reason} alone (ignoring the
+     * {@link #category() category}, using the provided
      * {@link TranslationService}..
      *
      * @param translationService
      */
     public String toMessageNoCategory(@Nullable TranslationService translationService) {
-
-        var reasonLiteral = translate(getReason(), translationService);
-        return String.format("%s", reasonLiteral);
-        // ...
+        var reasonLiteral = translate(reason(), translationService);
+        return "" + reasonLiteral;
     }
 
     private static String translate(

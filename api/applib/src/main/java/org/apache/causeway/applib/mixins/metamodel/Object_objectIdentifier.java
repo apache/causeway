@@ -71,7 +71,7 @@ public class Object_objectIdentifier {
 
     @MemberSupport public String prop() {
         var bookmark = bookmarkService.bookmarkForElseFail(this.holder);
-        return bookmark.getIdentifier();
+        return bookmark.identifier();
     }
 
     @MemberSupport public boolean hideProp() {

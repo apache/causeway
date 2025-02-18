@@ -63,9 +63,9 @@ implements EntityPropertyChangeSubscriber {
         PersistenceStack persistenceStack = causewayBeanTypeRegistry.persistenceStack();
 
         var target = entityPropertyChange.getTarget();
-        var targetLogicalTypeName = target.getLogicalTypeName();
+        var targetLogicalTypeName = target.logicalTypeName();
         var targetLogicalType = specificationLoader.lookupLogicalTypeElseFail(targetLogicalTypeName);
-        var targetSimpleName = targetLogicalType.getLogicalTypeSimpleName();
+        var targetSimpleName = targetLogicalType.logicalSimpleName();
 
         var propertyChangeEntry = String.format("%s %s/%s: '%s' -> '%s'",
                 persistenceStack.titleCase(),

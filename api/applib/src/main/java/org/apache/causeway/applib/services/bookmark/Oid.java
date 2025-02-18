@@ -50,7 +50,7 @@ public interface Oid extends Serializable {
 
     /**
      * The canonical form of the {@link Bookmark}, that is
-     * {@link #getLogicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #getIdentifier() identifier}.
+     * {@link #logicalTypeName() logical-type-name}{@value #SEPARATOR}{@link #identifier() identifier}.
      */
     String stringify();
 

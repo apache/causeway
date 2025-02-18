@@ -243,7 +243,7 @@ implements
                 .map(uuid->{
                     //XXX get current transaction's persistence context (once we support multiple contexts)
                     var persistenceContext = "";
-                    return TransactionId.of(uuid, txCounter.get().intValue(), persistenceContext);
+                    return new TransactionId(uuid, txCounter.get().intValue(), persistenceContext);
                 });
     }
 

@@ -168,8 +168,8 @@ implements IRequestListener {
         var attributeModel = getModel();
         var propertyId = attributeModel.getIdentifier();
         var bookmark = attributeModel.getParentUiModel().getOwnerBookmark();
-        var logicalTypeName = bookmark.getLogicalTypeName();
-        var identifier = bookmark.getIdentifier();
+        var logicalTypeName = bookmark.logicalTypeName();
+        var identifier = bookmark.identifier();
 
         return new PdfJsViewerAdvisor.InstanceKey(logicalTypeName, identifier, propertyId, userName);
     }

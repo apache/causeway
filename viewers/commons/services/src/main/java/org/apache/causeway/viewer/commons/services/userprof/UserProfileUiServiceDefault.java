@@ -67,9 +67,9 @@ public class UserProfileUiServiceDefault implements UserProfileUiService {
         if (user.isImpersonating()) {
             return user.nameFormatted();
         }
-        var realName = user.getRealName();
+        var realName = user.realName();
         return _Strings.isNullOrEmpty(realName)
-                ? user.getName()
+                ? user.name()
                 : realName;
     }
 

@@ -122,8 +122,8 @@ public class AuthenticationManager {
                             userMementoRefiners);
 
                     userByValidationCode.put(
-                            userRefined.getAuthenticationCode(),
-                            userRefined.getName());
+                            userRefined.authenticationCode(),
+                            userRefined.name());
 
                     var interactionContextRefined = interactionContextWithTimeZone
                             .withUser(userRefined);
@@ -160,13 +160,13 @@ public class AuthenticationManager {
             return false;
         }
         var userMemento = interactionContext.getUser();
-        if(userMemento.getAuthenticationSource().isExternal()) {
+        if(userMemento.authenticationSource().isExternal()) {
             return true;
         }
         if(userMemento.isImpersonating()) {
             return true;
         }
-        final String userName = userByValidationCode.get(userMemento.getAuthenticationCode());
+        final String userName = userByValidationCode.get(userMemento.authenticationCode());
         return interactionContext.getUser().isCurrentUser(userName);
     }
 
@@ -175,7 +175,7 @@ public class AuthenticationManager {
             authenticator.logout();
         }
         if(user==null) return;
-        userByValidationCode.remove(user.getAuthenticationCode());
+        userByValidationCode.remove(user.authenticationCode());
     }
 
     // -- AUTHENTICATORS

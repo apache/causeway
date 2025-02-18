@@ -187,7 +187,7 @@ implements
         String userName = null;
         var authentication = getInteractionContext();
         if (authentication != null) {
-            userName = authentication.getUser().getName();
+            userName = authentication.getUser().name();
         }
 
         super.onInvalidate();
@@ -236,14 +236,14 @@ implements
 
     /**
      * This is a no-op if the {@link #getInteractionContext() authentication session}'s
-     * {@link UserMemento#getAuthenticationSource() source} is
+     * {@link UserMemento#authenticationSource() source} is
      * {@link AuthenticationSource#EXTERNAL external}
      * (eg as managed by keycloak).
      */
     @Override
     public void invalidate() {
         if(interactionContext !=null
-                && interactionContext.getUser().getAuthenticationSource().isExternal()) {
+                && interactionContext.getUser().authenticationSource().isExternal()) {
             return;
         }
         // otherwise

@@ -54,7 +54,7 @@ extends ViewModelFacetAbstract {
     protected ManagedObject createViewmodel(
             final @NonNull ObjectSpecification viewmodelSpec,
             final @NonNull Bookmark bookmark) {
-        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.getIdentifier());
+        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.identifier());
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
             _Debug.log("[JAXB] de-serializing viewmodel %s\n"

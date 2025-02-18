@@ -160,7 +160,7 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      */
     @TargetLogicalTypeName
     default String getTargetLogicalTypeName() {
-        return getTarget().getLogicalTypeName();
+        return getTarget().logicalTypeName();
     }
 
     @Property(

@@ -80,7 +80,7 @@ public class LogoutMenu {
         var redirect =  interactionProvider.currentInteractionContext()
         .map(InteractionContext::getUser)
         .map(userMemento->
-            userMemento.getAuthenticationSource().isExternal()
+            userMemento.authenticationSource().isExternal()
                 ? "logout"
                 : "login"
         )

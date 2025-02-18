@@ -19,8 +19,11 @@
 package org.apache.causeway.applib.services.user;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.inject.Named;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
@@ -30,13 +33,10 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
 /**
  * Immutable serializable value held by {@link UserMemento}.
@@ -49,14 +49,27 @@ import lombok.Value;
 @DomainObjectLayout(
         titleUiEvent = RoleMemento.TitleUiEvent.class
 )
-@Value
-public class RoleMemento implements Serializable {
+@Builder
+public record RoleMemento(
+    @PropertyLayout(fieldSetId = "identity", sequence = "1")
+    @NonNull String name,
+    @PropertyLayout(fieldSetId = "details", sequence = "1")
+    @NonNull String description
+    ) implements Serializable {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".RoleMemento";
 
+    public static class UiSubscriber {
+        @Order(PriorityPrecedence.LATE)
+        @EventListener(RoleMemento.TitleUiEvent.class)
+        public void on(final RoleMemento.TitleUiEvent ev) {
+            var roleMemento = ev.getSource();
+            assert roleMemento != null;
+            ev.setTitle(roleMemento.name());
+        }
+    }
+    
     public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<RoleMemento> {}
-
-    private static final long serialVersionUID = -3876856609238378274L;
 
     /**
      * Creates a new role with the specified name. Description is left blank.
@@ -68,34 +81,37 @@ public class RoleMemento implements Serializable {
     /**
      * Creates a new role with the specified name and description.
      */
-    @Builder
+    // canonical constructor
     public RoleMemento(
             final @NonNull String name,
             final String description) {
         this.name = name;
         this.description = description == null ? "" : description;
     }
-
-    public static class UiSubscriber {
-        @Order(PriorityPrecedence.LATE)
-        @EventListener(RoleMemento.TitleUiEvent.class)
-        public void on(final RoleMemento.TitleUiEvent ev) {
-            var roleMemento = ev.getSource();
-            assert roleMemento != null;
-            ev.setTitle(roleMemento.getName());
-        }
+    
+    // -- OBJECT CONTRACT
+    
+    @Override
+    public final boolean equals(Object obj) {
+        return (obj instanceof RoleMemento other)
+            ? name.equals(other.name)
+            : false;
     }
-
-    @PropertyLayout(fieldSetId = "identity", sequence = "1")
-    @Getter
-    String name;
-
+    
+    @Override
+    public final int hashCode() {
+        return Objects.hashCode(name);
+    }
+    
+    // -- DEPRECATIONS
+    
     /**
-     * Excluded from {@link #equals(Object) equality} checks.
+     * @deprecated use {@link #name()} instead
      */
-    @EqualsAndHashCode.Exclude
-    @PropertyLayout(fieldSetId = "details", sequence = "1")
-    @Getter
-    String description;
+    @Programmatic @Deprecated public String getName() { return name(); }
+    /**
+     * @deprecated use {@link #description()} instead
+     */
+    @Programmatic @Deprecated public String getDescription() { return description(); }
 
 }

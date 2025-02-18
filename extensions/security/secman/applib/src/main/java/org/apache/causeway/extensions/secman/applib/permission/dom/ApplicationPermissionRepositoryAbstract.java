@@ -98,8 +98,8 @@ implements ApplicationPermissionRepository {
     }
 
     public List<ApplicationPermission> findByUserMemento(final @NonNull UserMemento userMemento) {
-        var roleNames = userMemento.getRoles().stream()
-                .map(RoleMemento::getName)
+        var roleNames = userMemento.roles().stream()
+                .map(RoleMemento::name)
                 .collect(Collectors.toList());
         return findByRoleNames(roleNames);
     }

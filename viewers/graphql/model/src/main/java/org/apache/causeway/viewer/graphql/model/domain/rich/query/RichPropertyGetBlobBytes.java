@@ -46,7 +46,7 @@ public class RichPropertyGetBlobBytes extends RichPropertyGetBlobAbstract {
         return bookmarkIfAny.map(x -> {
             final ObjectFeature objectFeature = memberInteractor.getObjectMember();
             return String.format(
-                    "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), objectFeature.asciiId());
+                    "//%s/object/%s:%s/%s/blobBytes", graphqlPath, x.logicalTypeName(), x.identifier(), objectFeature.asciiId());
         }).orElse(null);
 
     }

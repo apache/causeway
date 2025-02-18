@@ -37,8 +37,8 @@ public class ExceptionRecognizerTranslate implements TestExecutionExceptionHandl
         .flatMap(recService->recService.recognize(throwable))
         .<Throwable>map(recognition->new RecoverableException(
                 String.format("%s: %s",
-                        recognition.getCategory().getFriendlyName(),
-                        recognition.getReason()
+                        recognition.category().getFriendlyName(),
+                        recognition.reason()
                 ),
                 throwable))
         .orElse(throwable);

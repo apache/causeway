@@ -44,7 +44,7 @@ public class ProtoObject {
             return Optional.empty();
         }
         return specificationLoader
-                .specForLogicalTypeName(bookmark.getLogicalTypeName())
+                .specForLogicalTypeName(bookmark.logicalTypeName())
                 .map(spec->of(spec, bookmark));
     }
 
@@ -52,7 +52,7 @@ public class ProtoObject {
             final @NonNull SpecificationLoader specificationLoader,
             final @NonNull Bookmark bookmark) {
         return of(specificationLoader
-                    .specForLogicalTypeNameElseFail(bookmark.getLogicalTypeName()),
+                    .specForLogicalTypeNameElseFail(bookmark.logicalTypeName()),
                 bookmark);
     }
 

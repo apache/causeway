@@ -141,7 +141,7 @@ public class AuthorizationManager {
         if(session==null || session.getUser()==null) {
             return false;
         }
-        return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.getName());
+        return session.getUser().hasRoleName(SudoService.ACCESS_ALL_ROLE.name());
     }
 
     private boolean isPerspectiveMember(final Identifier identifier) {

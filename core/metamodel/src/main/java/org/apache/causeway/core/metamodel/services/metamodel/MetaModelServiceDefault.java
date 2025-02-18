@@ -212,7 +212,7 @@ public class MetaModelServiceDefault implements MetaModelService {
                 .map(ObjectSpecification::getCorrespondingClass)
                 .orElseThrow(()->_Exceptions
                         .noSuchElement("Cannot resolve logical type name %s to a java class",
-                                bookmark.getLogicalTypeName()));
+                                bookmark.logicalTypeName()));
             break;
         }
         return sortOf(domainType, mode);

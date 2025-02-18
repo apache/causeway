@@ -82,7 +82,7 @@ public final class PropertyChangeRecord implements Comparable<PropertyChangeReco
     public String getLogicalMemberIdentifier() {
         var target = getBookmark();
         var propertyId = getPropertyId();
-        return target.getLogicalTypeName() + "#" + propertyId;
+        return target.logicalTypeName() + "#" + propertyId;
     }
 
     public PropertyChangeRecord withPreValueSetToCurrentElseUnknown(DeadlockRecognizer deadlockRecognizer) {

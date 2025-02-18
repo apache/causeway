@@ -229,7 +229,7 @@ implements
                 .getPojo();
         if(ownerPojo==null) {
             throw new ObjectNotFoundException(
-                    bookmarkedObjectModel.getBookmark().getIdentifier());
+                    bookmarkedObjectModel.getBookmark().identifier());
         }
 
         var propIdentifier = property.getFeatureIdentifier();

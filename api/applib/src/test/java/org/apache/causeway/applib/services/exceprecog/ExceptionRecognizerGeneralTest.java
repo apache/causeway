@@ -43,7 +43,7 @@ class ExceptionRecognizerGeneralTest {
     @Test
     public void whenRecognized() {
         ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE){};
-        assertThat(ersGeneral.recognize(new FooException()).get().getReason(), is("foo"));
+        assertThat(ersGeneral.recognize(new FooException()).get().reason(), is("foo"));
     }
 
     @Test
@@ -55,7 +55,7 @@ class ExceptionRecognizerGeneralTest {
     @Test
     public void whenRecognizedWithMessageParser() {
         ersGeneral = new ExceptionRecognizerAbstract(ALWAYS_TRUE, ex->"pre: " + ex.getMessage()){};
-        assertThat(ersGeneral.recognize(new FooException()).get().getReason(), is("pre: foo"));
+        assertThat(ersGeneral.recognize(new FooException()).get().reason(), is("pre: foo"));
     }
 
 }

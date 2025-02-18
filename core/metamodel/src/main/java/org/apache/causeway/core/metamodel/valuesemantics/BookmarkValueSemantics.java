@@ -64,11 +64,11 @@ implements
 
     @Override
     public int compare(final Bookmark a, final Bookmark b, final Void epsilon) {
-        int c = _Strings.compareNullsFirst(a.getLogicalTypeName(), b.getLogicalTypeName());
+        int c = _Strings.compareNullsFirst(a.logicalTypeName(), b.logicalTypeName());
         if(c!=0) {
             return c;
         }
-        c = _Strings.compareNullsFirst(a.getIdentifier(), b.getIdentifier());
+        c = _Strings.compareNullsFirst(a.identifier(), b.identifier());
         if(c!=0) {
             return c;
         }

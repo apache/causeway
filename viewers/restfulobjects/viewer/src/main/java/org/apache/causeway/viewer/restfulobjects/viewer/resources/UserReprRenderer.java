@@ -36,7 +36,7 @@ extends ReprRendererAbstract<InteractionContext> {
 
     @Override
     public UserReprRenderer with(final InteractionContext authentication) {
-        representation.mapPutString("userName", authentication.getUser().getName());
+        representation.mapPutString("userName", authentication.getUser().name());
         final JsonRepresentation roles = JsonRepresentation.newArray();
 
         authentication.getUser().streamRoleNames()

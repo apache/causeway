@@ -46,7 +46,7 @@ public class RichPropertyGetClobChars extends RichPropertyGetClobAbstract {
         return bookmarkIfAny.map(x -> {
             final ObjectFeature objectFeature = holder.getObjectMember();
             return String.format(
-                    "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.getLogicalTypeName(), x.getIdentifier(), objectFeature.asciiId());
+                    "//%s/object/%s:%s/%s/clobChars", graphqlPath, x.logicalTypeName(), x.identifier(), objectFeature.asciiId());
         }).orElse(null);
 
     }

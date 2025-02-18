@@ -94,7 +94,7 @@ implements EntityFacet {
 
     @Override
     public Bookmark validateBookmark(final @NonNull Bookmark bookmark) {
-        _Assert.assertNotNull(primaryKeyType.destring(bookmark.getIdentifier()));
+        _Assert.assertNotNull(primaryKeyType.destring(bookmark.identifier()));
         return bookmark;
     }
 
@@ -102,7 +102,7 @@ implements EntityFacet {
     public Optional<Object> fetchByBookmark(final @NonNull Bookmark bookmark) {
         log.debug("fetchEntity; bookmark={}", bookmark);
 
-        var primaryKey = primaryKeyType.destring(bookmark.getIdentifier());
+        var primaryKey = primaryKeyType.destring(bookmark.identifier());
         var entityPojo = jdbcAggregateTemplate.findById(primaryKey, entityClass);
 
         return Optional.ofNullable(entityPojo);

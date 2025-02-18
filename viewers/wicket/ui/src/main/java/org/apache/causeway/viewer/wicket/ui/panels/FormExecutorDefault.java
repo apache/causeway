@@ -168,7 +168,7 @@ implements FormExecutor, HasCommonContext {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
-        var errorMsg = recognition.getCategory().isSuppressCategoryInUI()
+        var errorMsg = recognition.category().isSuppressCategoryInUI()
                 ? recognition.toMessageNoCategory(getTranslationService())
                 : recognition.toMessage(getTranslationService());
 

@@ -133,7 +133,7 @@ public class CausewaySignInPanel extends SignInPanelAbstract {
         // also propagate user's Locale from current InteractionContext to Wicket's session
         var session = AuthenticatedWebSession.get();
         ((HasAmendableInteractionContext)session).amendInteractionContext(interactionContext->{
-            Optional.ofNullable(interactionContext.getUser().getLanguageLocale())
+            Optional.ofNullable(interactionContext.getUser().languageLocale())
                 .ifPresent(session::setLocale);
             return interactionContext.withTimeZone(zoneId);
         });

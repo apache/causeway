@@ -94,7 +94,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     default Optional<ObjectSpecification> specForBookmark(
             final @Nullable Bookmark bookmark) {
         return Optional.ofNullable(bookmark)
-                .map(Bookmark::getLogicalTypeName)
+                .map(Bookmark::logicalTypeName)
                 .flatMap(this::specForLogicalTypeName);
     }
 

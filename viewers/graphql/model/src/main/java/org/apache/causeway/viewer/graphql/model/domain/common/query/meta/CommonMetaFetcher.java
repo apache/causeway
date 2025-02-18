@@ -55,11 +55,11 @@ public class CommonMetaFetcher {
     }
 
     public String logicalTypeName() {
-        return bookmark.getLogicalTypeName();
+        return bookmark.logicalTypeName();
     }
 
     public String id() {
-        return bookmark.getIdentifier();
+        return bookmark.identifier();
     }
 
     public String version() {
@@ -117,7 +117,7 @@ public class CommonMetaFetcher {
                 .flatMap(Bookmarkable::getBookmark
                 ).map(bookmark -> String.format(
                         "//%s/object/%s:%s/%s/%s",
-                        graphqlPath, bookmark.getLogicalTypeName(), bookmark.getIdentifier(), causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName(), resource))
+                        graphqlPath, bookmark.logicalTypeName(), bookmark.identifier(), causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName(), resource))
                 .orElse(null);
     }
 

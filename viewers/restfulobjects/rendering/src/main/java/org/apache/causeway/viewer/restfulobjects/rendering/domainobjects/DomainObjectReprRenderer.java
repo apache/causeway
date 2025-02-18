@@ -190,10 +190,10 @@ extends ReprRendererAbstract<ManagedObject> {
                 representation.mapPutString("serviceId", objectAdapter.getSpecification().logicalTypeName());
             } else {
                 oidIfAny.ifPresent(oid->{
-                    Optional.ofNullable(oid.getLogicalTypeName())
+                    Optional.ofNullable(oid.logicalTypeName())
                     .ifPresent(domainType->
                         representation.mapPutString("domainType", domainType));
-                    representation.mapPutString("instanceId", oid.getIdentifier());
+                    representation.mapPutString("instanceId", oid.identifier());
                 });
             }
         }

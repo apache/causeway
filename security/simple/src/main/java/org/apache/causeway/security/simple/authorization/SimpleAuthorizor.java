@@ -64,7 +64,7 @@ public class SimpleAuthorizor implements Authorizor {
     }
 
     protected List<SimpleRealm.Role> roles(final UserMemento userMemento){
-        var roles = realm.lookupUserByName(userMemento.getName())
+        var roles = realm.lookupUserByName(userMemento.name())
             .map(SimpleRealm.User::roles)
             .orElseGet(List::of);
         return roles;

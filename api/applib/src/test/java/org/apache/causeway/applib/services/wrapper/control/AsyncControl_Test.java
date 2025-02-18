@@ -75,7 +75,7 @@ class AsyncControl_Test {
         control.withUser(UserMemento.ofName("fred"));
 
         // then
-        Assertions.assertThat(control.getUser().getName()).isEqualTo("fred");
+        Assertions.assertThat(control.getUser().name()).isEqualTo("fred");
     }
 
     @Test
