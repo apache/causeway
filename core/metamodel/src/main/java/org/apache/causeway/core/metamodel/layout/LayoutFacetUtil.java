@@ -115,7 +115,7 @@ public class LayoutFacetUtil {
                         final String cssClassFa = faStaticFacet.getLayers().toQuickNotation();
                         if(!_Strings.isNullOrEmpty(cssClassFa)) {
                             hasCssClassFa.setCssClassFa(cssClassFa);
-                            hasCssClassFa.setCssClassFaPosition(faStaticFacet.getLayers().getPosition());
+                            hasCssClassFa.setCssClassFaPosition(faStaticFacet.getLayers().position());
                         }
                     },
                     _Functions.noopConsumer())); // not supported for imperative fa-icons

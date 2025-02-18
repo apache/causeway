@@ -69,7 +69,7 @@ implements FaStaticFacet {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("position", layers.getPosition());
+        visitor.accept("position", layers.position());
         visitor.accept("classes", layers.toQuickNotation());
     }
 

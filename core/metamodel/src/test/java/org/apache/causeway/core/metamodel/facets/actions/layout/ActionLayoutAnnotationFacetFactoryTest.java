@@ -119,10 +119,9 @@ extends FacetFactoryTestAbstract {
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
             var classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
-            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getIconEntries().get(0).getCssClasses(),
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().iconEntries().get(0).cssClasses(),
                     is(equalTo("fa fa-font-awesome fa-fw")));
-            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getPosition(), is(CssClassFaPosition.LEFT));
-
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().position(), is(CssClassFaPosition.LEFT));
         });
     }
 
@@ -141,10 +140,9 @@ extends FacetFactoryTestAbstract {
             assertThat(facet, is(notNullValue()));
             assertThat(facet, is(instanceOf(FaFacetForActionLayoutAnnotation.class)));
             var classFaFacetForActionLayoutAnnotation = (FaFacetForActionLayoutAnnotation) facet;
-            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getIconEntries().get(0).getCssClasses(),
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().iconEntries().get(0).cssClasses(),
                     is(equalTo("fa fa-font-awesome fa-fw")));
-            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().getPosition(), is(CssClassFaPosition.RIGHT));
-
+            assertThat(classFaFacetForActionLayoutAnnotation.getLayers().position(), is(CssClassFaPosition.RIGHT));
         });
 
     }

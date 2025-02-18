@@ -120,7 +120,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                     },
                     faLayers->{
                         WktComponents.permanentlyHide(link, ID_OBJECT_ICON);
-                        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.getPosition())) {
+                        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.position())) {
                             Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_LEFT, faLayers);
                             WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                         } else {

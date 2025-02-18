@@ -58,7 +58,7 @@ implements LanguageProvider {
     public Optional<Locale> getPreferredLanguage() {
         return interactionProvider.currentInteractionContext()
         .map(InteractionContext::getLocale)
-        .map(UserLocale::getLanguageLocale);
+        .map(UserLocale::languageLocale);
     }
 
 }

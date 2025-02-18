@@ -61,7 +61,6 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void fontAwesomeLayersFacetViaIconFaLayersMethod() {
-
         var domainObject = getObjectManager().adapt(new DomainObjectWithFontAwesomeLayersMethod());
 
         objectScenario(DomainObjectWithFontAwesomeLayersMethod.class, (processClassContext, facetHolder) -> {
@@ -77,7 +76,7 @@ extends FacetFactoryTestAbstract {
             assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);
             assertEquals(
                     FontAwesomeLayers.normalizeCssClasses("fa-solid fa-bookmark", "fa"),
-                    actual.getIconEntries().get(0).getCssClasses());
+                    actual.iconEntries().get(0).cssClasses());
         });
     }
 

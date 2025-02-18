@@ -136,7 +136,7 @@ extends TextFieldWithConverter<T> {
         var mmc = MetaModelContext.instanceElseFail();
 
         config.useLocale(mmc.currentUserLocale()
-                .map(UserLocale::getLanguageLocale)
+                .map(UserLocale::languageLocale)
                 .orElse(Locale.US));
 
         config.withFormat(_TimeFormatUtil.convertToMomentJsFormat(temporalPattern));

@@ -206,7 +206,7 @@ ValueSemanticsProvider<T> {
     protected DecimalFormat getNumberFormat(
             final ValueSemanticsProvider.@Nullable Context context,
             final @NonNull FormatUsageFor usedFor) {
-        var format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).getNumberFormatLocale());
+        var format = (DecimalFormat)NumberFormat.getNumberInstance(getUserLocale(context).numberFormatLocale());
         // prime w/ 16 (64 bit IEEE 754 double has 15 decimal digits of precision)
         format.setMaximumFractionDigits(16);
         configureDecimalFormat(context, format, usedFor);
@@ -245,7 +245,7 @@ ValueSemanticsProvider<T> {
 
         if (groupingSeparatorPolicy == GroupingSeparatorPolicy.DISALLOW) {
             var userLocale = getUserLocale(context);
-            var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.getNumberFormatLocale());
+            var decimalFormatSymbols = new DecimalFormatSymbols(userLocale.numberFormatLocale());
             var groupingSeparatorChar = decimalFormatSymbols.getGroupingSeparator();
             if (input.contains(""+groupingSeparatorChar)) {
                 throw new TextEntryParseException("Invalid value '" + input + "'; do not use the '" + groupingSeparatorChar + "' grouping separator");
@@ -325,7 +325,7 @@ ValueSemanticsProvider<T> {
             throw _Exceptions.unmatchedCase(temporalCharacteristic);
         }
         return noZoneOutputFormat
-                .withLocale(getUserLocale(context).getTimeFormatLocale());
+                .withLocale(getUserLocale(context).timeFormatLocale());
     }
 
     protected Optional<DateTimeFormatter> getTemporalZoneOnlyRenderingFormat(
@@ -359,7 +359,7 @@ ValueSemanticsProvider<T> {
                 .appendPattern(editingPattern
                         .getEditingFormatAsPattern(
                                 temporalCharacteristic, offsetCharacteristic, timePrecision, direction))
-                .toFormatter(getUserLocale(context).getTimeFormatLocale());
+                .toFormatter(getUserLocale(context).timeFormatLocale());
     }
 
     protected DateTimeFormatter getTemporalIsoFormat(
