@@ -19,55 +19,31 @@
 package org.apache.causeway.applib.value.semantics;
 
 import java.io.Serializable;
+import java.util.Optional;
+import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
-import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.functional.Either.HasEither;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+@Programmatic
+public record ValueDecomposition(
+    @Nullable ValueWithTypeDto fundamental, 
+    @Nullable TypedTupleDto composite)
+implements Serializable {
 
-@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
-@ToString @EqualsAndHashCode
-public final class ValueDecomposition
-implements
-    HasEither<ValueWithTypeDto, TypedTupleDto>,
-    Serializable {
-    private static final long serialVersionUID = 1L;
-
-    public static ValueDecomposition ofFundamental(final ValueWithTypeDto valueWithTypeDto) {
-        return new ValueDecomposition(Either.left(valueWithTypeDto));
+    public static ValueDecomposition ofFundamental(final @NonNull ValueWithTypeDto valueWithTypeDto) {
+        return new ValueDecomposition(valueWithTypeDto, null);
     }
 
-    public static ValueDecomposition ofComposite(final TypedTupleDto typedTupleDto) {
-        return new ValueDecomposition(Either.right(typedTupleDto));
-    }
-
-    /**
-     * In support of JAXB de-serialization,
-     * returns an unspecified type.
-     * (Introduced for the CalendarEvent demo to work.)
-     * @deprecated not sure why we are hitting this; remove eventually
-     */
-    @Deprecated
-    public ValueDecomposition() {
-        this(Either.left(new ValueWithTypeDto()));
-    }
-
-    @Getter private final Either<ValueWithTypeDto, TypedTupleDto> either;
-
-    // used by RO-Viewer to render values
-    public String toJson() {
-        return this.<String>fold(
-                CommonDtoUtils::getFundamentalValueAsJson,
-                CommonDtoUtils::getCompositeValueAsJson);
+    public static ValueDecomposition ofComposite(final @NonNull TypedTupleDto typedTupleDto) {
+        return new ValueDecomposition(null, typedTupleDto);
     }
 
     // used by EncodableFacet
@@ -76,14 +52,50 @@ implements
             ? ofComposite(CommonDtoUtils.getCompositeValueFromJson(json))
             : ofFundamental(CommonDtoUtils.getFundamentalValueFromJson(vType, json));
     }
+    
+    // for transport over REST
+    public static ValueDecomposition destringify(final ValueType vType, final String string) {
+        return fromJson(vType, _Strings.base64UrlDecodeZlibCompressed(string));
+    }
+    
+    public Optional<ValueWithTypeDto> fundamentalAsOptional() {
+        return Optional.ofNullable(fundamental);
+    }
+    public Optional<TypedTupleDto> compositeAsOptional() {
+        return Optional.ofNullable(composite);
+    }
+    
+    // used by RO-Viewer to render values
+    public String toJson() {
+        return fundamental!=null 
+                ? CommonDtoUtils.getFundamentalValueAsJson(fundamental)
+                : CommonDtoUtils.getCompositeValueAsJson(composite);
+    }
 
     // for transport over REST
     public String stringify() {
         return _Strings.base64UrlEncodeZlibCompressed(toJson());
     }
-    // for transport over REST
-    public static ValueDecomposition destringify(final ValueType vType, final String string) {
-        return fromJson(vType, _Strings.base64UrlDecodeZlibCompressed(string));
-    }
+    
+    public void accept(
+        final @NonNull Consumer<ValueWithTypeDto> fundamentalConsumer,
+        final @NonNull Consumer<TypedTupleDto> compositeConsumer) {
+            if(fundamental!=null) {
+                fundamentalConsumer.accept(fundamental);
+            } else {
+                compositeConsumer.accept(composite);
+            }
+        }
+
+    // -- DEPRECATIONS
+    
+    /** @deprecated use {@link #fundamental()} instead */
+    @Deprecated public @Nullable ValueWithTypeDto leftIfAny() { return fundamental(); }
+    /** @deprecated use {@link #composite()} instead */
+    @Deprecated public @Nullable TypedTupleDto rightIfAny() { return composite(); }
+    /** @deprecated use {@link #fundamentalAsOptional()} instead */
+    @Deprecated public Optional<ValueWithTypeDto> left() { return fundamentalAsOptional(); }
+    /** @deprecated use {@link #compositeAsOptional()} instead */
+    @Deprecated public Optional<TypedTupleDto> right() { return compositeAsOptional(); }
 
 }

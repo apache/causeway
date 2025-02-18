@@ -147,8 +147,8 @@ ValueSemanticsProvider<T> {
             final @NonNull Function<String, T> fromString,
             final @NonNull Supplier<T> onNullOrEmpty) {
         var string = decomposition!=null
-                ? decomposition.left().map(ValueWithTypeDto::getString).orElse(null)
-                        : null;
+                ? decomposition.fundamentalAsOptional().map(ValueWithTypeDto::getString).orElse(null)
+                : null;
         return _Strings.isNotEmpty(string)
                 ? fromString.apply(string)
                 : onNullOrEmpty.get();
@@ -177,7 +177,7 @@ ValueSemanticsProvider<T> {
             final @NonNull Supplier<T> onNull) {
 
         var valuePojo = decomposition!=null
-                ? decomposition.left().map(fundamentalValueExtractor).orElse(null)
+                ? decomposition.fundamentalAsOptional().map(fundamentalValueExtractor).orElse(null)
                 : null;
 
         return valuePojo!=null

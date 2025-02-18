@@ -69,7 +69,7 @@ extends ValueSemanticsBasedOnIdStringifier<ObjectIdentity> {
 
     @Override
     public ObjectIdentity compose(final ValueDecomposition decomposition) {
-        var elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.rightIfAny());
+        var elementMap = CommonDtoUtils.typedTupleAsMap(decomposition.composite());
         final String targetClassName = (String)elementMap.get("targetClassName");
         final String key = (String)elementMap.get("key");
         return destring(_InstanceUtil.loadClass(targetClassName), key);

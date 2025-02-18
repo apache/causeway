@@ -95,7 +95,7 @@ extends SchemaValueMarshallerAbstract {
 
         var decomposedValueDto = context.getSemantics()
                 .decompose(_Casts.uncheckedCast(value.getPojo()))
-                .leftIfAny();
+                .fundamental();
 
         // copy the decomposedValueDto into valueDto
         CommonDtoUtils.copy(decomposedValueDto, valueDto);
@@ -138,7 +138,7 @@ extends SchemaValueMarshallerAbstract {
         return valuePojo!=null
                 ? context.getSemantics()
                         .decompose(valuePojo)
-                        .rightIfAny()
+                        .composite()
                 : null;
     }
 

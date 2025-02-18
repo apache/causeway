@@ -106,7 +106,7 @@ implements
     @Override
     public CalendarEvent compose(final ValueDecomposition decomposition) {
 
-        final TypedTupleDto dto = decomposition.rightIfAny();
+        final TypedTupleDto dto = decomposition.composite();
 
         var elementMap = CommonDtoUtils.typedTupleAsMap(dto);
 
