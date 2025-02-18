@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 
-class _ObjectGraphRelationMerger implements ObjectGraph.Transformer {
+record ObjectGraphRelationMerger() implements ObjectGraph.Transformer {
 
     @Override
     public ObjectGraph transform(final ObjectGraph objGraph) {

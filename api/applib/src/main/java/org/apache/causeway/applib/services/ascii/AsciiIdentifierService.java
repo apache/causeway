@@ -27,7 +27,7 @@ package org.apache.causeway.applib.services.ascii;
  *     because feature Ids are used as GraphQL (field) names.
  * </p>
  *
- * @see <a href="https://spec.graphql.org/October2021/#sec-Names">GraphQL specification</a>.
+ * @see <a href="https://spec.graphql.org/October2021/#sec-Names">GraphQL specification</a>
  *
  * @since 2.x {@index}
  */

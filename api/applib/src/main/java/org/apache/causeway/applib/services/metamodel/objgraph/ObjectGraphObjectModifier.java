@@ -16,15 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.annotation;
+package org.apache.causeway.applib.services.metamodel.objgraph;
 
-/**
- * Corresponds to {@link DomainService#nature()}
- *
- * @deprecated has no scope limiting effect any longer, see [CAUSEWAY-3697]
- */
-@Deprecated(forRemoval = true, since = "2.0.0-RC4")
-public enum NatureOfService {
-    VIEW,
-    REST;
+import java.util.Objects;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
+record ObjectGraphObjectModifier(UnaryOperator<ObjectGraph.Object> operator) implements ObjectGraph.Transformer {
+
+    @Override
+    public ObjectGraph transform(final ObjectGraph g) {
+        var modified = g.objects().stream()
+                .map(obj->Objects.requireNonNull(operator.apply(obj),
+                        ()->"modifier returned null on non-null ObjectGraph.Object"))
+                .collect(Collectors.toList());
+        g.objects().clear();
+        g.objects().addAll(modified);
+        return g;
+    }
 }

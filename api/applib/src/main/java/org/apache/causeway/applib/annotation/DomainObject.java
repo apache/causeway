@@ -73,7 +73,7 @@ public @interface DomainObject {
     /**
      * Alternative logical type name(s) for the annotated type.
      * @see Bookmark
-     * @see Named
+     * @see jakarta.inject.Named
      */
     String[] aliased() default {};
 
@@ -197,8 +197,6 @@ public @interface DomainObject {
      * <p>
      *     The {@link Nature#BEAN} nature is for internally use, and should not normally be specified explicitly.
      * </p>
-     *
-     * @see DomainService#nature()
      */
     Nature nature()
             default Nature.NOT_SPECIFIED;

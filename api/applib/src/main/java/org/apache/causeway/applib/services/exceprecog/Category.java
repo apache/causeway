@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Categorises each exception that has been recognised, as per
- * {@link Recognition#getCategory()}.
+ * {@link Recognition#category()}.
  *
  * @since 1.x {@index}
  */

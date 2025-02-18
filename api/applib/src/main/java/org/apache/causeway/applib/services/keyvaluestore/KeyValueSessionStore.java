@@ -34,6 +34,7 @@ import org.jspecify.annotations.NonNull;
  *
  * @since 2.0 {@index}
  */
+@SuppressWarnings("javadoc")
 public interface KeyValueSessionStore {
 
     /**

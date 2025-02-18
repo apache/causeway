@@ -144,9 +144,9 @@ public class ObjectGraph {
     @UtilityClass
     public static class Transformers {
         @Getter(lazy = true)
-        private final Transformer relationMerger = new _ObjectGraphRelationMerger();
+        private final Transformer relationMerger = new ObjectGraphRelationMerger();
         public Transformer objectModifier(final @NonNull UnaryOperator<ObjectGraph.Object> modifier) {
-            return new _ObjectGraphObjectModifier(modifier);
+            return new ObjectGraphObjectModifier(modifier);
         }
     }
 

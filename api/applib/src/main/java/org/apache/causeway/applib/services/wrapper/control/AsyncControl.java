@@ -21,12 +21,12 @@ package org.apache.causeway.applib.services.wrapper.control;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
@@ -35,7 +35,6 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

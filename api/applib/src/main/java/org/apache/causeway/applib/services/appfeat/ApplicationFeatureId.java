@@ -134,7 +134,7 @@ implements
      * @param logicalType - from which the namespace is inferred.
      */
     public static ApplicationFeatureId newNamespace(final LogicalType logicalType) {
-        return newNamespace(logicalType.getNamespace());
+        return newNamespace(logicalType.namespace());
     }
 
     public static ApplicationFeatureId newType(final String logicalTypeName) {

@@ -96,11 +96,9 @@ public interface ServiceRegistry {
 
     /**
      * Returns a domain service implementing the requested type.
-     *
      * <p>
      * If this lookup is ambiguous, the service annotated with highest priority is returned.
-     * see {@link Priority}
-     * </p>
+     * see {@link jakarta.annotation.Priority}
      */
     default <T> Optional<T> lookupService(final Class<T> serviceClass) {
         final Comparator<Object> comparator = InstanceByPriorityComparator.instance();
@@ -109,10 +107,8 @@ public interface ServiceRegistry {
 
     /**
      * Returns a domain service implementing the requested type.
-     *
      * <p>
      * If this lookup is ambiguous, then the provided comparator is used.
-     * </p>
      */
     default <T> Optional<T> lookupService(final Class<T> serviceClass, final Comparator<Object> comparator) {
         var bin = select(serviceClass);
@@ -152,9 +148,11 @@ public interface ServiceRegistry {
 
     /**
      * Invalidates any cached service adapters that might hold a reference to
-     * the current {@link SpecificationLoader}. Particularly useful when discarding
-     * a meta-model instance, that is, purging the {@link ObjectSpecification} cache.
+     * the current {@link org.apache.causeway.core.metamodel.specloader.SpecificationLoader}. 
+     * Particularly useful when discarding
+     * a meta-model instance, that is, purging the {@link org.apache.causeway.core.metamodel.spec.ObjectSpecification} cache.
      */
+    @SuppressWarnings("javadoc")
     void clearRegisteredBeans();
 
 }

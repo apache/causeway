@@ -30,6 +30,7 @@ import org.apache.logging.log4j.message.ParameterizedMessage;
  * </pre>
  */
 public class TruncatingMessageFactory extends AbstractMessageFactory {
+    private static final long serialVersionUID = 1L;
     private static final int MAX_LENGTH = 128;
 
     @Override
