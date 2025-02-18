@@ -96,24 +96,23 @@ public class ModuleWithFixturesService {
     }
 
     public List<ModuleWithFixturesDescriptor> modules() {
-        var beans = springBeansService.beans();
-        var modules = modulesWithin(beans);
+        var modules = modulesWithin(springBeansService.beansByContextId().entrySet());
         return sequenced(modules);
     }
 
-    static List<ModuleWithFixturesDescriptor> modulesWithin(final Map<String, ContextBeans> beans) {
+    static List<ModuleWithFixturesDescriptor> modulesWithin(final Iterable<Map.Entry<String, ContextBeans>> beans) {
 
         var descriptors = new ArrayList<ModuleWithFixturesDescriptor>();
-        for (Map.Entry<String, ContextBeans> contextEntry : beans.entrySet()) {
+        for (Map.Entry<String, ContextBeans> contextEntry : beans) {
             final String contextId = contextEntry.getKey();
             final ContextBeans contextBeans = contextEntry.getValue();
-            final ConfigurableApplicationContext context = contextBeans.getContext();
+            final ConfigurableApplicationContext context = contextBeans.context();
 
             final Map<String, ModuleWithFixtures> modulesByBeanName = context.getBeansOfType(ModuleWithFixtures.class);
             final Map<String, Object> configurationBeansByBeanName = context.getBeansWithAnnotation(Configuration.class);
             final Map<String, Object> beansAnnotatedWithImportByBeanName = context.getBeansWithAnnotation(Import.class);
 
-            for (Map.Entry<String, BeanDescriptor> beanEntry : contextBeans.getBeans().entrySet()) {
+            for (Map.Entry<String, BeanDescriptor> beanEntry : contextBeans.beans().entrySet()) {
                 final String beanName = beanEntry.getKey();
 
                 final ModuleWithFixtures module = modulesByBeanName.get(beanName);
