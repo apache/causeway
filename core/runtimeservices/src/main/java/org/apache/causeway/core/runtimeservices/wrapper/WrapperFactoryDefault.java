@@ -38,6 +38,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -101,15 +103,13 @@ import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
-import org.apache.causeway.core.runtimeservices.wrapper.handlers.ProxyContextHandler;
-import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
+import org.apache.causeway.core.runtimeservices.wrapper.handlers.ProxyGenerator;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import static org.apache.causeway.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Data;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -142,17 +142,16 @@ implements WrapperFactory, HasMetaModelContext {
     private final List<InteractionListener> listeners = new ArrayList<>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher>
         dispatchersByEventClass = new HashMap<>();
-    private ProxyContextHandler proxyContextHandler;
 
     private ExecutorService commonExecutorService;
+    private ProxyGenerator proxyGenerator;
 
     @PostConstruct
     public void init() {
 
         this.commonExecutorService = newCommonExecutorService();
 
-        var proxyCreator = new ProxyCreator(proxyFactoryService);
-        proxyContextHandler = new ProxyContextHandler(proxyCreator);
+        this.proxyGenerator = new ProxyGenerator(proxyFactoryService);
 
         putDispatcher(ObjectTitleEvent.class, InteractionListener::objectTitleRead);
         putDispatcher(PropertyVisibilityEvent.class, InteractionListener::propertyVisible);
@@ -253,13 +252,13 @@ implements WrapperFactory, HasMetaModelContext {
 
     protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
         var objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
-        return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
+        return proxyGenerator.objectProxy(domainObject, objAdapter, syncControl);
     }
 
     protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
         var mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         var mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
-        return proxyContextHandler.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
+        return proxyGenerator.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
     }
 
     @Override

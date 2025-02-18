@@ -47,7 +47,7 @@ public class TimestampService {
     @EventListener(PreStoreEvent.class)
     public void onPreStore(PreStoreEvent event) {
 
-        var persistableObject = event.getPersistableObject();
+        var persistableObject = event.persistableObject();
 
         if(persistableObject instanceof OnUpdatedBy) {
             ((OnUpdatedBy)persistableObject).setUpdatedBy(userService.currentUserNameElseNobody());

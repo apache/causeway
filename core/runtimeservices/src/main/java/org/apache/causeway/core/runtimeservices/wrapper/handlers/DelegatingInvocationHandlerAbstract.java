@@ -21,6 +21,8 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
@@ -32,18 +34,17 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 /**
- * @param <T>
+ * @param <T> type of delegate
  */
-public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
+abstract class DelegatingInvocationHandlerAbstract<T> implements DelegatingInvocationHandler<T> {
 
     private ObjectManager objectManager;
 
     // getter is API
-    @Getter(onMethod = @__(@Override)) private final T delegate;
+    @Getter(onMethod_ = {@Override}) private final T delegate;
     @Getter protected final WrapperFactory wrapperFactory;
     @Getter private final SyncControl syncControl;
 
@@ -51,11 +52,10 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    // getter and setter are API
-    @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
-    private boolean resolveObjectChangedEnabled;
+    @Getter(onMethod_ = {@Override}) @Setter(onMethod_ = {@Override})
+    private boolean isResolveObjectChangedEnabled = false;
 
-    public DelegatingInvocationHandlerDefault(
+    protected DelegatingInvocationHandlerAbstract(
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
             final SyncControl syncControl) {
@@ -76,18 +76,11 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     }
 
     protected void resolveIfRequired(final ManagedObject adapter) {
+        if(adapter==null) return;
+        if(!isResolveObjectChangedEnabled) return;
+        if(!ManagedObjects.isEntity(adapter)) return;
 
-        if(!resolveObjectChangedEnabled) {
-            return;
-        }
-        if(adapter==null) {
-            return;
-        }
-        if(!ManagedObjects.isEntity(adapter)) {
-            return;
-        }
-
-        _Blackhole.consume(adapter.getPojo());
+        _Blackhole.consume(adapter.getPojo()); // has side effects
     }
 
     protected void resolveIfRequired(final Object domainObject) {

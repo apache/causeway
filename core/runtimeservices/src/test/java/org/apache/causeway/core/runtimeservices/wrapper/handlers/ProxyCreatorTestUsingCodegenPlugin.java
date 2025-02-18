@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.wrapper.proxy;
+package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -32,15 +32,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
-import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
+
+import lombok.Getter;
+import lombok.Setter;
 
 class ProxyCreatorTestUsingCodegenPlugin {
 
-    private ProxyCreator proxyCreator;
+    private ProxyGenerator proxyGenerator;
 
     @BeforeEach
     void setUp() throws Exception {
-        proxyCreator = new ProxyCreator(new ProxyFactoryServiceByteBuddy());
+        proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy());
     }
 
     public static class Employee {
@@ -68,25 +70,20 @@ class ProxyCreatorTestUsingCodegenPlugin {
             return delegate;
         }
 
-        @Override
-        public boolean isResolveObjectChangedEnabled() {
-            return false;
-        }
-
-        @Override
-        public void setResolveObjectChangedEnabled(final boolean resolveObjectChangedEnabled) {
-        }
+        @Getter @Setter 
+        private boolean resolveObjectChangedEnabled = false;
 
         public boolean wasInvoked(final String methodName) {
             return invoked.contains(methodName);
         }
+        
     }
 
     @Test
     void proxyShouldDelegateCalls() {
 
         final DelegatingInvocationHandlerForTest handler = new DelegatingInvocationHandlerForTest();
-        final Employee proxyOfEmployee = proxyCreator.instantiateProxy(handler);
+        final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler);
 
         assertNotNull(proxyOfEmployee);
 

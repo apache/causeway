@@ -49,7 +49,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.wrapper;
     exports org.apache.causeway.core.runtimeservices.wrapper.dispatchers;
     exports org.apache.causeway.core.runtimeservices.wrapper.handlers;
-    exports org.apache.causeway.core.runtimeservices.wrapper.proxy;
     exports org.apache.causeway.core.runtimeservices.xml;
     exports org.apache.causeway.core.runtimeservices.xmlsnapshot;
 
@@ -82,5 +81,5 @@ module org.apache.causeway.core.runtimeservices {
     
     opens org.apache.causeway.core.runtimeservices;
     opens org.apache.causeway.core.runtimeservices.wrapper;
-    opens org.apache.causeway.core.runtimeservices.wrapper.proxy; //to org.apache.causeway.core.codegen.bytebuddy
+    opens org.apache.causeway.core.runtimeservices.wrapper.handlers; //to org.apache.causeway.core.codegen.bytebuddy
 }

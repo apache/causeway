@@ -72,13 +72,13 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  *
- * @param <T>
+ * @param <T> type of delegate
  */
 @Log4j2
 public class DomainObjectInvocationHandler<T>
-extends DelegatingInvocationHandlerDefault<T> {
+extends DelegatingInvocationHandlerAbstract<T> {
 
-    private final ProxyContextHandler proxyContextHandler;
+    private final ProxyGenerator proxyGenerator;
     private final MetaModelContext mmContext;
 
     /**
@@ -109,14 +109,14 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
-            final ProxyContextHandler proxyContextHandler) {
+            final ProxyGenerator proxyGenerator) {
         super(
                 targetAdapter.getSpecification().getMetaModelContext(),
                 domainObject,
                 syncControl);
 
         this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
-        this.proxyContextHandler = proxyContextHandler;
+        this.proxyGenerator = proxyGenerator;
 
         try {
             titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
@@ -438,11 +438,11 @@ extends DelegatingInvocationHandlerDefault<T> {
         if (collectionToLookup instanceof WrappingObject) {
             return collectionToLookup;
         }
-        if(proxyContextHandler == null) {
+        if(proxyGenerator == null) {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyContextHandler.proxy(collectionToLookup, this, otma);
+        return proxyGenerator.collectionProxy(collectionToLookup, this, otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
@@ -451,11 +451,11 @@ extends DelegatingInvocationHandlerDefault<T> {
         if (mapToLookup instanceof WrappingObject) {
             return mapToLookup;
         }
-        if(proxyContextHandler == null) {
+        if(proxyGenerator == null) {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyContextHandler.proxy(mapToLookup, this, otma);
+        return proxyGenerator.mapProxy(mapToLookup, this, otma);
     }
 
     private Object handleActionMethod(

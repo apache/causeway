@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.filter.CollectionFilterService;
@@ -32,27 +33,20 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 
-import lombok.AllArgsConstructor;
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.UtilityClass;
+record FilterUtils() {
 
-@UtilityClass
-class _FilterUtils {
+    record FilterHandler(
+        @NonNull Function<Object, Tokens> tokenizer,
+        @NonNull BiPredicate<Tokens, String> tokenFilter,
+        @NonNull String searchPromptPlaceholderText) {
 
-    @AllArgsConstructor
-    static class FilterHandler {
-
-        final @NonNull Function<Object, Tokens> tokenizer;
-        final @NonNull BiPredicate<Tokens, String> tokenFilter;
-        final @NonNull String searchPromptPlaceholderText;
-
-        final @NonNull BiPredicate<DataRow, String> getDataRowFilter() {
+        @NonNull BiPredicate<DataRow, String> getDataRowFilter() {
             return (dataRow, searchArg) ->
                 tokenFilter.test(dataRow.filterTokens().orElse(null), searchArg);
         }
     }
 
-    Optional<FilterHandler> createFilterHandler(final @Nullable ObjectSpecification elementType) {
+    static Optional<FilterHandler> createFilterHandler(final @Nullable ObjectSpecification elementType) {
         if(elementType==null) return Optional.empty();
 
         var mmc = elementType.getMetaModelContext();

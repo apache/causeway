@@ -88,24 +88,24 @@ public class LifecycleCallbackNotifier {
      */
     public void prePersist(final Either<ManagedObject, ManagedObject> eitherWithOrWithoutOid) {
         var pojo = eitherWithOrWithoutOid.fold(ManagedObject::getPojo, ManagedObject::getPojo);
-        if(pojo==null) {return;}
-        eventBusService.post(PreStoreEvent.of(pojo));
+        if(pojo==null) return;
+        eventBusService.post(new PreStoreEvent(pojo));
         var entity = eitherWithOrWithoutOid.fold(UnaryOperator.identity(), UnaryOperator.identity());
         dispatch(entity, PersistingCallbackFacet.class, PersistingLifecycleEventFacet.class);
     }
 
     public void postPersist(final ManagedObject entity) {
-        eventBusService.post(PostStoreEvent.of(entity.getPojo()));
+        eventBusService.post(new PostStoreEvent(entity.getPojo()));
         dispatch(entity, PersistedCallbackFacet.class, PersistedLifecycleEventFacet.class);
     }
 
     public void preUpdate(final ManagedObject entity) {
-        eventBusService.post(PreStoreEvent.of(entity.getPojo()));
+        eventBusService.post(new PreStoreEvent(entity.getPojo()));
         dispatch(entity, UpdatingCallbackFacet.class, UpdatingLifecycleEventFacet.class);
     }
 
     public void postUpdate(final ManagedObject entity) {
-        eventBusService.post(PostStoreEvent.of(entity.getPojo()));
+        eventBusService.post(new PostStoreEvent(entity.getPojo()));
         dispatch(entity, UpdatedCallbackFacet.class, UpdatedLifecycleEventFacet.class);
     }
 
@@ -123,7 +123,6 @@ public class LifecycleCallbackNotifier {
         ManagedObjects.asSpecified(entity)
         .map(ManagedObject::getSpecification)
         .ifPresent(spec->{
-
             spec.lookupFacet(callbackFacetType)
             .ifPresent(callbackFacet->invokeCallback(callbackFacet, entity));
 

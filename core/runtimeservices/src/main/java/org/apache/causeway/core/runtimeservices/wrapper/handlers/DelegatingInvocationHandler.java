@@ -21,14 +21,13 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationHandler;
 
 /**
- * @param <T>
+ * @param <T> type of delegate
  */
 public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
     T getDelegate();
 
-    public boolean isResolveObjectChangedEnabled();
-
-    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
+    boolean isResolveObjectChangedEnabled();
+    void setResolveObjectChangedEnabled(boolean enabled);
 
 }

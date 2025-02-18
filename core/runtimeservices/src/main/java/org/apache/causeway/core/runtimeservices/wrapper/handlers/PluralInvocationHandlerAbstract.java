@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
 abstract class PluralInvocationHandlerAbstract<T, P>
-extends DelegatingInvocationHandlerDefault<P> {
+extends DelegatingInvocationHandlerAbstract<P> {
 
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;

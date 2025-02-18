@@ -18,37 +18,38 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
+import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.collections._Arrays;
+import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.commons.internal.proxy._ProxyFactory;
+import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
 
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
+public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) {
 
-@RequiredArgsConstructor
-public class ProxyContextHandler {
-
-    @NonNull private final ProxyCreator proxyCreator;
-
-    public <T> T proxy(
-            final T domainObject,
-            final ManagedObject adapter,
-            final SyncControl syncControl) {
+    public <T> T objectProxy(
+        final T domainObject,
+        final ManagedObject adapter,
+        final SyncControl syncControl) {
 
         var invocationHandler = new DomainObjectInvocationHandler<T>(
-                domainObject,
-                null, // mixeeAdapter ignored
-                adapter,
-                syncControl,
-                this);
+            domainObject,
+            null, // mixeeAdapter ignored
+            adapter,
+            syncControl,
+            this);
 
-        return proxyCreator.instantiateProxy(invocationHandler);
+        return instantiateProxy(invocationHandler);
     }
 
     public <T> T mixinProxy(
@@ -56,54 +57,78 @@ public class ProxyContextHandler {
             final ManagedObject mixeeAdapter,
             final ManagedObject mixinAdapter,
             final SyncControl syncControl) {
-
+    
         var invocationHandler = new DomainObjectInvocationHandler<T>(
                 mixin,
                 mixeeAdapter,
                 mixinAdapter,
                 syncControl,
                 this);
-
-        return proxyCreator.instantiateProxy(invocationHandler);
+    
+        return instantiateProxy(invocationHandler);
     }
-
+    
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
-    public <T, E> Collection<E> proxy(
+    public <T, E> Collection<E> collectionProxy(
             final Collection<E> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
-
+    
         var collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
                         collectionToBeProxied, handler, otma);
-        collectionInvocationHandler.setResolveObjectChangedEnabled(
-                handler.isResolveObjectChangedEnabled());
-
+    
         var proxyBase = CollectionSemantics
                 .valueOfElseFail(collectionToBeProxied.getClass())
                 .getContainerType();
-
-        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
+    
+        return instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
     }
-
+    
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
      */
-    public <T, P, Q> Map<P, Q> proxy(
+    public <T, P, Q> Map<P, Q> mapProxy(
             final Map<P, Q> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
-
+    
         var mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
                 collectionToBeProxied, handler, otma);
-        mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
-
+    
         var proxyBase = Map.class;
+    
+        return instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
+    }
+    
+    // -- HELPER
 
-        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
+    <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
+        final T classToBeProxied = handler.getDelegate();
+        final Class<T> base = _Casts.uncheckedCast(classToBeProxied.getClass());
+        return instantiateProxy(base, handler);
     }
 
+    /**
+     * Creates a proxy, using given {@code base} type as the proxy's base.
+     * @implNote introduced to circumvent access issues on cases,
+     *      where {@code handler.getDelegate().getClass()} is not visible
+     *      (eg. nested private type)
+     */
+    <T> T instantiateProxy(final Class<T> base, final DelegatingInvocationHandler<? extends T> handler) {
+        if (base.isInterface()) {
+            return _Casts.uncheckedCast(
+                    Proxy.newProxyInstance(
+                            _Context.getDefaultClassLoader(),
+                            _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
+                            handler));
+        } else {
+            final _ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
+            return proxyFactory.createInstance(handler, false);
+        }
+    }
+    
 }

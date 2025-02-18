@@ -55,7 +55,7 @@ import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.core.metamodel.tabular.DataTableMemento;
-import org.apache.causeway.core.metamodel.tabular.internal._FilterUtils.FilterHandler;
+import org.apache.causeway.core.metamodel.tabular.internal.FilterUtils.FilterHandler;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 
 import lombok.AccessLevel;
@@ -145,7 +145,7 @@ implements DataTableInteractive {
 
         this.managedMember = managedMember;
         this.where = where;
-        this.filterHandler = _FilterUtils.createFilterHandler(managedMember.getElementType());
+        this.filterHandler = FilterUtils.createFilterHandler(managedMember.getElementType());
 
         this.searchArgumentBindable = _Bindables.forValue("");
         this.columnSortBindable = _Bindables.forValue(null);
@@ -240,7 +240,7 @@ implements DataTableInteractive {
 
     @Override
     public String getSearchPromptPlaceholderText() {
-        return filterHandler.map(handler->handler.searchPromptPlaceholderText)
+        return filterHandler.map(FilterHandler::searchPromptPlaceholderText)
                 .orElse("");
     }
 
@@ -254,7 +254,7 @@ implements DataTableInteractive {
     private CollectionFilterService.@Nullable Tokens tokens(final ManagedObject element){
         return filterHandler.isEmpty()
                 ? null
-                : filterHandler.get().tokenizer.apply(element.getPojo());
+                : filterHandler.get().tokenizer().apply(element.getPojo());
     }
 
     // -- SORTING
