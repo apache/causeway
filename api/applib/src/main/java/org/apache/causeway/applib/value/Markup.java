@@ -33,8 +33,6 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.io.TextUtils;
 
-import lombok.EqualsAndHashCode;
-
 /**
  * Intended to be used as a read-only property, to render plain HTML.
  *
@@ -43,12 +41,7 @@ import lombok.EqualsAndHashCode;
 @Named(CausewayModuleApplib.NAMESPACE + ".value.Markup")
 @Value
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
-@EqualsAndHashCode
-public final class Markup implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    private final String html;
+public record Markup(String html) implements Serializable {
 
     public static Markup valueOf(final String html) {
         return new Markup(html);
@@ -62,9 +55,10 @@ public final class Markup implements Serializable {
         this.html = html!=null ? html : "";
     }
 
-    public String asHtml() {
-        return html;
-    }
+    /**
+     * use {@link #html()} instead
+     */
+    @Deprecated public String asHtml() { return html; }
 
     @Override
     public String toString() {
@@ -100,7 +94,7 @@ public final class Markup implements Serializable {
         @Override
         public String marshal(final Markup v) throws Exception {
             return v != null
-                    ? encoder.encodeToString(_Strings.toBytes(v.asHtml(), StandardCharsets.UTF_8))
+                    ? encoder.encodeToString(_Strings.toBytes(v.html(), StandardCharsets.UTF_8))
                     : null;
         }
     }

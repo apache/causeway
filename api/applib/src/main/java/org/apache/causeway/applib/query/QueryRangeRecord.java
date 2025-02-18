@@ -20,35 +20,29 @@ package org.apache.causeway.applib.query;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-
-@EqualsAndHashCode @ToString
-final class _QueryRangeDefault implements QueryRange {
+record QueryRangeRecord(
+    long start,
+    long limit
+    ) implements QueryRange {
     
     private static final long serialVersionUID = 1L;
     
-    // -- FACTORY
-    
-    static _QueryRangeDefault of(long... range) {
-        return new _QueryRangeDefault(range);
-    }
-    
-    @Getter(onMethod_ = {@Override}) private final long start;
-    @Getter(onMethod_ = {@Override}) private final long limit;
-
-    _QueryRangeDefault(
-            final long[] range) {
-        this.start = range.length > 0 ? range[0] : 0L;
-        this.limit = range.length > 1 ? range[1] : 0L;
+    // canonical constructor
+    QueryRangeRecord(
+        long start,
+        long limit) {
         if(start<0L) {
             throw _Exceptions.illegalArgument("start cannot be a negative number, got %d", start);
         }
         if(limit<0L) {
             throw _Exceptions.illegalArgument("limit cannot be a negative number, got %d", limit);
         }
+        this.start = start;
+        this.limit = limit;
     }
+    
+    @Override public long getStart() { return start; }
+    @Override public long getLimit() { return limit; };
 
     @Override
     public long getEnd() {

@@ -51,11 +51,9 @@ import lombok.SneakyThrows;
 
 /**
  * Represents a character large object.
- *
  * <p>
  * Conceptually you can consider it as a set of characters (an RTF or XML
  * document, for example), though in fact it wraps three pieces of information:
- * </p>
  * <ul>
  *     <li>
  *         the set of characters
@@ -75,13 +73,12 @@ import lombok.SneakyThrows;
 @Value
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
 //@Log4j2
-public final class Clob implements NamedWithMimeType {
-
-    private static final long serialVersionUID = SerializationProxy.serialVersionUID;
-
-    private final String name;
-    private final MimeType mimeType;
-    private final CharSequence chars;
+public record Clob(
+    String name,
+    MimeType mimeType,
+    CharSequence chars
+    ) implements NamedWithMimeType {
+    
 
     // -- FACTORIES
 
@@ -163,6 +160,7 @@ public final class Clob implements NamedWithMimeType {
         this(name, CommonMimeType.newMimeType(mimeTypeBase), chars);
     }
 
+    // canonical constructor
     public Clob(final String name, final MimeType mimeType, final CharSequence chars) {
         if(name == null) {
             throw new IllegalArgumentException("Name cannot be null");
@@ -181,19 +179,10 @@ public final class Clob implements NamedWithMimeType {
         this.chars = chars;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public MimeType getMimeType() {
-        return mimeType;
-    }
-
-    public CharSequence getChars() {
-        return chars;
-    }
+    /**
+     * @deprecated use {@link #chars()} instead
+     */
+    public CharSequence getChars() { return chars(); }
 
     // -- UTILITIES
 
@@ -202,7 +191,7 @@ public final class Clob implements NamedWithMimeType {
      * for the underlying String to byte[] conversion.
      */
     public Blob toBlob(final @NonNull Charset charset) {
-        return new Blob(getName(), getMimeType(), _Strings.toBytes(getChars().toString(), charset));
+        return new Blob(name(), mimeType(), _Strings.toBytes(chars().toString(), charset));
     }
 
     /**
@@ -275,7 +264,7 @@ public final class Clob implements NamedWithMimeType {
 
     @Override
     public String toString() {
-        return getName() + " [" + getMimeType().getBaseType() + "]: " + getChars().length() + " chars";
+        return name() + " [" + mimeType().getBaseType() + "]: " + getChars().length() + " chars";
     }
 
     /**
@@ -310,11 +299,11 @@ public final class Clob implements NamedWithMimeType {
                 return null;
             }
             return new StringBuilder()
-            .append(clob.getName())
+            .append(clob.name())
             .append(':')
-            .append(clob.getMimeType().getBaseType())
+            .append(clob.mimeType().getBaseType())
             .append(':')
-            .append(bytesAdapter.marshal(clob.getChars().toString().getBytes(StandardCharsets.UTF_8)))
+            .append(bytesAdapter.marshal(clob.chars().toString().getBytes(StandardCharsets.UTF_8)))
             .toString();
         }
 
@@ -340,9 +329,9 @@ public final class Clob implements NamedWithMimeType {
         private final CharSequence chars;
 
         private SerializationProxy(final Clob clob) {
-            this.name = clob.getName();
-            this.mimeTypeBase = clob.getMimeType().getBaseType();
-            this.chars = clob.getChars();
+            this.name = clob.name();
+            this.mimeTypeBase = clob.mimeType().getBaseType();
+            this.chars = clob.chars();
         }
 
         private Object readResolve() {

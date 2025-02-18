@@ -32,7 +32,7 @@ public class CausewayMarkupConverter implements TypeConverter<Markup, String>{
     @Override
     public String toDatastoreType(final Markup memberValue) {
         return memberValue != null
-                ? memberValue.asHtml()
+                ? memberValue.html()
                 : null;
     }
 

@@ -25,28 +25,22 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.commons.internal.resources._Resources;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-
 /**
  * Represents a local resource path, typically a relative path originating at this web-app's
  * root or context-root.
- *
  * <p>
  * Action results of type {@link LocalResourcePath} are interpreted as
  * browser/client redirects, if applicable.
- * </p>
- *
  * <p>
  * {@link OpenUrlStrategy} gives control on whether the redirect URL should open in the same
  * or a new window/tap.
- * </p>
  *
  * @since 2.0 {@index}
  * @see OpenUrlStrategy
@@ -54,21 +48,20 @@ import org.jspecify.annotations.NonNull;
 @Named(LocalResourcePath.LOGICAL_TYPE_NAME)
 @Value
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
-public final class LocalResourcePath implements Serializable {
+public record LocalResourcePath(
+    @NonNull String path, 
+    @NonNull OpenUrlStrategy openUrlStrategy) implements Serializable {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath";
 
-    private static final long serialVersionUID = 1L;
-    @NonNull private final String path;
-    @Getter @NonNull private final OpenUrlStrategy openUrlStrategy;
-
-    public LocalResourcePath(final @Nullable String path) throws IllegalArgumentException {
+    public LocalResourcePath(final @Nullable String path) {
         this(path, null);
     }
 
+    // canonical constructor
     public LocalResourcePath(
             final @Nullable String path,
-            final @Nullable OpenUrlStrategy openUrlStrategy) throws IllegalArgumentException {
+            final @Nullable OpenUrlStrategy openUrlStrategy) {
 
         validate(path); // may throw IllegalArgumentException
 
@@ -79,13 +72,16 @@ public final class LocalResourcePath implements Serializable {
                 ? openUrlStrategy
                 : OpenUrlStrategy.NEW_WINDOW; // default
     }
+    
+    /**
+     * use {@link #openUrlStrategy()} instead
+     */
+    @Deprecated public OpenUrlStrategy getOpenUrlStrategy() { return openUrlStrategy; }
 
-    @NonNull
     public String getValue() {
         return path;
     }
 
-    @NonNull
     public String getEffectivePath(final @NonNull UnaryOperator<String> contextPathPrepender) {
         return contextPathPrepender.apply(path);
     }

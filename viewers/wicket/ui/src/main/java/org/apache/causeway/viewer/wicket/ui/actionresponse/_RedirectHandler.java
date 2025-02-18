@@ -44,7 +44,7 @@ final class _RedirectHandler {
             var localResourcePath = (LocalResourcePath) value;
             return new RedirectRequestHandlerWithOpenUrlStrategy(
                     localResourcePath.getEffectivePath(webAppContextPath::prependContextPath),
-                    localResourcePath.getOpenUrlStrategy());
+                    localResourcePath.openUrlStrategy());
         }
         return null;
     }

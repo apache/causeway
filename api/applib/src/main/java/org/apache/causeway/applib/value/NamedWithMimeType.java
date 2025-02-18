@@ -35,14 +35,23 @@ import lombok.Getter;
 /**
  * @since 1.x {@index}
  */
-public interface NamedWithMimeType
+public sealed interface NamedWithMimeType
 extends
     Serializable,
-    Comparable<NamedWithMimeType> {
+    Comparable<NamedWithMimeType> 
+permits Blob, Clob {
 
-    String getName();
-
-    MimeType getMimeType();
+    String name();
+    MimeType mimeType();
+    
+    /**
+     * @deprecated use {@link #name()} instead
+     */
+    default String getName() { return name(); }
+    /**
+     * @deprecated use {@link #mimeType()} instead
+     */
+    default MimeType getMimeType() { return mimeType(); }
 
     @Override
     default int compareTo(final NamedWithMimeType o) {

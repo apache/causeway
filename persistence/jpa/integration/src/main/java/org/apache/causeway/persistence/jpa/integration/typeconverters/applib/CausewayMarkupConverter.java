@@ -33,7 +33,7 @@ implements AttributeConverter<Markup, String> {
     @Override
     public String convertToDatabaseColumn(final Markup memberValue) {
         return memberValue != null
-                ? memberValue.asHtml()
+                ? memberValue.html()
                 : null;
     }
 

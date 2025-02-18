@@ -57,7 +57,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Markup value) {
-        return decomposeAsString(value, Markup::asHtml, ()->null);
+        return decomposeAsString(value, Markup::html, ()->null);
     }
 
     @Override
@@ -74,14 +74,14 @@ implements
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Markup adoc) {
-        return renderHtml(adoc, Markup::asHtml);
+        return renderHtml(adoc, Markup::html);
     }
 
     // -- PARSER
 
     @Override
     public String parseableTextRepresentation(final ValueSemanticsProvider.Context context, final Markup value) {
-        return value != null? value.asHtml(): null;
+        return value != null? value.html(): null;
     }
 
     @Override

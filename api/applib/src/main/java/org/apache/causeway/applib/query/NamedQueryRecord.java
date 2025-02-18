@@ -28,14 +28,14 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-record _NamedQueryDefault<T>(
+record NamedQueryRecord<T>(
         @NonNull Class<T> resultType,
         @NonNull String name,
         @NonNull QueryRange range,
         @NonNull Map<String, Object> parametersByName
         ) implements NamedQuery<T>, Serializable {
 
-    protected _NamedQueryDefault(
+    protected NamedQueryRecord(
             final @NonNull Class<T> resultType,
             final @NonNull String name,
             final @NonNull QueryRange range,
@@ -61,8 +61,8 @@ record _NamedQueryDefault<T>(
     // -- WITHERS
 
     @Override
-    public _NamedQueryDefault<T> withRange(final @NonNull QueryRange range) {
-        return new _NamedQueryDefault<>(getResultType(),  getName(), range, getParametersByName());
+    public NamedQueryRecord<T> withRange(final @NonNull QueryRange range) {
+        return new NamedQueryRecord<>(getResultType(),  getName(), range, getParametersByName());
     }
 
     @Override
@@ -76,7 +76,7 @@ record _NamedQueryDefault<T>(
                 ? new HashMap<String, Object>()
                 : new HashMap<String, Object>(getParametersByName());
         params.put(parameterName, parameterValue);
-        return new _NamedQueryDefault<>(getResultType(), getName(), getRange(), params);
+        return new NamedQueryRecord<>(getResultType(), getName(), getRange(), params);
     }
 
 }

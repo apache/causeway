@@ -119,7 +119,11 @@ public interface QueryRange extends Serializable {
     }
 
     static QueryRange of(long... range) {
-        return new _QueryRangeDefault(range);
+        return range==null 
+            ? new QueryRangeRecord(0L, 0L)
+            : new QueryRangeRecord(
+              range.length > 0 ? range[0] : 0L,
+              range.length > 1 ? range[1] : 0L);
     }
 
     // -- WITHERS

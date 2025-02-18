@@ -132,13 +132,13 @@ class _ResponseUtil {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
             var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             return ActionResultResponse
-                    .openUrlInBrowser(ajaxTarget, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.getOpenUrlStrategy());
+                    .openUrlInBrowser(ajaxTarget, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.openUrlStrategy());
         }
         case VALUE_LOCALRESPATH_NOAJAX: {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
             var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
-            IRequestHandler handler = _RedirectHandler.redirectHandler(localResPath, localResPath.getOpenUrlStrategy(), webAppContextPath);
+            IRequestHandler handler = _RedirectHandler.redirectHandler(localResPath, localResPath.openUrlStrategy(), webAppContextPath);
             return ActionResultResponse.withHandler(handler);
         }
         case VALUE_URL_AJAX: {

@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.jspecify.annotations.NonNull;
 
-record _AllInstancesQueryDefault<T>(
+record AllInstancesQueryRecord<T>(
         @NonNull Class<T> resultType,
         @NonNull QueryRange range
         ) implements AllInstancesQuery<T>, Serializable {
@@ -38,8 +38,8 @@ record _AllInstancesQueryDefault<T>(
     // -- WITHERS
 
     @Override
-    public _AllInstancesQueryDefault<T> withRange(final @NonNull QueryRange range) {
-        return new _AllInstancesQueryDefault<>(getResultType(), range);
+    public AllInstancesQueryRecord<T> withRange(final @NonNull QueryRange range) {
+        return new AllInstancesQueryRecord<>(getResultType(), range);
     }
 
 }
