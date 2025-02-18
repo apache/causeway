@@ -31,12 +31,22 @@ public interface Oid extends Serializable {
      * Logical-type-name of the domain object this Oid is representing.
      * (aka. object-type)
      */
-    String getLogicalTypeName();
+    String logicalTypeName();
+    
+    /**
+     * use {@link #logicalTypeName()} instead
+     */
+    @Deprecated default String getLogicalTypeName() { return logicalTypeName(); }
 
     /**
      * Stringified version of the ID of the domain object instance this Oid is representing.
      */
-    String getIdentifier();
+    String identifier();
+    
+    /**
+     * use {@link #identifier()} instead
+     */
+    @Deprecated default String getIdentifier() { return identifier(); }
 
     /**
      * The canonical form of the {@link Bookmark}, that is

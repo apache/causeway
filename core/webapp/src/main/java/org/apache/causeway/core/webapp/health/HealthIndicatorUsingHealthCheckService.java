@@ -54,9 +54,8 @@ public class HealthIndicatorUsingHealthCheckService extends AbstractHealthIndica
         for (HealthCheckService healthCheckService : healthCheckServices) {
             org.apache.causeway.applib.services.health.Health health = interactionService.call(InteractionContextFactory.health(), healthCheckService::check);
             if (health != null) {
-                var success = health.getResult();
-                if(! success) {
-                    Optional.ofNullable(health.getCause())
+                if(!health.isOk()) {
+                    Optional.ofNullable(health.cause())
                             .ifPresentOrElse(ex -> builder.down(ex), () -> builder.down());
                     return;
                 }
