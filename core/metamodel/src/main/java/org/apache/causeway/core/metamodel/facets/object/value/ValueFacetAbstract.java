@@ -81,8 +81,8 @@ implements ValueFacet<T> {
         this.valueClass = valueClass;
         this.allValueSemantics = allValueSemantics;
         this.valueSerializer = selectDefaultSemantics()
-                .<ValueSerializer<T>>map(ValueSerializerDefault::forSemantics)
-                .orElseGet(()->ValueSerializerFallback.forValueType(valueClass));
+                .<ValueSerializer<T>>map(ValueSerializerDefault::new)
+                .orElseGet(()->new ValueSerializerFallback<>(valueClass));
     }
 
     protected boolean hasSemanticsProvider() {
@@ -257,8 +257,8 @@ implements ValueFacet<T> {
 
         //feed the action's invocation result back into the parameter negotiation model of the parent edit dialog
         return resolveCompositeValueMixinForFeature(parameterNegotiationModel.getParamMetamodel(paramIndex))
-                .map(m->CompositeValueUpdaterForParameter
-                        .createProxy(parameterNegotiationModel, paramIndex, (MixedInAction)m));
+                .map(m->CompositeValueUpdater
+                        .createProxyForParameter(parameterNegotiationModel, paramIndex, (MixedInAction)m));
     }
 
     @Override
@@ -267,7 +267,7 @@ implements ValueFacet<T> {
 
         //feed the action's invocation result back into the attributeModel's proposed value, then submit
         return resolveCompositeValueMixinForFeature(managedProperty.getProperty())
-                .map(m->CompositeValueUpdaterForProperty.createProxy(managedProperty, (MixedInAction)m));
+                .map(m->CompositeValueUpdater.createProxyForProperty(managedProperty, (MixedInAction)m));
     }
 
     // -- UTILITY

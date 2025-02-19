@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.value;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +41,7 @@ import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
@@ -86,8 +85,7 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
     protected void setSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
         this.semantics = valueSemantics;
 
-        this.valueSerializer = ValueSerializerDefault
-                .forSemantics(valueSemantics);
+        this.valueSerializer = new ValueSerializerDefault<>(valueSemantics);
     }
 
     protected ManagedObject createAdapter(final Object object) {

@@ -18,48 +18,34 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JsonUtils;
 
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor(staticName = "forValueType")
-public class ValueSerializerFallback<T>
-implements ValueSerializer<T> {
-
-    private final @NonNull Class<T> type;
+record ValueSerializerFallback<T>(
+    @NonNull Class<T> valueType
+    ) implements ValueSerializer<T> {
 
     @Override
     public T destring(final @NonNull Format format, final @NonNull String encodedData) {
-        if (ValueSerializerDefault.ENCODED_NULL.equals(encodedData)) {
-            return null;
-        }
-        switch(format) {
-        case JSON:
-            return JsonUtils.tryRead(type, encodedData)
-                    .valueAsNonNullElseFail();
-        case URL_SAFE:
-            return destring(Format.JSON, _Strings.base64UrlDecode(encodedData));
-        }
-        throw _Exceptions.unmatchedCase(format);
+        return ValueSerializerDefault.ENCODED_NULL.equals(encodedData)
+            ? null
+            : switch(format) {
+                case JSON-> JsonUtils.tryRead(valueType, encodedData)
+                            .valueAsNonNullElseFail();
+                case URL_SAFE -> destring(Format.JSON, _Strings.base64UrlDecode(encodedData));
+            };
     }
 
     @Override
     public String enstring(final @NonNull Format format, final @Nullable T value) {
-        if(value == null) {
-            return ValueSerializerDefault.ENCODED_NULL;
-        }
-        switch(format) {
-        case JSON:
-            return JsonUtils.toStringUtf8(value);
-        case URL_SAFE:
-            return _Strings.base64UrlEncode(enstring(Format.JSON, value));
-        }
-        throw _Exceptions.unmatchedCase(format);
+        return value == null
+            ? ValueSerializerDefault.ENCODED_NULL
+            : switch(format) {
+                case JSON -> JsonUtils.toStringUtf8(value);
+                case URL_SAFE -> _Strings.base64UrlEncode(enstring(Format.JSON, value));
+            };
     }
-
 }

@@ -17,43 +17,91 @@
  *  under the License.
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
-
-import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.delegate._Delegate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
+import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+sealed interface CompositeValueUpdater
+permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract class CompositeValueUpdater {
+    MixedInAction mixedInAction();
+    ObjectSpecification returnType();
+    ManagedObject map(final ManagedObject valueType);
 
-    private final MixedInAction mixedInAction;
-
-    public abstract ObjectSpecification getReturnType();
-    protected abstract ManagedObject map(final ManagedObject valueType);
-
-    public Identifier getFeatureIdentifier() {
-        var id = mixedInAction.getFeatureIdentifier();
-        return Identifier
-                .actionIdentifier(
-                        id.logicalType(),
-                        id.memberLogicalName(),
-                        id.memberParameterClassNames());
-    }
-
-    public ManagedObject execute(
+    default ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return map(simpleExecute(head, parameters));
+    }
+
+    // -- IMPLEMENTATIONS
+
+    record CompositeValueUpdaterForParameter(
+        ParameterNegotiationModel parameterNegotiationModel,
+        int paramIndex,
+        MixedInAction mixedInAction) implements CompositeValueUpdater {
+
+        @Override
+        public ObjectSpecification returnType() {
+            return parameterNegotiationModel.getParamMetamodel(paramIndex).getElementType();
+        }
+
+        @Override
+        public ManagedObject map(final ManagedObject newParamValue) {
+            parameterNegotiationModel.setParamValue(paramIndex, newParamValue);
+            return newParamValue;
+        }
+
+    }
+
+    record CompositeValueUpdaterForProperty(
+        ManagedProperty managedProperty,
+        MixedInAction mixedInAction
+        ) implements CompositeValueUpdater {
+
+        @Override
+        public ObjectSpecification returnType() {
+            return managedProperty.getElementType();
+        }
+
+        @Override
+        public ManagedObject map(final ManagedObject valueType) {
+            var propNeg = managedProperty.startNegotiation();
+            propNeg.getValue().setValue(valueType);
+            propNeg.submit();
+            return managedProperty.getOwner();
+        }
+
+    }
+
+    // -- FACTORIES
+
+    static ObjectAction createProxyForParameter(
+        final ParameterNegotiationModel parameterNegotiationModel,
+        final int paramIndex,
+        final MixedInAction mixedInAction) {
+        return _Delegate.createProxy(ObjectAction.class,
+                new CompositeValueUpdaterForParameter(parameterNegotiationModel, paramIndex, mixedInAction));
+    }
+
+    static ObjectAction createProxyForProperty(
+        final ManagedProperty managedProperty,
+        final MixedInAction mixedInAction) {
+        return _Delegate.createProxy(ObjectAction.class,
+                new CompositeValueUpdaterForProperty(managedProperty, mixedInAction));
     }
 
     // -- HELPER
@@ -61,10 +109,10 @@ abstract class CompositeValueUpdater {
     private ManagedObject simpleExecute(
             final InteractionHead head, final Can<ManagedObject> parameters) {
 
-        var methodFacade = mixedInAction instanceof HasFacetedMethod facetedMethodHolder
+        var methodFacade = mixedInAction() instanceof HasFacetedMethod facetedMethodHolder
             ? facetedMethodHolder.getFacetedMethod().methodFacade()
             : null;
-        if(methodFacade==null) return ManagedObject.empty(mixedInAction.getReturnType()); // unsupported MixedInAction
+        if(methodFacade==null) return ManagedObject.empty(mixedInAction().getReturnType()); // unsupported MixedInAction
 
         var method = methodFacade.asMethodForIntrospection();
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
@@ -73,7 +121,7 @@ abstract class CompositeValueUpdater {
                 .invokeWithConvertedArgs(method.method(), targetPojo,
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));
 
-        return ManagedObject.value(mixedInAction.getReturnType(), resultPojo);
+        return ManagedObject.value(mixedInAction().getReturnType(), resultPojo);
     }
 
 }
