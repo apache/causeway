@@ -81,7 +81,7 @@ implements IConverter<T> {
                 .createValueSemanticsContext(feature);
 
         try {
-            return valueFacet.selectParserForFeatureElseFallback(feature)
+            return valueFacet.selectParserForAttributeOrElseFallback(feature)
                     .parseTextRepresentation(context, text);
         } catch (Exception e) {
             if(e instanceof ConversionException) {
@@ -107,13 +107,13 @@ implements IConverter<T> {
 
         switch(scalarRepresentation) {
         case EDITING:
-            return valueFacet.selectParserForFeatureElseFallback(feature)
+            return valueFacet.selectParserForAttributeOrElseFallback(feature)
                     .parseableTextRepresentation(context, value);
         case VIEWING:
             return propOrParam.fold(
-                    prop->valueFacet.selectRendererForPropertyElseFallback(prop)
+                    prop->valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(prop)
                             .titlePresentation(context, value),
-                    param->valueFacet.selectRendererForParameterElseFallback(param)
+                    param->valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(param)
                             .titlePresentation(context, value));
         }
 
@@ -125,7 +125,7 @@ implements IConverter<T> {
         var valueFacet = valueFacet();
         var context = valueFacet
                 .createValueSemanticsContext(feature);
-        return valueFacet.selectParserForFeatureElseFallback(feature)
+        return valueFacet.selectParserForAttributeOrElseFallback(feature)
                 .getPattern(context);
     }
 

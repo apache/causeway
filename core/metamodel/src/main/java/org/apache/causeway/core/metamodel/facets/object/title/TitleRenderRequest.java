@@ -21,15 +21,12 @@ package org.apache.causeway.core.metamodel.facets.object.title;
 import java.util.function.Predicate;
 
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
 public record TitleRenderRequest(
     @NonNull ManagedObject object,
-    @Nullable ObjectFeature feature,
     /**
      * Provide a title for the target object, possibly abbreviated (according to supplied predicate)
      * <p>
@@ -42,13 +39,7 @@ public record TitleRenderRequest(
     @NonNull Predicate<ManagedObject> skipTitlePartEvaluator) {
 
     public static TitleRenderRequest forObject(final ManagedObject object) {
-        return new TitleRenderRequest(object, null);
-    }
-
-    public TitleRenderRequest(
-        @NonNull final ManagedObject object,
-        @Nullable final ObjectFeature feature) {
-        this(object, feature, _Predicates.alwaysFalse());
+        return new TitleRenderRequest(object,  _Predicates.alwaysFalse());
     }
 
 }

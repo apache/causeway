@@ -54,38 +54,31 @@ public class TitleServiceDefault implements TitleService {
     @Override
     public String titleOf(final Object domainObject) {
 
-        if(objectManager == null) { // simplified JUnit test support
-            return "" + domainObject;
-        }
+        if(objectManager == null) return "" + domainObject; // simplified JUnit test support
 
         var pojo = unwrapped(domainObject);
         var objectAdapter = objectManager.adapt(pojo);
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "[UNSPECIFIED]";
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return "[UNSPECIFIED]";
 
-        if(MmEntityUtils.getEntityState(objectAdapter).isTransientOrRemoved()) {
+        return MmEntityUtils.getEntityState(objectAdapter).isTransientOrRemoved()
             // here we just mean NOT-ATTACHED (and not the concrete DETACHED entity state)
-            return "[DETACHED]";
-        } else {
-            return objectAdapter.getSpecification().getTitle(TitleRenderRequest.forObject(objectAdapter));
-        }
+            ? "[DETACHED]"
+            : objectAdapter.getSpecification().getTitle(TitleRenderRequest.forObject(objectAdapter));
     }
 
     @Override
     public String iconNameOf(final Object domainObject) {
 
-        if(objectManager == null) { // simplified JUnit test support
+        if(objectManager == null)  // simplified JUnit test support
             return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
-        }
 
         var pojo = unwrapped(domainObject);
         var objectAdapter = objectManager.adapt(pojo);
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return "unspecified";
-
-        return objectAdapter.getSpecification().getIconName(objectAdapter);
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
+            ? "unspecified"
+            : objectAdapter.getSpecification().getIconName(objectAdapter);
     }
 
     //-- HELPER

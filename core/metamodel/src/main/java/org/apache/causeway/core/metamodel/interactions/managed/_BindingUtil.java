@@ -64,8 +64,8 @@ class _BindingUtil {
         return spec.valueFacet()
         .map(valueFacet->{
             var eitherRendererOrParser = format.requiresRenderer()
-                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForPropertyElseFallback(prop))
-                : Either.<Renderer, Parser>right(valueFacet.selectParserForPropertyElseFallback(prop));
+                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(prop))
+                : Either.<Renderer, Parser>right(valueFacet.selectParserForAttributeOrElseFallback(prop));
             var ctx = valueFacet.createValueSemanticsContext(prop);
 
             return bindAsFormated(format, spec, bindablePropertyValue, eitherRendererOrParser, ctx);
@@ -93,8 +93,8 @@ class _BindingUtil {
         return spec.valueFacet()
         .map(valueFacet->{
             var eitherRendererOrParser = format.requiresRenderer()
-                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParameterElseFallback(param))
-                : Either.<Renderer, Parser>right(valueFacet.selectParserForParameterElseFallback(param));
+                ? Either.<Renderer, Parser>left(valueFacet.selectRendererForParamOrPropOrCollOrElseFallback(param))
+                : Either.<Renderer, Parser>right(valueFacet.selectParserForAttributeOrElseFallback(param));
             var ctx = valueFacet.createValueSemanticsContext(param);
 
             return bindAsFormated(format, spec, bindableParamValue, eitherRendererOrParser, ctx);
@@ -113,7 +113,7 @@ class _BindingUtil {
     boolean hasParser(final @NonNull OneToOneAssociation prop) {
         return prop.getElementType()
                 .valueFacet()
-                .map(valueFacet->valueFacet.selectRendererForProperty(prop).isPresent())
+                .map(valueFacet->valueFacet.selectRendererForParamOrPropOrColl(prop).isPresent())
                 .orElse(false);
     }
 
@@ -122,7 +122,7 @@ class _BindingUtil {
                 ? false
                 : param.getElementType()
                     .valueFacet()
-                    .map(valueFacet->valueFacet.selectRendererForParameter(param).isPresent())
+                    .map(valueFacet->valueFacet.selectRendererForParamOrPropOrColl(param).isPresent())
                     .orElse(false);
     }
 

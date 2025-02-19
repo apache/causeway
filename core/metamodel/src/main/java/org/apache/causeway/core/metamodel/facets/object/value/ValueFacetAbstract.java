@@ -51,11 +51,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -182,16 +178,8 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public Optional<DefaultsProvider<T>> selectDefaultsProviderForParameter(final ObjectActionParameter param) {
-        return streamValueSemanticsHonoringQualifiers(param)
-                .map(ValueSemanticsProvider::getDefaultsProvider)
-                .filter(_NullSafe::isPresent)
-                .findFirst();
-    }
-
-    @Override
-    public Optional<DefaultsProvider<T>> selectDefaultsProviderForProperty(final OneToOneAssociation prop) {
-        return streamValueSemanticsHonoringQualifiers(prop)
+    public Optional<DefaultsProvider<T>> selectDefaultsProviderForAttribute(@Nullable final ObjectFeature feature) {
+        return streamValueSemanticsHonoringQualifiers(feature)
                 .map(ValueSemanticsProvider::getDefaultsProvider)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -210,16 +198,8 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public Optional<Parser<T>> selectParserForParameter(final ObjectActionParameter param) {
-        return streamValueSemanticsHonoringQualifiers(param)
-                .map(ValueSemanticsProvider::getParser)
-                .filter(_NullSafe::isPresent)
-                .findFirst();
-    }
-
-    @Override
-    public Optional<Parser<T>> selectParserForProperty(final OneToOneAssociation prop) {
-        return streamValueSemanticsHonoringQualifiers(prop)
+    public Optional<Parser<T>> selectParserForAttribute(@NonNull final ObjectFeature feature) {
+        return streamValueSemanticsHonoringQualifiers(feature)
                 .map(ValueSemanticsProvider::getParser)
                 .filter(_NullSafe::isPresent)
                 .findFirst();
@@ -243,24 +223,8 @@ implements ValueFacet<T> {
     }
 
     @Override
-    public Optional<Renderer<T>> selectRendererForParameter(final ObjectActionParameter param) {
+    public Optional<Renderer<T>> selectRendererForParamOrPropOrColl(final @NonNull ObjectFeature param) {
         return streamValueSemanticsHonoringQualifiers(param)
-                .map(ValueSemanticsProvider::getRenderer)
-                .filter(_NullSafe::isPresent)
-                .findFirst();
-    }
-
-    @Override
-    public Optional<Renderer<T>> selectRendererForProperty(final OneToOneAssociation prop) {
-        return streamValueSemanticsHonoringQualifiers(prop)
-                .map(ValueSemanticsProvider::getRenderer)
-                .filter(_NullSafe::isPresent)
-                .findFirst();
-    }
-
-    @Override
-    public Optional<Renderer<T>> selectRendererForCollection(final OneToManyAssociation coll) {
-        return streamValueSemanticsHonoringQualifiers(coll)
                 .map(ValueSemanticsProvider::getRenderer)
                 .filter(_NullSafe::isPresent)
                 .findFirst();

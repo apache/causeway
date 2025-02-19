@@ -28,10 +28,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
 import org.jspecify.annotations.NonNull;
 
 public final class TitleFacetFromValueFacet
@@ -52,13 +48,10 @@ implements TitleFacet {
 
     @Override
     public String title(final TitleRenderRequest renderRequest) {
-        if (renderRequest == null) {
-            return null;
-        }
+        if (renderRequest == null) return null;
+
         final Object pojo = renderRequest.object().getPojo();
-        if (pojo == null) {
-            return null;
-        }
+        if (pojo == null) return null;
 
         /* Enum values are treated special, that is, we honor @Title annotations
          * and alternatively object-support method 'title()',
@@ -68,32 +61,22 @@ implements TitleFacet {
             return Enums.getFriendlyNameOf((Enum<?>)pojo);
         }
 
+        var featureId = getFacetHolder().getFeatureIdentifier();
+        var feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
+
         // support for qualified value semantics, requires a 'where' context, that is,
         // what property, collection, action return or action param this is to be rendered for ...
-        if(renderRequest.feature()!=null) {
-            switch(renderRequest.feature().getFeatureType()) {
-            case PROPERTY: {
-                var prop = (OneToOneAssociation)renderRequest.feature();
-                final Renderer renderer = valueFacet
-                        .selectRendererForPropertyElseFallback(prop);
-                return renderer
-                        .titlePresentation(valueFacet
-                                .createValueSemanticsContext(prop), pojo);
-            }
-            case COLLECTION: {
-                var coll = (OneToManyAssociation)renderRequest.feature();
-                final Renderer renderer = valueFacet
-                        .selectRendererForCollectionElseFallback(coll);
-                return renderer
-                        .titlePresentation(valueFacet
-                                .createValueSemanticsContext(coll), pojo);
-            }
+        if(feature!=null) {
+            switch(feature.getFeatureType()) {
+            case PROPERTY:
+            case COLLECTION:
             case ACTION_PARAMETER_SINGULAR:
-            case ACTION_PARAMETER_PLURAL:{
-                var param = (ObjectActionParameter)renderRequest.feature();
+            case ACTION_PARAMETER_PLURAL: {
                 final Renderer renderer = valueFacet
-                        .selectRendererForParameterElseFallback(param);
-                return renderer.titlePresentation(valueFacet.createValueSemanticsContext(param), pojo);
+                        .selectRendererForParamOrPropOrCollOrElseFallback(feature);
+                return renderer
+                        .titlePresentation(valueFacet
+                                .createValueSemanticsContext(feature), pojo);
             }
             default:
                 // fall through
@@ -102,14 +85,11 @@ implements TitleFacet {
 
         // fall back to default value semantics ...
 
-        var featureId = getFacetHolder().getFeatureIdentifier();
-        var feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
-
         return valueFacet.selectDefaultRenderer()
-        .map(renderer->(Renderer) renderer)
-        .map(renderer->renderer.titlePresentation(valueFacet.createValueSemanticsContext(feature), pojo))
-        .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
-                renderRequest.object().getSpecification().getCorrespondingClass()));
+            .map(renderer->(Renderer) renderer)
+            .map(renderer->renderer.titlePresentation(valueFacet.createValueSemanticsContext(feature), pojo))
+            .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
+                    renderRequest.object().getSpecification().getCorrespondingClass()));
 
     }
 

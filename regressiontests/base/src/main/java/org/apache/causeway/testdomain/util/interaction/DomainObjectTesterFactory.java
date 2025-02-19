@@ -27,6 +27,8 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
@@ -82,7 +83,6 @@ import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testing.integtestsupport.applib.validate.DomainModelValidator;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 @Service
@@ -663,7 +663,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         // -- HELPER
 
         @SuppressWarnings("unchecked")
-        static void updatePojo(final ManagedValue managedValue, final UnaryOperator replacer) {
+        static void updatePojo(final ManagedValue managedValue, @SuppressWarnings("rawtypes") final UnaryOperator replacer) {
             managedValue.update(v->ManagedObject.adaptSingular(
                     v.getSpecification(),
                     replacer.apply(v.getPojo())));
@@ -902,7 +902,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             var context = valueFacet
                     .createValueSemanticsContext(prop);
 
-            return valueFacet.selectParserForPropertyElseFallback(prop)
+            return valueFacet.selectParserForAttributeOrElseFallback(prop)
                     .parseableTextRepresentation(context,
                             MmUnwrapUtils.single(managedPropertyIfAny.get().getPropertyValue()));
         }

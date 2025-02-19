@@ -102,7 +102,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
      */
     @Getter
     private final Optional<ObjectAction> metamodel;
-    
+
     public final Optional<Identifier> getFeatureIdentifier() {
         return metamodel.map(ObjectAction::getFeatureIdentifier);
     }
@@ -219,7 +219,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             var compositeValueNullable = prop.get(propertyOwner);
             var compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultsProviderForProperty(prop)
+                        valueFacet.selectDefaultsProviderForAttribute(prop)
                             .orElseThrow(()->onMissingDefaultsProvider(prop))
                             .getDefaultValue());
 
@@ -257,7 +257,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             var compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
             var compositeValue =
                     ManagedObjects.nullOrEmptyToDefault(elementType, compositeValueNullable, ()->
-                        valueFacet.selectDefaultsProviderForParameter(param.getMetaModel())
+                        valueFacet.selectDefaultsProviderForAttribute(param.getMetaModel())
                             .orElseThrow(()->onMissingDefaultsProvider(param.getMetaModel()))
                             .getDefaultValue());
 

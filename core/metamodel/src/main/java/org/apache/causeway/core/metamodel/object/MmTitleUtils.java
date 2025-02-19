@@ -49,7 +49,7 @@ public class MmTitleUtils {
                 ? "(multiple objects)"
                 : managedObject != null
                     ? _InternalTitleUtil.titleString(
-                            new TitleRenderRequest(managedObject, null, skipTitlePart))
+                            new TitleRenderRequest(managedObject, skipTitlePart))
                     : "(no object)";
     }
 
@@ -65,14 +65,11 @@ public class MmTitleUtils {
                 .map(ts->ts.translate(TranslationContext.empty(), "entries of"))
                 .orElse("entries of");
 
-        switch (cardinality) {
-        case 0:
-            return "No " + nounTranslated;
-        case 1:
-            return "1 " + nounTranslated;
-        default:
-            return "" + cardinality + " " + entriesOfTranslated + " " + nounTranslated;
-        }
+        return switch (cardinality) {
+            case 0 -> "No " + nounTranslated;
+            case 1 -> "1 " + nounTranslated;
+            default -> "" + cardinality + " " + entriesOfTranslated + " " + nounTranslated;
+        };
     }
 
 }
