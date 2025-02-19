@@ -93,7 +93,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
     public void process(final ProcessMethodContext processMethodContext) {
 
         var facetedMethod = processMethodContext.getFacetHolder();
-        var owningType = facetedMethod.getOwningType();
+        var owningType = facetedMethod.owningType();
         var declaringSpec = specForTypeElseFail(owningType);
 
         var propertyIfAny = propertyIfAny(processMethodContext);

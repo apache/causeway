@@ -70,7 +70,7 @@ implements OneToOneAssociation, Serializable {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 ((SpecificationLoaderInternal)facetedMethod.getMetaModelContext().getSpecificationLoader())
-                    .loadSpecification(facetedMethod.getType().elementType()));
+                    .loadSpecification(facetedMethod.resolvedType().elementType()));
     }
 
     // -- CONSTRUCTION
@@ -340,7 +340,7 @@ implements OneToOneAssociation, Serializable {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        var methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().methodFacade();
         return methodFacade.synthesize(Property.class).isPresent()
                 || methodFacade.synthesize(PropertyLayout.class).isPresent();
     }

@@ -50,7 +50,7 @@ extends PromptStyleFacetAbstract {
         // guard against member not being a property
         if(holder instanceof FacetedMethod) {
             final FacetedMethod facetedMethod = (FacetedMethod) holder;
-            if(facetedMethod.getFeatureType() != FeatureType.PROPERTY) {
+            if(facetedMethod.featureType() != FeatureType.PROPERTY) {
                 return Optional.empty();
             }
         }

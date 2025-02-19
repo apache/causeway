@@ -272,9 +272,9 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
-        if (facetMethod.getFeatureType().isCollection()) {
+        if (facetMethod.featureType().isCollection()) {
             return OneToManyAssociationDefault.forMethod(facetMethod);
-        } else if (facetMethod.getFeatureType().isProperty()) {
+        } else if (facetMethod.featureType().isProperty()) {
             return OneToOneAssociationDefault.forMethod(facetMethod);
         } else {
             return null;
@@ -289,7 +289,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
-        if (facetedMethod.getFeatureType().isAction()) {
+        if (facetedMethod.featureType().isAction()) {
             /* Assuming, that facetedMethod was already populated with ContributingFacet,
              * we copy the mixin-sort information from the FacetedMethod to the MixinFacet
              * that is held by the mixin's type spec. */

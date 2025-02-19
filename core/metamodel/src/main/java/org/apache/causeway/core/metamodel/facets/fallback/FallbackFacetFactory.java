@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.TypedHolder;
+import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s
@@ -80,7 +80,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         addFacet(new NamedFacetFallbackFromMemberName(facetedMethod));
 
-        final FeatureType featureType = facetedMethod.getFeatureType();
+        final FeatureType featureType = facetedMethod.featureType();
         if (featureType.isProperty()) {
             addFacet(new MaxLengthFacetUnlimited(facetedMethod));
             addFacet(new MultiLineFacetNone(facetedMethod));
@@ -102,8 +102,8 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void processParams(final ProcessParameterContext processParameterContext) {
-        final TypedHolder typedHolder = processParameterContext.getFacetHolder();
-        if (typedHolder.getFeatureType().isActionParameter()) {
+        final TypedFacetHolder typedHolder = processParameterContext.getFacetHolder();
+        if (typedHolder.featureType().isActionParameter()) {
             addFacet(new MultiLineFacetNone(typedHolder));
             addFacet(new MaxLengthFacetUnlimited(typedHolder));
             addFacet(new LabelAtFacetFromLayoutConfiguration(

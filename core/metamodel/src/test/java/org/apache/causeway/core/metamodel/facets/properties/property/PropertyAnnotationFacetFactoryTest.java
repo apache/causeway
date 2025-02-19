@@ -193,7 +193,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
-            if(facetedMethod.getMethod().getName().equals("prop")) {
+            if(facetedMethod.methodFacade().getName().equals("prop")) {
                 return; // skip further checks, when in a mixed-in scenario
             }
 

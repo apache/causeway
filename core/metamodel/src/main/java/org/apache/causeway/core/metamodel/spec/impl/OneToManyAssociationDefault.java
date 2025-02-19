@@ -53,7 +53,7 @@ implements OneToManyAssociation {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod,
                 ((SpecificationLoaderInternal)facetedMethod.getMetaModelContext().getSpecificationLoader())
-                    .loadSpecification(facetedMethod.getType().elementType()));
+                    .loadSpecification(facetedMethod.resolvedType().elementType()));
     }
 
     protected OneToManyAssociationDefault(
@@ -182,7 +182,7 @@ implements OneToManyAssociation {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        var methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().methodFacade();
         return methodFacade.synthesize(Collection.class).isPresent()
                 || methodFacade.synthesize(CollectionLayout.class).isPresent();
     }

@@ -285,8 +285,8 @@ implements HasMetaModelContext {
                 actionMethod.isNoArg()
                 ? (FacetedMethodParameter)null
                 : new FacetedMethodParameter(getMetaModelContext(),
-                    FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
-                    facetedMethod.getMethod(), 0);
+                    FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.owningType(),
+                    facetedMethod.methodFacade(), 0);
 
         var processParameterContext =
                 FacetFactory.ProcessParameterContext.forTesting(

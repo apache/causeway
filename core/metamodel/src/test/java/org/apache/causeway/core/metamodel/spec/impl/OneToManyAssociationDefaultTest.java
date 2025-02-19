@@ -64,7 +64,7 @@ extends MetaModelTestAbstract {
         when(mockNamedFacet.getSpecialization()).thenReturn(Either.left(mockHasStaticText));
 
         var mockPeer = mock(FacetedMethod.class);
-        doReturn(TOAC).when(mockPeer).getType();
+        doReturn(TOAC).when(mockPeer).resolvedType();
         when(mockPeer.getMetaModelContext()).thenReturn(getMetaModelContext());
         when(mockPeer.getFeatureIdentifier()).thenReturn(
                 Identifier

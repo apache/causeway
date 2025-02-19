@@ -56,13 +56,10 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
 
     @Override
     public final void process(final ProcessMethodContext processMethodContext) {
-
         var facetedMethod = processMethodContext.getFacetHolder();
-        var parameters = facetedMethod.getParameters();
+        var parameters = facetedMethod.parameters();
 
-        if (parameters.isEmpty()) {
-            return;
-        }
+        if (parameters.isEmpty()) return;
 
         var methodNameCandidates = memberSupportPrefix.getMethodNamePrefixes()
                 .flatMap(processMethodContext::parameterSupportCandidates);
@@ -84,7 +81,6 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
             var paramAsHolder = parameters.getElseFail(paramIndex);
             onSearchResult(paramAsHolder, searchResult);
         });
-
     }
 
     protected abstract void onSearchResult(

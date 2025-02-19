@@ -27,7 +27,7 @@ import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.TypedHolder;
+import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
@@ -35,7 +35,7 @@ public abstract class ExecutionPublishingFacetForPropertyAnnotation
 extends ExecutionPublishingFacetAbstract {
 
     static class Enabled extends ExecutionPublishingFacetForPropertyAnnotation {
-        Enabled(FacetHolder holder) {
+        Enabled(final FacetHolder holder) {
             super(holder);
         }
 
@@ -46,7 +46,7 @@ extends ExecutionPublishingFacetAbstract {
     }
 
     static class Disabled extends ExecutionPublishingFacetForPropertyAnnotation {
-        Disabled(FacetHolder holder) {
+        Disabled(final FacetHolder holder) {
             super(holder);
         }
 
@@ -118,9 +118,9 @@ extends ExecutionPublishingFacetAbstract {
             });
     }
 
-    private static boolean representsProperty(FacetHolder holder) {
+    private static boolean representsProperty(final FacetHolder holder) {
         // a property
-        if (holder instanceof TypedHolder && ((TypedHolder)holder).getFeatureType() == FeatureType.PROPERTY) {
+        if (holder instanceof TypedFacetHolder && ((TypedFacetHolder)holder).featureType() == FeatureType.PROPERTY) {
             return true;
         }
         // or a mixin

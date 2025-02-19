@@ -76,7 +76,7 @@ implements
         this.paramElementType = paramElementType;
 
         this.javaSourceParamName =
-                objectAction.getFacetedMethod().getMethod().getParameterName(parameterIndex);
+                objectAction.getFacetedMethod().methodFacade().getParameterName(parameterIndex);
     }
 
     @Override
@@ -163,7 +163,7 @@ implements
     @Override
     public FacetHolder getFacetHolder() {
         // that is the faceted method parameter
-        return parentAction.getFacetedMethod().getParameters().getElseFail(parameterIndex);
+        return parentAction.getFacetedMethod().parameter(parameterIndex);
     }
 
     // -- Defaults

@@ -135,7 +135,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
         // JUnit support
         if(testing
                 && declaringType.isEmpty()) {
-            return specLoaderInternal().loadSpecification(getFacetedMethod().getMethod().getDeclaringClass());
+            return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getDeclaringClass());
         }
         return declaringType.orElseThrow(()->_Exceptions
                 .illegalState("missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
@@ -175,7 +175,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
         // JUnit support
         if(testing
                 && returType.isEmpty()) {
-            return specLoaderInternal().loadSpecification(getFacetedMethod().getMethod().getReturnType());
+            return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getReturnType());
         }
         return returType.orElseThrow(()->_Exceptions
                 .illegalState("framework bug: missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
@@ -219,7 +219,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
 
     @Override
     public int getParameterCount() {
-        return getFacetedMethod().getParameters().size();
+        return getFacetedMethod().parameters().size();
     }
 
     @Override
@@ -228,21 +228,17 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     }
 
     protected Can<ObjectActionParameter> determineParameters() {
-
         var specLoaderInternal = specLoaderInternal();
 
-        return getFacetedMethod().getParameters()
-        .map(facetedParam->{
+        return getFacetedMethod().parameters()
+            .map(facetedParam->{
+                final int paramIndex = facetedParam.paramIndex();
+                var paramElementType = specLoaderInternal.loadSpecification(facetedParam.resolvedType().elementType()); // preload
 
-            final int paramIndex = facetedParam.getParamIndex();
-            var paramElementType = specLoaderInternal.loadSpecification(facetedParam.getType().elementType()); // preload
-
-            return
-                    facetedParam.getFeatureType() == FeatureType.ACTION_PARAMETER_SINGULAR
-                        ? new OneToOneActionParameterDefault(paramElementType, paramIndex, this)
-                        : new OneToManyActionParameterDefault(paramElementType, paramIndex, this);
-
-        });
+                return facetedParam.featureType() == FeatureType.ACTION_PARAMETER_SINGULAR
+                            ? new OneToOneActionParameterDefault(paramElementType, paramIndex, this)
+                            : new OneToManyActionParameterDefault(paramElementType, paramIndex, this);
+            });
     }
 
     @Override
@@ -603,7 +599,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     }
 
     private boolean calculateIsExplicitlyAnnotated() {
-        var methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().methodFacade();
         return methodFacade.synthesize(Action.class).isPresent()
                 || methodFacade.synthesize(ActionLayout.class).isPresent();
     }

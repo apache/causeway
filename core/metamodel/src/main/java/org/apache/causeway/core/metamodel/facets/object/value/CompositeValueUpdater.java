@@ -62,7 +62,7 @@ abstract class CompositeValueUpdater {
             final InteractionHead head, final Can<ManagedObject> parameters) {
 
         var methodFacade = mixedInAction instanceof HasFacetedMethod facetedMethodHolder
-            ? facetedMethodHolder.getFacetedMethod().getMethod()
+            ? facetedMethodHolder.getFacetedMethod().methodFacade()
             : null;
         if(methodFacade==null) return ManagedObject.empty(mixedInAction.getReturnType()); // unsupported MixedInAction
 

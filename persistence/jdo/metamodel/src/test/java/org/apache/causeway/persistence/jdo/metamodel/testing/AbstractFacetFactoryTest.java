@@ -97,8 +97,8 @@ public abstract class AbstractFacetFactoryTest {
         facetedMethod = FacetedMethod.testing.createSetterForProperty(metaModelContext, Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(
                 metaModelContext,
-                FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.getOwningType(),
-                facetedMethod.getMethod(), 0);
+                FeatureType.ACTION_PARAMETER_SINGULAR, facetedMethod.owningType(),
+                facetedMethod.methodFacade(), 0);
 
         jdoFacetContext = jdoFacetContextForTesting();
     }

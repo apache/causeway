@@ -27,7 +27,7 @@ import org.apache.causeway.applib.annotation.ValueSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.facets.TypedHolderAbstract;
+import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxFractionalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MaxTotalDigitsFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractionalDigitsFacetAbstract;
@@ -72,7 +72,7 @@ extends FacetFactoryAbstract {
     // -- HELPER
 
     private void processAll(
-            final TypedHolderAbstract facetHolder,
+            final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny,
             final Optional<Digits> digitsIfAny) {
         processProvider(facetHolder, valueSemanticsIfAny);
@@ -81,7 +81,7 @@ extends FacetFactoryAbstract {
     }
 
     private void processProvider(
-            final TypedHolderAbstract facetHolder,
+            final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny) {
 
         // check for @ValueSemantics(provider=...)
@@ -91,7 +91,7 @@ extends FacetFactoryAbstract {
     }
 
     private void processDigits(
-            final TypedHolderAbstract facetHolder,
+            final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny,
             final Optional<Digits> digitsIfAny){
 
@@ -130,7 +130,7 @@ extends FacetFactoryAbstract {
     }
 
     private void processTemporalFormat(
-            final TypedHolderAbstract facetHolder,
+            final TypedFacetHolder facetHolder,
             final Optional<ValueSemantics> valueSemanticsIfAny){
 
         addFacetIfPresent(

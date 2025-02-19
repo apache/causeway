@@ -69,7 +69,7 @@ public class MetaModelServiceDefaultTest {
         Mockito.when(mockFacetedMethod.getFeatureIdentifier()).thenReturn(Identifier.actionIdentifier(
               TypeIdentifierTestFactory.newCustomer(), "reduceheadcount"));
         Mockito.when(mockFacetedMethod.getFacet(Mockito.any(Class.class))).thenReturn(null);
-        Mockito.when(mockFacetedMethod.getParameters()).thenReturn(Can.empty());
+        Mockito.when(mockFacetedMethod.parameters()).thenReturn(Can.empty());
 
         mockSpec = Mockito.mock(ObjectSpecification.class);
         Mockito.when(mockSpec.getFullIdentifier()).thenReturn("mocked");

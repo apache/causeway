@@ -22,14 +22,15 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 
-import lombok.Getter;
-
-public class FacetedMethodParameter
-extends TypedHolderAbstract {
-
-    @Getter private final int paramIndex;
+public record FacetedMethodParameter(
+    int paramIndex,
+    FacetHolder facetHolder,
+    FeatureType featureType,
+    ResolvedType resolvedType
+    ) implements TypedFacetHolder {
 
     public FacetedMethodParameter(
             final MetaModelContext mmc,
@@ -37,24 +38,25 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final MethodFacade methodFacade,
             final int paramIndex) {
-
-        super(mmc,
-                featureType,
-                methodFacade.resolveParameter(paramIndex),
-                FeatureType.ACTION.identifierFor(
-                        LogicalType.infer(declaringType),
-                        methodFacade));
-
-        this.paramIndex = paramIndex;
+        this(
+            paramIndex,
+            FacetHolder.simple(mmc, FeatureType.ACTION.identifierFor(
+                LogicalType.infer(declaringType),
+                methodFacade)),
+            featureType,
+            methodFacade.resolveParameter(paramIndex));
     }
 
     /**
-     * Returns an instance with {@code type} replaced by given {@code newType}.
+     * Returns an instance with {@code resolvedType} replaced by given {@code newType}.
      */
-    public FacetedMethodParameter withType(final ResolvedType newType) {
-        //XXX maybe future refactoring can make the type immutable, so we can remove this method
-        this.type = newType;
-        return this;
+    public FacetedMethodParameter withResolvedType(final ResolvedType newType) {
+        return new FacetedMethodParameter(paramIndex, facetHolder, featureType, newType);
+    }
+
+    @Override // as used for logging, not strictly required
+    public String toString() {
+        return resolvedType.toString();
     }
 
 }

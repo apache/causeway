@@ -86,7 +86,7 @@ extends MetaModelValidatorAbstract {
             .streamAnyActions(MixedIn.EXCLUDED)
             .map(HasFacetedMethod.class::cast)
             .map(HasFacetedMethod::getFacetedMethod)
-            .map(FacetedMethod::getMethod)
+            .map(FacetedMethod::methodFacade)
             .map(MethodFacade::asMethodForIntrospection)
             .forEach(memberMethods::add);
 
@@ -94,7 +94,7 @@ extends MetaModelValidatorAbstract {
             .streamAssociations(MixedIn.EXCLUDED)
             .map(HasFacetedMethod.class::cast)
             .map(HasFacetedMethod::getFacetedMethod)
-            .map(FacetedMethod::getMethod)
+            .map(FacetedMethod::methodFacade)
             .map(MethodFacade::asMethodForIntrospection)
             .forEach(memberMethods::add);
 
@@ -195,7 +195,7 @@ extends MetaModelValidatorAbstract {
                     .isSupportMethodAnnotationsRequired()) {
             return; // ignore
         }
-        
+
         var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
             ? specDefault.getPotentialOrphans()
             : Collections.<ResolvedMethod>emptySet();
@@ -223,7 +223,7 @@ extends MetaModelValidatorAbstract {
         potentialOrphans.clear(); // no longer needed
     }
 
-    private static boolean matchesSupportMethodNamingConvention(String methodName) {
+    private static boolean matchesSupportMethodNamingConvention(final String methodName) {
         for(var objectSupportMethod : ObjectSupportMethod.values()) {
             if(objectSupportMethod.getMethodNames().anyMatch(name->name.equals(methodName))) return true;
         }

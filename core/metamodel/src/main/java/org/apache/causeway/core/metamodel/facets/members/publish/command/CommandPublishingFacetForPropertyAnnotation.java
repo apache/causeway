@@ -29,14 +29,14 @@ import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.PropertyConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.TypedHolder;
+import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 
 public abstract class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
 
     static class Enabled extends CommandPublishingFacetForPropertyAnnotation {
-        Enabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+        Enabled(final CommandDtoProcessor processor, final FacetHolder holder, final ServiceInjector servicesInjector) {
             super(processor, holder, servicesInjector);
         }
 
@@ -47,7 +47,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
     }
 
     static class Disabled extends CommandPublishingFacetForPropertyAnnotation {
-        Disabled(CommandDtoProcessor processor, FacetHolder holder, ServiceInjector servicesInjector) {
+        Disabled(final CommandDtoProcessor processor, final FacetHolder holder, final ServiceInjector servicesInjector) {
             super(processor, holder, servicesInjector);
         }
 
@@ -127,9 +127,9 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
             });
     }
 
-    private static boolean representsProperty(FacetHolder holder) {
+    private static boolean representsProperty(final FacetHolder holder) {
         // a property
-        if (holder instanceof TypedHolder && ((TypedHolder)holder).getFeatureType() == FeatureType.PROPERTY) {
+        if (holder instanceof TypedFacetHolder && ((TypedFacetHolder)holder).featureType() == FeatureType.PROPERTY) {
             return true;
         }
         // or a mixin

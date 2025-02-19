@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
@@ -33,18 +33,45 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.Getter;
-
 /**
- * non-final only so it can be mocked if need be.
+ * {@link TypedFacetHolder} representing a Java method.
  */
-public class FacetedMethod
-extends TypedHolderAbstract {
+public record FacetedMethod(
+    FacetHolder facetHolder,
+    FeatureType featureType,
+    /**
+     * resolved method return type
+     */
+    ResolvedType resolvedType,
+    /**
+     * The {@link Class} that owns this {@link Method} (as per
+     * {@link Class#getMethods()}, returning the {@link Method}s both of this
+     * class and of its super-classes).
+     * <p>
+     * Note: we don't call this the 'declaring type' because
+     * {@link Class#getDeclaredMethods()} does not return methods from
+     * super-classes.
+     */
+    Class<?> owningType,
+    /**
+     * A {@link Method} obtained from the {@link #owningType()}
+     * using {@link Class#getMethods()}.
+     */
+    MethodFacade methodFacade,
+    Can<FacetedMethodParameter> parameters,
+    /**
+     * @apiNote lazily memoized only once the metamodel was populated,
+     * otherwise during metamodel introspection would trigger cascading object introspection as a side-effect
+     */
+    _Lazy<ObjectSpecification> elementSpecificationLazy
+    ) implements TypedFacetHolder {
 
     // -- FACTORIES
 
@@ -103,16 +130,14 @@ extends TypedHolderAbstract {
             }
 
             // this is based on similar logic to ActionAnnotationFacetFactory#processTypeOf
-
-            var facetedMethodParamToUse =
-                    TypeOfFacet
-                    .inferFromMethodParameter(actionMethod, paramIndex, facetedMethodParam)
-                    .map(typeOfFacet->{
-                        // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
-                        FacetUtil.addFacet(typeOfFacet);
-                        return facetedMethodParam.withType(typeOfFacet.value());
-                    })
-                    .orElse(facetedMethodParam);
+            var facetedMethodParamToUse = TypeOfFacet
+                .inferFromMethodParameter(actionMethod, paramIndex, facetedMethodParam)
+                .map(typeOfFacet->{
+                    // (corresponds to similar code for OneToManyAssociation in FacetMethodsBuilder).
+                    FacetUtil.addFacet(typeOfFacet);
+                    return facetedMethodParam.withResolvedType(typeOfFacet.value());
+                })
+                .orElse(facetedMethodParam);
 
             actionParams.add(facetedMethodParamToUse);
 
@@ -165,28 +190,6 @@ extends TypedHolderAbstract {
         }
     }
 
-    // -- FIELDS
-
-    /**
-     * The {@link Class} that owns this {@link Method} (as per
-     * {@link Class#getMethods()}, returning the {@link Method}s both of this
-     * class and of its superclasses).
-     *
-     * <p>
-     * Note: we don't call this the 'declaring type' because
-     * {@link Class#getDeclaredMethods()} does not return methods from
-     * superclasses.
-     */
-    @Getter private final Class<?> owningType;
-
-    /**
-     * A {@link Method} obtained from the {@link #getOwningType() owning type}
-     * using {@link Class#getMethods()}.
-     */
-    @Getter private final MethodFacade method;
-
-    @Getter private final Can<FacetedMethodParameter> parameters;
-
     // -- CONSTRUCTOR
 
     private FacetedMethod(
@@ -194,32 +197,41 @@ extends TypedHolderAbstract {
             final FeatureType featureType,
             final Class<?> declaringType,
             final MethodFacade method,
-            final ResolvedType type,
+            final ResolvedType resolvedType,
             final Can<FacetedMethodParameter> parameters) {
+        this(
+            FacetHolder
+                .simple(mmc, methodIdentifier(mmc.getSpecificationLoader(), featureType, declaringType, method)),
+            featureType,
+            resolvedType,
+            declaringType,
+            method,
+            parameters,
+            elementSpecificationLazy(mmc.getSpecificationLoader(), resolvedType));
+    }
 
-        super(mmc,
-                featureType,
-                type,
-                methodIdentifier(mmc.getSpecificationLoader(), featureType, declaringType, method));
-        this.owningType = declaringType;
-        this.method = method;
-        this.parameters = parameters;
+    public FacetedMethodParameter parameter(final int paramIndex) {
+        return parameters.getElseFail(paramIndex);
     }
 
     @Override
     public String toString() {
-        return getFeatureType().name() + " Peer [identifier=\"" + getFeatureIdentifier()
-            + "\",type=" + getType() + " ]";
+        return featureType().name() + " Peer [identifier=\"" + getFeatureIdentifier()
+            + "\",type=" + resolvedType() + " ]";
+    }
+
+    public ObjectSpecification elementSpecification() {
+        return elementSpecificationLazy.get();
     }
 
     /**
-     * Returns an instance with {@code type} replaced by given {@code elementType}.
+     * Returns an instance with {@link #resolvedType} replaced by a new {@link ResolvedType} that has given {@code elementType}.
      * @param elementType
      */
-    public FacetedMethod withType(final Class<?> elementType) {
-        //XXX maybe future refactoring can make the type immutable, so we can remove this method
-        this.type = type.withElementType(elementType);
-        return this;
+    public FacetedMethod withElementType(final Class<?> elementType) {
+        var newResolvedType = resolvedType.withElementType(elementType);
+        return new FacetedMethod(facetHolder, featureType, newResolvedType, owningType, methodFacade, parameters,
+            elementSpecificationLazy(facetHolder.getSpecificationLoader(), newResolvedType));
     }
 
     // -- HELPER
@@ -230,6 +242,12 @@ extends TypedHolderAbstract {
             final Class<?> declaringType,
             final MethodFacade method) {
         return featureType.identifierFor(LogicalType.infer(declaringType), method);
+    }
+
+    private static _Lazy<ObjectSpecification> elementSpecificationLazy(
+            final SpecificationLoader specificationLoader,
+            final ResolvedType resolvedType) {
+        return _Lazy.threadSafe(()->specificationLoader.specForTypeElseFail(resolvedType.elementType()));
     }
 
 }

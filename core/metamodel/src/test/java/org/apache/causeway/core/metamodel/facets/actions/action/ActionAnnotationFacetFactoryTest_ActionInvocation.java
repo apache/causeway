@@ -185,13 +185,13 @@ extends FacetFactoryTestAbstract {
             final Facet facet0 = facetedMethod.getFacet(ActionInvocationFacet.class);
             assertNotNull(facet0);
 
-            final Facet facet1 = facetedMethod.getParameters().getElseFail(0).getFacet(ActionParameterChoicesFacet.class);
+            final Facet facet1 = facetedMethod.parameter(0).getFacet(ActionParameterChoicesFacet.class);
             assertNotNull(facet1);
             assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
             var actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
             assertMethodEqualsFirstIn(choices0Method, actionChoicesFacetViaMethod0);
 
-            final Facet facet2 = facetedMethod.getParameters().getElseFail(1).getFacet(ActionParameterChoicesFacet.class);
+            final Facet facet2 = facetedMethod.parameter(1).getFacet(ActionParameterChoicesFacet.class);
             assertNotNull(facet2);
             assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
             var actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;

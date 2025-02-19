@@ -225,24 +225,24 @@ implements
             // create property and add facets
             var facetedMethod = FacetedMethod.createForCollection(mmc, introspectedClass, accessorMethod);
             getFacetProcessor()
-            .process(
-                    introspectedClass,
-                    introspectionPolicy(),
-                    accessorMethodFacade,
-                    methodRemover,
-                    facetedMethod,
-                    FeatureType.COLLECTION,
-                    isMixinMain(accessorMethodFacade));
+                .process(
+                        introspectedClass,
+                        introspectionPolicy(),
+                        accessorMethodFacade,
+                        methodRemover,
+                        facetedMethod,
+                        FeatureType.COLLECTION,
+                        isMixinMain(accessorMethodFacade));
 
             // figure out what the type is
             final Class<?> elementType = facetedMethod.lookupFacet(TypeOfFacet.class)
                     .<Class<?>>map(typeOfFacet->typeOfFacet.value().elementType())
                     .orElse(Object.class);
 
-            // skip if class substitutor says so.
+            // skip if class substitutor says so
             if (classSubstitutorRegistry.getSubstitution(elementType).isNeverIntrospect()) continue;
 
-            onNewFacetMethod.accept(facetedMethod.withType(elementType));
+            onNewFacetMethod.accept(facetedMethod.withElementType(elementType));
         }
     }
 
@@ -352,12 +352,11 @@ implements
                 FeatureType.ACTION,
                 isMixinMain(actionMethodFacade));
 
-        action.getParameters()
-        .forEach(actionParam->{
-            getFacetProcessor()
-            .processParams(introspectedClass, introspectionPolicy(), actionMethodFacade, methodRemover, actionParam);
-
-        });
+        action.parameters()
+            .forEach(actionParam->{
+                getFacetProcessor()
+                    .processParams(introspectedClass, introspectionPolicy(), actionMethodFacade, methodRemover, actionParam);
+            });
 
         return action;
     }
@@ -415,9 +414,7 @@ implements
         return true;
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // Helpers for finding and removing methods.
-    // ////////////////////////////////////////////////////////////////////////////
+    // -- Helpers for finding and removing methods.
 
     private boolean isMixinMain(final MethodFacade methodFacade) {
         return isMixinMain(methodFacade.asMethodForIntrospection());
@@ -443,7 +440,7 @@ implements
                 .lookupMixedInAction(inspectedTypeSpec)
                 .map(HasFacetedMethod.class::cast)
                 .map(HasFacetedMethod::getFacetedMethod)
-                .map(FacetedMethod::getMethod)
+                .map(FacetedMethod::methodFacade)
                 .map(MethodFacade::asMethodForIntrospection)
                 .map(method::equals)
                 .orElse(false);
@@ -452,10 +449,6 @@ implements
     private IntrospectionPolicy introspectionPolicy() {
         return inspectedTypeSpec.getIntrospectionPolicy();
     }
-
-    // ////////////////////////////////////////////////////////////////////////////
-    // toString
-    // ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {

@@ -152,7 +152,7 @@ implements MixedInMember {
     // -- HELPER
 
     private boolean calculateIsExplicitlyAnnotated() {
-        var methodFacade = getFacetedMethod().getMethod();
+        var methodFacade = getFacetedMethod().methodFacade();
         return super.isExplicitlyAnnotated() // legacy programming style
                 || methodFacade.synthesize(Domain.Include.class).isPresent();
     }

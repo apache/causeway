@@ -22,18 +22,19 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
- * A {@link FacetHolder} that also has a {@link ObjectSpecification type}.
- *
+ * A {@link FacetHolder} that also has a {@link ResolvedType}.
  * <p>
  * Used to represent class members when building up the metamodel.
  */
-public interface TypedHolder extends HasFacetHolder {
+public sealed interface TypedFacetHolder extends HasFacetHolder
+permits FacetedMethod, FacetedMethodParameter {
 
-    FeatureType getFeatureType();
+    FacetHolder facetHolder();
+    FeatureType featureType();
+    ResolvedType resolvedType();
 
-    ResolvedType getType();
-
+    @Override
+    default FacetHolder getFacetHolder() { return facetHolder(); }
 }

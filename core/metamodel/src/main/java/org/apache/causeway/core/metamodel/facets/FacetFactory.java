@@ -373,7 +373,7 @@ public interface FacetFactory {
                 final FacetedMethodParameter facetedMethodParameter) {
 
             super(cls, introspectionPolicy, method, methodRemover, facetedMethodParameter);
-            this.paramNum = facetedMethodParameter.getParamIndex();
+            this.paramNum = facetedMethodParameter.paramIndex();
             this.parameterType = super.method.getParameterType(paramNum);
             this.parameterName = super.method.getParameterName(paramNum);
         }
