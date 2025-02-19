@@ -32,25 +32,24 @@ extends MixinFacetAbstract {
     public static Optional<MixinFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
             final Class<?> candidateMixinType,
-            final FacetHolder facetHolder,
-            final MetaModelValidatorForMixinTypes mixinTypeValidator) {
+            final FacetHolder facetHolder) {
 
         return domainObjectIfAny
-        .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
-        .map(domainObject -> {
+            .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
+            .map(domainObject -> {
 
-            var mixinContructors =
-                    ProgrammingModelConstants.MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
-                    .getConstructors(candidateMixinType);
+                var mixinContructors =
+                        ProgrammingModelConstants.MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
+                        .getConstructors(candidateMixinType);
 
-            return mixinContructors.getSingleton() // empty if cardinality!=1
-            .map(constructor -> new MixinFacetForDomainObjectAnnotation(
-                        candidateMixinType,
-                        domainObject.mixinMethod(),
-                        constructor,
-                        facetHolder))
-            .orElse(null);
-        });
+                return mixinContructors.getSingleton() // empty if cardinality!=1
+                .map(constructor -> new MixinFacetForDomainObjectAnnotation(
+                            candidateMixinType,
+                            domainObject.mixinMethod(),
+                            constructor,
+                            facetHolder))
+                .orElse(null);
+            });
     }
 
     private MixinFacetForDomainObjectAnnotation(

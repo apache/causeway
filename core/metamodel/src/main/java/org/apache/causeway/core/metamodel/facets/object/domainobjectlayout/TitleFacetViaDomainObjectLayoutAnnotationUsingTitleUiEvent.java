@@ -89,11 +89,9 @@ extends TitleFacetAbstract {
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
 
-        final ManagedObject owningAdapter = titleRenderRequest.getObject();
+        final ManagedObject owningAdapter = titleRenderRequest.object();
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
-            return null;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) return null;
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 

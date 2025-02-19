@@ -73,11 +73,10 @@ implements HasImperativeAspect {
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
 
-        final ManagedObject owningAdapter = titleRenderRequest.getObject();
+        final ManagedObject owningAdapter = titleRenderRequest.object();
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
-            return null;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) return null;
+
         try {
             var returnValue = imperativeAspect.invokeSingleMethod(owningAdapter);
             if(returnValue instanceof String) {

@@ -35,11 +35,9 @@ final class _InternalTitleUtil {
 
     String titleString(final @NonNull TitleRenderRequest titleRenderRequest) {
 
-        var managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.object();
 
-        if(managedObject.getSpecialization().isUnspecified()) {
-            return managedObject.getTitle();
-        }
+        if(managedObject.getSpecialization().isUnspecified()) return managedObject.getTitle();
 
         var objSpec = managedObject.getSpecification();
 
@@ -58,12 +56,11 @@ final class _InternalTitleUtil {
     }
 
     private String objectTitleString(final @NonNull TitleRenderRequest titleRenderRequest) {
-        var managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.object();
 
         //TODO we have value-semantics now, don't skip it for strings
-        if (managedObject.getPojo() instanceof String) {
-            return (String) managedObject.getPojo();
-        }
+        if (managedObject.getPojo() instanceof String) return (String) managedObject.getPojo();
+
         var spec = managedObject.getSpecification();
         return Optional.ofNullable(spec.getTitle(titleRenderRequest))
                 .orElseGet(()->getDefaultTitle(managedObject));

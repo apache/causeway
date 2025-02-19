@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
@@ -71,7 +73,6 @@ import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.Edi
 import org.apache.causeway.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.entitychangepublishing.EntityChangePublishingFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.introspection.IntrospectionPolicyFacetForDomainObjectAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.mixin.MetaModelValidatorForMixinTypes;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
@@ -82,7 +83,6 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -353,7 +353,7 @@ implements
 
         addFacetIfPresent(
                 MixinFacetForDomainObjectAnnotation
-                .create(mixinDomainObjectIfAny, cls, facetHolder, mixinTypeValidator));
+                    .create(mixinDomainObjectIfAny, cls, facetHolder));
 
     }
 

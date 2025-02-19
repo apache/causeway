@@ -32,32 +32,24 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
-@Value(staticConstructor = "of")
-public class GroupIdAndName
+public record GroupIdAndName(
+    /**
+     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
+     */
+    @NonNull String id,
+    /**
+     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
+     */
+    @NonNull String name)
 implements
     Comparable<GroupIdAndName>,
     Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * Id of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
-     */
-    private final @NonNull String id;
-
-    /**
-     * (Friendly) name of a layout group (a <i>FieldSet</i> or a <i>Collection panel</i>).
-     */
-    private final @NonNull String name;
-
     @Override
     public int compareTo(final GroupIdAndName other) {
-        if(other==null) {
-            return -1; // null last
-        }
-        return this.getId().compareTo(other.getId());
+        if(other==null) return -1; // null last
+        return this.id().compareTo(other.id());
     }
 
     // -- FACTORIES FOR ANNOTATIONS
@@ -77,9 +69,7 @@ implements
                 actionLayout.fieldSetId(),
                 actionLayout.fieldSetName());
 
-        if(explicit.isPresent()) {
-            return explicit;
-        }
+        if(explicit.isPresent()) return explicit;
 
         return GroupIdAndName.inferIfOneMissing(
                 actionLayout.associateWith(),
@@ -141,12 +131,12 @@ implements
             if(inferredId.isEmpty()) {
                 return Optional.empty(); // cannot infer a usable id, so don't create a LayoutGroupFacet down the line
             }
-            return Optional.of(GroupIdAndName.of(inferredId, name));
+            return Optional.of(new GroupIdAndName(inferredId, name));
         } else if(isNameUnspecified) {
             var inferredName = inferNameFromId(id);
-            return Optional.of(GroupIdAndName.of(id, inferredName));
+            return Optional.of(new GroupIdAndName(id, inferredName));
         }
-        return Optional.of(GroupIdAndName.of(id, name));
+        return Optional.of(new GroupIdAndName(id, name));
     }
 
     /**

@@ -55,17 +55,17 @@ final class _GridModel {
 
         private boolean gridErrorsDetected = false;
 
-        public boolean contains(String id) {
+        public boolean contains(final String id) {
             return allIds.contains(id);
         }
 
         public Collection<FieldSet> fieldSets() {
             return fieldSets.values();
         }
-        public boolean containsFieldSetId(String id) {
+        public boolean containsFieldSetId(final String id) {
             return fieldSets.containsKey(id);
         }
-        public FieldSet getFieldSet(String id) {
+        public FieldSet getFieldSet(final String id) {
             return fieldSets.get(id);
         }
 
@@ -77,7 +77,7 @@ final class _GridModel {
          * @param bsGrid
          * @return empty if not valid
          */
-        public static Optional<_GridModel> createFrom(BSGrid bsGrid) {
+        public static Optional<_GridModel> createFrom(final BSGrid bsGrid) {
 
             var gridModel = new _GridModel();
 
@@ -118,7 +118,7 @@ final class _GridModel {
                         gridModel.gridErrorsDetected = true;
                         return;
                     }
-                    String id = groupIdAndName.get().getId();
+                    String id = groupIdAndName.get().id();
                     if(gridModel.contains(id)) {
                         fieldSet.setMetadataError("There is another element in the grid with this id: " + id);
                         gridModel.gridErrorsDetected = true;
@@ -211,15 +211,15 @@ final class _GridModel {
 
         }
 
-        private void putRow(String id, BSRow bsRow) {
+        private void putRow(final String id, final BSRow bsRow) {
             rows.put(id, bsRow);
             allIds.add(id);
         }
-        private void putCol(String id, BSCol bsCol) {
+        private void putCol(final String id, final BSCol bsCol) {
             cols.put(id, bsCol);
             allIds.add(id);
         }
-        private void putFieldSet(String id, FieldSet fieldSet) {
+        private void putFieldSet(final String id, final FieldSet fieldSet) {
             fieldSets.put(id, fieldSet);
             allIds.add(id);
         }

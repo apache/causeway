@@ -62,7 +62,7 @@ implements HasImperativeAspect {
 
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
-        return imperativeAspect.eval(titleRenderRequest.getObject(), "(not present)");
+        return imperativeAspect.eval(titleRenderRequest.object(), "(not present)");
     }
 
     @Override

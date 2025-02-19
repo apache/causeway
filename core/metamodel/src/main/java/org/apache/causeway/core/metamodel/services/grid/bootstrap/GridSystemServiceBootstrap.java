@@ -280,7 +280,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             var fieldSetId = GroupIdAndName.forFieldSet(fieldSet)
                 .orElseThrow(()->_Exceptions.illegalArgument("invalid fieldSet detected, "
                         + "requires at least an id or a name"))
-                .getId();
+                .id();
             Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
             if(boundAssociationIds == null) {
                 boundAssociationIds = stream(fieldSet.getProperties())

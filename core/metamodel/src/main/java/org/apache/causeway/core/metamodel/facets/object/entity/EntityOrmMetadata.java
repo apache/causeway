@@ -20,35 +20,25 @@ package org.apache.causeway.core.metamodel.facets.object.entity;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
+public record EntityOrmMetadata(
+    @NonNull PersistenceStack persistenceStack,
+    @NonNull Optional<String> table,
+    @NonNull Optional<String> schema,
+    @NonNull Class<?> primaryKeyClass,
+    @NonNull Can<ColumnOrmMetadata> columns,
+    @NonNull Object vendorEntityMetadata) {
 
-// record candidate
-@lombok.Value @Accessors(fluent=true)
-public class EntityOrmMetadata {
-
-    @lombok.Value @Accessors(fluent=true)
-    public static class ColumnOrmMetadata {
-
-        final @NonNull String name;
-        final @NonNull String memberId;
-        final @NonNull String javaType;
-        //final @NonNull String sqlType;
-
-        final @NonNull Object vendorColumnMetadata;
-
+    public record ColumnOrmMetadata(
+        @NonNull String name,
+        @NonNull String memberId,
+        @NonNull String javaType,
+        //@NonNull String sqlType,
+        @NonNull Object vendorColumnMetadata) {
     }
-
-    final @NonNull PersistenceStack persistenceStack;
-    final @NonNull Optional<String> table;
-    final @NonNull Optional<String> schema;
-    final @NonNull Class<?> primaryKeyClass;
-
-    final @NonNull Can<ColumnOrmMetadata> columns;
-
-    final @NonNull Object vendorEntityMetadata;
 
 }

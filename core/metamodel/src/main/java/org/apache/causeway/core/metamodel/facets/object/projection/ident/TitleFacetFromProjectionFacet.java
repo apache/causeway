@@ -40,7 +40,7 @@ extends TitleFacetAbstract {
 
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
-        final ManagedObject targetAdapter = titleRenderRequest.getObject();
+        final ManagedObject targetAdapter = titleRenderRequest.object();
         var projectedAdapter = projectionFacet.projected(targetAdapter);
         return projectedAdapter.getTitle();
     }

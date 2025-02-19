@@ -238,7 +238,7 @@ class DeweyOrderSetTest {
     // -- HELPER
 
     void setupLayoutFacets(final String groupId, final String sequence, final FacetHolder facetedHolder) {
-        facetedHolder.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedHolder) {});
+        facetedHolder.addFacet(new LayoutGroupFacetAbstract(new GroupIdAndName(groupId, ""), facetedHolder) {});
         facetedHolder.addFacet(new LayoutOrderFacetAbstract(sequence, facetedHolder) {});
     }
 

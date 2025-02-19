@@ -58,14 +58,14 @@ public interface LayoutGroupFacet extends Facet {
      * Id of the layout group this member is associated with.
      */
     public default String getGroupId() {
-        return getGroupIdAndName().getId();
+        return getGroupIdAndName().id();
     }
 
     /**
      * (Friendly) name of the layout group this member is associated with.
      */
     public default String getGroupName() {
-        return getGroupIdAndName().getName();
+        return getGroupIdAndName().name();
     }
 
     /**

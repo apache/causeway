@@ -169,7 +169,7 @@ class DeweyOrderComparatorTest  {
     // -- HELPER
 
     void setupLayoutFacets(final String groupId, final String sequence, final FacetedMethod facetedMethod) {
-        facetedMethod.addFacet(new LayoutGroupFacetAbstract(GroupIdAndName.of(groupId, ""), facetedMethod) {});
+        facetedMethod.addFacet(new LayoutGroupFacetAbstract(new GroupIdAndName(groupId, ""), facetedMethod) {});
         facetedMethod.addFacet(new LayoutOrderFacetAbstract(sequence, facetedMethod) {});
     }
 

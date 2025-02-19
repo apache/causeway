@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.Query;
@@ -34,15 +35,12 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
+record _EntityFacetForTesting(
+    PersistenceStack persistenceStack,
+    FacetHolder facetHolder) implements EntityFacet {
 
-@RequiredArgsConstructor
-class _EntityFacetForTesting implements EntityFacet {
-
-    @Getter private final PersistenceStack persistenceStack;
-    @Getter private final FacetHolder facetHolder;
+    @Override public PersistenceStack getPersistenceStack() { return persistenceStack(); }
+    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
     public Class<? extends Facet> facetType() {

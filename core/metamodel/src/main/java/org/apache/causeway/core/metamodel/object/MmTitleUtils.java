@@ -49,10 +49,7 @@ public class MmTitleUtils {
                 ? "(multiple objects)"
                 : managedObject != null
                     ? _InternalTitleUtil.titleString(
-                            TitleRenderRequest.builder()
-                            .object(managedObject)
-                            .skipTitlePartEvaluator(skipTitlePart)
-                            .build())
+                            new TitleRenderRequest(managedObject, null, skipTitlePart))
                     : "(no object)";
     }
 

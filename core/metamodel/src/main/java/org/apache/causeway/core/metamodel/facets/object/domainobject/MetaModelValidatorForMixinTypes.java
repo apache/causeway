@@ -16,7 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.mixin;
+package org.apache.causeway.core.metamodel.facets.object.domainobject;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
@@ -26,15 +28,8 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
-import org.jspecify.annotations.NonNull;
-
-public class MetaModelValidatorForMixinTypes {
-
-    private final String annotation;
-
-    public MetaModelValidatorForMixinTypes(final String annotation) {
-        this.annotation = annotation;
-    }
+record MetaModelValidatorForMixinTypes(
+    @NonNull String annotation) {
 
     public boolean ensureMixinType(
             final @NonNull FacetHolder facetHolder,
@@ -44,9 +39,7 @@ public class MetaModelValidatorForMixinTypes {
                 .getPublicConstructors(candidateMixinType)
                 .filter(paramCount(1));
 
-        if(mixinContructors.getCardinality().isOne()) {
-            return true; // happy case
-        }
+        if(mixinContructors.getCardinality().isOne()) return true; // happy case
 
         if(mixinContructors.getCardinality().isZero()) {
             ValidationFailure.raise(

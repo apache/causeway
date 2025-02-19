@@ -69,10 +69,7 @@ public class TitleServiceDefault implements TitleService {
             // here we just mean NOT-ATTACHED (and not the concrete DETACHED entity state)
             return "[DETACHED]";
         } else {
-            return objectAdapter.getSpecification().getTitle(
-                    TitleRenderRequest.builder()
-                    .object(objectAdapter)
-                    .build());
+            return objectAdapter.getSpecification().getTitle(TitleRenderRequest.forObject(objectAdapter));
         }
     }
 
@@ -86,9 +83,7 @@ public class TitleServiceDefault implements TitleService {
         var pojo = unwrapped(domainObject);
         var objectAdapter = objectManager.adapt(pojo);
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return "unspecified";
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return "unspecified";
 
         return objectAdapter.getSpecification().getIconName(objectAdapter);
     }

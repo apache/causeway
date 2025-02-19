@@ -116,12 +116,11 @@ implements ImperativeFacet {
     @Override
     public String title(final TitleRenderRequest titleRenderRequest) {
 
-        final ManagedObject targetAdapter = titleRenderRequest.getObject();
+        final ManagedObject targetAdapter = titleRenderRequest.object();
 
         var pojo = targetAdapter.getPojo();
-        if(pojo==null) {
-            return "";
-        }
+        if(pojo==null) return "";
+
         var stringBuilder = new StringBuilder();
         var objectManager = getObjectManager();
 
@@ -133,7 +132,7 @@ implements ImperativeFacet {
                 }
                 // ignore context, if provided
                 var titlePartAdapter = objectManager.adapt(titlePart);
-                if(titleRenderRequest.getSkipTitlePartEvaluator().test(titlePartAdapter)) {
+                if(titleRenderRequest.skipTitlePartEvaluator().test(titlePartAdapter)) {
                     continue;
                 }
 

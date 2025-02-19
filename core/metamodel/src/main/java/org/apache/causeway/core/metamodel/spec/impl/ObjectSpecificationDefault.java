@@ -761,7 +761,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         if (!isEntity()) {
             return;
         }
-        var managedObject = titleRenderRequest.getObject();
+        var managedObject = titleRenderRequest.object();
         managedObject.getBookmark().ifPresent(bookmark -> {
             getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
         });
