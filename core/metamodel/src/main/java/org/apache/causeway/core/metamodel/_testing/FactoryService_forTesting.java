@@ -28,13 +28,10 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.navchild.ObjectTreeAdapter;
 
 import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-@RequiredArgsConstructor
-class FactoryService_forTesting implements FactoryService {
-
-    private final MetaModelContext metaModelContext;
+record FactoryService_forTesting(
+    MetaModelContext metaModelContext) implements FactoryService {
 
     @SneakyThrows
     @Override
@@ -81,7 +78,7 @@ class FactoryService_forTesting implements FactoryService {
     }
 
     @Override
-    public <T> TreeNode<T> treeNode(T root) {
+    public <T> TreeNode<T> treeNode(final T root) {
         return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(metaModelContext.getSpecificationLoader())));
     }
 

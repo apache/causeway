@@ -33,6 +33,7 @@ import static java.util.Objects.requireNonNull;
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
@@ -475,7 +476,7 @@ extends MetaModelContext {
     @Getter(lazy = true)
     private final GridMarshallerService gridMarshallerService = createGridMarshallerService();
     //XXX lombok issue: won't compile if inlined
-    private final GridMarshallerService createGridMarshallerService() {
+    private final GridMarshallerService<? extends Grid> createGridMarshallerService() {
         return new GridMarshallerServiceBootstrap(getJaxbService());
     }
 
@@ -489,6 +490,7 @@ extends MetaModelContext {
     @Getter(lazy = true)
     private final GridService gridService = createGridService();
     //XXX lombok issue: won't compile if inlined
+    @SuppressWarnings("unchecked")
     private final GridService createGridService() {
         return new GridServiceDefault(
             getGridLoaderService(),
@@ -524,10 +526,9 @@ extends MetaModelContext {
         objectAdaptersForBeansOfKnownSort.clear();
     }
 
-    @lombok.Value(staticConstructor = "of")
-    static class ServiceInstance {
-        ObjectSpecification specification;
-        Object pojo;
+    record ServiceInstance(
+        ObjectSpecification specification,
+        Object pojo) {
     }
 
     @Builder.Default
@@ -535,15 +536,14 @@ extends MetaModelContext {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void registerAsService(final ServiceInstance serviceInstance) {
-        var spec = serviceInstance.getSpecification();
+        var spec = serviceInstance.specification();
         discoveredServices.add(_SingletonBeanProvider.forTestingLazy(
                 spec.logicalTypeName(),
                 (Class)spec.getCorrespondingClass(),
-                serviceInstance::getPojo));
+                serviceInstance::pojo));
     }
 
     private final Map<String, ManagedObject> collectBeansOfKnownSort() {
-
         var map = _Maps.<String, ManagedObject>newLinkedHashMap();
 
         // first pass: introspect them all
@@ -574,7 +574,7 @@ extends MetaModelContext {
         }
         return getSpecificationLoader()
             .specForType(servicePojo.getClass())
-            .map(serviceSpec->ServiceInstance.of(serviceSpec, servicePojo));
+            .map(serviceSpec->new ServiceInstance(serviceSpec, servicePojo));
     }
 
     // -- RECURSIVE INITIALIZATION FIX

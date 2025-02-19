@@ -460,12 +460,12 @@ implements HasMetaModelContext {
     // -- EXPECTATIONS
 
     protected final void assertNoMethodsRemoved() {
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
-        assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
+        assertTrue(methodRemover.removedMethodMethodCalls().isEmpty());
+        assertTrue(methodRemover.removeMethodArgsCalls().isEmpty());
     }
 
     protected final void assertMethodWasRemoved(final ResolvedMethod method) {
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(method),
+        assertTrue(methodRemover.removedMethodMethodCalls().contains(method),
                 ()->String.format("method was not removed in test scenario: %s", method));
     }
 

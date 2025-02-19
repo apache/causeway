@@ -30,46 +30,37 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.commons.CanBeVoid;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
+public record MethodRemover_forTesting(
+    List<ResolvedMethod> removedMethodMethodCalls,
+    List<RemoveMethodArgs> removeMethodArgsCalls
+    ) implements MethodRemover {
 
-public class MethodRemover_forTesting
-implements MethodRemover {
-
-    @Value
-    static class RemoveMethodArgs {
-        public String methodName;
-        public Class<?> returnType;
-        public Class<?>[] parameterTypes;
+    record RemoveMethodArgs(
+        String methodName,
+        Class<?> returnType,
+        Class<?>[] parameterTypes) {
     }
 
-    @Getter
-    private final List<RemoveMethodArgs> removeMethodArgsCalls = new ArrayList<>();
+    record RemoveMethodsArgs(
+        String prefix,
+        Class<?> returnType,
+        CanBeVoid canBeVoid,
+        int paramCount) {
+    }
+
+    public MethodRemover_forTesting() {
+        this(new ArrayList<>(), new ArrayList<>());
+    }
 
     @Override
     public void removeMethod(final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
         removeMethodArgsCalls.add(new RemoveMethodArgs( methodName, returnType, parameterTypes));
     }
 
-    @Getter
-    private final List<ResolvedMethod> removedMethodMethodCalls = new ArrayList<ResolvedMethod>();
-
     @Override
     public void removeMethod(final @Nullable ResolvedMethod method) {
         if(method==null) return;
         removedMethodMethodCalls.add(method);
-    }
-
-    @Setter
-    private List<ResolvedMethod> removeMethodsReturn;
-
-    @Value
-    static class RemoveMethodsArgs {
-        public String prefix;
-        public Class<?> returnType;
-        public CanBeVoid canBeVoid;
-        public int paramCount;
     }
 
     @Override

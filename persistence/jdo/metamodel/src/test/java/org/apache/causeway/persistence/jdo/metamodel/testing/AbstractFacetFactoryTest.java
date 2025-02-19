@@ -126,8 +126,8 @@ public abstract class AbstractFacetFactoryTest {
     }
 
     protected void assertNoMethodsRemoved() {
-        assertTrue(methodRemover.getRemovedMethodMethodCalls().isEmpty());
-        assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
+        assertTrue(methodRemover.removedMethodMethodCalls().isEmpty());
+        assertTrue(methodRemover.removeMethodArgsCalls().isEmpty());
     }
 
     public static JdoFacetContext jdoFacetContextForTesting() {

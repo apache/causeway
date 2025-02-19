@@ -34,12 +34,10 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
  *
  * see <a href="https://mydailyjava.blogspot.com/2018/04/jdk-11-and-proxies-in-world-past.html">byte-buddy blog</a>
  */
-class ClassLoadingStrategyAdvisor {
-
-    final MethodHandle privateLookupMethodHandle;
+record ClassLoadingStrategyAdvisor(MethodHandle privateLookupMethodHandle) {
 
     ClassLoadingStrategyAdvisor() {
-        this.privateLookupMethodHandle = createPrivateLookupMethodHandle();
+        this(createPrivateLookupMethodHandle());
     }
 
     public ClassLoadingStrategy<ClassLoader> getSuitableStrategy(final Class<?> targetClass) {

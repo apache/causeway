@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PatternOptionalStringConstraintValidator
-        implements ConstraintValidator<jakarta.validation.constraints.Pattern, Optional<String>> {
+implements ConstraintValidator<jakarta.validation.constraints.Pattern, Optional<String>> {
 
     private final PatternValidator patternValidator = new PatternValidator();
 
@@ -45,9 +45,8 @@ public class PatternOptionalStringConstraintValidator
     public boolean isValid(
             final Optional<String> value,
             final ConstraintValidatorContext context) {
-        if(!value.isPresent()) {
-            return true;
-        }
+        if(!value.isPresent()) return true;
+        
         return patternValidator.isValid(value.get(), context);
     }
 }
