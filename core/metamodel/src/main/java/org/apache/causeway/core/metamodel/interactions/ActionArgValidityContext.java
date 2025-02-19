@@ -53,7 +53,7 @@ implements ProposedHolder, ActionInteractionContext {
         super(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
                 head,
                 id,
-                ()->objectAction.getParameters().getElseFail(position).getFriendlyName(()->head.getTarget()),
+                ()->objectAction.getParameters().getElseFail(position).getFriendlyName(head::target),
                 interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;

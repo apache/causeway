@@ -73,7 +73,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var method = methods.getFirstElseFail();
-        final Object collectionOrArray = MmInvokeUtils.invokeAutofit(patConstructor, method, head.getTarget(), pendingArgs);
+        final Object collectionOrArray = MmInvokeUtils.invokeAutofit(patConstructor, method, head.target(), pendingArgs);
         if (collectionOrArray == null) {
             return Can.empty();
         }

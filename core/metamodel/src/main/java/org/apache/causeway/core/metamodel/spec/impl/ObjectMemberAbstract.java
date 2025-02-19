@@ -121,7 +121,7 @@ implements
         return namedFacet
             .getSpecialization()
             .fold(  textFacet->textFacet.translated(),
-                    textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).getTarget()));
+                    textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target()));
     }
 
     @Override
@@ -140,7 +140,7 @@ implements
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
                 .fold(textFacet->textFacet.translated(),
-                      textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).getTarget())));
+                      textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target())));
     }
 
     @Override

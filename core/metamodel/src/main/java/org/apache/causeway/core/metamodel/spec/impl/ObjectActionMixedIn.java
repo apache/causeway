@@ -156,9 +156,9 @@ implements MixedInAction {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ManagedObject owner = head.getOwner();
+        final ManagedObject owner = head.owner();
         final ManagedObject target = mixinAdapterFor(mixinSpec, owner);
-        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
+        _Assert.assertEquals(target.getSpecification(), head.target().getSpecification(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
         if(!interactionInitiatedBy.isPassThrough()) {

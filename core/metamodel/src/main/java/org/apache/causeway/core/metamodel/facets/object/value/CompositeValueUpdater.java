@@ -116,7 +116,7 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
         var method = methodFacade.asMethodForIntrospection();
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(parameters);
-        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
+        final Object targetPojo = MmUnwrapUtils.single(head.target());
         var resultPojo = CanonicalInvoker
                 .invokeWithConvertedArgs(method.method(), targetPojo,
                         methodFacade.getArguments(executionParameters, ParameterConverters.DEFAULT));

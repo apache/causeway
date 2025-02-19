@@ -148,7 +148,7 @@ implements
         // One way this might occur is if using excel module to populate an entity representing each line of the spreadsheet;
         // but the entity will be transient at the point.  But there's probably very little value in creating DTOs in such a scenario.
         //
-        var ownerAdapter = head.getOwner();
+        var ownerAdapter = head.owner();
         var ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
 
         if (ownerHasBookmark) {
@@ -160,11 +160,11 @@ implements
         if(!isPostable()) {
             // don't emit domain events
             executeClearOrSetWithoutEvents(newValue);
-            return head.getTarget().getPojo();
+            return head.target().getPojo();
         }
 
         // ... post the executing event
-        var oldValuePojo = getterFacet.getAssociationValueAsPojo(head.getTarget(), interactionInitiatedBy);
+        var oldValuePojo = getterFacet.getAssociationValueAsPojo(head.target(), interactionInitiatedBy);
         var newValuePojo = MmUnwrapUtils.single(newValue);
 
         var propertyDomainEvent =
@@ -190,7 +190,7 @@ implements
         executeClearOrSetWithoutEvents(newValueAfterEventPolling);
 
         // reading the actual value from the target object, playing it safe...
-        var actualNewValue = getterFacet.getAssociationValueAsPojo(head.getTarget(), interactionInitiatedBy);
+        var actualNewValue = getterFacet.getAssociationValueAsPojo(head.target(), interactionInitiatedBy);
         if (!Objects.equals(oldValuePojo, actualNewValue)) {
 
             // ... post the executed event
@@ -204,7 +204,7 @@ implements
 
         // with action invocations, we inject services in the returned pojo at this point.
         // for property sets, though, there's no need, as we're just returning the targetPojo itself
-        return head.getTarget().getPojo();
+        return head.target().getPojo();
 
         //
         // REVIEW: the corresponding action has a whole bunch of error handling here.
@@ -221,10 +221,10 @@ implements
     public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValue) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
             clearFacet.clearProperty(
-                    owningProperty, head.getTarget(), interactionInitiatedBy);
+                    owningProperty, head.target(), interactionInitiatedBy);
         } else {
             setterFacet.setProperty(
-                    owningProperty, head.getTarget(), newValue, interactionInitiatedBy);
+                    owningProperty, head.target(), newValue, interactionInitiatedBy);
         }
     }
 

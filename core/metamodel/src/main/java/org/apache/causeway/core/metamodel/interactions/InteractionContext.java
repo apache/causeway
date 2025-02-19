@@ -117,7 +117,7 @@ public abstract class InteractionContext {
      * The target object that this interaction is associated with.
      */
     public ManagedObject getTarget() {
-        return head.getTarget();
+        return head.target();
     }
 
 }

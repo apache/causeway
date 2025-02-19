@@ -161,7 +161,7 @@ implements MemberExecutorService {
         var actionId = owningAction.getFeatureIdentifier();
         log.debug("about to invoke action {}", actionId);
 
-        var targetAdapter = head.getTarget();
+        var targetAdapter = head.target();
         var targetPojo = MmUnwrapUtils.single(targetAdapter);
 
         var argumentPojos = argumentAdapters.stream()
@@ -239,7 +239,7 @@ implements MemberExecutorService {
 
         final InteractionHead head = propertyModifier.getHead();
 
-        var domainObject = head.getTarget();
+        var domainObject = head.target();
 
         if(propertyModifier.getInteractionInitiatedBy().isPassThrough()) {
             /* directly access property setter to prevent triggering of domain events
@@ -262,7 +262,7 @@ implements MemberExecutorService {
 
         var propertyId = owningProperty.getFeatureIdentifier();
 
-        var targetManagedObject = head.getTarget();
+        var targetManagedObject = head.target();
         var target = MmUnwrapUtils.single(targetManagedObject);
         var argValuePojo = MmUnwrapUtils.single(propertyModifier.getNewValue());
 
@@ -292,7 +292,6 @@ implements MemberExecutorService {
         var result = getObjectManager().adapt(targetPojo);
         _Xray.exitInvocation(xrayHandle);
         return result;
-
     }
 
     // -- HELPER
@@ -304,7 +303,7 @@ implements MemberExecutorService {
             final Can<ManagedObject> arguments) {
 
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
-        final Object targetPojo = MmUnwrapUtils.single(head.getTarget());
+        final Object targetPojo = MmUnwrapUtils.single(head.target());
         return CanonicalInvoker.invoke(methodFacade, targetPojo, executionParameters);
     }
 

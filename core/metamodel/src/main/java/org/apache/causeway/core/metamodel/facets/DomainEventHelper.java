@@ -116,7 +116,7 @@ public record DomainEventHelper(
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+                final S source = uncheckedCast(MmUnwrapUtils.single(head.target()));
                 final Object[] arguments = MmUnwrapUtils.multipleAsArray(argumentAdapters);
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
@@ -249,7 +249,7 @@ public record DomainEventHelper(
             } else {
                 // all other phases, create a new event
 
-                final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+                final S source = uncheckedCast(MmUnwrapUtils.single(head.target()));
                 final Identifier identifier = facetHolder.getFeatureIdentifier();
 
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
@@ -340,7 +340,7 @@ public record DomainEventHelper(
         try {
             final CollectionDomainEvent<S, T> event;
 
-            final S source = uncheckedCast(MmUnwrapUtils.single(head.getTarget()));
+            final S source = uncheckedCast(MmUnwrapUtils.single(head.target()));
             final Identifier identifier = facetHolder.getFeatureIdentifier();
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 

@@ -114,7 +114,7 @@ public class ParameterNegotiationModel {
     }
 
     @NonNull public ManagedObject getActionTarget() {
-        return getHead().getTarget();
+        return getHead().target();
     }
 
     @NonNull public Observable<String> getObservableActionValidation() {

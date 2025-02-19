@@ -134,7 +134,7 @@ implements
         // but ... no point in attempting this if no bookmark is yet available.
         // this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
         //
-        var ownerAdapter = head.getOwner();
+        var ownerAdapter = head.owner();
         Optional<Bookmark> ownerBookmarkIfAny = ManagedObjects.bookmark(ownerAdapter);
         var ownerHasBookmark = ownerBookmarkIfAny.isPresent();
         if (ownerHasBookmark) {
@@ -213,7 +213,7 @@ implements
 
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
         final Object targetPojo = Objects.requireNonNull(
-                MmUnwrapUtils.single(head.getTarget()),
+                MmUnwrapUtils.single(head.target()),
                 ()->"Could not extract pojo, that this invocation is targeted at.");
 
         final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);

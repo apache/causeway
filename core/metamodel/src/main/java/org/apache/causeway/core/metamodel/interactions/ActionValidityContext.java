@@ -50,7 +50,7 @@ implements ActionInteractionContext {
         super(InteractionContextType.ACTION_INVOKE,
                 head,
                 id,
-                ()->objectAction.getFriendlyName(()->head.getTarget()),
+                ()->objectAction.getFriendlyName(head::target),
                 interactionInitiatedBy);
         this.objectAction = objectAction;
         this.args = args;

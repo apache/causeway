@@ -117,7 +117,7 @@ implements OneToOneAssociation, Serializable {
                 head,
                 getFeatureIdentifier(),
                 proposedValue,
-                ()->getFriendlyName(head::getTarget),
+                ()->getFriendlyName(head::target),
                 interactionInitiatedBy);
     }
 

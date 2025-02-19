@@ -416,7 +416,7 @@ public interface ObjectAction extends ObjectMember {
                         .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asSupplier()))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);
             }
-            return action.getFriendlyName(head::getOwner);
+            return action.getFriendlyName(head::owner);
         }
     }
 

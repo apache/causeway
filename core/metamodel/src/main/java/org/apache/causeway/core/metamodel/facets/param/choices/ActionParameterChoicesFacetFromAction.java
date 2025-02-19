@@ -71,7 +71,7 @@ extends ActionParameterChoicesFacetAbstract {
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        var collectionAsObject = choicesFromCollection.get(head.getOwner(), interactionInitiatedBy);
+        var collectionAsObject = choicesFromCollection.get(head.owner(), interactionInitiatedBy);
         return CollectionFacet.streamAdapters(collectionAsObject).collect(Can.toCan());
     }
 

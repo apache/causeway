@@ -87,7 +87,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         var interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
-        var owner = head.getOwner();
+        var owner = head.owner();
 
         // transient/detached entities have no bookmark, fail early
         var targetBookmark = ManagedObjects.bookmarkElseFail(owner);
@@ -128,7 +128,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
             final InteractionHead interactionHead,
             final ManagedObject newValueAdapterIfAny) {
 
-        ManagedObject targetAdapter = interactionHead.getOwner();
+        ManagedObject targetAdapter = interactionHead.owner();
 
         final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
         final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();

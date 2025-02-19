@@ -173,7 +173,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
         dto.setTimestamp(clockService.getClock().nowAsXmlGregorianCalendar());
 
         // transient/detached entities have no bookmark, fail early
-        var bookmark = ManagedObjects.bookmarkElseFail(targetHead.getOwner());
+        var bookmark = ManagedObjects.bookmarkElseFail(targetHead.owner());
         final OidsDto targetOids = CommandDtoUtils.targetsFor(dto);
         targetOids.getOid().add(bookmark.toOidDto());
 

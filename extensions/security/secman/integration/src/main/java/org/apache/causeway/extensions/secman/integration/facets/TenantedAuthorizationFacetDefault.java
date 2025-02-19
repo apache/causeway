@@ -81,7 +81,7 @@ implements TenantedAuthorizationFacet {
             return Optional.empty();
         }
 
-        var domainObject = head.getOwner().getPojo();
+        var domainObject = head.owner().getPojo();
         var userName = userService.currentUserNameElseNobody();
 
         var applicationUser = findApplicationUser(userName);

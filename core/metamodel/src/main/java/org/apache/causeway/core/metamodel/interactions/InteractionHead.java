@@ -21,14 +21,11 @@ package org.apache.causeway.core.metamodel.interactions;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Model that holds the objects involved with the interaction.
@@ -37,54 +34,64 @@ import lombok.RequiredArgsConstructor;
  * is represented.
  * @since 2.0
  */
-@Getter
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class InteractionHead {
+public interface InteractionHead {
     /**
      * The owning object of an interaction.
      */
-    @NonNull private final ManagedObject owner;
+    ManagedObject owner();
 
     /**
      * Typically equal to {@code owner}, except for mixins,
      * where {@code target} is the mixin instance.
      */
-    @NonNull private final ManagedObject target;
+    ManagedObject target();
 
     /** Regular case, when owner equals target. (no mixin) */
     public static InteractionHead regular(final ManagedObject owner) {
-        return InteractionHead.of(owner, owner);
+        return new InteractionHeadRecord(owner, owner);
     }
 
     /** Mixin case, when target is a mixin for the owner. */
     public static InteractionHead mixin(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
-        return InteractionHead.of(owner, target);
+        return new InteractionHeadRecord(owner, target);
     }
 
     /**
      * as used by the domain event subsystem
      * @return optionally the owner (mixee), based on whether the target is a mixin
      */
-    public Optional<ManagedObject> getMixee() {
-        return Objects.equals(getOwner(), getTarget())
+    default Optional<ManagedObject> getMixee() {
+        return Objects.equals(owner(), target())
                 ? Optional.empty()
-                : Optional.of(getOwner());
+                : Optional.of(owner());
     }
 
     // -- HELPER
-
-    /** factory with consistency checks */
-    private static InteractionHead of(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
-        if(ManagedObjects.isSpecified(owner)
+    
+    /**
+     * Immutable implementation of {@link InteractionHead} with consistency checks. 
+     */
+    record InteractionHeadRecord(
+        ManagedObject owner,
+        ManagedObject target) implements InteractionHead {
+       
+        // canonical constructor with consistency checks
+        public InteractionHeadRecord(
+            ManagedObject owner,
+            ManagedObject target) {
+            if(ManagedObjects.isSpecified(owner)
                 && owner.getSpecification().getBeanSort().isMixin()) {
-            throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
-        }
-        if(ManagedObjects.isSpecified(target)
+                throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
+            }
+            if(ManagedObjects.isSpecified(target)
                 && target.getSpecification().getBeanSort().isMixin()
                 && target.getPojo()==null) {
-            throw _Exceptions.unrecoverable("target not spec. %s", target);
+                throw _Exceptions.unrecoverable("target not spec. %s", target);
+            }
+            this.owner = owner;
+            this.target = target;
         }
-        return new InteractionHead(owner, target);
+        
     }
 
 }

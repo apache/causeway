@@ -58,7 +58,7 @@ extends ActionParameterChoicesFacetAbstract {
             final ActionInteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return choicesFacet.getChoices(head.getTarget(), interactionInitiatedBy);
+        return choicesFacet.getChoices(head.target(), interactionInitiatedBy);
     }
 
 }

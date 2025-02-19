@@ -403,7 +403,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
-        var target = head.getOwner();
+        var target = head.owner();
 
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
@@ -439,7 +439,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
 
-        final ManagedObject owner = head.getOwner();
+        final ManagedObject owner = head.owner();
 
         if(!interactionInitiatedBy.isPassThrough()) {
             setupCommand(head, argumentAdapters);
@@ -531,7 +531,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        if(head.getOwner().getSpecification().isValue()) {
+        if(head.owner().getSpecification().isValue()) {
             return; // do not record value type mixin actions
         }
 
