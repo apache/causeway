@@ -179,9 +179,10 @@ extends
      * and hence is effectively shared among multiple (target) <i>Mixee</i> types.
      * <p>
      * <ul>
-     * <li>type specific facets: probably only ever installed via {@link PostProcessor}(s)</li>
+     * <li>type specific facets: probably only ever installed via
+     * {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor}(s)</li>
      * <li>type agnostic facets: probably installed by both regular {@link FacetFactory}(s)
-     * and {@link PostProcessor}(s)</li>
+     * and {@link org.apache.causeway.core.metamodel.spec.impl.PostProcessor}(s)</li>
      * </ul>
      * <p>
      * Regularly {@link Facet}s for <i>Members</i> are installed on the <i>Member's</i> {@link FacetedMethod}.

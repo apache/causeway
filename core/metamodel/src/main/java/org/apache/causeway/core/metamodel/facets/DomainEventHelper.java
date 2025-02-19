@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -53,20 +54,15 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFromValue;
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor(staticName = "ofEventService")
 @Log4j2
-public class DomainEventHelper {
+public record DomainEventHelper(
+    @NonNull MetamodelEventService metamodelEventService) {
 
     public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
-        var eventService = serviceRegistry.lookupServiceElseFail(MetamodelEventService.class);
-        return ofEventService(eventService);
+        return new DomainEventHelper(serviceRegistry.lookupServiceElseFail(MetamodelEventService.class));
     }
-
-    private final MetamodelEventService metamodelEventService;
 
     // -- postEventForAction
 
@@ -376,7 +372,7 @@ public class DomainEventHelper {
                 .filter(paramCount(0))
                 .getFirst().orElse(null);
         if(noArgConstructor != null) {
-            final CollectionDomainEvent<S, T> cde = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();;
+            final CollectionDomainEvent<S, T> cde = EventObjectBase.getInstanceWithSource(type, source).orElseThrow();
             cde.setIdentifier(identifier);
             return cde;
         }

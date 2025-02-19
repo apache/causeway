@@ -33,6 +33,7 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
 import lombok.experimental.UtilityClass;
 
@@ -40,22 +41,20 @@ import lombok.experimental.UtilityClass;
 class _Utils {
 
     DomainEventHelper domainEventHelper() {
-        return DomainEventHelper.ofEventService(null);
+        return new DomainEventHelper(new MetamodelEventService(__->{}));
     }
 
     boolean contains(final Class<?>[] array, final Class<?> val) {
         for (final Class<?> element : array) {
-            if (element == val) {
-                return true;
-            }
+            if (element == val) return true;
         }
         return false;
     }
 
     boolean contains(final ImmutableEnumSet<FeatureType> featureTypes, final FeatureType featureType) {
-        if(featureTypes==null || featureType==null) {
-            return false;
-        }
+        if(featureTypes==null
+            || featureType==null) return false;
+
         return featureTypes.contains(featureType);
     }
 

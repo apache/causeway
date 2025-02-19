@@ -136,12 +136,9 @@ extends MetaModelContext {
 
     @Builder.Default
     private MetamodelEventService metamodelEventService =
-        MetamodelEventService
-        .builder()
-        .publisher(event->{
+        new MetamodelEventService(event->{
             System.out.printf("MetaModelContext_forTesting (logs event to console): %s%n", event);
-        })
-        .build();
+        });
 
     @Builder.Default
     private CausewaySystemEnvironment systemEnvironment = newCausewaySystemEnvironment();
