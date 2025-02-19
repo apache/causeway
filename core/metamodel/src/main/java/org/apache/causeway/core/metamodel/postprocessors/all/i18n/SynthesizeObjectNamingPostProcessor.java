@@ -20,8 +20,9 @@ package org.apache.causeway.core.metamodel.postprocessors.all.i18n;
 
 import jakarta.inject.Inject;
 
+import org.springframework.util.StringUtils;
+
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
@@ -57,15 +58,11 @@ extends MetaModelPostProcessorAbstract {
                 .filter(objectNamedFacet->objectNamedFacet.isNounPresent())
                 .findFirst()
                 .map(ObjectNamedFacet::singular)
-                .filter(_Strings::isNotEmpty)
+                .filter(StringUtils::hasText)
                 .orElseGet(()->getSingularFallbackNoun(objectSpecification));
 
         FacetUtil.addFacet(
-                new ObjectNamedFacetSynthesized(
-                        Noun.singular(singular),
-                        objectSpecification)
-                );
-
+                new ObjectNamedFacetSynthesized(new Noun(singular), objectSpecification));
     }
 
     // -- HELEPR

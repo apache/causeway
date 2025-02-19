@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -30,34 +29,23 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
-import lombok.Value;
-
-@Value
-public class ImperativeAspect {
+public record ImperativeAspect(
+    Can<MethodFacade> methods,
+    Intent intent) {
 
     // -- FACTORIES
 
-    public static ImperativeAspect singleRegularMethod(final ResolvedMethod method, final Intent checkIfDisabled) {
-        return new ImperativeAspect(ImperativeFacet.singleRegularMethod(method), checkIfDisabled);
+    public static ImperativeAspect singleRegularMethod(final ResolvedMethod method, final Intent intent) {
+        return new ImperativeAspect(ImperativeFacet.singleRegularMethod(method), intent);
     }
 
     // --
 
-    private final Can<MethodFacade> methods;
-    private final Intent intent;
-
-    public Intent getIntent(final MethodFacade method) {
-        return intent;
-    }
-
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("methods",
-                getMethods().stream()
-                .map(MethodFacade::toString)
-                .collect(Collectors.joining(", ")));
-        getMethods().forEach(method->
+        visitor.accept("methods", methods().join(", "));
+        methods().forEach(method->
             visitor.accept(
-                    "intent." + method.getName(), getIntent(method)));
+                    "intent." + method.getName(), intent));
     }
 
     public Object invokeSingleMethod(final ManagedObject domainObject) {
@@ -69,16 +57,13 @@ public class ImperativeAspect {
     public <T> T eval(
             final ManagedObject domainObject,
             final T fallback) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
-            return fallback;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return fallback;
+
         try {
             return _Casts.uncheckedCast(invokeSingleMethod(domainObject));
         } catch (final RuntimeException ex) {
-
             return fallback;
         }
-
     }
 
 }

@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
@@ -36,23 +35,13 @@ extends ObjectNamedFacetAbstract {
             final FacetHolder holder,
             final Facet.Precedence precedence) {
 
-        if(domainObjectLayout == null) {
-            return Optional.empty();
-        }
+        if(domainObjectLayout == null) return Optional.empty();
 
-        var singular = _Strings.emptyToNull(domainObjectLayout.getNamed());
+        var noun = new Noun(domainObjectLayout.getNamed());
 
-        var noun = Noun.singular(singular);
-
-        if(!noun.isLiteralPresent()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(
-                new ObjectNamedFacetForDomainObjectLayoutXml(
-                        noun,
-                            holder,
-                            precedence));
+        return noun.isEmpty()
+            ? Optional.empty()
+            : Optional.of(new ObjectNamedFacetForDomainObjectLayoutXml(noun, holder, precedence));
     }
 
     private ObjectNamedFacetForDomainObjectLayoutXml(

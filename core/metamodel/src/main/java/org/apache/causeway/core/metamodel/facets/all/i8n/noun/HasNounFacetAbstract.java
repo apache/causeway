@@ -62,7 +62,7 @@ implements HasNoun {
 
     @Override
     public boolean isNounPresent() {
-        return noun.isLiteralPresent();
+        return noun.isPresent();
     }
 
     @Override
@@ -79,7 +79,7 @@ implements HasNoun {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        if(noun.isLiteralPresent()) {
+        if(noun.isPresent()) {
             visitor.accept("hasNoun", "true");
             visitor.accept("originalText", text());
             visitor.accept("translated", translated()); // memoizes as a side-effect

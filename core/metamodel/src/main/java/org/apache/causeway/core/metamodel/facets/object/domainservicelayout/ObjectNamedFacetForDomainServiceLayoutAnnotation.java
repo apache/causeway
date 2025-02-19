@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainservicelayout;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
@@ -35,12 +34,10 @@ extends ObjectNamedFacetAbstract {
             final FacetHolder facetHolder) {
 
         return domainServiceLayoutIfAny
-                .map(DomainServiceLayout::named)
-                .filter(_Strings::isNotEmpty)
-                .map(serviceNamed->Noun.singular(serviceNamed))
-                .map(nounForms->new ObjectNamedFacetForDomainServiceLayoutAnnotation(
-                        nounForms,
-                        facetHolder));
+            .map(DomainServiceLayout::named)
+            .map(Noun::new)
+            .filter(Noun::isPresent)
+            .map(noun->new ObjectNamedFacetForDomainServiceLayoutAnnotation(noun, facetHolder));
     }
 
     private ObjectNamedFacetForDomainServiceLayoutAnnotation(

@@ -28,12 +28,12 @@ extends ImperativeFacet {
 
     @Override
     default Can<MethodFacade> getMethods() {
-        return getImperativeAspect().getMethods();
+        return getImperativeAspect().methods();
     }
 
     @Override
     default Intent getIntent() {
-        return getImperativeAspect().getIntent();
+        return getImperativeAspect().intent();
     }
 
 }

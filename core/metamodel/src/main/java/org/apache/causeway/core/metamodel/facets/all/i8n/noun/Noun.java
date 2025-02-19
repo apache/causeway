@@ -20,39 +20,46 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.noun;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Immutable value object that holds the null-able literal (String) for a noun.
+ * For the Noun to be non-empty requires the literal to contain at least one non-whitespace character.
  *
  * @since 2.0
+ * @see StringUtils#hasText
  */
-@lombok.Value(staticConstructor = "singular")
-public class Noun {
+public record Noun(
+    @Nullable String nullableLiteral) {
 
-    private final @Nullable String singular;
-
-    public boolean isLiteralPresent() {
-        return singular!=null;
+    // canonical constructor
+    public Noun(
+        @Nullable final String nullableLiteral) {
+        this.nullableLiteral = StringUtils.hasText(nullableLiteral)
+            ? nullableLiteral
+            : null;
     }
 
+    public boolean isEmpty() { return nullableLiteral==null; }
+    public boolean isPresent() { return nullableLiteral!=null; }
+
     public Optional<String> literal() {
-        return isLiteralPresent()
-                ? Optional.of(getSingular())
+        return isPresent()
+                ? Optional.of(nullableLiteral)
                 : Optional.empty();
     }
 
     public Noun translate(
             final @NonNull TranslationService translationService,
             final TranslationContext context) {
-
-        return isLiteralPresent()
-                ? singular(translationService.translate(context, singular))
+        return isPresent()
+                ? new Noun(translationService.translate(context, nullableLiteral))
                 : this;
     }
 
