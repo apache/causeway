@@ -39,13 +39,16 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ConflictingAnnotations;
 import org.apache.causeway.core.metamodel.commons.MethodUtil;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class MethodFinder {
+public record MethodFinder(
+        @NonNull Class<?> correspondingClass,
+        @NonNull Can<String> methodNameCandidates,
+        @NonNull EncapsulationPolicy encapsulationPolicy,
+        @NonNull Predicate<ResolvedMethod> mustSatisfy) {
+
+    public static final Can<String> ANY_NAME = Can.of(""); // arbitrary marker
+    public static final Class<?>[] NO_ARG = new Class<?>[0];
 
     public static MethodFinder of(
             final @NonNull Class<?> correspondingClass,
@@ -58,17 +61,14 @@ public class MethodFinder {
 
         return new MethodFinder(
                 correspondingClass,
+                methodNameCandidates,
                 encapsulationPolicy,
                 methodNameCandidates.equals(ANY_NAME)
                         ? isNotStatic.and(mustSatisfy)
                         : isNotStatic
                             .and(method->methodNameCandidates.contains(method.name()))
-                            .and(mustSatisfy),
-                methodNameCandidates);
+                            .and(mustSatisfy));
     }
-
-    public static final Can<String> ANY_NAME = Can.of(""); // arbitrary marker
-    public static final Class<?>[] NO_ARG = new Class<?>[0];
 
     public static MethodFinder notNecessarilyPublic(
             final Class<?> correspondingClass,
@@ -77,8 +77,7 @@ public class MethodFinder {
                 correspondingClass,
                 methodNameCandidates,
                 EncapsulationPolicy.ENCAPSULATED_MEMBERS_SUPPORTED,
-                _Predicates.alwaysTrue()
-                );
+                _Predicates.alwaysTrue());
     }
 
     public static MethodFinder publicOnly(
@@ -88,8 +87,7 @@ public class MethodFinder {
                 correspondingClass,
                 methodNameCandidates,
                 EncapsulationPolicy.ONLY_PUBLIC_MEMBERS_SUPPORTED,
-                _Predicates.alwaysTrue()
-                );
+                _Predicates.alwaysTrue());
     }
 
     public static MethodFinder accessor(
@@ -138,21 +136,14 @@ public class MethodFinder {
                 ProgrammingModelConstants.ConflictingAnnotations.MEMBER_SUPPORT);
     }
 
-    @Getter private final @NonNull Class<?> correspondingClass;
-    @Getter private final @NonNull EncapsulationPolicy encapsulationPolicy;
-    @Getter private final @NonNull Predicate<ResolvedMethod> mustSatisfy;
-    private final @NonNull Can<String> methodNameCandidates;
-
     public Stream<ResolvedMethod> streamMethodsMatchingSignature(
             final @Nullable Class<?>[] paramTypes) {
 
-        if(paramTypes==null) {
-            return streamMethodsIgnoringSignature();
-        }
+        if(paramTypes==null) return streamMethodsIgnoringSignature();
 
-        var type = getCorrespondingClass();
+        var type = correspondingClass();
         var classCache = _ClassCache.getInstance();
-        var isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        var isEncapsulationSupported = encapsulationPolicy().isEncapsulatedMembersSupported();
 
         if(methodNameCandidates.equals(ANY_NAME)) {
             //stream all
@@ -164,18 +155,18 @@ public class MethodFinder {
         }
 
         return methodNameCandidates.stream()
-        .map(name->isEncapsulationSupported
-                ? classCache.lookupResolvedMethod(type, name, paramTypes)
-                : classCache.lookupPublicMethod(type, name, paramTypes))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .filter(mustSatisfy);
+            .map(name->isEncapsulationSupported
+                    ? classCache.lookupResolvedMethod(type, name, paramTypes)
+                    : classCache.lookupPublicMethod(type, name, paramTypes))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(mustSatisfy);
     }
 
     public Stream<ResolvedMethod> streamMethodsIgnoringSignature() {
-        var type = getCorrespondingClass();
+        var type = correspondingClass();
         var classCache = _ClassCache.getInstance();
-        var isEncapsulationSupported = getEncapsulationPolicy().isEncapsulatedMembersSupported();
+        var isEncapsulationSupported = encapsulationPolicy().isEncapsulatedMembersSupported();
         return (isEncapsulationSupported
                 ? classCache.streamResolvedMethods(type)
                 : classCache.streamPublicMethods(type))
@@ -187,17 +178,17 @@ public class MethodFinder {
     public MethodFinder withRequiredReturnType(final @NonNull Class<?> requiredReturnType) {
         return new MethodFinder(
                 correspondingClass,
+                methodNameCandidates,
                 encapsulationPolicy,
-                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeATypeOf(requiredReturnType)),
-                methodNameCandidates);
+                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeATypeOf(requiredReturnType)));
     }
 
     public MethodFinder withReturnTypeAnyOf(final @NonNull Can<Class<?>> anyOfReturnTypes) {
         return new MethodFinder(
                 correspondingClass,
+                methodNameCandidates,
                 encapsulationPolicy,
-                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeAnyTypeOf(anyOfReturnTypes)),
-                methodNameCandidates);
+                mustSatisfy.and(resolvedMethod->resolvedMethod.isReturnTypeAnyTypeOf(anyOfReturnTypes)));
     }
 
     // -- HELPER

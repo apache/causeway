@@ -152,10 +152,10 @@ public final class ParameterSupport {
             final MethodAndPatConstructor supportingMethodAndPatConstructor) {
         return ParamSupportingMethodSearchResult
                 .of(paramIndex, paramType,
-                    supportingMethodAndPatConstructor.getSupportingMethod(),
-                    Optional.of(supportingMethodAndPatConstructor.getPatConstructor()),
+                    supportingMethodAndPatConstructor.supportingMethod(),
+                    Optional.of(supportingMethodAndPatConstructor.patConstructor()),
                     _GenericResolver.forMethodReturn(
-                            supportingMethodAndPatConstructor.getSupportingMethod()));
+                            supportingMethodAndPatConstructor.supportingMethod()));
     }
 
     private static void singleArgBeingParamType(
@@ -171,11 +171,11 @@ public final class ParameterSupport {
         var signature = new Class<?>[]{paramType};
 
         MethodFinder
-        .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
-        .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
-        .streamMethodsMatchingSignature(signature)
-        .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
-        .forEach(onMethodFound);
+            .memberSupport(type, methodNames, processMethodContext.getIntrospectionPolicy())
+            .withReturnTypeAnyOf(searchRequest.getReturnTypePattern().matchingTypes(paramType))
+            .streamMethodsMatchingSignature(signature)
+            .map(supportingMethod->toSearchResult(paramIndex, paramType, supportingMethod))
+            .forEach(onMethodFound);
     }
 
     /*

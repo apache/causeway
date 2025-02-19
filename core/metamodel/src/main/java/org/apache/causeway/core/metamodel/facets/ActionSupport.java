@@ -113,9 +113,9 @@ public final class ActionSupport {
             final MethodAndPatConstructor supportingMethodAndPatConstructor) {
         return ActionSupportingMethodSearchResult
                 .of(
-                        supportingMethodAndPatConstructor.getSupportingMethod(),
-                        supportingMethodAndPatConstructor.getSupportingMethod().returnType(),
-                        Optional.of(supportingMethodAndPatConstructor.getPatConstructor()));
+                        supportingMethodAndPatConstructor.supportingMethod(),
+                        supportingMethodAndPatConstructor.supportingMethod().returnType(),
+                        Optional.of(supportingMethodAndPatConstructor.patConstructor()));
     }
 
     private final static void findActionSupportingMethodWithAllParamTypes(
@@ -134,9 +134,9 @@ public final class ActionSupport {
             var signature = concat(paramTypes, paramsConsideredCount, additionalParamTypes);
 
             finderOptions
-            .streamMethodsMatchingSignature(signature)
-            .map(ActionSupport::toSearchResult)
-            .forEach(onMethodFound);
+                .streamMethodsMatchingSignature(signature)
+                .map(ActionSupport::toSearchResult)
+                .forEach(onMethodFound);
         }
     }
 
