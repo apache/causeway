@@ -327,7 +327,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                         associationIds.stream()
                         .map(oneToOneAssociationById::get)
                         .filter(_NullSafe::isPresent)
-                        .sorted(ObjectMember.Comparators.byMemberOrderSequence(false))
+                        .sorted(ObjectMember.byMemberOrderSequence(false))
                         .map(ObjectAssociation::getId)
                         .collect(Collectors.toList());
 
@@ -406,7 +406,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         final List<ObjectAction> sortedPossiblyMissingActions =
                 _Lists.map(possiblyMissingActionIds, objectActionById::get);
 
-        sortedPossiblyMissingActions.sort(ObjectMember.Comparators.byMemberOrderSequence(false));
+        sortedPossiblyMissingActions.sort(ObjectMember.byMemberOrderSequence(false));
 
         final List<String> sortedPossiblyMissingActionIds =
                 _Lists.map(sortedPossiblyMissingActions, ObjectMember::getId);

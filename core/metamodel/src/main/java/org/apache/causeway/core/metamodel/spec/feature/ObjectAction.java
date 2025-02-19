@@ -24,6 +24,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -55,8 +57,6 @@ import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
-
-import org.jspecify.annotations.NonNull;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -386,7 +386,7 @@ public interface ObjectAction extends ObjectMember {
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates.isSameLayoutGroupAs(association))
-            .sorted(Comparators.byMemberOrderSequence(false));
+            .sorted(ObjectMember.byMemberOrderSequence(false));
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {

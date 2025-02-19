@@ -27,7 +27,7 @@ import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class MMHintUtils {
+public class MmHintUtils {
 
     public String hintId(final @Nullable ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) return null;

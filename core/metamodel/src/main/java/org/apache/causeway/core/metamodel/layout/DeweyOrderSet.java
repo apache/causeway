@@ -35,8 +35,7 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
-import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberIdentifierComparator;
-import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
+import org.apache.causeway.core.metamodel.object.MmSortUtils;
 
 /**
  * Represents a nested hierarchy of ordered members.
@@ -76,7 +75,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     public static DeweyOrderSet createOrderSet(final Stream<? extends FacetHolder> identifiedHolders) {
 
         final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup = _Maps.newTreeMap();
-        final SortedSet<FacetHolder> nonAnnotatedGroup = _Sets.newTreeSet(new MemberIdentifierComparator());
+        final SortedSet<FacetHolder> nonAnnotatedGroup = _Sets.newTreeSet(MmSortUtils::memberIdentifierCompare);
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
@@ -150,24 +149,19 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     /**
      * Gets the SortedSet with the specified group from the supplied Map of
      * SortedSets.
-     *
      * <p>
-     * If there is no such SortedSet, creates.
-     *
-     * @param sortedMembersByGroup
-     * @param groupName
-     * @return
+     * If there is no such SortedSet, creates one.
      */
     private static SortedSet<FacetHolder> getSortedSet(final SortedMap<String, SortedSet<FacetHolder>> sortedMembersByGroup, final String groupName) {
         SortedSet<FacetHolder> sortedMembersForGroup = sortedMembersByGroup.get(groupName);
         if (sortedMembersForGroup == null) {
-            sortedMembersForGroup = new TreeSet<FacetHolder>(new MemberOrderComparator(true));
+            sortedMembersForGroup = new TreeSet<FacetHolder>((a, b)->MmSortUtils.compareMemberOrder(true, a, b));
             sortedMembersByGroup.put(groupName, sortedMembersForGroup);
         }
         return sortedMembersForGroup;
     }
 
-    // /////////////////////////////////////////////////////////////////////////
+    // --
 
     private final List<Object> elements = _Lists.newArrayList();
     private final String groupFullName;
@@ -182,7 +176,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
      */
     protected SortedSet<DeweyOrderSet> childOrderSets = new TreeSet<DeweyOrderSet>();
 
-    // /////////////////////////////////////////////////////////////////////////
+    // --
 
     private DeweyOrderSet(final String groupFullName) {
         this.groupFullName = groupFullName;
@@ -191,7 +185,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         groupPath = deriveGroupPath(groupFullName);
     }
 
-    // ///////////////// Group Name etc ////////////////////
+    // -- Group Name etc
 
     /**
      * Last component of the comma-separated group name supplied in the

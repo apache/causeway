@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.objectmanager.memento;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.object.MMHintUtils;
+import org.apache.causeway.core.metamodel.object.MmHintUtils;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 
@@ -50,7 +50,7 @@ implements ObjectMemento {
 
         return new ObjectMementoSingular(
                 adapter.getLogicalType(),
-                MMHintUtils.bookmarkElseFail(adapter),
+                MmHintUtils.bookmarkElseFail(adapter),
                 MmTitleUtils.titleOf(adapter));
     }
 

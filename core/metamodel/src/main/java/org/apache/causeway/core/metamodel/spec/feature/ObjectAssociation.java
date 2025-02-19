@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.spec.feature;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 import org.jspecify.annotations.Nullable;
@@ -28,15 +26,10 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
-import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -209,46 +202,6 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          */
         private static boolean equivalent(final ObjectSpecification parentSpec, final ObjectSpecification childSpec) {
             return parentSpec.isOfType(childSpec) || childSpec.isOfType(parentSpec);
-        }
-    }
-
-    // -- UTIL
-
-    @Domain.Exclude
-    public static class Util {
-        private Util(){}
-
-        public static final String LAYOUT_DEFAULT_GROUP = "General";
-
-        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
-                final List<ObjectAssociation> associations) {
-            Map<String, List<ObjectAssociation>> associationsByGroup = _Maps.newHashMap();
-            for(ObjectAssociation association: associations) {
-                addAssociationIntoGroup(associationsByGroup, association);
-            }
-            for (Map.Entry<String, List<ObjectAssociation>> objectAssociations : associationsByGroup.entrySet()) {
-                objectAssociations.getValue().sort(new MemberOrderComparator(true));
-            }
-            return associationsByGroup;
-        }
-
-        private static void addAssociationIntoGroup(
-                final Map<String, List<ObjectAssociation>> associationsByGroup,
-                final ObjectAssociation association) {
-
-            var layoutGroupFacet = association.getFacet(LayoutGroupFacet.class);
-            if(layoutGroupFacet != null) {
-                var fieldSetId = layoutGroupFacet.getGroupId();
-                if(_Strings.isNotEmpty(fieldSetId)) {
-                    getFrom(associationsByGroup, fieldSetId).add(association);
-                    return;
-                }
-            }
-            getFrom(associationsByGroup, LAYOUT_DEFAULT_GROUP).add(association);
-        }
-
-        private static List<ObjectAssociation> getFrom(final Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
-            return associationsByGroup.computeIfAbsent(groupName, k -> _Lists.newArrayList());
         }
     }
 

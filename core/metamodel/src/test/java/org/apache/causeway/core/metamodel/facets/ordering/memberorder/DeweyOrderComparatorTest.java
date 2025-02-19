@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.ordering.memberorder;
 
+import java.util.Comparator;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -34,11 +36,11 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetAbstract;
-import org.apache.causeway.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
+import org.apache.causeway.core.metamodel.object.MmSortUtils;
 
 class DeweyOrderComparatorTest  {
 
-    private MemberOrderComparator comparator, laxComparator;
+    private Comparator<Object> comparator, laxComparator;
 
     static class Customer {
         private String abc;
@@ -59,8 +61,8 @@ class DeweyOrderComparatorTest  {
 	@BeforeEach
     protected void setUp() {
         _Context.clear();
-        comparator = new MemberOrderComparator(true);
-        laxComparator = new MemberOrderComparator(false);
+        comparator = (a, b)->MmSortUtils.compareMemberOrder(true, a, b);
+        laxComparator = (a, b)->MmSortUtils.compareMemberOrder(false, a, b);
     }
 
 	@Test

@@ -48,7 +48,7 @@ class _UnreferencedSequenceUtil {
                     .sorted()
                     .collect(Collectors.toList())
                 : propertyStream
-                    .sorted(ObjectMember.Comparators.byMemberOrderSequence(false))
+                    .sorted(ObjectMember.byMemberOrderSequence(false))
                     .map(ObjectAssociation::getId)
                     .collect(Collectors.toList());
     }
@@ -64,7 +64,7 @@ class _UnreferencedSequenceUtil {
                     .sorted()
                     .collect(Collectors.toList())
                 : collectionStream
-                    .sorted(ObjectMember.Comparators.byMemberOrderSequence(false))
+                    .sorted(ObjectMember.byMemberOrderSequence(false))
                     .map(ObjectAssociation::getId)
                     .collect(Collectors.toList());
     }
