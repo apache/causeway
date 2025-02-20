@@ -20,9 +20,9 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import java.io.Serializable;
 
-import org.apache.causeway.core.config.CausewayConfiguration;
-
 import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 /**
  * <h1>Troubleshooting Visibility and Usability</h1>
@@ -50,10 +50,22 @@ import org.jspecify.annotations.NonNull;
  * </li>
  * </ol>
  */
-@lombok.Value
-public class RenderPolicy implements Serializable {
+public record RenderPolicy(
+    /**
+     * If not specified or is set to HIDE, then the behaviour is as per normal.
+     * However, if set to SHOW_AS_DISABLED then instead the action or property will be shown,
+     * but disabled with the veto providing some explanation as to why. And, if set to SHOW_AS_DISABLED_WITH_DIAGNOSTICS,
+     * then the class name of the metamodel facet that vetoed the visibility is also shown in the tooltip.
+     */
+    CausewayConfiguration.Prototyping.@NonNull IfHiddenPolicy ifHiddenPolicy,
 
-    private static final long serialVersionUID = 1L;
+    /**
+     * If not specified or is set to DISABLED, then the behaviour is as per normal.
+     * But if set to SHOW_AS_DISABLED_WITH_DIAGNOSTICS, then the class name of the metamodel facet that vetoed
+     * the usability is also shown in the tooltip.
+     */
+    CausewayConfiguration.Prototyping.@NonNull IfDisabledPolicy ifDisabledPolicy
+    ) implements Serializable {
 
     /**
      * Always HIDE and DISABLE.
@@ -63,20 +75,5 @@ public class RenderPolicy implements Serializable {
                 CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE,
                 CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE);
     }
-
-    /**
-     * If not specified or is set to HIDE, then the behaviour is as per normal.
-     * However, if set to SHOW_AS_DISABLED then instead the action or property will be shown,
-     * but disabled with the veto providing some explanation as to why. And, if set to SHOW_AS_DISABLED_WITH_DIAGNOSTICS,
-     * then the class name of the metamodel facet that vetoed the visibility is also shown in the tooltip.
-     */
-    private final CausewayConfiguration.Prototyping.@NonNull IfHiddenPolicy ifHiddenPolicy;
-
-    /**
-     * If not specified or is set to DISABLED, then the behaviour is as per normal.
-     * But if set to SHOW_AS_DISABLED_WITH_DIAGNOSTICS, then the class name of the metamodel facet that vetoed
-     * the usability is also shown in the tooltip.
-     */
-    private final CausewayConfiguration.Prototyping.@NonNull IfDisabledPolicy ifDisabledPolicy;
 
 }

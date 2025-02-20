@@ -49,7 +49,7 @@ public final class InteractionUtils {
         var iaResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
-        var ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
+        var ifHiddenPolicy = context.getRenderPolicy().ifHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
@@ -77,7 +77,7 @@ public final class InteractionUtils {
         var isResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
-        var ifHiddenPolicy = context.getRenderPolicy().getIfHiddenPolicy();
+        var ifHiddenPolicy = context.getRenderPolicy().ifHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 break;
@@ -100,7 +100,7 @@ public final class InteractionUtils {
                 break;
         }
 
-        var ifDisabledPolicy = context.getRenderPolicy().getIfDisabledPolicy();
+        var ifDisabledPolicy = context.getRenderPolicy().ifDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{

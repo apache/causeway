@@ -31,29 +31,43 @@ import org.jspecify.annotations.NonNull;
 /**
  * Pair of {@link ObjectSpecification} and {@link Bookmark}.
  */
-@lombok.Value(staticConstructor = "of")
-public class ProtoObject {
-
-    private final @NonNull ObjectSpecification objectSpecification;
-    private final @NonNull Bookmark bookmark;
+public record ProtoObject(
+    @NonNull ObjectSpecification objectSpecification,
+    @NonNull Bookmark bookmark) {
 
     public static Optional<ProtoObject> resolve(
             final @NonNull SpecificationLoader specificationLoader,
             final @Nullable Bookmark bookmark) {
-        if(bookmark==null) {
-            return Optional.empty();
-        }
+        if(bookmark==null) return Optional.empty();
+
         return specificationLoader
                 .specForLogicalTypeName(bookmark.logicalTypeName())
-                .map(spec->of(spec, bookmark));
+                .map(spec->new ProtoObject(spec, bookmark));
     }
 
     public static ProtoObject resolveElseFail(
             final @NonNull SpecificationLoader specificationLoader,
             final @NonNull Bookmark bookmark) {
-        return of(specificationLoader
+        return new ProtoObject(specificationLoader
                     .specForLogicalTypeNameElseFail(bookmark.logicalTypeName()),
                 bookmark);
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return obj instanceof ProtoObject other
+            ? this.bookmark().equals(other.bookmark())
+            : false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return bookmark().hashCode();
+    }
+
+    @Override
+    public final String toString() {
+        return "ProtoObject[bookmark=%s]".formatted(bookmark);
     }
 
 }

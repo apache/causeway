@@ -39,12 +39,12 @@ record ObjectLoaderFactory() {
         LoadService{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 return spec.isInjectable();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 var logicalType = spec.logicalType();
                 var servicePojo = spec.getServiceRegistry()
                     .lookupRegisteredBeanById(logicalType)
@@ -58,15 +58,15 @@ record ObjectLoaderFactory() {
         LoadValue{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 return spec.isValue();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 var valueFacet = spec.valueFacetElseFail();
 
-                var bookmark = objectLoadRequest.getBookmark();
+                var bookmark = objectLoadRequest.bookmark();
                 var valuePojoIfAny = valueFacet.destring(Format.URL_SAFE, bookmark.identifier());
 
                 return ManagedObject.value(spec, valuePojoIfAny);
@@ -75,31 +75,31 @@ record ObjectLoaderFactory() {
         LoadViewModel{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 return spec.isViewModel();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 var viewModelFacet = spec.viewmodelFacetElseFail();
 
-                var bookmark = objectLoadRequest.getBookmark();
+                var bookmark = objectLoadRequest.bookmark();
                 return viewModelFacet.instantiate(spec, Optional.of(bookmark));
             }
         },
         LoadEntity{
             @Override
             public boolean isHandling(final ProtoObject objectLoadRequest) {
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 return spec.isEntity();
             }
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
 
-                var spec = objectLoadRequest.getObjectSpecification();
+                var spec = objectLoadRequest.objectSpecification();
                 var entityFacet = spec.entityFacetElseFail();
 
-                var bookmark = objectLoadRequest.getBookmark();
+                var bookmark = objectLoadRequest.bookmark();
                 var entityPojoIfAny = entityFacet.fetchByBookmark(bookmark);
 
                 return entityPojoIfAny
