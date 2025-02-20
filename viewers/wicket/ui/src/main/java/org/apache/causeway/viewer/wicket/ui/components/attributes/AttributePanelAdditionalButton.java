@@ -40,7 +40,7 @@ enum AttributePanelAdditionalButton {
             var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION;
             return precondition
                     && attributeModel.disabledReason()
-                        .map(InteractionVeto::getVetoConsent)
+                        .map(InteractionVeto::vetoConsent)
                         .flatMap(Consent::getReason)
                         .map(VetoReason::uiHint)
                         .map(VetoReason.UiHint::isShowBanIcon)
@@ -58,7 +58,7 @@ enum AttributePanelAdditionalButton {
                     && attributeModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled();
             return precondition
                     && attributeModel.disabledReason()
-                        .map(InteractionVeto::getVetoConsent)
+                        .map(InteractionVeto::vetoConsent)
                         .flatMap(Consent::getReason)
                         .map(VetoReason::uiHint)
                         // opposite of logic in DISABLED_REASON above,

@@ -39,7 +39,7 @@ public class InteractionFailureHandler {
                             "unexpected empty failure holder");
         }
 
-        switch(veto.getVetoType()) {
+        switch(veto.vetoType()) {
         case NOT_FOUND:
         case HIDDEN:
             return RestfulObjectsApplicationException
@@ -66,7 +66,7 @@ public class InteractionFailureHandler {
 
         return RestfulObjectsApplicationException
                 .createWithMessage(RestfulResponse.HttpStatusCode.INTERNAL_SERVER_ERROR,
-                        "unmatched veto type " + veto.getVetoType());
+                        "unmatched veto type " + veto.vetoType());
 
     }
 

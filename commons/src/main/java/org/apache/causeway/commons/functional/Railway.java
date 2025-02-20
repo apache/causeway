@@ -22,11 +22,12 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -240,32 +241,32 @@ public interface Railway<F, S> {
     @FunctionalInterface
     public static interface HasRailway<F, S> extends Railway<F, S> {
 
-        Railway<F, S> getRailway();
+        Railway<F, S> railway();
 
-        @Override default boolean isSuccess() { return getRailway().isSuccess(); }
-        @Override default boolean isFailure() { return getRailway().isFailure(); }
+        @Override default boolean isSuccess() { return railway().isSuccess(); }
+        @Override default boolean isFailure() { return railway().isFailure(); }
 
-        @Override default Optional<S> getSuccess() { return getRailway().getSuccess(); }
-        @Override default Optional<F> getFailure() { return getRailway().getFailure(); }
+        @Override default Optional<S> getSuccess() { return railway().getSuccess(); }
+        @Override default Optional<F> getFailure() { return railway().getFailure(); }
 
         @Override default Railway<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer) {
-            return getRailway().ifSuccess(successConsumer); }
+            return railway().ifSuccess(successConsumer); }
         @Override default Railway<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer) {
-            return getRailway().ifFailure(failureConsumer); }
+            return railway().ifFailure(failureConsumer); }
 
         @Override default <R> Railway<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper) {
-            return getRailway().mapSuccess(successMapper); }
+            return railway().mapSuccess(successMapper); }
         @Override default <R> Railway<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper) {
-            return getRailway().mapFailure(failureMapper); }
+            return railway().mapFailure(failureMapper); }
 
         @Override default <R> R fold(
                 final @NonNull ThrowingFunction<F, R> failureMapper,
                 final @NonNull ThrowingFunction<S, R> successMapper) {
-            return getRailway().fold(failureMapper, successMapper);
+            return railway().fold(failureMapper, successMapper);
         }
 
         @Override default public Railway<F, S> chain(final @NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction){
-            return getRailway().chain(chainingFunction);
+            return railway().chain(chainingFunction);
         }
     }
 

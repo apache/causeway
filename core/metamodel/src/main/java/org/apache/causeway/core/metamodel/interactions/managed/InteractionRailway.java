@@ -20,25 +20,19 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Railway.HasRailway;
 
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
-
 /**
  * Follows the <em>Railway Pattern</em>, that is, once vetoed, stays vetoed.
  * @see Railway
  */
-@RequiredArgsConstructor(access=AccessLevel.PROTECTED)
-@ToString @EqualsAndHashCode
-public final class InteractionRailway<T extends ManagedMember>
+public record InteractionRailway<T extends ManagedMember>(
+    Railway<InteractionVeto, T> railway)
 implements
     HasRailway<InteractionVeto, T>,
     Serializable {
@@ -51,8 +45,6 @@ implements
     public static <T extends ManagedMember> InteractionRailway<T> veto(final InteractionVeto veto) {
         return new InteractionRailway<>(Railway.<InteractionVeto, T>failure(veto));
     }
-
-    @Getter private final Railway<InteractionVeto, T> railway;
 
     @Override // type-safe override
     public InteractionRailway<T> chain(final @NonNull ThrowingFunction<T, Railway<InteractionVeto, T>> chainingFunction) {

@@ -29,10 +29,7 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
 
     public static enum AccessIntent {
         ACCESS, MUTATE;
-
-        public boolean isMutate() {
-            return this == MUTATE;
-        }
+        public boolean isMutate() { return this == MUTATE; }
     }
 
     @NonNull protected InteractionRailway<T> railway;

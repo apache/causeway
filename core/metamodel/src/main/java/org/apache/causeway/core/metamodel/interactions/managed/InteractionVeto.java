@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -28,16 +29,10 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.consent.Veto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-public class InteractionVeto implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public record InteractionVeto(
+    @NonNull VetoType vetoType,
+    @NonNull Consent vetoConsent
+    ) implements Serializable {
 
     public static enum VetoType {
         NOT_FOUND,
@@ -47,13 +42,11 @@ public class InteractionVeto implements Serializable {
 
         ACTION_NOT_SAFE,
         ACTION_NOT_IDEMPOTENT,
-        ACTION_PARAM_INVALID,
-        ;
-        public boolean isHidden() { return this == HIDDEN;};
+        ACTION_PARAM_INVALID;
+
+        public boolean isHidden() { return this == HIDDEN;}
     }
 
-    @NonNull private final VetoType vetoType;
-    @NonNull private final Consent vetoConsent;
 
     public static InteractionVeto notFound(
             final Identifier.@NonNull Type memberType,
@@ -61,50 +54,50 @@ public class InteractionVeto implements Serializable {
         var reason = String.format("member '%s' in %s either does not exist, is disabled or is not visible",
                 "" + memberId,
                 memberType.name().toLowerCase());
-        return of(VetoType.NOT_FOUND, new Veto(reason));
+        return new InteractionVeto(VetoType.NOT_FOUND, new Veto(reason));
     }
 
     public static InteractionVeto hidden(final @NonNull Consent vetoConsent) {
-        return of(VetoType.HIDDEN, vetoConsent);
+        return new InteractionVeto(VetoType.HIDDEN, vetoConsent);
     }
 
     public static InteractionVeto readonly(final @NonNull Consent vetoConsent) {
-        return of(VetoType.READONLY, vetoConsent);
+        return new InteractionVeto(VetoType.READONLY, vetoConsent);
     }
 
     public static InteractionVeto invalid(final @NonNull Consent vetoConsent) {
-        return of(VetoType.INVALID, vetoConsent);
+        return new InteractionVeto(VetoType.INVALID, vetoConsent);
     }
 
     public static InteractionVeto actionNotSafe(final @NonNull ManagedAction action) {
         var reason = String.format("Method not allowed; action '%s' does not have safe semantics",
                 action.getId());
-        return of(VetoType.ACTION_NOT_SAFE, new Veto(reason));
+        return new InteractionVeto(VetoType.ACTION_NOT_SAFE, new Veto(reason));
     }
 
     public static InteractionVeto actionNotIdempotent(final @NonNull ManagedAction action) {
         var reason = String.format("Method not allowed; action '%s' does not have idempotent semantics",
                 action.getId());
-        return of(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
+        return new InteractionVeto(VetoType.ACTION_NOT_IDEMPOTENT, new Veto(reason));
     }
 
     public static InteractionVeto actionParamInvalid(final @NonNull Consent vetoConsent) {
-        return of(VetoType.ACTION_PARAM_INVALID, vetoConsent);
+        return new InteractionVeto(VetoType.ACTION_PARAM_INVALID, vetoConsent);
     }
 
     public static InteractionVeto actionParamInvalid(final @NonNull String reason) {
-        return of(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
+        return new InteractionVeto(VetoType.ACTION_PARAM_INVALID, new Veto(reason));
     }
 
     public Optional<VetoReason> getReason() {
-        return getVetoConsent().getReason();
+        return vetoConsent().getReason();
     }
     public Optional<String> getReasonAsString() {
-        return getVetoConsent().getReasonAsString();
+        return vetoConsent().getReasonAsString();
     }
 
     public String getDescription() {
-        return getVetoConsent().getDescription();
+        return vetoConsent().getDescription();
     }
 
     @Override
