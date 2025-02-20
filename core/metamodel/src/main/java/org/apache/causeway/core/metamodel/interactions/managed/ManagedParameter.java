@@ -20,49 +20,26 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
-
-@Log4j2
-public abstract class ManagedParameter
-implements
+public interface ManagedParameter
+extends
     ManagedValue,
     ManagedFeature {
-
-    public abstract int getParamNr();
-    @Override public abstract ObjectActionParameter getMetaModel();
-    public abstract ParameterNegotiationModel getNegotiationModel();
-
+    
+    ObjectActionParameter metaModel();
+    @Override default ObjectActionParameter getMetaModel() { return metaModel(); }
+    
+    int paramIndex();
+    ParameterNegotiationModel negotiationModel();
+    
     /**
-     * @param params
      * @return non-empty if not usable/editable (meaning if read-only)
      */
-    public final Optional<InteractionVeto> checkUsability(final @NonNull Can<ManagedObject> params) {
-
-        try {
-            var head = getNegotiationModel().getHead();
-
-            var usabilityConsent =
-                    getMetaModel()
-                    .isUsable(head, params, InteractionInitiatedBy.USER);
-
-            return usabilityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.readonly(usabilityConsent))
-                    : Optional.empty();
-
-        } catch (final Exception ex) {
-
-            log.warn(ex.getLocalizedMessage(), ex);
-            return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
-
-        }
-
-    }
+    Optional<InteractionVeto> checkUsability(@NonNull Can<ManagedObject> params);
 
 }

@@ -50,7 +50,7 @@ public final class MmDebugUtils {
         }
         String formatted(final ManagedParameter managedParam) {
             return String.format("- param[index=%d,name=%s]: %s",
-                    managedParam.getParamNr(),
+                    managedParam.paramIndex(),
                     managedParam.getFriendlyName(),
                     formatPendingValue(managedParam.getValue().getValue()));
         }

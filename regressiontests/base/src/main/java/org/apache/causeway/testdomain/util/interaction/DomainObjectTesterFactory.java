@@ -367,7 +367,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 pendingArgs.getParamModels()
                         .forEach(param->{
                             pojoReplacers
-                                .get(param.getParamNr())
+                                .get(param.paramIndex())
                                 .ifPresent(replacer->updatePojo(param, replacer));
                         });
 
@@ -397,7 +397,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 pendingArgs.getParamModels()
                         .forEach(param->{
                             pojoVector
-                                .get(param.getParamNr())
+                                .get(param.paramIndex())
                                 .ifPresent(pojo->updatePojo(param, __->pojo));
                         });
 
@@ -431,7 +431,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 pendingArgs.getParamModels()
                 .forEach(param->{
                     pojoReplacers
-                        .get(param.getParamNr())
+                        .get(param.paramIndex())
                         .ifPresent(replacer->updatePojo(param, replacer));
                 });
 
@@ -463,7 +463,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 pendingArgs.getParamModels()
                 .forEach(param->{
                     pojoTests
-                        .get(param.getParamNr())
+                        .get(param.paramIndex())
                         .ifPresent(pojoTest->
                             pojoTest.accept(
                                     MmUnwrapUtils.single(param.getValue().getValue())
@@ -491,7 +491,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 startParameterNegotiation(checkRules).getParamModels()
                 .forEach(param->{
                     pojoTests
-                        .get(param.getParamNr())
+                        .get(param.paramIndex())
                         .ifPresent(pojoTest->
                             pojoTest.accept(
                                     (List<X>) choicesFor(param)
@@ -526,10 +526,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                     pendingArgs.getParamModels()
                     .forEach(param->{
 
-                        var consent = pendingArgs.getVisibilityConsent(param.getParamNr());
+                        var consent = pendingArgs.getVisibilityConsent(param.paramIndex());
 
                         visibilityTests
-                            .get(param.getParamNr())
+                            .get(param.paramIndex())
                             .ifPresent(visibilityTest->
                                 visibilityTest.accept(consent.isAllowed()));
                     });
@@ -554,10 +554,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                     pendingArgs.getParamModels()
                     .forEach(param->{
 
-                        var consent = pendingArgs.getUsabilityConsent(param.getParamNr());
+                        var consent = pendingArgs.getUsabilityConsent(param.paramIndex());
 
                         usabilityTests
-                            .get(param.getParamNr())
+                            .get(param.paramIndex())
                             .ifPresent(usabilityTest->
                                 usabilityTest.accept(consent.getReasonAsString().orElse(null)));
                     });
@@ -583,7 +583,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                         var objManager = param.getMetaModel().getObjectManager();
 
                         pojoArgMappers
-                            .get(param.getParamNr())
+                            .get(param.paramIndex())
                             .ifPresent(argMapper->
                                 param.getValue().setValue(
                                     objManager
@@ -640,7 +640,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 pendingArgs.getParamModels()
                         .forEach(param->{
                             pojoReplacers
-                                .get(param.getParamNr())
+                                .get(param.paramIndex())
                                 .ifPresent(replacer->updatePojo(param, replacer));
                         });
 

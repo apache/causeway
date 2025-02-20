@@ -21,7 +21,8 @@ package org.apache.causeway.core.metamodel.tabular.simple;
 import jakarta.inject.Named;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,6 +39,7 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 class DataTableSerializationTest implements HasMetaModelContext {
 
@@ -49,52 +51,59 @@ class DataTableSerializationTest implements HasMetaModelContext {
             .build();
     }
 
-    @Named("DataTableSerializationTest.Customer")
+    @Named("DataTableSerializationTest.CustomerClass")
     @AllArgsConstructor
-    public static class Customer implements ViewModel {
+    public static class CustomerClass implements ViewModel {
 
-        @Property
-        @Getter @Setter
-        private String memento;
+        @Property @Getter @Setter private String memento;
 
-        @Override
-        public String viewModelMemento() {
-            return memento;
-        }
+        @Override public String viewModelMemento() { return memento; }
+    }
+    
+    @Named("DataTableSerializationTest.CustomerRecord")
+    public record CustomerRecord(@Property String memento) implements ViewModel {
 
+        @Override public String viewModelMemento() { return memento; }
     }
 
-    @Test
-    void roundtripOnEmptyTable() {
-        var original = DataTable.forDomainType(Customer.class);
+
+    @ParameterizedTest
+    @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
+    void roundtripOnEmptyTable(Class<? extends ViewModel> viewmodelClass) {
+        var original = DataTable.forDomainType(viewmodelClass);
         var afterRoundtrip = _SerializationTester.roundtrip(original);
 
         assertNotNull(afterRoundtrip);
         assertEquals(
-                "DataTableSerializationTest.Customer",
+                "DataTableSerializationTest." + viewmodelClass.getSimpleName(),
                 afterRoundtrip.elementType().logicalTypeName());
         assertEquals(0, afterRoundtrip.getElementCount());
         assertEquals(1, afterRoundtrip.dataColumns().size());
         assertEquals(0, afterRoundtrip.dataRows().size());
     }
 
-    @Test
-    void roundtripOnPopulatedTable() {
-        var original = DataTable.forDomainType(Customer.class)
-            .withDataElementPojos(Can.of(
-                getObjectManager().adapt(new Customer("cus-1")),
-                getObjectManager().adapt(new Customer("cus-2"))
-                ));
+    @ParameterizedTest
+    @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
+    void roundtripOnPopulatedTable(Class<? extends ViewModel> viewmodelClass) {
+        var original = DataTable.forDomainType(viewmodelClass)
+            .withDataElementPojos(Can.of("cus-1", "cus-2")
+                .map(name->newInstance(viewmodelClass, name))
+                .map(getObjectManager()::adapt));
 
         var afterRoundtrip = _SerializationTester.roundtrip(original);
         assertNotNull(afterRoundtrip);
         assertEquals(2, afterRoundtrip.dataRows().size());
 
-        var cus1 = (Customer) afterRoundtrip.dataRows().getElseFail(0).rowElement().getPojo();
-        var cus2 = (Customer) afterRoundtrip.dataRows().getElseFail(1).rowElement().getPojo();
+        var cus1 = (ViewModel) afterRoundtrip.dataRows().getElseFail(0).rowElement().getPojo();
+        var cus2 = (ViewModel) afterRoundtrip.dataRows().getElseFail(1).rowElement().getPojo();
 
-        assertEquals("cus-1", cus1.getMemento());
-        assertEquals("cus-2", cus2.getMemento());
+        assertEquals("cus-1", cus1.viewModelMemento());
+        assertEquals("cus-2", cus2.viewModelMemento());
+    }
+    
+    @SneakyThrows
+    private static ViewModel newInstance(Class<? extends ViewModel> viewmodelClass, String memento) {
+        return viewmodelClass.getConstructor(new Class<?>[]{String.class}).newInstance(memento);
     }
 
 }

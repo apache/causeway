@@ -144,7 +144,7 @@ public class PendingParamsSnapshot implements Serializable {
                         ()->String.format("Framework Bug: cardinality constraint mismatch on parameter %s",
                                 paramModel.getMetaModel().getFeatureIdentifier()));
                 if(isPlural) {
-                    cardinalityConstraints[paramModel.getParamNr()] =
+                    cardinalityConstraints[paramModel.paramIndex()] =
                             Objects.requireNonNull(((PackedManagedObject)paramValue).getLogicalType());
                 }
             }

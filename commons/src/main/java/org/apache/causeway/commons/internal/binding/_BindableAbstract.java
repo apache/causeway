@@ -45,7 +45,7 @@ import lombok.Setter;
 public abstract class _BindableAbstract<T> implements Bindable<T> {
 
     private T value;
-    private Observable<? extends T> observable = null;;
+    private Observable<? extends T> observable = null;
     private InvalidationListener invalidationListener = null;
     private boolean valid = true;
     private InternalUtil<T> util = null;
@@ -178,9 +178,8 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
 
         var newBindable = _Bindables.<R>forValue(forwardMapper.apply(getValue()));
         addListener((e,o,n)->{
-            if(isReverseUpdating.get()) {
-                return;
-            }
+            if(isReverseUpdating.get()) return;
+
             try {
                 isForwardUpdating.set(true);
                 newBindable.setValue(forwardMapper.apply(n));
@@ -190,9 +189,8 @@ public abstract class _BindableAbstract<T> implements Bindable<T> {
         });
 
         newBindable.addListener((e,o,n)->{
-            if(isForwardUpdating.get()) {
-                return;
-            }
+            if(isForwardUpdating.get()) return;
+
             try {
                 isReverseUpdating.set(true);
                 setValue(reverseMapper.apply(n));

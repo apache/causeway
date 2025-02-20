@@ -24,12 +24,14 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.binding._BindableAbstract;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
@@ -38,6 +40,7 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
+import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -45,8 +48,7 @@ import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Model used to negotiate the parameter values of an action by means of an UI dialog.
@@ -133,7 +135,7 @@ public class ParameterNegotiationModel {
         var valueIterator = paramValues.iterator();
         paramModels.forEach(paramModel->{
             if(!valueIterator.hasNext()) return;
-            paramModel.getBindableParamValue().setValue(valueIterator.next());
+            paramModel.bindableParamValue().setValue(valueIterator.next());
         });
     }
 
@@ -148,19 +150,19 @@ public class ParameterNegotiationModel {
     }
 
     @NonNull public Bindable<ManagedObject> getBindableParamValue(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getBindableParamValue();
+        return paramModels.getElseFail(paramNr).bindableParamValue();
     }
 
     @NonNull public BooleanBindable getBindableParamValueDirtyFlag(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getBindableParamValueDirtyFlag();
+        return paramModels.getElseFail(paramNr).bindableParamValueDirtyFlag();
     }
 
     @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getObservableParamChoices();
+        return paramModels.getElseFail(paramNr).observableParamChoices();
     }
 
     @NonNull public Observable<String> getObservableParamValidation(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getObservableParamValidation();
+        return paramModels.getElseFail(paramNr).observableParamValidation();
     }
 
     /**
@@ -168,20 +170,26 @@ public class ParameterNegotiationModel {
      * (Ignoring the {@link ParameterModel#isValidationFeedbackActive()} flag.)
      * @apiNote introduced for [CAUSEWAY-3753] - not sure why required.
      */
-    @NonNull public String validateImmediately(final int paramNr) {
-        return paramModels.getElseFail(paramNr).validateImmediately();
+    @NonNull public String validateImmediately(final int paramIndex) {
+        return getHead().getMetaModel().getParameterByIndex(paramIndex)
+                .isValid(
+                        getHead(),
+                        getParamValues(),
+                        InteractionInitiatedBy.USER)
+                .getReasonAsString()
+                .orElse(null);
     }
 
     @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getBindableParamSearchArgument();
+        return paramModels.getElseFail(paramNr).bindableParamSearchArgument();
     }
 
     @NonNull public Observable<Consent> getObservableVisibilityConsent(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getObservableVisibilityConsent();
+        return paramModels.getElseFail(paramNr).observableVisibilityConsent();
     }
 
     @NonNull public Observable<Consent> getObservableUsabilityConsent(final int paramNr) {
-        return paramModels.getElseFail(paramNr).getObservableUsabilityConsent();
+        return paramModels.getElseFail(paramNr).observableUsabilityConsent();
     }
 
     @NonNull public Consent getVisibilityConsent(final int paramNr) {
@@ -232,13 +240,13 @@ public class ParameterNegotiationModel {
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
             clearParamValue(paramIndex);
         } else {
-            paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(newParamValue);
+            paramModels.getElseFail(paramIndex).bindableParamValue().setValue(newParamValue);
         }
     }
 
     public void clearParamValue(final int paramIndex) {
         var emptyValue = adaptParamValuePojo(paramIndex, null);
-        paramModels.getElseFail(paramIndex).getBindableParamValue().setValue(emptyValue);
+        paramModels.getElseFail(paramIndex).bindableParamValue().setValue(emptyValue);
     }
 
     /**
@@ -247,7 +255,7 @@ public class ParameterNegotiationModel {
      *      and returns the new parameter argument value also wrapped as {@link ManagedObject}
      */
     public void updateParamValue(final int paramIndex, final @NonNull UnaryOperator<ManagedObject> updater) {
-        var bindableParamValue = paramModels.getElseFail(paramIndex).getBindableParamValue();
+        var bindableParamValue = paramModels.getElseFail(paramIndex).bindableParamValue();
         var newParamValue = updater.apply(bindableParamValue.getValue());
         if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newParamValue)) {
             clearParamValue(paramIndex);
@@ -320,92 +328,127 @@ public class ParameterNegotiationModel {
     }
 
     /**
-     * Returns a copy, but with a single param value replaced. 
+     * Returns a copy, but with a single param value replaced.
      */
-    public ParameterNegotiationModel withParamValue(int parameterIndex, @NonNull ManagedObject paramValue) {
+    public ParameterNegotiationModel withParamValue(final int parameterIndex, @NonNull final ManagedObject paramValue) {
         return ParameterNegotiationModel.of(managedAction, getParamValues().replace(parameterIndex, paramValue));
     }
-    
+
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
-    private static class ParameterModel extends ManagedParameter {
-
-        @Getter(onMethod_ = {@Override}) private final int paramNr;
-        @Getter(onMethod_ = {@Override}) @NonNull private final ObjectActionParameter metaModel;
-        @Getter(onMethod_ = {@Override}) @NonNull private final ParameterNegotiationModel negotiationModel;
-        @Getter @NonNull private final _BindableAbstract<ManagedObject> bindableParamValue;
-        @Getter @NonNull private final BooleanBindable bindableParamValueDirtyFlag;
-        @Getter @NonNull private final LazyObservable<String> observableParamValidation;
-        @Getter @NonNull private final _BindableAbstract<String> bindableParamSearchArgument;
-        @Getter @NonNull private final LazyObservable<Can<ManagedObject>> observableParamChoices;
-        @Getter @NonNull private final LazyObservable<Consent> observableVisibilityConsent;
-        @Getter @NonNull private final LazyObservable<Consent> observableUsabilityConsent;
-        private Observable<String> bindableParamAsTitle;
-        private Observable<String> bindableParamAsHtml;
-        private Bindable<String> bindableParamAsParsableText;
+    @Log4j2
+    private record ParameterModel(
+            int paramIndex,
+            @NonNull ObjectActionParameter metaModel,
+            @NonNull ParameterNegotiationModel negotiationModel,
+            @NonNull _BindableAbstract<ManagedObject> bindableParamValue,
+            @NonNull BooleanBindable bindableParamValueDirtyFlag,
+            @NonNull _BindableAbstract<String> bindableParamSearchArgument,
+            @NonNull LazyObservable<String> observableParamValidation,
+            @NonNull LazyObservable<Can<ManagedObject>> observableParamChoices,
+            @NonNull LazyObservable<Consent> observableVisibilityConsent,
+            @NonNull LazyObservable<Consent> observableUsabilityConsent,
+            @NonNull Observable<String> observableParamAsTitle,
+            @NonNull Observable<String> observableParamAsHtml,
+            @NonNull _Lazy<Bindable<String>> bindableParamAsParsableTextLazy
+        ) implements ManagedParameter {
 
         private ParameterModel(
-                final int paramNr,
-                final @NonNull ParameterNegotiationModel negotiationModel,
-                final @NonNull ManagedObject initialValue) {
+            final int paramIndex,
+            final @NonNull ParameterNegotiationModel negotiationModel,
+            final @NonNull ManagedObject initialValue) {
+            this(paramIndex, negotiationModel.getHead().getMetaModel().getParameterByIndex(paramIndex), negotiationModel,
+                // bindableParamValue
+                _Bindables.forValue(initialValue),
+                // bindableParamValueDirtyFlag
+                _Bindables.forBoolean(false),
+                // bindableParamSearchArgument
+                _Bindables.forValue(null),
+                // unused in canonical constructor  ..
+                null, null, null, null, null, null, null);
+        }
 
-            var action = negotiationModel.getHead().getMetaModel();
-
-            this.paramNr = paramNr;
-            this.metaModel = action.getParameters().getElseFail(paramNr);
+        // canonical constructor
+        ParameterModel(
+            final int paramIndex,
+            @NonNull final ObjectActionParameter metaModel,
+            @NonNull final ParameterNegotiationModel negotiationModel,
+            @NonNull final _BindableAbstract<ManagedObject> bindableParamValue,
+            @NonNull final BooleanBindable bindableParamValueDirtyFlag,
+            @NonNull final _BindableAbstract<String> bindableParamSearchArgument,
+            // unused ..
+            final LazyObservable<String> observableParamValidation,
+            final LazyObservable<Can<ManagedObject>> observableParamChoices,
+            final LazyObservable<Consent> observableVisibilityConsent,
+            final LazyObservable<Consent> observableUsabilityConsent,
+            final Observable<String> observableParamAsTitle,
+            final Observable<String> observableParamAsHtml,
+            final _Lazy<Bindable<String>> bindableParamAsParsableTextLazy
+        ) {
+            this.paramIndex = paramIndex;
+            this.metaModel = metaModel;
             this.negotiationModel = negotiationModel;
 
-            bindableParamValue = _Bindables.forValue(initialValue);
-            bindableParamValueDirtyFlag = _Bindables.forBoolean(false);
+            this.bindableParamValue = bindableParamValue;
+            this.bindableParamValueDirtyFlag = bindableParamValueDirtyFlag;
+            this.bindableParamSearchArgument = bindableParamSearchArgument;
 
-            //bindableParamValue.setValueRefiner(MmEntityUtil::refetch); no longer used
-            bindableParamValue.setValueGuard(MmAssertionUtils.assertInstanceOf(metaModel.getElementType()));
-            bindableParamValue.addListener((event, oldValue, newValue)->{
+            bindableParamValue().setValueGuard(MmAssertionUtils.assertInstanceOf(metaModel().getElementType()));
+            bindableParamValue().addListener((event, oldValue, newValue)->{
                 if(newValue==null) {
                     // lift null to empty ...
-                    bindableParamValue.setValue(metaModel.getEmpty()); // triggers this event again
+                    bindableParamValue().setValue(metaModel().getEmpty()); // triggers this event again
                     return;
                 }
-                getNegotiationModel().onNewParamValue();
-                bindableParamValueDirtyFlag.setValue(true); // set dirty whenever an update event happens
+                negotiationModel().onNewParamValue();
+                bindableParamValueDirtyFlag().setValue(true); // set dirty whenever an update event happens
             });
 
             // has either autoComplete, choices, or none
-            observableParamChoices = metaModel.hasAutoComplete()
-            ? _Observables.lazy(()->
-                getMetaModel().getAutoComplete(
-                        getNegotiationModel(),
-                        getBindableParamSearchArgument().getValue(),
-                        InteractionInitiatedBy.USER))
-            : metaModel.hasChoices()
+            this.observableParamChoices = metaModel().hasAutoComplete()
                 ? _Observables.lazy(()->
-                    getMetaModel().getChoices(getNegotiationModel(), InteractionInitiatedBy.USER))
-                : _Observables.lazy(Can::empty);
+                    metaModel().getAutoComplete(
+                            negotiationModel(),
+                            bindableParamSearchArgument().getValue(),
+                            InteractionInitiatedBy.USER))
+                : metaModel().hasChoices()
+                    ? _Observables.lazy(()->
+                        getMetaModel().getChoices(negotiationModel(), InteractionInitiatedBy.USER))
+                    : _Observables.lazy(Can::empty);
 
             // if has autoComplete, then activate the search argument
-            bindableParamSearchArgument = _Bindables.forValue(null);
-            if(metaModel.hasAutoComplete()) {
-                bindableParamSearchArgument.addListener((e,o,n)->{
-                    observableParamChoices.invalidate();
+            if(metaModel().hasAutoComplete()) {
+                this.bindableParamSearchArgument.addListener((e,o,n)->{
+                    observableParamChoices().invalidate();
                 });
             }
 
             // validate this parameter, but only when validationFeedback has been activated
-            observableParamValidation = _Observables.lazy(()->
+            this.observableParamValidation = _Observables.lazy(()->
                 isValidationFeedbackActive()
-                    ? validateImmediately()
+                    ? negotiationModel().validateImmediately(paramIndex)
                     : (String)null);
 
-            observableVisibilityConsent = _Observables.lazy(()->
-                metaModel.isVisible(
-                        negotiationModel.getHead(),
-                        negotiationModel.getParamValues(),
+            this.observableVisibilityConsent = _Observables.lazy(()->
+                metaModel().isVisible(
+                        negotiationModel().getHead(),
+                        negotiationModel().getParamValues(),
                         InteractionInitiatedBy.USER));
-            observableUsabilityConsent = _Observables.lazy(()->
-                metaModel.isUsable(
-                        negotiationModel.getHead(),
-                        negotiationModel.getParamValues(),
+            this.observableUsabilityConsent = _Observables.lazy(()->
+                metaModel().isUsable(
+                        negotiationModel().getHead(),
+                        negotiationModel().getParamValues(),
                         InteractionInitiatedBy.USER));
+
+            // value types should have associated rederers via value semantics
+            this.observableParamAsTitle = _BindingUtil
+                    .bindAsFormated(TargetFormat.TITLE, metaModel(), bindableParamValue());
+            this.observableParamAsHtml = _BindingUtil
+                    .bindAsFormated(TargetFormat.HTML, metaModel(), bindableParamValue());
+            // value types should have associated parsers/formatters via value semantics
+            // except for composite value types, which might have not
+            this.bindableParamAsParsableTextLazy = _Lazy.threadSafe(()->(Bindable<String>) _BindingUtil
+                    .bindAsFormated(TargetFormat.PARSABLE_TEXT, metaModel(), bindableParamValue()));
         }
 
         public void invalidateChoicesAndValidation() {
@@ -419,7 +462,7 @@ public class ParameterNegotiationModel {
         }
 
         private boolean isValidationFeedbackActive() {
-            return getNegotiationModel().getObservableValidationFeedbackActive().getValue();
+            return negotiationModel().getObservableValidationFeedbackActive().getValue();
         }
 
         // -- MANAGED PARAMETER
@@ -452,22 +495,12 @@ public class ParameterNegotiationModel {
 
         @Override
         public Observable<String> getValueAsTitle() {
-            if(bindableParamAsTitle==null) {
-                // value types should have associated rederers via value semantics
-                bindableParamAsTitle = _BindingUtil
-                        .bindAsFormated(TargetFormat.TITLE, metaModel, bindableParamValue);
-            }
-            return bindableParamAsTitle;
+            return observableParamAsTitle;
         }
 
         @Override
         public Observable<String> getValueAsHtml() {
-            if(bindableParamAsHtml==null) {
-                // value types should have associated rederers via value semantics
-                bindableParamAsHtml = _BindingUtil
-                        .bindAsFormated(TargetFormat.HTML, metaModel, bindableParamValue);
-            }
-            return bindableParamAsHtml;
+            return observableParamAsHtml;
         }
 
         @Override
@@ -477,13 +510,7 @@ public class ParameterNegotiationModel {
 
         @Override
         public Bindable<String> getValueAsParsableText() {
-            if(bindableParamAsParsableText==null) {
-                // value types should have associated parsers/formatters via value semantics
-                // except for composite value types, which might have not
-                bindableParamAsParsableText = (Bindable<String>) _BindingUtil
-                        .bindAsFormated(TargetFormat.PARSABLE_TEXT, metaModel, bindableParamValue);
-            }
-            return bindableParamAsParsableText;
+            return bindableParamAsParsableTextLazy.get();
         }
 
         @Override
@@ -501,20 +528,44 @@ public class ParameterNegotiationModel {
             return observableParamChoices;
         }
 
-        // -- HELPER
+        @Override
+        public Optional<InteractionVeto> checkUsability(@NonNull final Can<ManagedObject> params) {
 
-        /**
-         * Calls the underlying action parameter validation logic, for pending arguments.
-         * (Ignoring the {@link #isValidationFeedbackActive()} flag.)
-         */
-        private String validateImmediately() {
-            return metaModel
-                    .isValid(
-                            getNegotiationModel().getHead(),
-                            getNegotiationModel().getParamValues(),
-                            InteractionInitiatedBy.USER)
-                    .getReasonAsString()
-                    .orElse(null);
+            try {
+                var head = negotiationModel().getHead();
+
+                var usabilityConsent =
+                    getMetaModel()
+                    .isUsable(head, params, InteractionInitiatedBy.USER);
+
+                return usabilityConsent.isVetoed()
+                    ? Optional.of(InteractionVeto.readonly(usabilityConsent))
+                    : Optional.empty();
+
+            } catch (final Exception ex) {
+                log.warn(ex.getLocalizedMessage(), ex);
+                return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
+            }
+
+        }
+
+        // -- OBJECT CONTRACT
+
+        @Override
+        public final boolean equals(final Object obj) {
+            return obj instanceof ParameterModel other
+                ? Objects.equals(this.getIdentifier(), other.getIdentifier())
+                : false;
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hashCode(getIdentifier());
+        }
+
+        @Override
+        public final String toString() {
+            return "ParameterModel[id=%s]".formatted(getIdentifier());
         }
 
     }
