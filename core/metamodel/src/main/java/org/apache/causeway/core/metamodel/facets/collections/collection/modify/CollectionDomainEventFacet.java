@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.jspecify.annotations.NonNull;

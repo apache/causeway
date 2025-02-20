@@ -16,27 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.fallback;
+package org.apache.causeway.core.metamodel.interactions.val;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.HasSemanticEqualityByClass;
-import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import java.util.function.Supplier;
 
-public class MaxLengthFacetUnlimited
-extends MaxLengthFacetAbstract
-implements HasSemanticEqualityByClass {
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.metamodel.consent.InteractionContextType;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 
-    public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);
-    }
-
-    /**
-     * No limit to maximum length.
-     */
-    @Override
-    public String invalidates(final ValidityContext context) {
-        return null;
-    }
-
+public record ValidityContextRecord(
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    Supplier<String> friendlyNameProvider,
+    InteractionInitiatedBy initiatedBy) {
 }

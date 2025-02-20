@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -34,9 +35,11 @@ import org.apache.causeway.core.metamodel.consent.VetoUtil;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -115,7 +118,7 @@ public final class InteractionUtils {
         return isResult;
     }
 
-    public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContextHolder context) {
+    public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
 
         var iaResult = new InteractionResult(context.createInteractionEvent());
 
@@ -136,7 +139,7 @@ public final class InteractionUtils {
 
     public InteractionResultSet isValidResultSet(
             final FacetHolder facetHolder,
-            final ValidityContextHolder context,
+            final ValidityContext context,
             final InteractionResultSet resultSet) {
 
         return resultSet.add(isValidResult(facetHolder, context));

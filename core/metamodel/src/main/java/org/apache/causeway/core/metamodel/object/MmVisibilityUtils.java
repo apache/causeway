@@ -26,8 +26,8 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 import lombok.experimental.UtilityClass;
 

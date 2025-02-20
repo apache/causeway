@@ -30,9 +30,9 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -105,7 +105,7 @@ extends ObjectFeature, CurrentHolder {
     String getCanonicalFriendlyName();
 
     // internal API
-    ActionArgValidityContext createProposedArgumentInteractionContext(
+    ParamValidityContext createProposedArgumentInteractionContext(
             InteractionHead head,
             Can<ManagedObject> args,
             int position,

@@ -16,28 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.acc;
 
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.AccessEvent;
-import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
 
 /**
  * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}
- * .
  */
-public abstract class AccessContext
-extends InteractionContextAbstract
-implements InteractionEventSupplier<AccessEvent> {
-
-    public AccessContext(
-            final InteractionContextType interactionType,
-            final Identifier identifier,
-            final InteractionHead head,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        super(interactionType, interactionInitiatedBy, identifier, head, Where.NOT_SPECIFIED);
-    }
+public sealed interface AccessContext
+extends InteractionContext, InteractionEventSupplier<AccessEvent>
+permits AccessContextHolder {
 
 }

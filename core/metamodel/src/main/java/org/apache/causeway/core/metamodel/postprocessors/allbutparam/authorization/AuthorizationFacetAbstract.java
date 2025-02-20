@@ -24,8 +24,8 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.extern.log4j.Log4j2;

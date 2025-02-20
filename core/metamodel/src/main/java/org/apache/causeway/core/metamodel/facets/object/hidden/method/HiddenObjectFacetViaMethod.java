@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;

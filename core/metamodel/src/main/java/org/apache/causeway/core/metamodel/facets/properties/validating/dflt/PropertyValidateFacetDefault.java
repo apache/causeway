@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.properties.validating.dflt;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 public class PropertyValidateFacetDefault extends FacetAbstract implements PropertyValidateFacet {
 
     @Override
-    public String invalidates(final ValidityContextHolder ic) {
+    public String invalidates(final ValidityContext ic) {
         return null;
     }
 

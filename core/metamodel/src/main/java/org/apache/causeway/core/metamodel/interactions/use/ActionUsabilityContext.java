@@ -16,30 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.vis.ActionVisibilityContext;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionUsabilityEvent}.
  */
-@Accessors(fluent=true)
-public class ActionUsabilityContext
-extends UsabilityContext
-implements ActionInteractionContext {
-
-    @Getter(onMethod_={@Override})
-    private final ObjectAction objectAction;
+public record ActionUsabilityContext(
+    UsabilityContextRecord usabilityContext,
+    ObjectAction objectAction
+    )
+implements UsabilityContextHolder, ActionInteractionContext {
 
     public ActionUsabilityContext(
             final InteractionHead head,
@@ -48,9 +48,9 @@ implements ActionInteractionContext {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        super(InteractionContextType.ACTION_USABLE,
-                head, id, interactionInitiatedBy, where, renderPolicy);
-        this.objectAction = objectAction;
+        this(new UsabilityContextRecord(InteractionContextType.ACTION_USABLE,
+                head, id, interactionInitiatedBy, where, renderPolicy),
+            objectAction);
     }
 
     @Override
@@ -58,7 +58,6 @@ implements ActionInteractionContext {
         return new ActionUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
-    @Override
     public ActionVisibilityContext asVisibilityContext() {
         return new ActionVisibilityContext(head(), objectAction(), identifier(),
                 initiatedBy(), where(), renderPolicy());

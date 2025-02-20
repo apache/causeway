@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.facets.objectvalue.mandatory;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -34,16 +33,15 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
+import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class MandatoryFacetAbstract
 extends FacetAbstract
@@ -96,10 +94,10 @@ implements MandatoryFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder context) {
+    public String invalidates(final ValidityContext context) {
         var proposedHolder =
                 context instanceof PropertyModifyContext
-                || context instanceof ActionArgValidityContext
+                || context instanceof ParamValidityContext
                         ? (ProposedHolder) context
                         : null;
 
@@ -108,9 +106,7 @@ implements MandatoryFacet {
             return null;
         }
 
-        return Optional.ofNullable(context.friendlyNameProvider())
-            .map(Supplier::get)
-            .filter(_Strings::isNotEmpty)
+        return _Strings.nonEmpty(context.friendlyName())
             .map(named->"'" + named + "' is mandatory")
             .orElse("Mandatory");
     }

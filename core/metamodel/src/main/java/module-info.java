@@ -82,7 +82,11 @@ open module org.apache.causeway.core.metamodel {
             to org.apache.causeway.persistence.jdo.metamodel;
 
     exports org.apache.causeway.core.metamodel.interactions;
+    exports org.apache.causeway.core.metamodel.interactions.acc;
     exports org.apache.causeway.core.metamodel.interactions.managed;
+    exports org.apache.causeway.core.metamodel.interactions.use;
+    exports org.apache.causeway.core.metamodel.interactions.val;
+    exports org.apache.causeway.core.metamodel.interactions.vis;
     exports org.apache.causeway.core.metamodel.tabular;
     exports org.apache.causeway.core.metamodel.tabular.simple;
     exports org.apache.causeway.core.metamodel.tree;

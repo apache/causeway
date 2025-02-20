@@ -16,48 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.acc;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
-import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link ActionInvocationEvent}.
+ * {@link CollectionAccessEvent}.
  */
-public record ActionValidityContext(
-    ValidityContext validityContext,
-    ObjectAction objectAction,
-    Can<ManagedObject> args
-    ) implements ActionInteractionContext, ValidityContextHolder {
+public record CollectionAccessContext(
+    AccessContextRecord accessContext
+    ) implements AccessContextHolder {
 
-    public ActionValidityContext(
+    public CollectionAccessContext(
             final InteractionHead head,
-            final ObjectAction objectAction,
-            final Identifier id,
-            final Can<ManagedObject> args,
+            final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        this(
-            new ValidityContextHolder.ValidityContext(InteractionContextType.ACTION_INVOKE,
-                head,
-                id,
-                ()->objectAction.getFriendlyName(head::target),
-                interactionInitiatedBy),
-            objectAction,
-            args);
+        this(new AccessContextRecord(InteractionContextType.COLLECTION_READ, identifier, head, interactionInitiatedBy));
     }
 
     @Override
-    public ActionInvocationEvent createInteractionEvent() {
-        return new ActionInvocationEvent(
-                MmUnwrapUtils.single(target()), identifier(), MmUnwrapUtils.multipleAsArray(args().toList()));
+    public CollectionAccessEvent createInteractionEvent() {
+        return new CollectionAccessEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

@@ -23,6 +23,8 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -32,11 +34,10 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class MustSatisfySpecificationFacetAbstract
 extends FacetAbstract
@@ -65,7 +66,7 @@ implements MustSatisfySpecificationFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder validityContext) {
+    public String invalidates(final ValidityContext validityContext) {
         if (!(validityContext instanceof ProposedHolder)) return null;
 
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;

@@ -21,8 +21,8 @@ package org.apache.causeway.core.metamodel.facets.param.hide;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.ActionArgVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ParamVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 public abstract class ActionParameterHiddenFacetAbstract
 extends FacetAbstract
@@ -38,10 +38,10 @@ implements ActionParameterHiddenFacet {
 
     @Override
     public String hides(final VisibilityContext context) {
-        if (!(context instanceof ActionArgVisibilityContext)) {
+        if (!(context instanceof ParamVisibilityContext)) {
             return null;
         }
-        var actionArgVisibilityContext = (ActionArgVisibilityContext) context;
+        var actionArgVisibilityContext = (ParamVisibilityContext) context;
         return isHidden(
                     actionArgVisibilityContext.target(),
                     actionArgVisibilityContext.args())

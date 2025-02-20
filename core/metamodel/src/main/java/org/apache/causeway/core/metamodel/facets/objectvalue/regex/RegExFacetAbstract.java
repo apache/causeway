@@ -22,15 +22,16 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 public abstract class RegExFacetAbstract
@@ -62,7 +63,7 @@ implements RegExFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof ProposedHolder)) {
             return null;
         }

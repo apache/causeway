@@ -16,47 +16,39 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.services.wrapper.events.PropertyAccessEvent;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link PropertyAccessEvent}.
+ * {@link CollectionVisibilityEvent}.
  */
-public class PropertyAccessContext
-extends AccessContext {
+public record CollectionVisibilityContext(
+    VisibilityContextRecord visibilityContext)
+implements VisibilityContextHolder {
 
-    private final ManagedObject value;
-
-    public PropertyAccessContext(
+    public CollectionVisibilityContext(
             final InteractionHead head,
-            final Identifier id,
-            final ManagedObject value,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.PROPERTY_READ, id, head, interactionInitiatedBy);
-
-        this.value = value;
-    }
-
-    /**
-     * The current value for a property.
-     */
-    public ManagedObject getValue() {
-        return value;
+            final Identifier identifierAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where,
+            final RenderPolicy renderPolicy) {
+        this(new VisibilityContextRecord(InteractionContextType.COLLECTION_VISIBLE,
+            head, identifierAdapter, interactionInitiatedBy, where, renderPolicy));
     }
 
     @Override
-    public PropertyAccessEvent createInteractionEvent() {
-        return new PropertyAccessEvent(
-                MmUnwrapUtils.single(target()),
-                identifier(),
-                MmUnwrapUtils.single(getValue()));
+    public CollectionVisibilityEvent createInteractionEvent() {
+        return new CollectionVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

@@ -16,61 +16,68 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
-
-import java.util.function.Supplier;
+package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
- * See {@link InteractionContext} for overview; analogous to
- * {@link ValidityEvent}
+ * Helper interface that allows composition on {@link VisibilityContextRecord}.
  */
-public sealed interface ValidityContextHolder
-extends InteractionContext, InteractionEventSupplier<ValidityEvent>
-permits ActionArgValidityContext, ActionValidityContext, ObjectValidityContext, ParseValueContext, PropertyModifyContext {
+sealed interface VisibilityContextHolder
+extends VisibilityContext
+permits ParamVisibilityContext, ActionVisibilityContext, CollectionVisibilityContext,
+    ObjectVisibilityContext, PropertyVisibilityContext {
 
-    record ValidityContext(
+    record VisibilityContextRecord(
         InteractionContextType interactionType,
         InteractionHead head,
         Identifier identifier,
-        Supplier<String> friendlyNameProvider,
-        InteractionInitiatedBy initiatedBy) {
+        InteractionInitiatedBy initiatedBy,
+        Where where,
+        RenderPolicy renderPolicy) {
     }
 
-    ValidityContext validityContext();
+    VisibilityContextRecord visibilityContext();
 
-    default Supplier<String> friendlyNameProvider() {
-        return validityContext().friendlyNameProvider();
+    @Override
+    default RenderPolicy renderPolicy() {
+        return visibilityContext().renderPolicy();
     }
 
     @Override
     default InteractionContextType interactionType() {
-        return validityContext().interactionType();
+        return visibilityContext().interactionType();
     }
 
     @Override
     default InteractionInitiatedBy initiatedBy() {
-        return validityContext().initiatedBy();
+        return visibilityContext().initiatedBy();
     }
 
     @Override
     default Identifier identifier() {
-        return validityContext().identifier();
+        return visibilityContext().identifier();
     }
 
     @Override
     default InteractionHead head() {
-        return validityContext().head();
+        return visibilityContext().head();
     }
 
     @Override
     default Where where() {
-        return Where.NOT_SPECIFIED;
+        return visibilityContext().where();
+    }
+
+    @Override
+    default ManagedObject target() {
+        return head().target();
     }
 
 }

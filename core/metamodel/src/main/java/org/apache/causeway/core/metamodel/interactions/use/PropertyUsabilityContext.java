@@ -16,37 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.vis.PropertyVisibilityContext;
+import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link VisibilityEvent}.
+ * {@link PropertyUsabilityEvent}.
  */
-@Accessors(fluent=true)
-public abstract class VisibilityContext
-extends InteractionContextAbstract
-implements InteractionEventSupplier<VisibilityEvent> {
+public record PropertyUsabilityContext(
+    UsabilityContextRecord usabilityContext)
+implements UsabilityContextHolder {
 
-    @Getter private final RenderPolicy renderPolicy;
-
-    public VisibilityContext(
-            final InteractionContextType interactionType,
+    public PropertyUsabilityContext(
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        super(interactionType, interactionInitiatedBy, identifier, head, where);
-        this.renderPolicy = renderPolicy;
+        this(new UsabilityContextRecord(InteractionContextType.PROPERTY_USABLE,
+                head, identifier, interactionInitiatedBy, where, renderPolicy));
     }
 
+    @Override
+    public PropertyUsabilityEvent createInteractionEvent() {
+        return new PropertyUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
+    }
+
+    public PropertyVisibilityContext asVisibilityContext() {
+        return new PropertyVisibilityContext(head(), identifier(),
+                initiatedBy(), where(), renderPolicy());
+    }
 }

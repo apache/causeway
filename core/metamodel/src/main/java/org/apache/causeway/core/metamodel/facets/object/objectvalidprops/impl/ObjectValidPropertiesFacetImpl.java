@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 

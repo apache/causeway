@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.objectvalidprops;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 
 /**
  * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that

@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.interactions;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.HidingOrShowing;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 /**
  * Mix-in interface for facets that can advise as to whether a member should be
@@ -38,7 +39,7 @@ extends InteractionAdvisorFacet, HidingOrShowing {
      * Implementations should use the provided {@link InteractionContext} to
      * determine whether they declare the object/member is hidden. They must
      * however guard against a <tt>null</tt>
-     * {@link InteractionContext#getTarget() target} is not guaranteed
+     * {@link InteractionContext#target() target} is not guaranteed
      * to be populated.
      */
     String hides(VisibilityContext ic);

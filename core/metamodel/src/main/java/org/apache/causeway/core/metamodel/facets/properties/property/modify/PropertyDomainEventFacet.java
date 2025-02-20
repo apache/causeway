@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -38,15 +40,13 @@ import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCol
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import org.jspecify.annotations.NonNull;
 
 public class PropertyDomainEventFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
@@ -171,7 +171,7 @@ implements
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder ic) {
+    public String invalidates(final ValidityContext ic) {
         if(getterFacetIfAny == null) return null;
         if(!isPostable()) return null; // bale out
 

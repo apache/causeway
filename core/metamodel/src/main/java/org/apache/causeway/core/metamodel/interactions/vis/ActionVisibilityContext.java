@@ -16,34 +16,44 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.wrapper.events.CollectionVisibilityEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link CollectionVisibilityEvent}.
+ * {@link ActionVisibilityEvent}.
  */
-public class CollectionVisibilityContext
-extends VisibilityContext {
+public record ActionVisibilityContext(
+    VisibilityContextRecord visibilityContext,
+    ObjectAction objectAction)
+implements VisibilityContextHolder, ActionInteractionContext  {
 
-    public CollectionVisibilityContext(
+    public ActionVisibilityContext(
             final InteractionHead head,
-            final Identifier identifierAdapter,
+            final ObjectAction objectAction,
+            final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        super(InteractionContextType.COLLECTION_VISIBLE, head, identifierAdapter, interactionInitiatedBy, where, renderPolicy);
+        this(new VisibilityContextRecord(InteractionContextType.ACTION_VISIBLE,
+            head, identifier, interactionInitiatedBy, where, renderPolicy),
+            objectAction);
     }
 
     @Override
-    public CollectionVisibilityEvent createInteractionEvent() {
-        return new CollectionVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
+    public ActionVisibilityEvent createInteractionEvent() {
+        return new ActionVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

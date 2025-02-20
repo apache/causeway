@@ -29,10 +29,10 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
@@ -68,7 +68,7 @@ implements
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof ObjectValidityContext)) {
             return null;
         }

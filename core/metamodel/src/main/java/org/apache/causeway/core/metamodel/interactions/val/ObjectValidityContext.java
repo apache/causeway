@@ -16,12 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.val;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ObjectValidityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
@@ -30,14 +33,14 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link ObjectValidityEvent}.
  */
 public record ObjectValidityContext(
-    ValidityContext validityContext
+    ValidityContextRecord validityContext
     ) implements ValidityContextHolder, ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        this(new ValidityContext(InteractionContextType.OBJECT_VALIDATE,
+        this(new ValidityContextRecord(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.regular(targetAdapter),
                 identifier,
                 ()->targetAdapter.getSpecification().getSingularName(),

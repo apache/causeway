@@ -16,13 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
@@ -30,9 +35,9 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectVisibilityEvent}.
  */
-public class ObjectVisibilityContext
-extends VisibilityContext
-implements ProposedHolder {
+public record ObjectVisibilityContext(
+    VisibilityContextRecord visibilityContext)
+implements VisibilityContextHolder, ProposedHolder {
 
     // -- FACTORIES
 
@@ -59,9 +64,9 @@ implements ProposedHolder {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        super(
+        this(new VisibilityContextRecord(
                 InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, interactionInitiatedBy, where, renderPolicy);
+                head, identifier, interactionInitiatedBy, where, renderPolicy));
     }
 
     @Override

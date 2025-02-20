@@ -37,13 +37,13 @@ import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParame
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
-import org.apache.causeway.core.metamodel.interactions.ActionArgUsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.causeway.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
+import org.apache.causeway.core.metamodel.interactions.use.ParamUsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ParamVisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -306,13 +306,13 @@ implements
 
     // > Visibility
 
-    private ActionArgVisibilityContext createArgumentVisibilityContext(
+    private ParamVisibilityContext createArgumentVisibilityContext(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return new ActionArgVisibilityContext(
+        return new ParamVisibilityContext(
                 head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy,
                 RenderPolicy.forActionParameters());
     }
@@ -331,13 +331,13 @@ implements
 
     // > Usability
 
-    private ActionArgUsabilityContext createArgumentUsabilityContext(
+    private ParamUsabilityContext createArgumentUsabilityContext(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return new ActionArgUsabilityContext(
+        return new ParamUsabilityContext(
                 head,
                 parentAction,
                 getFeatureIdentifier(),
@@ -363,13 +363,13 @@ implements
     // -- Validation
 
     @Override
-    public ActionArgValidityContext createProposedArgumentInteractionContext(
+    public ParamValidityContext createProposedArgumentInteractionContext(
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return new ActionArgValidityContext(
+        return new ParamValidityContext(
                 head, parentAction, getFeatureIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 

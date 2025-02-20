@@ -19,7 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 public class HideForContextFacetNone
 extends HideForContextFacetAbstract {

@@ -35,14 +35,14 @@ import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
-import org.apache.causeway.core.metamodel.interactions.ActionValidityContext;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
@@ -170,7 +170,7 @@ implements
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder ic) {
+    public String invalidates(final ValidityContext ic) {
         if(!isPostable()) return null; // bale out
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->

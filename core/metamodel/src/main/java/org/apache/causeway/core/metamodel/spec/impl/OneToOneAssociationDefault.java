@@ -44,12 +44,12 @@ import org.apache.causeway.core.metamodel.facets.properties.update.init.Property
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.causeway.core.metamodel.interactions.PropertyUsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.PropertyVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.PropertyUsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.PropertyVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -106,7 +106,7 @@ implements OneToOneAssociation, Serializable {
 
     // -- VALIDITY
 
-    private ValidityContextHolder createValidateInteractionContext(
+    private ValidityContext createValidateInteractionContext(
             final ManagedObject ownerAdapter,
             final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {

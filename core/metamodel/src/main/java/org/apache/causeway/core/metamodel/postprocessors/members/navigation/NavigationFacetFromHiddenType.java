@@ -28,8 +28,8 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
-import org.apache.causeway.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 public class NavigationFacetFromHiddenType

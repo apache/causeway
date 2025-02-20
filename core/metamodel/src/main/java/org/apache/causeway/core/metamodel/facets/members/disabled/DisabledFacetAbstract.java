@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;

@@ -16,63 +16,51 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.val;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.events.ActionArgumentVisibilityEvent;
-import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
+import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link ActionArgumentEvent}.
+ * {@link ActionInvocationEvent}.
  */
-@Accessors(fluent=true)
-public class ActionArgVisibilityContext
-extends VisibilityContext
-implements ActionInteractionContext {
+public record ActionValidityContext(
+    ValidityContextRecord validityContext,
+    ObjectAction objectAction,
+    Can<ManagedObject> args
+    ) implements ActionInteractionContext, ValidityContextHolder {
 
-    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter private final Can<ManagedObject> args;
-    @Getter private final int position;
-
-    public ActionArgVisibilityContext(
+    public ActionValidityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,
-            final int position,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final RenderPolicy renderPolicy) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
-        super(InteractionContextType.ACTION_PARAMETER_VISIBLE,
+        this(
+            new ValidityContextRecord(InteractionContextType.ACTION_INVOKE,
                 head,
                 id,
-                interactionInitiatedBy,
-                Where.OBJECT_FORMS,
-                renderPolicy);
-
-        this.objectAction = objectAction;
-        this.args = args;
-        this.position = position;
+                ()->objectAction.getFriendlyName(head::target),
+                interactionInitiatedBy),
+            objectAction,
+            args);
     }
 
     @Override
-    public ActionArgumentVisibilityEvent createInteractionEvent() {
-        return new ActionArgumentVisibilityEvent(
-                MmUnwrapUtils.single(target()),
-                identifier(),
-                MmUnwrapUtils.multipleAsArray(args().toList()),
-                position());
+    public ActionInvocationEvent createInteractionEvent() {
+        return new ActionInvocationEvent(
+                MmUnwrapUtils.single(target()), identifier(), MmUnwrapUtils.multipleAsArray(args().toList()));
     }
 
 }

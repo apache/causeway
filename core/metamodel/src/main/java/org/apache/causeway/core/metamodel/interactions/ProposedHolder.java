@@ -19,6 +19,8 @@
 package org.apache.causeway.core.metamodel.interactions;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
@@ -27,7 +29,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  *
  * <p>
  * Where this is used most often is for {@link PropertyModifyContext} and
- * {@link ActionArgValidityContext}, where a {@link Facet} (such as
+ * {@link ParamValidityContext}, where a {@link Facet} (such as
  * <tt>MandatoryFacet</tt> or <tt>MaxLengthFacet</tt>) would want to perform the
  * same checks on the {@link #proposed()} value/argument.
  */

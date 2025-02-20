@@ -20,11 +20,11 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.Validating;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
 /**
  * Mix-in interface for {@link Facet}s that can advise as to whether a proposed
  * value is valid.
- *
  * <p>
  * For example, <tt>MaxLengthFacet</tt> does constrain the length of candidate
  * values, whereas <tt>DebugFacet</tt> or <tt>MemberOrderFacet</tt> do not -
@@ -37,12 +37,11 @@ public interface ValidatingInteractionAdvisor extends InteractionAdvisorFacet, V
 
     /**
      * Whether the validation represented by this facet passes or fails.
-     *
      * <p>
-     * Implementations should use the provided {@link ValidityContextHolder} to
+     * Implementations should use the provided {@link ValidityContext} to
      * determine whether they declare the interaction invalid. They must however
-     * guard against a <tt>null</tt> {@link ValidityContextHolder#getTarget() target}
+     * guard against a <tt>null</tt> {@link ValidityContext#target()}
      * is not guaranteed to be populated.
      */
-    String invalidates(ValidityContextHolder ic);
+    String invalidates(ValidityContext ic);
 }

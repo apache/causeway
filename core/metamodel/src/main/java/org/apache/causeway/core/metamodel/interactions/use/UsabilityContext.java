@@ -16,27 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.fallback;
+package org.apache.causeway.core.metamodel.interactions.use;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.HasSemanticEqualityByClass;
-import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public class MaxLengthFacetUnlimited
-extends MaxLengthFacetAbstract
-implements HasSemanticEqualityByClass {
+public sealed interface UsabilityContext
+extends InteractionContext, InteractionEventSupplier<UsabilityEvent>
+permits UsabilityContextHolder {
 
-    public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);
-    }
+    RenderPolicy renderPolicy();
+    VisibilityContext asVisibilityContext();
 
-    /**
-     * No limit to maximum length.
-     */
     @Override
-    public String invalidates(final ValidityContext context) {
-        return null;
+    default ManagedObject target() {
+        return head().target();
     }
 
 }

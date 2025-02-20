@@ -16,40 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.services.wrapper.events.ParseValueEvent;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link ParseValueEvent}.
+ * {@link PropertyVisibilityEvent}.
  */
-public record ParseValueContext(
-    ValidityContext validityContext,
-    ManagedObject proposed
-    ) implements ValidityContextHolder, ProposedHolder {
+public record PropertyVisibilityContext(
+    VisibilityContextRecord visibilityContext
+    ) implements VisibilityContextHolder {
 
-    public ParseValueContext(
+    public PropertyVisibilityContext(
             final InteractionHead head,
             final Identifier identifier,
-            final ManagedObject proposed,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where,
+            final RenderPolicy renderPolicy) {
 
-        this(
-            new ValidityContextHolder.ValidityContext(InteractionContextType.PARSE_VALUE,
-                head, identifier, /*friendlyNameProvider*/null, interactionInitiatedBy),
-            proposed);
+        this(new VisibilityContextRecord(InteractionContextType.PROPERTY_VISIBLE,
+            head, identifier, interactionInitiatedBy, where, renderPolicy));
     }
 
     @Override
-    public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) MmUnwrapUtils.single(proposed());
-        return new ParseValueEvent(MmUnwrapUtils.single(target()), identifier(), proposedPojo);
+    public PropertyVisibilityEvent createInteractionEvent() {
+        return new PropertyVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

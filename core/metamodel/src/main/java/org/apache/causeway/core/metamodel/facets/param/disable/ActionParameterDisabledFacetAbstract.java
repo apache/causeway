@@ -24,8 +24,8 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.ActionArgUsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.ParamUsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 
 public abstract class ActionParameterDisabledFacetAbstract
 extends FacetAbstract
@@ -41,10 +41,10 @@ implements ActionParameterDisabledFacet {
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext context) {
-        if (!(context instanceof ActionArgUsabilityContext)) {
+        if (!(context instanceof ParamUsabilityContext)) {
             return Optional.empty();
         }
-        final ActionArgUsabilityContext actionArgUsabilityContext = (ActionArgUsabilityContext) context;
+        final ParamUsabilityContext actionArgUsabilityContext = (ParamUsabilityContext) context;
         return disabledReason(actionArgUsabilityContext.target(), actionArgUsabilityContext.args());
     }
 }

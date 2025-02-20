@@ -68,8 +68,8 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.acc.ObjectTitleContext;
+import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;

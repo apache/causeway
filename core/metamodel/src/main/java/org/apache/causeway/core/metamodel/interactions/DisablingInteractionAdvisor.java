@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.DisablingOrEnabling;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 
 /**
  * Mix-in interface for facets that can advise as to whether a member should be
@@ -41,7 +42,7 @@ extends InteractionAdvisorFacet, DisablingOrEnabling {
      * Implementations should use the provided {@link InteractionContext} to
      * determine whether they disable the member from being modified or used.
      * They must however guard against a <tt>null</tt>
-     * {@link InteractionContext#getTarget() target} - this is not guaranteed to be populated.
+     * {@link InteractionContext#target() target} - this is not guaranteed to be populated.
      */
     Optional<VetoReason> disables(UsabilityContext ic);
 

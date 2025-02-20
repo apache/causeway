@@ -16,30 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions;
+package org.apache.causeway.core.metamodel.interactions.acc;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.services.wrapper.events.CollectionAccessEvent;
+import org.apache.causeway.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
- * {@link CollectionAccessEvent}.
+ * {@link ObjectTitleEvent}.
  */
-public class CollectionAccessContext extends AccessContext {
+public record ObjectTitleContext(
+    AccessContextRecord accessContext,
+    String title)
+implements AccessContextHolder {
 
-    public CollectionAccessContext(
-            final InteractionHead head,
+    public ObjectTitleContext(
+            final ManagedObject targetAdapter,
             final Identifier identifier,
+            final String title,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.COLLECTION_READ, identifier, head, interactionInitiatedBy);
+
+        this(new AccessContextRecord(InteractionContextType.OBJECT_TITLE,
+                identifier, InteractionHead.regular(targetAdapter), interactionInitiatedBy),
+            title);
     }
 
     @Override
-    public CollectionAccessEvent createInteractionEvent() {
-        return new CollectionAccessEvent(MmUnwrapUtils.single(target()), identifier());
+    public ObjectTitleEvent createInteractionEvent() {
+        return new ObjectTitleEvent(MmUnwrapUtils.single(target()), identifier(), title());
     }
 
 }

@@ -16,27 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.fallback;
+package org.apache.causeway.core.metamodel.interactions.vis;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.HasSemanticEqualityByClass;
-import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
+import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.causeway.core.metamodel.interactions.InteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 
-public class MaxLengthFacetUnlimited
-extends MaxLengthFacetAbstract
-implements HasSemanticEqualityByClass {
+/**
+ * See {@link InteractionContext} for overview; analogous to
+ * {@link VisibilityEvent}.
+ */
+public sealed interface VisibilityContext
+extends InteractionContext, InteractionEventSupplier<VisibilityEvent>
+permits VisibilityContextHolder {
 
-    public MaxLengthFacetUnlimited(final FacetHolder holder) {
-        super(Integer.MAX_VALUE, holder, Precedence.FALLBACK);
-    }
-
-    /**
-     * No limit to maximum length.
-     */
-    @Override
-    public String invalidates(final ValidityContext context) {
-        return null;
-    }
+    RenderPolicy renderPolicy();
 
 }

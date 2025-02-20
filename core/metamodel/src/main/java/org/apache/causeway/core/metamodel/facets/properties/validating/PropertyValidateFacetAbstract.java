@@ -22,8 +22,8 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
+import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public abstract class PropertyValidateFacetAbstract extends FacetAbstract implements PropertyValidateFacet {
@@ -41,7 +41,7 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
     }
 
     @Override
-    public String invalidates(final ValidityContextHolder context) {
+    public String invalidates(final ValidityContext context) {
         if (!(context instanceof PropertyModifyContext)) return null;
 
         final PropertyModifyContext propertyModifyContext = (PropertyModifyContext) context;
