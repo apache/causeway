@@ -35,13 +35,9 @@ import org.apache.causeway.commons.graph.GraphUtils.GraphKernel.GraphCharacteris
 import org.apache.causeway.commons.graph.GraphUtils.NodeFormatter;
 import org.apache.causeway.commons.io.TextUtils;
 
-import lombok.Value;
-
 class GraphUtilsTest {
 
-    @Value
-    static class Customer {
-       String name;
+    record Customer(String name) {
     }
 
     @Test
@@ -57,7 +53,7 @@ class GraphUtilsTest {
             .addEdge(2, 0);
 
         var graph = gBuilder.build();
-        var textForm = graph.toString(Customer::getName);
+        var textForm = graph.toString(Customer::name);
 
         //debug
         //System.err.println(textForm);
@@ -80,7 +76,7 @@ class GraphUtilsTest {
             .addEdge(2, 0);
 
         var graph = gBuilder.build();
-        var textForm = graph.toString(Customer::getName);
+        var textForm = graph.toString(Customer::name);
 
         //debug
         //System.err.println(textForm);
@@ -136,7 +132,7 @@ class GraphUtilsTest {
 
         var graph = gBuilder.build();
         var textForm = graph.toString(
-                NodeFormatter.of(Customer::getName),
+                NodeFormatter.of(Customer::name),
                 edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
         //debug
         //System.err.println(textForm);
@@ -162,9 +158,9 @@ class GraphUtilsTest {
 
         var graph = gBuilder
                 .build()
-                .sorted(Comparator.comparing(Customer::getName)); // test sorting
+                .sorted(Comparator.comparing(Customer::name)); // test sorting
         var textForm = graph.toString(
-                NodeFormatter.of(Customer::getName),
+                NodeFormatter.of(Customer::name),
                 edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
         //debug
         //System.err.println(textForm);
@@ -215,9 +211,9 @@ class GraphUtilsTest {
             .addEdge(1, 2)      // B -> C
             .addEdge(2, 0, 0.7) // C -> A (weight=0.7)
             .build()
-            .filter(node->!node.getName().equals("C")); // now remove C
+            .filter(node->!node.name().equals("C")); // now remove C
 
-        var textForm = graph.toString(Customer::getName);
+        var textForm = graph.toString(Customer::name);
 
         //debug
         //System.err.println(textForm);
@@ -240,11 +236,11 @@ class GraphUtilsTest {
             .addEdge(c, b, 0.7) // B - C (weight=0.7)
             .addNode(d)
             .build()
-            .filter(node->!node.getName().equals("C")) // now remove C
+            .filter(node->!node.name().equals("C")) // now remove C
             ;
 
         var textForm = graph.toString(
-                NodeFormatter.of(Customer::getName),
+                NodeFormatter.of(Customer::name),
                 edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
         //debug
         //System.err.println(textForm);

@@ -154,7 +154,7 @@ implements
             } else {
                 log.error("### Validation FAILED, failure count: {}", validationResult.getNumberOfFailures());
                 validationResult.forEach(failure->{
-                    log.error("# " + failure.getMessage());
+                    log.error("# " + failure.message());
                 });
                 //throw _Exceptions.unrecoverable("Validation FAILED");
             }

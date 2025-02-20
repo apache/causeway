@@ -136,7 +136,7 @@ implements
                 .orElse(null);
     }
 
-    private boolean isUseGroupingSeparatorFrom(CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
+    private boolean isUseGroupingSeparatorFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
         return bigDecimalConfig.getEditing().isUseGroupingSeparator() || bigDecimalConfig.isUseGroupingSeparator();
     }
 
@@ -156,15 +156,11 @@ implements
                     : bigDecimalConfig.getDisplay().isUseGroupingSeparator()
         );
 
-        if(context==null) {
-            return;
-        }
+        if(context==null) return;
 
-        var feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
+        var feature = specificationLoader.loadFeature(context.featureIdentifier())
                 .orElse(null);
-        if(feature==null) {
-            return;
-        }
+        if(feature==null) return;
 
         // evaluate any facets that provide the MaximumFractionDigits
         Facets.maxFractionalDigits(feature)

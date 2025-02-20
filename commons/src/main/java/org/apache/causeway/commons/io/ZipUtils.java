@@ -38,6 +38,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
@@ -48,12 +49,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Predicates;
 
 import lombok.Builder;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.Value;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -64,32 +60,33 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ZipUtils {
 
-    //XXX record candidate
-    @Builder
-    @Value @Accessors(fluent=true)
-    public static class ZipOptions {
-        @Builder.Default
-        private final int bufferSize = 64*1024; // 64k
-        /**
-         * The {@link java.nio.charset.Charset charset} to be
-         *        used to decode the ZIP entry name (ignored if the
-         *        <a href="package-summary.html#lang_encoding"> language
-         *        encoding bit</a> of the ZIP entry's general purpose bit
-         *        flag is set).
-         */
-        @Builder.Default @NonNull
-        private final Charset zipEntryCharset = StandardCharsets.UTF_8;
+    @Builder()
+    public record ZipOptions(int bufferSize,
+            /**
+             * The {@link java.nio.charset.Charset charset} to be
+             *        used to decode the ZIP entry name (ignored if the
+             *        <a href="package-summary.html#lang_encoding"> language
+             *        encoding bit</a> of the ZIP entry's general purpose bit
+             *        flag is set).
+             */
+            @NonNull Charset zipEntryCharset,
+            @NonNull Predicate<ZipEntry> zipEntryFilter
+            ) {
 
-        @Builder.Default @NonNull
-        private final Predicate<ZipEntry> zipEntryFilter = _Predicates.alwaysTrue();
+        // canonical constructor
+        public ZipOptions(
+                final int bufferSize,
+                final Charset zipEntryCharset,
+                final Predicate<ZipEntry> zipEntryFilter) {
+            this.bufferSize = bufferSize>0 ? bufferSize : 64*1024; // 64k
+            this.zipEntryCharset = zipEntryCharset!=null ? zipEntryCharset : StandardCharsets.UTF_8;
+            this.zipEntryFilter = zipEntryFilter!=null ? zipEntryFilter : _Predicates.alwaysTrue();
+        }
     }
 
-    //XXX record candidate
-    @RequiredArgsConstructor
-    public static class ZipEntryDataSource implements DataSource {
-        @Getter @Accessors(fluent=true)
-        private final ZipEntry zipEntry;
-        private final byte[] bytes;
+    public record ZipEntryDataSource(
+            ZipEntry zipEntry,
+            byte[] bytes) implements DataSource {
 
         @Override
         public <T> Try<T> tryReadAll(final @NonNull Function<InputStream, Try<T>> consumingMapper) {

@@ -47,11 +47,11 @@ permits Blob, Clob {
     /**
      * @deprecated use {@link #name()} instead
      */
-    default String getName() { return name(); }
+    @Deprecated default String getName() { return name(); }
     /**
      * @deprecated use {@link #mimeType()} instead
      */
-    default MimeType getMimeType() { return mimeType(); }
+    @Deprecated default MimeType getMimeType() { return mimeType(); }
 
     @Override
     default int compareTo(final NamedWithMimeType o) {

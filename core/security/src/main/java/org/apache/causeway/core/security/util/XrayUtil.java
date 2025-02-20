@@ -30,9 +30,8 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
-public final class XrayUtil {
+public record XrayUtil() {
 
     /**
      * Returns the sequence diagram data model's id, that is bound to the current thread and interaction.
@@ -76,15 +75,15 @@ public final class XrayUtil {
 
     }
 
-    @Value @Builder
-    public static final class SequenceHandle {
-        final @NonNull String sequenceId;
-        final @NonNull String caller;
-        final @NonNull Can<String> callees;
+    @Builder
+    public record SequenceHandle(
+            @NonNull String sequenceId,
+            @NonNull String caller,
+            @NonNull Can<String> callees) {
 
         public void submit(final Consumer<SequenceDiagram> onSubmission) {
             XrayUi.updateModel(model->{
-                model.lookupSequence(getSequenceId())
+                model.lookupSequence(sequenceId())
                 .ifPresent(sequence->onSubmission.accept(sequence.getData()));
             });
         }

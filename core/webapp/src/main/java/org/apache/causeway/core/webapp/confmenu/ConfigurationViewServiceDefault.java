@@ -200,7 +200,7 @@ implements
 
             dsInfos.forEach(IndexedConsumer.offset(1, (index,  dataSourceInfo)->{
                 add(String.format("Data Source (%d/%d)", index, dsInfos.size()),
-                        dataSourceInfo.getJdbcUrl(),
+                        dataSourceInfo.jdbcUrl(),
                         map);
             }));
 

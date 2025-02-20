@@ -182,9 +182,8 @@ public record Blob(
      */
     @SneakyThrows
     public void writeBytesTo(final @Nullable OutputStream os) {
-        if(os==null) {
-            return;
-        }
+        if(os==null) return;
+        
         if(bytes!=null) {
             os.write(bytes);
         }
@@ -203,9 +202,8 @@ public record Blob(
      */
     @SneakyThrows
     public void writeTo(final @Nullable File file) {
-        if(file==null) {
-            return; // just ignore
-        }
+        if(file==null) return; // just ignore
+        
         try(var os = new FileOutputStream(file)){
             writeBytesTo(os);
         }

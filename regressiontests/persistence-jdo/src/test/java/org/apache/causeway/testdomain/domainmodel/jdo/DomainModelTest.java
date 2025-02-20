@@ -69,29 +69,25 @@ class DomainModelTest {
 
     @Test
     void goodDomain_shouldPassValidation() {
-        //debug();
         assertFalse(specificationLoader.snapshotSpecifications().isEmpty());
 
         var validateDomainModel = new DomainModelValidator(serviceRegistry);
 
-        validateDomainModel.getFailures().forEach(f->System.err.printf("%s:%s%n", f.getOrigin(), f.getMessage()));
+        validateDomainModel.getFailures().forEach(f->System.err.printf("%s:%s%n", f.origin(), f.message()));
 
         validateDomainModel.throwIfInvalid(); // should not throw
     }
 
     @Test
     void pluginProvidedMixins_shouldBePickedUp() {
-
         var entitySpec = specificationLoader.loadSpecification(JdoProduct.class);
 
         var mx_datanucleusVersionLong = entitySpec.getAssociationElseFail("datanucleusVersionLong"); // plugged in mixin
         assertNotNull(mx_datanucleusVersionLong);
-
     }
 
     @Test
     void metaAnnotatedEntities_shouldBeRecognized() {
-
         var entitySpec = specificationLoader.loadSpecification(JdoEntityMetaAnnotated.class);
 
         assertEquals(BeanSort.ENTITY, entitySpec.getBeanSort());

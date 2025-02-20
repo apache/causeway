@@ -92,7 +92,7 @@ public class _MethodFacades {
          * Replaces {@code parameterValue} (if required) to be conform with the {@code parameterType}.
          */
         <T> T convert(final Class<T> parameterType, Object parameterValue);
-        
+
         // -- UTILITY
 
         default Object[] convertAll(
@@ -111,8 +111,9 @@ public class _MethodFacades {
             return adaptedExecutionParameters;
         }
     }
-    
-    public static interface MethodFacade {
+
+    public static sealed interface MethodFacade
+    permits ParamsAsTupleMethod, RegularMethod {
 
         Class<?>[] getParameterTypes();
         Class<?> getParameterType(int paramNum);
@@ -177,10 +178,7 @@ public class _MethodFacades {
     /**
      * Wraps a {@link Method}, implemented as a transparent pass through.
      */
-    @lombok.Value
-    private final static class RegularMethod implements MethodFacade {
-
-        private final ResolvedMethod method;
+    private record RegularMethod(ResolvedMethod method) implements MethodFacade {
 
         @Override public Class<?> getDeclaringClass() {
             return method.method().getDeclaringClass();
@@ -223,7 +221,7 @@ public class _MethodFacades {
                 final Class<A> annotationType, final int paramNum) {
             return _Annotations.synthesize(method.method().getParameters()[paramNum], annotationType);
         }
-        @Override public Object[] getArguments(final Object[] executionParameters, ParameterConverter converter) {
+        @Override public Object[] getArguments(final Object[] executionParameters, final ParameterConverter converter) {
             return converter.convertAll(method.method(), executionParameters);
         }
         @Override public boolean isAnnotatedAsNullable() {
@@ -236,11 +234,9 @@ public class _MethodFacades {
         }
     }
 
-    @lombok.Value
-    private final static class ParamsAsTupleMethod implements MethodFacade {
-
-        private final ResolvedConstructor patConstructor;
-        private final ResolvedMethod method;
+    private record ParamsAsTupleMethod(
+            ResolvedConstructor patConstructor,
+            ResolvedMethod method) implements MethodFacade {
 
         @Override public Class<?>[] getParameterTypes() {
             return patConstructor.paramTypes();
@@ -278,7 +274,7 @@ public class _MethodFacades {
             return patConstructor.constructor();
         }
         @Override @SneakyThrows
-        public Object[] getArguments(final Object[] executionParameters, ParameterConverter converter) {
+        public Object[] getArguments(final Object[] executionParameters, final ParameterConverter converter) {
             var convertedArgs = converter.convertAll(patConstructor.constructor(), executionParameters);
             // converts input args into a single arg tuple type (PAT semantics)
             return new Object[] {patConstructor.constructor().newInstance(convertedArgs)};

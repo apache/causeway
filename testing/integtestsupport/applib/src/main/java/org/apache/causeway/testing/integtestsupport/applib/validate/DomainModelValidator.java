@@ -118,21 +118,17 @@ public class DomainModelValidator {
     }
 
     public Set<ValidationFailure> getFailures() {
-        if (validationFailures == null) {
-            return Collections.emptySet();
-        }
+        if (validationFailures == null) return Collections.emptySet();
+
         return validationFailures.getFailures(); // already wrapped unmodifiable
     }
 
     public Stream<ValidationFailure> streamFailures(final @Nullable Predicate<Identifier> filter) {
-        if(validationFailures==null) {
-            return Stream.empty();
-        }
-        if(filter==null) {
-            return validationFailures.getFailures().stream();
-        }
+        if(validationFailures==null) return Stream.empty();
+        if(filter==null) return validationFailures.getFailures().stream();
+
         return validationFailures.getFailures().stream()
-                .filter(failure->filter.test(failure.getOrigin()));
+                .filter(failure->filter.test(failure.origin()));
     }
 
     public Stream<ValidationFailure> streamFailuresMatchingOriginatingIdentifier(
@@ -151,13 +147,13 @@ public class DomainModelValidator {
 
         boolean matchFound = streamFailuresMatchingOriginatingIdentifier(identifier)
                 .anyMatch(failure->
-                    failure.getMessage().contains(messageSnippet));
+                    failure.message().contains(messageSnippet));
 
         if(!matchFound) {
             var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     streamFailuresMatchingOriginatingIdentifier(identifier)
-                    .map(ValidationFailure::getMessage)
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }
@@ -176,13 +172,13 @@ public class DomainModelValidator {
 
         boolean matchFound = streamFailures(filterByLogicalType)
                 .anyMatch(failure->
-                    failure.getMessage().contains(messageSnippet));
+                    failure.message().contains(messageSnippet));
 
         if(!matchFound) {
             var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     streamFailures(filterByLogicalType)
-                    .map(ValidationFailure::getMessage)
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }
@@ -196,18 +192,18 @@ public class DomainModelValidator {
             final String messageSnippet) {
 
         boolean matchFound = classIdentifiers
-                .stream()
-                .anyMatch(identifier->
-                        streamFailuresMatchingOriginatingIdentifier(identifier)
-                                .anyMatch(failure->
-                                failure.getMessage().contains(messageSnippet)));
+            .stream()
+            .anyMatch(identifier->
+                    streamFailuresMatchingOriginatingIdentifier(identifier)
+                            .anyMatch(failure->
+                            failure.message().contains(messageSnippet)));
 
         if(!matchFound) {
             var msg = String.format("validation snipped '%s' not found within messages:\n%s",
                     messageSnippet,
                     classIdentifiers.stream()
                     .flatMap(identifier->streamFailuresMatchingOriginatingIdentifier(identifier))
-                    .map(ValidationFailure::getMessage)
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n")));
             throw new AssertionFailedError(msg);
         }

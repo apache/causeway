@@ -23,7 +23,9 @@ import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.function.ThrowingSupplier;
 
 import org.apache.causeway.commons.functional.Try;
@@ -32,10 +34,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -49,21 +48,19 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class HashUtils {
 
-    //XXX record candidate
-    @Value @Accessors(fluent=true)
-    public static class Hash {
-        private final String algorithmName;
-        private final byte[] bytes;
+    public record Hash(
+            String algorithmName,
+            byte[] _bytes) {
 
         public byte[] bytes() {
             // defensive copy
-            return bytes!=null
-                    ? bytes.clone()
+            return _bytes!=null
+                    ? _bytes.clone()
                     : null;
         }
 
         public String asHexString() {
-            return _Bytes.hexDump(bytes, "");
+            return _Bytes.hexDump(_bytes, "");
         }
     }
 

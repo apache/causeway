@@ -57,8 +57,8 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                var callee = handle.getCallees().getFirstElseFail();
-                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                var callee = handle.callees().getFirstElseFail();
+                sequenceData.enter(handle.caller(), callee, enteringLabel);
                 //sequenceData.activate(callee);
             });
 
@@ -117,8 +117,8 @@ final class _Xray {
 
                 sequenceData.alias("ec-tracker", "EntityChange-\nTracker-\n(Default)");
 
-                var callee = handle.getCallees().getFirstElseFail();
-                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                var callee = handle.callees().getFirstElseFail();
+                sequenceData.enter(handle.caller(), callee, enteringLabel);
                 //sequenceData.activate(callee);
             });
 

@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -45,7 +46,6 @@ import org.apache.causeway.commons.internal.collections._PrimitiveCollections.In
 import org.apache.causeway.commons.internal.primitives._Longs;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
 
@@ -283,11 +283,10 @@ public class GraphUtils {
      * @param <T> graph's node type
      * @since 2.1, 3.1
      */
-    @lombok.Value @Accessors(fluent=true)
-    public class Graph<T> {
-        private final GraphKernel kernel;
-        private final Can<T> nodes;
-        private final Map<Long, Object> edgeAttributeByPackedEdgeIndex;
+    public record Graph<T>(
+            GraphKernel kernel,
+            Can<T> nodes,
+            Map<Long, Object> edgeAttributeByPackedEdgeIndex) {
 
         // -- TRAVERSAL
 
@@ -376,7 +375,7 @@ public class GraphUtils {
             var nodeType = _Casts.<Class<T>>uncheckedCast(nodes.getFirst().get().getClass());
             var builder = new GraphBuilder<T>(nodeType, kernel().characteristics);
             var isUndirected = kernel().isUndirected();
-            
+
             nodes.forEach(IndexedConsumer.zeroBased((nodeIndex, node)->{
                 if(filter.test(node)) {
                     builder.addNode(node);

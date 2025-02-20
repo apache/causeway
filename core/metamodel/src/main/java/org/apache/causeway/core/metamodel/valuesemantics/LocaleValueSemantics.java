@@ -80,17 +80,13 @@ implements
     }
 
     private String localeToString(final ValueSemanticsProvider.Context context, final Locale value) {
-        var userLanguageLocale = context.getInteractionContext().getLocale().languageLocale();
+        var userLanguageLocale = context.interactionContext().getLocale().languageLocale();
 
         var language = value.getDisplayLanguage(userLanguageLocale);
-        if(_Strings.isEmpty(language)) {
-            return stringify(value);
-        }
+        if(_Strings.isEmpty(language)) return stringify(value);
 
         var country = value.getDisplayCountry(userLanguageLocale);
-        if(_Strings.isEmpty(country)) {
-            return language;
-        }
+        if(_Strings.isEmpty(country)) return language;
 
         return String.format("%s (%s)",
                 value.getDisplayLanguage(userLanguageLocale),

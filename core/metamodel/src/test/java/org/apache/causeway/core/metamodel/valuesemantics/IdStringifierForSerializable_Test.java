@@ -31,19 +31,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 
-import lombok.Value;
-
 class IdStringifierForSerializable_Test {
 
     private UrlEncodingService codec = UrlEncodingService.forTesting();
 
     // -- SCENARIO
 
-    @Value
-    static class CustomerPK implements Serializable{
-        private static final long serialVersionUID = 1L;
-        final int lower;
-        final int upper;
+    static record CustomerPK(
+            int lower,
+            int upper) implements Serializable{
     }
 
     // -- TEST

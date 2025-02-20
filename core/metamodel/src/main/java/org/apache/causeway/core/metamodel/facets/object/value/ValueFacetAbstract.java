@@ -122,7 +122,7 @@ implements ValueFacet<T> {
         if(iaProvider==null) {
             return null; // JUnit context
         }
-        return ValueSemanticsProvider.Context.of(
+        return new ValueSemanticsProvider.Context(
                 feature!=null
                     ? feature.getFeatureIdentifier()
                     : null,

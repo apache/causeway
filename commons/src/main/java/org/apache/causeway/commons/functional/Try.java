@@ -24,14 +24,14 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
@@ -46,7 +46,8 @@ import lombok.SneakyThrows;
  *
  * @since 2.0 {@index}
  */
-public interface Try<T> {
+public sealed interface Try<T>
+permits Try.Success, Try.Failure {
 
     // -- FACTORIES
 
@@ -292,17 +293,12 @@ public interface Try<T> {
 
     // -- SUCCESS
 
-    @lombok.Value
-    @RequiredArgsConstructor
-    final class Success<T> implements Try<T>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final @Nullable T value;
+    record Success<T>(@Nullable T _value) implements Try<T>, Serializable {
 
         @Override public boolean isSuccess() { return true; }
         @Override public boolean isFailure() { return false; }
 
-        @Override public Optional<T> getValue() { return Optional.ofNullable(value); }
+        @Override public Optional<T> getValue() { return Optional.ofNullable(_value); }
         @Override public Optional<Throwable> getFailure() { return Optional.empty(); }
 
         @Override
@@ -336,7 +332,7 @@ public interface Try<T> {
 
         @Override
         public Success<T> ifAbsentFail() {
-            if(value==null) throw _Exceptions.noSuchElement();
+            if(_value==null) throw _Exceptions.noSuchElement();
             return this;
         }
 
@@ -392,7 +388,7 @@ public interface Try<T> {
 
         @Override
         public Try<T> mapEmptyToFailure() {
-            return value!=null
+            return _value!=null
                     ? this
                     : Try.failure(_Exceptions.noSuchElement());
         }
@@ -451,12 +447,7 @@ public interface Try<T> {
 
     // -- FAILURE
 
-    @lombok.Value
-    @RequiredArgsConstructor
-    final class Failure<T> implements Try<T>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final @NonNull Throwable throwable;
+    record Failure<T>(@NonNull Throwable throwable) implements Try<T>, Serializable {
 
         @Override public boolean isSuccess() { return false; }
         @Override public boolean isFailure() { return true; }

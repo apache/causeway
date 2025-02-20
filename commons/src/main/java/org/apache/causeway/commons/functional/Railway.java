@@ -28,7 +28,6 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
@@ -138,12 +137,7 @@ public interface Railway<F, S> {
 
     // -- SUCCESS
 
-    @lombok.Value
-    @RequiredArgsConstructor
-    final class Success<F, S> implements Railway<F, S>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final @NonNull S success;
+    final record Success<F, S>(@NonNull S success) implements Railway<F, S>, Serializable {
 
         @Override public boolean isSuccess() { return true; }
         @Override public boolean isFailure() { return false; }
@@ -188,12 +182,7 @@ public interface Railway<F, S> {
 
     // -- FAILURE
 
-    @lombok.Value
-    @RequiredArgsConstructor
-    final class Failure<F, S> implements Railway<F, S>, Serializable {
-        private static final long serialVersionUID = 1L;
-
-        private final @NonNull F failure;
+    final record Failure<F, S>(@NonNull F failure) implements Railway<F, S>, Serializable {
 
         @Override public boolean isSuccess() { return false; }
         @Override public boolean isFailure() { return true; }

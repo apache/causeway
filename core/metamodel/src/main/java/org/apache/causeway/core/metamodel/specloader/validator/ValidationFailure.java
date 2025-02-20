@@ -29,18 +29,13 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
 /**
- *
  * @since 2.0
- *
  */
-@Value(staticConstructor = "of")
-public final class ValidationFailure implements Comparable<ValidationFailure> {
-
-    @NonNull private Identifier origin;
-    @NonNull private String message;
+public record ValidationFailure(
+    @NonNull Identifier origin,
+    @NonNull String message) implements Comparable<ValidationFailure> {
 
     // -- FACTORIES
 
@@ -52,7 +47,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
             final @NonNull Identifier deficiencyOrigin,
             final @NonNull String deficiencyMessage) {
 
-        specLoader.addValidationFailure(ValidationFailure.of(deficiencyOrigin, deficiencyMessage));
+        specLoader.addValidationFailure(new ValidationFailure(deficiencyOrigin, deficiencyMessage));
     }
 
     /**
@@ -76,9 +71,9 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
     }
 
     private static final Comparator<ValidationFailure> comparator = Comparator
-            .<ValidationFailure, String>comparing(failure->failure.getOrigin().className(), nullsFirst(naturalOrder()))
-            .<String>thenComparing(failure->failure.getOrigin().memberLogicalName(), nullsFirst(naturalOrder()))
-            .thenComparing(ValidationFailure::getMessage);
+            .<ValidationFailure, String>comparing(failure->failure.origin().className(), nullsFirst(naturalOrder()))
+            .<String>thenComparing(failure->failure.origin().memberLogicalName(), nullsFirst(naturalOrder()))
+            .thenComparing(ValidationFailure::message);
 
     // -- CONTRACT
 
@@ -97,15 +92,8 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
 
     @Override
     public int compareTo(final ValidationFailure o) {
-
-        if(equals(o)) {
-            return 0; // for consistency with equals
-        }
-
-        if(o==null) {
-            return -1; // null last policy
-        }
-
+        if(equals(o)) return 0; // for consistency with equals
+        if(o==null) return -1; // null last policy
         return comparator.compare(this, o);
     }
 

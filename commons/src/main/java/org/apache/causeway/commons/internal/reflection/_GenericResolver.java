@@ -320,37 +320,39 @@ public class _GenericResolver {
 
     // -- IMPLEMENTATIONS
 
-    @lombok.Value @Accessors(fluent=true)
-    private static class SimpleTypeOfAnyCardinality implements ResolvedType {
-        @Getter(onMethod_={@Override})
-        private final @NonNull Class<?> elementType;
-        @Getter(onMethod_={@Override})
-        private final @NonNull Optional<Class<?>> containerType;
-        @Getter(onMethod_={@Override})
-        private final @NonNull Optional<CollectionSemantics> collectionSemantics;
+    private record SimpleTypeOfAnyCardinality(
+            @NonNull Class<?> elementType,
+            @NonNull Optional<Class<?>> containerType,
+            @NonNull Optional<CollectionSemantics> collectionSemantics) implements ResolvedType {
     }
 
-    @EqualsAndHashCode
-    @Getter @Accessors(fluent=true)
-    private static class SimpleResolvedMethod implements ResolvedMethod {
-
-        private final Method method;
-        private final Class<?> implementationClass;
-
-        @EqualsAndHashCode.Exclude
-        private final Class<?>[] paramTypes;
-        @EqualsAndHashCode.Exclude
-        private final Class<?> returnType;
-        @EqualsAndHashCode.Exclude
-        private final boolean isResolved;
+    private record SimpleResolvedMethod(
+            Method method,
+            Class<?> implementationClass,
+            Class<?>[] paramTypes,
+            Class<?> returnType,
+            boolean isResolved
+            ) implements ResolvedMethod {
 
         public SimpleResolvedMethod(final Method method, final Class<?> implementationClass) {
+            this(method, implementationClass,
+                _GenericResolver.resolveParameterTypes(method, implementationClass),
+                GenericTypeResolver.resolveReturnType(method, implementationClass),
+                // not used in canonical constructor ...
+                false);
+        }
+        // canonical constructor
+        public SimpleResolvedMethod(
+                final Method method,
+                final Class<?> implementationClass,
+                final Class<?>[] paramTypes,
+                final Class<?> returnType,
+                final boolean isResolved) {
             this.method = method;
             this.implementationClass = implementationClass;
-            this.paramTypes = _GenericResolver.resolveParameterTypes(method, implementationClass);
-            this.returnType = GenericTypeResolver.resolveReturnType(method, implementationClass);
-            this.isResolved = isReturnTypeResolved()
-                    && areParamsResolved();
+            this.paramTypes = paramTypes;
+            this.returnType = returnType;
+            this.isResolved = isReturnTypeResolved() && areParamsResolved();
         }
         public Optional<ResolvedMethod> guardAgainstCannotResolve() {
             return isResolved ? Optional.of(this) : Optional.empty();
@@ -372,6 +374,18 @@ public class _GenericResolver {
                         .map(Class::getSimpleName)
                         .collect(Collectors.joining(",")));
         }
+        @Override
+        public final boolean equals(final Object obj) {
+            return obj instanceof SimpleResolvedMethod other
+                    ? Objects.equals(this.method(), other.method())
+                            && Objects.equals(this.implementationClass(), other.implementationClass())
+                    : false;
+        }
+        @Override
+        public final int hashCode() {
+            return Objects.hash(method(), implementationClass());
+        }
+
         //-- HELPER
         private boolean areParamsResolved() {
             if(isNoArg()) return true; // skip check
@@ -395,7 +409,7 @@ public class _GenericResolver {
                 _NullSafe.stream(method().getAnnotatedReturnType().getAnnotations()),
                 _NullSafe.stream(method().getAnnotations()));
         }
-        
+
 //        private Try<SimpleResolvedMethod> adopt(final @NonNull ClassLoader classLoader) {
 //            return Try.call(()->{
 //                var ownerReloaded = Class.forName(implementationClass.getName(), true, classLoader);

@@ -28,6 +28,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -59,9 +61,7 @@ import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -423,7 +423,6 @@ implements
      * @param interaction The {@link CausewayInteraction} object representing the current interaction.
      */
     public void onClose(final @NonNull CausewayInteraction interaction) {
-
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
         }
@@ -436,11 +435,10 @@ implements
         txCounter.remove(); //XXX not tested yet: can we be certain that no txCounter.get() is called afterwards?
     }
 
-    @Value
-    private static class CloseTask {
-        @NonNull TransactionStatus txStatus;
-        @NonNull String onErrorInfo;
-        @NonNull ThrowingRunnable runnable;
+    private record CloseTask(
+            @NonNull TransactionStatus txStatus,
+            @NonNull String onErrorInfo,
+            @NonNull ThrowingRunnable runnable) {
     }
 
     @RequiredArgsConstructor
@@ -455,13 +453,13 @@ implements
             onCloseTasks.forEach(onCloseTask->{
 
                 try {
-                    onCloseTask.getRunnable().run();
+                    onCloseTask.runnable().run();
                 } catch(final Throwable ex) {
                     // ignore
                     log.error(
                             "failed to close transactional boundary using transaction-manager {}; "
                                     + "continuing to avoid memory leakage",
-                            onCloseTask.getOnErrorInfo(),
+                            onCloseTask.onErrorInfo(),
                             ex);
                 }
             });

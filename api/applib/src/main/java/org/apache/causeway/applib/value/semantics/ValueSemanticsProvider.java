@@ -53,10 +53,9 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
  */
 public interface ValueSemanticsProvider<T> {
 
-    @lombok.Value(staticConstructor = "of")
-    class Context {
-        private final @Nullable Identifier featureIdentifier;
-        private final @Nullable InteractionContext interactionContext;
+    record Context(
+            @Nullable Identifier featureIdentifier,
+            @Nullable InteractionContext interactionContext) {
     }
 
     Class<T> getCorrespondingClass();

@@ -24,20 +24,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
-
 public interface Consent {
 
-    //XXX record candidate
-    @lombok.Value @Accessors(fluent=true)
-    public static class VetoReason implements Serializable {
-        private static final long serialVersionUID = 1L;
+    public record VetoReason(
+            VetoOriging vetoOriging,
+            UiHint uiHint,
+            @NonNull String string) implements Serializable {
 
         /**
          * Introduced to help pick a winner when merging 2 {@link VetoReason}(s).
@@ -87,9 +86,7 @@ public interface Consent {
                 return b.ordinal()>a.ordinal() ? b : a;
             }
         }
-        private final VetoOriging vetoOriging;
-        private final UiHint uiHint;
-        private final @NonNull String string;
+
         private static VetoReason of(
                 final @NonNull VetoOriging vetoOriging,
                 final @NonNull UiHint uiHint,
@@ -107,7 +104,7 @@ public interface Consent {
             return of(VetoOriging.PROGRAMMING_MODEL, UiHint.NO_ICON_UNLESS_PROTOTYPING, reason);
         }
 
-        VetoReason withAdvisorAsDiagnostic(Object advisor) {
+        VetoReason withAdvisorAsDiagnostic(final Object advisor) {
             return new VetoReason(this.vetoOriging, this.uiHint, this.string + " {" + advisor.getClass().getSimpleName() + "} ");
         }
 

@@ -74,7 +74,7 @@ final class _Xray {
         return enterCommandPublishing(iaTracker, command, enabledSubscribers, cannotPublishReasonSupplier, "completed");
     }
 
-    private static SequenceHandle enterCommandPublishing(InteractionLayerTracker iaTracker, Command command, Can<CommandSubscriber> enabledSubscribers, Supplier<String> cannotPublishReasonSupplier, String verb) {
+    private static SequenceHandle enterCommandPublishing(final InteractionLayerTracker iaTracker, final Command command, final Can<CommandSubscriber> enabledSubscribers, final Supplier<String> cannotPublishReasonSupplier, final String verb) {
         if(!XrayUi.isXrayEnabled()) {
             return null;
         }
@@ -100,8 +100,8 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                var callee = handle.getCallees().getFirstElseFail();
-                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                var callee = handle.callees().getFirstElseFail();
+                sequenceData.enter(handle.caller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
 
@@ -142,8 +142,8 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                var callee = handle.getCallees().getFirstElseFail();
-                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                var callee = handle.callees().getFirstElseFail();
+                sequenceData.enter(handle.caller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
 
@@ -185,8 +185,8 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                var callee = handle.getCallees().getFirstElseFail();
-                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                var callee = handle.callees().getFirstElseFail();
+                sequenceData.enter(handle.caller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
 
@@ -228,8 +228,8 @@ final class _Xray {
                     sequenceData.setConnectionLabelColor(Color.GRAY);
                 }
 
-                var callee = handle.getCallees().getFirstElseFail();
-                sequenceData.enter(handle.getCaller(), callee, enteringLabel);
+                var callee = handle.callees().getFirstElseFail();
+                sequenceData.enter(handle.caller(), callee, enteringLabel);
                 sequenceData.activate(callee);
             });
 
@@ -248,8 +248,8 @@ final class _Xray {
         }
 
         handle.submit(sequenceData->{
-            var callee = handle.getCallees().getFirstElseFail();
-            sequenceData.exit(callee, handle.getCaller());
+            var callee = handle.callees().getFirstElseFail();
+            sequenceData.exit(callee, handle.caller());
             sequenceData.deactivate(callee);
 
             sequenceData.setConnectionArrowColor(null);
@@ -260,23 +260,23 @@ final class _Xray {
 
     // -- HELPER
 
-    static String toText(Command command) {
+    static String toText(final Command command) {
         return _Text.breakLines(Can.of(command.toString()), 80)
                 .stream()
                 .collect(Collectors.joining("\n "));
     }
 
-    static String toText(Execution<?, ?> execution) {
+    static String toText(final Execution<?, ?> execution) {
         //TODO
         return execution.toString();
     }
 
-    static String toText(EntityChanges changes) {
+    static String toText(final EntityChanges changes) {
         //TODO
         return changes.toString();
     }
 
-    static String toText(Can<EntityPropertyChange> changes) {
+    static String toText(final Can<EntityPropertyChange> changes) {
         //TODO
         return changes.toString();
     }

@@ -107,7 +107,6 @@ import org.apache.causeway.schema.cmd.v2.ParamDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Value;
 
 /**
  * Configuration 'beans' with meta-data (IDE-support).
@@ -229,8 +228,8 @@ public class CausewayConfiguration {
              * Setting this option to {@literal true} allows {@code CsrfFilter}(s) to be
              * configured. Yet EXPERIMENTAL.
              *
-             * @see <code>org.springframework.security.web.csrf.CsrfFilter</code>
-             * @see "https://www.baeldung.com/spring-security-registered-filters"
+             * @see org.springframework.security.web.csrf.CsrfFilter
+             * @see <a href="https://www.baeldung.com/spring-security-registered-filters">baeldung</a>
              */
             private boolean allowCsrfFilters = false;
 
@@ -4586,24 +4585,22 @@ public class CausewayConfiguration {
         return new ArrayList<>(Arrays.asList(values));
     }
 
-    @Value
-    static class PatternToString {
-        private final Pattern pattern;
-        private final String string;
+    record PatternToString(
+            Pattern pattern,
+            String string) {
     }
     private static Map<Pattern, String> asMap(final String... mappings) {
         return new LinkedHashMap<>(_NullSafe.stream(mappings).map(mapping -> {
                     final String[] parts = mapping.split(":");
-                    if (parts.length != 2) {
-                        return null;
-                    }
+                    if (parts.length != 2) return null;
+                    
                     try {
                         return new PatternToString(Pattern.compile(parts[0], Pattern.CASE_INSENSITIVE), parts[1]);
                     } catch(Exception ex) {
                         return null;
                     }
                 }).filter(Objects::nonNull)
-                .collect(Collectors.toMap(PatternToString::getPattern, PatternToString::getString)));
+                .collect(Collectors.toMap(PatternToString::pattern, PatternToString::string)));
     }
 
     @Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE })

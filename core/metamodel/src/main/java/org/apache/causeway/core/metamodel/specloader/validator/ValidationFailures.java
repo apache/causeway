@@ -36,7 +36,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     public void add(final Identifier origin, final String pattern, final Object... arguments) {
         var message = String.format(pattern, arguments);
-        failures.add(ValidationFailure.of(origin, message));
+        failures.add(new ValidationFailure(origin, message));
     }
 
     public void addAll(final Iterable<ValidationFailure> failures) {
@@ -59,7 +59,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
 
     public ArrayList<String> getMessages() { // <-- ensure serializable result
         var messages = failures.stream() // already sorted
-        .map(ValidationFailure::getMessage)
+        .map(ValidationFailure::message)
         .collect(Collectors.toCollection(ArrayList::new));
         return messages;
     }
@@ -70,7 +70,7 @@ public final class ValidationFailures implements Iterable<ValidationFailure> {
     public ArrayList<String> getMessages(final String messageFormat) { // <-- ensure serializable result
         var messages = _Lists.<String>newArrayList();
         failures.stream() // already sorted
-        .map(ValidationFailure::getMessage)
+        .map(ValidationFailure::message)
         .map(msg->String.format(messageFormat, messages.size()+1, msg))
         .forEach(messages::add);
         return messages;

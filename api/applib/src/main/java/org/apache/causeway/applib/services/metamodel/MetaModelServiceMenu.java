@@ -257,10 +257,9 @@ public class MetaModelServiceMenu {
 
     // -- HELPER
 
-    @lombok.Value
-    static class MetaModelServiceAndConfig {
-        MetaModelService metaModelService;
-        Config config;
+    static record MetaModelServiceAndConfig(
+            MetaModelService metaModelService,
+            Config config) {
     }
 
     private Config defaultConfig(

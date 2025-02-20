@@ -58,7 +58,7 @@ public class HsqlDbManagerMenu {
     public HsqlDbManagerMenu(final DataSourceIntrospectionService datasourceIntrospector) {
         this.url = datasourceIntrospector.getDataSourceInfos()
         .stream()
-        .map(DataSourceInfo::getJdbcUrl)
+        .map(DataSourceInfo::jdbcUrl)
         .filter(jdbcUrl->{
             if(jdbcUrl.contains("hsqldb:mem")) {
                 log.info("found hsqldb in-memory data-source: {}", jdbcUrl);

@@ -62,14 +62,14 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test
     void rendering() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         assertEquals("Mar 13, 2013, 5:59:03 PM", valueSemantics.titlePresentation(_context , date));
     }
 
     @Test // support omitted parts on input
     void parseNoMinutes() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17");
         assertEquals(date.getTime() - 3540_000L - 3000L, parsedDate.getTime());
     }
@@ -77,7 +77,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test // support omitted parts on input
     void parseNoSeconds() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59");
         assertEquals(date.getTime() - 3000L, parsedDate.getTime());
     }
@@ -85,7 +85,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test
     void parseSeconds() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03");
         assertEquals(date.getTime(), parsedDate.getTime());
     }
@@ -93,7 +93,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test
     void parseMillis() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.MILLI_SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
@@ -101,7 +101,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test
     void parseMicros() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.MICRO_SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }
@@ -109,7 +109,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
     @Test
     void parseNanos() {
         setSemantics(valueSemantics = createValueSemantics(TimePrecision.NANO_SECOND));
-        var _context = Context.of(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
+        var _context = new Context(null, InteractionContext.builder().locale(UserLocale.valueOf(Locale.ENGLISH)).build());
         var parsedDate = valueSemantics.parseTextRepresentation(_context, "2013-03-13 17:59:03.123456789");
         assertEquals(date.getTime() + 123L, parsedDate.getTime());
     }

@@ -175,7 +175,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
 
         return datasourceIntrospector.getDataSourceInfos()
         .stream()
-        .map(DataSourceInfo::getJdbcUrl)
+        .map(DataSourceInfo::jdbcUrl)
         .anyMatch(jdbcUrl->{
             if(jdbcUrl.contains(":h2:mem:")) {
                 log.info("found h2 in-memory data-source: {}", jdbcUrl);

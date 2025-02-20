@@ -29,6 +29,8 @@ import java.util.stream.IntStream;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,7 +55,6 @@ import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -161,7 +162,7 @@ implements
 
     public final void assertHasPersistenceId(final Object entity) {
         var bookmark = bookmarkService.bookmarkForElseFail(entity);
-        final int id = Integer.parseInt(bookmark.getIdentifier());
+        final int id = Integer.parseInt(bookmark.identifier());
         assertTrue(id>=-1, ()->String.format("expected valid id; got %d", id));
     }
 
@@ -201,7 +202,7 @@ implements
 
     @SneakyThrows
     public final synchronized Lock aquireLock() {
-        var dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().getJdbcUrl();
+        var dsUrl = dataSourceIntrospectionService.getDataSourceInfos().getFirstElseFail().jdbcUrl();
         this.lockQueue = lockQueueByDatasource.computeIfAbsent(dsUrl, __->new LinkedBlockingQueue<>(1));
         log.info("waiting for lock {}", dsUrl);
         Lock lock;

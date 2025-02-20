@@ -37,8 +37,6 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -97,7 +95,7 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
         log.info("=== PHASE 2 === Initializing the ServletContext");
 
         webModuleContext.init();
-        servletContext.addListener(new ShutdownHook(webModuleContext));
+        servletContext.addListener(new ShutdownHook(this, webModuleContext));
 
         log.info("=== DONE === ServletContext initialized.");
 
@@ -114,13 +112,13 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
 
     // -- HELPER
 
-    @Value
-    private class ShutdownHook implements EventListener, ServletContextListener {
-        @NonNull WebModuleContext webModuleContext;
+    private record ShutdownHook(
+            CausewayWebAppContextInitializer self,
+            WebModuleContext webModuleContext) implements EventListener, ServletContextListener {
 
         @Override
         public void contextDestroyed(final ServletContextEvent sce) {
-            CausewayWebAppContextInitializer.this.contextDestroyed(webModuleContext, sce);
+            self.contextDestroyed(webModuleContext, sce);
         }
     }
 

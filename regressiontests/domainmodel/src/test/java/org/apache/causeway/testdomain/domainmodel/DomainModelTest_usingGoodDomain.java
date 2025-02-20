@@ -172,7 +172,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
         // guard against left overs from shared context
         var validationFailures = validateDomainModel.getFailures().stream()
-                .filter(f->!f.getOrigin().className().contains("bad"))
+                .filter(f->!f.origin().className().contains("bad"))
                 .collect(Collectors.toSet());
 
         if(!validationFailures.isEmpty()) {
@@ -180,7 +180,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             fail(String.format("%d problems found:\n%s",
                     validationFailures.size(),
                     validationFailures.stream()
-                    .map(validationFailure->validationFailure.getMessage())
+                    .map(validationFailure->validationFailure.message())
                     .collect(Collectors.joining("\n"))));
         }
     }

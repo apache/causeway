@@ -27,16 +27,15 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 
 import lombok.Builder;
 
-@lombok.Value @Builder
-public class _Expectations {
-
-    int methodCount;
-    int syntheticCount;
-    int bridgeCount;
-    /**
-     * short notation see {@link _MethodSummaryUtil}
-     */
-    String methodNameOrdinals;
+@Builder
+public record _Expectations(
+        int methodCount,
+        int syntheticCount,
+        int bridgeCount,
+        /**
+         * short notation see {@link _MethodSummaryUtil}
+         */
+        String methodNameOrdinals) {
 
     _Expectations actual(final Can<ResolvedMethod> methods) {
         return _Expectations.builder()

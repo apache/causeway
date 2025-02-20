@@ -37,35 +37,35 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
-    
+
     final @NonNull String name;
     final @NonNull Class<T> valueType;
     final @NonNull ValueTypeExample<T> example;
     final @NonNull ValueSemanticsTester<T> tester;
-    
+
     @Inject private SchemaValueMarshaller valueMarshaller;
-    
+
     @Override
     public void testCommandWithNonEmptyArg(
             final ValueSemanticsProvider.Context context,
             final Command command) {
 
         assertNotNull(command.getCommandDto());
-        
+
         //debug
         //System.err.printf("CommandDto %s %s%n", name,
         //      CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
-        
+
         var actionDto = (ActionDto)command.getCommandDto().getMember();
-        
+
         assertNotNull(actionDto.getParameters());
         assertNotNull(actionDto.getParameters().getParameter());
-        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
-        
+        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action
+
         var parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
-        
-        final Identifier paramId = context.getFeatureIdentifier();
+
+        final Identifier paramId = context.featureIdentifier();
         var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
@@ -76,28 +76,28 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         tester.assertValueEquals(example.getUpdateValue(), parameterRecorded.getPojo(), "command failed");
 
     }
-    
+
     @Override
     public void testCommandWithEmptyArg(
             final ValueSemanticsProvider.Context context,
             final Command command) {
 
         assertNotNull(command.getCommandDto());
-        
+
         //debug
 //        System.err.printf("CommandDto %s %s%n", name,
 //              CommandDtoUtils.dtoMapper().toString(command.getCommandDto()));
-        
+
         var actionDto = (ActionDto)command.getCommandDto().getMember();
-        
+
         assertNotNull(actionDto.getParameters());
         assertNotNull(actionDto.getParameters().getParameter());
-        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action 
-        
+        assertEquals(1, actionDto.getParameters().getParameter().size()); // we are testing a single arg action
+
         var parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
-        
-        final Identifier paramId = context.getFeatureIdentifier();
+
+        final Identifier paramId = context.featureIdentifier();
         var parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
@@ -107,5 +107,5 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
 
         assertNull(parameterRecorded.getPojo());
     }
-    
+
 }

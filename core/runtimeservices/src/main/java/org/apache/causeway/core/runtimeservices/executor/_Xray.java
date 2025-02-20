@@ -95,10 +95,10 @@ final class _Xray {
 
                 sequenceData.alias("executor", "Member-\nExecutorService-\n(Default)");
 
-                var callee1 = handle.getCallees().getFirstElseFail();
-                var callee2 = handle.getCallees().getLastElseFail();
+                var callee1 = handle.callees().getFirstElseFail();
+                var callee2 = handle.callees().getLastElseFail();
 
-                sequenceData.enter(handle.getCaller(), callee1);
+                sequenceData.enter(handle.caller(), callee1);
                 sequenceData.activate(callee1);
 
                 sequenceData.enter(callee1, callee2, enteringLabel);
@@ -118,13 +118,13 @@ final class _Xray {
 
         handle.submit(sequenceData->{
 
-            var callee1 = handle.getCallees().getFirstElseFail();
-            var callee2 = handle.getCallees().getLastElseFail();
+            var callee1 = handle.callees().getFirstElseFail();
+            var callee2 = handle.callees().getLastElseFail();
 
             sequenceData.exit(callee2, callee1);
             sequenceData.deactivate(callee2);
 
-            sequenceData.exit(callee1, handle.getCaller());
+            sequenceData.exit(callee1, handle.caller());
             sequenceData.deactivate(callee1);
 
         });

@@ -180,7 +180,7 @@ class ValueSemanticsTester<T> {
 
         assertTrue(semanticsIfAny.isPresent(), ()->
             "value semantics must be available for "
-                + context.getFeatureIdentifier());
+                + context.featureIdentifier());
 
         probe.testComposer(context, semanticsIfAny.get());
 

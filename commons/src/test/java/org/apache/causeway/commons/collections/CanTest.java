@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -40,7 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -48,7 +48,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.testing._SerializationTester;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 class CanTest {
 
@@ -406,9 +405,7 @@ class CanTest {
 
     // -- TO MAP
 
-    @Value
-    static class Customer {
-        final String name;
+    static record Customer(String name) {
     }
 
     @RequiredArgsConstructor
@@ -424,7 +421,7 @@ class CanTest {
             return customers.size();
         }
         // simulates a zip-function with nullable result
-        @Nullable static String format(Customer customer, int ordinal) {
+        @Nullable static String format(final Customer customer, final int ordinal) {
             return StringUtils.hasLength(customer.name)
                     ? String.format("%d->%s", ordinal, customer.name)
                     : null;
@@ -433,8 +430,8 @@ class CanTest {
 
     @RequiredArgsConstructor
     enum MapScenario {
-        HASH_MAP(customers->customers.toMap(Customer::getName)),
-        TREE_MAP(customers->customers.toMap(Customer::getName, (a, b)->a, TreeMap::new));
+        HASH_MAP(customers->customers.toMap(Customer::name)),
+        TREE_MAP(customers->customers.toMap(Customer::name, (a, b)->a, TreeMap::new));
         final Function<Can<Customer>, Map<String, Customer>> toMapConverterUnderTest;
         void assertUnmodifiable(final Map<String, Customer> map) {
             assertThrows(Exception.class, ()->{
@@ -548,7 +545,7 @@ class CanTest {
                 scenario.customers
                     .join(", "));
     }
-    
+
     /**
      * Tests all {@link Cardinality}(s) on
      * {@link Can#join(Function, String) join w/ explicit toString}
@@ -557,11 +554,11 @@ class CanTest {
     @EnumSource(CustomerScenario.class)
     void join_withExplicit_toString(final CustomerScenario scenario) {
         assertEquals(
-                scenario.customers.map(Customer::getName)
+                scenario.customers.map(Customer::name)
                     .stream()
                     .collect(Collectors.joining(", ")),
                 scenario.customers
-                    .join(Customer::getName, ", "));
+                    .join(Customer::name, ", "));
     }
 
     // -- HEPER

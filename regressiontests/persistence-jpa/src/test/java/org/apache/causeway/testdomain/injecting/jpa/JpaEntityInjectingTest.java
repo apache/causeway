@@ -147,7 +147,7 @@ class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 
     private void assertInjectCountRange(final long lower, final long upper) {
         _Assert.assertRangeContains(
-                Range.of(Bound.inclusive(lower), Bound.inclusive(upper)),
+                new Range(Bound.inclusive(lower), Bound.inclusive(upper)),
                 getInjectCount(), "injection count");
     }
 

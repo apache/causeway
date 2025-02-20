@@ -65,7 +65,7 @@ final class _Xray {
                             new XrayDataModel.Sequence(sequenceId, iaLabel))
                         .getData();
 
-                sequenceData.alias("thread", threadId.getMultilinelabel());
+                sequenceData.alias("thread", threadId.multilinelabel());
                 sequenceData.alias(uiInteractionId, iaLabelMultiline);
 
                 sequenceData.enter("thread", uiInteractionId, iaOpeningLabel);

@@ -29,6 +29,8 @@ import javax.sql.DataSource;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -38,9 +40,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -61,9 +61,7 @@ public class DataSourceIntrospectionService {
     @Autowired(required = false)
     private List<DataSource> dataSources;
 
-    @Value
-    public static class DataSourceInfo {
-        private final String jdbcUrl;
+    public record DataSourceInfo(String jdbcUrl) {
 
         @SneakyThrows
         private static DataSourceInfo fromMetaData(final @NonNull DatabaseMetaData databaseMetaData) {
