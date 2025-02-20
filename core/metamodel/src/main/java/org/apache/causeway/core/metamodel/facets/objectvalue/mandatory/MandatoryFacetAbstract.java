@@ -37,7 +37,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
@@ -96,8 +96,7 @@ implements MandatoryFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext context) {
-
+    public String invalidates(final ValidityContextHolder context) {
         var proposedHolder =
                 context instanceof PropertyModifyContext
                 || context instanceof ActionArgValidityContext
@@ -105,15 +104,15 @@ implements MandatoryFacet {
                         : null;
 
         if(proposedHolder==null
-                || !isRequiredButNull(proposedHolder.getProposed())) {
+                || !isRequiredButNull(proposedHolder.proposed())) {
             return null;
         }
 
-        return Optional.ofNullable(context.getFriendlyNameProvider())
-        .map(Supplier::get)
-        .filter(_Strings::isNotEmpty)
-        .map(named->"'" + named + "' is mandatory")
-        .orElse("Mandatory");
+        return Optional.ofNullable(context.friendlyNameProvider())
+            .map(Supplier::get)
+            .filter(_Strings::isNotEmpty)
+            .map(named->"'" + named + "' is mandatory")
+            .orElse("Mandatory");
     }
 
     @Override

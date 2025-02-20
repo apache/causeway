@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvis
 import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRequest;
@@ -68,20 +68,15 @@ implements
     }
 
     @Override
-    public String invalidates(final ValidityContext context) {
+    public String invalidates(final ValidityContextHolder context) {
         if (!(context instanceof ObjectValidityContext)) {
             return null;
         }
-        final ManagedObject target = context.getTarget();
-        if(target == null) {
-            return null;
-        }
+        final ManagedObject target = context.target();
+        if(target == null) return null;
 
-        // ensure that the target is of the correct type
-        if(!(getFacetHolder() instanceof ObjectSpecification)) {
-            // should never be the case
-            return null;
-        }
+        // ensure that the target is of the correct type (unexpected)
+        if(!(getFacetHolder() instanceof ObjectSpecification)) return null;
 
         final ObjectSpecification objectSpec = getObjectSpecification();
         return objectSpec == target.getSpecification()? null: "Invalid type";
@@ -93,7 +88,7 @@ implements
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext context) {
-        final ManagedObject target = context.getTarget();
+        final ManagedObject target = context.target();
         return disabledReason(target);
     }
 

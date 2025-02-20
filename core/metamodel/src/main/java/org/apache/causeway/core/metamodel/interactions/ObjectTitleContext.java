@@ -47,7 +47,7 @@ extends AccessContext {
 
     @Override
     public ObjectTitleEvent createInteractionEvent() {
-        return new ObjectTitleEvent(MmUnwrapUtils.single(getTarget()), getIdentifier(), getTitle());
+        return new ObjectTitleEvent(MmUnwrapUtils.single(target()), identifier(), getTitle());
     }
 
     private String getTitle() {

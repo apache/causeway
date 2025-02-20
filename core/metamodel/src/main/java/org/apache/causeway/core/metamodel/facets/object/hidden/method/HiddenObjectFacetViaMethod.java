@@ -57,7 +57,7 @@ implements HasImperativeAspect {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        final ManagedObject toValidate = ic.getTarget();
+        final ManagedObject toValidate = ic.target();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }
 

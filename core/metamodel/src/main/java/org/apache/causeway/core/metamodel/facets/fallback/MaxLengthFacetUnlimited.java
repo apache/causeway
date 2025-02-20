@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.fallback;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasSemanticEqualityByClass;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 
 public class MaxLengthFacetUnlimited
 extends MaxLengthFacetAbstract
@@ -35,7 +35,7 @@ implements HasSemanticEqualityByClass {
      * No limit to maximum length.
      */
     @Override
-    public String invalidates(final ValidityContext context) {
+    public String invalidates(final ValidityContextHolder context) {
         return null;
     }
 

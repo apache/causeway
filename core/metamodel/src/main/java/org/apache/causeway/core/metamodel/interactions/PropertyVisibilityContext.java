@@ -42,7 +42,7 @@ public class PropertyVisibilityContext extends VisibilityContext {
 
     @Override
     public PropertyVisibilityEvent createInteractionEvent() {
-        return new PropertyVisibilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new PropertyVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

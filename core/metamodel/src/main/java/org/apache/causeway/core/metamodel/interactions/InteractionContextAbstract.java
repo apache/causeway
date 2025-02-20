@@ -18,34 +18,41 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import java.util.function.Supplier;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
-/**
- * See {@link InteractionContext} for overview; analogous to
- * {@link ValidityEvent}
- */
-public abstract class ValidityContext
-extends InteractionContext
-implements InteractionEventSupplier<ValidityEvent> {
+@Accessors(fluent=true)
+@Deprecated
+public abstract class InteractionContextAbstract implements InteractionContext {
 
-    @Getter private final Supplier<String> friendlyNameProvider;
+    @Getter private final InteractionContextType interactionType;
+    @Getter private final InteractionInitiatedBy initiatedBy;
+    @Getter private final Identifier identifier;
+    @Getter private final InteractionHead head;
+    @Getter private final Where where;
 
-    public ValidityContext(
+    protected InteractionContextAbstract(
             final InteractionContextType interactionType,
-            final InteractionHead head,
+            final InteractionInitiatedBy invocationMethod,
             final Identifier identifier,
-            final Supplier<String> friendlyNameProvider,
-            final InteractionInitiatedBy invocationMethod) {
-        super(interactionType, invocationMethod, identifier, head, Where.NOT_SPECIFIED);
-        this.friendlyNameProvider = friendlyNameProvider;
+            final InteractionHead head,
+            final Where where) {
+        this.interactionType = interactionType;
+        this.initiatedBy = invocationMethod;
+        this.identifier = identifier;
+        this.head = head;
+        this.where = where;
+    }
+
+    @Override
+    public ManagedObject target() {
+        return head.target();
     }
 
 }

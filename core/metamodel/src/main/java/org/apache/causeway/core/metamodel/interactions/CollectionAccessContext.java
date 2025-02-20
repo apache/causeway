@@ -39,7 +39,7 @@ public class CollectionAccessContext extends AccessContext {
 
     @Override
     public CollectionAccessEvent createInteractionEvent() {
-        return new CollectionAccessEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new CollectionAccessEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

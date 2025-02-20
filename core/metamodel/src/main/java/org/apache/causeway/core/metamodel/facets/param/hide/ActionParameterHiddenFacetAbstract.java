@@ -43,8 +43,8 @@ implements ActionParameterHiddenFacet {
         }
         var actionArgVisibilityContext = (ActionArgVisibilityContext) context;
         return isHidden(
-                    actionArgVisibilityContext.getTarget(),
-                    actionArgVisibilityContext.getArgs())
+                    actionArgVisibilityContext.target(),
+                    actionArgVisibilityContext.args())
                 ? "Hidden"
                 : null;
     }

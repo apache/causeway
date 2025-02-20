@@ -45,6 +45,6 @@ implements ActionParameterDisabledFacet {
             return Optional.empty();
         }
         final ActionArgUsabilityContext actionArgUsabilityContext = (ActionArgUsabilityContext) context;
-        return disabledReason(actionArgUsabilityContext.getTarget(), actionArgUsabilityContext.getArgs());
+        return disabledReason(actionArgUsabilityContext.target(), actionArgUsabilityContext.args());
     }
 }

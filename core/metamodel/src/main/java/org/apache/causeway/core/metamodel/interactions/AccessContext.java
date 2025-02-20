@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
  * .
  */
 public abstract class AccessContext
-extends InteractionContext
+extends InteractionContextAbstract
 implements InteractionEventSupplier<AccessEvent> {
 
     public AccessContext(

@@ -23,7 +23,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public abstract class PropertyValidateFacetAbstract extends FacetAbstract implements PropertyValidateFacet {
@@ -41,18 +41,16 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
     }
 
     @Override
-    public String invalidates(final ValidityContext context) {
-        if (!(context instanceof PropertyModifyContext)) {
-            return null;
-        }
+    public String invalidates(final ValidityContextHolder context) {
+        if (!(context instanceof PropertyModifyContext)) return null;
+
         final PropertyModifyContext propertyModifyContext = (PropertyModifyContext) context;
-        ManagedObject proposed = propertyModifyContext.getProposed();
-        if(proposed == null) {
-            // skip validation if null value and optional property.
-            if(MandatoryFacet.isMandatory(getFacetHolder())) {
-                return null;
-            }
-        }
-        return invalidReason(propertyModifyContext.getTarget(), proposed);
+        ManagedObject proposed = propertyModifyContext.proposed();
+
+        // skip validation if null value and optional property.
+        if(proposed == null
+            && MandatoryFacet.isMandatory(getFacetHolder())) return null;
+
+        return invalidReason(propertyModifyContext.target(), proposed);
     }
 }

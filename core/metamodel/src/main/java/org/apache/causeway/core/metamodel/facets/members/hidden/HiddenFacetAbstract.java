@@ -56,7 +56,7 @@ implements HiddenFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        return hiddenReason(ic.getTarget(), ic.getWhere());
+        return hiddenReason(ic.target(), ic.where());
     }
 
     /**

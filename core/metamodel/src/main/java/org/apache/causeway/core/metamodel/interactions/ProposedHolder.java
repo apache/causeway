@@ -29,9 +29,12 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * Where this is used most often is for {@link PropertyModifyContext} and
  * {@link ActionArgValidityContext}, where a {@link Facet} (such as
  * <tt>MandatoryFacet</tt> or <tt>MaxLengthFacet</tt>) would want to perform the
- * same checks on the {@link #getProposed() proposed} value/argument.
+ * same checks on the {@link #proposed()} value/argument.
  */
 public interface ProposedHolder {
 
-    ManagedObject getProposed();
+    /**
+     * The (proposed) new value for a property or parameter.
+     */
+    ManagedObject proposed();
 }

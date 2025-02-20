@@ -54,8 +54,8 @@ extends AccessContext {
     @Override
     public PropertyAccessEvent createInteractionEvent() {
         return new PropertyAccessEvent(
-                MmUnwrapUtils.single(getTarget()),
-                getIdentifier(),
+                MmUnwrapUtils.single(target()),
+                identifier(),
                 MmUnwrapUtils.single(getValue()));
     }
 

@@ -80,7 +80,7 @@ implements DisabledFacet {
         if(getSemantics().isEnabled()) {
             return Optional.empty();
         }
-        final ManagedObject target = ic.getTarget();
+        final ManagedObject target = ic.target();
         final Optional<VetoReason> disabledReason = disabledReason(target);
         return disabledReason;
     }

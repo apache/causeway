@@ -61,7 +61,7 @@ implements ImperativeFacet {
      */
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        final ManagedObject target = ic.getTarget();
+        final ManagedObject target = ic.target();
         if (target == null) {
             return Optional.empty();
         }

@@ -26,7 +26,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
@@ -62,22 +62,18 @@ implements RegExFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext context) {
+    public String invalidates(final ValidityContextHolder context) {
         if (!(context instanceof ProposedHolder)) {
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) context;
-        final ManagedObject proposedArgument = proposedHolder.getProposed();
-        if (proposedArgument == null) {
-            return null;
-        }
-        if (proposedArgument.getPojo() == null) {
-            return null;
-        }
+        final ManagedObject proposedArgument = proposedHolder.proposed();
+        if (proposedArgument == null) return null;
+
+        if (proposedArgument.getPojo() == null) return null;
+
         final String titleString = proposedArgument.getTitle();
-        if (!doesNotMatch(titleString)) {
-            return null;
-        }
+        if (!doesNotMatch(titleString)) return null;
 
         return message();
     }
@@ -96,9 +92,8 @@ implements RegExFacet {
 
     @Override
     public boolean semanticEquals(final @NonNull Facet otherFacet) {
-        if(!(otherFacet instanceof RegExFacetAbstract)) {
-            return false;
-        }
+        if(!(otherFacet instanceof RegExFacetAbstract)) return false;
+
         var other = (RegExFacetAbstract)otherFacet;
         return Objects.equals(this.regexp(), other.regexp())
                 && this.patternFlags() == other.patternFlags()

@@ -30,11 +30,13 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
+@Accessors(fluent=true)
 public class ActionArgVisibilityContext
 extends VisibilityContext
 implements ActionInteractionContext {
@@ -67,10 +69,10 @@ implements ActionInteractionContext {
     @Override
     public ActionArgumentVisibilityEvent createInteractionEvent() {
         return new ActionArgumentVisibilityEvent(
-                MmUnwrapUtils.single(getTarget()),
-                getIdentifier(),
-                MmUnwrapUtils.multipleAsArray(getArgs().toList()),
-                getPosition());
+                MmUnwrapUtils.single(target()),
+                identifier(),
+                MmUnwrapUtils.multipleAsArray(args().toList()),
+                position());
     }
 
 }

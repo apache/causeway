@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.causeway.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -106,7 +106,7 @@ implements OneToOneAssociation, Serializable {
 
     // -- VALIDITY
 
-    private ValidityContext createValidateInteractionContext(
+    private ValidityContextHolder createValidateInteractionContext(
             final ManagedObject ownerAdapter,
             final ManagedObject proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy) {

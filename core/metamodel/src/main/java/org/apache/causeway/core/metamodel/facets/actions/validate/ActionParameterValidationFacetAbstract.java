@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 
 public abstract class ActionParameterValidationFacetAbstract
 extends FacetAbstract
@@ -37,11 +37,10 @@ implements ActionParameterValidationFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext context) {
-        if (!(context instanceof ActionArgValidityContext)) {
-            return null;
-        }
+    public String invalidates(final ValidityContextHolder context) {
+        if (!(context instanceof ActionArgValidityContext)) return null;
+
         final ActionArgValidityContext actionArgValidityContext = (ActionArgValidityContext) context;
-        return invalidReason(actionArgValidityContext.getTarget(), actionArgValidityContext.getProposed());
+        return invalidReason(actionArgValidityContext.target(), actionArgValidityContext.proposed());
     }
 }

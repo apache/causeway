@@ -27,20 +27,16 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.Getter;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionArgumentEvent}.
  */
-public class ActionArgValidityContext
-extends ValidityContext
-implements ProposedHolder, ActionInteractionContext {
-
-    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter(onMethod = @__(@Override)) private final ManagedObject proposed;
-    @Getter private final Can<ManagedObject> args;
-    @Getter private final int position;
+public record ActionArgValidityContext(
+    ValidityContext validityContext,
+    ObjectAction objectAction,
+    ManagedObject proposed,
+    Can<ManagedObject> args,
+    int position) implements ValidityContextHolder, ProposedHolder, ActionInteractionContext {
 
     public ActionArgValidityContext(
             final InteractionHead head,
@@ -49,25 +45,25 @@ implements ProposedHolder, ActionInteractionContext {
             final Can<ManagedObject> args,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        super(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
+        this(
+            new ValidityContextHolder.ValidityContext(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
                 head,
                 id,
                 ()->objectAction.getParameters().getElseFail(position).getFriendlyName(head::target),
-                interactionInitiatedBy);
-        this.objectAction = objectAction;
-        this.args = args;
-        this.position = position;
-        this.proposed = args.getElseFail(position);
+                interactionInitiatedBy),
+            objectAction,
+            args.getElseFail(position),
+            args,
+            position);
     }
 
     @Override
     public ActionArgumentEvent createInteractionEvent() {
         return new ActionArgumentEvent(
-                MmUnwrapUtils.single(getTarget()),
-                getIdentifier(),
-                MmUnwrapUtils.multipleAsArray(getArgs().toList()),
-                getPosition());
+                MmUnwrapUtils.single(target()),
+                identifier(),
+                MmUnwrapUtils.multipleAsArray(args().toList()),
+                position());
     }
 
 }

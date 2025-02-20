@@ -50,10 +50,9 @@ implements ImperativeFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        final ManagedObject target = ic.getTarget();
-        if (target == null) {
-            return null;
-        }
+        final ManagedObject target = ic.target();
+        if (target == null) return null;
+
         var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
         final Boolean isHidden = (Boolean) MmInvokeUtils.invokeAutofit(method.method(), target);
         return isHidden.booleanValue() ? "Hidden" : null;

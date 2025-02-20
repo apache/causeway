@@ -44,12 +44,12 @@ extends UsabilityContext {
 
     @Override
     public PropertyUsabilityEvent createInteractionEvent() {
-        return new PropertyUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new PropertyUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
     @Override
     public PropertyVisibilityContext asVisibilityContext() {
-        return new PropertyVisibilityContext(getHead() ,getIdentifier(),
-                getInitiatedBy(), getWhere(), getRenderPolicy());
+        return new PropertyVisibilityContext(head(), identifier(),
+                initiatedBy(), where(), renderPolicy());
     }
 }

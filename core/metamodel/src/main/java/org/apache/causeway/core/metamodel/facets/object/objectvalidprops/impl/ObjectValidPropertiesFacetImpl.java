@@ -43,18 +43,18 @@ extends ObjectValidPropertiesFacetAbstract {
     public String invalidReason(
             final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
-        final ManagedObject adapter = context.getTarget();
+        final ManagedObject adapter = context.target();
 
         adapter.getSpecification().streamProperties(MixedIn.EXCLUDED)
-        .filter(property->property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) // ignore hidden properties
-        .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties
+        .filter(property->property.isVisible(adapter, context.initiatedBy(), where).isVetoed()) // ignore hidden properties
+        .filter(property->property.isUsable(adapter, context.initiatedBy(), where).isVetoed())  // ignore disabled properties
         .forEach(property->{
-            final ManagedObject value = property.get(adapter, context.getInitiatedBy());
-            if (property.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
+            final ManagedObject value = property.get(adapter, context.initiatedBy());
+            if (property.isAssociationValid(adapter, value, context.initiatedBy()).isVetoed()) {
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
-                buf.append(property.getFriendlyName(context::getTarget));
+                buf.append(property.getFriendlyName(context::target));
             }
         });
         if (buf.length() > 0) {

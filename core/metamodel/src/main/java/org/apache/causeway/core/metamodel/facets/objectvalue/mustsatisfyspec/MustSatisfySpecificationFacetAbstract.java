@@ -32,7 +32,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
@@ -65,15 +65,13 @@ implements MustSatisfySpecificationFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext validityContext) {
-        if (!(validityContext instanceof ProposedHolder)) {
-            return null;
-        }
+    public String invalidates(final ValidityContextHolder validityContext) {
+        if (!(validityContext instanceof ProposedHolder)) return null;
+
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
-        final ManagedObject proposedAdapter = proposedHolder.getProposed();
-        if(proposedAdapter == null) {
-            return null;
-        }
+        final ManagedObject proposedAdapter = proposedHolder.proposed();
+        if(proposedAdapter == null) return null;
+
         final Object proposedObject = proposedAdapter.getPojo();
         return specificationEvaluator.evaluation()
                 .evaluate(specifications, proposedObject)

@@ -43,7 +43,7 @@ extends VisibilityContext {
 
     @Override
     public CollectionVisibilityEvent createInteractionEvent() {
-        return new CollectionVisibilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new CollectionVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
 }

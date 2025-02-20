@@ -26,8 +26,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.Getter;
-
 /**
  * Represents an interaction between the framework and (a {@link Facet} of) the
  * domain object.
@@ -57,7 +55,7 @@ import lombok.Getter;
  * {@link InteractionEventSupplier#createInteractionEvent() factory method}
  * can return the correct subclass without having to downcast.
  */
-public abstract class InteractionContext {
+public interface InteractionContext {
 
     /**
      * The type of interaction.
@@ -71,53 +69,40 @@ public abstract class InteractionContext {
      * <p>
      * Alternatively, {@link Facet}s can use <tt>instanceof</tt>.
      */
-    @Getter private final InteractionContextType interactionType;
+    InteractionContextType interactionType();
 
     /**
      * How the interaction was initiated.
      */
-    @Getter private final InteractionInitiatedBy initiatedBy;
+    InteractionInitiatedBy initiatedBy();
 
     /**
      * The identifier of the object or member that this interaction is being
      * identified with.
      *
      * <p>
-     * If the {@link #getInteractionType() type} is
+     * If the {@link #interactionType() type} is
      * {@link InteractionContextType#OBJECT_VALIDATE}, will be the identifier of
-     * the {@link #getTarget() target} object's specification. Otherwise will be
+     * the {@link #target() target} object's specification. Otherwise will be
      * the identifier of the member.
      */
-    @Getter private final Identifier identifier;
+    Identifier identifier();
 
     /**
      * Model that holds the objects involved with the interaction.
      */
-    @Getter private final InteractionHead head;
+    InteractionHead head();
 
     /**
      * Where the element is to be rendered.
      */
-    @Getter private final Where where;
-
-    protected InteractionContext(
-            final InteractionContextType interactionType,
-            final InteractionInitiatedBy invocationMethod,
-            final Identifier identifier,
-            final InteractionHead head,
-            final Where where) {
-        this.interactionType = interactionType;
-        this.initiatedBy = invocationMethod;
-        this.identifier = identifier;
-        this.head = head;
-        this.where = where;
-    }
+    Where where();
 
     /**
      * The target object that this interaction is associated with.
      */
-    public ManagedObject getTarget() {
-        return head.target();
+    default ManagedObject target() {
+        return head().target();
     }
 
 }

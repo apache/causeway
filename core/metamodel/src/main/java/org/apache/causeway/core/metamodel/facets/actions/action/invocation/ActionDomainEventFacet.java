@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -131,7 +131,7 @@ implements
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
                         actionFrom(ic), getFacetHolder(),
-                        ic.getHead(),
+                        ic.head(),
                         // corresponds to programming model 'hidePlaceOrder()',
                         // which does no longer consider args
                         Can.empty(),
@@ -152,7 +152,7 @@ implements
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
                         actionFrom(ic), getFacetHolder(),
-                        ic.getHead(),
+                        ic.head(),
                         // corresponds to programming model 'disablePlaceOrder()',
                         // which does no longer consider args
                         Can.empty(),
@@ -164,19 +164,17 @@ implements
                     ? reasonTranslatable.translate(translationService, translationContext)
                     : event.getDisabledReason();
 
-            if(reasonString!=null) {
-                return VetoReason.explicit(reasonString).toOptional();
-            }
+            if(reasonString!=null) return VetoReason.explicit(reasonString).toOptional();
         }
         return Optional.empty();
     }
 
     @Override
-    public String invalidates(final ValidityContext ic) {
+    public String invalidates(final ValidityContextHolder ic) {
         if(!isPostable()) return null; // bale out
 
         _Assert.assertTrue(ic instanceof ActionValidityContext, ()->
-            String.format("expecting an action context but got %s", ic.getIdentifier()));
+            String.format("expecting an action context but got %s", ic.identifier()));
 
         final ActionValidityContext aic = (ActionValidityContext) ic;
         final ActionDomainEvent<?> event =
@@ -184,7 +182,7 @@ implements
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
                         actionFrom(ic), getFacetHolder(),
-                        ic.getHead(), aic.getArgs(),
+                        ic.head(), aic.args(),
                         null);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
@@ -204,7 +202,7 @@ implements
             throw new IllegalStateException(
                     "Expecting ic to be of type ActionInteractionContext, instead was: " + ic);
         }
-        return ((ActionInteractionContext) ic).getObjectAction();
+        return ((ActionInteractionContext) ic).objectAction();
     }
 
 }

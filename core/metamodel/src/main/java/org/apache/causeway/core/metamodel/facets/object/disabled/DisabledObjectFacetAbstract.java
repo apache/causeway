@@ -41,7 +41,7 @@ implements DisabledObjectFacet {
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        final ManagedObject toDisable = ic.getTarget();
+        final ManagedObject toDisable = ic.target();
         return toDisable != null
                 ? disabledReason(toDisable)
                 : Optional.empty();

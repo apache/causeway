@@ -108,7 +108,7 @@ implements HidingInteractionAdvisor {
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
                         _Casts.uncheckedCast(getEventType()),
-                        getFacetHolder(), ic.getHead()
+                        getFacetHolder(), ic.head()
                 );
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";

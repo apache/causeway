@@ -70,8 +70,8 @@ implements ImmutableFacet {
      */
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        final ManagedObject target = ic.getTarget();
-        switch (ic.getInteractionType()) {
+        final ManagedObject target = ic.target();
+        switch (ic.interactionType()) {
         case PROPERTY_MODIFY:
         case COLLECTION_ADD_TO:
         case COLLECTION_REMOVE_FROM:

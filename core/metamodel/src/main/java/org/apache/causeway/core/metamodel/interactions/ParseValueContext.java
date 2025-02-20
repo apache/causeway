@@ -29,11 +29,10 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ParseValueEvent}.
  */
-public class ParseValueContext
-extends ValidityContext
-implements ProposedHolder {
-
-    private final ManagedObject proposed;
+public record ParseValueContext(
+    ValidityContext validityContext,
+    ManagedObject proposed
+    ) implements ValidityContextHolder, ProposedHolder {
 
     public ParseValueContext(
             final InteractionHead head,
@@ -41,19 +40,16 @@ implements ProposedHolder {
             final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        super(InteractionContextType.PARSE_VALUE, head, identifier, /*friendlyNameProvider*/null, interactionInitiatedBy);
-        this.proposed = proposed;
-    }
-
-    @Override
-    public ManagedObject getProposed() {
-        return proposed;
+        this(
+            new ValidityContextHolder.ValidityContext(InteractionContextType.PARSE_VALUE,
+                head, identifier, /*friendlyNameProvider*/null, interactionInitiatedBy),
+            proposed);
     }
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) MmUnwrapUtils.single(getProposed());
-        return new ParseValueEvent(MmUnwrapUtils.single(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) MmUnwrapUtils.single(proposed());
+        return new ParseValueEvent(MmUnwrapUtils.single(target()), identifier(), proposedPojo);
     }
 
 }

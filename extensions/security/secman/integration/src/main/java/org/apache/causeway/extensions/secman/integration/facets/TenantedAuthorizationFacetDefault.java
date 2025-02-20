@@ -64,13 +64,13 @@ implements TenantedAuthorizationFacet {
 
     @Override
     public String hides(final VisibilityContext ic) {
-        return evaluate(ApplicationTenancyEvaluator::hides, ic.getHead())
+        return evaluate(ApplicationTenancyEvaluator::hides, ic.head())
                 .orElse(null);
     }
 
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
-        return evaluate(ApplicationTenancyEvaluator::disables, ic.getHead())
+        return evaluate(ApplicationTenancyEvaluator::disables, ic.head())
                 .map(VetoReason::explicit);
     }
 

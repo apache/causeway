@@ -25,6 +25,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  */
 public interface ActionInteractionContext {
 
-    ObjectAction getObjectAction();
+    ObjectAction objectAction();
 
 }

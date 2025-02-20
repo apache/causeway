@@ -49,7 +49,7 @@ public final class InteractionUtils {
         var iaResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
-        var ifHiddenPolicy = context.getRenderPolicy().ifHiddenPolicy();
+        var ifHiddenPolicy = context.renderPolicy().ifHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
@@ -77,7 +77,7 @@ public final class InteractionUtils {
         var isResult = new InteractionResult(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
-        var ifHiddenPolicy = context.getRenderPolicy().ifHiddenPolicy();
+        var ifHiddenPolicy = context.renderPolicy().ifHiddenPolicy();
         switch (ifHiddenPolicy) {
             case HIDE:
                 break;
@@ -100,7 +100,7 @@ public final class InteractionUtils {
                 break;
         }
 
-        var ifDisabledPolicy = context.getRenderPolicy().ifDisabledPolicy();
+        var ifDisabledPolicy = context.renderPolicy().ifDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
@@ -115,7 +115,7 @@ public final class InteractionUtils {
         return isResult;
     }
 
-    public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
+    public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContextHolder context) {
 
         var iaResult = new InteractionResult(context.createInteractionEvent());
 
@@ -123,7 +123,7 @@ public final class InteractionUtils {
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
             var invalidatingReasonString =
-                    guardAgainstEmptyReasonString(advisor.invalidates(context), context.getIdentifier());
+                    guardAgainstEmptyReasonString(advisor.invalidates(context), context.identifier());
 
             var invalidatingReason = Optional.ofNullable(invalidatingReasonString)
                     .map(Consent.VetoReason::explicit)
@@ -136,7 +136,7 @@ public final class InteractionUtils {
 
     public InteractionResultSet isValidResultSet(
             final FacetHolder facetHolder,
-            final ValidityContext context,
+            final ValidityContextHolder context,
             final InteractionResultSet resultSet) {
 
         return resultSet.add(isValidResult(facetHolder, context));
@@ -169,7 +169,7 @@ public final class InteractionUtils {
     }
 
     private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
-        if(ic.getInitiatedBy().isPassThrough()
+        if(ic.initiatedBy().isPassThrough()
                 && isDomainEventAdvisor(advisor)) {
             //[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
             return false;

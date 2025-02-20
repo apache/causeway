@@ -39,10 +39,10 @@ public interface ValidatingInteractionAdvisor extends InteractionAdvisorFacet, V
      * Whether the validation represented by this facet passes or fails.
      *
      * <p>
-     * Implementations should use the provided {@link ValidityContext} to
+     * Implementations should use the provided {@link ValidityContextHolder} to
      * determine whether they declare the interaction invalid. They must however
-     * guard against a <tt>null</tt> {@link ValidityContext#getTarget() target}
+     * guard against a <tt>null</tt> {@link ValidityContextHolder#getTarget() target}
      * is not guaranteed to be populated.
      */
-    String invalidates(ValidityContext ic);
+    String invalidates(ValidityContextHolder ic);
 }

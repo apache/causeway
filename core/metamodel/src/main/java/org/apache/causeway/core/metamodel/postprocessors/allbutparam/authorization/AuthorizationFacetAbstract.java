@@ -50,19 +50,19 @@ implements AuthorizationFacet {
     @Override
     public String hides(final VisibilityContext ic) {
 
-        if(ic.getHead().owner().getSpecification().isValue()) {
+        if(ic.head().owner().getSpecification().isValue()) {
             return null; // never hide value-types
         }
 
         var hides = authorizationManager
                 .isVisible(
                         getInteractionService().currentInteractionContextElseFail(),
-                        ic.getIdentifier())
+                        ic.identifier())
                 ? null
                 : "Not authorized to view";
 
         if(hides!=null && log.isDebugEnabled()) {
-            log.debug("hides[{}] -> {}", ic.getIdentifier(), hides);
+            log.debug("hides[{}] -> {}", ic.identifier(), hides);
         }
 
         return hides;
@@ -71,19 +71,19 @@ implements AuthorizationFacet {
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
 
-        if(ic.getHead().owner().getSpecification().isValue()) {
+        if(ic.head().owner().getSpecification().isValue()) {
             return Optional.empty(); // never disable value-types
         }
 
         var disables = authorizationManager
                 .isUsable(
                         getInteractionService().currentInteractionContextElseFail(),
-                        ic.getIdentifier())
+                        ic.identifier())
                 ? null
-                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.getIdentifier(), getMetaModelContext());
+                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.identifier(), getMetaModelContext());
 
         if(disables!=null && log.isDebugEnabled()) {
-            log.debug("disables[{}] -> {}", ic.getIdentifier(), disables);
+            log.debug("disables[{}] -> {}", ic.identifier(), disables);
         }
 
         return Optional.ofNullable(disables).map(VetoReason::unauthorized);

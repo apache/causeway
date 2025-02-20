@@ -27,18 +27,15 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.Getter;
-
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionInvocationEvent}.
  */
-public class ActionValidityContext
-extends ValidityContext
-implements ActionInteractionContext {
-
-    @Getter(onMethod = @__(@Override)) private final ObjectAction objectAction;
-    @Getter private final Can<ManagedObject> args;
+public record ActionValidityContext(
+    ValidityContext validityContext,
+    ObjectAction objectAction,
+    Can<ManagedObject> args
+    ) implements ActionInteractionContext, ValidityContextHolder {
 
     public ActionValidityContext(
             final InteractionHead head,
@@ -47,19 +44,20 @@ implements ActionInteractionContext {
             final Can<ManagedObject> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        super(InteractionContextType.ACTION_INVOKE,
+        this(
+            new ValidityContextHolder.ValidityContext(InteractionContextType.ACTION_INVOKE,
                 head,
                 id,
                 ()->objectAction.getFriendlyName(head::target),
-                interactionInitiatedBy);
-        this.objectAction = objectAction;
-        this.args = args;
+                interactionInitiatedBy),
+            objectAction,
+            args);
     }
 
     @Override
     public ActionInvocationEvent createInteractionEvent() {
         return new ActionInvocationEvent(
-                MmUnwrapUtils.single(getTarget()), getIdentifier(), MmUnwrapUtils.multipleAsArray(getArgs().toList()));
+                MmUnwrapUtils.single(target()), identifier(), MmUnwrapUtils.multipleAsArray(args().toList()));
     }
 
 }

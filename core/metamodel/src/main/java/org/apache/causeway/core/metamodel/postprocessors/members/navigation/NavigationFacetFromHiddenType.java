@@ -66,11 +66,11 @@ implements
             return null;
         }
         var objVisibilityContext = new ObjectVisibilityContext(
-                ic.getHead(),
+                ic.head(),
                 Identifier.classIdentifier(navigatedType.logicalType()),
-                ic.getInitiatedBy(),
-                ic.getWhere(),
-                ic.getRenderPolicy());
+                ic.initiatedBy(),
+                ic.where(),
+                ic.renderPolicy());
         final String hides = facet.hides(objVisibilityContext);
         return hides;
     }

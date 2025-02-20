@@ -66,12 +66,12 @@ implements ProposedHolder {
 
     @Override
     public ObjectVisibilityEvent createInteractionEvent() {
-        return new ObjectVisibilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new ObjectVisibilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
     @Override
-    public ManagedObject getProposed() {
-        return getTarget();
+    public ManagedObject proposed() {
+        return target();
     }
 
 }

@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 
 public abstract class ObjectValidPropertiesFacetAbstract extends FacetAbstract implements ObjectValidPropertiesFacet {
 
@@ -35,7 +35,7 @@ public abstract class ObjectValidPropertiesFacetAbstract extends FacetAbstract i
     }
 
     @Override
-    public String invalidates(final ValidityContext ic) {
+    public String invalidates(final ValidityContextHolder ic) {
         if (!(ic instanceof ObjectValidityContext)) {
             return null;
         }

@@ -29,30 +29,29 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ObjectValidityEvent}.
  */
-public class ObjectValidityContext
-extends ValidityContext
-implements ProposedHolder {
+public record ObjectValidityContext(
+    ValidityContext validityContext
+    ) implements ValidityContextHolder, ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        super(InteractionContextType.OBJECT_VALIDATE,
+        this(new ValidityContext(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.regular(targetAdapter),
                 identifier,
                 ()->targetAdapter.getSpecification().getSingularName(),
-                interactionInitiatedBy);
+                interactionInitiatedBy));
     }
 
     @Override
     public ObjectValidityEvent createInteractionEvent() {
-        return new ObjectValidityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new ObjectValidityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
     @Override
-    public ManagedObject getProposed() {
-        return getTarget();
+    public ManagedObject proposed() {
+        return target();
     }
 
 }

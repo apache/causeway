@@ -43,12 +43,12 @@ extends UsabilityContext {
 
     @Override
     public CollectionUsabilityEvent createInteractionEvent() {
-        return new CollectionUsabilityEvent(getTarget().getPojo(), getIdentifier());
+        return new CollectionUsabilityEvent(target().getPojo(), identifier());
     }
 
     @Override
     public CollectionVisibilityContext asVisibilityContext() {
-        return new CollectionVisibilityContext(getHead(), getIdentifier(),
-                getInitiatedBy(), getWhere(), getRenderPolicy());
+        return new CollectionVisibilityContext(head(), identifier(),
+                initiatedBy(), where(), renderPolicy());
     }
 }

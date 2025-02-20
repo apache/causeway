@@ -31,11 +31,9 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link PropertyModifyEvent}.
  */
-public class PropertyModifyContext
-extends ValidityContext
-implements ProposedHolder {
-
-    private final ManagedObject proposed;
+public record PropertyModifyContext(
+    ValidityContext validityContext,
+    ManagedObject proposed) implements ValidityContextHolder, ProposedHolder {
 
     public PropertyModifyContext(
             final InteractionHead head,
@@ -43,28 +41,20 @@ implements ProposedHolder {
             final ManagedObject proposed,
             final Supplier<String> friendlyMemberNameProvider,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        super(InteractionContextType.PROPERTY_MODIFY,
+        this(new ValidityContextHolder.ValidityContext(InteractionContextType.PROPERTY_MODIFY,
                 head,
                 id,
                 friendlyMemberNameProvider,
-                interactionInitiatedBy);
-        this.proposed = proposed;
-    }
-
-    /**
-     * The (proposed) new value for a property.
-     */
-    @Override
-    public ManagedObject getProposed() {
-        return proposed;
+                interactionInitiatedBy),
+            proposed);
     }
 
     @Override
     public PropertyModifyEvent createInteractionEvent() {
         return new PropertyModifyEvent(
-                MmUnwrapUtils.single(getTarget()),
-                getIdentifier(),
-                MmUnwrapUtils.single(getProposed()));
+                MmUnwrapUtils.single(target()),
+                identifier(),
+                MmUnwrapUtils.single(proposed()));
     }
 
 }

@@ -50,11 +50,11 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
         return property.lookupFacet(AuthorizationFacet.class)
                 .map(facet->facet.hides(
                         new PropertyVisibilityContext(
-                                vc.getHead(),
+                                vc.head(),
                                 property.getFeatureIdentifier(),
-                                vc.getInitiatedBy(),
-                                vc.getWhere(),
-                                vc.getRenderPolicy())) != null)
+                                vc.initiatedBy(),
+                                vc.where(),
+                                vc.renderPolicy())) != null)
                 .orElse(false);
     }
 
@@ -65,11 +65,11 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
         return collection.lookupFacet(AuthorizationFacet.class)
                 .map(facet->facet.hides(
                         new CollectionVisibilityContext(
-                                vc.getHead(),
+                                vc.head(),
                                 collection.getFeatureIdentifier(),
-                                vc.getInitiatedBy(),
-                                vc.getWhere(),
-                                vc.getRenderPolicy())) != null)
+                                vc.initiatedBy(),
+                                vc.where(),
+                                vc.renderPolicy())) != null)
                 .orElse(false);
     }
 
@@ -80,12 +80,12 @@ extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
         return action.lookupFacet(AuthorizationFacet.class)
                 .map(facet->facet.hides(
                         new ActionVisibilityContext(
-                                vc.getHead(),
+                                vc.head(),
                                 action,
                                 action.getFeatureIdentifier(),
-                                vc.getInitiatedBy(),
-                                vc.getWhere(),
-                                vc.getRenderPolicy())) != null)
+                                vc.initiatedBy(),
+                                vc.where(),
+                                vc.renderPolicy())) != null)
                 .orElse(false);
     }
 

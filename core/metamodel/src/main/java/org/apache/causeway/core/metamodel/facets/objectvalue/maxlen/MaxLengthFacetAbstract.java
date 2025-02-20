@@ -22,7 +22,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
@@ -62,15 +62,14 @@ implements MaxLengthFacet {
     }
 
     @Override
-    public String invalidates(final ValidityContext context) {
+    public String invalidates(final ValidityContextHolder context) {
         if (!(context instanceof ProposedHolder)) {
             return null;
         }
         var proposedHolder = (ProposedHolder) context;
-        var proposedArgument = proposedHolder.getProposed();
-        if (!exceeds(proposedArgument)) {
-            return null;
-        }
+        var proposedArgument = proposedHolder.proposed();
+        if (!exceeds(proposedArgument)) return null;
+
         return "The value proposed exceeds the maximum length of " + value();
     }
 

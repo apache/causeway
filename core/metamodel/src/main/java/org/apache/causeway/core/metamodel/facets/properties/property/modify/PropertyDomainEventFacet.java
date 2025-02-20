@@ -40,7 +40,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.interactions.ValidityContext;
+import org.apache.causeway.core.metamodel.interactions.ValidityContextHolder;
 import org.apache.causeway.core.metamodel.interactions.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -139,7 +139,7 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.getHead(),
+                        getFacetHolder(), ic.head(),
                         null, null);
         if (event != null && event.isHidden()) return "Hidden by subscriber";
 
@@ -154,7 +154,7 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.getHead(),
+                        getFacetHolder(), ic.head(),
                         null, null);
         if (event != null
                 && event.isDisabled()) {
@@ -171,7 +171,7 @@ implements
     }
 
     @Override
-    public String invalidates(final ValidityContext ic) {
+    public String invalidates(final ValidityContextHolder ic) {
         if(getterFacetIfAny == null) return null;
         if(!isPostable()) return null; // bale out
 
@@ -180,15 +180,15 @@ implements
 
         final ProposedHolder ph = (ProposedHolder) ic;
 
-        final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.getTarget(), ic.getInitiatedBy());
-        final ManagedObject proposedAdapter = ph.getProposed();
+        final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.target(), ic.initiatedBy());
+        final ManagedObject proposedAdapter = ph.proposed();
         final Object proposedValue = proposedAdapter != null ? proposedAdapter.getPojo() : null;
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.getHead(),
+                        getFacetHolder(), ic.head(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();

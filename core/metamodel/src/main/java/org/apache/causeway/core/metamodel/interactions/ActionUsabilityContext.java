@@ -26,14 +26,19 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 /**
  * See {@link InteractionContext} for overview; analogous to
  * {@link ActionUsabilityEvent}.
  */
+@Accessors(fluent=true)
 public class ActionUsabilityContext
 extends UsabilityContext
 implements ActionInteractionContext {
 
+    @Getter(onMethod_={@Override})
     private final ObjectAction objectAction;
 
     public ActionUsabilityContext(
@@ -49,18 +54,13 @@ implements ActionInteractionContext {
     }
 
     @Override
-    public ObjectAction getObjectAction() {
-        return objectAction;
-    }
-
-    @Override
     public ActionUsabilityEvent createInteractionEvent() {
-        return new ActionUsabilityEvent(MmUnwrapUtils.single(getTarget()), getIdentifier());
+        return new ActionUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
     @Override
     public ActionVisibilityContext asVisibilityContext() {
-        return new ActionVisibilityContext(getHead(), getObjectAction(), getIdentifier(),
-                getInitiatedBy(), getWhere(), getRenderPolicy());
+        return new ActionVisibilityContext(head(), objectAction(), identifier(),
+                initiatedBy(), where(), renderPolicy());
     }
 }
