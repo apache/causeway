@@ -39,7 +39,7 @@ identified
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.3</version>
         <relativePath />
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -62,7 +62,7 @@ identified
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.8.8</minimalMavenBuildVersion> <!-- latest
+        <minimalMavenBuildVersion>3.9.9</minimalMavenBuildVersion> <!-- latest
         from github actions/setup-java@v3 -->
         <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
         <maven.compiler.release>17</maven.compiler.release>
@@ -190,7 +190,7 @@ identified
 
         <sql-formatter.version>2.0.5</sql-formatter.version>
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.4.2</spring-boot.version>
+        <spring-boot.version>3.4.3</spring-boot.version>
 
         <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
