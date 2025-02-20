@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.val;
 
+import java.util.function.Supplier;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ObjectValidityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
@@ -33,18 +35,22 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link ObjectValidityEvent}.
  */
 public record ObjectValidityContext(
-    ValidityContextRecord validityContext
-    ) implements ValidityContextHolder, ProposedHolder {
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    Supplier<String> friendlyNameProvider,
+    InteractionInitiatedBy initiatedBy
+    ) implements ValidityContext, ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        this(new ValidityContextRecord(InteractionContextType.OBJECT_VALIDATE,
+            final InteractionInitiatedBy initiatedBy) {
+        this(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.regular(targetAdapter),
                 identifier,
                 ()->targetAdapter.getSpecification().getSingularName(),
-                interactionInitiatedBy));
+                initiatedBy);
     }
 
     @Override

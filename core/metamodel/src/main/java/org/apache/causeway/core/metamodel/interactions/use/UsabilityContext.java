@@ -23,18 +23,12 @@ import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public sealed interface UsabilityContext
 extends InteractionContext, InteractionEventSupplier<UsabilityEvent>
-permits UsabilityContextHolder {
+permits ActionUsabilityContext, CollectionUsabilityContext, ParamUsabilityContext, PropertyUsabilityContext {
 
     RenderPolicy renderPolicy();
     VisibilityContext asVisibilityContext();
-
-    @Override
-    default ManagedObject target() {
-        return head().target();
-    }
 
 }

@@ -36,20 +36,25 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionUsabilityEvent}.
  */
 public record ActionUsabilityContext(
-    UsabilityContextRecord usabilityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy,
     ObjectAction objectAction
     )
-implements UsabilityContextHolder, ActionInteractionContext {
+implements UsabilityContext, ActionInteractionContext {
 
     public ActionUsabilityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        this(new UsabilityContextRecord(InteractionContextType.ACTION_USABLE,
-                head, id, interactionInitiatedBy, where, renderPolicy),
+        this(InteractionContextType.ACTION_USABLE,
+            head, id, initiatedBy, where, renderPolicy,
             objectAction);
     }
 
@@ -58,6 +63,7 @@ implements UsabilityContextHolder, ActionInteractionContext {
         return new ActionUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
+    @Override
     public ActionVisibilityContext asVisibilityContext() {
         return new ActionVisibilityContext(head(), objectAction(), identifier(),
                 initiatedBy(), where(), renderPolicy());

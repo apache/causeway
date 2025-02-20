@@ -29,7 +29,8 @@ import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
  */
 public sealed interface VisibilityContext
 extends InteractionContext, InteractionEventSupplier<VisibilityEvent>
-permits VisibilityContextHolder {
+permits ParamVisibilityContext, ActionVisibilityContext, CollectionVisibilityContext,
+    ObjectVisibilityContext, PropertyVisibilityContext {
 
     RenderPolicy renderPolicy();
 

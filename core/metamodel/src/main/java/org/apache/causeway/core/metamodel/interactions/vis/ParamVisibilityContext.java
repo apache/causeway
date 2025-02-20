@@ -38,11 +38,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionArgumentEvent}.
  */
 public record ParamVisibilityContext(
-    VisibilityContextRecord visibilityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy,
     ObjectAction objectAction,
     Can<ManagedObject> args,
     int position)
-implements VisibilityContextHolder, ActionInteractionContext {
+implements VisibilityContext, ActionInteractionContext {
 
     public ParamVisibilityContext(
             final InteractionHead head,
@@ -50,14 +55,12 @@ implements VisibilityContextHolder, ActionInteractionContext {
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final RenderPolicy renderPolicy) {
 
-        this(new VisibilityContextRecord(InteractionContextType.ACTION_PARAMETER_VISIBLE,
-                head, id, interactionInitiatedBy, Where.OBJECT_FORMS, renderPolicy),
-            objectAction,
-            args,
-            position);
+        this(InteractionContextType.ACTION_PARAMETER_VISIBLE,
+            head, id, initiatedBy, Where.OBJECT_FORMS, renderPolicy,
+            objectAction, args, position);
     }
 
     @Override

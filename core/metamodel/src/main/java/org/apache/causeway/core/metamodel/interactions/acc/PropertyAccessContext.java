@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.interactions.acc;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.PropertyAccessEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -32,24 +33,24 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link PropertyAccessEvent}.
  */
 public record PropertyAccessContext(
-    AccessContextRecord accessContext,
+    InteractionContextType interactionType,
+    Identifier identifier,
+    InteractionHead head,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    /**
+     * The current value for a property.
+     */
     ManagedObject value)
-implements AccessContextHolder {
+implements AccessContext {
 
     public PropertyAccessContext(
             final InteractionHead head,
             final Identifier id,
             final ManagedObject value,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        this(new AccessContextRecord(InteractionContextType.PROPERTY_READ, id, head, interactionInitiatedBy),
+            final InteractionInitiatedBy initiatedBy) {
+        this(InteractionContextType.PROPERTY_READ, id, head, initiatedBy, Where.NOT_SPECIFIED,
             value);
-    }
-
-    /**
-     * The current value for a property.
-     */
-    public ManagedObject getValue() {
-        return value;
     }
 
     @Override
@@ -57,7 +58,7 @@ implements AccessContextHolder {
         return new PropertyAccessEvent(
                 MmUnwrapUtils.single(target()),
                 identifier(),
-                MmUnwrapUtils.single(getValue()));
+                MmUnwrapUtils.single(value()));
     }
 
 }

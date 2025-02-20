@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.val;
 
+import java.util.function.Supplier;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.causeway.commons.collections.Can;
@@ -35,26 +37,25 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionInvocationEvent}.
  */
 public record ActionValidityContext(
-    ValidityContextRecord validityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    Supplier<String> friendlyNameProvider,
+    InteractionInitiatedBy initiatedBy,
     ObjectAction objectAction,
     Can<ManagedObject> args
-    ) implements ActionInteractionContext, ValidityContextHolder {
+    ) implements ValidityContext, ActionInteractionContext {
 
     public ActionValidityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy initiatedBy) {
 
-        this(
-            new ValidityContextRecord(InteractionContextType.ACTION_INVOKE,
-                head,
-                id,
-                ()->objectAction.getFriendlyName(head::target),
-                interactionInitiatedBy),
-            objectAction,
-            args);
+        this(InteractionContextType.ACTION_INVOKE,
+            head, id, ()->objectAction.getFriendlyName(head::target), initiatedBy,
+            objectAction, args);
     }
 
     @Override

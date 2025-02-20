@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.interactions.acc;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -32,18 +33,22 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link ObjectTitleEvent}.
  */
 public record ObjectTitleContext(
-    AccessContextRecord accessContext,
+    InteractionContextType interactionType,
+    Identifier identifier,
+    InteractionHead head,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
     String title)
-implements AccessContextHolder {
+implements AccessContext {
 
     public ObjectTitleContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
             final String title,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy initiatedBy) {
 
-        this(new AccessContextRecord(InteractionContextType.OBJECT_TITLE,
-                identifier, InteractionHead.regular(targetAdapter), interactionInitiatedBy),
+        this(InteractionContextType.OBJECT_TITLE,
+            identifier, InteractionHead.regular(targetAdapter), initiatedBy, Where.NOT_SPECIFIED,
             title);
     }
 

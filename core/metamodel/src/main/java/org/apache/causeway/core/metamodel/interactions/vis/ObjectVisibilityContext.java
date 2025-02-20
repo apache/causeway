@@ -36,8 +36,13 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link ObjectVisibilityEvent}.
  */
 public record ObjectVisibilityContext(
-    VisibilityContextRecord visibilityContext)
-implements VisibilityContextHolder, ProposedHolder {
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy)
+implements VisibilityContext, ProposedHolder {
 
     // -- FACTORIES
 
@@ -61,12 +66,11 @@ implements VisibilityContextHolder, ProposedHolder {
     public ObjectVisibilityContext(
             final InteractionHead head,
             final Identifier identifier,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        this(new VisibilityContextRecord(
-                InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, interactionInitiatedBy, where, renderPolicy));
+        this(InteractionContextType.OBJECT_VISIBILITY,
+                head, identifier, initiatedBy, where, renderPolicy);
     }
 
     @Override

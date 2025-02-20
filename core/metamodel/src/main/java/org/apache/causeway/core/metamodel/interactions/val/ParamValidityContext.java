@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.val;
 
+import java.util.function.Supplier;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
@@ -36,11 +38,15 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionArgumentEvent}.
  */
 public record ParamValidityContext(
-    ValidityContextRecord validityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    Supplier<String> friendlyNameProvider,
+    InteractionInitiatedBy initiatedBy,
     ObjectAction objectAction,
     ManagedObject proposed,
     Can<ManagedObject> args,
-    int position) implements ValidityContextHolder, ProposedHolder, ActionInteractionContext {
+    int position) implements ValidityContext, ProposedHolder, ActionInteractionContext {
 
     public ParamValidityContext(
             final InteractionHead head,
@@ -48,13 +54,11 @@ public record ParamValidityContext(
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-        this(
-            new ValidityContextRecord(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
-                head,
-                id,
-                ()->objectAction.getParameters().getElseFail(position).getFriendlyName(head::target),
-                interactionInitiatedBy),
+            final InteractionInitiatedBy initiatedBy) {
+        this(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
+            head, id,
+            ()->objectAction.getParameters().getElseFail(position).getFriendlyName(head::target),
+            initiatedBy,
             objectAction,
             args.getElseFail(position),
             args,

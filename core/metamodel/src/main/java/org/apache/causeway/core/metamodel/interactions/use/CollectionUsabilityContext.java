@@ -33,17 +33,22 @@ import org.apache.causeway.core.metamodel.interactions.vis.CollectionVisibilityC
  * {@link CollectionUsabilityEvent}.
  */
 public record CollectionUsabilityContext(
-    UsabilityContextRecord usabilityContext)
-implements UsabilityContextHolder {
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy)
+implements UsabilityContext {
 
     public CollectionUsabilityContext(
             final InteractionHead head,
             final Identifier identifier,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        this(new UsabilityContextRecord(InteractionContextType.COLLECTION_USABLE,
-                head, identifier, interactionInitiatedBy, where, renderPolicy));
+        this(InteractionContextType.COLLECTION_USABLE,
+                head, identifier, initiatedBy, where, renderPolicy);
     }
 
     @Override
@@ -51,6 +56,7 @@ implements UsabilityContextHolder {
         return new CollectionUsabilityEvent(target().getPojo(), identifier());
     }
 
+    @Override
     public CollectionVisibilityContext asVisibilityContext() {
         return new CollectionVisibilityContext(head(), identifier(),
                 initiatedBy(), where(), renderPolicy());

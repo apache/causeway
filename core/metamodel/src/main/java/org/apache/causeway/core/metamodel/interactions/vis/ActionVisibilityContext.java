@@ -35,19 +35,24 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionVisibilityEvent}.
  */
 public record ActionVisibilityContext(
-    VisibilityContextRecord visibilityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy,
     ObjectAction objectAction)
-implements VisibilityContextHolder, ActionInteractionContext  {
+implements VisibilityContext, ActionInteractionContext  {
 
     public ActionVisibilityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier identifier,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        this(new VisibilityContextRecord(InteractionContextType.ACTION_VISIBLE,
-            head, identifier, interactionInitiatedBy, where, renderPolicy),
+        this(InteractionContextType.ACTION_VISIBLE,
+            head, identifier, initiatedBy, where, renderPolicy,
             objectAction);
     }
 

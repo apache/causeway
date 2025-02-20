@@ -34,17 +34,22 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link PropertyUsabilityEvent}.
  */
 public record PropertyUsabilityContext(
-    UsabilityContextRecord usabilityContext)
-implements UsabilityContextHolder {
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy)
+implements UsabilityContext {
 
     public PropertyUsabilityContext(
             final InteractionHead head,
             final Identifier identifier,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
-        this(new UsabilityContextRecord(InteractionContextType.PROPERTY_USABLE,
-                head, identifier, interactionInitiatedBy, where, renderPolicy));
+        this(InteractionContextType.PROPERTY_USABLE,
+                head, identifier, initiatedBy, where, renderPolicy);
     }
 
     @Override
@@ -52,6 +57,7 @@ implements UsabilityContextHolder {
         return new PropertyUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
+    @Override
     public PropertyVisibilityContext asVisibilityContext() {
         return new PropertyVisibilityContext(head(), identifier(),
                 initiatedBy(), where(), renderPolicy());

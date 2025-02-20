@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions.val;
 
+import java.util.function.Supplier;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ParseValueEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
@@ -33,19 +35,22 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link ParseValueEvent}.
  */
 public record ParseValueContext(
-    ValidityContextRecord validityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    Supplier<String> friendlyNameProvider,
+    InteractionInitiatedBy initiatedBy,
     ManagedObject proposed
-    ) implements ValidityContextHolder, ProposedHolder {
+    ) implements ValidityContext, ProposedHolder {
 
     public ParseValueContext(
             final InteractionHead head,
             final Identifier identifier,
             final ManagedObject proposed,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy initiatedBy) {
 
-        this(
-            new ValidityContextRecord(InteractionContextType.PARSE_VALUE,
-                head, identifier, /*friendlyNameProvider*/null, interactionInitiatedBy),
+        this(InteractionContextType.PARSE_VALUE,
+            head, identifier, /*friendlyNameProvider*/()->null, initiatedBy,
             proposed);
     }
 

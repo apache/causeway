@@ -33,18 +33,23 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * {@link PropertyVisibilityEvent}.
  */
 public record PropertyVisibilityContext(
-    VisibilityContextRecord visibilityContext
-    ) implements VisibilityContextHolder {
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy
+    ) implements VisibilityContext {
 
     public PropertyVisibilityContext(
             final InteractionHead head,
             final Identifier identifier,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final Where where,
             final RenderPolicy renderPolicy) {
 
-        this(new VisibilityContextRecord(InteractionContextType.PROPERTY_VISIBLE,
-            head, identifier, interactionInitiatedBy, where, renderPolicy));
+        this(InteractionContextType.PROPERTY_VISIBLE,
+            head, identifier, initiatedBy, where, renderPolicy);
     }
 
     @Override

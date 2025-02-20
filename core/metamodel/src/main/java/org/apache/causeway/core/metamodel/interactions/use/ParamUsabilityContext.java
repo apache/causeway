@@ -39,11 +39,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionArgumentEvent}.
  */
 public record ParamUsabilityContext(
-    UsabilityContextRecord usabilityContext,
+    InteractionContextType interactionType,
+    InteractionHead head,
+    Identifier identifier,
+    InteractionInitiatedBy initiatedBy,
+    Where where,
+    RenderPolicy renderPolicy,
     ObjectAction objectAction,
     Can<ManagedObject> args,
     int position)
-implements UsabilityContextHolder, ActionInteractionContext {
+implements UsabilityContext, ActionInteractionContext {
 
     public ParamUsabilityContext(
             final InteractionHead head,
@@ -51,12 +56,12 @@ implements UsabilityContextHolder, ActionInteractionContext {
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy,
+            final InteractionInitiatedBy initiatedBy,
             final RenderPolicy renderPolicy) {
 
-        this(new UsabilityContextRecord(InteractionContextType.ACTION_PARAMETER_USABLE,
-                head, id, interactionInitiatedBy, Where.OBJECT_FORMS, renderPolicy),
-        objectAction,args,position);
+        this(InteractionContextType.ACTION_PARAMETER_USABLE,
+            head, id, initiatedBy, Where.OBJECT_FORMS, renderPolicy,
+            objectAction, args, position);
     }
 
     @Override
@@ -68,6 +73,7 @@ implements UsabilityContextHolder, ActionInteractionContext {
                 position());
     }
 
+    @Override
     public ParamVisibilityContext asVisibilityContext() {
         return new ParamVisibilityContext(head(), objectAction(), identifier(),
                 args, position, initiatedBy(), renderPolicy());
