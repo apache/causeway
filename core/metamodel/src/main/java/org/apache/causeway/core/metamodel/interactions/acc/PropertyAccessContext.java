@@ -32,7 +32,8 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link PropertyAccessEvent}.
  */
-public record PropertyAccessContext(
+@Deprecated  // not used
+record PropertyAccessContext(
     InteractionContextType interactionType,
     Identifier identifier,
     InteractionHead head,
@@ -44,7 +45,7 @@ public record PropertyAccessContext(
     ManagedObject value)
 implements AccessContext {
 
-    public PropertyAccessContext(
+    PropertyAccessContext(
             final InteractionHead head,
             final Identifier id,
             final ManagedObject value,

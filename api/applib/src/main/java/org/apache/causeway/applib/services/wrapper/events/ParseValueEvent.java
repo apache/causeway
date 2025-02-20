@@ -30,6 +30,7 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
  *
  * @since 1.x {@index}
  */
+@Deprecated // not used
 public class ParseValueEvent extends ValidityEvent {
 
     private static Object coalesce(final Object source, final String proposed) {

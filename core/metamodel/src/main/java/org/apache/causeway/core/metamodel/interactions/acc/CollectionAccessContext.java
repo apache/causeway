@@ -31,14 +31,15 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link CollectionAccessEvent}.
  */
-public record CollectionAccessContext(
+@Deprecated  // not used
+record CollectionAccessContext(
     InteractionContextType interactionType,
     Identifier identifier,
     InteractionHead head,
     InteractionInitiatedBy initiatedBy,
     Where where) implements AccessContext {
 
-    public CollectionAccessContext(
+    CollectionAccessContext(
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy initiatedBy) {

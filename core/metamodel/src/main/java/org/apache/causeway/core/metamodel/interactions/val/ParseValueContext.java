@@ -34,7 +34,8 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * See {@link InteractionContext} for overview; analogous to
  * {@link ParseValueEvent}.
  */
-public record ParseValueContext(
+@Deprecated // not used
+record ParseValueContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
