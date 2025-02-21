@@ -23,6 +23,8 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -33,25 +35,24 @@ import org.apache.causeway.core.metamodel.methods.MethodFinderPAT;
 import org.apache.causeway.core.metamodel.methods.MethodFinderPAT.MethodAndPatConstructor;
 
 import lombok.Builder;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
-public final class ActionSupport {
+public record ActionSupport() {
 
-    @Value @Builder
-    public static class ActionSupportingMethodSearchRequest {
+    @Builder(builderMethodName = "builderInternal")
+    public record ActionSupportingMethodSearchRequest(
+            FacetFactory.@NonNull ProcessMethodContext processMethodContext,
+            @NonNull MethodFinder methodFinder,
+            @NonNull EnumSet<SearchAlgorithm> searchAlgorithms,
+            @NonNull Can<Class<?>> additionalParamTypes) {
 
-        FacetFactory.@NonNull ProcessMethodContext processMethodContext;
-        @Getter @NonNull MethodFinder methodFinder;
-        @NonNull EnumSet<SearchAlgorithm> searchAlgorithms;
-
-        @Builder.Default
-        final @NonNull Can<Class<?>> additionalParamTypes = Can.empty();
-
-        @Getter(lazy = true) Class<?>[] paramTypes =
-                getProcessMethodContext().getMethod().getParameterTypes();
+        public static ActionSupportingMethodSearchRequestBuilder builder() {
+            return builderInternal()
+                    .additionalParamTypes(Can.empty());
+        }
+        public Class<?>[] paramTypes() {
+            return processMethodContext().getMethod().getParameterTypes();
+        }
     }
 
     @FunctionalInterface
@@ -66,8 +67,8 @@ public final class ActionSupport {
     implements SearchFunction {
         /** Parameter as a Tuple */
         PAT(ActionSupport::findActionSupportingMethodWithPATArg),
-        ALL_PARAM_TYPES(ActionSupport::findActionSupportingMethodWithAllParamTypes),
-        ;
+        ALL_PARAM_TYPES(ActionSupport::findActionSupportingMethodWithAllParamTypes);
+
         private final SearchFunction searchFunction;
         @Override
         public void search(
@@ -77,11 +78,10 @@ public final class ActionSupport {
         }
     }
 
-    @Value(staticConstructor = "of")
-    public static class ActionSupportingMethodSearchResult {
-        ResolvedMethod supportingMethod;
-        Class<?> returnType;
-        Optional<ResolvedConstructor> patConstructor;
+    public record ActionSupportingMethodSearchResult(
+            ResolvedMethod supportingMethod,
+            Class<?> returnType,
+            Optional<ResolvedConstructor> patConstructor) {
     }
 
     public static void findActionSupportingMethods(
@@ -102,17 +102,16 @@ public final class ActionSupport {
 
         MethodFinderPAT
         .findMethodWithPATArg(
-                searchRequest.getMethodFinder(),
-                searchRequest.getParamTypes(),
-                searchRequest.getAdditionalParamTypes())
+                searchRequest.methodFinder(),
+                searchRequest.paramTypes(),
+                searchRequest.additionalParamTypes())
         .map(ActionSupport::toSearchResult)
         .forEach(onMethodFound);
     }
 
     private static ActionSupportingMethodSearchResult toSearchResult(
             final MethodAndPatConstructor supportingMethodAndPatConstructor) {
-        return ActionSupportingMethodSearchResult
-                .of(
+        return new ActionSupportingMethodSearchResult(
                         supportingMethodAndPatConstructor.supportingMethod(),
                         supportingMethodAndPatConstructor.supportingMethod().returnType(),
                         Optional.of(supportingMethodAndPatConstructor.patConstructor()));
@@ -122,10 +121,10 @@ public final class ActionSupport {
             final ActionSupportingMethodSearchRequest searchRequest,
             final Consumer<ActionSupportingMethodSearchResult> onMethodFound) {
 
-        var paramTypes = searchRequest.getParamTypes();
-        var finderOptions = searchRequest.getMethodFinder();
+        var paramTypes = searchRequest.paramTypes();
+        var finderOptions = searchRequest.methodFinder();
 
-        var additionalParamTypes = searchRequest.getAdditionalParamTypes();
+        var additionalParamTypes = searchRequest.additionalParamTypes();
         var additionalParamCount = additionalParamTypes.size();
 
         final int paramsConsideredCount = paramTypes.length + additionalParamCount;
@@ -142,8 +141,7 @@ public final class ActionSupport {
 
     private static ActionSupportingMethodSearchResult toSearchResult(
             final ResolvedMethod supportingMethod) {
-        return ActionSupportingMethodSearchResult
-                .of(supportingMethod, supportingMethod.returnType(), Optional.empty());
+        return new ActionSupportingMethodSearchResult(supportingMethod, supportingMethod.returnType(), Optional.empty());
     }
 
     // -- PARAM UTIL

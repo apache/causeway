@@ -41,9 +41,9 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        var autoCompleteMethod = searchResult.getSupportingMethod();
-        var patConstructor = searchResult.getPatConstructor();
-        var paramSupportReturnType = searchResult.getParamSupportReturnType();
+        var autoCompleteMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
+        var paramSupportReturnType = searchResult.paramSupportReturnType();
         addFacet(
                 new ActionParameterAutoCompleteFacetViaMethod(
                         autoCompleteMethod, paramSupportReturnType, patConstructor, paramAsHolder));

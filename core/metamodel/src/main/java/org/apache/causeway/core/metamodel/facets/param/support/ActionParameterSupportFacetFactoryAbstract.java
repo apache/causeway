@@ -66,7 +66,7 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
 
         var searchRequest = searchRefiner
                 .apply(
-                        ParameterSupport.ParamSupportingMethodSearchRequest.builder()
+                    ParameterSupport.ParamSupportingMethodSearchRequest.builder()
                         .processMethodContext(processMethodContext)
                         .paramIndexToMethodNameProviders(methodNameCandidates)
                         // default, can be overwritten
@@ -75,8 +75,8 @@ extends MemberAndPropertySupportFacetFactoryAbstract {
                 .build();
 
         ParameterSupport.findParamSupportingMethods(searchRequest, searchResult -> {
-            processMethodContext.removeMethod(searchResult.getSupportingMethod());
-            var paramIndex = searchResult.getParamIndex();
+            processMethodContext.removeMethod(searchResult.supportingMethod());
+            var paramIndex = searchResult.paramIndex();
             // add facets directly to parameters, not to actions
             var paramAsHolder = parameters.getElseFail(paramIndex);
             onSearchResult(paramAsHolder, searchResult);

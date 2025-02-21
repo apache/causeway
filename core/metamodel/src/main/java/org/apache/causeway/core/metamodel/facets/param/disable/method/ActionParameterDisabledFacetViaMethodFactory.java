@@ -42,8 +42,8 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        var disableMethod = searchResult.getSupportingMethod();
-        var patConstructor = searchResult.getPatConstructor();
+        var disableMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
         addFacet(
                 new ActionParameterDisabledFacetViaMethod(
                         disableMethod, patConstructor, paramAsHolder));

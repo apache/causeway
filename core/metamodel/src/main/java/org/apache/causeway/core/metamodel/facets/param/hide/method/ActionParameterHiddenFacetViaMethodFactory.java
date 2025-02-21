@@ -42,8 +42,8 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        var hideMethod = searchResult.getSupportingMethod();
-        var patConstructor = searchResult.getPatConstructor();
+        var hideMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
         addFacet(
                 new ActionParameterHiddenFacetViaMethod(
                         hideMethod, patConstructor, paramAsHolder));

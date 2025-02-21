@@ -38,9 +38,9 @@ extends ActionParameterSupportFacetFactoryAbstract {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        var choicesMethod = searchResult.getSupportingMethod();
-        var patConstructor = searchResult.getPatConstructor();
-        var paramSupportReturnType = searchResult.getParamSupportReturnType();
+        var choicesMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
+        var paramSupportReturnType = searchResult.paramSupportReturnType();
         addFacet(
                 new ActionParameterChoicesFacetViaMethod(
                         choicesMethod, paramSupportReturnType, patConstructor, paramAsHolder));

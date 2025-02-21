@@ -46,8 +46,8 @@ extends ActionParameterSupportFacetFactoryAbstract  {
     protected void onSearchResult(
             final FacetedMethodParameter paramAsHolder,
             final ParamSupportingMethodSearchResult searchResult) {
-        var validateMethod = searchResult.getSupportingMethod();
-        var patConstructor = searchResult.getPatConstructor();
+        var validateMethod = searchResult.supportingMethod();
+        var patConstructor = searchResult.patConstructor();
         addFacet(
                 new ActionParameterValidationFacetViaMethod(
                         validateMethod, patConstructor, paramAsHolder));

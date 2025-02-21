@@ -53,9 +53,9 @@ extends MemberSupportFacetFactoryAbstract {
                 .build();
 
         ActionSupport.findActionSupportingMethods(searchRequest, searchResult -> {
-            var validateMethod = searchResult.getSupportingMethod();
+            var validateMethod = searchResult.supportingMethod();
             processMethodContext.removeMethod(validateMethod);
-            var patConstructor = searchResult.getPatConstructor();
+            var patConstructor = searchResult.patConstructor();
             addFacet(
                     new ActionValidationFacetViaMethod(
                             validateMethod, patConstructor, processMethodContext.getFacetHolder()));
