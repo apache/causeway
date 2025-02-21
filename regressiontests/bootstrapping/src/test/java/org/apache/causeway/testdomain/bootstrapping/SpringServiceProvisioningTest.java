@@ -49,8 +49,8 @@ import static org.apache.causeway.commons.internal.collections._Sets.intersectSo
 //import org.apache.causeway.testdomain.Incubating;
 
 @SpringBootTest(
-        classes = { 
-                Configuration_headless.class, 
+        classes = {
+                Configuration_headless.class,
         },
         properties = {
                 // "causeway.core.meta-model.introspector.parallelize=false",
@@ -64,8 +64,8 @@ import static org.apache.causeway.commons.internal.collections._Sets.intersectSo
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {
-    
-    @Inject private ServiceRegistry serviceRegistry; 
+
+    @Inject private ServiceRegistry serviceRegistry;
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
 
     @BeforeEach
@@ -77,7 +77,7 @@ class SpringServiceProvisioningTest {
     void dump_all() throws IOException {
 
         final List<String> beans = causewaySystemEnvironment.getIocContainer().streamAllBeans()
-                .map(_SingletonBeanProvider::getId)
+                .map(_SingletonBeanProvider::id)
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -91,7 +91,7 @@ class SpringServiceProvisioningTest {
     void builtInServices_shouldBeSetUp() throws IOException {
 
         var managedServices = serviceRegistry.streamRegisteredBeans()
-                .map(_SingletonBeanProvider::getBeanClass)
+                .map(_SingletonBeanProvider::beanClass)
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 
@@ -100,14 +100,14 @@ class SpringServiceProvisioningTest {
                 .filter(entry->!entry.startsWith("#"))
                 .filter(entry->!entry.startsWith("org.apache.causeway.testdomain."))
                 .collect(Collectors.toCollection(TreeSet::new));
-        
+
         assertFalse(expectedSingletons.isEmpty());
-        
+
         var servicesFound = toStringJoiningNewLine(managedServices);
         System.out.println("--- Services discovered by Causeway ---");
         System.out.println(servicesFound);
         System.out.println("--------------------------------");
-        
+
         // same as managedServices.containsAll(singletonSet) but more verbose in case of
         // failure
         assertEquals(toStringJoiningNewLine(expectedSingletons),

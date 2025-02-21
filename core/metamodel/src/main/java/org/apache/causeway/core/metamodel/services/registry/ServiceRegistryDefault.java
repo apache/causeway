@@ -96,14 +96,14 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         .streamAllBeans()
         .filter(contributes())
         .forEach(singletonProvider->
-            managedBeanAdapterByName.put(singletonProvider.getId(), singletonProvider));
+            managedBeanAdapterByName.put(singletonProvider.id(), singletonProvider));
 
         return managedBeanAdapterByName;
     }
 
     private Predicate<_SingletonBeanProvider> contributes() {
         return singletonProvider->singletonProvider!=null
-                ? causewayBeanTypeRegistry.containsManagedBeansContributing(singletonProvider.getBeanClass())
+                ? causewayBeanTypeRegistry.containsManagedBeansContributing(singletonProvider.beanClass())
                 // do not register unknown sort
                 : false;
     }

@@ -61,7 +61,7 @@ record _IocContainer_Spring(
         return Stream.of(springContext.getBeanDefinitionNames())
                 .map(name->{
                     var type = ClassUtils.getUserClass(springContext.getType(name));
-                    var beanAdapter = _SingletonBeanProvider.of(name, type, ()->springContext.getBean(name));
+                    var beanAdapter = new _SingletonBeanProvider(name, type, ()->springContext.getBean(name));
                     return beanAdapter;
                 });
     }

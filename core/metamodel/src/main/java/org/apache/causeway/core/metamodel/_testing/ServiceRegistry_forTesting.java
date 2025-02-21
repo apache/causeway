@@ -119,10 +119,10 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
             if(registeredBeans.isEmpty()) {
                 streamBeans()
                 .filter(_NullSafe::isPresent)
-                .peek(bean->_Assert.assertTrue(_Strings.isNotEmpty(bean.getId())))
+                .peek(bean->_Assert.assertTrue(_Strings.isNotEmpty(bean.id())))
                 .forEach(bean->{
                     registeredBeans.add(bean);
-                    registeredBeanById.put(bean.getId(), bean);
+                    registeredBeanById.put(bean.id(), bean);
                 });
                 triggerPostInit.set(true);
             }

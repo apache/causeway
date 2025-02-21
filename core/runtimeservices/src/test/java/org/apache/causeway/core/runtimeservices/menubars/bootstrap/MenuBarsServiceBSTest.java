@@ -72,7 +72,7 @@ extends RuntimeServicesTestAbstract {
         assertNotNull(getSpecificationLoader().loadSpecification(Bar.class));
 
         assertTrue(getServiceRegistry().streamRegisteredBeans()
-                .anyMatch(bean->bean.getBeanClass().equals(Bar.class)));
+                .anyMatch(bean->bean.beanClass().equals(Bar.class)));
 
         assertTrue(getMetaModelContext().streamServiceAdapters()
                 .anyMatch(domainObject->domainObject.getSpecification().getCorrespondingClass().equals(Bar.class)));

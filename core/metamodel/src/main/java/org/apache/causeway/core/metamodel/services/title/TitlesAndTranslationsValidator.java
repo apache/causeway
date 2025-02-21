@@ -60,19 +60,19 @@ extends MetaModelValidatorAbstract {
         .forEach(managedBeanAdapter->{
 
             var domainService = managedBeanAdapter.lookupInstance().orElse(null);
-            var logicalTypeName = managedBeanAdapter.getId();
+            var logicalTypeName = managedBeanAdapter.id();
 
             if(domainService == null) {
 
                 var deficiencyOrigin = Identifier.classIdentifier(
-                        LogicalType.eager(managedBeanAdapter.getBeanClass(), logicalTypeName));
+                        LogicalType.eager(managedBeanAdapter.beanClass(), logicalTypeName));
 
                 ValidationFailure.raise(
                         specificationLoader,
                         deficiencyOrigin,
                         String.format(
                                 "Failed to get instance of service bean %s",
-                                managedBeanAdapter.getId())
+                                managedBeanAdapter.id())
                         );
                 return; // next
             }
@@ -87,14 +87,14 @@ extends MetaModelValidatorAbstract {
                 e.printStackTrace();
 
                 var deficiencyOrigin = Identifier.classIdentifier(
-                        LogicalType.eager(managedBeanAdapter.getBeanClass(), logicalTypeName));
+                        LogicalType.eager(managedBeanAdapter.beanClass(), logicalTypeName));
 
                 ValidationFailure.raise(
                         specificationLoader,
                         deficiencyOrigin,
                         String.format(
                                 "Failed to get title for service bean %s",
-                                managedBeanAdapter.getId())
+                                managedBeanAdapter.id())
                         );
             }
 

@@ -208,7 +208,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
                 .map(serviceSpec->ManagedObject.service(serviceSpec, servicePojo))
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "Cannot wrap vetoed service of type '%s'",
-                        managedBeanAdapter.getBeanClass()));
+                        managedBeanAdapter.beanClass()));
     }
 
 }

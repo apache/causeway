@@ -18,52 +18,45 @@
  */
 package org.apache.causeway.commons.internal.ioc;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.EqualsAndHashCode;
-import org.jspecify.annotations.NonNull;
-import lombok.ToString;
-import lombok.Value;
-
 /**
  * @since 2.0
  */
-@Value(staticConstructor = "of")
-public final class _SingletonBeanProvider {
+public record _SingletonBeanProvider(
+        /**
+         * Unique bean name (not an alias).
+         * Corresponds to the logical-type-name (Causeway semantics).
+         */
+        @NonNull String id,
+        @NonNull Class<?> beanClass,
+
+        //@ToString.Exclude @EqualsAndHashCode.Exclude
+        @NonNull Supplier<?> beanProvider) {
 
     // -- TEST FACTORIES
 
     public static <T> _SingletonBeanProvider forTestingLazy(
             final String logicalTypeName, final Class<T> beanClass, final Supplier<T> beanProvider) {
-        return _SingletonBeanProvider.of(logicalTypeName, beanClass, beanProvider);
+        return new _SingletonBeanProvider(logicalTypeName, beanClass, beanProvider);
     }
 
     public static <T> _SingletonBeanProvider forTestingLazy(
             final Class<T> beanClass, final Supplier<T> beanProvider) {
-        return _SingletonBeanProvider.of(beanClass.getName(), beanClass, beanProvider);
+        return new _SingletonBeanProvider(beanClass.getName(), beanClass, beanProvider);
     }
 
     public static <T> _SingletonBeanProvider forTesting(final T bean) {
-        return _SingletonBeanProvider.of(bean.getClass().getName(), bean.getClass(), ()->bean);
+        return new _SingletonBeanProvider(bean.getClass().getName(), bean.getClass(), ()->bean);
     }
-
-    // -- CONSTRUCTION
-
-    /**
-     * Unique bean name (not an alias).
-     * Corresponds to the logical-type-name (Causeway semantics).
-     */
-    private final @NonNull String id;
-    private final @NonNull Class<?> beanClass;
-
-    @ToString.Exclude @EqualsAndHashCode.Exclude
-    private final @NonNull Supplier<?> beanProvider;
 
     public Optional<?> lookupInstance() {
         return Optional.ofNullable(beanProvider.get());
@@ -79,6 +72,22 @@ public final class _SingletonBeanProvider {
     public boolean isCandidateFor(final @Nullable Class<?> requiredType) {
         if(requiredType==null) return false;
         return requiredType.isAssignableFrom(beanClass);
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return obj instanceof _SingletonBeanProvider other
+                ? Objects.equals(this.id(), other.id())
+                        && Objects.equals(this.beanClass(), other.beanClass())
+                : false;
+    }
+    @Override
+    public final int hashCode() {
+        return Objects.hash(id, beanClass);
+    }
+    @Override
+    public final String toString() {
+        return "SingletonBeanProvider[id=%s, beanClass=%s]".formatted(id, beanClass);
     }
 
     // -- UTILITY
