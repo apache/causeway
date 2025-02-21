@@ -20,44 +20,58 @@ package org.apache.causeway.valuetypes.asciidoc.builder.xref;
 
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Lazy;
 
 import lombok.Builder;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
-@Value @Builder
-public final class Xref {
+// model for
+// xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot]
+// location: system, generated
+// namespace: index, applib, services, xmlsnapshot
+// canonicalName: XmlSnapshotService~Snapshot.adoc
+// friendlyName: XmlSnapshotService.Snapshot
+@Builder
+public record Xref(
+        @NonNull Can<String> location,
+        @NonNull Can<String> namespace,
+        @NonNull String canonicalName,
+        @NonNull String friendlyName,  // as used for display
+        @NonNull _Lazy<String> xrefLazy // full xref string
+        ) {
 
-    // model for
-    // xref:refguide:applib:index/services/xmlsnapshot/XmlSnapshotService~Snapshot.adoc[XmlSnapshotService.Snapshot]
-    // location: system, generated
-    // namespace: index, applib, services, xmlsnapshot
-    // canonicalName: XmlSnapshotService~Snapshot.adoc
-    // friendlyName: XmlSnapshotService.Snapshot
+    public Xref(
+            final Can<String> location,
+            final Can<String> namespace,
+            final String canonicalName,
+            final String friendlyName,
+            final _Lazy<String> xrefLazy) {
+        this.location = location;
+        this.namespace = namespace;
+        this.canonicalName = canonicalName;
+        this.friendlyName = friendlyName;
+        this.xrefLazy = _Lazy.threadSafe(()->evalXref());
+    }
 
-    private final @NonNull Can<String> location;
-    private final @NonNull Can<String> namespace;
-    private final @NonNull String canonicalName;
-    private final @NonNull String friendlyName;  // as used for display
+    public String xref() {
+        return xrefLazy().get();
+    }
 
-    @Getter(lazy = true)
-    private final @lombok.NonNull /*failing to migrate to JSpecify*/ String xref = xref(); // full xref string
-
-    private String xref() {
+    private String evalXref() {
         var sb = new StringBuilder();
 
         sb.append("xref:")
-        .append(location.stream().collect(Collectors.joining(":")))
-        .append(":");
+            .append(location.stream().collect(Collectors.joining(":")))
+            .append(":");
 
         namespace.stream().forEach(part->sb.append(part).append("/"));
 
         sb.append(canonicalName)
-        .append("[")
-        .append(friendlyName)
-        .append("]");
+            .append("[")
+            .append(friendlyName)
+            .append("]");
 
         return sb.toString();
     }

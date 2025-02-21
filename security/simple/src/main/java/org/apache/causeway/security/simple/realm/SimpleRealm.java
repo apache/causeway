@@ -26,13 +26,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.base._Strings;
-
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Component
 public class SimpleRealm {
@@ -55,17 +53,15 @@ public class SimpleRealm {
         }
     }
 
-    @Value @Accessors(fluent=true)
-    public static class Role {
-        String name;
-        Function<Identifier, Grant> grants;
+    public record Role(
+            String name,
+            Function<Identifier, Grant> grants) {
     }
 
-    @Value @Accessors(fluent=true)
-    public static class User {
-        String name;
-        String encryptedPass;
-        List<Role> roles;
+    public record User(
+            String name,
+            String encryptedPass,
+            List<Role> roles) {
     }
 
     final Map<String, Role> roles = new HashMap<>();

@@ -27,8 +27,6 @@ import org.apache.causeway.applib.annotation.MinLength;
 import org.apache.causeway.applib.annotation.Publishing;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 /**
  * For (test) mixin descriptions see {@link ProperMemberSupport}.
@@ -39,10 +37,9 @@ public class ProperMemberSupport_action4 {
 
     private final ProperMemberSupport holder;
 
-    @Value @Accessors(fluent = true)
-    public static class Parameter {
-        List<String> a;
-        List<String> b;
+    public record Parameter(
+            List<String> a,
+            List<String> b) {
     }
 
     // proper mix-in action

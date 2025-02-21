@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,9 +52,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 public abstract class PublishingTestFactoryAbstract {
 
@@ -77,8 +76,22 @@ public abstract class PublishingTestFactoryAbstract {
         final boolean supportsProgrammatic;
     }
 
-    @Value(staticConstructor = "of")
-    public static class PublishingTestContext {
+    public record PublishingTestContext(
+            @NonNull String displayName,
+            @NonNull ChangeScenario scenario,
+            @NonNull Optional<Class<? extends Throwable>> expectedException,
+            @NonNull Runnable given,
+            @NonNull BiConsumer<ChangeScenario, VerificationStage> verifier,
+
+            TraceLog traceLog,
+            List<Throwable> verificationErrors) {
+
+        public static PublishingTestContext of(
+                final String displayName, final ChangeScenario scenario, final Optional<Class<? extends Throwable>> expectedException,
+                final Runnable given, final BiConsumer<ChangeScenario, VerificationStage> verifier) {
+            return new PublishingTestContext(displayName, scenario, expectedException, given, verifier,
+                    new TraceLog(), _Lists.newConcurrentList());
+        }
 
         public static class TraceLog {
             private final StringBuilder buffer = new StringBuilder();
@@ -101,15 +114,6 @@ public abstract class PublishingTestFactoryAbstract {
                 log("---------------------------------------------------------");
             }
         }
-
-        private final @NonNull String displayName;
-        private final @NonNull ChangeScenario scenario;
-        private final @NonNull Optional<Class<? extends Throwable>> expectedException;
-        private final @NonNull Runnable given;
-        private final @NonNull BiConsumer<ChangeScenario, VerificationStage> verifier;
-
-        private final TraceLog traceLog = new TraceLog();
-        private final List<Throwable> verificationErrors = _Lists.newConcurrentList();
 
         public void runGiven() {
             traceLog.log("2.1 about to run given");
@@ -173,7 +177,7 @@ public abstract class PublishingTestFactoryAbstract {
         public void beforeCompletion() {
             _Probe.errOut("=== TRANSACTION before completion");
             if(testContext!=null) {
-                testContext.getTraceLog().log("3.1 pre-commit event is occurring");
+                testContext.traceLog().log("3.1 pre-commit event is occurring");
                 testContext.runVerify(VerificationStage.PRE_COMMIT);
             }
         }
@@ -190,10 +194,10 @@ public abstract class PublishingTestFactoryAbstract {
             if(testContext!=null) {
                 try {
                     if(transactionCompletionStatus.isCommitted()) {
-                        testContext.getTraceLog().log("3.2 post-commit event is occurring");
+                        testContext.traceLog().log("3.2 post-commit event is occurring");
                         testContext.runVerify(VerificationStage.POST_COMMIT);
                     } else {
-                        testContext.getTraceLog().log("3.2 rollback event is occurring");
+                        testContext.traceLog().log("3.2 rollback event is occurring");
                         testContext.runVerify(VerificationStage.FAILURE_CASE);
                     }
 
@@ -211,7 +215,7 @@ public abstract class PublishingTestFactoryAbstract {
         public void unbind(final PublishingTestContext testContext) {
             _Assert.assertEquals(this.testContext, testContext, "PreCommitListener is not bound to the testContext, "
                     + "which it receives a request to unbind from.");
-            this.testContext.getTraceLog().log("4.? unbind from commit events");
+            this.testContext.traceLog().log("4.? unbind from commit events");
             this.testContext = null;
         }
 
@@ -322,15 +326,15 @@ public abstract class PublishingTestFactoryAbstract {
             final PublishingTestRunner testRunner) {
 
         var displayName = String.format("%s (%s)",
-                testContext.getDisplayName(),
-                testContext.getScenario().getDisplayName());
+                testContext.displayName(),
+                testContext.scenario().getDisplayName());
 
         var onSuccess = VerificationStage.POST_INTERACTION;
         var onFailure = VerificationStage.FAILURE_CASE;
 
         return dynamicTest(displayName, ()->{
 
-            var traceLog = testContext.getTraceLog();
+            var traceLog = testContext.traceLog();
 
             xrayAddTest(displayName);
 
@@ -369,8 +373,8 @@ public abstract class PublishingTestFactoryAbstract {
                 assertFalse(getInteractionService().isInInteraction());
                 assert_no_initial_tx_context();
 
-                if(testContext.getExpectedException().isPresent()) {
-                    var expectedException = testContext.getExpectedException().get();
+                if(testContext.expectedException().isPresent()) {
+                    var expectedException = testContext.expectedException().get();
                     var actualException = result.getFailure().map(Throwable::getClass).orElse(null);
                     assertEquals(expectedException, actualException);
                     testContext.runVerify(onFailure);
@@ -403,8 +407,8 @@ public abstract class PublishingTestFactoryAbstract {
     }
 
     private final void failWhenContextHasErrors(final PublishingTestContext testContext) {
-        if(!testContext.getVerificationErrors().isEmpty()) {
-            fail(testContext.getVerificationErrors().get(0));
+        if(!testContext.verificationErrors().isEmpty()) {
+            fail(testContext.verificationErrors().get(0));
         }
     }
 

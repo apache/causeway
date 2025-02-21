@@ -142,7 +142,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
             case SECTION_LABEL:
                 WktComponents.permanentlyHide(item, ID_SECTION_SEPARATOR);
                 WktComponents.permanentlyHide(item, ID_VIEW_LINK);
-                Wkt.labelAdd(item, ID_SECTION_LABEL, ((Menuable.SectionLabel)menuable).getSectionLabel());
+                Wkt.labelAdd(item, ID_SECTION_LABEL, ((Menuable.SectionLabel)menuable).sectionLabel());
                 return;
             case LINK:
                 WktComponents.permanentlyHide(item, ID_SECTION_SEPARATOR);
@@ -262,9 +262,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
                 LinkEntry::cssClassFor);
     }
 
-    @lombok.Value
-    static class LinkEntry implements Menuable {
-        private static final long serialVersionUID = 1L;
+    record LinkEntry(CollectionPresentationChoice choice) implements Menuable {
 
         // -- FACTORIES
 
@@ -272,9 +270,7 @@ extends PanelAbstract<DataTableInteractive, CollectionModel> {
             return new LinkEntry(choice);
         }
 
-        // -- CONSTRUCTION
-
-        final CollectionPresentationChoice choice;
+        // --
 
         @Override
         public Kind menuableKind() { return Kind.LINK; }

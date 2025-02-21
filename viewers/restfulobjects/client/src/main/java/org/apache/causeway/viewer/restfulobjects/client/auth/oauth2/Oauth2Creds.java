@@ -19,12 +19,15 @@
 package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2;
 
 import lombok.Builder;
-import lombok.Value;
 
 @Builder
-@Value
-public class Oauth2Creds {
-    private final String tenantId;
-    private final String clientId;
-    private final String clientSecret;
+public record Oauth2Creds(
+        String tenantId,
+        String clientId,
+        String clientSecret) {
+
+    @Deprecated public String getTenantId() { return tenantId(); }
+    @Deprecated public String getClientId() { return clientId(); }
+    @Deprecated public String getClientSecret() { return clientSecret(); }
+
 }

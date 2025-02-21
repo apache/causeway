@@ -39,24 +39,14 @@ import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 
-import lombok.Builder;
-import lombok.Value;
-
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
 
-    @Value @Builder
-    public static class Options implements Serializable {
-        private static final long serialVersionUID = 1L;
-
-        @Builder.Default
-        private SyntaxHighlighter syntaxHighlighter = SyntaxHighlighter.NONE;
-
+    public record Options(SyntaxHighlighter syntaxHighlighter) implements Serializable {
         public static Options defaults() {
-            return Options.builder().build();
+            return new Options(SyntaxHighlighter.NONE);
         }
-
     }
 
     // -- CONSTRUCTION
@@ -65,8 +55,8 @@ public class MarkupComponent extends WebComponent {
 
     public MarkupComponent(final String id, final IModel<?> model, final @Nullable Options options) {
         super(id, model);
-        this.options = options == null 
-            ? Options.defaults() 
+        this.options = options == null
+            ? Options.defaults()
             : options;
     }
 
@@ -87,8 +77,8 @@ public class MarkupComponent extends WebComponent {
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
         htmlContent()
             .ifPresentOrElse(html -> {
-                replaceComponentTagBody(markupStream, openTag, 
-                    highlightBehavior().map(highlighter->highlighter.htmlContentPostProcess(html)).orElse(html));        
+                replaceComponentTagBody(markupStream, openTag,
+                    highlightBehavior().map(highlighter->highlighter.htmlContentPostProcess(html)).orElse(html));
             }, ()->{
                 replaceComponentTagBody(markupStream, openTag, "");
             });
@@ -101,18 +91,18 @@ public class MarkupComponent extends WebComponent {
     }
 
     // -- HELPER
-    
+
     private Optional<HighlightBehavior> highlightBehavior() {
-        return HighlightBehavior.lookup(options.getSyntaxHighlighter());
+        return HighlightBehavior.lookup(options.syntaxHighlighter());
     }
 
     /**
      * Optionally returns the underlying model's HTML representation,
-     * based on whether it is available and has length. 
+     * based on whether it is available and has length.
      */
     protected Optional<String> htmlContent() {
         var modelObject = getDefaultModelObject();
-        
+
         if(modelObject==null) return Optional.empty();
 
         if(modelObject instanceof ManagedObject managedObj) {
@@ -130,7 +120,7 @@ public class MarkupComponent extends WebComponent {
 
     protected Optional<ObjectFeature> lookupObjectFeatureIn() {
         var model = getDefaultModel();
-        
+
         if(model instanceof PropertyModel propertyModel) {
             return Optional.of(propertyModel.getMetaModel());
         }

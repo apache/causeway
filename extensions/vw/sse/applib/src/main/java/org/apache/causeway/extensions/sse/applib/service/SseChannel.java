@@ -32,8 +32,11 @@ import org.apache.causeway.extensions.sse.applib.annotations.SseSource;
  */
 public interface SseChannel {
 
-    UUID getId();
-    Class<?> getSourceType();
+    UUID uuid();
+    Class<?> sourceType();
+
+    @Deprecated default UUID getId() { return uuid(); }
+    @Deprecated default Class<?> getSourceType() { return sourceType(); }
 
     void listenWhile(Predicate<SseSource> listener);
 

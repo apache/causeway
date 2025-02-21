@@ -169,7 +169,7 @@ extends AttributePanel {
      * @see #obtainOutputFormat()
      */
     protected final String outputFormatAsString() {
-        return obtainOutputFormat().getString();
+        return obtainOutputFormat().string();
     }
 
     /**

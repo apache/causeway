@@ -42,6 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.integrations.junit5.JupiterApprovals;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -59,7 +60,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.graphql.test.tester.HttpGraphQlTester;
-import org.jspecify.annotations.Nullable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -79,7 +79,6 @@ import org.apache.causeway.viewer.graphql.viewer.integration.GraphQlSourceForCau
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.SneakyThrows;
-import lombok.Value;
 
 /**
  * Intended as a base class for integration testing.
@@ -224,9 +223,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         return submitRequest(httpRequest);
     }
 
-    @Value
-    protected static class GqlBody {
-        String query;
+    protected record GqlBody(String query) {
     }
 
     @SneakyThrows

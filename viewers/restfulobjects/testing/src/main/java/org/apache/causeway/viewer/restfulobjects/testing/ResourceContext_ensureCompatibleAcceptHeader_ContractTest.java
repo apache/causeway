@@ -182,7 +182,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     private ResourceContext instantiateResourceContext(
             final RepresentationType representationType) {
 
-        var resourceDescriptor = ResourceDescriptor.of(representationType, null, null);
+        var resourceDescriptor = new ResourceDescriptor(representationType, null, null);
 
         return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, null,
                 mockHttpServletRequest, null, null,

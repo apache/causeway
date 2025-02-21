@@ -221,7 +221,7 @@ implements ApplicationUserRepository {
 			user.setStatus(ApplicationUserStatus.LOCKED);
         }
         repository.persistAndFlush(user);
-        eventBusService.post(UserCreatedEvent.of(user));
+        eventBusService.post(new UserCreatedEvent(user));
         return user;
     }
 

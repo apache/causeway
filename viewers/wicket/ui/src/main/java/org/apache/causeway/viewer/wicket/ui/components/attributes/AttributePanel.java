@@ -34,7 +34,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -69,9 +69,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -89,7 +87,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  * represent all the UI components that are directly associated with attribute types
  * such as domain object references, number types, textual types, temporal types etc.
  * <p>
- * For action parameters attribute-panels are available to support plural (multivalued) variants.
+ * For action parameters attribute-panels are available to support plural (multi-valued) variants.
  *
  * @see UiAttribute
  */
@@ -585,8 +583,10 @@ implements AttributeModelChangeListener {
         });
     }
 
-    @Value
-    private static class ScalarNameHelper {
+    private record ScalarNameHelper(
+            Optional<String> visibleLabelId,
+            String[] hiddenLabelIds) {
+
         static ScalarNameHelper from(final UiAttributeWkt attributeModel) {
             final LabelPosition labelPostion = Facets.labelAt(attributeModel.getMetaModel());
             return labelPostion == LabelPosition.NONE
@@ -595,8 +595,6 @@ implements AttributeModelChangeListener {
                             ? new ScalarNameHelper(Optional.of(ID_SCALAR_NAME_AFTER_VALUE), new String[]{ID_SCALAR_NAME_BEFORE_VALUE})
                             : new ScalarNameHelper(Optional.of(ID_SCALAR_NAME_BEFORE_VALUE), new String[]{ID_SCALAR_NAME_AFTER_VALUE});
         }
-        final Optional<String> visibleLabelId;
-        final String[] hiddenLabelIds;
 
         void hideHiddenLabels(final MarkupContainer container) {
             for(final String hiddenLabelId : hiddenLabelIds) {
@@ -605,7 +603,7 @@ implements AttributeModelChangeListener {
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // --
 
     /**
      * Component to attach feedback to.

@@ -24,20 +24,18 @@ import java.util.concurrent.CountDownLatch;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import jakarta.inject.Singleton;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Maps;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.Value;
-
 import lombok.extern.log4j.Log4j2;
 
-@Service @Singleton
+@Service
 @Log4j2
 public class KVStoreForTesting {
 
@@ -62,7 +60,7 @@ public class KVStoreForTesting {
     }
 
     public void put(final Object caller, final String keyStr, final Object value) {
-        var key = Key.of(caller.getClass(), keyStr);
+        var key = new Key(caller.getClass(), keyStr);
         log.debug("writing {} -> {}", key, value);
         keyValueMap.put(key, value);
         var latch = latchMap.remove(caller.getClass());
@@ -72,7 +70,7 @@ public class KVStoreForTesting {
     }
 
     public Optional<Object> get(final Class<?> callerType, final String keyStr) {
-        return Optional.ofNullable(keyValueMap.get(Key.of(callerType, keyStr)));
+        return Optional.ofNullable(keyValueMap.get(new Key(callerType, keyStr)));
     }
 
     public Optional<Object> get(final Object caller, final String keyStr) {
@@ -107,12 +105,12 @@ public class KVStoreForTesting {
     // -- COUNTING
 
     public long incrementCounter(final Class<?> callerType, final String keyStr) {
-        var key = Key.of(callerType, keyStr);
+        var key = new Key(callerType, keyStr);
         return (long) keyValueMap.compute(key, (k, v) -> (v == null) ? 1L : 1L + (long)v);
     }
 
     public long getCounter(final Class<?> callerType, final String keyStr) {
-        var key = Key.of(callerType, keyStr);
+        var key = new Key(callerType, keyStr);
         return (long) keyValueMap.getOrDefault(key, 0L);
     }
 
@@ -121,7 +119,7 @@ public class KVStoreForTesting {
     public void clear(final Class<?> callerType) {
         log.debug("clearing {}", callerType);
         keyValueMap.entrySet()
-        .removeIf(entry->entry.getKey().getCaller().equals(callerType));
+        .removeIf(entry->entry.getKey().caller().equals(callerType));
     }
 
     public void clear(final Object caller) {
@@ -130,15 +128,14 @@ public class KVStoreForTesting {
 
     public long countEntries(final Class<?> callerType) {
         return keyValueMap.entrySet()
-        .stream()
-        .filter(entry->entry.getKey().getCaller().equals(callerType))
-        .count();
+            .stream()
+            .filter(entry->entry.getKey().caller().equals(callerType))
+            .count();
     }
 
-    @Value(staticConstructor = "of")
-    private final static class Key {
-        @NonNull Class<?> caller;
-        @NonNull String keyStr;
+    private record Key(
+            @NonNull Class<?> caller,
+            @NonNull String keyStr) {
     }
 
     /** blocks until a new lock becomes available */

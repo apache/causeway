@@ -35,7 +35,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.Loc
 import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationUser_updateLocale.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
  *
@@ -63,11 +62,10 @@ public class ApplicationUser_updateLocale {
     private final ApplicationUser mixee;
 
     // typed tuple made of all the action parameters
-    @lombok.Value @Accessors(fluent = true)
-    public static class Parameters {
-        final java.util.Locale language;
-        final java.util.Locale numberFormat;
-        final java.util.Locale timeFormat;
+    public record Parameters(
+            java.util.Locale language,
+            java.util.Locale numberFormat,
+            java.util.Locale timeFormat) {
     }
 
     @MemberSupport public ApplicationUser act(

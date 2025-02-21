@@ -49,8 +49,6 @@ import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -75,12 +73,12 @@ public class SseServiceDefault implements SseService {
     private final EventStreamPool eventStreamPool = new EventStreamPool();
 
     @Override
-    public Optional<SseChannel> lookupByType(Class<?> sourceType) {
+    public Optional<SseChannel> lookupByType(final Class<?> sourceType) {
         return eventStreamPool.lookupByType(sourceType);
     }
 
     @Override
-    public void submit(SseSource task, ExecutionBehavior executionBehavior) {
+    public void submit(final SseSource task, final ExecutionBehavior executionBehavior) {
 
         Objects.requireNonNull(task);
         Objects.requireNonNull(executionBehavior);
@@ -108,7 +106,7 @@ public class SseServiceDefault implements SseService {
 
     // -- HELPER
 
-    private void run(SseSource task) {
+    private void run(final SseSource task) {
 
         var sourceType = task.getClass();
 
@@ -138,12 +136,12 @@ public class SseServiceDefault implements SseService {
 
         private final Map<Class<?>,  EventStreamLifecycle> eventStreamsByType = new ConcurrentHashMap<>();
 
-        public Optional<SseChannel> lookupByType(Class<?> sourceType) {
+        public Optional<SseChannel> lookupByType(final Class<?> sourceType) {
             return Optional.ofNullable(eventStreamsByType.get(sourceType))
                     .map(EventStreamLifecycle::getEventStream);
         }
 
-        public synchronized EventStreamLifecycle acquireLifecycleForType(Class<?> sourceType) {
+        public synchronized EventStreamLifecycle acquireLifecycleForType(final Class<?> sourceType) {
             var eventStreamLifecycle = eventStreamsByType.computeIfAbsent(sourceType,
                     __->EventStreamLifecycle.of(
                             new EventStreamDefault(UUID.randomUUID(), sourceType),
@@ -191,26 +189,27 @@ public class SseServiceDefault implements SseService {
 
     // -- EVENT STREAM DEFAULT IMPLEMENTATION
 
-    @Value @Log4j2
-    private static class EventStreamDefault implements SseChannel {
+    @Log4j2
+    private record EventStreamDefault(
+            UUID uuid,
+            Class<?> sourceType,
+            CountDownLatch latch,
+            Queue<Predicate<SseSource>> listeners
+            ) implements SseChannel {
 
         private static final Object $LOCK = new Object[0]; //see https://projectlombok.org/features/Synchronized
 
-        @Getter final UUID id;
-        @Getter final Class<?> sourceType;
-
-        private final CountDownLatch latch = new CountDownLatch(1);
-        private final Queue<Predicate<SseSource>> listeners = new ConcurrentLinkedQueue<>();
+        public EventStreamDefault(final UUID uuid, final Class<?> sourceType) {
+            this(uuid, sourceType, new CountDownLatch(1), new ConcurrentLinkedQueue<>());
+        }
 
         @Override
-        public void fire(SseSource source) {
+        public void fire(final SseSource source) {
 
             final List<Predicate<SseSource>> defensiveCopyOfListeners;
 
             synchronized ($LOCK) {
-                if(!isActive()) {
-                    return;
-                }
+                if(!isActive()) return;
                 defensiveCopyOfListeners = _Lists.newArrayList(listeners);
 
             }
@@ -227,16 +226,14 @@ public class SseServiceDefault implements SseService {
             });
 
             synchronized ($LOCK) {
-                if(!isActive()) {
-                    return;
-                }
+                if(!isActive()) return;
                 listeners.removeAll(markedForRemoval);
             }
 
         }
 
         @Override
-        public void listenWhile(Predicate<SseSource> listener) {
+        public void listenWhile(final Predicate<SseSource> listener) {
             synchronized ($LOCK) {
                 if(isActive()) {
                     listeners.add(listener);

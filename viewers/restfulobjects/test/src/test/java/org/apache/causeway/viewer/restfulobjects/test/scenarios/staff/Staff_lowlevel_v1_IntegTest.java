@@ -141,7 +141,7 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
     }
 
     private String asRelativeHref(final Bookmark bookmark) {
-        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
+        return String.format("objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier());
     }
 
     private String readFileAndEncodeAsBlob(final String fileName) throws IOException, URISyntaxException {
@@ -175,25 +175,15 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         private Department department;
         private Blob photo;
 
-        @lombok.Value
-        static class Name {
-            private String value;
+        record Name(String value) {
         }
 
-        @lombok.Value
-        static class Department {
-            private Value value;
-
-            @lombok.Value
-            static class Value {
-                private String href;
+        record Department(Value value) {
+            record Value(String href) {
             }
-
         }
 
-        @lombok.Value
-        static class Blob {
-            private String value;
+        record Blob(String value) {
         }
     }
 
@@ -234,17 +224,17 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
         @Override
         public String titlePresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-            return renderTitle(value, Blob::getName);
+            return renderTitle(value, Blob::name);
         }
 
         @Override
         public String htmlPresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-            return renderHtml(value, Blob::getName);
+            return renderHtml(value, Blob::name);
         }
 
         private String toEncodedString(final Blob blob) {
-            return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
-            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
+            return blob.name() + ":" + blob.mimeType().getBaseType() + ":" +
+            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.bytes()), StandardCharsets.UTF_8);
         }
 
         private Blob fromEncodedString(final String data) {

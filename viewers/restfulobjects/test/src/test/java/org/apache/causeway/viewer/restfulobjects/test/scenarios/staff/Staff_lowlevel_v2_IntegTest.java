@@ -116,7 +116,7 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
     }
 
     private String asRelativeHref(final Bookmark bookmark) {
-        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
+        return String.format("objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier());
     }
 
     private Blob readFileAsBlob(final String fileName) throws IOException {
@@ -136,38 +136,26 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
         Body(final String nameValue, final String departmentHrefValue, final org.apache.causeway.applib.value.Blob blob) {
             name = new Name(nameValue);
             department = new Department(new Department.Value(departmentHrefValue));
-            photo = new Blob(new Blob.Value(blob.getName(), blob.getMimeType().toString(), Base64.getEncoder().encodeToString(blob.getBytes())));
+            photo = new Blob(new Blob.Value(blob.name(), blob.mimeType().toString(), Base64.getEncoder().encodeToString(blob.bytes())));
         }
 
         private Name name;
         private Department department;
         private Blob photo;
 
-        @lombok.Value
-        static class Name {
-            private String value;
+        record Name(String value) {
         }
 
-        @lombok.Value
-        static class Department {
-            private Value value;
-
-            @lombok.Value
-            static class Value {
-                private String href;
+        record Department(Value value) {
+            record Value(String href) {
             }
-
         }
 
-        @lombok.Value
-        static class Blob {
-            private Value value;
-
-            @lombok.Value
-            static class Value {
-                private String name;
-                private String mimeType;
-                private String bytes;
+        record Blob(Value value) {
+            record Value(
+                    String name,
+                    String mimeType,
+                    String bytes) {
             }
         }
 

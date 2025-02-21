@@ -180,11 +180,9 @@ implements CollectionCountProvider {
                     ? wktConfig.getMaxTitleLengthInParentedTables()
                     : wktConfig.getMaxTitleLengthInStandaloneTables();
 
-        var opts = ColumnAbbreviationOptions.builder()
-            .maxElementTitleLength(columns.size()==0
+        var opts = new ColumnAbbreviationOptions(columns.size()==0
                             ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
-                            : -1 /* don't override */)
-            .build();
+                            : -1 /* don't override */);
 
         columns.add(0, new TitleColumn(elementType, variant, contextBookmark, maxColumnTitleLength, opts));
     }
@@ -239,7 +237,7 @@ implements CollectionCountProvider {
                 parentTypeName,
                 collection.getCanonicalDescription(),
                 // future work: can hook up with global config
-                RenderOptions.builder().build());
+                new RenderOptions(50, 5, true));
     }
 
     private void addActionsColumnIfRequired(

@@ -22,26 +22,21 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-import lombok.Value;
-
 /**
- *
  * @since 2.0
  */
-@Value(staticConstructor = "of")
-public class ResourceDescriptor {
+public record ResourceDescriptor(
+        RepresentationType representationType,
+        Where where,
+        RepresentationService.Intent intent) {
 
-    RepresentationType representationType;
-    Where where;
-    RepresentationService.Intent intent;
-
-    public static ResourceDescriptor generic(Where where, RepresentationService.Intent intent) {
-        return of(RepresentationType.GENERIC, where, intent);
+    public static ResourceDescriptor generic(final Where where, final RepresentationService.Intent intent) {
+        return new ResourceDescriptor(RepresentationType.GENERIC, where, intent);
     }
 
     public static ResourceDescriptor empty() {
         // in support of testing
-        return of(null, null, null);
+        return new ResourceDescriptor(null, null, null);
     }
 
 }

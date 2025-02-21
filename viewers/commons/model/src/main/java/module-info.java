@@ -22,7 +22,6 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model.components;
     exports org.apache.causeway.viewer.commons.model.binding;
     exports org.apache.causeway.viewer.commons.model.mixin;
-    exports org.apache.causeway.viewer.commons.model.mock;
     exports org.apache.causeway.viewer.commons.model.object;
     exports org.apache.causeway.viewer.commons.model.action;
     exports org.apache.causeway.viewer.commons.model.decorators;

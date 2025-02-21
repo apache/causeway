@@ -23,10 +23,7 @@ import java.util.Optional;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
-
 import org.jspecify.annotations.Nullable;
-
-import lombok.Builder;
 
 /**
  * Acts as a rendering hint for the title column in tables.
@@ -36,13 +33,9 @@ import lombok.Builder;
  *
  * @since 2.0.0
  */
-@lombok.Value @Builder
-public class ColumnAbbreviationOptions implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Builder.Default
-    private final int maxElementTitleLength = -1;
+public record ColumnAbbreviationOptions(
+        int maxElementTitleLength// = -1
+        ) implements Serializable {
 
     private static final MetaDataKey<ColumnAbbreviationOptions> KEY = new MetaDataKey<>() {
         private static final long serialVersionUID = 1L; };

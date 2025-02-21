@@ -32,25 +32,23 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import lombok.Value;
-
 @Service
 public class ValueTypeExampleService {
 
     @Inject ValueSemanticsResolver valueSemanticsResolver;
     @Inject List<ValueTypeExample<?>> examples;
 
-    @Value(staticConstructor = "of")
-    public static class Scenario implements Comparable<Scenario> {
+    public record Scenario(
+            String name,
+            Arguments arguments) implements Comparable<Scenario> {
         static Scenario of(final ValueTypeExample<?> example) {
             var name = example.getName();
-            return Scenario.of(name, Arguments.of(
+            return new Scenario(name, Arguments.of(
                     name,
                     example.getValueType(),
                     example));
         }
-        String name;
-        Arguments arguments;
+
         @Override public int compareTo(final Scenario other) {
             return _Strings.compareNullsFirst(this.name, other.name);
         }

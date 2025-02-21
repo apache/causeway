@@ -24,35 +24,27 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
-@Value(staticConstructor = "of")
-public class MenuItemDto {
-
-    @NonNull
-    private final String name;
-
-    @Nullable
-    private final String cssClassFa;
-
-    @Nullable // eg. topLevel
-    private final ManagedAction managedAction;
-
-    private final boolean isTertiaryRoot;
+public record MenuItemDto(
+        @NonNull String name,
+        @Nullable String cssClassFa,
+        // eg. topLevel
+        @Nullable ManagedAction managedAction,
+        boolean isTertiaryRoot) {
 
     public static MenuItemDto topLevel(final String name, final String cssClassFa) {
-        return of(name, cssClassFa, null, false);
+        return new MenuItemDto(name, cssClassFa, null, false);
     }
 
     public static MenuItemDto tertiaryRoot(final String name, final String cssClassFa) {
-        return of(name, cssClassFa, null, true);
+        return new MenuItemDto(name, cssClassFa, null, true);
     }
 
     public static MenuItemDto subMenu(final @NonNull ManagedAction managedAction, final String named, final String cssClassFa) {
         var name = _Strings.isNotEmpty(named)
                 ? named
                 : managedAction.getFriendlyName();
-        return of(name, cssClassFa, managedAction, false);
+        return new MenuItemDto(name, cssClassFa, managedAction, false);
     }
 
 }

@@ -264,7 +264,7 @@ implements DomainServiceResource {
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
         var resourceContext = createResourceContext(
-                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 RequestParams.ofQueryString(urlUnencodedQueryString));
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
@@ -289,7 +289,7 @@ implements DomainServiceResource {
             final InputStream body) {
 
         var resourceContext = createResourceContext(
-                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
@@ -314,7 +314,7 @@ implements DomainServiceResource {
             final InputStream body) {
 
         var resourceContext = createResourceContext(
-                ResourceDescriptor.of(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
                 body);
 
         final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();

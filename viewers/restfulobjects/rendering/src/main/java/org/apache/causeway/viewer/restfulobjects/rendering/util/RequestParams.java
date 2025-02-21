@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Bytes;
@@ -34,31 +35,25 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
-
-@lombok.Value(staticConstructor = "of")
-@Accessors(fluent=true) //XXX record candidate
-public class RequestParams {
+public record RequestParams(
+        RequestParams.@NonNull Nature nature,
+        @Nullable String raw) {
 
     static enum Nature {
         REQUEST_BODY,
         QUERY_STRING
     }
 
-    private final RequestParams.@NonNull Nature nature;
-    private final @Nullable String raw;
-
     public static RequestParams ofRequestBody(final InputStream is) {
-        return of(Nature.REQUEST_BODY, asStringUtf8(is));
+        return new RequestParams(Nature.REQUEST_BODY, asStringUtf8(is));
     }
 
     public static RequestParams ofQueryString(final String queryString) {
-        return of(Nature.QUERY_STRING, queryString);
+        return new RequestParams(Nature.QUERY_STRING, queryString);
     }
 
     public static RequestParams ofEmptyQueryString() {
-        return of(Nature.QUERY_STRING, "");
+        return new RequestParams(Nature.QUERY_STRING, "");
     }
 
     public JsonRepresentation asMap() {

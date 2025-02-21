@@ -29,8 +29,6 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Action
 @ActionLayout(associateWith = "books", promptStyle = PromptStyle.DIALOG_MODAL)
@@ -40,10 +38,9 @@ public class JdoInventoryJaxbVm_selectBooksForSale {
     private final JdoInventoryJaxbVm mixee;
 
     // typed tuple made of all the action parameters
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        String filter;
-        List<JdoBook> booksForSale;
+    public record Parameters(
+            String filter,
+            List<JdoBook> booksForSale) {
     }
 
     @MemberSupport public List<JdoBook> act(

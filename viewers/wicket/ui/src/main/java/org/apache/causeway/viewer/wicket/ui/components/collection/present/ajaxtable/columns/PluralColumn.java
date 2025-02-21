@@ -40,23 +40,15 @@ import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-import lombok.Builder;
-import lombok.experimental.Accessors;
-
 public final class PluralColumn
 extends AssociationColumnAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    @lombok.Value @Builder @Accessors(fluent=true)
-    public static class RenderOptions implements Serializable {
-        private static final long serialVersionUID = 1L;
-        @Builder.Default
-        final int titleAbbreviationThreshold = 50;
-        @Builder.Default
-        final int maxElements = 5;
-        @Builder.Default
-        final boolean isRenderEmptyBadge = true;
+    public record RenderOptions(
+            int titleAbbreviationThreshold,
+            int maxElements,
+            boolean isRenderEmptyBadge) implements Serializable {
     }
 
     private final RenderOptions opts;
@@ -131,9 +123,7 @@ extends AssociationColumnAbstract {
         final Component objectLink =
                 componentFactory.createComponent(componentId, uiObject);
 
-        ColumnAbbreviationOptions.builder()
-                .maxElementTitleLength(opts.titleAbbreviationThreshold())
-                .build()
+        new ColumnAbbreviationOptions(opts.titleAbbreviationThreshold())
                 .applyTo(objectLink);
 
         return objectLink;

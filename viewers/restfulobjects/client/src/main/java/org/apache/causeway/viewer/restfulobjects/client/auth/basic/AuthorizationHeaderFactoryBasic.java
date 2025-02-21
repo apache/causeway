@@ -48,7 +48,7 @@ public class AuthorizationHeaderFactoryBasic implements AuthorizationHeaderFacto
 
     @Override
     public String create() {
-        return "Basic " + encode(creds.getUsername(), creds.getPassword());
+        return "Basic " + encode(creds.username(), creds.password());
     }
 
     static String encode(final String username, final String password) {

@@ -194,7 +194,7 @@ class ValueSemanticsTest {
 
     Stream<Arguments> provideValueTypeExamples() {
         return valueTypeExampleService.streamScenarios()
-                .map(Scenario::getArguments);
+                .map(Scenario::arguments);
     }
 
 }

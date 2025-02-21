@@ -33,7 +33,6 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.runtimeservices.eventbus.EventBusServiceSpring;
 
 import lombok.Getter;
-import lombok.Value;
 
 @SpringBootTest(
         classes = {
@@ -70,7 +69,7 @@ class GenericEventPublishingTest {
         @Inject EventBusService eventBusService;
 
         public void fireHelloWorld() {
-            eventBusService.post(GenericEvent.of("Hello World!"));
+            eventBusService.post(new GenericEvent<>("Hello World!"));
         }
 
     }
@@ -83,14 +82,12 @@ class GenericEventPublishingTest {
 
         @EventListener(GenericEvent.class)
         public void receiveHelloWorld(final GenericEvent<String> event) {
-            history.append(event.getWhat());
+            history.append(event.what());
         }
 
     }
 
-    @Value(staticConstructor = "of")
-    static class GenericEvent<T> {
-        private T what;
+    record GenericEvent<T>(T what) {
     }
 
 }

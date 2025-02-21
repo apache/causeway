@@ -141,13 +141,12 @@ public abstract class ValueTypeExample<T> {
 
     // -- PARSING
 
-    @lombok.Value @Builder
-    public static class ParseExpectation<T> {
-        final T value;
-        @Singular
-        final List<String> inputSamples;
-        final String expectedOutput;
-        final Class<? extends Throwable> expectedThrows;
+    @Builder
+    public record ParseExpectation<T>(
+            T value,
+            @Singular List<String> inputSamples,
+            String expectedOutput,
+            Class<? extends Throwable> expectedThrows) {
     }
 
     public Can<ParseExpectation<T>> getParseExpectations() {
@@ -157,11 +156,11 @@ public abstract class ValueTypeExample<T> {
 
     // -- RENDERING
 
-    @lombok.Value @Builder
-    public static class RenderExpectation<T> {
-        final T value;
-        final String title;
-        final String html;
+    @Builder
+    public record RenderExpectation<T>(
+            T value,
+            String title,
+            String html) {
     }
 
     public Can<RenderExpectation<T>> getRenderExpectations() {
@@ -753,7 +752,7 @@ public abstract class ValueTypeExample<T> {
     }
 
     // -- EXAMPLES - DATA STRUCTURE
-    
+
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleTreePath")
     @DomainObject(
             nature = Nature.BEAN) @Scope("prototype")
@@ -766,7 +765,7 @@ public abstract class ValueTypeExample<T> {
         @Action @Override
         public TreePath sampleAction(@Parameter final @Nullable TreePath value) { return value; }
     }
-    
+
     //TODO    TreeNode
 //    @DomainObject(
 //            @Named("causeway.testdomain.valuetypes.ValueTypeExampleTreeNode",

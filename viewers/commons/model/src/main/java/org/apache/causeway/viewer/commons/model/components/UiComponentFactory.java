@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.commons.model.components;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.LabelPosition;
@@ -35,9 +36,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
-
 public interface UiComponentFactory<B, C> {
 
     B buttonFor(UiComponentFactory.ButtonRequest request);
@@ -45,28 +43,24 @@ public interface UiComponentFactory<B, C> {
     C parameterFor(UiComponentFactory.ComponentRequest request);
     LabelAndPosition<C> labelFor(UiComponentFactory.ComponentRequest request);
 
-    @Value(staticConstructor = "of")
-    public static class LabelAndPosition<T> {
-        @NonNull private final LabelPosition labelPosition;
-        @NonNull private final T uiLabel;
+    public record LabelAndPosition<T>(
+            @NonNull LabelPosition labelPositio,
+            @NonNull T uiLabel) {
     }
 
-    @Value(staticConstructor = "of")
-    public static class ButtonRequest {
-        @NonNull private final ManagedAction managedAction;
-        @NonNull private final Optional<DisablingDecorationModel> disablingUiModelIfAny;
-        @NonNull private final Consumer<ManagedAction> actionEventHandler;
+    public record ButtonRequest(
+            @NonNull ManagedAction managedAction,
+            @NonNull Optional<DisablingDecorationModel> disablingUiModelIfAny,
+            @NonNull Consumer<ManagedAction> actionEventHandler) {
     }
 
-    @Value(staticConstructor = "of")
-    public static class ComponentRequest {
-
-        @NonNull private final ManagedValue managedValue;
-        @NonNull private final ManagedFeature managedFeature;
-        @NonNull private final Optional<DisablingDecorationModel> disablingUiModelIfAny;
+    public record ComponentRequest(
+            @NonNull ManagedValue managedValue,
+            @NonNull ManagedFeature managedFeature,
+            @NonNull Optional<DisablingDecorationModel> disablingUiModelIfAny) {
 
         public static ComponentRequest of(final ManagedParameter managedParameter) {
-            return of(managedParameter, managedParameter, Optional.empty());
+            return new ComponentRequest(managedParameter, managedParameter, Optional.empty());
         }
 
         // -- SHORTCUTS

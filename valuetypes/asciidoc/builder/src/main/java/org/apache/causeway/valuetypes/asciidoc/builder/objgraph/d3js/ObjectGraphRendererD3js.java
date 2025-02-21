@@ -24,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.JsonUtils;
@@ -31,12 +33,11 @@ import org.apache.causeway.commons.io.TextUtils;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-@RequiredArgsConstructor
-public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
+public record ObjectGraphRendererD3js(
+        GraphRenderOptions graphRenderOptions
+        ) implements ObjectGraph.Renderer {
 
     @Builder
     public static class GraphRenderOptions {
@@ -56,29 +57,30 @@ public class ObjectGraphRendererD3js implements ObjectGraph.Renderer {
     /**
      * Graph model used as input to accompanied force-directed-graph JavaScript.
      */
-    @lombok.Value
-    private static class D3jsGraph {
-        @lombok.Value
-        public static class Node {
-            int id;
-            String label;
-            /** Governs node color. */
-            String group;
-            /** Shown as tooltip. */
-            String description;
+    private record D3jsGraph(
+            List<Node> nodes,
+            List<Link> links) {
+        public record Node(
+                int id,
+                String label,
+                /** Governs node color. */
+                String group,
+                /** Shown as tooltip. */
+                String description) {
         }
-        @lombok.Value
-        public static class Link {
-            int source;
-            int target;
-            String label;
-            float weight = 1.f;
+        public record Link(
+                int source,
+                int target,
+                String label,
+                float weight) {
+            public Link(
+                    final int source,
+                    final int target,
+                    final String label) {
+                this(source, target, label, 1.f);
+            }
         }
-        private final List<Node> nodes;
-        private final List<Link> links;
     }
-
-    private final GraphRenderOptions graphRenderOptions;
 
     @Override
     public void render(final StringBuilder sb, final ObjectGraph objGraph) {

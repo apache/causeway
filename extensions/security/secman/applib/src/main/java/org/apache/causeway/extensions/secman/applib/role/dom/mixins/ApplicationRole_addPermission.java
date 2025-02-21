@@ -39,8 +39,6 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.applib.role.dom.mixins.ApplicationRole_addPermission.DomainEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 /**
  *
@@ -69,11 +67,11 @@ public class ApplicationRole_addPermission {
 
     private final ApplicationRole target;
 
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        ApplicationPermissionRule rule; // ALLOW/VETO
-        ApplicationPermissionMode mode; // r/w
-        ApplicationFeatureChoices.AppFeat feature;
+    public record Parameters(
+            ApplicationPermissionRule rule, // ALLOW/VETO
+            ApplicationPermissionMode mode, // r/w
+            ApplicationFeatureChoices.AppFeat feature
+            ) {
     }
 
     /**
@@ -92,8 +90,8 @@ public class ApplicationRole_addPermission {
         return target;
     }
 
-    @MemberSupport public ApplicationPermissionRule defaultRule(Parameters params) { return ApplicationPermissionRule.ALLOW; }
-    @MemberSupport public ApplicationPermissionMode defaultMode(Parameters params) { return ApplicationPermissionMode.CHANGING; }
+    @MemberSupport public ApplicationPermissionRule defaultRule(final Parameters params) { return ApplicationPermissionRule.ALLOW; }
+    @MemberSupport public ApplicationPermissionMode defaultMode(final Parameters params) { return ApplicationPermissionMode.CHANGING; }
     @MemberSupport public java.util.Collection<ApplicationFeatureChoices.AppFeat> autoCompleteFeature(
             final Parameters params,
             final @MinLength(3) String search) {

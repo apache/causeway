@@ -81,7 +81,7 @@ implements HasMetaModelContext {
             final Where where,
             final RepresentationService.Intent intent) {
 
-        return createResourceContext(ResourceDescriptor.of(representationType, where, intent));
+        return createResourceContext(new ResourceDescriptor(representationType, where, intent));
     }
 
     protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {

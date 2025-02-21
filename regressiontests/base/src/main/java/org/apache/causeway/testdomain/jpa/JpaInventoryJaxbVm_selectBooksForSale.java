@@ -29,8 +29,6 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Action
 @ActionLayout(associateWith = "books", promptStyle = PromptStyle.DIALOG_MODAL)
@@ -40,10 +38,9 @@ public class JpaInventoryJaxbVm_selectBooksForSale {
     private final JpaInventoryJaxbVm mixee;
 
     // typed tuple made of all the action parameters
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        String filter;
-        List<JpaBook> booksForSale;
+    public record Parameters(
+            String filter,
+            List<JpaBook> booksForSale) {
     }
 
     @MemberSupport public List<JpaBook> act(

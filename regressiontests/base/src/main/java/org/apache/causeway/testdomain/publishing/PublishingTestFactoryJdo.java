@@ -96,7 +96,7 @@ extends PublishingTestFactoryAbstract {
 
     @Override
     protected void setupEntity(final PublishingTestContext context) {
-        switch(context.getScenario()) {
+        switch(context.scenario()) {
         case ENTITY_CREATION:
 
             // given - nothing to do
@@ -117,7 +117,7 @@ extends PublishingTestFactoryAbstract {
             //jdoTestFixtures.install(lock);
             break;
         default:
-            throw _Exceptions.unmatchedCase(context.getScenario());
+            throw _Exceptions.unmatchedCase(context.scenario());
         }
     }
 
@@ -132,7 +132,7 @@ extends PublishingTestFactoryAbstract {
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
 
-        switch(context.getScenario()) {
+        switch(context.scenario()) {
         case ENTITY_CREATION:
 
             context.runGiven();
@@ -197,7 +197,7 @@ extends PublishingTestFactoryAbstract {
 
             break;
         default:
-            throw _Exceptions.unmatchedCase(context.getScenario());
+            throw _Exceptions.unmatchedCase(context.scenario());
         }
 
     }
@@ -210,7 +210,7 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        switch(context.getScenario()) {
+        switch(context.scenario()) {
 
         case PROPERTY_UPDATE:
 
@@ -255,7 +255,7 @@ extends PublishingTestFactoryAbstract {
 
             break;
         default:
-            throw _Exceptions.unmatchedCase(context.getScenario());
+            throw _Exceptions.unmatchedCase(context.scenario());
         }
 
     }
@@ -268,7 +268,7 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        switch(context.getScenario()) {
+        switch(context.scenario()) {
 
         case PROPERTY_UPDATE:
 
@@ -297,7 +297,7 @@ extends PublishingTestFactoryAbstract {
 
             break;
         default:
-            throw _Exceptions.unmatchedCase(context.getScenario());
+            throw _Exceptions.unmatchedCase(context.scenario());
         }
 
     }
@@ -308,7 +308,7 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        switch(context.getScenario()) {
+        switch(context.scenario()) {
 
         case PROPERTY_UPDATE:
 
@@ -343,7 +343,7 @@ extends PublishingTestFactoryAbstract {
 
             break;
         default:
-            throw _Exceptions.unmatchedCase(context.getScenario());
+            throw _Exceptions.unmatchedCase(context.scenario());
         }
 
     }

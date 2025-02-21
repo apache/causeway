@@ -42,9 +42,8 @@ public class VegaComponentWkt extends MarkupComponent {
 
     public VegaComponentWkt(final String id, final IModel<?> model){
         super(id, model,
-                org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent.Options.builder()
-                .syntaxHighlighter(SyntaxHighlighter.NONE)
-                .build());
+                new org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent
+                    .Options(SyntaxHighlighter.NONE));
     }
 
     @Override

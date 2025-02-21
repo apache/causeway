@@ -50,14 +50,14 @@ public class TokenCache {
         }
 
         var client = clientBuilder.build();
-        var webTarget = client.target(UriBuilder.fromUri(String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/token", creds.getTenantId())));
+        var webTarget = client.target(UriBuilder.fromUri(String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/token", creds.tenantId())));
         var invocationBuilder = webTarget.request()
                 .header(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded")
                 .header(HttpHeaders.ACCEPT, "application/json")
                 ;
-        var form = new Form().param("scope", String.format("%s/.default", creds.getClientId()))
-                .param("client_id", creds.getClientId())
-                .param("client_secret", creds.getClientSecret())
+        var form = new Form().param("scope", String.format("%s/.default", creds.clientId()))
+                .param("client_id", creds.clientId())
+                .param("client_secret", creds.clientSecret())
                 .param("grant_type", "client_credentials");
 
         var invocation = invocationBuilder.buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));

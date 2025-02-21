@@ -23,12 +23,13 @@ import java.util.Optional;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.jspecify.annotations.Nullable;
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,8 +47,6 @@ import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import lombok.Value;
 
 @RestController()
 @RequestMapping("/graphql/object")
@@ -85,13 +84,13 @@ public class ResourceController {
                 .map(Blob.class::cast)
                 .map(blob -> {
                     var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.asMediaType(MimeType.valueOf(blob.getMimeType().toString())));
+                            .contentType(MediaType.asMediaType(MimeType.valueOf(blob.mimeType().toString())));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder
-                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.getName()).build().toString())
-                                .contentLength(blob.getBytes().length);
+                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.name()).build().toString())
+                                .contentLength(blob.bytes().length);
                     }
-                    return bodyBuilder.body(blob.getBytes());
+                    return bodyBuilder.body(blob.bytes());
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -114,12 +113,12 @@ public class ResourceController {
                 .map(Clob.class::cast)
                 .map(clob -> {
                     var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.asMediaType(MimeType.valueOf(clob.getMimeType().toString())));
+                            .contentType(MediaType.asMediaType(MimeType.valueOf(clob.mimeType().toString())));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
-                        bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.getName()).build().toString())
-                                .contentLength(clob.getChars().length());
+                        bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.name()).build().toString())
+                                .contentLength(clob.chars().length());
                     }
-                    return bodyBuilder.body(clob.getChars());
+                    return bodyBuilder.body(clob.chars());
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -192,39 +191,38 @@ public class ResourceController {
     }
 
     @Nullable
-    private static Grid gridOf(ManagedObject managedObject) {
+    private static Grid gridOf(final ManagedObject managedObject) {
         var facet = managedObject.getSpecification().getFacet(GridFacet.class);
         return facet != null ? facet.getGrid(managedObject) : null;
     }
 
-    private Optional<Object> valueOfProperty(String logicalTypeName, String id, String propertyId) {
+    private Optional<Object> valueOfProperty(final String logicalTypeName, final String id, final String propertyId) {
         return lookup(logicalTypeName, id)
-                .map(managedObject -> ManagedObjectAndPropertyIfAny.of(managedObject, managedObject.getSpecification().getProperty(propertyId)))
+                .map(managedObject -> new ManagedObjectAndPropertyIfAny(managedObject, managedObject.getSpecification().getProperty(propertyId)))
                 .filter(ManagedObjectAndPropertyIfAny::isPropertyPresent)
                 .map(ManagedObjectAndProperty::of)
                 .map(ManagedObjectAndProperty::value)
                 .map(ManagedObject::getPojo);
     }
 
-    private Optional<ManagedObject> lookup(String logicalTypeName, String id) {
+    private Optional<ManagedObject> lookup(final String logicalTypeName, final String id) {
         return bookmarkService.lookup(Bookmark.forLogicalTypeNameAndIdentifier(logicalTypeName, id))
                 .map(objectManager::adapt);
     }
 
-    @Value(staticConstructor = "of")
-    private static class ManagedObjectAndPropertyIfAny {
-        ManagedObject owningObject;
-        Optional<OneToOneAssociation> propertyIfAny;
+    private record ManagedObjectAndPropertyIfAny(
+            ManagedObject owningObject,
+            Optional<OneToOneAssociation> propertyIfAny) {
         boolean isPropertyPresent() {
             return propertyIfAny.isPresent();
         }
     }
 
     private static class ManagedObjectAndProperty {
-        private static ManagedObjectAndProperty of(ManagedObjectAndPropertyIfAny tuple) {
+        private static ManagedObjectAndProperty of(final ManagedObjectAndPropertyIfAny tuple) {
             return new ManagedObjectAndProperty(tuple);
         }
-        private ManagedObjectAndProperty(ManagedObjectAndPropertyIfAny tuple) {
+        private ManagedObjectAndProperty(final ManagedObjectAndPropertyIfAny tuple) {
             this.owningObject = tuple.owningObject;
             this.property = tuple.propertyIfAny.orElse(null);
         }

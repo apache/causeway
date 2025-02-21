@@ -42,7 +42,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Builder;
-import lombok.experimental.Accessors;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
@@ -179,13 +178,12 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
      * Holder of titles for various UI contexts (Java record candidate).
      */
     @Builder
-    @lombok.Value @Accessors(fluent=true)
-    private static class TitleRecord implements Serializable {
-        private static final long serialVersionUID = 1L;
-        final String fullTitle;
-        final String abbreviatedTitle;
-        final String tooltipTitle;
-        final String tooltipBody;
+    private record TitleRecord(
+            String fullTitle,
+            String abbreviatedTitle,
+            String tooltipTitle,
+            String tooltipBody) implements Serializable {
+
         /**
          * Whether tooltip-title and tooltip-body are the same ignoring case.
          * <p>
@@ -220,9 +218,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     private TitleRecord cachedTitle;
 
     private TitleRecord determineTitle(final ManagedObject linkedDomainObject) {
-        if(cachedTitle!=null) {
-            return cachedTitle;
-        }
+        if(cachedTitle!=null) return cachedTitle;
+
         var fullTitle = MmTitleUtils.getTitleHonoringTitlePartSkipping(linkedDomainObject, this::isContextAdapter);
         return this.cachedTitle = TitleRecord.builder()
                 .fullTitle(fullTitle)
@@ -246,7 +243,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
          * if the context requires it.
          * Eg. don't suppress titles for tables that have no property columns. */
         final int maxTitleLengthOverride = ColumnAbbreviationOptions.lookupIn(this)
-            .map(opts->opts.getMaxElementTitleLength())
+            .map(ColumnAbbreviationOptions::maxElementTitleLength)
             .orElse(-1);
         if(maxTitleLengthOverride>-1) {
             return maxTitleLengthOverride;

@@ -20,8 +20,9 @@ package org.apache.causeway.viewer.wicket.model.links;
 
 import java.io.Serializable;
 
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
+
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -55,16 +56,11 @@ public interface Menuable extends Serializable {
 
     // -- IMPLEMENTATIONS
 
-    @lombok.Value
-    public static class SectionSeparator implements Menuable {
-        private static final long serialVersionUID = 1L;
+    public record SectionSeparator() implements Menuable {
         @Override public Kind menuableKind() { return Menuable.Kind.SECTION_SEPARATOR; }
     }
 
-    @lombok.Value
-    public static class SectionLabel implements Menuable {
-        private static final long serialVersionUID = 1L;
-        final String sectionLabel;
+    public record SectionLabel(String sectionLabel) implements Menuable {
         @Override public Kind menuableKind() { return Menuable.Kind.SECTION_LABEL; }
     }
 

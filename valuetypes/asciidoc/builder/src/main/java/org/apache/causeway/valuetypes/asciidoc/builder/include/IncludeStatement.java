@@ -25,21 +25,20 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Builder;
-import lombok.Value;
 
-@Value @Builder
-public final class IncludeStatement {
-    int zeroBasedLineIndex;
-    String matchingLine;
-    Can<String> namespace;
-    String canonicalName;
+@Builder
+public record IncludeStatement(
+        int zeroBasedLineIndex,
+        String matchingLine,
+        Can<String> namespace,
+        String canonicalName,
 
-    String version;
-    String component;
-    String module;
-    String type; // usually 'page'
-    String ext;
-    String options;
+        String version,
+        String component,
+        String module,
+        String type, // usually 'page'
+        String ext,
+        String options) {
 
     public boolean isLocal() {
         return _Strings.isNullOrEmpty(component);

@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.extensions.secman.applib.user.events;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.extensions.secman.applib.user.dom.AccountType;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
-
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
 /**
  * SecMan fires this event when a new user entity just got persisted.
@@ -43,10 +42,12 @@ import lombok.Value;
  *
  * @since 2.0 {@index}
  */
-@Value(staticConstructor="of")
-public class UserCreatedEvent {
+public record UserCreatedEvent(@NonNull ApplicationUser user) {
 
-    @NonNull private ApplicationUser user;
+    /**
+     * @deprecated use {@link #user()} instead
+     */
+    @Deprecated public ApplicationUser getUser() { return user(); }
 
     // -- SHORTCUTS
 

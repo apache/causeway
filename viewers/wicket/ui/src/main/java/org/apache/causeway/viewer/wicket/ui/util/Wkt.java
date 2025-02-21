@@ -810,7 +810,7 @@ public class Wkt {
     }
 
     // -- IMAGE
-    
+
     public Image imageNonCaching(final String id, final BufferedImage buffImg) {
         var imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
@@ -848,7 +848,7 @@ public class Wkt {
      *  is dynamically based on the provided {@link UiString}.
      */
     public Label labelWithDynamicEscaping(final String id, final SerializableSupplier<UiString> labelModel) {
-        var label = new Label(id, ()->labelModel.get().getString()) {
+        var label = new Label(id, labelModel.get()::string) {
             private static final long serialVersionUID = 1L;
             // we are using this method as a hook to update the ESCAPE flag before rendering
             @Override public <C> IConverter<C> getConverter(final Class<C> type) {
@@ -901,12 +901,12 @@ public class Wkt {
 
     // -- LINK
 
-    public ResourceLink<Void> link(final String id, BufferedImage buffImg) {
+    public ResourceLink<Void> link(final String id, final BufferedImage buffImg) {
         var imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
         return new ResourceLink<Void>(id, imageResource);
     }
-    
+
     public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
         return new AjaxLinkNoPropagate(id, onClick);
     }

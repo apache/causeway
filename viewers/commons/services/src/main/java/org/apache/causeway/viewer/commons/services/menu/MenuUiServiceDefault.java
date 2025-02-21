@@ -76,7 +76,7 @@ implements MenuUiService {
 
             @Override
             public void addTopLevel(final MenuItemDto menuDto) {
-                topLevelEntries.add(currentMenu = new MenuDropdownBuilder(menuDto.getName(), new ArrayList<>()));
+                topLevelEntries.add(currentMenu = new MenuDropdownBuilder(menuDto.name(), new ArrayList<>()));
             }
 
             @Override
@@ -91,7 +91,7 @@ implements MenuUiService {
 
             @Override
             public void addMenuAction(final MenuItemDto menuDto) {
-                var action = menuDto.getManagedAction();
+                var action = menuDto.managedAction();
                 currentMenu.addAction(action);
             }
 

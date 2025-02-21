@@ -103,8 +103,8 @@ implements IResourceContext {
         this.httpHeaders = httpHeaders;
         //not used ... this.providers = providers;
         this.request = request;
-        this.where = resourceDescriptor.getWhere();
-        this.intent = resourceDescriptor.getIntent();
+        this.where = resourceDescriptor.where();
+        this.intent = resourceDescriptor.intent();
         this.urlUnencodedQueryString = Optional.ofNullable(urlUnencodedQueryString)
                 .orElseGet(RequestParams::ofEmptyQueryString);
         this.httpServletRequest = httpServletRequest;
@@ -117,7 +117,7 @@ implements IResourceContext {
 
         this.readQueryStringAsMap = requestArgsAsMap(requestParams);
 
-        init(resourceDescriptor.getRepresentationType());
+        init(resourceDescriptor.representationType());
     }
 
     void init(final RepresentationType representationType) {

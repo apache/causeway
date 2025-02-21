@@ -19,11 +19,12 @@
 package org.apache.causeway.viewer.restfulobjects.client.auth.basic;
 
 import lombok.Builder;
-import lombok.Value;
 
 @Builder
-@Value
-public class BasicCreds {
-    private final String username;
-    private final String password;
+public record BasicCreds(
+        String username,
+        String password) {
+
+    @Deprecated public String getUsername() { return username(); }
+    @Deprecated public String getPassword() { return password(); }
 }

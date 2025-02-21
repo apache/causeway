@@ -28,7 +28,6 @@ import org.apache.causeway.testdomain.model.interaction.InteractionDemo_negotiat
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.experimental.Accessors;
 
 @Action
@@ -38,10 +37,17 @@ public class InteractionDemo_negotiate {
     @SuppressWarnings("unused")
     private final InteractionDemo holder;
 
-    @Value @Accessors(fluent = true)
-    public static class Params {
+    public record Params(
+            NumberRange rangeA,
+            int a,
 
-        @Getter @RequiredArgsConstructor
+            NumberRange rangeB,
+            int b,
+
+            NumberRange rangeC,
+            int c) {
+
+        @Getter @RequiredArgsConstructor @Accessors(fluent=true)
         public static enum NumberRange {
             POSITITVE(new int[] {1, 2, 3, 4}),
             NEGATIVE(new int[] {-1, -2, -3, -4}),
@@ -50,14 +56,6 @@ public class InteractionDemo_negotiate {
             private final int[] numbers;
         }
 
-        NumberRange rangeA;
-        int a;
-
-        NumberRange rangeB;
-        int b;
-
-        NumberRange rangeC;
-        int c;
     }
 
     // for the purpose of testing we constrain parameters a, b, c by their ranges rangeA, rangeB, rangeC

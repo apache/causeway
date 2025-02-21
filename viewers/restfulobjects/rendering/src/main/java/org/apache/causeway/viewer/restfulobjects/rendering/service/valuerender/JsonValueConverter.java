@@ -23,6 +23,7 @@ import java.util.OptionalInt;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.NullNode;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -37,7 +38,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender._JsonValueConverters.DefaultFormat;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public interface JsonValueConverter {
 
@@ -91,11 +91,11 @@ public interface JsonValueConverter {
             };
         }
 
-        @Getter
-        @lombok.Value
-        static class InferredFromFacets implements Context {
-            final @NonNull ObjectFeature objectFeature;
-            final boolean suppressExtensions;
+        record InferredFromFacets(
+                @NonNull ObjectFeature objectFeature,
+                boolean isSuppressExtensions) implements Context {
+
+            @Override public ObjectFeature getObjectFeature() { return objectFeature(); }
 
             @Override
             public OptionalInt maxTotalDigits(final @Nullable ManagedObject value) {
@@ -113,7 +113,6 @@ public interface JsonValueConverter {
                     ? Can.of(objectFeature)
                     : Can.of(objectFeature, value.getSpecification());
             }
-
         }
 
     }

@@ -29,9 +29,8 @@ public class AsciiDocComponentWkt extends MarkupComponent {
 
     public AsciiDocComponentWkt(final String id, final IModel<?> model){
         super(id, model,
-                org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent.Options.builder()
-                .syntaxHighlighter(SyntaxHighlighter.PRISM_COY)
-                .build());
+                new org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent
+                    .Options((SyntaxHighlighter.PRISM_COY)));
     }
 
 }

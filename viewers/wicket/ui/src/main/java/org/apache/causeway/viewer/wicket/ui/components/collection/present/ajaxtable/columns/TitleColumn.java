@@ -76,7 +76,7 @@ extends GenericColumnAbstract {
     }
 
     boolean isTitleSuppressed() {
-        return opts.getMaxElementTitleLength()<=3;
+        return opts.maxElementTitleLength()<=3;
     }
 
     // -- HELPER

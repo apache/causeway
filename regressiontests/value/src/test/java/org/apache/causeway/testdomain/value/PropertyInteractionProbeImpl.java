@@ -24,6 +24,7 @@ import java.time.OffsetTime;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Assertions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,7 +53,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 import org.apache.causeway.testdomain.value.ValueSemanticsTester.PropertyInteractionProbe;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -132,14 +132,14 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         example.getParseExpectations()
         .forEach(parseExpectation->{
-            var value = parseExpectation.getValue();
+            var value = parseExpectation.value();
 
-            if(parseExpectation.getExpectedThrows()!=null) {
+            if(parseExpectation.expectedThrows()!=null) {
 
                 // test parsing that should throw
-                parseExpectation.getInputSamples()
+                parseExpectation.inputSamples()
                 .forEach(in->{
-                    Assertions.assertThrows(parseExpectation.getExpectedThrows(), ()->{
+                    Assertions.assertThrows(parseExpectation.expectedThrows(), ()->{
                         parser.parseTextRepresentation(context, in);
                     });
                 });
@@ -147,7 +147,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
             } else {
 
                 // test parsing that should not throw
-                parseExpectation.getInputSamples()
+                parseExpectation.inputSamples()
                 .forEach(in->{
                     var parsedValue = parser.parseTextRepresentation(context, in);
 
@@ -161,7 +161,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
                 // test formatting
                 assertEquals(
-                        parseExpectation.getExpectedOutput(),
+                        parseExpectation.expectedOutput(),
                         parser.parseableTextRepresentation(context, value));
 
             }
@@ -219,9 +219,9 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         example.getRenderExpectations()
         .forEach(renderExpectation->{
-            var value = renderExpectation.getValue();
-            assertEquals(renderExpectation.getTitle(), renderer.titlePresentation(context, value));
-            assertEquals(renderExpectation.getHtml(), renderer.htmlPresentation(context, value));
+            var value = renderExpectation.value();
+            assertEquals(renderExpectation.title(), renderer.titlePresentation(context, value));
+            assertEquals(renderExpectation.html(), renderer.htmlPresentation(context, value));
         });
     }
 

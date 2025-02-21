@@ -22,63 +22,32 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import lombok.Value;
-import lombok.experimental.Accessors;
-
 final class ParameterSamples {
 
-    // -- SCALAR PARAMS
+    // -- SINGULAR PARAMS
 
-    @Value @Accessors(fluent = true)
-    public static class BiInt {
-        int a;
-        int b;
+    public record BiInt(int a, int b) {
+    }
+    public record TriInt(int a, int b, int c) {
+    }
+    public record TriEnum(DemoEnum a, DemoEnum b, DemoEnum c) {
     }
 
-    @Value @Accessors(fluent = true)
-    public static class TriInt {
-        int a;
-        int b;
-        int c;
+    // -- PLURAL PARAMS
+
+    public record BiListOfString(List<String> a, List<String> b) {
     }
 
-    @Value @Accessors(fluent = true)
-    public static class TriEnum {
-        DemoEnum a;
-        DemoEnum b;
-        DemoEnum c;
+    public record BiSetOfString(Set<String> a, Set<String> b) {
     }
 
-    // -- NON SCALAR PARAMS
-
-    @Value @Accessors(fluent = true)
-    public static class BiListOfString {
-        List<String> a;
-        List<String> b;
+    public record BiArrayOfInt(int[] a, int[] b) {
     }
 
-    @Value @Accessors(fluent = true)
-    public static class BiSetOfString {
-        Set<String> a;
-        Set<String> b;
+    public record BiArrayOfEnum(DemoEnum[] a, DemoEnum[] b) {
     }
 
-    @Value @Accessors(fluent = true)
-    public static class BiArrayOfInt {
-        int[] a;
-        int[] b;
-    }
-
-    @Value @Accessors(fluent = true)
-    public static class BiArrayOfEnum {
-        DemoEnum[] a;
-        DemoEnum[] b;
-    }
-
-    @Value @Accessors(fluent = true)
-    public static class BiCollectionOfEnum {
-        Collection<DemoEnum> a;
-        Collection<DemoEnum> b;
+    public record BiCollectionOfEnum(Collection<DemoEnum> a, Collection<DemoEnum> b) {
     }
 
 }

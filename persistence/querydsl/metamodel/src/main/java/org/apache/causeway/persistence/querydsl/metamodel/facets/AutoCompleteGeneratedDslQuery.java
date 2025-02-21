@@ -64,11 +64,9 @@ public class AutoCompleteGeneratedDslQuery {
      */
     final @NonNull protected Class<?> entity;
 
-    @lombok.Value
-    static class SearchableProperty {
-        @Getter
-        String propertyId;
-        Property.QueryDslAutoCompletePolicy queryDslAutoCompletePolicy;
+    record SearchableProperty(
+            String propertyId,
+            Property.QueryDslAutoCompletePolicy queryDslAutoCompletePolicy) {
 
         @Override
         public String toString() {
@@ -153,7 +151,7 @@ public class AutoCompleteGeneratedDslQuery {
             searchableProperties.forEach(se -> {
 
                 // Only string type fields are supported
-                var propertyPath = entityPath.getString(se.getPropertyId());
+                var propertyPath = entityPath.getString(se.propertyId());
                 var searchReplaced = Wildcards.toAnsiSqlWildcard(searchPhrase);
 
                 var expr = DslExpressions.search(propertyPath, searchReplaced, se.getCaseSensitivity());
