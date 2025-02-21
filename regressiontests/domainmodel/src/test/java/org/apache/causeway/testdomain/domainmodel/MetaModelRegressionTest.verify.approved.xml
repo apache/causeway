@@ -34553,7 +34553,7 @@
 <mml:attr name="choicesType" value="COLLECTION"/>
 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
 <mml:attr name="intent.autoComplete0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
-<mml:attr name="methods" value="public java.util.Collection org.apache.causeway.testdomain.model.good.ProperParameterSupport.autoComplete0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters,java.lang.String)"/>
+<mml:attr name="methods" value="public java.util.Collection org.apache.causeway.testdomain.model.good.ProperParameterSupport.autoComplete0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params,java.lang.String)"/>
 <mml:attr name="minLength" value="1"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
@@ -34561,27 +34561,27 @@
 <mml:attr name="choicesType" value="COLLECTION"/>
 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
 <mml:attr name="intent.choices0Act" value="CHOICES_OR_AUTOCOMPLETE"/>
-<mml:attr name="methods" value="public java.util.Collection org.apache.causeway.testdomain.model.good.ProperParameterSupport.choices0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public java.util.Collection org.apache.causeway.testdomain.model.good.ProperParameterSupport.choices0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
 <mml:attr name="intent.default0Act" value="DEFAULTS"/>
-<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.default0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.default0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.disable.ActionParameterDisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.disable.method.ActionParameterDisabledFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterDisabledFacetViaMethod"/>
 <mml:attr name="intent.disable0Act" value="CHECK_IF_VALID"/>
 <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
-<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.disable0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.disable0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.hide.method.ActionParameterHiddenFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterHiddenFacetViaMethod"/>
 <mml:attr name="intent.hide0Act" value="CHECK_IF_VALID"/>
 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide0Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
@@ -34622,7 +34622,7 @@
 <mml:attr name="choicesType" value="ARRAY"/>
 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
 <mml:attr name="intent.autoComplete1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
-<mml:attr name="methods" value="public int[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.autoComplete1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters,java.lang.String)"/>
+<mml:attr name="methods" value="public int[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.autoComplete1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params,java.lang.String)"/>
 <mml:attr name="minLength" value="1"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
@@ -34630,27 +34630,27 @@
 <mml:attr name="choicesType" value="ARRAY"/>
 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
 <mml:attr name="intent.choices1Act" value="CHOICES_OR_AUTOCOMPLETE"/>
-<mml:attr name="methods" value="public int[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.choices1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public int[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.choices1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
 <mml:attr name="intent.default1Act" value="DEFAULTS"/>
-<mml:attr name="methods" value="public int org.apache.causeway.testdomain.model.good.ProperParameterSupport.default1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public int org.apache.causeway.testdomain.model.good.ProperParameterSupport.default1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.disable.ActionParameterDisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.disable.method.ActionParameterDisabledFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterDisabledFacetViaMethod"/>
 <mml:attr name="intent.disable1Act" value="CHECK_IF_VALID"/>
 <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
-<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.disable1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.disable1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.hide.method.ActionParameterHiddenFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterHiddenFacetViaMethod"/>
 <mml:attr name="intent.hide1Act" value="CHECK_IF_VALID"/>
 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide1Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">
@@ -34691,7 +34691,7 @@
 <mml:attr name="choicesType" value="ARRAY"/>
 <mml:attr name="facet" value="ActionParameterAutoCompleteFacetViaMethod"/>
 <mml:attr name="intent.autoComplete2Act" value="CHOICES_OR_AUTOCOMPLETE"/>
-<mml:attr name="methods" value="public boolean[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.autoComplete2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters,java.lang.String)"/>
+<mml:attr name="methods" value="public boolean[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.autoComplete2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params,java.lang.String)"/>
 <mml:attr name="minLength" value="1"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
@@ -34699,27 +34699,27 @@
 <mml:attr name="choicesType" value="ARRAY"/>
 <mml:attr name="facet" value="ActionParameterChoicesFacetViaMethod"/>
 <mml:attr name="intent.choices2Act" value="CHOICES_OR_AUTOCOMPLETE"/>
-<mml:attr name="methods" value="public boolean[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.choices2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public boolean[] org.apache.causeway.testdomain.model.good.ProperParameterSupport.choices2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterDefaultsFacetViaMethod"/>
 <mml:attr name="intent.default2Act" value="DEFAULTS"/>
-<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.default2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.default2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.disable.ActionParameterDisabledFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.disable.method.ActionParameterDisabledFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterDisabledFacetViaMethod"/>
 <mml:attr name="intent.disable2Act" value="CHECK_IF_VALID"/>
 <mml:attr name="interactionAdvisors" value="DisablingOrEnabling"/>
-<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.disable2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperParameterSupport.disable2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.hide.method.ActionParameterHiddenFacetViaMethod">
 <mml:attr name="facet" value="ActionParameterHiddenFacetViaMethod"/>
 <mml:attr name="intent.hide2Act" value="CHECK_IF_VALID"/>
 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
-<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Parameters)"/>
+<mml:attr name="methods" value="public boolean org.apache.causeway.testdomain.model.good.ProperParameterSupport.hide2Act(org.apache.causeway.testdomain.model.good.ProperParameterSupport$Params)"/>
 <mml:attr name="precedence" value="DEFAULT"/>
                             </mml:facet>
                             <mml:facet id="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.param.parameter.precpol.PrecedingParametersPolicyFacetFromConfiguration">

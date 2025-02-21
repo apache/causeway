@@ -305,6 +305,9 @@ public final class _ClassCache implements AutoCloseable {
 
     private record ClassModelBody(
             Can<Field> declaredFields,
+            /**
+             * For Java Record types, those include all declared constructors, that are not private.
+             */
             Map<ConstructorKey, ResolvedConstructor> publicConstructorsByKey,
             Map<ConstructorKey, ResolvedConstructor> constructorsWithInjectSemanticsByKey,
 
@@ -329,16 +332,32 @@ public final class _ClassCache implements AutoCloseable {
 
             var body = new ClassModelBody(Can.ofArray(type.getDeclaredFields()));
 
-            // process public constructors
-            var publicConstr = type.getConstructors();
-            for(var constr : publicConstr) {
-                var key = new ConstructorKey(type, constr);
-                var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
-                // collect public constructors
-                body.publicConstructorsByKey.put(key, resolvedConstr);
-                // collect public constructors with inject semantics
-                if(isInjectSemantics(constr)) {
-                    body.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
+            if(type.isRecord()) {
+                // process declared constructors, that are not private
+                var declaredConstr = type.getDeclaredConstructors();
+                for(var constr : declaredConstr) {
+                    if(Modifier.isPrivate(constr.getModifiers())) continue;
+                    var key = new ConstructorKey(type, constr);
+                    var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+                    // collect non-private constructors
+                    body.publicConstructorsByKey.put(key, resolvedConstr);
+                    // collect non-private constructors with inject semantics
+                    if(isInjectSemantics(constr)) {
+                        body.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
+                    }
+                }
+            } else {
+                // process public constructors
+                var publicConstr = type.getConstructors();
+                for(var constr : publicConstr) {
+                    var key = new ConstructorKey(type, constr);
+                    var resolvedConstr = _GenericResolver.resolveConstructor(constr, type);
+                    // collect public constructors
+                    body.publicConstructorsByKey.put(key, resolvedConstr);
+                    // collect public constructors with inject semantics
+                    if(isInjectSemantics(constr)) {
+                        body.constructorsWithInjectSemanticsByKey.put(key, resolvedConstr);
+                    }
                 }
             }
 
