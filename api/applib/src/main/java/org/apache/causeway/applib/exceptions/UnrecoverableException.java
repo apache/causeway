@@ -28,24 +28,24 @@ import lombok.Getter;
  * Indicates that an unexpected, non-recoverable (fatal) exception has occurred within
  * the application logic.
  * <p>
- * Throwing this exception will (dependent on the viewer) result in some sort of an error 
+ * Throwing this exception will (dependent on the viewer) result in some sort of an error
  * page being displayed to the user.
  *
  * @see RecoverableException
  * @since 1.x {@index}
  */
-public class UnrecoverableException 
-extends RuntimeException 
+public class UnrecoverableException
+extends RuntimeException
 implements TranslatableException {
 
     private static final long serialVersionUID = 1L;
 
     @Getter(onMethod_ = {@Override})
     private final TranslatableString translatableMessage;
-    
-    @Getter(onMethod_ = {@Override}) 
+
+    @Getter(onMethod_ = {@Override})
     private final TranslationContext translationContext;
-    
+
     public UnrecoverableException(final String msg) {
         this(msg, null, null, null, null);
     }
@@ -83,7 +83,7 @@ implements TranslatableException {
         this.translatableMessage = translatableMessage;
         this.translationContext = translationContextClass != null
                 ? TranslationContext.named(
-                        translationContextClass.getName() 
+                        translationContextClass.getName()
                         + (_Strings.isNotEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
                                 : ""))
@@ -93,7 +93,7 @@ implements TranslatableException {
     @Override
     public String getMessage() {
         return getTranslatableMessage() != null
-                ? getTranslatableMessage().getPattern()
+                ? getTranslatableMessage().pattern()
                 : super.getMessage();
     }
 

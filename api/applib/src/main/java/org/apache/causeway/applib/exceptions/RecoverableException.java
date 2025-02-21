@@ -41,16 +41,16 @@ import lombok.Getter;
  * @see UnrecoverableException
  * @since 1.x {@index}
  */
-public class RecoverableException 
-extends RuntimeException 
+public class RecoverableException
+extends RuntimeException
 implements TranslatableException {
 
     private static final long serialVersionUID = 1L;
 
     @Getter(onMethod_ = {@Override})
     private final TranslatableString translatableMessage;
-    
-    @Getter(onMethod_ = {@Override}) 
+
+    @Getter(onMethod_ = {@Override})
     private final TranslationContext translationContext;
 
     public RecoverableException(final String msg) {
@@ -90,7 +90,7 @@ implements TranslatableException {
         this.translatableMessage = translatableMessage;
         this.translationContext = translationContextClass != null
                 ? TranslationContext.named(
-                        translationContextClass.getName() 
+                        translationContextClass.getName()
                         + (_Strings.isNotEmpty(translationContextMethod)
                                 ? "#" + translationContextMethod
                                 : ""))
@@ -100,7 +100,7 @@ implements TranslatableException {
     @Override
     public String getMessage() {
         return getTranslatableMessage() != null
-                ? getTranslatableMessage().getPattern()
+                ? getTranslatableMessage().pattern()
                 : super.getMessage();
     }
 

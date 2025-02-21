@@ -36,7 +36,7 @@ class TranslatableStringTest {
         public void singularForm() throws Exception {
             final TranslatableString ts = TranslatableString.tr("No, you can't do that!");
 
-            assertThat(ts.getPattern(), is("No, you can't do that!"));
+            assertThat(ts.pattern(), is("No, you can't do that!"));
         }
 
         @Test
@@ -45,7 +45,7 @@ class TranslatableStringTest {
                     "You can't do that because there is a dependent object",
                     "You can't do that because there are dependent objects", 1);
 
-            assertThat(ts.getPattern(), is("You can't do that because there is a dependent object"));
+            assertThat(ts.pattern(), is("You can't do that because there is a dependent object"));
         }
 
         @Test
@@ -54,7 +54,7 @@ class TranslatableStringTest {
                     "You can't do that because there is a dependent object",
                     "You can't do that because there are dependent objects", 2);
 
-            assertThat(ts.getPattern(), is("You can't do that because there are dependent objects"));
+            assertThat(ts.pattern(), is("You can't do that because there are dependent objects"));
         }
 
     }

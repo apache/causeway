@@ -28,15 +28,12 @@ import static org.apache.causeway.commons.internal.base._NullSafe.isEmpty;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
- *
  * <p>
- *     Implementation notes:
- *     <ul>
- *         <li>a class has been used here so that additional fields might be added in the future.</li>
- *         <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
- *     </ul>
- * </p>
- *
+ * Implementation notes:
+ * <ul>
+ * <li>a class has been used here so that additional fields might be added in the future.</li>
+ * <li>the class is {@link Serializable}</li> so that it can be stored by the Wicket viewer as a Wicket model.
+ * </ul>
  * @since 2.0 {@index}
  */
 public class SimpleTicket implements Ticket {

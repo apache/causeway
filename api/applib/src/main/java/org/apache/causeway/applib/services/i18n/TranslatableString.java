@@ -31,7 +31,23 @@ import org.apache.causeway.commons.internal.collections._Lists;
  * @since 1.x {@index}
  */
 @Domain.Exclude
-public final class TranslatableString {
+public record TranslatableString(
+        /**
+         * The text as provided in (either of the {@link #tr(String, Object...) factory} {@link #trn(String, String, int, Object...) method}s,
+         * with placeholders rather than substituted arguments; if {@link #isPluralForm()} is <code>true</code> then used only
+         * for the singular form.
+         */
+        String singularText,
+        /**
+         * The plural text as provided in the {@link #trn(String, String, int, Object...) factory method}, with placeholders
+         * rather than substituted arguments; but will be <code>null</code> if {@link #isPluralForm()} is <code>false</code>.
+         */
+        String pluralText,
+        int number,
+        /**
+         * The arguments; excluded from {@link #equals(Object)} comparison.
+         */
+        Map<String, Object> argumentsByParameterName) {
 
     /**
      * A translatable string with a single pattern for both singular and plural forms.
@@ -42,10 +58,8 @@ public final class TranslatableString {
     public static TranslatableString tr(
             final String pattern,
             final Object... paramArgs) {
-
         if(pattern == null) return null;
-
-        return new TranslatableString(Type.TR, pattern, null, 1, asMap(paramArgs));
+        return new TranslatableString(pattern, null, 1, asMap(paramArgs));
     }
 
     /**
@@ -61,10 +75,94 @@ public final class TranslatableString {
             final String pluralPattern,
             final int number,
             final Object... paramArgs) {
+        return new TranslatableString(singularPattern, pluralPattern, number, asMap(paramArgs));
+    }
 
-        return new TranslatableString(Type.TRN, singularPattern, pluralPattern, number, asMap(paramArgs));
+    /**
+     * Translates this string using the provided {@link org.apache.causeway.applib.services.i18n.TranslationService}, selecting
+     * either the single or plural form as per {@link #pattern()}.
+     */
+    public String translate(final TranslationService translationService, final TranslationContext context) {
 
-        // ...
+        final String translatedText = !isPluralForm()
+                ? translationService.translate(context, singularText())
+                : translationService.translate(context, singularText(), pluralText(), number);
+        return translated(translatedText);
+    }
+
+    /**
+     * The text to be translated; depends on whether {@link #isPluralForm()} and whether to be translated.
+     * <p>
+     * Any placeholders will <i>not</i> have been replaced.
+     * <p>
+     * NB: this method is exposed only so that implementations of
+     * {@link org.apache.causeway.applib.exceptions.TranslatableException} can return a non-null
+     * {@link Exception#getMessage() message} when only a translatable message has been provided.
+     */
+    public String pattern() {
+        return !isPluralForm()
+                || number == 1
+            ? singularText()
+            : pluralText();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final TranslatableString that = (TranslatableString) o;
+
+        if (pluralText != null ? !pluralText.equals(that.pluralText) : that.pluralText != null)
+            return false;
+        if (singularText != null ? !singularText.equals(that.singularText) : that.singularText != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = isPluralForm() ? 13 : 7;
+        result = 31 * result + (singularText != null ? singularText.hashCode() : 0);
+        result = 31 * result + (pluralText != null ? pluralText.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return isPluralForm()
+                ? "tr: " + singularText()
+                : "trn: " + pluralText();
+    }
+
+    // -- HELPER
+
+    // not private for JUnit tests
+    String translated(final String translatedText) {
+        return format(translatedText, argumentsByParameterName);
+    }
+
+    private static final Pattern PATTERN = Pattern.compile("\\{(\\w+)}");
+
+    private static String format(final String format, final Map<String, Object> values) {
+        StringBuilder formatter = new StringBuilder(format);
+        List<Object> valueList = _Lists.newArrayList();
+        Matcher matcher = PATTERN.matcher(format);
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+
+            String formatKey = String.format("{%s}", key);
+            int index = formatter.indexOf(formatKey);
+
+            if (index != -1) {
+                formatter.replace(index, index + formatKey.length(), "%s");
+                valueList.add(values.get(key));
+            }
+        }
+
+        return String.format(formatter.toString(), valueList.toArray());
     }
 
     /**
@@ -94,172 +192,8 @@ public final class TranslatableString {
         return map;
     }
 
-    private TranslatableString(
-            final Type type,
-            final String singularText,
-            final String pluralText,
-            final int number,
-            final Map<String, Object> argumentsByParameterName) {
-
-        this.type = type;
-        this.singularText = singularText;
-        this.pluralText = pluralText;
-        this.number = number;
-        this.argumentsByParameterName = argumentsByParameterName;
-    }
-
-    // -- singularText, pluralText, pluralForm
-
-    private final String singularText;
-    private final String pluralText;
-
-    /**
-     * The text as provided in (either of the {@link #tr(String, Object...) factory} {@link #trn(String, String, int, Object...) method}s,
-     * with placeholders rather than substituted arguments; if {@link #isPluralForm()} is <code>true</code> then used only
-     * for the singular form.
-     */
-    String getSingularText() {
-        return singularText;
-    }
-
-    /**
-     * The plural text as provided in the {@link #trn(String, String, int, Object...) factory method}, with placeholders
-     * rather than substituted arguments; but will be <code>null</code> if {@link #isPluralForm()} is <code>false</code>.
-     */
-    String getPluralText() {
-        return pluralText;
-    }
-
-    private enum Type {
-        /**
-         * No plurals
-         */
-        TR {
-            @Override
-            public String toString(final TranslatableString trString) {
-                return "tr: " + trString.singularText;
-            }
-        },
-        /**
-         * With plurals
-         */
-        TRN {
-            @Override
-            public String toString(final TranslatableString trString) {
-                return "trn: " + trString.pluralText;
-            }
-        };
-
-        public abstract String toString(final TranslatableString trString);
-    }
-
-    private final Type type;
-    private final int number;
-
-    boolean isPluralForm() {
-        return type == Type.TRN;
-    }
-
-    // -- argumentsByParameterName
-    private final Map<String, Object> argumentsByParameterName;
-
-    /**
-     * The arguments; excluded from {@link #equals(Object)} comparison.
-     */
-    Map<String, Object> getArgumentsByParameterName() {
-        return argumentsByParameterName;
-    }
-
-    // -- translate
-
-    /**
-     * Translates this string using the provided {@link org.apache.causeway.applib.services.i18n.TranslationService}, selecting
-     * either the single or plural form as per {@link #getPattern()}.
-     * @param translationService
-     * @param context
-     */
-    public String translate(final TranslationService translationService, final TranslationContext context) {
-
-        final String translatedText = !isPluralForm()
-                ? translationService.translate(context, getSingularText())
-                : translationService.translate(context, getSingularText(), getPluralText(), number);
-        return translated(translatedText);
-    }
-
-    /**
-     * The text to be translated; depends on whether {@link #isPluralForm()} and whether to be translated.
-     *
-     * <p>
-     *     Any placeholders will <i>not</i> have been replaced.
-     * </p>
-     *
-     * <p>
-     *     NB: this method is exposed only so that implementations of
-     *     {@link org.apache.causeway.applib.exceptions.TranslatableException} can return a non-null
-     *     {@link Exception#getMessage() message} when only a translatable message has been provided.
-     * </p>
-     */
-    public String getPattern() {
-        return !isPluralForm() || number == 1 ? getSingularText() : getPluralText();
-    }
-
-    String translated(final String translatedText) {
-        return format(translatedText, argumentsByParameterName);
-    }
-
-    static String format(final String format, final Map<String, Object> values)
-    {
-        StringBuilder formatter = new StringBuilder(format);
-        List<Object> valueList = _Lists.newArrayList();
-
-        Matcher matcher = Pattern.compile("\\{(\\w+)}").matcher(format);
-
-        while (matcher.find())
-        {
-            String key = matcher.group(1);
-
-            String formatKey = String.format("{%s}", key);
-            int index = formatter.indexOf(formatKey);
-
-            if (index != -1)
-            {
-                formatter.replace(index, index + formatKey.length(), "%s");
-                valueList.add(values.get(key));
-            }
-        }
-
-        return String.format(formatter.toString(), valueList.toArray());
-    }
-
-    // -- equals, hashCode, toString
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final TranslatableString that = (TranslatableString) o;
-
-        if (pluralText != null ? !pluralText.equals(that.pluralText) : that.pluralText != null)
-            return false;
-        if (singularText != null ? !singularText.equals(that.singularText) : that.singularText != null)
-            return false;
-        if (type != that.type) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (singularText != null ? singularText.hashCode() : 0);
-        result = 31 * result + (pluralText != null ? pluralText.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return type.toString(this);
+    private boolean isPluralForm() {
+        return pluralText!=null;
     }
 
 }
