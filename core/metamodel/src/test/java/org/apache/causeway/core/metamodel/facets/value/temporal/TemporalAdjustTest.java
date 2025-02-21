@@ -36,20 +36,20 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.TemporalAdjust
 
 class TemporalAdjustTest {
 
-    final TemporalAdjust plus1Year = TemporalAdjust.of(1, 0, 0, 0, 0);
-    final TemporalAdjust minus1Year = TemporalAdjust.of(-1, 0, 0, 0, 0);
+    final TemporalAdjust plus1Year = new TemporalAdjust(1, 0, 0, 0, 0);
+    final TemporalAdjust minus1Year = new TemporalAdjust(-1, 0, 0, 0, 0);
 
-    final TemporalAdjust plus1Month = TemporalAdjust.of(0, 1, 0, 0, 0);
-    final TemporalAdjust minus1Month = TemporalAdjust.of(0, -1, 0, 0, 0);
+    final TemporalAdjust plus1Month = new TemporalAdjust(0, 1, 0, 0, 0);
+    final TemporalAdjust minus1Month = new TemporalAdjust(0, -1, 0, 0, 0);
 
-    final TemporalAdjust plus1Day = TemporalAdjust.of(0, 0, 1, 0, 0);
-    final TemporalAdjust minus1Day = TemporalAdjust.of(0, 0, -1, 0, 0);
+    final TemporalAdjust plus1Day = new TemporalAdjust(0, 0, 1, 0, 0);
+    final TemporalAdjust minus1Day = new TemporalAdjust(0, 0, -1, 0, 0);
 
-    final TemporalAdjust plus1Hour = TemporalAdjust.of(0, 0, 0, 1, 0);
-    final TemporalAdjust minus1Hour = TemporalAdjust.of(0, 0, 0, -1, 0);
+    final TemporalAdjust plus1Hour = new TemporalAdjust(0, 0, 0, 1, 0);
+    final TemporalAdjust minus1Hour = new TemporalAdjust(0, 0, 0, -1, 0);
 
-    final TemporalAdjust plus1Minute = TemporalAdjust.of(0, 0, 0, 0, 1);
-    final TemporalAdjust minus1Minute = TemporalAdjust.of(0, 0, 0, 0, -1);
+    final TemporalAdjust plus1Minute = new TemporalAdjust(0, 0, 0, 0, 1);
+    final TemporalAdjust minus1Minute = new TemporalAdjust(0, 0, 0, 0, -1);
 
     // java.time
     final LocalTime localTime = LocalTime.of(9, 54, 1);

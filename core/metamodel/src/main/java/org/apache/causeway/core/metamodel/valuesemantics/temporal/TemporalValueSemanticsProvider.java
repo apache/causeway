@@ -56,7 +56,6 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.temporalformat.Time
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
 import lombok.experimental.Accessors;
 
 /**
@@ -219,14 +218,14 @@ implements TemporalValueSemantics<T> {
         var dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
         var temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getDateFormatStyle(),
-                dateAndTimeFormatStyle.getTimeFormatStyle(),
+                dateAndTimeFormatStyle.dateFormatStyle(),
+                dateAndTimeFormatStyle.timeFormatStyle(),
                 datePattern, dateTimePattern);
 
         var temporalZoneOnlyRenderingFormat = getTemporalZoneOnlyRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic).orElse(null);
 
-        var timeZoneTranslation = dateAndTimeFormatStyle.getTimeZoneTranslation();
+        var timeZoneTranslation = dateAndTimeFormatStyle.timeZoneTranslation();
 
         return time-> {
 
@@ -334,7 +333,7 @@ implements TemporalValueSemantics<T> {
         var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getTimePrecision(),
+                dateAndTimeFormatStyle.timePrecision(),
                 EditingFormatDirection.OUTPUT,
                 temporalEditingPattern());
     }
@@ -347,7 +346,7 @@ implements TemporalValueSemantics<T> {
         var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
         return getTemporalEditingFormat(context, temporalCharacteristic, offsetCharacteristic,
-                dateAndTimeFormatStyle.getTimePrecision(),
+                dateAndTimeFormatStyle.timePrecision(),
                 EditingFormatDirection.INPUT,
                 temporalEditingPattern());
     }
@@ -359,7 +358,7 @@ implements TemporalValueSemantics<T> {
 
         return temporalEditingPattern()
                 .getEditingFormatAsPattern(temporalCharacteristic, offsetCharacteristic,
-                        dateAndTimeFormatStyle.getTimePrecision(),
+                        dateAndTimeFormatStyle.timePrecision(),
                         EditingFormatDirection.OUTPUT);
     }
 
@@ -372,12 +371,11 @@ implements TemporalValueSemantics<T> {
 
     // -- HELPER
 
-    @Value(staticConstructor = "of")
-    static class DateAndTimeFormatStyle {
-        @NonNull FormatStyle dateFormatStyle;
-        @NonNull FormatStyle timeFormatStyle;
-        @NonNull TimePrecision timePrecision;
-        @NonNull TimeZoneTranslation timeZoneTranslation;
+    record DateAndTimeFormatStyle(
+            @NonNull FormatStyle dateFormatStyle,
+            @NonNull FormatStyle timeFormatStyle,
+            @NonNull TimePrecision timePrecision,
+            @NonNull TimeZoneTranslation timeZoneTranslation) {
 
         static DateAndTimeFormatStyle forContext(
                 final @Nullable MetaModelContext mmc, // nullable .. JUnit support
@@ -411,7 +409,7 @@ implements TemporalValueSemantics<T> {
                     .map(TimeZoneTranslationFacet::getTimeZoneTranslation)
                     .orElse(TimeZoneTranslation.TO_LOCAL_TIMEZONE);
 
-            return of(dateFormatStyle, timeFormatStyle, timePrecision, timeZoneTranslation);
+            return new DateAndTimeFormatStyle(dateFormatStyle, timeFormatStyle, timePrecision, timeZoneTranslation);
         }
 
     }

@@ -47,22 +47,21 @@ import org.jspecify.annotations.NonNull;
  */
 public interface EntityFacet extends Facet {
 
-    @lombok.Value(staticConstructor = "of")
-    static class PrimaryKeyType<T> {
-        private final @NonNull Class<?> owningEntityClass;
-        private final @NonNull IdStringifier<T> idStringifier;
-        private final @NonNull Class<T> primaryKeyClass;
+    record PrimaryKeyType<T>(
+            @NonNull Class<?> owningEntityClass,
+            @NonNull IdStringifier<T> idStringifier,
+            @NonNull Class<T> primaryKeyClass) {
+
         public String enstring(final T primaryKey) {
             return idStringifier.enstring(primaryKey);
         }
         public String enstringWithCast(final Object primaryKey) {
             return _Casts.castTo(primaryKeyClass, primaryKey)
-            .map(idStringifier::enstring)
-            .orElseThrow(()->_Exceptions.illegalArgument(
-                    "failed to cast primary-key '%s' to expected type %s",
-                        ""+primaryKey,
-                        primaryKeyClass.getName()))
-            ;
+                .map(idStringifier::enstring)
+                .orElseThrow(()->_Exceptions.illegalArgument(
+                        "failed to cast primary-key '%s' to expected type %s",
+                            ""+primaryKey,
+                            primaryKeyClass.getName()));
         }
         public T destring(final String stringifiedPrimaryKey) {
             return idStringifier.destring(owningEntityClass, stringifiedPrimaryKey);
@@ -77,7 +76,7 @@ public interface EntityFacet extends Facet {
                 final @NonNull Class<?> owningEntityClass,
                 final @NonNull Function<Class<T>, IdStringifier<T>> stringifierLookup,
                 final @NonNull Class<T> primaryKeyClass){
-            return of(
+            return new PrimaryKeyType<>(
                     owningEntityClass,
                     stringifierLookup.apply(primaryKeyClass),
                     _Casts.uncheckedCast(ClassUtils.resolvePrimitiveIfNecessary(primaryKeyClass)));

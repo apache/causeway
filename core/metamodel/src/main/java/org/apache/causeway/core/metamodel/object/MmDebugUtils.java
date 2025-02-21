@@ -28,20 +28,17 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 
 import lombok.Builder;
-import lombok.Value;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public final class MmDebugUtils {
+public record MmDebugUtils() {
 
     // -- PARAM
 
-    @Value @Builder
-    public static class ParamUpdateData {
-        final String action; // feature-id
-        final int index;
-        final String name;
-        final Can<? extends ManagedParameter> allParams;
+    @Builder
+    public record ParamUpdateData(
+            String action, // feature-id
+            int index,
+            String name,
+            Can<? extends ManagedParameter> allParams) {
         public String formatted() {
             return String.format("[actionId=%s,paramIndex=%d,paramName=%s]\n%s",
                     action, index, name,
@@ -70,11 +67,12 @@ public final class MmDebugUtils {
 
     // -- PROP
 
-    @Value @Builder
-    public static class PropUpdateData {
-        final String property;  // feature-id
-        final String name;
-        final ManagedObject pendingValue;
+    @Builder
+    public record PropUpdateData(
+            String property,  // feature-id
+            String name,
+            ManagedObject pendingValue
+            ) {
         public String formatted() {
             return String.format("[propertyId=%s,propertyName=%s] -> %s)",
                     property, name, formatPendingValue(pendingValue));
@@ -91,7 +89,7 @@ public final class MmDebugUtils {
 
     // -- HELPER
 
-    private String formatPendingValue(final @Nullable ManagedObject managedObject) {
+    private static String formatPendingValue(final @Nullable ManagedObject managedObject) {
         return ManagedObjects.isSpecified(managedObject)
                 ? String.format("(%s,cls=%s) pojo=%s",
                     managedObject.getSpecialization().name(),

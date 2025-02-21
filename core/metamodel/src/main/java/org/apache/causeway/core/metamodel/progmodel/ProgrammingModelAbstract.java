@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.progmodel;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -34,9 +35,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Value;
 
 public abstract class ProgrammingModelAbstract
 implements
@@ -86,7 +85,7 @@ implements
 
         assertNotInitialized();
         metaModelContext.getServiceInjector().injectServicesInto(instance);
-        var factoryEntry = ProgrammingModelEntry.of(instance, markers);
+        var factoryEntry = new ProgrammingModelEntry<>(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
 
@@ -98,7 +97,7 @@ implements
 
         assertNotInitialized();
         metaModelContext.getServiceInjector().injectServicesInto(instance);
-        var validatorEntry = ProgrammingModelEntry.of(instance, markers);
+        var validatorEntry = new ProgrammingModelEntry<>(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }
 
@@ -110,7 +109,7 @@ implements
 
         assertNotInitialized();
         metaModelContext.getServiceInjector().injectServicesInto(instance);
-        var postProcessorEntry = ProgrammingModelEntry.of(instance, markers);
+        var postProcessorEntry = new ProgrammingModelEntry<>(instance, markers);
         postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
     }
 
@@ -136,10 +135,19 @@ implements
 
     // -- VALUE TYPE
 
-    @Value(staticConstructor = "of") @EqualsAndHashCode(of = "instance")
-    static final class ProgrammingModelEntry<T> {
-        T instance;
-        Marker[] markers;
+    record ProgrammingModelEntry<T>(
+            T instance,
+            Marker[] markers) {
+        @Override
+        public final boolean equals(final Object obj) {
+            return obj instanceof ProgrammingModelEntry other
+                    ? Objects.equals(this.instance(), other.instance())
+                    : false;
+        }
+        @Override
+        public final int hashCode() {
+            return Objects.hash(instance);
+        }
     }
 
     // -- SNAPSHOT HELPER
@@ -156,8 +164,8 @@ implements
             var factoryEntrySet = factoryEntriesByOrder.get(order);
             if(factoryEntrySet==null)  continue;
             for(var factoryEntry : factoryEntrySet) {
-                if(filter.acceptFactoryType(factoryEntry.getInstance().getClass(), factoryEntry.getMarkers())) {
-                    factories.add(factoryEntry.getInstance());
+                if(filter.acceptFactoryType(factoryEntry.instance().getClass(), factoryEntry.markers())) {
+                    factories.add(factoryEntry.instance());
                 }
             }
         }
@@ -177,8 +185,8 @@ implements
             if(validatorEntrySet==null) continue;
 
             for(var validatorEntry : validatorEntrySet) {
-                if(filter.acceptValidator(validatorEntry.getInstance().getClass(), validatorEntry.getMarkers())) {
-                    validators.add(validatorEntry.getInstance());
+                if(filter.acceptValidator(validatorEntry.instance().getClass(), validatorEntry.markers())) {
+                    validators.add(validatorEntry.instance());
                 }
             }
         }
@@ -199,9 +207,9 @@ implements
 
             for(var postProcessorEntry : postProcessorEntrySet) {
                 if(filter.acceptPostProcessor(
-                        postProcessorEntry.getInstance().getClass(),
-                        postProcessorEntry.getMarkers())) {
-                    postProcessors.add(postProcessorEntry.getInstance());
+                        postProcessorEntry.instance().getClass(),
+                        postProcessorEntry.markers())) {
+                    postProcessors.add(postProcessorEntry.instance());
                 }
             }
         }

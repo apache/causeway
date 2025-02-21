@@ -105,7 +105,7 @@ implements InteractionInternal {
         try {
             return executeInternal(memberExecutor, actionInvocation, context);
         } finally {
-            popAndComplete(context.getClockService(), context.getMetricsService());
+            popAndComplete(context.clockService(), context.metricsService());
         }
     }
 
@@ -120,7 +120,7 @@ implements InteractionInternal {
         try {
             return executeInternal(memberExecutor, propertyEdit, context);
         } finally {
-            popAndComplete(context.getClockService(), context.getMetricsService());
+            popAndComplete(context.clockService(), context.metricsService());
         }
     }
 
@@ -140,7 +140,7 @@ implements InteractionInternal {
             // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
             // WrapperFactory utilizing async calls
 
-            if(context.getDeadlockRecognizer().isDeadlock(ex)) {
+            if(context.deadlockRecognizer().isDeadlock(ex)) {
                 if(log.isDebugEnabled()) {
                     log.debug("failed to execute an interaction due to a deadlock", ex);
                 } else if(log.isInfoEnabled()) {
@@ -193,12 +193,12 @@ implements InteractionInternal {
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
         // to have been set on the current execution).
-        var startedAt = execution.start(context.getClockService(), context.getMetricsService());
+        var startedAt = execution.start(context.clockService(), context.metricsService());
         if(getCommand().getStartedAt() == null) {
             getCommand().updater().setStartedAt(startedAt);
             getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
-        context.getCommandPublisher().start(getCommand());
+        context.commandPublisher().start(getCommand());
     }
 
     /**

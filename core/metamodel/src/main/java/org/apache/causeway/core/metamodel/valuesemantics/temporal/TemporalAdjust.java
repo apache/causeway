@@ -31,21 +31,16 @@ import java.util.function.BiFunction;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.Value;
-
 /**
- *
  * @since 2.0
  * @see TemporalAdjuster
  */
-@Value(staticConstructor = "of")
-public class TemporalAdjust {
-
-    private int years;
-    private int months;
-    private int days;
-    private int hours;
-    private int minutes;
+public record TemporalAdjust(
+         int years,
+         int months,
+         int days,
+         int hours,
+         int minutes) {
 
     public static TemporalAdjust parse(String str) {
         int hours = 0;
@@ -76,7 +71,7 @@ public class TemporalAdjust {
             days = Integer.valueOf(str).intValue();
         }
 
-        return TemporalAdjust.of(years, months, days, hours, minutes);
+        return new TemporalAdjust(years, months, days, hours, minutes);
     }
 
     public TemporalAdjust sign(final int sign) {
@@ -84,7 +79,7 @@ public class TemporalAdjust {
             return this;
         }
         if(sign==-1) {
-            return of(-this.years, -this.months, -this.days, -this.hours, -this.minutes);
+            return new TemporalAdjust(-this.years, -this.months, -this.days, -this.hours, -this.minutes);
         }
         throw _Exceptions.unsupportedOperation();
     }

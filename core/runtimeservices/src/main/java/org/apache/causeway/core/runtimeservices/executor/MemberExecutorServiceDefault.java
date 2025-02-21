@@ -172,7 +172,7 @@ implements MemberExecutorService {
                         interaction, actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(actionExecutor, actionInvocation, InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
+        interaction.execute(actionExecutor, actionInvocation, new InteractionInternal.Context(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
 
         // handle any exceptions
         var priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -250,9 +250,7 @@ implements MemberExecutorService {
 
         var interaction = getInteractionElseFail();
         var command = interaction.getCommand();
-        if( command==null ) {
-            return domainObject;
-        }
+        if( command==null ) return domainObject;
 
         var owningProperty = propertyModifier.getOwningProperty();
 
@@ -270,7 +268,7 @@ implements MemberExecutorService {
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         var targetPojo = interaction.execute(propertyModifier, propertyEdit,
-                InteractionInternal.Context.of(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
+                new InteractionInternal.Context(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();

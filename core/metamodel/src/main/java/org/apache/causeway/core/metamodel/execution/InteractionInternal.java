@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.execution;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
@@ -30,9 +32,6 @@ import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
-
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
 /**
  * @since 2.0
@@ -48,12 +47,11 @@ extends Interaction {
         Object execute(final T currentExecution);
     }
 
-    @Value(staticConstructor = "of")
-    class Context {
-        ClockService clockService;
-        MetricsService metricsService;
-        CommandPublisher commandPublisher;
-        DeadlockRecognizer deadlockRecognizer;
+    record Context(
+            ClockService clockService,
+            MetricsService metricsService,
+            CommandPublisher commandPublisher,
+            DeadlockRecognizer deadlockRecognizer) {
     }
 
     /**
