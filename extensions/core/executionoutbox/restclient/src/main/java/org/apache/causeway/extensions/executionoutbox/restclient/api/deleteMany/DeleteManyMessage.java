@@ -20,15 +20,12 @@
 
 package org.apache.causeway.extensions.executionoutbox.restclient.api.deleteMany;
 
-import lombok.Getter;
+public record DeleteManyMessage(StringValue interactionsDtoXml) {
 
-@lombok.Value
-public class DeleteManyMessage {
-
-    @Getter private final StringValue interactionsDtoXml;
+    @Deprecated public StringValue getInteractionsDtoXml() { return interactionsDtoXml(); }
 
     public DeleteManyMessage(final String interactionsDtoXml) {
-        this.interactionsDtoXml = new StringValue(interactionsDtoXml);
+        this(new StringValue(interactionsDtoXml));
     }
 
     @Override

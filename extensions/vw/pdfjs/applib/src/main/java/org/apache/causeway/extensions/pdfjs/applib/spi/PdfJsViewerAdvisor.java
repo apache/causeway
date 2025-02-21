@@ -27,11 +27,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
 
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.With;
 
 /**
@@ -64,20 +61,16 @@ public interface PdfJsViewerAdvisor {
      * implementations can use as a key within a hash structure.
      */
     @Programmatic
-    @Value @RequiredArgsConstructor
-    class InstanceKey implements Serializable {
+    record InstanceKey(
+            TypeKey typeKey,
 
-        private static final long serialVersionUID = 1L;
-
-        private final TypeKey typeKey;
-
-        /**
-         * The identifier of the object being rendered.
-         * <p>
-         * The {@link TypeKey#getLogicalTypeName() TypeKey#logicalTypeName}  and {@link #getIdentifier() identifier}
-         * together constitute the object's identity (in effect, its {@link Bookmark}).
-         */
-        private final String identifier;
+            /**
+             * The identifier of the object being rendered.
+             * <p>
+             * The {@link TypeKey#logicalTypeName() TypeKey#logicalTypeName}  and {@link #identifier() identifier}
+             * together constitute the object's identity (in effect, its {@link Bookmark}).
+             */
+            String identifier) implements Serializable {
 
         public InstanceKey(
                 final String logicalTypeName,
@@ -98,26 +91,20 @@ public interface PdfJsViewerAdvisor {
          * implementations can use as a key within a hash structure.
          */
         @Programmatic
-        @Value @With
-        public static class TypeKey implements Serializable {
-
-            private static final long serialVersionUID = 1L;
-
-            /**
-             * The object type of the object being rendered.
-             */
-            private final String logicalTypeName;
-
-            /**
-             * The property of the object (a {@link Blob} containing a PDF) being rendered.
-             */
-            private final String propertyId;
-
-            /**
-             * The user for whom the object's property is being rendered.
-             */
-            private final String userName;
-
+        @With
+        public record TypeKey(
+                /**
+                 * The object type of the object being rendered.
+                 */
+                String logicalTypeName,
+                /**
+                 * The property of the object (a {@link Blob} containing a PDF) being rendered.
+                 */
+                String propertyId,
+                /**
+                 * The user for whom the object's property is being rendered.
+                 */
+                String userName) implements Serializable {
         }
     }
 
@@ -128,14 +115,11 @@ public interface PdfJsViewerAdvisor {
      * for convenience of implementors.
      */
     @Programmatic
-    @Value @With
-    class Advice implements Serializable {
-
-        private static final long serialVersionUID = 1L;
-
-        private final Integer pageNum;
-        private final Scale scale;
-        private final Integer height;
+    @With
+    record Advice(
+            Integer pageNum,
+            Scale scale,
+            Integer height) implements Serializable {
     }
 
     /**
@@ -146,20 +130,20 @@ public interface PdfJsViewerAdvisor {
     public static class Default implements PdfJsViewerAdvisor {
 
         @Override
-        public Advice advise(InstanceKey instanceKey) {
+        public Advice advise(final InstanceKey instanceKey) {
             return null;
         }
 
         @Override
-        public void pageNumChangedTo(InstanceKey instanceKey, int pageNum) {
+        public void pageNumChangedTo(final InstanceKey instanceKey, final int pageNum) {
         }
 
         @Override
-        public void scaleChangedTo(InstanceKey instanceKey, Scale scale) {
+        public void scaleChangedTo(final InstanceKey instanceKey, final Scale scale) {
         }
 
         @Override
-        public void heightChangedTo(InstanceKey instanceKey, int height) {
+        public void heightChangedTo(final InstanceKey instanceKey, final int height) {
         }
     }
 

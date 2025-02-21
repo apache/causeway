@@ -85,7 +85,6 @@ import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetI
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject}, access = AccessLevel.PROTECTED)
@@ -102,10 +101,8 @@ implements GridSystemService<G> {
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {
 
-        if(!gridImplementation().isAssignableFrom(grid.getClass())) {
-            // ignore any other grid implementations
-            return;
-        }
+        // ignore any other grid implementations
+        if(!gridImplementation().isAssignableFrom(grid.getClass())) return;
 
         final boolean valid = validateAndNormalize(grid, domainClass);
         if (valid) {
@@ -372,19 +369,18 @@ implements GridSystemService<G> {
         });
     }
 
-    @Value(staticConstructor = "of")
-    protected static class SurplusAndMissing {
-        public final Set<String> surplus;
-        public final Set<String> missing;
+    protected record SurplusAndMissing(
+            Set<String> surplus,
+            Set<String> missing) {
     }
 
     protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
         var firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
         var secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
-        return SurplusAndMissing.of(firstNotSecond, secondNotFirst);
+        return new SurplusAndMissing(firstNotSecond, secondNotFirst);
     }
 
-    // //////////////////////////////////////
+    // --
 
     @Programmatic
     @Override

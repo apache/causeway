@@ -29,16 +29,18 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.PrecedingParamsPolicy;
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -55,10 +57,7 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.schema.common.v2.TypedTupleDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Component
 @Import({
@@ -203,12 +202,11 @@ implements
     // -- EMBEDDING
 
     // typed tuple of fundamental types
-    @Value @Accessors(fluent = true)
-    public static class Parameters {
-        final LocalDateTime dateTime;
-        final String calendarName;
-        final String title;
-        final String notes;
+    public record Parameters(
+            LocalDateTime dateTime,
+            String calendarName,
+            String title,
+            String notes) {
 
         public CalendarEvent construct() {
             var zoneId = //context.getInteractionContext().getTimeZone();

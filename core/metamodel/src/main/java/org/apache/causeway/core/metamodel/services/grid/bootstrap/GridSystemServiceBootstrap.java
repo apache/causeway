@@ -264,8 +264,8 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         var surplusAndMissingPropertyIds =
                 surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
-        var surplusPropertyIds = surplusAndMissingPropertyIds.getSurplus();
-        var missingPropertyIds = surplusAndMissingPropertyIds.getMissing();
+        var surplusPropertyIds = surplusAndMissingPropertyIds.surplus();
+        var missingPropertyIds = surplusAndMissingPropertyIds.missing();
 
         for (String surplusPropertyId : surplusPropertyIds) {
             propertyLayoutDataById.get(surplusPropertyId).setMetadataError("No such property");
@@ -361,8 +361,8 @@ extends GridSystemServiceAbstract<BSGrid> {
         // any missing collections will be added as tabs to a new TabGroup in the specified column
         var surplusAndMissingCollectionIds =
                 surplusAndMissing(collectionLayoutDataById.keySet(), oneToManyAssociationById.keySet());
-        var surplusCollectionIds = surplusAndMissingCollectionIds.getSurplus();
-        var missingCollectionIds = surplusAndMissingCollectionIds.getMissing();
+        var surplusCollectionIds = surplusAndMissingCollectionIds.surplus();
+        var missingCollectionIds = surplusAndMissingCollectionIds.missing();
 
         for (String surplusCollectionId : surplusCollectionIds) {
             collectionLayoutDataById.get(surplusCollectionId).setMetadataError("No such collection");
@@ -398,8 +398,8 @@ extends GridSystemServiceAbstract<BSGrid> {
         // any missing actions will be added as actions in the specified column
         var surplusAndMissingActionIds =
                 surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
-        var surplusActionIds = surplusAndMissingActionIds.getSurplus();
-        var possiblyMissingActionIds = surplusAndMissingActionIds.getMissing();
+        var surplusActionIds = surplusAndMissingActionIds.surplus();
+        var possiblyMissingActionIds = surplusAndMissingActionIds.missing();
 
         final List<String> associatedActionIds = _Lists.newArrayList();
 

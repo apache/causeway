@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.schema;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -54,15 +55,15 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.Value;
-
 public abstract class SchemaValueMarshallerAbstract
 implements SchemaValueMarshaller, HasMetaModelContext {
 
-    @Value(staticConstructor = "of")
-    public static class Context<T> {
+    public record Context<T>(
+            @NonNull Class<T> correspondingClass,
+            @NonNull ObjectFeature feature,
+            @NonNull ValueType schemaValueType,
+            @Nullable ValueSemanticsProvider<T> semantics,
+            @NonNull Optional<Converter<T, ?>> converter) {
 
         public static <T> Context<T> forNonValue(
                 final Class<T> correspondingClass,
@@ -79,17 +80,11 @@ implements SchemaValueMarshaller, HasMetaModelContext {
                 final ObjectFeature feature,
                 final @NonNull ValueSemanticsProvider<T> semantics) {
 
-            return of(correspondingClass, feature,
+            return new Context<>(correspondingClass, feature,
                     semantics.getSchemaValueType(),
                     semantics,
                     Optional.ofNullable(semantics.getConverter()));
         }
-
-        private final @NonNull Class<T> correspondingClass;
-        private final @NonNull ObjectFeature feature;
-        @Getter private final @NonNull ValueType schemaValueType;
-        private final @Nullable ValueSemanticsProvider<T> semantics;
-        private final @NonNull Optional<Converter<T, ?>> converter;
 
         public ObjectSpecification getElementType() {
             return feature.getElementType();
@@ -294,7 +289,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
             final Context<?> valueTypeHelper,
             final CollectionDto collectionDto) {
 
-        _Assert.assertEquals(valueTypeHelper.getSchemaValueType(), collectionDto.getType());
+        _Assert.assertEquals(valueTypeHelper.schemaValueType(), collectionDto.getType());
 
         if(_NullSafe.isEmpty(collectionDto.getValue())) {
             return Can.empty();
@@ -306,7 +301,7 @@ implements SchemaValueMarshaller, HasMetaModelContext {
         for(var _elementDto : elementDtos) {
 
             var elementDto = CommonDtoUtils
-                    .toValueWithTypeDto(valueTypeHelper.getSchemaValueType(), _elementDto);
+                    .toValueWithTypeDto(valueTypeHelper.schemaValueType(), _elementDto);
             var cardinalityConstraint = elementDto.getCollection()!=null
                     ? Cardinality.MULTIPLE
                     : Cardinality.ONE;

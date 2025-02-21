@@ -25,10 +25,8 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
-import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
-
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -37,13 +35,14 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
+import org.apache.causeway.commons.internal.concurrent._ConcurrentTask;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepository;
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Builder;
-import lombok.experimental.Accessors;
 
 /**
  * Intended to support integration testing which uses the
@@ -72,19 +71,18 @@ public class FakeScheduler {
         STRICT;
     }
 
-    /** record candidate */
-    @lombok.Value @Builder @Accessors(fluent=true)
-    public static class CommandBulkExecutionResult {
+    @Builder
+    public record CommandBulkExecutionResult(
+            @Nullable Throwable failure,
+            boolean hasTimedOut,
+            /** Number of commands still to be processed.
+             * This will generally be 0 (in the happy case),
+             * but could be non-zero if not enough time was provided to wait. */
+            int remainingCommandsToProcessCount) {
         static CommandBulkExecutionResult happyCase() {
             return CommandBulkExecutionResult.builder()
                     .build();
         }
-        private final @Nullable Throwable failure;
-        private final boolean hasTimedOut;
-        /** Number of commands still to be processed.
-         * This will generally be 0 (in the happy case),
-         * but could be non-zero if not enough time was provided to wait. */
-        private final int remainingCommandsToProcessCount;
     }
 
     /**
@@ -168,7 +166,7 @@ public class FakeScheduler {
         );
     }
 
-    private void invokeListenerCallbackWithinTransaction(RunBackgroundCommandsJobListener listener, List<String> interactionIds) {
+    private void invokeListenerCallbackWithinTransaction(final RunBackgroundCommandsJobListener listener, final List<String> interactionIds) {
         interactionService.runAnonymous(() -> {
             transactionService.runTransactional(Propagation.REQUIRED, () -> {
                 listener.executed(interactionIds);

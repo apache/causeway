@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
@@ -86,10 +85,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         this.layoutResourceLoaders = Can.ofCollection(layoutResourceLoaders);
     }
 
-    @Value
-    static class LayoutKey {
-        private final @NonNull Class<?> domainClass;
-        private final @Nullable String layoutIfAny; // layout suffix
+    record LayoutKey(
+            @NonNull Class<?> domainClass,
+            /** layout suffix */
+            @Nullable String layoutIfAny) {
     }
 
     // for better logging messages (used only in prototyping mode)
@@ -187,8 +186,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     Optional<LayoutResource> loadLayoutResource(
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
-        return _Reflect.streamTypeHierarchy(layoutKey.getDomainClass(), InterfacePolicy.EXCLUDE)
-            .flatMap(type->loadContent(type, layoutKey.getLayoutIfAny(), supportedFormats).stream())
+        return _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.EXCLUDE)
+            .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
             .findFirst();
     }
 

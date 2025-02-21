@@ -17,20 +17,17 @@
  * under the License.
  *
  */
-
 package org.apache.causeway.extensions.executionoutbox.restclient.api.delete;
 
-import lombok.Getter;
+public record DeleteMessage(
+        StringValue interactionId,
+        IntValue sequence) {
 
-@lombok.Value
-public class DeleteMessage {
-
-    @Getter private final StringValue interactionId;
-    @Getter private final IntValue sequence;
+    @Deprecated public StringValue getInteractionId() { return interactionId(); }
+    @Deprecated public IntValue getSequence() { return sequence(); }
 
     public DeleteMessage(final String interactionId, final int sequence) {
-        this.interactionId = new StringValue(interactionId);
-        this.sequence = new IntValue(sequence);
+        this(new StringValue(interactionId), new IntValue(sequence));
     }
 
     @Override

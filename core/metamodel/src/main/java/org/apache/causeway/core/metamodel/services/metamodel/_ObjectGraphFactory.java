@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -40,14 +41,17 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 /**
  * @implNote implemented for one shot use only (stateful), hence not made public
  */
-@lombok.Value
-class _ObjectGraphFactory implements ObjectGraph.Factory {
+record _ObjectGraphFactory(
+        Collection<? extends ObjectSpecification> objectSpecifications,
+        ObjectGraph objectGraph,
+        ListMultimap<String, LogicalType> logicalTypesByNamespace,
+        Map<LogicalType, ObjectGraph.Object> objectByLogicalType,
+        Map<String, ObjectGraph.Object> objectById) implements ObjectGraph.Factory {
 
-    private final Collection<? extends ObjectSpecification> objectSpecifications;
-    private final ObjectGraph objectGraph = new ObjectGraph();
-    private final ListMultimap<String, LogicalType> logicalTypesByNamespace = _Multimaps.newListMultimap();
-    private final Map<LogicalType, ObjectGraph.Object> objectByLogicalType = new HashMap<>();
-    private final Map<String, ObjectGraph.Object> objectById = new HashMap<>();
+
+    public _ObjectGraphFactory(final List<? extends ObjectSpecification> objectSpecs) {
+        this(objectSpecs, new ObjectGraph(), _Multimaps.newListMultimap(), new HashMap<>(), new HashMap<>());
+    }
 
     @Override
     public final ObjectGraph create() {
@@ -66,7 +70,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
         var addFieldsLater = _Refs.booleanRef(false);
 
         var obj = objectByLogicalType.computeIfAbsent(objSpec.logicalType(), logicalType->{
-            logicalTypesByNamespace.putElement(logicalType.getNamespace(), logicalType);
+            logicalTypesByNamespace.putElement(logicalType.namespace(), logicalType);
             var newObjId = "o" + objectByLogicalType.size();
             var newObj = object(newObjId, objSpec);
             objectById.put(newObjId, newObj);
@@ -86,8 +90,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                     var thisType = objSpec.logicalType();
                     var refType = elementType.logicalType();
 
-                    var thisNs = thisType.getNamespace();
-                    var refNs = refType.getNamespace();
+                    var thisNs = thisType.namespace();
+                    var refNs = refType.namespace();
 
                     // only register association relations if they don't cross namespace boundaries
                     // in other words: only include, if they share the same namespace
@@ -130,8 +134,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
 
     private static ObjectGraph.Object object(final String id, final ObjectSpecification objSpec) {
         var obj =  new ObjectGraph.Object(id,
-                objSpec.logicalType().getNamespace(),
-                objSpec.logicalType().getLogicalTypeSimpleName(),
+                objSpec.logicalType().namespace(),
+                objSpec.logicalType().logicalSimpleName(),
                 objSpec.isAbstract()
                     ? Optional.of("abstract")
                     : Optional.empty(),
@@ -206,7 +210,7 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
     }
 
     private static String objectShortName(final ObjectSpecification objSpec) {
-        var simpleName = objSpec.logicalType().getLogicalTypeSimpleName();
+        var simpleName = objSpec.logicalType().logicalSimpleName();
         return simpleName;
     }
 
