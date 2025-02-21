@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.io.Serializable;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -43,7 +44,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.Authorizatio
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 

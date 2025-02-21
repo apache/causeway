@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-
-import org.jspecify.annotations.NonNull;
 
 public final class CollectionInteraction
 extends MemberInteraction<ManagedCollection, CollectionInteraction> {
@@ -53,7 +53,7 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedCollection> getManagedCollection() {
-        return super.getManagedMember().getSuccess();
+        return railway.getSuccess();
     }
 
     /**

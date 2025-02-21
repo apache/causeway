@@ -42,7 +42,8 @@ import lombok.SneakyThrows;
  *
  * @since 2.0 {@index}
  */
-public interface Railway<F, S> {
+public sealed interface Railway<F, S>
+permits Railway.Failure, Railway.Success {
 
     // -- FACTORIES
 
@@ -223,40 +224,6 @@ public interface Railway<F, S> {
             return this;
         }
 
-    }
-
-    // -- TYPE COMPOSITION
-
-    @FunctionalInterface
-    public static interface HasRailway<F, S> extends Railway<F, S> {
-
-        Railway<F, S> railway();
-
-        @Override default boolean isSuccess() { return railway().isSuccess(); }
-        @Override default boolean isFailure() { return railway().isFailure(); }
-
-        @Override default Optional<S> getSuccess() { return railway().getSuccess(); }
-        @Override default Optional<F> getFailure() { return railway().getFailure(); }
-
-        @Override default Railway<F, S> ifSuccess(final @NonNull ThrowingConsumer<S> successConsumer) {
-            return railway().ifSuccess(successConsumer); }
-        @Override default Railway<F, S> ifFailure(final @NonNull ThrowingConsumer<F> failureConsumer) {
-            return railway().ifFailure(failureConsumer); }
-
-        @Override default <R> Railway<F, R> mapSuccess(final @NonNull ThrowingFunction<S, R> successMapper) {
-            return railway().mapSuccess(successMapper); }
-        @Override default <R> Railway<R, S> mapFailure(final @NonNull ThrowingFunction<F, R> failureMapper) {
-            return railway().mapFailure(failureMapper); }
-
-        @Override default <R> R fold(
-                final @NonNull ThrowingFunction<F, R> failureMapper,
-                final @NonNull ThrowingFunction<S, R> successMapper) {
-            return railway().fold(failureMapper, successMapper);
-        }
-
-        @Override default public Railway<F, S> chain(final @NonNull ThrowingFunction<S, Railway<F, S>> chainingFunction){
-            return railway().chain(chainingFunction);
-        }
     }
 
 }

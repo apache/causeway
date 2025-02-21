@@ -21,9 +21,9 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.apache.causeway.commons.internal.base._Casts;
-
 import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.commons.internal.base._Casts;
 
 public abstract class MemberInteraction<T extends ManagedMember, H extends MemberInteraction<T, ?>> {
 
@@ -32,25 +32,19 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         public boolean isMutate() { return this == MUTATE; }
     }
 
-    @NonNull protected InteractionRailway<T> railway;
+    @NonNull protected final InteractionRailway<T> railway;
 
     protected MemberInteraction(final @NonNull InteractionRailway<T> railway) {
         this.railway = railway;
     }
 
     public H checkVisibility() {
-        railway = railway.chain(property->
-            property.checkVisibility()
-            .map(this::vetoRailway)
-            .orElse(railway));
+        railway.update(ManagedMember::checkVisibility);
         return _Casts.uncheckedCast(this);
     }
 
     public H checkUsability() {
-        railway = railway.chain(property->
-            property.checkUsability()
-            .map(this::vetoRailway)
-            .orElse(railway));
+        railway.update(ManagedMember::checkUsability);
         return _Casts.uncheckedCast(this);
     }
 
@@ -60,15 +54,14 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * @return self
      */
     public H checkUsability(final @NonNull AccessIntent intent) {
-        if(intent.isMutate()) {
-            return checkUsability();
-        }
+        if(intent.isMutate()) return checkUsability();
+
         return _Casts.uncheckedCast(this);
     }
 
     public <X extends Throwable>
     H validateElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        var veto = railway.getFailure().orElse(null);
+        var veto = getInteractionVeto().orElse(null);
         if (veto == null) {
             return _Casts.uncheckedCast(this);
         } else {
@@ -76,20 +69,20 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
 
-    /**
-     * @return optionally the ManagedMember based on whether there
-     * was no interaction veto within the originating chain
-     */
-    protected InteractionRailway<T> getManagedMember() {
-        return railway;
-    }
+//    /**
+//     * @return optionally the ManagedMember based on whether there
+//     * was no interaction veto within the originating chain
+//     */
+//    protected InteractionRailway<T> getManagedMember() {
+//        return railway;
+//    }
 
     /**
      * @return optionally the InteractionVeto based on whether there
      * was any interaction veto within the originating chain
      */
     public Optional<InteractionVeto> getInteractionVeto() {
-        return railway.getFailure();
+        return railway.getVeto();
     }
 
     /**

@@ -69,6 +69,11 @@ public record InteractionVeto(
         return new InteractionVeto(VetoType.INVALID, vetoConsent);
     }
 
+    public static InteractionVeto invocationException(final Throwable e) {
+        var reason = e.toString();
+        return new InteractionVeto(VetoType.INVALID, new Veto(reason));
+    }
+
     public static InteractionVeto actionNotSafe(final @NonNull ManagedAction action) {
         var reason = String.format("Method not allowed; action '%s' does not have safe semantics",
                 action.getId());

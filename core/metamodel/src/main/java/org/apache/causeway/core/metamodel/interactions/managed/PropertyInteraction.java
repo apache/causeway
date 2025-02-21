@@ -21,11 +21,11 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-
-import org.jspecify.annotations.NonNull;
 
 public final class PropertyInteraction
 extends MemberInteraction<ManagedProperty, PropertyInteraction> {
@@ -59,12 +59,8 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public PropertyInteraction modifyProperty(
             final @NonNull Function<ManagedProperty, ManagedObject> newProperyValueProvider) {
-
-        railway = railway.chain(property->
-            property.modifyProperty(newProperyValueProvider.apply(property))
-            .map(super::vetoRailway)
-            .orElse(railway));
-
+        railway.update(property->
+            property.modifyProperty(newProperyValueProvider.apply(property)));
         return this;
     }
 
@@ -73,7 +69,7 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedProperty> getManagedProperty() {
-        return super.getManagedMember().getSuccess();
+        return super.railway.getSuccess();
     }
 
     /**

@@ -19,39 +19,70 @@
 package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.io.Serializable;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
 import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.commons.functional.Railway;
-import org.apache.causeway.commons.functional.Railway.HasRailway;
 
 /**
- * Follows the <em>Railway Pattern</em>, that is, once vetoed, stays vetoed.
+ * Thread-safe state machine that follows the railway pattern: once failed stays failed.
  * @see Railway
  */
-public record InteractionRailway<T extends ManagedMember>(
-    Railway<InteractionVeto, T> railway)
-implements
-    HasRailway<InteractionVeto, T>,
-    Serializable {
-    private static final long serialVersionUID = 1L;
+record InteractionRailway<T extends ManagedMember>(
+        AtomicReference<Railway<InteractionVeto, T>> state)
+implements Serializable {
 
     public static <T extends ManagedMember> InteractionRailway<T> success(final T managedMember) {
-        return new InteractionRailway<T>(Railway.<InteractionVeto, T>success(managedMember));
+        return new InteractionRailway<T>(new AtomicReference<>(Railway.success(managedMember)));
     }
 
     public static <T extends ManagedMember> InteractionRailway<T> veto(final InteractionVeto veto) {
-        return new InteractionRailway<>(Railway.<InteractionVeto, T>failure(veto));
+        return new InteractionRailway<>(new AtomicReference<>(Railway.failure(veto)));
     }
 
-    @Override // type-safe override
-    public InteractionRailway<T> chain(final @NonNull ThrowingFunction<T, Railway<InteractionVeto, T>> chainingFunction) {
-        var railway = HasRailway.super.chain(chainingFunction);
-        return railway instanceof InteractionRailway
-            ? (InteractionRailway<T>) railway
-            : new InteractionRailway<>(railway);
+    public boolean isVeto() { return internal().isFailure(); }
+    public boolean isSuccess() { return internal().isSuccess(); }
+
+    public Optional<InteractionVeto> getVeto() {
+        return internal().getFailure();
     }
+
+    public Optional<T> getSuccess() {
+        return internal().getSuccess();
+    }
+
+    public T getSuccessElseFail() {
+        return internal().getSuccessElseFail();
+    }
+
+    public T getSuccessElseFail(final Function<InteractionVeto, ? extends Throwable> toThrowable) {
+        return internal().getSuccessElseFail(toThrowable);
+    }
+
+    /**
+     * Only updates state from success. If successMapper result is non-empty, transitions to failed state.
+     */
+    public void update(final @NonNull ThrowingFunction<T, Optional<InteractionVeto>> successMapper) {
+        state.getAndUpdate(railway->{
+            try {
+                return railway.chain(t->
+                    successMapper
+                        .apply(t)
+                        .<Railway<InteractionVeto, T>>map(Railway::failure)
+                        .orElse(railway));
+            } catch(Throwable e) {
+                return Railway.failure(InteractionVeto.invocationException(e));
+            }
+        });
+    }
+
+    // -- HELPER
+
+    private Railway<InteractionVeto, T> internal() { return state.get(); }
 
 }

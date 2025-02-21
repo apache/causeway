@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -35,7 +37,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public final class ActionInteraction
 extends MemberInteraction<ManagedAction, ActionInteraction> {
@@ -106,29 +107,16 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     }
 
     public ActionInteraction checkSemanticConstraint(final @NonNull SemanticConstraint semanticConstraint) {
-
-        railway = railway.chain(action->{
-
-            var actionSemantics = action.getAction().getSemantics();
-
-            switch(semanticConstraint) {
-            case NONE:
-                return railway;
-
-            case IDEMPOTENT:
-                return actionSemantics.isIdempotentInNature()
-                        ? railway
-                        : vetoRailway(InteractionVeto.actionNotIdempotent(action)) ;
-            case SAFE:
-                return actionSemantics.isSafeInNature()
-                        ? railway
-                        : vetoRailway(InteractionVeto.actionNotSafe(action));
-            default:
-                throw _Exceptions.unmatchedCase(semanticConstraint); // unexpected code reach
+        railway.update(action -> switch(semanticConstraint) {
+                case NONE -> Optional.empty();
+                case IDEMPOTENT -> action.getAction().getSemantics().isIdempotentInNature()
+                            ? Optional.empty()
+                            : Optional.of(InteractionVeto.actionNotIdempotent(action));
+                case SAFE -> action.getAction().getSemantics().isSafeInNature()
+                            ? Optional.empty()
+                            : Optional.of(InteractionVeto.actionNotSafe(action));
             }
-
-        });
-
+        );
         return this;
     }
 
@@ -161,9 +149,8 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
     public Optional<InteractionVeto> validate(
             final @NonNull ParameterNegotiationModel pendingArgs) {
 
-        if(railway.isFailure()) {
-            return railway.getFailure();
-        }
+        if(railway.isVeto()) return railway.getVeto();
+
         var validityConsent = pendingArgs.validateParameterSet(); // full validation
         if(validityConsent!=null && validityConsent.isVetoed()) {
             return Optional.of(InteractionVeto.actionParamInvalid(validityConsent));
@@ -176,7 +163,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedAction> getManagedAction() {
-        return super.getManagedMember().getSuccess();
+        return railway.getSuccess();
     }
 
     /**
