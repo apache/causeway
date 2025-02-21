@@ -36,7 +36,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.Authorizatio
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
 
 public final class ActionInteraction
 extends MemberInteraction<ManagedAction, ActionInteraction> {
@@ -47,11 +46,10 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
         SAFE
     }
 
-    @Value(staticConstructor = "of")
-    public static class Result {
-        private final ManagedAction managedAction;
-        private final Can<ManagedObject> parameterList;
-        private final ManagedObject actionReturnedObject;
+    public record Result(
+            ManagedAction managedAction,
+            Can<ManagedObject> parameterList,
+            ManagedObject actionReturnedObject) {
     }
 
     public static final ActionInteraction start(

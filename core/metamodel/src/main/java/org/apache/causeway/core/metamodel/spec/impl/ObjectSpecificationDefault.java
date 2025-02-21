@@ -226,7 +226,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         for (var interfaceType : interfaceTypes) {
             var interfaceSubstitute = classSubstitutorRegistry.getSubstitution(interfaceType);
             if (interfaceSubstitute.isReplace()) {
-                var interfaceSpec = specLoaderInternal().loadSpecification(interfaceSubstitute.getReplacement());
+                var interfaceSpec = specLoaderInternal().loadSpecification(interfaceSubstitute.replacement());
                 interfaceSpecList.add(interfaceSpec);
             }
         }

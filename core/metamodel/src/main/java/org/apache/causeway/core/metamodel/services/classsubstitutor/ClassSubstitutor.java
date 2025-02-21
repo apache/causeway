@@ -21,10 +21,8 @@ package org.apache.causeway.core.metamodel.services.classsubstitutor;
 import java.io.Serializable;
 import java.util.function.UnaryOperator;
 
-import org.jspecify.annotations.Nullable;
-
 import org.jspecify.annotations.NonNull;
-import lombok.Value;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides capability to translate or ignore classes.
@@ -41,12 +39,14 @@ public interface ClassSubstitutor {
      * </ul>
      * @since 2.0
      */
-    @Value(staticConstructor = "of")
-    static class Substitution implements UnaryOperator<Class<?>>, Serializable {
-        private static final long serialVersionUID = 1L;
-        private static final Substitution PASSTHROUGH = Substitution.of(Type.PASSTHROUGH, null);
-        private static final Substitution NEVER_REPLACE_CLASS = Substitution.of(Type.NEVER_REPLACE_CLASS, null);
-        private static final Substitution NEVER_INTROSPECT_CLASS = Substitution.of(Type.NEVER_INTROSPECT_CLASS, null);
+    record Substitution(
+            @NonNull Type type,
+            @Nullable Class<?> replacement
+            ) implements UnaryOperator<Class<?>>, Serializable {
+
+        private static final Substitution PASSTHROUGH = new Substitution(Type.PASSTHROUGH, null);
+        private static final Substitution NEVER_REPLACE_CLASS = new Substitution(Type.NEVER_REPLACE_CLASS, null);
+        private static final Substitution NEVER_INTROSPECT_CLASS = new Substitution(Type.NEVER_INTROSPECT_CLASS, null);
 
         private static enum Type {
             PASSTHROUGH,
@@ -54,9 +54,6 @@ public interface ClassSubstitutor {
             NEVER_INTROSPECT_CLASS,
             REPLACE_WITH_OTHER_CLASS,
         }
-
-        @NonNull Type type;
-        @Nullable Class<?> replacement;
 
         // -- FACTORIES
 
@@ -80,7 +77,7 @@ public interface ClassSubstitutor {
         }
 
         public static Substitution replaceWith(final @NonNull Class<?> cls) {
-            return of(Type.REPLACE_WITH_OTHER_CLASS, cls);
+            return new Substitution(Type.REPLACE_WITH_OTHER_CLASS, cls);
         }
 
         // -- PREDICATES
@@ -117,10 +114,8 @@ public interface ClassSubstitutor {
 
         @Override
         public Class<?> apply(final Class<?> cls) {
-            if(isNeverIntrospect()) {
-                return null;
-            }
-            return isReplace() ? getReplacement() : cls;
+            if(isNeverIntrospect()) return null;
+            return isReplace() ? replacement() : cls;
         }
 
     }

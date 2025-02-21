@@ -136,7 +136,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         if(supportsReloading()) {
             final String badContent = badContentByKey.get(layoutKey);
             if(badContent != null) {
-                if(Objects.equals(layoutResource.getContent(), badContent)) {
+                if(Objects.equals(layoutResource.content(), badContent)) {
                     // seen this before and already logged; just quit
                     return Optional.empty();
                 } else {
@@ -155,7 +155,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
         try {
             final T grid = marshaller
-                    .unmarshal(layoutResource.getContent(), layoutResource.getFormat())
+                    .unmarshal(layoutResource.content(), layoutResource.format())
                     .getValue().orElseThrow();
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
@@ -166,12 +166,12 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
             if(supportsReloading()) {
                 // save fact that this was bad content, so that we don't log again if called next time
-                badContentByKey.put(layoutKey, layoutResource.getContent());
+                badContentByKey.put(layoutKey, layoutResource.content());
             }
 
             // note that we don't blacklist if the file exists but couldn't be parsed;
             // the developer might fix so we will want to retry.
-            final String resourceName = layoutResource.getResourceName();
+            final String resourceName = layoutResource.resourceName();
             final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
             if(supportsReloading()) {
                 messageService.warnUser(message);

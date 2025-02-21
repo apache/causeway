@@ -47,11 +47,11 @@ public class ObjectAndActionInvocation {
             final @NonNull JsonRepresentation argsJsonRepr,
             final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
         return new ObjectAndActionInvocation(
-                actionInteractionResult.getManagedAction().getOwner(),
-                actionInteractionResult.getManagedAction().getAction(),
+                actionInteractionResult.managedAction().getOwner(),
+                actionInteractionResult.managedAction().getAction(),
                 argsJsonRepr,
-                actionInteractionResult.getParameterList(),
-                actionInteractionResult.getActionReturnedObject(),
+                actionInteractionResult.parameterList(),
+                actionInteractionResult.actionReturnedObject(),
                 selfLink);
     }
 

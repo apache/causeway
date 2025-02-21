@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.LayoutKey;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 
@@ -74,7 +75,7 @@ class GridLoaderServiceDefault_resourceNameTest {
 
     private String resourceNameFor(final LayoutKey dcal) {
         return gridLoaderServiceDefault.loadLayoutResource(dcal, EnumSet.of(CommonMimeType.XML))
-        .map(xml->xml.getResourceName())
+        .map(LayoutResource::resourceName)
         .orElse(null);
     }
 

@@ -290,7 +290,7 @@ class _DomainResourceHelper {
             throw InteractionFailureHandler.onFailure(veto);
         });
 
-        var actionInteractionResult = Result.of(
+        var actionInteractionResult = new Result(
                 actionInteraction.getManagedAction().orElse(null),
                 pendingArgs.getParamValues(),
                 resultOrVeto.getSuccessElseFail());
@@ -302,9 +302,7 @@ class _DomainResourceHelper {
         return representationService.actionResult(resourceContext, objectAndActionInvocation);
     }
 
-    // //////////////////////////////////////
-    // dependencies (from context)
-    // //////////////////////////////////////
+    // -- DEPENDENCIES (FROM CONTEXT)
 
     //TODO pretty low level stuff; maybe move the logic to metamodel module
     static ManagedObject getServiceAdapter(
