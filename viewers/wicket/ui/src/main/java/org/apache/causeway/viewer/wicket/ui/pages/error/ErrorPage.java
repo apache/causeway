@@ -85,7 +85,7 @@ public class ErrorPage extends PageAbstract {
     }
 
     protected List<String> transform(final List<StackTraceDetail> stackTrace) {
-        return _Lists.map(stackTrace, (final StackTraceDetail stackTraceDetail) -> stackTraceDetail.getLine());
+        return _Lists.map(stackTrace, StackTraceDetail::line);
     }
 
 }

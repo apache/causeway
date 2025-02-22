@@ -32,7 +32,8 @@ extends ListView<StackTraceDetail> {
     private static final long serialVersionUID = 1L;
     private final String idLine;
 
-    public StackTraceListView(final String id, final String idLine, final List<org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail> list) {
+    public StackTraceListView(final String id, final String idLine,
+            final List<org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail> list) {
         super(id, list);
         this.idLine = idLine;
     }
@@ -40,7 +41,7 @@ extends ListView<StackTraceDetail> {
     @Override
     protected void populateItem(final ListItem<StackTraceDetail> item) {
         final StackTraceDetail detail = item.getModelObject();
-        item.add(new AttributeAppender("class", detail.getType().name().toLowerCase()));
-        Wkt.labelAdd(item, idLine, detail.getLine());
+        item.add(new AttributeAppender("class", detail.type().name().toLowerCase()));
+        Wkt.labelAdd(item, idLine, detail.line());
     }
 }

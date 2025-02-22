@@ -20,30 +20,37 @@ package org.apache.causeway.viewer.wicket.ui.errors;
 
 import java.io.Serializable;
 
-public class StackTraceDetail implements Serializable {
+public record StackTraceDetail(
+        Type type,
+        String line) implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    enum Type {
+        EXCEPTION_CLASS_NAME,
+        EXCEPTION_MESSAGE,
+        STACKTRACE_ELEMENT,
+        LITERAL
+    }
 
-    public static StackTraceDetail exceptionClassName(Throwable cause) {
+    public static StackTraceDetail exceptionClassName(final Throwable cause) {
         return new StackTraceDetail(StackTraceDetail.Type.EXCEPTION_CLASS_NAME, cause.getClass().getName());
     }
 
-    public static StackTraceDetail exceptionMessage(Throwable cause) {
+    public static StackTraceDetail exceptionMessage(final Throwable cause) {
         return new StackTraceDetail(StackTraceDetail.Type.EXCEPTION_MESSAGE, cause.getMessage());
     }
 
-    public static StackTraceDetail element(StackTraceElement el) {
-        StringBuilder buf = new StringBuilder();
-        buf .append("    ")
-        .append(el.getClassName())
-        .append("#")
-        .append(el.getMethodName())
-        .append("(")
-        .append(el.getFileName())
-        .append(":")
-        .append(el.getLineNumber())
-        .append(")\n")
-        ;
+    public static StackTraceDetail element(final StackTraceElement el) {
+        var buf = new StringBuilder();
+        buf.append("    ")
+            .append(el.getClassName())
+            .append("#")
+            .append(el.getMethodName())
+            .append("(")
+            .append(el.getFileName())
+            .append(":")
+            .append(el.getLineNumber())
+            .append(")\n");
+
         return new StackTraceDetail(StackTraceDetail.Type.STACKTRACE_ELEMENT, buf.toString());
     }
 
@@ -53,26 +60,6 @@ public class StackTraceDetail implements Serializable {
 
     public static StackTraceDetail causedBy() {
         return new StackTraceDetail(Type.LITERAL, "Caused by:");
-    }
-
-    enum Type {
-        EXCEPTION_CLASS_NAME,
-        EXCEPTION_MESSAGE,
-        STACKTRACE_ELEMENT,
-        LITERAL
-    }
-    private final Type type;
-    private final String line;
-
-    public StackTraceDetail(Type type, String line) {
-        this.type = type;
-        this.line = line;
-    }
-    public StackTraceDetail.Type getType() {
-        return type;
-    }
-    public String getLine() {
-        return line;
     }
 
 }

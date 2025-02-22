@@ -39,7 +39,7 @@ final class JarManifestListView extends ListView<JarManifestAttributes> {
     @Override
     protected void populateItem(final ListItem<JarManifestAttributes> item) {
         final JarManifestAttributes detail = item.getModelObject();
-        item.add(new AttributeAppender("class", detail.getType().name().toLowerCase()));
-        Wkt.labelAdd(item, idLine, detail.getLine());
+        item.add(new AttributeAppender("class", detail.type().name().toLowerCase()));
+        Wkt.labelAdd(item, idLine, detail.line());
     }
 }

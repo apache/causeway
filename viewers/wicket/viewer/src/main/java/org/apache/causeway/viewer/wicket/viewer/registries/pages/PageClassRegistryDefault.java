@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -44,7 +45,9 @@ import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer
  * Default implementation of {@link PageClassRegistry}; just delegates to an
  * underlying {@link PageClassList}.
  */
+@Service
 public class PageClassRegistryDefault implements PageClassRegistry, PageClassRegistrySpi {
+    private static final long serialVersionUID = 1L;
 
     public static final String LOGICAL_TYPE_NAME =
             CausewayModuleViewerWicketViewer.NAMESPACE + ".PageClassRegistryDefault";
@@ -55,19 +58,17 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
         @Named(LOGICAL_TYPE_NAME)
         @Order(PriorityPrecedence.MIDPOINT)
         @Qualifier("Default")
-        public PageClassRegistryDefault pageClassRegistryDefault(PageClassList pageClassList) {
+        public PageClassRegistryDefault pageClassRegistryDefault(final PageClassList pageClassList) {
             return new PageClassRegistryDefault(pageClassList);
         }
     }
-
-    private static final long serialVersionUID = 1L;
 
     private final PageClassList pageClassList; // serializable
     private final Map<PageType, Class<? extends Page>> pageClassByType = _Maps.newHashMap();
     private final Map<Class<? extends Page>, PageType> typeByPageClass = _Maps.newHashMap();
 
     @Inject
-    public PageClassRegistryDefault(PageClassList pageClassList) {
+    public PageClassRegistryDefault(final PageClassList pageClassList) {
         this.pageClassList = pageClassList;
     }
 
@@ -91,12 +92,12 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
     }
 
     @Override
-    public PageType getPageType(Class<? extends Page> pageClass) {
+    public PageType getPageType(final Class<? extends Page> pageClass) {
         return typeByPageClass.get(pageClass);
     }
 
     @Override
-    public PageType getPageType(PageAbstract page) {
+    public PageType getPageType(final PageAbstract page) {
         return getPageType(page.getClass());
     }
 

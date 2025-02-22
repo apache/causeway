@@ -201,7 +201,7 @@ implements AttributeModelChangeListener {
         // change visibility of inline components
         formExecutorContext().getInlinePromptContext().onCancel(getMemberModel());
 
-        Optional.ofNullable(formExecutorContext().getInlinePromptContext().getScalarTypeContainer())
+        Optional.ofNullable(formExecutorContext().getInlinePromptContext().scalarTypeContainer())
         .ifPresent(scalarTypeContainer->{
             Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PROPERTY, scalarTypeContainer.getMarkupId());
         });

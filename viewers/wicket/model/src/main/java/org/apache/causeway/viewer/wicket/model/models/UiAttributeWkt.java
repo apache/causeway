@@ -218,33 +218,35 @@ implements HasRenderingHints, UiAttribute, FormExecutorContext {
 
     public final AssociatedActions getAssociatedActions() {
         if (associatedActions == null) {
-            associatedActions = new AssociatedActions(calcAssociatedActions());
+            associatedActions = AssociatedActions.of(calcAssociatedActions());
         }
         return associatedActions;
     }
 
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
-        return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
+        return getAssociatedActions().firstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
     protected transient AssociatedActions associatedActions;
 
-    public static class AssociatedActions {
-        @Getter private final Optional<ObjectAction> firstAssociatedWithInlineAsIfEdit;
-        @Getter private final List<ObjectAction> remainingAssociated;
+    public record AssociatedActions(
+            Optional<ObjectAction> firstAssociatedWithInlineAsIfEdit,
+            List<ObjectAction> remainingAssociated) {
 
-        AssociatedActions(final Can<ObjectAction> allAssociated) {
-            firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
-            remainingAssociated = firstAssociatedWithInlineAsIfEdit.isPresent()
-                    ? allAssociated.remove(firstAssociatedWithInlineAsIfEdit.get()).toList()
-                    : allAssociated.toList();
+        static AssociatedActions of(final Can<ObjectAction> allAssociated) {
+            Optional<ObjectAction> firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
+            return new AssociatedActions(
+                    firstAssociatedWithInlineAsIfEdit,
+                    firstAssociatedWithInlineAsIfEdit.isPresent()
+                        ? allAssociated.remove(firstAssociatedWithInlineAsIfEdit.get()).toList()
+                        : allAssociated.toList());
         }
 
         private static Optional<ObjectAction> firstAssociatedActionWithInlineAsIfEdit(
                 final Can<ObjectAction> objectActions) {
             return objectActions.stream()
-            .filter(act->ObjectAction.Util.promptStyleFor(act).isInlineAsIfEdit())
-            .findFirst();
+                .filter(act->ObjectAction.Util.promptStyleFor(act).isInlineAsIfEdit())
+                .findFirst();
         }
     }
 

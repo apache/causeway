@@ -18,21 +18,23 @@
  */
 package org.apache.causeway.viewer.wicket.ui.app.registry;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
-public final class ComponentFactoryList implements Iterable<ComponentFactory> {
+public record ComponentFactoryList(
+        List<ComponentFactory> componentFactories) implements Iterable<ComponentFactory> {
 
-    private final List<ComponentFactory> componentFactories = _Lists.newArrayList();
+    public ComponentFactoryList() {
+        this(new ArrayList<>());
+    }
 
     public void add(final ComponentFactory componentFactory) {
-        if(componentFactories.contains(componentFactory)) {
-            return;
-        }
+        if(componentFactories.contains(componentFactory)) return;
+
         componentFactories.add(componentFactory);
     }
 

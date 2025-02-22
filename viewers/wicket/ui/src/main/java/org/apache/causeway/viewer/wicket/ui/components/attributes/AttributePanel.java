@@ -19,7 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.attributes;
 
 import java.io.Serializable;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +43,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -69,7 +68,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -492,37 +490,28 @@ implements AttributeModelChangeListener {
         addOrReplaceBehavoir(AttributeModelDefaultChangeBehavior.class, ()->new AttributeModelDefaultChangeBehavior(this));
     }
 
-    @RequiredArgsConstructor
-    static class AttributeModelChangeDispatcherImpl
-    implements AttributeModelChangeDispatcher, Serializable {
-        private static final long serialVersionUID = 1L;
-        private final List<AttributeModelChangeListener> changeListeners = _Lists.newArrayList();
-
-        @Getter(onMethod_={@Override})
-        private final AttributePanel scalarPanel;
+    record AttributeModelChangeDispatcherImpl(
+            AttributePanel attributePanel,
+            List<AttributeModelChangeListener> changeListeners) implements AttributeModelChangeDispatcher, Serializable {
 
         @Override
         public void notifyUpdate(final AjaxRequestTarget target) {
             _Probe.entryPoint(EntryPoint.USER_INTERACTION, "Wicket Ajax Request, "
                     + "originating from User either having changed a Property value during inline editing "
                     + "or having changed a Parameter value within an open ActionPrompt.");
-            _Xray.onParamOrPropertyEdited(scalarPanel);
+            _Xray.onParamOrPropertyEdited(attributePanel);
             AttributeModelChangeDispatcher.super.notifyUpdate(target);
-        }
-
-        @Override
-        public @NonNull Iterable<AttributeModelChangeListener> getChangeListeners() {
-            return Collections.unmodifiableCollection(changeListeners);
         }
 
         void addChangeListener(final AttributeModelChangeListener listener) {
             changeListeners.add(listener);
         }
+
     }
 
     @Getter
     private final AttributeModelChangeDispatcher attributeModelChangeDispatcher =
-            new AttributeModelChangeDispatcherImpl(this);
+            new AttributeModelChangeDispatcherImpl(this, new ArrayList<>());
 
     public void addChangeListener(final AttributeModelChangeListener listener) {
         ((AttributeModelChangeDispatcherImpl)getAttributeModelChangeDispatcher()).addChangeListener(listener);
@@ -538,7 +527,7 @@ implements AttributeModelChangeListener {
         validationFeedbackReceiver.add(factory.get());
     }
 
-    // //////////////////////////////////////
+    // --
 
     @Override
     public void onUpdate(final AjaxRequestTarget target, final AttributePanel scalarPanel) {
@@ -551,7 +540,7 @@ implements AttributeModelChangeListener {
     public void onError(final AjaxRequestTarget target, final AttributePanel scalarPanel) {
     }
 
-    // ///////////////////////////////////////////////////////////////////
+    // --
 
     /**
      * When label-position LEFT or TOP populates Wicket template ID_SCALAR_NAME_BEFORE_VALUE,

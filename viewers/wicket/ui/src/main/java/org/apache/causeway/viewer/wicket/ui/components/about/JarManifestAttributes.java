@@ -22,28 +22,9 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.Map.Entry;
 
-class JarManifestAttributes implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    public static JarManifestAttributes jarName(String jarName) {
-        return new JarManifestAttributes(JarManifestAttributes.Type.JAR_NAME, jarName);
-    }
-
-    public static JarManifestAttributes jarUrl(URL jarUrl) {
-        return new JarManifestAttributes(JarManifestAttributes.Type.JAR_URL, jarUrl != null? jarUrl.toExternalForm(): "");
-    }
-
-    public static JarManifestAttributes attribute(Entry<Object,Object> entry) {
-        StringBuilder buf = new StringBuilder();
-        buf .append("    ")
-        .append(entry.getKey())
-        .append(": ")
-        .append(entry.getValue())
-        .append("\n")
-        ;
-        return new JarManifestAttributes(JarManifestAttributes.Type.MANIFEST_ATTRIBUTE, buf.toString());
-    }
+record JarManifestAttributes(
+        Type type,
+        String line) implements Serializable {
 
     enum Type {
         JAR_NAME,
@@ -51,18 +32,22 @@ class JarManifestAttributes implements Serializable {
         MANIFEST_ATTRIBUTE
     }
 
-    private final Type type;
-    private final String line;
+    public static JarManifestAttributes jarName(final String jarName) {
+        return new JarManifestAttributes(JarManifestAttributes.Type.JAR_NAME, jarName);
+    }
 
-    public JarManifestAttributes(Type type, String line) {
-        this.type = type;
-        this.line = line;
+    public static JarManifestAttributes jarUrl(final URL jarUrl) {
+        return new JarManifestAttributes(JarManifestAttributes.Type.JAR_URL, jarUrl != null? jarUrl.toExternalForm(): "");
     }
-    public JarManifestAttributes.Type getType() {
-        return type;
-    }
-    public String getLine() {
-        return line;
+
+    public static JarManifestAttributes attribute(final Entry<Object,Object> entry) {
+        var buf = new StringBuilder();
+        buf.append("    ")
+            .append(entry.getKey())
+            .append(": ")
+            .append(entry.getValue())
+            .append("\n");
+        return new JarManifestAttributes(JarManifestAttributes.Type.MANIFEST_ATTRIBUTE, buf.toString());
     }
 
 }

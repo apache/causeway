@@ -40,10 +40,9 @@ import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class FormExecutorDefault
-implements FormExecutor, HasCommonContext {
-
-    private static final long serialVersionUID = 1L;
+public record FormExecutorDefault(
+        Either<ActionModel, PropertyModel> actionOrPropertyModel
+        ) implements FormExecutor, HasCommonContext {
 
     // -- FACTORIES
 
@@ -57,15 +56,6 @@ implements FormExecutor, HasCommonContext {
 
     public static FormExecutor forMember(final Either<ActionModel, PropertyModel> actionOrPropertyModel) {
         return new FormExecutorDefault(actionOrPropertyModel);
-    }
-
-    // -- CONSTRUCTION
-
-    private final Either<ActionModel, PropertyModel> actionOrPropertyModel;
-
-    private FormExecutorDefault(
-            final Either<ActionModel, PropertyModel> actionOrPropertyModel) {
-        this.actionOrPropertyModel = actionOrPropertyModel;
     }
 
     /**

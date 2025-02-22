@@ -20,7 +20,6 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model;
     exports org.apache.causeway.viewer.commons.model.layout;
     exports org.apache.causeway.viewer.commons.model.components;
-    exports org.apache.causeway.viewer.commons.model.binding;
     exports org.apache.causeway.viewer.commons.model.mixin;
     exports org.apache.causeway.viewer.commons.model.object;
     exports org.apache.causeway.viewer.commons.model.action;

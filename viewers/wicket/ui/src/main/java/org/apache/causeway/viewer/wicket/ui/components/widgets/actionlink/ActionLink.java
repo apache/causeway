@@ -241,7 +241,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     private void startDialogInline(final AjaxRequestTarget target) {
         var actionModel = this.getActionModel();
         var inlinePromptContext = actionModel.getInlinePromptContext();
-        var scalarTypeContainer = inlinePromptContext.getScalarTypeContainer();
+        var scalarTypeContainer = inlinePromptContext.scalarTypeContainer();
 
         getComponentFactoryRegistry().addOrReplaceComponent(scalarTypeContainer,
                 FrameFragment.INLINE_PROMPT_FORM.getContainerId(),

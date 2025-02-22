@@ -24,18 +24,18 @@ import org.jspecify.annotations.NonNull;
 
 public interface AttributeModelChangeDispatcher {
 
-    @NonNull Iterable<AttributeModelChangeListener> getChangeListeners();
-    @NonNull AttributePanel getScalarPanel();
+    @NonNull Iterable<AttributeModelChangeListener> changeListeners();
+    @NonNull AttributePanel attributePanel();
 
     default void notifyUpdate(final AjaxRequestTarget target) {
-        for (var listener : getChangeListeners()) {
-            listener.onUpdate(target, getScalarPanel());
+        for (var listener : changeListeners()) {
+            listener.onUpdate(target, attributePanel());
         }
     }
 
     default void notifyError(final AjaxRequestTarget target) {
-        for (var listener : getChangeListeners()) {
-            listener.onError(target, getScalarPanel());
+        for (var listener : changeListeners()) {
+            listener.onError(target, attributePanel());
         }
     }
 

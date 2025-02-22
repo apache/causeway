@@ -96,7 +96,6 @@ extends ManagedMember {
 
     public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
         try {
-
             var validityConsent =
                     property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
 
@@ -117,11 +116,8 @@ extends ManagedMember {
      * @return non-empty if the interaction is not valid for given {@code proposedNewValue}
      */
     public Optional<InteractionVeto> modifyProperty(final @Nullable ManagedObject newValue) {
-
         var interactionVeto = checkValidity(newValue);
-        if(interactionVeto.isPresent()) {
-            return interactionVeto;
-        }
+        if(interactionVeto.isPresent()) return interactionVeto;
 
         var updatedOwner = property.set(getOwner(), newValue, InteractionInitiatedBy.USER);
         setOwner(updatedOwner);

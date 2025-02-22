@@ -198,7 +198,7 @@ public class DomainObjectPage extends PageAbstract {
         whereAmIModel.streamParentChainReversed().forEach(objectModel->
             listItems.add(ObjectIconAndTitlePanelFactory.entityIconAndTitlePanel(listItems.newChildId(), objectModel)));
 
-        Wkt.labelAdd(listItems, listItems.newChildId(), whereAmIModel.getStartOfChain().getTitle());
+        Wkt.labelAdd(listItems, listItems.newChildId(), whereAmIModel.startOfChain().getTitle());
 
         whereAmIContainer.addOrReplace(listItems);
     }

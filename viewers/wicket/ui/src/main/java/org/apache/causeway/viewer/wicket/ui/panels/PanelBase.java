@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
-import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProviderDefault;
+import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProviderBootstrap;
 import org.apache.causeway.viewer.wicket.ui.pages.EmailVerificationUrlService;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
@@ -75,7 +75,7 @@ implements HasCommonContext {
 
     private transient TreeThemeProvider treeThemeProvider;
     protected TreeThemeProvider getTreeThemeProvider() {
-        return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderDefault::new);
+        return treeThemeProvider = computeIfAbsentOrFallback(TreeThemeProvider.class, treeThemeProvider, TreeThemeProviderBootstrap::new);
     }
 
     private transient EmailNotificationService emailNotificationService;

@@ -22,16 +22,13 @@ import java.io.Serializable;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.object.ObjectComponentFactoryAbstract;
-
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  * {@link ComponentFactory} for {@link ParentedCollectionPanel}.
@@ -41,12 +38,9 @@ public class ParentedCollectionPanelFactory extends ObjectComponentFactoryAbstra
     /**
      * Helper class, used to call this factory.
      */
-    @RequiredArgsConstructor
-    @Getter
-    public static class CollectionOwnerAndLayout implements Serializable {
-        private static final long serialVersionUID = 1L;
-        final @NonNull UiObjectWkt owner;
-        final @NonNull CollectionLayoutData layout;
+    public record CollectionOwnerAndLayout(
+            @NonNull UiObjectWkt owner,
+            @NonNull CollectionLayoutData layout) implements Serializable {
     }
 
     public ParentedCollectionPanelFactory() {
@@ -66,6 +60,6 @@ public class ParentedCollectionPanelFactory extends ObjectComponentFactoryAbstra
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         var collectionOwnerAndId = (CollectionOwnerAndLayout) model.getObject();
-        return new ParentedCollectionPanel(id, collectionOwnerAndId.getOwner(), collectionOwnerAndId.getLayout());
+        return new ParentedCollectionPanel(id, collectionOwnerAndId.owner(), collectionOwnerAndId.layout());
     }
 }

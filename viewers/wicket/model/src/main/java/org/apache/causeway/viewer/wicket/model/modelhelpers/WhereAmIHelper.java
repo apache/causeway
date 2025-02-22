@@ -19,52 +19,37 @@
 package org.apache.causeway.viewer.wicket.model.modelhelpers;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.util.pchain.ParentChain;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 /**
- *
- * @implNote - previously this was called WhereAmIModel,
- *      but it isn't really a model in the Wicket sense (it's not serializable, for a start), hence renamed.
  * @since 2.0
  */
-public class WhereAmIHelper {
+public record WhereAmIHelper(
+        /** immutable start node of the navigable parent chain */
+        UiObjectWkt startOfChain,
+        List<Object> reversedChainOfParents,
+        boolean isWhereAmIEnabled) {
 
     public static WhereAmIHelper of(final UiObjectWkt startOfChain) {
-        return new WhereAmIHelper(startOfChain);
-    }
-
-    private final LinkedList<Object> reversedChainOfParents = new LinkedList<>();
-    private final UiObjectWkt startOfChain;
-    private final MetaModelContext commonContext;
-
-    private final boolean isWhereAmIEnabled;
-
-    public WhereAmIHelper(final UiObjectWkt startOfChain) {
-        this.startOfChain = startOfChain;
-        this.commonContext = startOfChain.getMetaModelContext();
-
-        var settings = commonContext.getConfiguration().getViewer().getWicket().getBreadcrumbs();
-        this.isWhereAmIEnabled = settings.isEnabled();
+        var mmc = startOfChain.getMetaModelContext();
+        var settings = mmc.getConfiguration().getViewer().getWicket().getBreadcrumbs();
+        var isWhereAmIEnabled = settings.isEnabled();
         int maxChainLength = settings.getMaxParentChainLength();
 
         var adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
 
-        ParentChain.of(commonContext.getSpecificationLoader())
-        .streamParentChainOf(startNode, maxChainLength)
-        .forEach(reversedChainOfParents::addFirst);
-    }
+        var reversedChainOfParents = new LinkedList<Object>();
 
-    /**
-     *
-     * @return the immutable start node of the navigable parent chain
-     */
-    public UiObjectWkt getStartOfChain() {
-        return startOfChain;
+        ParentChain.of(mmc.getSpecificationLoader())
+            .streamParentChainOf(startNode, maxChainLength)
+            .forEach(reversedChainOfParents::addFirst);
+
+        return new WhereAmIHelper(startOfChain, reversedChainOfParents, isWhereAmIEnabled);
     }
 
     /**
@@ -72,9 +57,8 @@ public class WhereAmIHelper {
      * @return whether the where-am-I hint should be shown or hidden
      */
     public boolean isShowWhereAmI() {
-        if(!isWhereAmIEnabled) {
-            return false; // this will prevent rendering
-        }
+        if(!isWhereAmIEnabled) return false; // this will prevent rendering
+
         return !reversedChainOfParents.isEmpty();
     }
 
@@ -83,8 +67,7 @@ public class WhereAmIHelper {
      * @return reversed order stream of linked parent nodes, which does not include the start node
      */
     public Stream<UiObjectWkt> streamParentChainReversed() {
-        if(!isWhereAmIEnabled)
-            return Stream.empty(); //[ahuber] unexpected call, we could log a warning
+        if(!isWhereAmIEnabled) return Stream.empty(); //unexpected call, we could log a warning
 
         return reversedChainOfParents.stream()
                 .map(this::toEntityModel);
@@ -93,7 +76,7 @@ public class WhereAmIHelper {
     // -- HELPER
 
     private UiObjectWkt toEntityModel(final Object domainObject) {
-        var objectAdapter = commonContext.getObjectManager().adapt(domainObject);
+        var objectAdapter = startOfChain.getMetaModelContext().getObjectManager().adapt(domainObject);
         return UiObjectWkt.ofAdapter(objectAdapter);
     }
 

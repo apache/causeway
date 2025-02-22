@@ -80,7 +80,7 @@ class _Util {
     Optional<ActionModel> lookupPropertyActionForInlineEdit(final UiAttributeWkt attributeModel) {
         // not editable property, but maybe one of the actions is.
         return attributeModel.getAssociatedActions()
-                .getFirstAssociatedWithInlineAsIfEdit()
+                .firstAssociatedWithInlineAsIfEdit()
                 .flatMap(action->toActionModelWithRuleChecking(action, attributeModel));
     }
 
@@ -88,7 +88,7 @@ class _Util {
         // find associated actions for this scalar property (only properties will have any.)
         // convert those actions into UI layer widgets
         return attributeModel.getAssociatedActions()
-                .getRemainingAssociated()
+                .remainingAssociated()
                 .stream()
                 .map(act->ActionModel.forPropertyOrParameter(act, attributeModel))
                 .collect(Can.toCan());

@@ -16,30 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.model.binding;
+package org.apache.causeway.viewer.wicket.ui.components.tree.themes;
 
-public interface BindingConverter<L, R> {
+import org.apache.wicket.behavior.Behavior;
 
-    L toLeft(R right);
-    R toRight(L left);
+import org.apache.causeway.viewer.wicket.ui.components.tree.themes.bootstrap.WktBootstrapTreeTheme;
 
-    public static <T> BindingConverter<T, T> identity(final Class<T> type){
-        return new BindingConverter<T, T>() {
-            @Override public T toLeft(final T right) {
-                return right;}
-            @Override public T toRight(final T left) {
-                return left;}
-        };
-    }
+public class TreeThemeProviderBootstrap implements TreeThemeProvider {
 
-    public default BindingConverter<R, L> reverse() {
-        var self = this;
-        return new BindingConverter<R, L>() {
-            @Override public R toLeft(final L right) {
-                return self.toRight(right);}
-            @Override public L toRight(final R left) {
-                return self.toLeft(left);}
-        };
+    // other options as provided by wicket-extensions: WindowsTheme, HumanTheme
+    private final Behavior bootstrapTheme = new WktBootstrapTreeTheme();
+
+    @Override
+    public Behavior treeThemeFor(Object model) {
+        return bootstrapTheme;
     }
 
 }

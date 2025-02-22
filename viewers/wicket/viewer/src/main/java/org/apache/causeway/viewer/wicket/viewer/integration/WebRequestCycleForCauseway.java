@@ -43,7 +43,6 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
@@ -58,6 +57,8 @@ import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.base._Timing;
+import org.apache.causeway.commons.internal.base._Timing.StopWatch;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -121,7 +122,7 @@ implements
     @Setter
     private PageClassRegistry pageClassRegistry;
 
-    private static ThreadLocal<Timing> timings = ThreadLocal.withInitial(Timing::new);
+    private static ThreadLocal<StopWatch> timings = ThreadLocal.withInitial(_Timing::now);
 
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
@@ -186,7 +187,7 @@ implements
         }
 
         if(log.isDebugEnabled()) {
-            timings.set(new Timing());
+            timings.set(_Timing.now());
         }
     }
 
@@ -273,7 +274,7 @@ implements
 
         if(log.isDebugEnabled()) {
             var metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
-            long took = timings.get().took();
+            long took = timings.get().getMillis();
             if(took > 50) {  // avoid too much clutter
                 if(metricsServiceIfAny.isPresent()) {
                     var metricsService = metricsServiceIfAny.get();
@@ -303,7 +304,7 @@ implements
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
 
         if(log.isDebugEnabled()) {
-            log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().took());
+            log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().getMillis());
         }
 
         // using side-effect free access to MM validation result

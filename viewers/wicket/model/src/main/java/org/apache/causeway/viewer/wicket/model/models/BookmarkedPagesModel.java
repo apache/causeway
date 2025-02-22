@@ -33,10 +33,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     public void bookmarkPage(final BookmarkableModel bookmarkableModel) {
 
         var bookmark = bookmarkableModel.toBookmark().orElse(null);
-        if(bookmark == null) {
-            // ignore
-            return;
-        }
+        if(bookmark == null) return; // ignore
 
         var matchingRootNode = matchRootNode(bookmarkableModel).orElse(null);
 

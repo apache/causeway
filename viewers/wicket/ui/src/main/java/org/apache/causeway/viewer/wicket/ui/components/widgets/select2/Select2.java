@@ -43,14 +43,11 @@ import org.jspecify.annotations.NonNull;
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
  */
-public class Select2
+public record Select2(
+        Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice)
 implements
     Serializable,
     HasCommonContext {
-
-    private static final long serialVersionUID = 1L;
-
-    final Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice;
 
     public static Select2 createSelect2(
             final String id,
@@ -78,7 +75,8 @@ implements
         return select2;
     }
 
-    private Select2(final @NonNull Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
+    // canonical constructor
+    public Select2(final @NonNull Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
         this.select2Choice = select2Choice;
         asComponent().setOutputMarkupId(true);
     }
