@@ -161,16 +161,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     }
 
     public final ObjectAction getMetaModel() {
-
         //[CAUSEWAY-3648] In support of the composite value type's 'Xxx_default' mixin.
         if(actionMemento==null) {
-            var objectAction = actionInteraction().getMetamodel()
-                .orElseThrow(()->_Exceptions
-                        .noSuchElement("could not resolve action by memberId '%s'", memberId));
-            this.actionMemento = objectAction;
-            return objectAction;
+            this.actionMemento = actionInteraction()
+                    .getObjectActionElseFail();
         }
-
         // re-attachment fails, if the owner is not found (eg. deleted entity),
         // hence we return the directly memoized meta-model of the underlying action
         return actionMemento;

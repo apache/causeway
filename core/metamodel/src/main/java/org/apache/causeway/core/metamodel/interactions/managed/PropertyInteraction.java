@@ -27,8 +27,9 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public final class PropertyInteraction
-extends MemberInteraction<ManagedProperty, PropertyInteraction> {
+public record PropertyInteraction(
+        @NonNull InteractionRailway<ManagedProperty> railway)
+implements MemberInteraction<ManagedProperty, PropertyInteraction> {
 
     public static final PropertyInteraction start(
             final @NonNull ManagedObject owner,
@@ -48,10 +49,6 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
         return new PropertyInteraction(InteractionRailway.success(managedProperty));
     }
 
-    PropertyInteraction(final @NonNull InteractionRailway<ManagedProperty> railway) {
-        super(railway);
-    }
-
     public Optional<PropertyNegotiationModel> startPropertyNegotiation() {
         return getManagedProperty()
             .map(ManagedProperty::startNegotiation);
@@ -69,16 +66,16 @@ extends MemberInteraction<ManagedProperty, PropertyInteraction> {
      * was no interaction veto within the originating chain
      */
     public Optional<ManagedProperty> getManagedProperty() {
-        return super.railway.getSuccess();
+        return railway.getSuccess();
     }
 
     /**
      * @return this Interaction's ManagedProperty
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable>
-    ManagedProperty getManagedPropertyElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return super.getManagedMemberElseThrow(onFailure);
+    public <X extends Throwable> ManagedProperty getManagedPropertyElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return getManagedMemberElseThrow(onFailure);
     }
 
 }

@@ -448,6 +448,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         }
 
+        @SuppressWarnings("unchecked")
         public void assertParameterValues(
                 final boolean checkRules,
                 @SuppressWarnings("rawtypes") final Consumer ...pojoDefaultArgTests) {
@@ -539,7 +540,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         public void assertParameterUsability(
                 final boolean checkRules,
-                final Consumer<String> ...argUsableChecks) {
+                @SuppressWarnings("unchecked") final Consumer<String> ...argUsableChecks) {
 
             assertParameterModel(checkRules,
                 // when
@@ -566,6 +567,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         }
 
+        @SuppressWarnings("unchecked")
         public void assertValidationMessage(
                 final String expectedMessage,
                 final boolean checkRules,

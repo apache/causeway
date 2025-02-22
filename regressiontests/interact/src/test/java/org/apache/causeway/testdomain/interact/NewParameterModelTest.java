@@ -75,7 +75,7 @@ class NewParameterModelTest extends InteractionTestAbstract {
     void paramAnnotations_whenNpm_shouldBeRecognized(final String mixinName) {
 
         var param0Metamodel = startActionInteractionOn(InteractionNpmDemo.class, mixinName, Where.OBJECT_FORMS)
-                .getMetamodel().get().getParameters().getElseFail(0);
+                .objectAction().get().getParameterByIndex(0);
 
         // as with first param's @Parameter(maxLength = 2)
         var maxLengthFacet = param0Metamodel.getFacet(MaxLengthFacet.class);

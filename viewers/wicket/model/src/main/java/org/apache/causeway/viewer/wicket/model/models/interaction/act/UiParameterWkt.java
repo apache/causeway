@@ -49,13 +49,9 @@ implements
         return getObject();
     }
 
-    public ActionInteractionWkt actionInteractionModel() {
-        return actionInteractionModel;
-    }
-
     @Override
     public UiObject getParentUiModel() {
-        return ()->getOwner();
+        return this::getOwner;
     }
 
     @Override
@@ -65,7 +61,7 @@ implements
 
     @Override
     public ObjectActionParameter getMetaModel() {
-        return actionInteraction().getMetamodel().get().getParameters().getElseFail(paramIndex);
+        return actionInteraction().getObjectActionElseFail().getParameterByIndex(paramIndex);
     }
 
     @Override

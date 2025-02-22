@@ -36,12 +36,16 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember.AuthorizationException;
 
-import lombok.Getter;
+public record ActionInteraction(
+        String memberId,
+        /**
+         * optionally the action's metamodel, based on whether was found by actionId
+         */
+        @NonNull Optional<ObjectAction> objectAction,
+        @NonNull InteractionRailway<ManagedAction> railway)
+implements MemberInteraction<ManagedAction, ActionInteraction> {
 
-public final class ActionInteraction
-extends MemberInteraction<ManagedAction, ActionInteraction> {
-
-    public static enum SemanticConstraint {
+    public enum SemanticConstraint {
         NONE,
         IDEMPOTENT,
         SAFE
@@ -53,6 +57,12 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
             ManagedObject actionReturnedObject) {
     }
 
+    public static interface ParameterInvalidCallback {
+        void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
+    }
+
+    // -- FACTORIES
+
     public static final ActionInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
@@ -62,123 +72,20 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
     public static final ActionInteraction startWithMultiselect(
             final @NonNull ManagedObject owner,
-            final @NonNull String memberId,
+            final @NonNull String actionId,
             final @NonNull Where where,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        var managedAction = ManagedAction.lookupActionWithMultiselect(owner, memberId, where, multiselectChoices);
+        var managedAction = ManagedAction.lookupActionWithMultiselect(owner, actionId, where, multiselectChoices);
 
         final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
                 ? InteractionRailway.success(managedAction.get())
-                : InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, memberId));
+                : InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId));
 
         return new ActionInteraction(
-                managedAction.map(ManagedAction::getAction),
+                actionId,
+                managedAction.map(x->x.getAction()),
                 railway);
-    }
-
-    public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
-        return new ActionInteraction(
-                Optional.of(managedAction.getAction()),
-                InteractionRailway.success(managedAction));
-    }
-
-    public static ActionInteraction empty(final String actionId) {
-        return new ActionInteraction(
-                Optional.empty(),
-                InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId)));
-    }
-
-    ActionInteraction(
-            final @NonNull Optional<ObjectAction> metamodel,
-            final @NonNull InteractionRailway<ManagedAction> railway) {
-        super(railway);
-        this.metamodel = metamodel;
-    }
-
-    /**
-     * optionally the action's metamodel, based on whether even exists (eg. was found by memberId)
-     */
-    @Getter
-    private final Optional<ObjectAction> metamodel;
-
-    public final Optional<Identifier> getFeatureIdentifier() {
-        return metamodel.map(ObjectAction::getFeatureIdentifier);
-    }
-
-    public ActionInteraction checkSemanticConstraint(final @NonNull SemanticConstraint semanticConstraint) {
-        railway.update(action -> switch(semanticConstraint) {
-                case NONE -> Optional.empty();
-                case IDEMPOTENT -> action.getAction().getSemantics().isIdempotentInNature()
-                            ? Optional.empty()
-                            : Optional.of(InteractionVeto.actionNotIdempotent(action));
-                case SAFE -> action.getAction().getSemantics().isSafeInNature()
-                            ? Optional.empty()
-                            : Optional.of(InteractionVeto.actionNotSafe(action));
-            }
-        );
-        return this;
-    }
-
-    public Optional<ParameterNegotiationModel> startParameterNegotiation() {
-        return getManagedAction()
-            .map(ManagedAction::startParameterNegotiation);
-    }
-
-    public static interface ParameterInvalidCallback {
-        void onParameterInvalid(ManagedParameter managedParameter, InteractionVeto veto);
-    }
-
-    public Railway<InteractionVeto, ManagedObject> invokeWith(final ParameterNegotiationModel pendingArgs) {
-        pendingArgs.activateValidationFeedback();
-        var veto = validate(pendingArgs);
-        if(veto.isPresent()) {
-            return Railway.failure(veto.get());
-        }
-        var action = railway.getSuccessElseFail();
-        var actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
-        return actionResultOrVeto;
-    }
-
-    public final ManagedObject invokeWithRuleChecking(
-            final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
-        var action = railway.getSuccessElseFail();
-        return action.invokeWithRuleChecking(pendingArgs.getParamValues());
-    }
-
-    public Optional<InteractionVeto> validate(
-            final @NonNull ParameterNegotiationModel pendingArgs) {
-
-        if(railway.isVeto()) return railway.getVeto();
-
-        var validityConsent = pendingArgs.validateParameterSet(); // full validation
-        if(validityConsent!=null && validityConsent.isVetoed()) {
-            return Optional.of(InteractionVeto.actionParamInvalid(validityConsent));
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * @return optionally the ManagedAction based on whether there
-     * was no interaction veto within the originating chain
-     */
-    public Optional<ManagedAction> getManagedAction() {
-        return railway.getSuccess();
-    }
-
-    /**
-     * @return this Interaction's ManagedAction
-     * @throws X if there was any interaction veto within the originating chain
-     */
-    public <X extends Throwable>
-    ManagedAction getManagedActionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return super.getManagedMemberElseThrow(onFailure);
-    }
-
-    public <X extends Throwable>
-    ManagedAction getManagedActionElseFail() {
-        return getManagedActionElseThrow(veto->
-            _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
 
     /** Supports composite-value-types via mixin (in case detected). */
@@ -259,6 +166,100 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
 
         // else if not a composite value
         return ActionInteraction.start(actionOwner, memberId, where);
+    }
+
+    public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {
+        var action = managedAction.getAction();
+        return new ActionInteraction(
+                action.getId(),
+                Optional.of(action),
+                InteractionRailway.success(managedAction));
+    }
+
+    public static ActionInteraction empty(final String actionId) {
+        return new ActionInteraction(
+                actionId,
+                Optional.empty(),
+                InteractionRailway.veto(InteractionVeto.notFound(Identifier.Type.ACTION, actionId)));
+    }
+
+    // -- METHODS
+
+    public ObjectAction getObjectActionElseFail() {
+        return objectAction.orElseThrow(()->_Exceptions
+                .noSuchElement("could not resolve action by memberId '%s'", memberId));
+    }
+
+    public Optional<Identifier> getFeatureIdentifier() {
+        return objectAction.map(ObjectAction::getFeatureIdentifier);
+    }
+
+    public ActionInteraction checkSemanticConstraint(final @NonNull SemanticConstraint semanticConstraint) {
+        railway.update(action -> switch(semanticConstraint) {
+                case NONE -> Optional.empty();
+                case IDEMPOTENT -> action.getAction().getSemantics().isIdempotentInNature()
+                            ? Optional.empty()
+                            : Optional.of(InteractionVeto.actionNotIdempotent(action));
+                case SAFE -> action.getAction().getSemantics().isSafeInNature()
+                            ? Optional.empty()
+                            : Optional.of(InteractionVeto.actionNotSafe(action));
+            }
+        );
+        return this;
+    }
+
+    public Optional<ParameterNegotiationModel> startParameterNegotiation() {
+        return getManagedAction()
+            .map(ManagedAction::startParameterNegotiation);
+    }
+
+    public Railway<InteractionVeto, ManagedObject> invokeWith(final ParameterNegotiationModel pendingArgs) {
+        pendingArgs.activateValidationFeedback();
+        var veto = validate(pendingArgs);
+        if(veto.isPresent()) return Railway.failure(veto.get());
+
+        var action = railway.getSuccessElseFail();
+        var actionResultOrVeto = action.invoke(pendingArgs.getParamValues());
+        return actionResultOrVeto;
+    }
+
+    public ManagedObject invokeWithRuleChecking(
+            final ParameterNegotiationModel pendingArgs) throws AuthorizationException {
+        var action = railway.getSuccessElseFail();
+        return action.invokeWithRuleChecking(pendingArgs.getParamValues());
+    }
+
+    public Optional<InteractionVeto> validate(
+            final @NonNull ParameterNegotiationModel pendingArgs) {
+        if(railway.isVeto()) return railway.getVeto();
+
+        var validityConsent = pendingArgs.validateParameterSet(); // full validation
+        return validityConsent!=null
+                && validityConsent.isVetoed()
+            ? Optional.of(InteractionVeto.actionParamInvalid(validityConsent))
+            : Optional.empty();
+    }
+
+    /**
+     * @return optionally the ManagedAction based on whether there
+     * was no interaction veto within the originating chain
+     */
+    public Optional<ManagedAction> getManagedAction() {
+        return railway.getSuccess();
+    }
+
+    /**
+     * @return this Interaction's ManagedAction
+     * @throws X if there was any interaction veto within the originating chain
+     */
+    public <X extends Throwable> ManagedAction getManagedActionElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return getManagedMemberElseThrow(onFailure);
+    }
+
+    public <X extends Throwable> ManagedAction getManagedActionElseFail() {
+        return getManagedActionElseThrow(veto->
+            _Exceptions.unrecoverable("action vetoed: " + veto.getReason()));
     }
 
     // -- HELPER

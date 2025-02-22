@@ -25,26 +25,23 @@ import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.commons.internal.base._Casts;
 
-public abstract class MemberInteraction<T extends ManagedMember, H extends MemberInteraction<T, ?>> {
+public sealed interface MemberInteraction<T extends ManagedMember, H extends MemberInteraction<T, ?>>
+permits ActionInteraction, CollectionInteraction, PropertyInteraction {
 
     public static enum AccessIntent {
         ACCESS, MUTATE;
         public boolean isMutate() { return this == MUTATE; }
     }
 
-    @NonNull protected final InteractionRailway<T> railway;
+    @NonNull InteractionRailway<T> railway();
 
-    protected MemberInteraction(final @NonNull InteractionRailway<T> railway) {
-        this.railway = railway;
-    }
-
-    public H checkVisibility() {
-        railway.update(ManagedMember::checkVisibility);
+    default H checkVisibility() {
+        railway().update(ManagedMember::checkVisibility);
         return _Casts.uncheckedCast(this);
     }
 
-    public H checkUsability() {
-        railway.update(ManagedMember::checkUsability);
+    default H checkUsability() {
+        railway().update(ManagedMember::checkUsability);
         return _Casts.uncheckedCast(this);
     }
 
@@ -53,14 +50,14 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
      * @param intent
      * @return self
      */
-    public H checkUsability(final @NonNull AccessIntent intent) {
+    default H checkUsability(final @NonNull AccessIntent intent) {
         if(intent.isMutate()) return checkUsability();
 
         return _Casts.uncheckedCast(this);
     }
 
-    public <X extends Throwable>
-    H validateElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
+    default <X extends Throwable> H validateElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
         var veto = getInteractionVeto().orElse(null);
         if (veto == null) {
             return _Casts.uncheckedCast(this);
@@ -69,32 +66,24 @@ public abstract class MemberInteraction<T extends ManagedMember, H extends Membe
         }
     }
 
-//    /**
-//     * @return optionally the ManagedMember based on whether there
-//     * was no interaction veto within the originating chain
-//     */
-//    protected InteractionRailway<T> getManagedMember() {
-//        return railway;
-//    }
-
     /**
      * @return optionally the InteractionVeto based on whether there
      * was any interaction veto within the originating chain
      */
-    public Optional<InteractionVeto> getInteractionVeto() {
-        return railway.getVeto();
+    default Optional<InteractionVeto> getInteractionVeto() {
+        return railway().getVeto();
     }
 
     /**
      * @return this Interaction's ManagedMember
      * @throws X if there was any interaction veto within the originating chain
      */
-    protected <X extends Throwable>
-    T getManagedMemberElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return railway.getSuccessElseFail(onFailure);
+    default <X extends Throwable> T getManagedMemberElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return railway().getSuccessElseFail(onFailure);
     }
 
-    protected InteractionRailway<T> vetoRailway(final InteractionVeto veto) {
+    default InteractionRailway<T> vetoRailway(final InteractionVeto veto) {
         return InteractionRailway.veto(veto);
     }
 

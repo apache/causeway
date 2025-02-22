@@ -107,9 +107,9 @@ class ActionInteractionTest extends InteractionTestAbstract {
                 .checkUsability();
 
         assertFalse(actionInteraction.getManagedAction().isPresent()); // since usability should be vetoed
-        assertTrue(actionInteraction.getMetamodel().isPresent()); // but should always provide access to metamodel
+        assertTrue(actionInteraction.objectAction().isPresent()); // but should always provide access to metamodel
 
-        var actionMeta = actionInteraction.getMetamodel().get();
+        var actionMeta = actionInteraction.objectAction().get();
         assertEquals(2, actionMeta.getParameterCount());
     }
 

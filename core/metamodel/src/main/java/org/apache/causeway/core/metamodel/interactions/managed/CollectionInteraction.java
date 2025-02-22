@@ -27,8 +27,9 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public final class CollectionInteraction
-extends MemberInteraction<ManagedCollection, CollectionInteraction> {
+public record CollectionInteraction(
+        @NonNull InteractionRailway<ManagedCollection> railway)
+implements MemberInteraction<ManagedCollection, CollectionInteraction> {
 
     public static final CollectionInteraction start(
             final @NonNull ManagedObject owner,
@@ -44,10 +45,6 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
         return new CollectionInteraction(railway);
     }
 
-    CollectionInteraction(final @NonNull InteractionRailway<ManagedCollection> railway) {
-        super(railway);
-    }
-
     /**
      * @return optionally the ManagedCollection based on whether there
      * was no interaction veto within the originating chain
@@ -60,9 +57,9 @@ extends MemberInteraction<ManagedCollection, CollectionInteraction> {
      * @return this Interaction's ManagedCollection
      * @throws X if there was any interaction veto within the originating chain
      */
-    public <X extends Throwable>
-    ManagedCollection getManagedCollectionElseThrow(final Function<InteractionVeto, ? extends X> onFailure) throws X {
-        return super.getManagedMemberElseThrow(onFailure);
+    public <X extends Throwable> ManagedCollection getManagedCollectionElseThrow(
+            final Function<InteractionVeto, ? extends X> onFailure) throws X {
+        return getManagedMemberElseThrow(onFailure);
     }
 
 }
