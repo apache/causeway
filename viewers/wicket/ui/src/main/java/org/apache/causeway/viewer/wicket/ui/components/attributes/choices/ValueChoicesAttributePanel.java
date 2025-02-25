@@ -62,7 +62,7 @@ implements ChoiceTitleHandler {
             select2.clearInput();
         }
         @SuppressWarnings("rawtypes") // incompatible generic type parameter cast
-        FormComponent formComponent = select2.asComponent();
+        FormComponent formComponent = select2.component();
         return formComponent;
     }
 
@@ -78,7 +78,7 @@ implements ChoiceTitleHandler {
         super.onInitializeNotEditable();
         if(isCompactFormat) return;
         // View: Read only
-        select2.setEnabled(false);
+        select2.setMutable(false);
     }
 
     @Override
@@ -86,7 +86,7 @@ implements ChoiceTitleHandler {
         super.onInitializeEditable();
         if(isCompactFormat) return;
         // Edit: read/write
-        select2.setEnabled(true);
+        select2.setMutable(true);
         clearTitleAttribute();
     }
 
@@ -95,7 +95,7 @@ implements ChoiceTitleHandler {
         super.onInitializeReadonly(disableReason);
         if(isCompactFormat) return;
         setTitleAttribute(disableReason);
-        select2.setEnabled(false);
+        select2.setMutable(false);
     }
 
     @Override
@@ -103,7 +103,7 @@ implements ChoiceTitleHandler {
         super.onMakeNotEditable(disableReason);
         if(isCompactFormat) return;
         setTitleAttribute(disableReason);
-        select2.setEnabled(false);
+        select2.setMutable(false);
     }
 
     @Override
@@ -111,7 +111,7 @@ implements ChoiceTitleHandler {
         super.onMakeEditable();
         if(isCompactFormat) return;
         clearTitleAttribute();
-        select2.setEnabled(true);
+        select2.setMutable(true);
     }
 
     // -- CHOICE TITLE HANDLER

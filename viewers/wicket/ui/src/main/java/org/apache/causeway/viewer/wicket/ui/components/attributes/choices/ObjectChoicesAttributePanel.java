@@ -86,7 +86,7 @@ implements ChoiceTitleHandler {
 
         this.select2 = createSelect2(ID_AUTO_COMPLETE);
 
-        objectLink.addOrReplace(select2.asComponent());
+        objectLink.addOrReplace(select2.component());
         objectLink.setOutputMarkupId(true);
 
         return objectLink;
@@ -180,7 +180,7 @@ implements ChoiceTitleHandler {
         }
 
         // set mutability
-        select2.setEnabled(objectLink.isEnableAllowed()
+        select2.setMutable(objectLink.isEnableAllowed()
                 && !getModel().isViewingMode());
 
         /* XXX not sure if required any more
@@ -242,8 +242,8 @@ implements ChoiceTitleHandler {
         if(isEditable()) {
 
             // flush changes to pending model
-            var adapter = select2.getConvertedInputValue();
-            pendingValue.setValue(adapter);
+            var managedObject = select2.convertedInputValue();
+            pendingValue.setValue(managedObject);
         }
 
         objectLink.setConvertedInput(pendingValue.getValue());

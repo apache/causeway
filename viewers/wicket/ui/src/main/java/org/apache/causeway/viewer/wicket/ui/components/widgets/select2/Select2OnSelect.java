@@ -32,11 +32,13 @@ import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.INamedParameters.NamedPair;
 import org.wicketstuff.select2.JQuery;
-
+import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Select2MultiChoice;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -109,12 +111,11 @@ class Select2OnSelect extends AbstractAjaxBehavior {
         .forEach(pair->
             Event.valueOf(pair)
             .ifPresent(event->{
-                if(getComponent() instanceof Select2MultiChoiceExt) {
+                if(getComponent() instanceof Select2MultiChoice select2MultiChoice) {
                     var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
-                    if(objectMementoFromEvent==null) {
-                        return; // add or remove nothing is a no-op
-                    }
-                    var component = (Select2MultiChoiceExt)getComponent();
+                    if(objectMementoFromEvent==null) return; // add or remove nothing is a no-op
+
+                    var component = _Casts.<Select2MultiChoice<ObjectMemento>>uncheckedCast(select2MultiChoice);
                     switch(event) {
                     case SELECT:{
                         var newSelection = copySelection(component.getModelObject());
@@ -137,8 +138,8 @@ class Select2OnSelect extends AbstractAjaxBehavior {
                     }
                 }
                 else
-                if(getComponent() instanceof Select2ChoiceExt) {
-                    var component = (Select2ChoiceExt)getComponent();
+                if(getComponent() instanceof Select2Choice select2Choice) {
+                    var component = _Casts.<Select2Choice<ObjectMemento>>uncheckedCast(select2Choice);
                     switch(event) {
                     case SELECT:
                         var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());

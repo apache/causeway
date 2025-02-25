@@ -21,44 +21,30 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 import org.apache.wicket.model.IModel;
 import org.wicketstuff.select2.Select2Choice;
 
-import org.apache.causeway.applib.id.HasLogicalType;
-import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
+record SingleChoice(Select2Choice<ObjectMemento> component)
+implements Select2, HasMetaModelContext {
 
-public class Select2ChoiceExt
-extends Select2Choice<ObjectMemento>
-implements HasLogicalType {
-
-    private static final long serialVersionUID = 1L;
-
-    public static Select2ChoiceExt create(
-            final String id,
-            final IModel<ObjectMemento> modelObject,
-            final UiAttributeWkt attributeModel,
-            final ChoiceProviderRecord choiceProvider) {
-        return new Select2ChoiceExt(id, modelObject, attributeModel, choiceProvider);
-    }
-
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) private final LogicalType logicalType;
-
-    private Select2ChoiceExt(
+    SingleChoice(
             final String id,
             final IModel<ObjectMemento> model,
             final UiAttributeWkt attributeModel,
             final ChoiceProviderRecord choiceProvider) {
-        super(id, model, choiceProvider.toSelect2ChoiceProvider());
+        this(new Select2Choice<>(id, model, choiceProvider.toSelect2ChoiceProvider()));
+    }
 
-        logicalType = attributeModel.getElementType().logicalType();
+    @Override
+    public ManagedObject convertedInputValue() {
+        return getObjectManager().demementify(component.getConvertedInput());
+    }
 
-        getSettings().setCloseOnSelect(true);
-        getSettings().setWidth("auto");
-        getSettings().setDropdownAutoWidth(true);
-
-        setOutputMarkupPlaceholderTag(true);
+    @Override
+    public ObjectMemento objectMemento() {
+        return component.getModelObject();
     }
 
 }

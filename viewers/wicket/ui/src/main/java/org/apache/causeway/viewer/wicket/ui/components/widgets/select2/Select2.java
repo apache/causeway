@@ -20,123 +20,77 @@ package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 
 import java.io.Serializable;
 
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
-import org.jspecify.annotations.NonNull;
 import org.wicketstuff.select2.AbstractSelect2Choice;
-import org.wicketstuff.select2.Select2Choice;
-import org.wicketstuff.select2.Select2MultiChoice;
+import org.wicketstuff.select2.Settings;
 
-import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithSingleChoice;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 
-/**
- * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
- */
-public record Select2(
-        Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice)
-implements
-    Serializable,
-    HasCommonContext {
+public interface Select2 extends Serializable {
 
-    public static Select2 createSelect2(
-            final String id,
-            final UiAttributeWkt attributeModel,
-            final ChoiceProviderRecord choiceProvider,
-            final AttributeModelChangeDispatcher select2ChangeDispatcher) {
-        var select2 = new Select2(attributeModel.isSingular()
-                ? Either.left(
-                        Select2ChoiceExt.create(id,
+    static Select2 create(
+        final String id,
+        final UiAttributeWkt attributeModel,
+        final ChoiceProviderRecord choiceProvider,
+        final AttributeModelChangeDispatcher select2ChangeDispatcher) {
+        var select2 = attributeModel.isSingular()
+                ? new SingleChoice(id,
                                 AttributeModelWithSingleChoice.chain(attributeModel),
                                 attributeModel,
-                                choiceProvider))
-                : Either.right(
-                        Select2MultiChoiceExt.create(id,
-                                AttributeModelWithMultiChoice.chain(attributeModel),
+                                choiceProvider)
+                : new MultiChoice(id,
+                                _Casts.uncheckedCast(AttributeModelWithMultiChoice.chain(attributeModel)),
                                 attributeModel,
-                                choiceProvider)));
+                                choiceProvider);
 
-        select2.setLabel(Model.of(attributeModel.getFriendlyName()));
-        select2.getSettings().setWidth("100%");
+        var component = select2.component();
+        component.setOutputMarkupPlaceholderTag(true);
+        component.getSettings().setCloseOnSelect(true);
+        component.getSettings().setDropdownAutoWidth(true);
+        component.getSettings().setWidth("100%");
+        component.setLabel(Model.of(attributeModel.getFriendlyName()));
 
         // listen on select2:select/unselect events (client-side)
-        select2.add(new Select2OnSelect(attributeModel, select2ChangeDispatcher));
+        component.add(new Select2OnSelect(attributeModel, select2ChangeDispatcher));
 
         return select2;
     }
 
-    // canonical constructor
-    public Select2(final @NonNull Either<Select2ChoiceExt, Select2MultiChoiceExt> select2Choice) {
-        this.select2Choice = select2Choice;
-        asComponent().setOutputMarkupId(true);
-    }
+    AbstractSelect2Choice<ObjectMemento, ?> component();
+    ManagedObject convertedInputValue();
+    ObjectMemento objectMemento();
 
-    public org.wicketstuff.select2.Settings getSettings() {
-        return select2Choice.fold(
-                Select2ChoiceExt::getSettings,
-                Select2MultiChoiceExt::getSettings);
-    }
-
-    public AbstractSelect2Choice<ObjectMemento, ?> asComponent() {
-        return select2Choice.fold(
-                single->single,
-                multi->multi);
-    }
-
-    public void clearInput() {
-        asComponent().clearInput();
-    }
-
-    public void setEnabled(final boolean mutability) {
-        asComponent().setEnabled(mutability);
-    }
-
-    public boolean checkRequired() {
-        return asComponent().checkRequired();
-    }
-
-    public ManagedObject getConvertedInputValue() {
-        return getObjectManager().demementify(convertedInput());
-    }
-
-    public IModel<String> obtainOutputFormatModel() {
+    default IModel<String> obtainOutputFormatModel() {
         return LambdaModel.<String>of(()->{
-            var memento = memento();
+            var memento = objectMemento();
             return memento!=null
                     ? memento.title()
                     : null;
         });
     }
 
-    // -- HELPER
-
-    private void setLabel(final Model<String> model) {
-        asComponent().setLabel(model);
+    default Settings settings() {
+        return component().getSettings();
     }
 
-    private void add(final Behavior behavior) {
-        asComponent().add(behavior);
+    default void clearInput() {
+        component().clearInput();
     }
 
-    private ObjectMemento memento() {
-        return select2Choice.fold(
-                single->single.getModelObject(),
-                multi->multi.getPackedModelObject());
+    default boolean isRequired() {
+        return component().isRequired();
     }
 
-    private ObjectMemento convertedInput() {
-        final ObjectMemento convertedInput = select2Choice.fold(
-                single->single.getConvertedInput(),
-                multi->multi.getPackedConvertedInput());
-        return convertedInput;
+    default void setMutable(final boolean mutability) {
+        component().setEnabled(mutability);
     }
 
 }

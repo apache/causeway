@@ -58,10 +58,10 @@ extends AttributePanelWithFormField<ManagedObject> {
     protected final Select2 createSelect2(
             final String id) {
         var attributeModel = attributeModel();
-        var select2 = Select2.createSelect2(id, attributeModel,
+        var select2 = Select2.create(id, attributeModel,
                 new ChoiceProviderRecord(attributeModel),
                 getAttributeModelChangeDispatcher());
-        var settings = select2.getSettings();
+        var settings = select2.settings();
         settings.setPlaceholder(attributeModel.getFriendlyName());
 
         switch(attributeModel.getChoiceProviderSort()) {
@@ -102,7 +102,7 @@ extends AttributePanelWithFormField<ManagedObject> {
     }
 
     public final boolean checkSelect2Required() {
-        return select2.checkRequired();
+        return select2.isRequired();
     }
 
     @Override

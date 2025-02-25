@@ -69,9 +69,8 @@ implements HasCommonContext, Serializable {
      * available choices.
      */
     public String getIdValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null) {
-            return ObjectMemento.NULL_ID;
-        }
+        if (choiceMemento == null) return ObjectMemento.NULL_ID;
+        
         return ObjectMemento.enstringToUrlBase64(choiceMemento);
     }
 
