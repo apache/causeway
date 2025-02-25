@@ -39,17 +39,15 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-final class _DownloadHandler {
+final class DownloadHandlerFactory {
 
     public IRequestHandler downloadHandler(
             final ObjectAction action,
             final Object value) {
-        if(value instanceof Clob) {
-            var clob = (Clob)value;
+        if(value instanceof Clob clob) {
             return handlerFor(action, resourceStreamFor(clob), clob);
         }
-        if(value instanceof Blob) {
-            var blob = (Blob)value;
+        if(value instanceof Blob blob) {
             return handlerFor(action, resourceStreamFor(blob), blob);
         }
         return null;
@@ -59,28 +57,21 @@ final class _DownloadHandler {
 
     private IResourceStream resourceStreamFor(final Blob blob) {
         final IResourceStream resourceStream = new AbstractResourceStream() {
-
             private static final long serialVersionUID = 1L;
-
-            @Override
-            public InputStream getInputStream() throws ResourceStreamNotFoundException {
-                return new ByteArrayInputStream(blob.getBytes());
+            @Override public InputStream getInputStream() throws ResourceStreamNotFoundException {
+                return new ByteArrayInputStream(blob.bytes());
             }
-
-            @Override
-            public String getContentType() {
-                return blob.getMimeType().toString();
+            @Override public String getContentType() {
+                return blob.mimeType().toString();
             }
-
-            @Override
-            public void close() throws IOException {
+            @Override public void close() throws IOException {
             }
         };
         return resourceStream;
     }
 
     private IResourceStream resourceStreamFor(final Clob clob) {
-        return new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
+        return new StringResourceStream(clob.chars(), clob.mimeType().toString());
     }
 
     private IRequestHandler handlerFor(
@@ -88,7 +79,7 @@ final class _DownloadHandler {
             final IResourceStream resourceStream,
             final NamedWithMimeType namedWithMimeType) {
         var handler =
-                new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.getName());
+                new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.name());
         handler.setContentDisposition(ContentDisposition.ATTACHMENT);
 
         //CAUSEWAY-1619, prevent clients from caching the response content

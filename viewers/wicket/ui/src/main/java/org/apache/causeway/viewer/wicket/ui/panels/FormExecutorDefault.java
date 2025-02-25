@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.exceprecog.Category;
@@ -34,9 +34,8 @@ import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
-import org.apache.causeway.viewer.wicket.ui.actionresponse.ActionResultResponse;
+import org.apache.causeway.viewer.wicket.ui.actionresponse.ExecutionResultHandler;
 
-import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -110,18 +109,8 @@ public record FormExecutorDefault(
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 
-            //XXX triggers ManagedObject.getBookmarkRefreshed()
-            var resultResponse = actionOrPropertyModel.fold(
-                    act->ActionResultResponse
-                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter),
-                    prop->ActionResultResponse
-                            .toDomainObjectPage(resultAdapter));
-
-            // redirect using associated strategy
-            // XXX note: on property edit, triggers SQL update (on JPA)
-            resultResponse
-                .handlingStrategy()
-                .handleResults(resultResponse);
+            new ExecutionResultHandler(actionOrPropertyModel)
+                .handle(ajaxTarget, resultAdapter);
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 

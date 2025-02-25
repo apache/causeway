@@ -23,26 +23,24 @@ import org.apache.wicket.core.request.handler.PageProvider;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import org.jspecify.annotations.NonNull;
-
-public record PageRedirectRequest<T extends IRequestablePage>(
+record PageRedirectRequest<T extends IRequestablePage>(
     @NonNull Class<T> pageClass,
     @Nullable PageParameters pageParameters,
     @Nullable IRequestablePage pageInstance) {
 
-    public static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
             final @NonNull Class<T> pageClass,
             final @NonNull PageParameters pageParameters) {
         return new PageRedirectRequest<>(pageClass, pageParameters, null);
     }
 
-    public static <T extends IRequestablePage> PageRedirectRequest forPageClassAndBookmark(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClassAndBookmark(
             final @NonNull Class<T> pageClass,
             final @NonNull Bookmark bookmark) {
         return forPageClass(
@@ -50,25 +48,25 @@ public record PageRedirectRequest<T extends IRequestablePage>(
                         PageParameterUtils.createPageParametersForBookmark(bookmark));
     }
 
-    public static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
             final @NonNull Class<T> pageClass) {
         return new PageRedirectRequest<>(pageClass, null, null);
     }
 
-    public static <T extends IRequestablePage> PageRedirectRequest<T> forPage(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forPage(
             final @NonNull Class<T> pageClass,
             final @NonNull T pageInstance) {
         return new PageRedirectRequest<>(pageClass, null, pageInstance);
     }
 
-    public String toUrl() {
+    String toUrl() {
         var handler = new BookmarkablePageRequestHandler(
                 new PageProvider(pageClass, pageParameters));
         return RequestCycle.get().urlFor(handler)
             .toString();
     }
 
-    public void apply() {
+    void apply() {
         var requestCycle = RequestCycle.get();
         if(requestCycle==null) return;
         if(pageParameters!=null) {
