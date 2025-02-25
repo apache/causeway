@@ -44,7 +44,7 @@ public interface UiComponentFactory<B, C> {
     LabelAndPosition<C> labelFor(UiComponentFactory.ComponentRequest request);
 
     public record LabelAndPosition<T>(
-            @NonNull LabelPosition labelPositio,
+            @NonNull LabelPosition labelPosition,
             @NonNull T uiLabel) {
     }
 
