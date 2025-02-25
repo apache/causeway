@@ -29,7 +29,6 @@ import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -44,7 +43,7 @@ implements HasLogicalType {
             final String id,
             final IModel<ArrayList<ObjectMemento>> modelObject,
             final UiAttributeWkt attributeModel,
-            final ChoiceProviderAbstract choiceProvider) {
+            final ChoiceProviderRecord choiceProvider) {
 
         return new Select2MultiChoiceExt(id, _Casts.uncheckedCast(modelObject), attributeModel, choiceProvider);
     }
@@ -55,9 +54,9 @@ implements HasLogicalType {
             final String id,
             final IModel<Collection<ObjectMemento>> model,
             final UiAttributeWkt attributeModel,
-            final ChoiceProviderAbstract choiceProvider) {
+            final ChoiceProviderRecord choiceProvider) {
 
-        super(id, model, choiceProvider);
+        super(id, model, choiceProvider.toSelect2ChoiceProvider());
         logicalType = attributeModel.getElementType().logicalType();
 
         getSettings().setCloseOnSelect(true);

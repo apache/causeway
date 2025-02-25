@@ -82,7 +82,6 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.formcomponent;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.links;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.navbar;
-    exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.zclip;

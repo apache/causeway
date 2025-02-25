@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragm
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.choices.AttributePanelWithSelect.ChoiceTitleHandler;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.objectsimplelink.ObjectLinkSimplePanel;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
@@ -85,8 +84,7 @@ implements ChoiceTitleHandler {
         this.objectLink = new ChoiceFormComponent(UiComponentType.OBJECT_LINK.getId(), this);
         objectLink.setRequired(attributeModel.isRequired());
 
-        this.select2 = createSelect2(ID_AUTO_COMPLETE,
-                ChoiceProviderDefault::new);
+        this.select2 = createSelect2(ID_AUTO_COMPLETE);
 
         objectLink.addOrReplace(select2.asComponent());
         objectLink.setOutputMarkupId(true);

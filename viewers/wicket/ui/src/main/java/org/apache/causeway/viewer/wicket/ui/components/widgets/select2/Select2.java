@@ -24,6 +24,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
+import org.jspecify.annotations.NonNull;
 import org.wicketstuff.select2.AbstractSelect2Choice;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -31,14 +32,11 @@ import org.wicketstuff.select2.Select2MultiChoice;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithSingleChoice;
+import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Wrapper around either a {@link Select2Choice} or a {@link Select2MultiChoice}.
@@ -52,7 +50,7 @@ implements
     public static Select2 createSelect2(
             final String id,
             final UiAttributeWkt attributeModel,
-            final ChoiceProviderAbstract choiceProvider,
+            final ChoiceProviderRecord choiceProvider,
             final AttributeModelChangeDispatcher select2ChangeDispatcher) {
         var select2 = new Select2(attributeModel.isSingular()
                 ? Either.left(

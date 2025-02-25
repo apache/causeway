@@ -19,11 +19,10 @@
 package org.apache.causeway.viewer.wicket.ui.components.attributes.choices;
 
 import java.io.Serializable;
-import java.util.function.Function;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -32,12 +31,10 @@ import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanelWithFormField;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.ChoiceProviderRecord;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.Select2;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
-
-import org.jspecify.annotations.NonNull;
 
 public abstract class AttributePanelWithSelect
 extends AttributePanelWithFormField<ManagedObject> {
@@ -59,11 +56,10 @@ extends AttributePanelWithFormField<ManagedObject> {
     }
 
     protected final Select2 createSelect2(
-            final String id,
-            final Function<UiAttributeWkt, ChoiceProviderAbstract> choiceProviderFactory) {
+            final String id) {
         var attributeModel = attributeModel();
         var select2 = Select2.createSelect2(id, attributeModel,
-                choiceProviderFactory.apply(attributeModel),
+                new ChoiceProviderRecord(attributeModel),
                 getAttributeModelChangeDispatcher());
         var settings = select2.getSettings();
         settings.setPlaceholder(attributeModel.getFriendlyName());

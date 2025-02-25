@@ -28,7 +28,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel._testing._TestDummies;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.ChoiceProviderRecord;
 
 class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
 
@@ -50,7 +50,7 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
                 .map(mmc.getObjectManager()::adapt);
 
         var isRequired = true;
-        var choiceProvider = new ChoiceProviderDefault(mockAttributeModel(choices, isRequired));
+        var choiceProvider = new ChoiceProviderRecord(mockAttributeModel(choices, isRequired));
 
         var response = new Response<ObjectMemento>();
         choiceProvider.query(null, 0, response);

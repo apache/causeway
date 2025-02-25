@@ -28,7 +28,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.InputFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.choices.AttributePanelWithSelect.ChoiceTitleHandler;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
@@ -58,7 +57,7 @@ implements ChoiceTitleHandler {
     protected FormComponent<ManagedObject> createFormComponent(
             final String id, final UiAttributeWkt attributeModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(id, ChoiceProviderDefault::new);
+            this.select2 = createSelect2(id);
         } else {
             select2.clearInput();
         }
