@@ -16,7 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.test.components.widgets.choices;
+package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
+
+import java.math.BigDecimal;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,12 +28,11 @@ import org.wicketstuff.select2.Response;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel._testing._TestDummies;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.ChoiceProviderRecord;
 
-class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
+class ChoiceProviderForValuesTest
+extends ChoiceProviderTestAbstract {
 
     @BeforeEach
     void setup() throws Exception {
@@ -40,9 +42,9 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
     @Test
     void roundtrip() {
 
-        var a = new _TestDummies.CustomerAsViewmodel("a");
-        var b = new _TestDummies.CustomerAsViewmodel("b");
-        var c = new _TestDummies.CustomerAsViewmodel("c");
+        var a = new BigDecimal("0.01");
+        var b = UUID.randomUUID();
+        var c = 12345;
 
         var choiceValues = Can.of(a, b, c);
 
@@ -58,13 +60,13 @@ class ChoiceProviderForReferencesTest extends ChoiceProviderTestAbstract {
 
         assertEquals(3, mementos.size());
 
-        /* debug
-        mementos
-        .forEach(memento->{
-            System.err.printf("id: %s%n", choiceProvider.getIdValue(memento));
-            System.err.printf("title (un-translated):  %s%n", memento.getTitle());
-            System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
-        });*/
+//debug
+//        mementos
+//        .forEach(memento->{
+//            System.err.printf("id: %s%n", choiceProvider.getIdValue(memento));
+//            System.err.printf("title (un-translated):  %s%n", memento.getTitle());
+//            System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
+//        });
 
         var asIds = mementos.map(choiceProvider::getIdValue);
 

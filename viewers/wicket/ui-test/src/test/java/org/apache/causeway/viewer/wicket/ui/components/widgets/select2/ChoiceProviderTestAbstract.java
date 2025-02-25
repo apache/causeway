@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.test.components.widgets.choices;
+package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

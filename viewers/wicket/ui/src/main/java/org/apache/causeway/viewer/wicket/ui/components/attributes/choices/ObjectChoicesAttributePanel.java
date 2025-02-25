@@ -84,7 +84,7 @@ implements ChoiceTitleHandler {
         this.objectLink = new ChoiceFormComponent(UiComponentType.OBJECT_LINK.getId(), this);
         objectLink.setRequired(attributeModel.isRequired());
 
-        this.select2 = createSelect2(ID_AUTO_COMPLETE);
+        createSelect2(ID_AUTO_COMPLETE);
 
         objectLink.addOrReplace(select2.component());
         objectLink.setOutputMarkupId(true);

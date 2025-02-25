@@ -29,6 +29,7 @@ import org.wicketstuff.select2.Settings;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithMultiChoice;
 import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithSingleChoice;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
@@ -39,8 +40,8 @@ public interface Select2 extends Serializable {
     static Select2 create(
         final String id,
         final UiAttributeWkt attributeModel,
-        final ChoiceProviderRecord choiceProvider,
         final AttributeModelChangeDispatcher select2ChangeDispatcher) {
+        var choiceProvider = new ChoiceProviderRecord(attributeModel);
         var select2 = attributeModel.isSingular()
                 ? new SingleChoice(id,
                                 AttributeModelWithSingleChoice.chain(attributeModel),
@@ -51,11 +52,21 @@ public interface Select2 extends Serializable {
                                 attributeModel,
                                 choiceProvider);
 
+        var settings = select2.settings();
+        settings.setCloseOnSelect(true);
+        settings.setDropdownAutoWidth(true);
+        settings.setWidth("100%");
+        settings.setPlaceholder(attributeModel.getFriendlyName());
+
+        switch(attributeModel.getChoiceProviderSort()) {
+            case AUTO_COMPLETE->settings.setMinimumInputLength(attributeModel.getAutoCompleteMinLength());
+            case OBJECT_AUTO_COMPLETE->Facets.autoCompleteMinLength(attributeModel.getElementType())
+                .ifPresent(settings::setMinimumInputLength);
+            case CHOICES, NO_CHOICES->{}
+        }
+
         var component = select2.component();
         component.setOutputMarkupPlaceholderTag(true);
-        component.getSettings().setCloseOnSelect(true);
-        component.getSettings().setDropdownAutoWidth(true);
-        component.getSettings().setWidth("100%");
         component.setLabel(Model.of(attributeModel.getFriendlyName()));
 
         // listen on select2:select/unselect events (client-side)

@@ -57,7 +57,7 @@ implements ChoiceTitleHandler {
     protected FormComponent<ManagedObject> createFormComponent(
             final String id, final UiAttributeWkt attributeModel) {
         if(select2 == null) {
-            this.select2 = createSelect2(id);
+            createSelect2(id);
         } else {
             select2.clearInput();
         }

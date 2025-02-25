@@ -63,12 +63,6 @@ implements Select2, HasMetaModelContext {
                 // --
 
             });
-
-        component.getSettings().setCloseOnSelect(true);
-        component.getSettings().setWidth("auto");
-        component.getSettings().setDropdownAutoWidth(true);
-
-        component.setOutputMarkupPlaceholderTag(true);
     }
 
     @Override

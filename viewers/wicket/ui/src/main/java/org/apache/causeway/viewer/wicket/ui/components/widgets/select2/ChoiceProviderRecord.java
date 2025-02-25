@@ -39,7 +39,7 @@ import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
-public record ChoiceProviderRecord(
+record ChoiceProviderRecord(
     UiAttributeWkt attributeModel,
     UiAttribute.ChoiceProviderSort choiceProviderSort)
 implements HasCommonContext, Serializable {
@@ -48,7 +48,7 @@ implements HasCommonContext, Serializable {
             final UiAttributeWkt attributeModel) {
         this(attributeModel, UiAttribute.ChoiceProviderSort.valueOf(attributeModel));
     }
-    
+
     /**
      * Get the value for displaying to an end user.
      */
@@ -70,7 +70,7 @@ implements HasCommonContext, Serializable {
      */
     public String getIdValue(final ObjectMemento choiceMemento) {
         if (choiceMemento == null) return ObjectMemento.NULL_ID;
-        
+
         return ObjectMemento.enstringToUrlBase64(choiceMemento);
     }
 
@@ -107,32 +107,32 @@ implements HasCommonContext, Serializable {
                 .map(this::mementoFromIdWithNullHandling)
                 .collect(Collectors.toList());
     }
-    
+
     // -- UTIL
-    
+
     /** adapter method */
     ChoiceProvider<ObjectMemento> toSelect2ChoiceProvider() {
         var delegate = this;
         return new ChoiceProvider<ObjectMemento>() {
             private static final long serialVersionUID = 1L;
 
-            @Override public Collection<ObjectMemento> toChoices(Collection<String> ids) {
+            @Override public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
                 return delegate.toChoices(ids);
             }
-            @Override public void query(String term, int page, Response<ObjectMemento> response) {
+            @Override public void query(final String term, final int page, final Response<ObjectMemento> response) {
                 delegate.query(term, page, response);
             }
-            @Override public String getIdValue(ObjectMemento object) {
+            @Override public String getIdValue(final ObjectMemento object) {
                 return delegate.getIdValue(object);
             }
-            @Override public String getDisplayValue(ObjectMemento object) {
+            @Override public String getDisplayValue(final ObjectMemento object) {
                 return delegate.getDisplayValue(object);
             }
         };
     }
-    
+
     // -- HELPER
-    
+
     private Can<ObjectMemento> queryAll() {
         return attributeModel().getChoices() // must not return detached entities
                 .map(ManagedObject::getMementoElseFail);
@@ -177,13 +177,13 @@ implements HasCommonContext, Serializable {
 
        return pendingArgsList;
     }
-    
+
     private @Nullable ObjectMemento mementoFromIdWithNullHandling(final String id) {
         if(ObjectMemento.NULL_ID.equals(id)) return null;
-        
+
         return mementoFromId(id);
     }
-    
+
     /**
      * Whether to not prepend <code>null</code> as choice candidate.
      */
