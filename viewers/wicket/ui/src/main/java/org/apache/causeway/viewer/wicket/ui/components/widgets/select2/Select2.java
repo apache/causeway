@@ -91,8 +91,8 @@ public interface Select2 extends Serializable {
         component().clearInput();
     }
 
-    default boolean isRequired() {
-        return component().isRequired();
+    default boolean checkRequired() {
+        return component().checkRequired();
     }
 
     default void setMutable(final boolean mutability) {

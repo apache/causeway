@@ -45,14 +45,14 @@ implements Select2, HasMetaModelContext {
                 private static final long serialVersionUID = 1L;
                 private boolean workaround;
 
-                // -- bug in wicket 8.8.0
+                // -- bug in wicket-stuff
                 @Override public void updateModel() {
                     workaround = true;
                     super.updateModel();
                     workaround = false;
                 }
                 @Override public Collection<ObjectMemento> getModelObject() {
-                    var modelObj = getModelObject();
+                    var modelObj = super.getModelObject();
                     if(workaround) {
                         return modelObj==null
                                 ? null
@@ -63,6 +63,8 @@ implements Select2, HasMetaModelContext {
                 // --
 
             });
+
+        component().setRequired(attributeModel.isRequired());
     }
 
     @Override

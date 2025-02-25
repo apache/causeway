@@ -79,7 +79,7 @@ extends AttributePanelWithFormField<ManagedObject> {
     }
 
     public final boolean checkSelect2Required() {
-        return select2.isRequired();
+        return select2.checkRequired();
     }
 
     @Override

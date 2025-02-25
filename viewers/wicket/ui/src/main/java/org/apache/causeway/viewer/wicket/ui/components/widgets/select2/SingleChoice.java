@@ -35,6 +35,7 @@ implements Select2, HasMetaModelContext {
             final UiAttributeWkt attributeModel,
             final ChoiceProvider choiceProvider) {
         this(new Select2Choice<>(id, model, choiceProvider.toSelect2ChoiceProvider()));
+        component().setRequired(attributeModel.isRequired());
     }
 
     @Override
