@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.actionresponse;
+package org.apache.causeway.viewer.wicket.ui.exec;
 
 import java.net.URL;
 
@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.wicket.model.models.RedirectRequestHandlerWith
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.model.models.VoidModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelStandalone;
-import org.apache.causeway.viewer.wicket.ui.actionresponse.Mediator.ExecutionResultHandlingStrategy;
+import org.apache.causeway.viewer.wicket.ui.exec.Mediator.ExecutionResultHandlingStrategy;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.causeway.viewer.wicket.ui.pages.value.ValuePage;

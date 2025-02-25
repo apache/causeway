@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.actionresponse;
+package org.apache.causeway.viewer.wicket.ui.exec;
 
 import org.apache.wicket.core.request.handler.BookmarkablePageRequestHandler;
 import org.apache.wicket.core.request.handler.PageProvider;

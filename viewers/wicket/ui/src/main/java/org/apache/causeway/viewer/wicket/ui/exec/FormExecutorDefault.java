@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.panels;
+package org.apache.causeway.viewer.wicket.ui.exec;
 
 import java.util.Optional;
 
@@ -34,7 +34,6 @@ import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
-import org.apache.causeway.viewer.wicket.ui.actionresponse.ExecutionResultHandler;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -109,8 +108,14 @@ public record FormExecutorDefault(
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 
-            new ExecutionResultHandler(actionOrPropertyModel)
-                .handle(ajaxTarget, resultAdapter);
+            // triggers ManagedObject.getBookmarkRefreshed()
+            var mediator = actionOrPropertyModel.fold(
+                    act->Mediator.determineAndInterpretResult(act, ajaxTarget, resultAdapter),
+                    prop->Mediator.toDomainObjectPage(resultAdapter));
+
+            // redirect using associated strategy
+            // on property edit, triggers SQL update (on JPA)
+            mediator.handle();
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 

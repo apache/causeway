@@ -18,7 +18,6 @@
  */
 module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui;
-    exports org.apache.causeway.viewer.wicket.ui.actionresponse;
     exports org.apache.causeway.viewer.wicket.ui.app.logout;
     exports org.apache.causeway.viewer.wicket.ui.app.registry;
     exports org.apache.causeway.viewer.wicket.ui.components;
@@ -86,6 +85,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.themepicker;
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.zclip;
     exports org.apache.causeway.viewer.wicket.ui.errors;
+    exports org.apache.causeway.viewer.wicket.ui.exec;
     exports org.apache.causeway.viewer.wicket.ui.pages;
     exports org.apache.causeway.viewer.wicket.ui.pages.about;
     exports org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset;
