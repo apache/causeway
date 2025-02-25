@@ -61,16 +61,16 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0
  */
 @RequiredArgsConstructor
-class Select2OnSelect extends AbstractAjaxBehavior {
+class OnSelectBehavior extends AbstractAjaxBehavior {
 
     private static final long serialVersionUID = 1L;
     private final UiAttributeWkt attributeModel;
     private final AttributeModelChangeDispatcher select2ChangeDispatcher;
 
-    private static enum Event {
+    private enum Event {
         SELECT, UNSELECT, CLEAR;
         String key() { return name().toLowerCase(); }
-        static Optional<Select2OnSelect.Event> valueOf(final NamedPair pair) {
+        static Optional<OnSelectBehavior.Event> valueOf(final NamedPair pair) {
             for(var event : Event.values()) {
                 if(event.name().equalsIgnoreCase(pair.getKey())) {
                     return Optional.of(event);
@@ -84,17 +84,16 @@ class Select2OnSelect extends AbstractAjaxBehavior {
     public void renderHead(final Component component, final IHeaderResponse response) {
         for(var event : Event.values()) {
             //response.render(OnDomReadyHeaderItem.forScript("Wicket.Log.enabled=true;"));
-            response.render(OnDomReadyHeaderItem.forScript(JQuery.execute("$('#%s')"
-                    + ".on('select2:%s', function (e) {"
-                    + "var data = e.params.data;"
-                    //debug + "console.log(e);"
-                    + "Wicket.Ajax.get({'u': '%s&%s=' + data.id});"
-                    + "});",
+            response.render(OnDomReadyHeaderItem.forScript(JQuery.execute("""
+                    $('#%s').on('select2:%s', function (e) {
+                      var data = e.params.data;
+                      Wicket.Ajax.get({'u': '%s&%s=' + data.id});
+                    });""",
                     component.getMarkupId(),
                     event.key(),
                     getCallbackUrl(),
                     event.key()
-                    )));
+                )));
         }
     }
 

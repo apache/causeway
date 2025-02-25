@@ -24,8 +24,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.AbstractSelect2Choice;
-import org.wicketstuff.select2.Settings;
-
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -41,7 +39,7 @@ public interface Select2 extends Serializable {
         final String id,
         final UiAttributeWkt attributeModel,
         final AttributeModelChangeDispatcher select2ChangeDispatcher) {
-        var choiceProvider = new ChoiceProviderRecord(attributeModel);
+        var choiceProvider = new ChoiceProvider(attributeModel);
         var select2 = attributeModel.isSingular()
                 ? new SingleChoice(id,
                                 AttributeModelWithSingleChoice.chain(attributeModel),
@@ -51,8 +49,8 @@ public interface Select2 extends Serializable {
                                 _Casts.uncheckedCast(AttributeModelWithMultiChoice.chain(attributeModel)),
                                 attributeModel,
                                 choiceProvider);
-
-        var settings = select2.settings();
+        var component = select2.component();
+        var settings = component.getSettings();
         settings.setCloseOnSelect(true);
         settings.setDropdownAutoWidth(true);
         settings.setWidth("100%");
@@ -65,12 +63,11 @@ public interface Select2 extends Serializable {
             case CHOICES, NO_CHOICES->{}
         }
 
-        var component = select2.component();
         component.setOutputMarkupPlaceholderTag(true);
         component.setLabel(Model.of(attributeModel.getFriendlyName()));
 
         // listen on select2:select/unselect events (client-side)
-        component.add(new Select2OnSelect(attributeModel, select2ChangeDispatcher));
+        component.add(new OnSelectBehavior(attributeModel, select2ChangeDispatcher));
 
         return select2;
     }
@@ -88,9 +85,7 @@ public interface Select2 extends Serializable {
         });
     }
 
-    default Settings settings() {
-        return component().getSettings();
-    }
+    // -- SHORTCUTS
 
     default void clearInput() {
         component().clearInput();

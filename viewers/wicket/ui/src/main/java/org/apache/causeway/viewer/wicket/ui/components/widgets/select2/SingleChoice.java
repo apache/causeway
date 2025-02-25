@@ -33,7 +33,7 @@ implements Select2, HasMetaModelContext {
             final String id,
             final IModel<ObjectMemento> model,
             final UiAttributeWkt attributeModel,
-            final ChoiceProviderRecord choiceProvider) {
+            final ChoiceProvider choiceProvider) {
         this(new Select2Choice<>(id, model, choiceProvider.toSelect2ChoiceProvider()));
     }
 

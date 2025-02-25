@@ -38,7 +38,7 @@ implements Select2, HasMetaModelContext {
             final String id,
             final IModel<Collection<ObjectMemento>> model,
             final UiAttributeWkt attributeModel,
-            final ChoiceProviderRecord choiceProvider) {
+            final ChoiceProvider choiceProvider) {
         this(
             attributeModel.getElementType().logicalType(),
             new Select2MultiChoice<>(id, model, choiceProvider.toSelect2ChoiceProvider()) {

@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.apache.wicket.util.string.Strings;
 import org.jspecify.annotations.Nullable;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -39,12 +38,12 @@ import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
-record ChoiceProviderRecord(
+record ChoiceProvider(
     UiAttributeWkt attributeModel,
     UiAttribute.ChoiceProviderSort choiceProviderSort)
 implements HasCommonContext, Serializable {
 
-    public ChoiceProviderRecord(
+    public ChoiceProvider(
             final UiAttributeWkt attributeModel) {
         this(attributeModel, UiAttribute.ChoiceProviderSort.valueOf(attributeModel));
     }
@@ -111,9 +110,9 @@ implements HasCommonContext, Serializable {
     // -- UTIL
 
     /** adapter method */
-    ChoiceProvider<ObjectMemento> toSelect2ChoiceProvider() {
+    org.wicketstuff.select2.ChoiceProvider<ObjectMemento> toSelect2ChoiceProvider() {
         var delegate = this;
-        return new ChoiceProvider<ObjectMemento>() {
+        return new org.wicketstuff.select2.ChoiceProvider<ObjectMemento>() {
             private static final long serialVersionUID = 1L;
 
             @Override public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
