@@ -21,14 +21,13 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 
-import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,32 +36,14 @@ import lombok.extern.log4j.Log4j2;
  * with the parent {@link UiAttributeWkt}, allowing also for pending values.
  */
 @Log4j2
-public class AttributeModelWithMultiChoice
-extends ChainingModel<ArrayList<ObjectMemento>>
-implements
-    AttributeModelWithChoice<ArrayList<ObjectMemento>> {
-
-    private static final long serialVersionUID = 1L;
-
-    // -- FACTORY
-
-    public static AttributeModelWithMultiChoice chain(final @NonNull UiAttributeWkt attributeModel) {
-        return new AttributeModelWithMultiChoice(attributeModel);
-    }
-
-    // -- CONSTRUCTION
-
-    private AttributeModelWithMultiChoice(final UiAttributeWkt attributeModel) {
-        super(attributeModel); // chaining to attributeModel
-    }
-
+public record AttributeModelWithMultiChoice(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
-    @Override
-    public UiAttributeWkt attributeModel() {
-        return (UiAttributeWkt) super.getTarget();
-    }
+    UiAttributeWkt attributeModel)
+implements
+    IModel<ArrayList<ObjectMemento>>,
+    AttributeModelWithChoice<ArrayList<ObjectMemento>> {
 
     @Override
     public ArrayList<ObjectMemento> getObject() {

@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LambdaModel;
 import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.AbstractSelect2Choice;
+
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -42,11 +43,11 @@ public interface Select2 extends Serializable {
         var choiceProvider = new ChoiceProvider(attributeModel);
         var select2 = attributeModel.isSingular()
                 ? new SingleChoice(id,
-                                AttributeModelWithSingleChoice.chain(attributeModel),
+                                new AttributeModelWithSingleChoice(attributeModel),
                                 attributeModel,
                                 choiceProvider)
                 : new MultiChoice(id,
-                                _Casts.uncheckedCast(AttributeModelWithMultiChoice.chain(attributeModel)),
+                                _Casts.uncheckedCast(new AttributeModelWithMultiChoice(attributeModel)),
                                 attributeModel,
                                 choiceProvider);
         var component = select2.component();

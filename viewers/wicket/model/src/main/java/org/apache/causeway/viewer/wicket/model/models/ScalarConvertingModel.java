@@ -18,27 +18,27 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.ChainingModel;
-
+import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * @param <T> foreign type
  * @param <V> scalar value type
  */
 public abstract class ScalarConvertingModel<T, V>
-extends ChainingModel<T> {
+implements IModel<T> {
 
     private static final long serialVersionUID = 1L;
 
+    private final UiAttributeWkt attributeModel;
+
     protected ScalarConvertingModel(final @NonNull UiAttributeWkt attributeModel) {
-        super(attributeModel);
+        this.attributeModel = attributeModel;
     }
 
     @Override
@@ -68,7 +68,7 @@ extends ChainingModel<T> {
     // -- HELPER
 
     protected UiAttributeWkt attributeModel() {
-        return (UiAttributeWkt) super.getTarget();
+        return attributeModel;
     }
 
 }

@@ -18,7 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.util.ClassUtils;
 
@@ -27,24 +28,19 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-
 /**
  * Wraps and unwraps the contained value within {@link ManagedObject},
  * as provided by a {@link UiAttributeWkt}.
  */
-public class ScalarUnwrappingModel<T>
-extends ChainingModel<T> {
+public record ScalarUnwrappingModel<T>(
+    Class<T> type,
+    UiAttributeWkt attributeModel) implements IModel<T> {
 
-    private static final long serialVersionUID = 1L;
-
-    @Getter @NonNull private final Class<T> type;
-
+    // canonical constructor
     public ScalarUnwrappingModel(
             final @NonNull Class<T> type,
             final @NonNull UiAttributeWkt attributeModel) {
-        super(attributeModel);
+        this.attributeModel = attributeModel;
         this.type = type;
         _Assert.assertTrue(attributeModel.getElementType().isAssignableFrom(type), ()->
                 String.format("cannot possibly unwrap model of type %s into target type %s",
@@ -80,10 +76,6 @@ extends ChainingModel<T> {
             return null;
         }
         return _Casts.uncheckedCast(pojo);
-    }
-
-    private UiAttributeWkt attributeModel() {
-        return (UiAttributeWkt) super.getTarget();
     }
 
 }

@@ -67,7 +67,7 @@ extends SortableDataProvider<DataRow, String> {
 
     @Override
     public IModel<DataRow> model(final DataRow dataRow) {
-        return DataRowWkt.chain(collectionModel, dataRow);
+        return new DataRowWkt(dataRow.rowIndex(), collectionModel);
     }
 
     @Override

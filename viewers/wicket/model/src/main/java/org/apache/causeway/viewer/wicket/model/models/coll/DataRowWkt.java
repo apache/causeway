@@ -20,35 +20,18 @@ package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import java.util.Optional;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
-import lombok.Getter;
-
-public final class DataRowWkt
-extends ChainingModel<DataRow> {
-
-    private static final long serialVersionUID = 1L;
-
-    public static DataRowWkt chain(
-            final CollectionModel collectionModel,
-            final DataRow dataRow) {
-        return new DataRowWkt(collectionModel, dataRow);
-    }
-
-    @Getter private final int rowIndex;
-
-    private DataRowWkt(
-            final CollectionModel collectionModel,
-            final DataRow dataRow) {
-        super(collectionModel);
-        this.rowIndex = dataRow.rowIndex();
-    }
+public record DataRowWkt(
+    int rowIndex,
+    CollectionModel collectionModel)
+implements IModel<DataRow> {
 
     @Override
-    public final DataRow getObject() {
+    public DataRow getObject() {
         return dataRow().orElse(null);
     }
 
@@ -69,10 +52,6 @@ extends ChainingModel<DataRow> {
     }
 
     // -- HELPER
-
-    private CollectionModel collectionModel() {
-        return (CollectionModel) super.getTarget();
-    }
 
     private DataTableInteractive dataTable() {
         return collectionModel().getObject();

@@ -108,8 +108,8 @@ public class ReuseIfRowIndexEqualsStrategy implements IItemReuseStrategy {
         }
 
         private static int rowIndex(final IModel<?> model) {
-            return model instanceof DataRowWkt
-                ? ((DataRowWkt)model).getRowIndex()
+            return model instanceof DataRowWkt dataRowWkt
+                ? dataRowWkt.rowIndex()
                 : -1;
         }
     }

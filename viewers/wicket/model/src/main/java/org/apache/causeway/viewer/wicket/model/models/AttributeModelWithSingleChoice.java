@@ -18,12 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;
@@ -31,32 +29,14 @@ import org.jspecify.annotations.NonNull;
  * with the parent {@link UiAttributeWkt}.
  */
 //@Log4j2
-public class AttributeModelWithSingleChoice
-extends ChainingModel<ObjectMemento>
-implements
-    AttributeModelWithChoice<ObjectMemento> {
-
-    private static final long serialVersionUID = 1L;
-
-    // -- FACTORY
-
-    public static AttributeModelWithSingleChoice chain(final @NonNull UiAttributeWkt attributeModel) {
-        return new AttributeModelWithSingleChoice(attributeModel);
-    }
-
-    // -- CONSTRUCTION
-
-    private AttributeModelWithSingleChoice(final UiAttributeWkt attributeModel) {
-        super(attributeModel); // chaining to attributeModel
-    }
-
+public record AttributeModelWithSingleChoice(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
-    @Override
-    public UiAttributeWkt attributeModel() {
-        return (UiAttributeWkt) super.getTarget();
-    }
+    UiAttributeWkt attributeModel)
+implements
+    IModel<ObjectMemento>,
+    AttributeModelWithChoice<ObjectMemento> {
 
     @Override
     public ObjectMemento getObject() {
