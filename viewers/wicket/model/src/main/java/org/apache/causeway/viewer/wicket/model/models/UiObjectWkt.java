@@ -225,11 +225,11 @@ implements
         // (that is loading entities only if required),
         // this guard only triggers, once the first property model gets looked up;
         // in other words: this guard only works if every entity has at least a property
-        var ownerPojo = bookmarkedObjectModel.asManagedObject()
+        var ownerPojo = bookmarkedObjectModel.managedObject()
                 .getPojo();
         if(ownerPojo==null) {
             throw new ObjectNotFoundException(
-                    bookmarkedObjectModel.getBookmark().identifier());
+                    bookmarkedObjectModel.bookmark().identifier());
         }
 
         var propIdentifier = property.getFeatureIdentifier();

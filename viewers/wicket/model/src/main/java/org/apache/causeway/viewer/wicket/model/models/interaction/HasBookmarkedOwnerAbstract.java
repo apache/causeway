@@ -39,12 +39,12 @@ implements
 
     @Override
     public final Bookmark getOwnerBookmark() {
-        return bookmarkedObject.getBookmark();
+        return bookmarkedObject.bookmark();
     }
 
     @Override
     public final ManagedObject getBookmarkedOwner() {
-        return bookmarkedObject.asManagedObject();
+        return bookmarkedObject.managedObject();
     }
 
     public final BookmarkedObjectWkt bookmarkedObjectModel() {

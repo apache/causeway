@@ -18,59 +18,51 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction;
 
+import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
+import org.apache.causeway.core.metamodel.object.BookmarkedObjectHolder;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-
-public final class BookmarkedObjectWkt
-extends ModelAbstract<ManagedObject> {
-
-    private static final long serialVersionUID = 1L;
-    @Getter private final @NonNull Bookmark bookmark;
+public record BookmarkedObjectWkt(
+    @NonNull BookmarkedObjectHolder moHolder)
+implements IModel<ManagedObject> {
 
     /** overwrites any current cache entry, only safe when no other views/models reference the same ManagedObject */
     public static BookmarkedObjectWkt ofAdapter(
             final @NonNull ManagedObject domainObject) {
         var bookmark = domainObject.getBookmarkElseFail();
-        return new BookmarkedObjectWkt(bookmark, domainObject);
+        return new BookmarkedObjectWkt(new BookmarkedObjectHolder(bookmark, domainObject));
     }
 
     public static BookmarkedObjectWkt ofBookmark(final @Nullable Bookmark bookmark) {
-        return new BookmarkedObjectWkt(bookmark);
+        return new BookmarkedObjectWkt(new BookmarkedObjectHolder(bookmark, null));
     }
 
-    private BookmarkedObjectWkt(final @NonNull Bookmark bookmark) {
-        super();
-        this.bookmark = bookmark;
+    public Bookmark bookmark() {
+        return moHolder.bookmark();
     }
 
-    private BookmarkedObjectWkt(
-            final @NonNull Bookmark bookmark,
-            final @Nullable ManagedObject domainObject) {
-        super(domainObject);
-        this.bookmark = bookmark;
-    }
-
-    public final ManagedObject asManagedObject() {
-        var entityOrViewmodel = super.getObject();
-        return entityOrViewmodel;
+    public ManagedObject managedObject() {
+        return moHolder.managedObject();
     }
 
     @Override
-    public final void setObject(final ManagedObject object) {
-        throw _Exceptions.unsupportedOperation("ManagedObjectWkt is immuatable");
+    public ManagedObject getObject() {
+        return managedObject();
     }
 
     @Override
-    protected final ManagedObject load() {
-        var adapter = getMetaModelContext().getObjectManager().loadObjectElseFail(bookmark);
-        return adapter;
+    public void setObject(final ManagedObject object) {
+        throw _Exceptions.unsupportedOperation("BookmarkedObjectWkt is immuatable");
+    }
+
+    @Override
+    public void detach() {
+        moHolder.detach();
     }
 
 }

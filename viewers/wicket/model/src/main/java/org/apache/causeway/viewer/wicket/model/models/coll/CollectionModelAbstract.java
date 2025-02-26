@@ -70,7 +70,7 @@ permits CollectionModelParented, CollectionModelStandalone {
 
     @Override
     protected DataTableInteractive load() {
-        var tableInteractive = tableMemento.getDataTableModel(bookmarkedObject.asManagedObject());
+        var tableInteractive = tableMemento.getDataTableModel(bookmarkedObject.managedObject());
         tableMemento.setupBindings(tableInteractive);
         return tableInteractive;
     }
@@ -98,7 +98,7 @@ permits CollectionModelParented, CollectionModelStandalone {
 
     @Override
     public final ManagedObject getParentObject() {
-        return bookmarkedObject.asManagedObject();
+        return bookmarkedObject.managedObject();
     }
 
     /* XXX[CAUSEWAY-3798] do not override (as it was for the hidden table)
