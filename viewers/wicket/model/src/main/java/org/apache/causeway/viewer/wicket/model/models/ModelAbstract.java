@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 /**
@@ -28,7 +29,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
  */
 public abstract class ModelAbstract<T>
 extends LoadableDetachableModel<T>
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 

@@ -36,6 +36,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.settings.DebugSettings.ClassOutputStrategy;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 
@@ -90,7 +91,7 @@ public class Configuration_usingWicket {
         public void init(final WebApplication webApplication) {
             webApplication.getDebugSettings()
                 .setComponentPathAttributeName("wicket-tester-path")
-                .setOutputMarkupContainerClassName(true);
+                .setOutputMarkupContainerClassNameStrategy(ClassOutputStrategy.HTML_COMMENT);
         }
     }
 
@@ -346,8 +347,7 @@ public class Configuration_usingWicket {
     static class WicketApplication_forTesting
     extends WebApplication
     implements
-        HasComponentFactoryRegistry,
-        HasMetaModelContext {
+        HasComponentFactoryRegistry{
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -368,11 +368,11 @@ public class Configuration_usingWicket {
 
         @Getter(lazy=true)
         private final ComponentFactoryRegistry componentFactoryRegistry =
-                lookupServiceElseFail(ComponentFactoryRegistry.class);
+                metaModelContext.lookupServiceElseFail(ComponentFactoryRegistry.class);
 
         @Getter(lazy=true)
         private final PageClassRegistry pageClassRegistry =
-                lookupServiceElseFail(PageClassRegistry.class);
+                metaModelContext.lookupServiceElseFail(PageClassRegistry.class);
 
         @Override
         public Class<? extends Page> getHomePage() {

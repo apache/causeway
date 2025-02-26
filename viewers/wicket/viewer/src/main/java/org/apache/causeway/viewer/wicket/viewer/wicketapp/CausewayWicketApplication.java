@@ -54,7 +54,6 @@ import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -98,8 +97,7 @@ public class CausewayWicketApplication
 extends AuthenticatedWebApplication
 implements
     HasComponentFactoryRegistry,
-    HasPageClassRegistry,
-    HasMetaModelContext {
+    HasPageClassRegistry {
 
     private static final long serialVersionUID = 1L;
 
@@ -110,7 +108,7 @@ implements
         return (CausewayWicketApplication) AuthenticatedWebApplication.get();
     }
 
-    @Getter(onMethod = @__(@Override))
+    @Getter
     @Inject private MetaModelContext metaModelContext;
     @Inject private List<WicketApplicationInitializer> applicationInitializers;
     @Inject private CausewaySystemEnvironment systemEnvironment;

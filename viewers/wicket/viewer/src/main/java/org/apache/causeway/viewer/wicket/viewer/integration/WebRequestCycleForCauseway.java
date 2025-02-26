@@ -60,9 +60,9 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.base._Timing.StopWatch;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
@@ -84,7 +84,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebRequestCycleForCauseway
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     IRequestCycleListener {
 
     // introduced (CAUSEWAY-1922) to handle render 'session refreshed' messages after session was expired

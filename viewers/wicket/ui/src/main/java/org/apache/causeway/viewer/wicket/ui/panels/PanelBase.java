@@ -22,15 +22,14 @@ import java.util.function.Supplier;
 
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
 import org.apache.causeway.applib.services.userreg.EmailNotificationService;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
@@ -46,7 +45,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.PageNavigationService;
  */
 public class PanelBase<T>
 extends GenericPanel<T>
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 

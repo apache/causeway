@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.model.models.interaction.prop;
 
 import org.apache.wicket.model.ChainingModel;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -27,7 +28,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.commons.model.attrib.UiProperty;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 /**
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 public final class UiPropertyWkt
 extends ChainingModel<PropertyInteraction>
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     HasUiParentObject<UiObject>,
     UiProperty {
 

@@ -25,13 +25,13 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.links.LinksProvider;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 public sealed interface CollectionModel
 extends
     IModel<DataTableInteractive>,
-    HasCommonContext,
+    HasMetaModelContext,
     LinksProvider
 permits CollectionModelAbstract, CollectionModelEmpty {
 

@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.model.models;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
@@ -29,7 +30,7 @@ import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 public interface ObjectAdapterModel
 extends
-    HasCommonContext,
+    HasMetaModelContext,
     HasRenderingHints,
     IModel<ManagedObject> {
 

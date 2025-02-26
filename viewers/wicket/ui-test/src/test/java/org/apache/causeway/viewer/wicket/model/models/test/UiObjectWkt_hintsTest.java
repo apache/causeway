@@ -42,7 +42,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
@@ -61,8 +60,7 @@ class UiObjectWkt_hintsTest {
 
     @RequiredArgsConstructor
     static class WicketAppStup
-    extends org.apache.wicket.Application
-    implements HasMetaModelContext {
+    extends org.apache.wicket.Application {
         @Getter final MetaModelContext metaModelContext;
         @Override public String getApplicationKey() {
             return null; }

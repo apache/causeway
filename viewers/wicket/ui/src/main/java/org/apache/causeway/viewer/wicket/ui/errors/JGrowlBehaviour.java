@@ -28,8 +28,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
 /**
  * Attach to any Ajax button that might trigger a notification (ie calls
@@ -45,7 +45,7 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
  */
 public class JGrowlBehaviour
 extends AbstractDefaultAjaxBehavior
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 

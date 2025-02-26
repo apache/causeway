@@ -20,22 +20,23 @@ package org.apache.causeway.viewer.wicket.model.value;
 
 import java.io.Serializable;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 
-import org.jspecify.annotations.NonNull;
 import lombok.Synchronized;
 
 abstract class ValueSemanticsModelAbstract
 implements
-    HasCommonContext,
+    HasMetaModelContext,
     Serializable {
 
     private static final long serialVersionUID = 1L;

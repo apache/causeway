@@ -30,18 +30,18 @@ import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.attrib.UiAttribute;
 import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 record ChoiceProvider(
     UiAttributeWkt attributeModel,
     UiAttribute.ChoiceProviderSort choiceProviderSort)
-implements HasCommonContext, Serializable {
+implements HasMetaModelContext, Serializable {
 
     public ChoiceProvider(
             final UiAttributeWkt attributeModel) {

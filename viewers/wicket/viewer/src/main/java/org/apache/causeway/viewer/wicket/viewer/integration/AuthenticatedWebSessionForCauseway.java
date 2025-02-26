@@ -44,7 +44,6 @@ import org.apache.causeway.core.security.authentication.AuthenticationRequestPas
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
@@ -65,7 +64,7 @@ extends AuthenticatedWebSession
 implements
     BreadcrumbModelProvider,
     BookmarkedPagesModelProvider,
-    HasCommonContext,
+    HasMetaModelContext,
     HasAmendableInteractionContext {
 
     private static final long serialVersionUID = 1L;

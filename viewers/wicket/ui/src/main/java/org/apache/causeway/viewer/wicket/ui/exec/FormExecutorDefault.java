@@ -29,10 +29,10 @@ import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
 
 import lombok.extern.log4j.Log4j2;
@@ -40,7 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public record FormExecutorDefault(
         Either<ActionModel, PropertyModel> actionOrPropertyModel
-        ) implements FormExecutor, HasCommonContext {
+        ) implements FormExecutor, HasMetaModelContext {
 
     // -- FACTORIES
 

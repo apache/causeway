@@ -28,7 +28,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -114,10 +113,6 @@ implements GenericColumn, HasMetaModelContext {
             componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
         }
         return componentRegistry;
-    }
-
-    protected String translate(final String raw) {
-        return getTranslationService().translate(TranslationContext.empty(), raw);
     }
 
 }

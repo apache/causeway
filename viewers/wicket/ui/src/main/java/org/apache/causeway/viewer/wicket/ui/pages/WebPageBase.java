@@ -25,7 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
 /**
  * Provides all the system dependencies for sub-classes.
@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
  */
 public abstract class WebPageBase
 extends WebPage
-implements HasCommonContext {
+implements HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 

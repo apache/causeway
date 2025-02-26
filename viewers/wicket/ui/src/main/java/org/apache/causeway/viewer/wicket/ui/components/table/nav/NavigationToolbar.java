@@ -23,7 +23,7 @@ import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNav
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.timetaken.TimeTakenModel;
 import org.apache.causeway.viewer.wicket.ui.components.table.DataTableWithPagesAndFilter;
 import org.apache.causeway.viewer.wicket.ui.components.table.nav.pagesize.PagesizeChooser;
@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.wicket.ui.components.table.nav.paging.PageNavi
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public class NavigationToolbar extends AjaxNavigationToolbar
-implements HasCommonContext {
+implements HasMetaModelContext {
     private static final long serialVersionUID = 1L;
 
     private static final String NAVIGATOR_CONTAINER_ID = "span";

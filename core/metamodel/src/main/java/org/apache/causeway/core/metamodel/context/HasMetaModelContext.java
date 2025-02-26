@@ -27,6 +27,7 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -40,6 +41,9 @@ import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Application;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
@@ -207,6 +211,35 @@ public interface HasMetaModelContext {
 
     default Stream<ManagedObject> streamServiceAdapters() {
         return getMetaModelContext().streamServiceAdapters();
+    }
+
+    // -- VIEWER SHORTCUTS
+
+    default Common getCommonViewerSettings() {
+        return getConfiguration().getViewer().getCommon();
+    }
+
+    default Wicket getWicketViewerSettings() {
+        return getConfiguration().getViewer().getWicket();
+    }
+
+    default Application getApplicationSettings() {
+        return getCommonViewerSettings().getApplication();
+    }
+
+    /**
+     * Translate without context: Tooltips, Button-Labels, etc.
+     */
+    default String translate(final String input) {
+        return getTranslationService().translate(TranslationContext.empty(), input);
+    }
+
+    default String translate(final TranslationContext tc, final String text) {
+        return getTranslationService().translate(tc, text);
+    }
+
+    default boolean isPrototyping() {
+        return getSystemEnvironment().isPrototyping();
     }
 
 }

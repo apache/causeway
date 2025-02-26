@@ -20,12 +20,13 @@ package org.apache.causeway.viewer.wicket.model.models;
 
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedValue;
 
 public interface AttributeModelWithChoice<T>
 extends
     IModel<T>,
-    HasCommonContext {
+    HasMetaModelContext {
 
     UiAttributeWkt attributeModel();
 

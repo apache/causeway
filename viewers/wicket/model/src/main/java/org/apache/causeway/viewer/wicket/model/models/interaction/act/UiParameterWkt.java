@@ -19,7 +19,9 @@
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
 import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -27,9 +29,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.commons.model.attrib.UiParameter;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * <i>Action Parameter Interaction</i> model bound to its owner {@link ActionInteractionWkt}.
@@ -41,7 +40,7 @@ public record UiParameterWkt(
     int paramIndex)
 implements
     IModel<ActionInteraction>,
-    HasCommonContext,
+    HasMetaModelContext,
     HasUiParentObject<UiObject>,
     UiParameter {
 
