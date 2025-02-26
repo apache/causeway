@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import org.jspecify.annotations.Nullable;
@@ -28,7 +29,7 @@ import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 
 public record NavbarSection(
         DomainServiceLayout.MenuBar menuBarSelect,
-        Can<MenuDropdown> topLevelEntries) {
+        Can<MenuDropdown> topLevelEntries) implements Serializable {
 
     public String cssClass() {
         return menuBarSelect.name().toLowerCase(Locale.ENGLISH);

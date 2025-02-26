@@ -130,7 +130,7 @@ class MediatorFactory {
             return Mediator.toPage(pageRedirectRequest);
         }
         case VALUE: {
-            var valueModel = ValueModel.of(actionModel.getAction(), resultAdapter);
+            var valueModel = new ValueModel(actionModel.getAction(), resultAdapter);
             valueModel.setActionHint(actionModel);
             var valuePage = new ValuePage(valueModel);
             var pageRedirectRequest = PageRedirectRequest.forPage(ValuePage.class, valuePage);

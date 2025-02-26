@@ -112,7 +112,7 @@ extends AssociationColumnAbstract {
             final String componentId, final DataColumn dataColumn, final ManagedObject cellElement) {
 
         if(ManagedObjects.isValue(cellElement)) {
-            var valueModel = ValueModel.of(dataColumn.associationMetaModel(), cellElement);
+            var valueModel = new ValueModel(dataColumn.associationMetaModel(), cellElement);
             var componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }

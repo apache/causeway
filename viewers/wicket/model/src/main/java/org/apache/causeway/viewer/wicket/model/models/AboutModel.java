@@ -18,19 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import org.apache.wicket.model.IModel;
+
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 /**
  * Model providing welcome text.
  */
-public final class AboutModel
-extends ModelAbstract<CausewayConfiguration.Viewer.Common.Application> {
-
-    private static final long serialVersionUID = 1L;
+public record AboutModel(CausewayConfiguration.Viewer.Common.Application applicationSettings)
+implements IModel<CausewayConfiguration.Viewer.Common.Application> {
 
     @Override
-    protected CausewayConfiguration.Viewer.Common.Application load() {
-        return getApplicationSettings();
+    public CausewayConfiguration.Viewer.Common.Application getObject() {
+        return applicationSettings();
     }
 
 }

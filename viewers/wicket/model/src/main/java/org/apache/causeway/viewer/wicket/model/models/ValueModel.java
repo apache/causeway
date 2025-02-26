@@ -28,24 +28,16 @@ import org.jspecify.annotations.NonNull;
 /**
  * Represents a standalone value (used for standalone value page).
  */
-public class ValueModel
+public final class ValueModel
 extends ModelAbstract<ManagedObject> {
 
     private static final long serialVersionUID = 1L;
-
-    // -- FACTORIES
-
-    public static ValueModel of(
-            final @NonNull ObjectMember objectMember,
-            final @NonNull ManagedObject valueAdapter) {
-        return new ValueModel(objectMember, valueAdapter);
-    }
 
     // --
 
     private final ObjectMemento adapterMemento;
 
-    private ValueModel(
+    public ValueModel(
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
         super();

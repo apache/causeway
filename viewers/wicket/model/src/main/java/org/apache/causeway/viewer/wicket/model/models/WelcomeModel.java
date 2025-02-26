@@ -18,19 +18,23 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import org.apache.wicket.model.IModel;
+
 import org.apache.causeway.core.config.CausewayConfiguration;
 
 /**
  * Model providing welcome text.
  */
-public class WelcomeModel
-extends ModelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome> {
+public record WelcomeModel(String welcomeText)
+implements IModel<String> {
 
-    private static final long serialVersionUID = 1L;
+    public WelcomeModel(final CausewayConfiguration config) {
+        this(config.getViewer().getWicket().getWelcome().getText());
+    }
 
     @Override
-    protected CausewayConfiguration.Viewer.Wicket.Welcome load() {
-        return getWicketViewerSettings().getWelcome();
+    public String getObject() {
+        return welcomeText;
     }
 
 }

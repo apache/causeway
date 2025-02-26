@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.welcome;
 
-import org.apache.wicket.model.LambdaModel;
-
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.wicket.model.models.WelcomeModel;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -31,7 +28,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * {@link HomePage}).
  */
 class WelcomePanel
-extends PanelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome, WelcomeModel> {
+extends PanelAbstract<String, WelcomeModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +36,7 @@ extends PanelAbstract<CausewayConfiguration.Viewer.Wicket.Welcome, WelcomeModel>
 
     public WelcomePanel(final String id, final WelcomeModel welcomeModel) {
         super(id, welcomeModel);
-        Wkt.labelAdd(this, ID_MESSAGE, LambdaModel.of(()->welcomeModel.getObject().getText()))
+        Wkt.labelAdd(this, ID_MESSAGE, welcomeModel)
             // safe to not escape, welcome message is read from file (part of deployed WAR)
             .setEscapeModelStrings(false);
 

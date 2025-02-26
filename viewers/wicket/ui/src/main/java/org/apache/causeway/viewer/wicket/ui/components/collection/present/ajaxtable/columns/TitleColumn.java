@@ -60,7 +60,7 @@ extends GenericColumnAbstract {
 
         if(ManagedObjects.isValue(rowElement)) {
             var objectMember = dataRow.parentTable().getMetaModel();
-            var valueModel = ValueModel.of(objectMember, rowElement);
+            var valueModel = new ValueModel(objectMember, rowElement);
             var componentFactory = findComponentFactory(UiComponentType.VALUE, valueModel);
             return componentFactory.createComponent(componentId, valueModel);
         }
