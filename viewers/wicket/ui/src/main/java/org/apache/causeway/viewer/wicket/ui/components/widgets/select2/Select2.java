@@ -29,8 +29,8 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithMultiChoice;
-import org.apache.causeway.viewer.wicket.model.models.AttributeModelWithSingleChoice;
+import org.apache.causeway.viewer.wicket.model.models.MultiChoiceModel;
+import org.apache.causeway.viewer.wicket.model.models.SingleChoiceModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 
@@ -43,11 +43,11 @@ public interface Select2 extends Serializable {
         var choiceProvider = new ChoiceProvider(attributeModel);
         var select2 = attributeModel.isSingular()
                 ? new SingleChoice(id,
-                                new AttributeModelWithSingleChoice(attributeModel),
+                                new SingleChoiceModel(attributeModel),
                                 attributeModel,
                                 choiceProvider)
                 : new MultiChoice(id,
-                                _Casts.uncheckedCast(new AttributeModelWithMultiChoice(attributeModel)),
+                                _Casts.uncheckedCast(new MultiChoiceModel(attributeModel)),
                                 attributeModel,
                                 choiceProvider);
         var component = select2.component();

@@ -29,7 +29,7 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
  * with the parent {@link UiAttributeWkt}.
  */
 //@Log4j2
-public record AttributeModelWithSingleChoice(
+public record SingleChoiceModel(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
@@ -47,6 +47,11 @@ implements
     public void setObject(final ObjectMemento memento) {
         pendingValue().getValue().setValue(
                 getObjectManager().demementify(memento));
+    }
+
+    @Override
+    public void detach() {
+        attributeModel.detach();
     }
 
 }

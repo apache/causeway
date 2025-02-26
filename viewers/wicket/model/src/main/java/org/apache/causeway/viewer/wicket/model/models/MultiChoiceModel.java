@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
  * with the parent {@link UiAttributeWkt}, allowing also for pending values.
  */
 @Log4j2
-public record AttributeModelWithMultiChoice(
+public record MultiChoiceModel(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
@@ -67,6 +67,11 @@ implements
         var logicalType = attributeModel().getElementType().logicalType();
         var packedMemento = ObjectMemento.packed(logicalType, unpackedMemento);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
+    }
+
+    @Override
+    public void detach() {
+        attributeModel.detach();
     }
 
 }
