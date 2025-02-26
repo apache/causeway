@@ -18,47 +18,38 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction;
 
+import org.apache.wicket.model.LoadableDetachableModel;
+
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class HasBookmarkedOwnerAbstract<T>
-extends ModelAbstract<T>
+extends LoadableDetachableModel<T>
 implements
-    HasBookmarkedOwner {
+    HasBookmarkedOwner, HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
     final BookmarkedObjectWkt bookmarkedObject;
 
     @Override
-    public final Bookmark getOwnerBookmark() {
-        return bookmarkedObject.bookmark();
-    }
-
-    @Override
-    public final ManagedObject getBookmarkedOwner() {
-        return bookmarkedObject.managedObject();
-    }
-
     public final BookmarkedObjectWkt bookmarkedObjectModel() {
         return bookmarkedObject;
+    }
+
+    public final ObjectSpecification getTypeOfSpecification() {
+        // serving this from a potentially unattached entity seems safe
+        return bookmarkedObjectModel().getObject().getSpecification();
     }
 
     /** governs how to populate the BookmarkPanel in the UI */
     public final BookmarkPolicy getBookmarkPolicy() {
         return Facets.bookmarkPolicyOrElseNotSpecified(getTypeOfSpecification());
-    }
-
-    public final ObjectSpecification getTypeOfSpecification() {
-        // serving this from a potentially unattached entity seems safe
-        return bookmarkedObject.getObject().getSpecification();
     }
 
 }
