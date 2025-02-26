@@ -44,9 +44,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.model.whereAmI.WhereAmI;
 import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -163,7 +163,7 @@ public class DomainObjectPage extends PageAbstract {
 
         themeDiv.addOrReplace(domainObjectContainer);
 
-        addWhereAmIIfShown(domainObjectContainer, WhereAmIHelper.of(model));
+        addWhereAmIIfShown(domainObjectContainer, WhereAmI.of(model));
 
         // bookmarks and breadcrumbs
         bookmarkPageIfShown(model);
@@ -183,7 +183,7 @@ public class DomainObjectPage extends PageAbstract {
 
     protected void addWhereAmIIfShown(
             final WebMarkupContainer domainObjectContainer,
-            final WhereAmIHelper whereAmIModel) {
+            final WhereAmI whereAmIModel) {
 
         var whereAmIContainer = new WebMarkupContainer(ID_WHEREAMI_CONTAINER);
         domainObjectContainer.addOrReplace(whereAmIContainer);

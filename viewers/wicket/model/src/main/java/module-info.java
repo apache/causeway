@@ -17,22 +17,22 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.wicket.model {
-    exports org.apache.causeway.viewer.wicket.model.value;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.prop;
-    exports org.apache.causeway.viewer.wicket.model.modelhelpers;
+    exports org.apache.causeway.viewer.wicket.model;
+    exports org.apache.causeway.viewer.wicket.model.causeway;
     exports org.apache.causeway.viewer.wicket.model.hints;
     exports org.apache.causeway.viewer.wicket.model.itemreuse;
-    exports org.apache.causeway.viewer.wicket.model.models;
-    exports org.apache.causeway.viewer.wicket.model;
     exports org.apache.causeway.viewer.wicket.model.links;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction.act;
-    exports org.apache.causeway.viewer.wicket.model.models.interaction;
-    exports org.apache.causeway.viewer.wicket.model.tableoption;
-    exports org.apache.causeway.viewer.wicket.model.util;
     exports org.apache.causeway.viewer.wicket.model.mementos;
     exports org.apache.causeway.viewer.wicket.model.models.coll;
-    exports org.apache.causeway.viewer.wicket.model.causeway;
+    exports org.apache.causeway.viewer.wicket.model.models.interaction.act;
+    exports org.apache.causeway.viewer.wicket.model.models.interaction.prop;
+    exports org.apache.causeway.viewer.wicket.model.models.interaction;
+    exports org.apache.causeway.viewer.wicket.model.models;
+    exports org.apache.causeway.viewer.wicket.model.tableoption;
     exports org.apache.causeway.viewer.wicket.model.timetaken;
+    exports org.apache.causeway.viewer.wicket.model.util;
+    exports org.apache.causeway.viewer.wicket.model.value;
+    exports org.apache.causeway.viewer.wicket.model.whereAmI;
 
     requires jakarta.activation;
     requires static lombok;

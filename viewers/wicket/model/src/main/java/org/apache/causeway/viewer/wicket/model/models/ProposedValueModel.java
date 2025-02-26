@@ -27,15 +27,15 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 /**
  * Wraps a {@link UiAttributeWkt} to act as an {@link ObjectAdapterModel}.
  */
-public record ChainingObjectModel(
+public record ProposedValueModel(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
     UiAttributeWkt attributeModel)
 implements ObjectAdapterModel {
 
-    public static ChainingObjectModel chain(final UiAttributeWkt attributeModel) {
-        return new ChainingObjectModel(attributeModel);
+    public static ProposedValueModel chain(final UiAttributeWkt attributeModel) {
+        return new ProposedValueModel(attributeModel);
     }
 
     /**

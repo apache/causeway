@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.causeway.viewer.wicket.model.modelhelpers;
+package org.apache.causeway.viewer.wicket.model.whereAmI;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,13 +28,13 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 /**
  * @since 2.0
  */
-public record WhereAmIHelper(
+public record WhereAmI(
         /** immutable start node of the navigable parent chain */
         UiObjectWkt startOfChain,
         List<Object> reversedChainOfParents,
         boolean isWhereAmIEnabled) {
 
-    public static WhereAmIHelper of(final UiObjectWkt startOfChain) {
+    public static WhereAmI of(final UiObjectWkt startOfChain) {
         var mmc = startOfChain.getMetaModelContext();
         var settings = mmc.getConfiguration().getViewer().getWicket().getBreadcrumbs();
         var isWhereAmIEnabled = settings.isEnabled();
@@ -49,7 +49,7 @@ public record WhereAmIHelper(
             .streamParentChainOf(startNode, maxChainLength)
             .forEach(reversedChainOfParents::addFirst);
 
-        return new WhereAmIHelper(startOfChain, reversedChainOfParents, isWhereAmIEnabled);
+        return new WhereAmI(startOfChain, reversedChainOfParents, isWhereAmIEnabled);
     }
 
     /**

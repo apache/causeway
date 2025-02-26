@@ -24,7 +24,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.ChainingObjectModel;
+import org.apache.causeway.viewer.wicket.model.models.ProposedValueModel;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
@@ -34,7 +34,7 @@ import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
  * {@link ComponentFactory} for {@link ObjectIconAndTitlePanel}.
  *
  * @implNote Knows how to deal with {@link ObjectAdapterModel}. And for
- * {@link UiAttributeWkt} we have an adapter {@link ChainingObjectModel}
+ * {@link UiAttributeWkt} we have an adapter {@link ProposedValueModel}
  * that implements {@link ObjectAdapterModel}, such that it can also deal
  * with {@link UiAttributeWkt}.
  *
@@ -87,7 +87,7 @@ public class ObjectIconAndTitlePanelFactory extends ComponentFactoryAbstract {
         } else if (model instanceof UiAttributeWkt) {
             var attributeModel = (UiAttributeWkt) model;
             // effectively acts as an adapter from UiAttribute to ObjectAdapterModel
-            objectAdapterModel = ChainingObjectModel.chain(attributeModel);
+            objectAdapterModel = ProposedValueModel.chain(attributeModel);
         } else {
             throw _Exceptions.unexpectedCodeReach();
         }
