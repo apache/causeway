@@ -18,30 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import org.jspecify.annotations.NonNull;
+public record BooleanAttributeModel(
+    boolean isPrimitive,
+    UiAttributeWkt attributeModel) implements IModel<Boolean> {
 
-public class BooleanModel
-extends ChainingModel<Boolean> {
-
-    private static final long serialVersionUID = 1L;
-
-    public static BooleanModel forAttributeModel(final @NonNull UiAttributeWkt attributeModel) {
-        return new BooleanModel(attributeModel);
-    }
-
-    final boolean isPrimitive;
-
-    protected BooleanModel(final UiAttributeWkt attributeModel) {
-        super(attributeModel);
-
-        var spec = attributeModel().getElementType();
-        this.isPrimitive = spec.getFullIdentifier().equals("boolean");
+    public BooleanAttributeModel(final UiAttributeWkt attributeModel) {
+        this(
+            attributeModel.getElementType().getFullIdentifier().equals("boolean"),
+            attributeModel);
     }
 
     @Override
@@ -82,7 +71,7 @@ extends ChainingModel<Boolean> {
             private static final long serialVersionUID = 1L;
 
             @Override public String getObject() {
-                final Boolean bool = BooleanModel.this.getObject();
+                final Boolean bool = BooleanAttributeModel.this.getObject();
                 return bool == null
                         ? notSetLiteral // '(not set)'
                         : bool
@@ -90,12 +79,6 @@ extends ChainingModel<Boolean> {
                             : falseLiteral; // 'no'
             }
         };
-    }
-
-    // -- HELPER
-
-    protected UiAttributeWkt attributeModel() {
-        return (UiAttributeWkt) super.getTarget();
     }
 
 }

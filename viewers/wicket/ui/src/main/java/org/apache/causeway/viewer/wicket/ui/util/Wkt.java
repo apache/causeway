@@ -532,9 +532,8 @@ public class Wkt {
              * enforce a page-reload as side-effect.
              */
             private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
-                if(model instanceof DataRowToggleWkt) {
-                    var chainedModel = ((DataRowToggleWkt)model).getChainedModel();
-                    if(chainedModel instanceof DataRowWkt dataRowWkt) {
+                if(model instanceof DataRowToggleWkt dataRowToggleWkt) {
+                    if(dataRowToggleWkt.delegate() instanceof DataRowWkt dataRowWkt) {
                         return dataRowWkt.isTableDataLoaded();
                     }
                 }

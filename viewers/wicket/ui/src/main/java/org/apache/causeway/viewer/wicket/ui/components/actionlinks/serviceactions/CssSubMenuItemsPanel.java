@@ -36,7 +36,7 @@ extends MenuablePanelAbstract {
         setRenderBodyOnly(true);
 
         Wkt.repeatingViewAdd(this, getId(),
-            menuablesModel().streamMenuables(CssMenuItem.class),
+            streamMenuables(CssMenuItem.class),
             (container, menuable)->menuable.addTo(container));
     }
 

@@ -23,7 +23,6 @@ module org.apache.causeway.viewer.wicket.model {
     exports org.apache.causeway.viewer.wicket.model.hints;
     exports org.apache.causeway.viewer.wicket.model.itemreuse;
     exports org.apache.causeway.viewer.wicket.model.models;
-    exports org.apache.causeway.viewer.wicket.model.models.binding;
     exports org.apache.causeway.viewer.wicket.model;
     exports org.apache.causeway.viewer.wicket.model.links;
     exports org.apache.causeway.viewer.wicket.model.models.interaction.act;

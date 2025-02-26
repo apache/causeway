@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import org.apache.wicket.model.ChainingModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
@@ -42,7 +42,6 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 
 /**
@@ -64,8 +63,7 @@ import lombok.Setter;
  */
 //@Log4j2
 public abstract class UiAttributeWkt
-extends ChainingModel<ManagedObject>
-implements HasRenderingHints, UiAttribute, FormExecutorContext {
+implements IModel<ManagedObject>, HasRenderingHints, UiAttribute, FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
 
@@ -98,7 +96,6 @@ implements HasRenderingHints, UiAttribute, FormExecutorContext {
             final @NonNull UiObjectWkt parentEntityModel,
             final @NonNull ViewOrEditMode viewOrEdit,
             final @NonNull RenderingHint renderingHint) {
-        super(parentEntityModel); // the so called target model, we are chaining us to
         this.parentEntityModel = parentEntityModel;
         this.renderingHint = renderingHint;
         this.viewOrEditMode = viewOrEdit;

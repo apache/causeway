@@ -27,27 +27,39 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
-import org.apache.causeway.viewer.wicket.model.models.binding.BooleanBinding;
 
 /**
  * Boolean {@link IModel} to bind to the associated {@link DataTableInteractive}'s
  * {@link DataRow} model to handle check-box selection.
  */
-public final class DataRowToggleWkt
-extends BooleanBinding<DataRow> {
+public record DataRowToggleWkt(
+    IModel<DataRow> delegate) implements IModel<Boolean> {
 
-    private static final long serialVersionUID = 1L;
-
-    public DataRowToggleWkt(final DataRowWkt dataRowWkt) {
-        super(dataRowWkt);
+    @Override
+    public final Boolean getObject() {
+        return getBindable(modelObject())
+            .map(Bindable::getValue)
+            .orElse(null);
     }
 
     @Override
-    protected Optional<Bindable<Boolean>> getBindable(
-            final @Nullable DataRow dataRow) {
+    public final void setObject(final Boolean value) {
+        getBindable(modelObject())
+            .ifPresent(bindable->bindable.setValue(value));
+    }
+
+    private Optional<Bindable<Boolean>> getBindable(
+        final @Nullable DataRow dataRow) {
         return dataRow!=null
-                ? Optional.ofNullable(dataRow.selectToggleBindable())
-                : Optional.empty();
+            ? Optional.ofNullable(dataRow.selectToggleBindable())
+            : Optional.empty();
+    }
+
+    /**
+     * For DataRowToggleWkt returns its DataRow.
+     */
+    private DataRow modelObject() {
+        return delegate.getObject();
     }
 
 }

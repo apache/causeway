@@ -18,25 +18,31 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.menuable;
 
+import java.util.stream.Stream;
+
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
-import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
  * Common panel for drop-downs and sub-menus.
  */
 public abstract class MenuablePanelAbstract
-extends PanelAbstract<Can<? extends Menuable>, MenuablesModel> {
+extends PanelAbstract<Can<? extends Menuable>, IModel<Can<? extends Menuable>>> {
 
     private static final long serialVersionUID = 1L;
 
     protected MenuablePanelAbstract(final String id, final Can<? extends Menuable> menuables) {
-        super(id, new MenuablesModel(menuables));
+        super(id, Model.of(menuables));
     }
 
-    public final MenuablesModel menuablesModel() {
-        return getModel();
+    protected final <T extends Menuable> Stream<T> streamMenuables(final Class<T> linkType) {
+        return getModelObject().stream()
+                .filter(linkType::isInstance)
+                .map(linkType::cast);
     }
 
 }

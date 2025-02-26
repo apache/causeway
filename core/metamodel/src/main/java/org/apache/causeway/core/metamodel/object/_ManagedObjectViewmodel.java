@@ -97,12 +97,10 @@ implements
     @Override
     public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
         var shouldRefresh = getTransactionService().currentTransactionId()
-        .map(this::shouldRefresh)
-        .orElse(true); // if there is no current transaction, refresh regardless; unexpected state, might fail later
+            .map(this::shouldRefresh)
+            .orElse(true); // if there is no current transaction, refresh regardless; unexpected state, might fail later
 
-        if(!shouldRefresh) {
-            return;
-        }
+        if(!shouldRefresh) return;
 
         if(isBookmarkMemoized()) {
             reloadViewmodelFromMemoizedBookmark();

@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.commons.model.attrib.UiProperty;
 import org.apache.causeway.viewer.commons.model.object.HasUiParentObject;
 import org.apache.causeway.viewer.commons.model.object.UiObject;
+import org.apache.causeway.viewer.wicket.model.models.DelegatingModel;
 
 /**
  * <i>Property Interaction</i> model bound to its owner {@link PropertyInteractionWkt}.
@@ -36,7 +37,7 @@ import org.apache.causeway.viewer.commons.model.object.UiObject;
  * @see ChainingModel
  */
 public final class UiPropertyWkt
-extends ChainingModel<PropertyInteraction>
+extends DelegatingModel<PropertyInteraction>
 implements
     HasMetaModelContext,
     HasUiParentObject<UiObject>,

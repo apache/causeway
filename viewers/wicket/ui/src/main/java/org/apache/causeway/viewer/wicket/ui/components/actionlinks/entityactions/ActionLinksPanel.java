@@ -118,7 +118,7 @@ extends MenuablePanelAbstract {
     }
 
     protected final Stream<ActionLink> streamActionLinks() {
-        return menuablesModel().streamMenuables(ActionLink.class);
+        return streamMenuables(ActionLink.class);
     }
 
     protected final List<ActionLink> listOfActionLinks() {

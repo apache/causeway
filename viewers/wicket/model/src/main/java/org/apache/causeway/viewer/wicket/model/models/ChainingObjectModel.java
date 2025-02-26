@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.ChainingModel;
-
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -29,25 +27,15 @@ import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 /**
  * Wraps a {@link UiAttributeWkt} to act as an {@link ObjectAdapterModel}.
  */
-public final class ChainingObjectModel
-extends ChainingModel<ManagedObject>
-implements ObjectAdapterModel {
-
-    private static final long serialVersionUID = 1L;
-
-    public static ChainingObjectModel chain(final UiAttributeWkt attributeModel) {
-        return new ChainingObjectModel(attributeModel);
-    }
-
-    private ChainingObjectModel(final UiAttributeWkt attributeModel) {
-        super(attributeModel);
-    }
-
+public record ChainingObjectModel(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to
      */
-    public UiAttributeWkt attributeModel() {
-        return (UiAttributeWkt) super.getTarget();
+    UiAttributeWkt attributeModel)
+implements ObjectAdapterModel {
+
+    public static ChainingObjectModel chain(final UiAttributeWkt attributeModel) {
+        return new ChainingObjectModel(attributeModel);
     }
 
     /**

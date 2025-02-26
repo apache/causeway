@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.commons.model.components.UiString;
-import org.apache.causeway.viewer.wicket.model.models.BooleanModel;
+import org.apache.causeway.viewer.wicket.model.models.BooleanAttributeModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanelWithFormField;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.CompactFragment;
@@ -59,7 +59,7 @@ extends AttributePanelWithFormField<Boolean> {
     protected FormComponent<Boolean> createFormComponent(final String id, final UiAttributeWkt attributeModel) {
         checkBox = Wkt.checkboxX(
                 id,
-                BooleanModel.forAttributeModel(attributeModel),
+                new BooleanAttributeModel(attributeModel),
                 attributeModel.isRequired(),
                 CheckBoxXConfig.Sizes.xl);
         return checkBox;
