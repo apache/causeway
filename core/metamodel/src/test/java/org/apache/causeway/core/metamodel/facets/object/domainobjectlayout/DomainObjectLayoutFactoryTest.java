@@ -123,7 +123,6 @@ extends FacetFactoryTestAbstract {
                 facetFactory.process(processClassContext);
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                System.err.printf("%s%n", facet);
                 assertNotNull(facet);
                 assertTrue(facet instanceof CssClassFacetForDomainObjectLayoutAnnotation);
 

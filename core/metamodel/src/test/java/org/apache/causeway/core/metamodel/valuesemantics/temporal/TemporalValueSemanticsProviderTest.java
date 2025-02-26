@@ -75,8 +75,6 @@ class TemporalValueSemanticsProviderTest {
 
         var formattedTemporal = formatter.format(localTime);
         assertNotNull(formattedTemporal);
-
-        System.out.println(formattedTemporal);
     }
 
     // -- HELPER

@@ -192,7 +192,10 @@ identified
         <snakeyaml.version>2.0</snakeyaml.version>
         <spring-boot.version>3.4.3</spring-boot.version>
 
-        <surefire-plugin.argLine>-Xmx384m</surefire-plugin.argLine>
+        <surefire-plugin.argLine>
+            -Xmx384m
+            -XX:+EnableDynamicAgentLoading 
+        </surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
         module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.28</swagger-core.version>

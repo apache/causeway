@@ -53,7 +53,8 @@ class BSMenuBarsTest {
         final Map<String, String> schemas = jaxbService.toXsd(menuBars, CausewaySchemas.INCLUDE);
 
         menuBars.visit(data->{
-            System.err.printf("%s%n", data);
+            //debug
+            //System.err.printf("%s%n", data);
         });
 
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
@@ -63,7 +64,7 @@ class BSMenuBarsTest {
     }
 
     private void println(final String string) {
-        //for test debugging only
+        //debug
         //System.err.printf("%s%n", string);
     }
 
