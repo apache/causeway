@@ -17,10 +17,15 @@
  *  under the License.
  */
 package org.apache.causeway.core.metamodel.facets.object.value;
+
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.delegate._Delegate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
+import org.apache.causeway.core.metamodel.consent.Allow;
+import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
@@ -31,17 +36,35 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.HasObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-sealed interface CompositeValueUpdater
+/**
+ * Implementations are proxied in support of composite value types.
+ * <p>
+ * @implSpec The proxy mimics an {@link ObjectAction},
+ *      hence extending {@link HasObjectAction} for delegation to {@link #mixedInAction()}.
+ */
+public sealed interface CompositeValueUpdater extends HasObjectAction
 permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
     MixedInAction mixedInAction();
     ObjectSpecification returnType();
     ManagedObject map(final ManagedObject valueType);
 
-    default ManagedObject execute(
+    // HasObjectAction
+    @Override default ObjectAction getObjectAction() { return mixedInAction(); }
+
+
+    // -- OBJECT ACTION MOCKUP
+
+    @Override default String getId() { return "proxyCompositeValueUpdater"; }
+    @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
+    @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
+    @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
+
+    @Override default ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return map(simpleExecute(head, parameters));
@@ -64,7 +87,6 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
             parameterNegotiationModel.setParamValue(paramIndex, newParamValue);
             return newParamValue;
         }
-
     }
 
     record CompositeValueUpdaterForProperty(
@@ -84,7 +106,6 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
             propNeg.submit();
             return managedProperty.getOwner();
         }
-
     }
 
     // -- FACTORIES

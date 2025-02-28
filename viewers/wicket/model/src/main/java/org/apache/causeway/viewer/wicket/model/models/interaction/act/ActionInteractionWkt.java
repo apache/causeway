@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
+import java.lang.reflect.Proxy;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -77,8 +78,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      * we don't have to re-attach the entire model (ActionInteraction)
      * <p>
      * nullable in support of lazy evaluation
+     * <p>
+     * make sure we don't memoize non-serializable ObjectAction proxies (as introduced via composite value type support)
      */
     private @Nullable ObjectAction actionMemento;
+    private transient @Nullable ObjectAction objectAction; // might be a proxy (non-serializbale)
 
     private Can<UiParameterWkt> childModels;
     private @Nullable PropertyModel associatedWithPropertyIfAny;
@@ -125,11 +129,18 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
         super(bookmarkedObject);
         this.memberId = memberId;
         this.where = where;
-        this.actionMemento = objectAction
-                    .orElse(null);
+        setObjectAction(objectAction.orElse(null));
         this.associatedWithPropertyIfAny = associatedWithPropertyIfAny;
         this.associatedWithParameterIfAny = associatedWithParameterIfAny;
         this.associatedWithCollectionIfAny = associatedWithCollectionIfAny;
+    }
+
+    private void setObjectAction(final ObjectAction objectAction) {
+        this.objectAction = objectAction;
+        this.actionMemento = objectAction!=null
+                && !Proxy.isProxyClass(objectAction.getClass())
+            ? objectAction
+            : null;
     }
 
     @Override
@@ -162,13 +173,13 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
 
     public final ObjectAction getMetaModel() {
         //[CAUSEWAY-3648] In support of the composite value type's 'Xxx_default' mixin.
-        if(actionMemento==null) {
-            this.actionMemento = actionInteraction()
-                    .getObjectActionElseFail();
-        }
+        if(objectAction!=null) return objectAction;
+        if(actionMemento!=null) return actionMemento;
+        setObjectAction(actionInteraction()
+                .getObjectActionElseFail());
         // re-attachment fails, if the owner is not found (eg. deleted entity),
         // hence we return the directly memoized meta-model of the underlying action
-        return actionMemento;
+        return objectAction;
     }
 
     public Optional<PropertyModel> associatedWithProperty() {

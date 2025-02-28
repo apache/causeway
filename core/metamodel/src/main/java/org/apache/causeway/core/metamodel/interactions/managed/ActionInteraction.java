@@ -63,14 +63,14 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
 
     // -- FACTORIES
 
-    public static final ActionInteraction start(
+    public static ActionInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
             final @NonNull Where where) {
         return startWithMultiselect(owner, memberId, where, Can::empty);
     }
 
-    public static final ActionInteraction startWithMultiselect(
+    public static ActionInteraction startWithMultiselect(
             final @NonNull ManagedObject owner,
             final @NonNull String actionId,
             final @NonNull Where where,
@@ -159,10 +159,6 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
                 return ActionInteraction.wrap(managedAction);
             }
         }
-
-        //XXX[CAUSEWAY-3080] prior to this fix we returned... (which I'm not sure why - makes no sense to me)
-        //var paramValue = parameterNegotiationModel.getParamValue(paramIndex);
-        //return ActionInteraction.start(paramValue, memberId, where);
 
         // else if not a composite value
         return ActionInteraction.start(actionOwner, memberId, where);

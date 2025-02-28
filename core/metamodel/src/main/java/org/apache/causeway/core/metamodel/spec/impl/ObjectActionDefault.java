@@ -70,7 +70,7 @@ import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
- class ObjectActionDefault
+class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction, HasSpecificationLoaderInternal {
     private static final long serialVersionUID = 1L;
