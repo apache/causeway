@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
@@ -27,20 +26,16 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 
-public class PromptStyleFacetForPropertyLayoutXml
+public final class PromptStyleFacetForPropertyLayoutXml
 extends PromptStyleFacetAbstract {
 
     public static Optional<PromptStyleFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(propertyLayout == null) {
-            return Optional.empty();
-        }
-        final PromptStyle promptStyle = propertyLayout.getPromptStyle();
-        return promptStyle != null
-                ? Optional.of(new PromptStyleFacetForPropertyLayoutXml(promptStyle, holder, precedence))
-                : Optional.empty();
+        return Optional.ofNullable(propertyLayout)
+            .map(PropertyLayoutData::getPromptStyle)
+            .map(promptStyle->new PromptStyleFacetForPropertyLayoutXml(promptStyle, holder, precedence));
     }
 
     private final PromptStyle promptStyle;
@@ -59,12 +54,6 @@ extends PromptStyleFacetAbstract {
     @Override
     public PromptStyle value() {
         return promptStyle;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("promptStyle", promptStyle);
     }
 
 }

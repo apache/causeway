@@ -22,13 +22,16 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.delegate._Delegate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
 import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetForCompositeValueEdit;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -42,10 +45,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 /**
- * Implementations are proxied in support of composite value types.
- * <p>
- * @implSpec The proxy mimics an {@link ObjectAction},
- *      hence extending {@link HasObjectAction} for delegation to {@link #mixedInAction()}.
+ * Implementations are implementing {@link HasObjectAction} and delegating to {@link #mixedInAction()}.
  */
 public sealed interface CompositeValueUpdater extends HasObjectAction
 permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
@@ -57,9 +57,19 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
     // HasObjectAction
     @Override default ObjectAction getObjectAction() { return mixedInAction(); }
 
+    // makes sure PromptStyle is always INLINE_AS_IF_EDIT
+    default CompositeValueUpdater overrideFacets() {
+        FacetUtil.computeIfAbsentExact(mixedInAction().getFacetHolder(),
+            PromptStyleFacet.class,
+            PromptStyleFacetForCompositeValueEdit.class,
+            Precedence.HIGH,
+            PromptStyleFacetForCompositeValueEdit::new);
+        return this;
+    }
+
     // -- OBJECT ACTION MOCKUP
 
-    @Override default String getId() { return "proxiedCompositeValueUpdaterAction"; }
+    @Override default String getId() { return "delegatedCompositeValueUpdaterAction"; }
     @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
     @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
     @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
@@ -88,6 +98,7 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
             parameterNegotiationModel.setParamValue(paramIndex, newParamValue);
             return newParamValue;
         }
+
     }
 
     record CompositeValueUpdaterForProperty(
@@ -107,23 +118,24 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
             propNeg.submit();
             return managedProperty.getOwner();
         }
+
     }
 
     // -- FACTORIES
 
-    static ObjectAction createProxyForParameter(
+    static ObjectAction createDelegatorForParameter(
         final ParameterNegotiationModel parameterNegotiationModel,
         final int paramIndex,
         final MixedInAction mixedInAction) {
-        return _Delegate.createProxy(ObjectAction.class,
-                new CompositeValueUpdaterForParameter(parameterNegotiationModel, paramIndex, mixedInAction));
+        return new CompositeValueUpdaterForParameter(parameterNegotiationModel, paramIndex, mixedInAction)
+            .overrideFacets();
     }
 
-    static ObjectAction createProxyForProperty(
+    static ObjectAction createDelegatorForProperty(
         final ManagedProperty managedProperty,
         final MixedInAction mixedInAction) {
-        return _Delegate.createProxy(ObjectAction.class,
-                new CompositeValueUpdaterForProperty(managedProperty, mixedInAction));
+        return new CompositeValueUpdaterForProperty(managedProperty, mixedInAction)
+            .overrideFacets();
     }
 
     // -- HELPER

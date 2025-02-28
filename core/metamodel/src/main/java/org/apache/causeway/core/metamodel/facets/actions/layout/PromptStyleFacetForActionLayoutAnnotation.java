@@ -19,87 +19,54 @@
 package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 
-public class PromptStyleFacetForActionLayoutAnnotation
+public final class PromptStyleFacetForActionLayoutAnnotation
 extends PromptStyleFacetAbstract {
-
-    private final PromptStyle promptStyle;
-
-    public PromptStyleFacetForActionLayoutAnnotation(final PromptStyle promptStyle, final FacetHolder holder) {
-        super( holder );
-        this.promptStyle = promptStyle;
-    }
 
     public static Optional<PromptStyleFacet> create(
             final Optional<ActionLayout> actionLayoutIfAny,
             final CausewayConfiguration configuration,
             final FacetHolder holder) {
 
-        return _Optionals.<PromptStyleFacet>orNullable(
-
-        actionLayoutIfAny
-        .map(ActionLayout::promptStyle)
-        .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
-        .map(promptStyle -> {
-
-            switch (promptStyle) {
-            case DIALOG:
-            case DIALOG_MODAL:
-            case DIALOG_SIDEBAR:
-            case INLINE:
-            case INLINE_AS_IF_EDIT:
-                return new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
-
-            case AS_CONFIGURED:
-
-                // do not replace
-                if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                    return null;
-                }
-
-                promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-                return new PromptStyleFacetAsConfigured(promptStyle, holder);
-            default:
-                throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
-            }
-
-        })
-
-        ,
-
-        () -> {
-            // do not replace
-            if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                return null;
-            }
-
-            PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-            return new PromptStyleFacetAsConfigured(promptStyle, holder);
-        }
-
+        return Optional.ofNullable(
+            actionLayoutIfAny
+                .map(ActionLayout::promptStyle)
+                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+                .map(promptStyle -> switch (promptStyle) {
+                    case DIALOG, DIALOG_MODAL, DIALOG_SIDEBAR, INLINE, INLINE_AS_IF_EDIT->
+                        new PromptStyleFacetForActionLayoutAnnotation(promptStyle, holder);
+                    case AS_CONFIGURED->
+                        holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                            ? null // do not replace
+                            : new PromptStyleFacetAsConfigured(configuration, holder);
+                    case NOT_SPECIFIED -> null; // unexpected code reach
+                })
+                .orElseGet(() ->
+                    // do not replace
+                    holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                        ? null
+                        : new PromptStyleFacetAsConfigured(configuration, holder))
         );
+    }
 
+    private final PromptStyle promptStyle;
+
+    private PromptStyleFacetForActionLayoutAnnotation(final PromptStyle promptStyle, final FacetHolder holder) {
+        super(holder);
+        this.promptStyle = promptStyle;
     }
 
     @Override
     public PromptStyle value() {
         return promptStyle;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("promptStyle", promptStyle);
     }
 
 }

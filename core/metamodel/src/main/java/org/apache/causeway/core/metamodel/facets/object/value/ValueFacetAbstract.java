@@ -258,7 +258,7 @@ implements ValueFacet<T> {
         //feed the action's invocation result back into the parameter negotiation model of the parent edit dialog
         return resolveCompositeValueMixinForFeature(parameterNegotiationModel.getParamMetamodel(paramIndex))
                 .map(m->CompositeValueUpdater
-                        .createProxyForParameter(parameterNegotiationModel, paramIndex, (MixedInAction)m));
+                        .createDelegatorForParameter(parameterNegotiationModel, paramIndex, (MixedInAction)m));
     }
 
     @Override
@@ -267,7 +267,7 @@ implements ValueFacet<T> {
 
         //feed the action's invocation result back into the attributeModel's proposed value, then submit
         return resolveCompositeValueMixinForFeature(managedProperty.getProperty())
-                .map(m->CompositeValueUpdater.createProxyForProperty(managedProperty, (MixedInAction)m));
+                .map(m->CompositeValueUpdater.createDelegatorForProperty(managedProperty, (MixedInAction)m));
     }
 
     // -- UTILITY

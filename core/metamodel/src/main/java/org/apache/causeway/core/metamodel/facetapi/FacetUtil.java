@@ -20,11 +20,14 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -33,7 +36,6 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -56,9 +58,8 @@ public final class FacetUtil {
      * @return the argument as is - or just in case if null converted to an Optional.empty()
      */
     public static <F extends Facet> Optional<F> addFacetIfPresent(final @Nullable Optional<F> facetIfAny) {
-        if (facetIfAny == null) {
-            return Optional.empty();
-        }
+        if (facetIfAny == null) return Optional.empty();
+
         facetIfAny
             .ifPresent(facet->facet.getFacetHolder().addFacet(facet));
         return facetIfAny;
@@ -106,17 +107,14 @@ public final class FacetUtil {
      * then adds given facet to its facetHolder, honoring precedence.
      */
     public static void updateFacet(final @Nullable Facet facet) {
-        if(facet==null) {
-            return;
-        }
+        if(facet==null) return;
+
         final boolean skip = facet.getFacetHolder().lookupFacet(facet.facetType())
                 .map(Facet::getPrecedence)
                 .map(Facet.Precedence::ordinal)
                 .map(ordinal -> ordinal>facet.getPrecedence().ordinal())
                 .orElse(false);
-        if(skip) {
-            return;
-        }
+        if(skip) return;
 
         purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
         addFacet(facet);
@@ -204,6 +202,31 @@ public final class FacetUtil {
         .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
                 ? b
                 : a);
+    }
+
+    /**
+     * Looks up the exact facet class and if found returns it,
+     * otherwise creates it via the factory and automatically wires it to its holder.
+     * <p>
+     * Only exception is, when there already exists a facet with higher precedence, in which case
+     * an empty optional is returned.
+     */
+    public static <E extends T, T extends Facet> Optional<E> computeIfAbsentExact(
+            final FacetHolder facetHolder,
+            final Class<T> facetType,
+            final Class<E> facetExactClass,
+            final Precedence overrideUpToIncluding,
+            final Function<FacetHolder, E> facetFactory) {
+
+        T winnerFacet = facetHolder.lookupFacet(facetType).orElse(null);
+        if(winnerFacet==null) return Optional.of(addFacet(facetFactory.apply(facetHolder)));
+        if(winnerFacet.getClass().equals(facetExactClass)) return Optional.of(winnerFacet).map(facetExactClass::cast);
+        // check if we are allowed to override based on precedence
+        if(winnerFacet.getPrecedence().ordinal()<=overrideUpToIncluding.ordinal()) {
+            return Optional.of(addFacet(facetFactory.apply(facetHolder)));
+        }
+        // not allowed to override
+        return Optional.empty();
     }
 
 }

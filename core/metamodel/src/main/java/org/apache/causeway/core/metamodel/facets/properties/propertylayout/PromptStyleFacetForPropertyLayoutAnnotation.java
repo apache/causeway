@@ -19,11 +19,9 @@
 package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.commons.internal.base._Optionals;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
@@ -32,15 +30,8 @@ import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleF
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
 
-public class PromptStyleFacetForPropertyLayoutAnnotation
+public final class PromptStyleFacetForPropertyLayoutAnnotation
 extends PromptStyleFacetAbstract {
-
-    private final PromptStyle promptStyle;
-
-    public PromptStyleFacetForPropertyLayoutAnnotation(final PromptStyle promptStyle, final FacetHolder holder) {
-        super( holder );
-        this.promptStyle = promptStyle;
-    }
 
     public static Optional<PromptStyleFacet> create(
             final Optional<PropertyLayout> propertyLayoutIfAny,
@@ -48,67 +39,44 @@ extends PromptStyleFacetAbstract {
             final FacetHolder holder) {
 
         // guard against member not being a property
-        if(holder instanceof FacetedMethod) {
-            final FacetedMethod facetedMethod = (FacetedMethod) holder;
-            if(facetedMethod.featureType() != FeatureType.PROPERTY) {
-                return Optional.empty();
-            }
+        if(holder instanceof FacetedMethod facetedMethod
+                && facetedMethod.featureType() != FeatureType.PROPERTY) {
+            return Optional.empty();
         }
 
-        return _Optionals.orNullable(
+        return Optional.ofNullable(
 
             propertyLayoutIfAny
-            .map(PropertyLayout::promptStyle)
-            .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
-            .map(promptStyle -> {
-
-                switch (promptStyle) {
-                case DIALOG:
-                case DIALOG_MODAL:
-                case DIALOG_SIDEBAR:
-                case INLINE:
-                    return new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
-                case INLINE_AS_IF_EDIT:
-                    return new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
-
-                case AS_CONFIGURED:
-
-                    // do not replace
-                    if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                        return null;
-                    }
-
-                    promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-                    return new PromptStyleFacetAsConfigured(promptStyle, holder);
-                default:
-                }
-                throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
-            })
-
-            ,
-
-            () -> {
-
-                // do not replace
-                if (holder.containsNonFallbackFacet(PromptStyleFacet.class)) {
-                    return null;
-                }
-
-                PromptStyle promptStyle = configuration.getViewer().getWicket().getPromptStyle();
-                return new PromptStyleFacetAsConfigured(promptStyle, holder);
-            }
+                .map(PropertyLayout::promptStyle)
+                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+                .map(promptStyle -> switch (promptStyle) {
+                    case DIALOG, DIALOG_MODAL, DIALOG_SIDEBAR, INLINE->
+                        new PromptStyleFacetForPropertyLayoutAnnotation(promptStyle, holder);
+                    case INLINE_AS_IF_EDIT->
+                        new PromptStyleFacetForPropertyLayoutAnnotation(PromptStyle.INLINE, holder);
+                    case AS_CONFIGURED->
+                        holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                            ? null // do not replace
+                            : new PromptStyleFacetAsConfigured(configuration, holder);
+                    case NOT_SPECIFIED -> null; // unexpected code reach
+                })
+                .orElseGet(() ->
+                    holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                        ? null // do not replace
+                        : new PromptStyleFacetAsConfigured(configuration, holder))
         );
+    }
+
+    private final PromptStyle promptStyle;
+
+    private PromptStyleFacetForPropertyLayoutAnnotation(final PromptStyle promptStyle, final FacetHolder holder) {
+        super( holder );
+        this.promptStyle = promptStyle;
     }
 
     @Override
     public PromptStyle value() {
         return promptStyle;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("promptStyle", promptStyle);
     }
 
 }

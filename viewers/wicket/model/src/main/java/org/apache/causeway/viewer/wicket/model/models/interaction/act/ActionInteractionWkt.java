@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.interaction.act;
 
-import java.lang.reflect.Proxy;
 import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -32,6 +31,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -79,7 +79,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
      * <p>
      * nullable in support of lazy evaluation
      * <p>
-     * make sure we don't memoize non-serializable ObjectAction proxies (as introduced via composite value type support)
+     * make sure we don't memoize non-serializable ObjectAction instances (as introduced via composite value type support)
      */
     private @Nullable ObjectAction actionMemento;
     private transient @Nullable ObjectAction objectAction; // might be a proxy (non-serializbale)
@@ -138,7 +138,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private void setObjectAction(final ObjectAction objectAction) {
         this.objectAction = objectAction;
         this.actionMemento = objectAction!=null
-                && !Proxy.isProxyClass(objectAction.getClass())
+                && !(objectAction instanceof CompositeValueUpdater)
             ? objectAction
             : null;
     }

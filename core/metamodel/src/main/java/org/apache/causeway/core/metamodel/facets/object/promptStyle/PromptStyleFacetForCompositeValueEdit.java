@@ -19,25 +19,18 @@
 package org.apache.causeway.core.metamodel.facets.object.promptStyle;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-public final class PromptStyleFacetAsConfigured
+public final class PromptStyleFacetForCompositeValueEdit
 extends PromptStyleFacetAbstract {
 
-    private final PromptStyle promptStyle;
-
-    public PromptStyleFacetAsConfigured(final CausewayConfiguration configuration, final FacetHolder holder) {
-        this(configuration.getViewer().getWicket().getPromptStyle(), holder);
-    }
-
-    private PromptStyleFacetAsConfigured(final PromptStyle promptStyle, final FacetHolder holder) {
-        super(holder);
-        this.promptStyle = promptStyle;
+    public PromptStyleFacetForCompositeValueEdit(final FacetHolder holder) {
+        super(holder, Precedence.SYNTHESIZED); // overrules xml layout
     }
 
     @Override public PromptStyle value() {
-        return promptStyle;
+        return PromptStyle.INLINE_AS_IF_EDIT;
     }
+
 
 }

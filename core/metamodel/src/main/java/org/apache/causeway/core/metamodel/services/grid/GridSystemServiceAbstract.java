@@ -279,9 +279,7 @@ implements GridSystemService<G> {
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
                 var oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
-                if(oneToOneAssociation == null) {
-                    return;
-                }
+                if(oneToOneAssociation == null) return;
 
                 updateFacetIfPresent(
                         CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));

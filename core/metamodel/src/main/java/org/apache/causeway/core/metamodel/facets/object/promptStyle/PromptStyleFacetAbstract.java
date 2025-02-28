@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.promptStyle;
 
+import java.util.function.BiConsumer;
+
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -35,6 +37,12 @@ implements PromptStyleFacet {
 
     protected PromptStyleFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
         super( type(), holder, precedence);
+    }
+
+    @Override
+    public final void visitAttributes(final BiConsumer<String, Object> visitor) {
+        super.visitAttributes(visitor);
+        visitor.accept("promptStyle", value());
     }
 
 }
