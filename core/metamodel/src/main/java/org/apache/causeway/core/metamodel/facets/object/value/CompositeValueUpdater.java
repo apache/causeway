@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.delegate._Delegate;
@@ -56,13 +57,13 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
     // HasObjectAction
     @Override default ObjectAction getObjectAction() { return mixedInAction(); }
 
-
     // -- OBJECT ACTION MOCKUP
 
-    @Override default String getId() { return "proxyCompositeValueUpdater"; }
+    @Override default String getId() { return "proxiedCompositeValueUpdaterAction"; }
     @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
     @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
     @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
+    @Override default SemanticsOf getSemantics() { return SemanticsOf.SAFE; }
 
     @Override default ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
