@@ -68,7 +68,7 @@ class LayoutFacetMethodTest {
     @Test
     void when_layout_throws_exception() {
         //assertThrows(NullPointerException.class, ()->facet.layout(mockOwningAdapter));
-        final String layout = facet.layout(mockOwningAdapter);
+        final String layout = facet.layoutPrefix(mockOwningAdapter);
         assertThat(layout, is(nullValue()));
     }
 

@@ -106,7 +106,7 @@ implements GridFacet {
                 || ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
             return "";
         }
-        var layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layout(objectAdapter));
+        var layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layoutPrefix(objectAdapter));
         return layoutName;
     }
 

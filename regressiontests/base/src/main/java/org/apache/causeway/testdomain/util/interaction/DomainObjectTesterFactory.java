@@ -243,7 +243,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         public void assertLayout(final @Nullable String expectedResult) {
             assertEquals(expectedResult,
                     super.objectSpecification.lookupFacet(LayoutPrefixFacet.class)
-                    .map(layoutFacet->layoutFacet.layout(vm))
+                    .map(layoutPrefixFacet->layoutPrefixFacet.layoutPrefix(vm))
                     .orElse(null));
         }
 

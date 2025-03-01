@@ -99,7 +99,7 @@ public class CommonMetaFetcher {
         return managedObject()
                 .map(managedObject -> {
                     var facet = managedObject.getSpecification().getFacet(LayoutPrefixFacet.class);
-                    return facet != null ? facet.layout(managedObject) : null;
+                    return facet != null ? facet.layoutPrefix(managedObject) : null;
                 })
                 .orElse(null);
     }

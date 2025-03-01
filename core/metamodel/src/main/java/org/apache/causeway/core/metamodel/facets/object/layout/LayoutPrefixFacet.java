@@ -51,21 +51,21 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
  */
 public record LayoutPrefixFacet(
     @NonNull String origin,
-    @NonNull LayoutProvider layoutProvider,
+    @NonNull PrefixProvider prefixProvider,
     @NonNull FacetHolder facetHolder,
     Facet.@NonNull Precedence precedence
 ) implements Facet, HasImperativeAspect {
 
-    public interface LayoutProvider {
-        String layout(LayoutPrefixFacet layoutFacet, @Nullable ManagedObject managedObject);
+    public interface PrefixProvider {
+        String layoutPrefix(LayoutPrefixFacet layoutFacet, @Nullable ManagedObject managedObject);
         default void visitAttributes(final BiConsumer<String, Object> visitor) {}
     }
 
     // -- LAYOUT PROVIDERS
 
-    private record LayoutProviderForImperativeAspect(
-        ImperativeAspect imperativeAspect) implements LayoutProvider {
-        @Override public String layout(final LayoutPrefixFacet layoutFacet, @Nullable final ManagedObject managedObject) {
+    private record PrefixProviderForImperativeAspect(
+        ImperativeAspect imperativeAspect) implements PrefixProvider {
+        @Override public String layoutPrefix(final LayoutPrefixFacet layoutFacet, @Nullable final ManagedObject managedObject) {
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) return null;
             try {
                 return (String) imperativeAspect.invokeSingleMethod(managedObject);
@@ -78,10 +78,10 @@ public record LayoutPrefixFacet(
         }
     }
 
-    private record LayoutProviderForUiEvent(
+    private record PrefixProviderForUiEvent(
         Class<? extends LayoutUiEvent<Object>> layoutUiEventClass,
-        MetamodelEventService metamodelEventService) implements LayoutPrefixFacet.LayoutProvider {
-        @Override public String layout(final LayoutPrefixFacet layoutFacet, final ManagedObject managedObject) {
+        MetamodelEventService metamodelEventService) implements LayoutPrefixFacet.PrefixProvider {
+        @Override public String layoutPrefix(final LayoutPrefixFacet layoutFacet, final ManagedObject managedObject) {
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) return null;
 
             final LayoutUiEvent<Object> layoutUiEvent = newLayoutUiEvent(managedObject);
@@ -94,7 +94,7 @@ public record LayoutPrefixFacet(
             // ie no subscribers out there, then fallback to the underlying ...
             return layoutFacet.getSharedFacetRanking()
                 .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutPrefixFacet.class))
-                .map(underlyingLayoutFacet->underlyingLayoutFacet.layout(managedObject))
+                .map(underlyingLayoutFacet->underlyingLayoutFacet.layoutPrefix(managedObject))
                 .orElse(null);
         }
         @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
@@ -117,7 +117,7 @@ public record LayoutPrefixFacet(
 
         return Optional.ofNullable(methodIfAny)
             .map(method->ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT))
-            .map(LayoutProviderForImperativeAspect::new)
+            .map(PrefixProviderForImperativeAspect::new)
             .map(layoutProvider->
                 new LayoutPrefixFacet("LayoutMethod", layoutProvider, holder, Precedence.DEFAULT));
     }
@@ -135,7 +135,7 @@ public record LayoutPrefixFacet(
                         LayoutUiEvent.Default.class,
                         facetHolder.getConfiguration().getApplib().getAnnotation()
                             .getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
-                .map(layoutUiEvent -> new LayoutProviderForUiEvent(_Casts.uncheckedCast(layoutUiEvent), metamodelEventService))
+                .map(layoutUiEvent -> new PrefixProviderForUiEvent(_Casts.uncheckedCast(layoutUiEvent), metamodelEventService))
                 .map(layoutProvider -> new LayoutPrefixFacet("DomainObjectLayoutAnnotationWithLayoutUiEvent",
                     layoutProvider,
                         facetHolder, Precedence.EVENT));
@@ -147,13 +147,13 @@ public record LayoutPrefixFacet(
     @Override public Precedence getPrecedence() { return precedence(); }
     @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
-    public String layout(final ManagedObject managedObject) {
-        return layoutProvider().layout(this, managedObject);
+    public String layoutPrefix(final ManagedObject managedObject) {
+        return prefixProvider().layoutPrefix(this, managedObject);
     }
 
     @Override
     public ImperativeAspect getImperativeAspect() {
-        return layoutProvider() instanceof LayoutProviderForImperativeAspect aspectHolder
+        return prefixProvider() instanceof PrefixProviderForImperativeAspect aspectHolder
             ? aspectHolder.imperativeAspect()
             : null;
     }
@@ -162,7 +162,7 @@ public record LayoutPrefixFacet(
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("origin", origin());
         visitor.accept("precedence", getPrecedence().name());
-        layoutProvider().visitAttributes(visitor);
+        prefixProvider().visitAttributes(visitor);
     }
 
 }
