@@ -25,7 +25,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.object.Bookmarkable;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -98,7 +98,7 @@ public class CommonMetaFetcher {
     public String layout() {
         return managedObject()
                 .map(managedObject -> {
-                    var facet = managedObject.getSpecification().getFacet(LayoutFacet.class);
+                    var facet = managedObject.getSpecification().getFacet(LayoutPrefixFacet.class);
                     return facet != null ? facet.layout(managedObject) : null;
                 })
                 .orElse(null);

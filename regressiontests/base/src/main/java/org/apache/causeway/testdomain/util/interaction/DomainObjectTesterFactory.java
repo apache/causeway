@@ -58,7 +58,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
@@ -242,7 +242,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         public void assertLayout(final @Nullable String expectedResult) {
             assertEquals(expectedResult,
-                    super.objectSpecification.lookupFacet(LayoutFacet.class)
+                    super.objectSpecification.lookupFacet(LayoutPrefixFacet.class)
                     .map(layoutFacet->layoutFacet.layout(vm))
                     .orElse(null));
         }

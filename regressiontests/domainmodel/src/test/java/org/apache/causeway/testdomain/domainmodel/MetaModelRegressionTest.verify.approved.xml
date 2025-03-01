@@ -9536,7 +9536,7 @@
                 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperFullyImpl.iconName()"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet">
                 <mml:attr name="intent.layout" value="UI_HINT"/>
                 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperFullyImpl.layout()"/>
                 <mml:attr name="origin" value="LayoutMethod"/>
@@ -14013,7 +14013,7 @@
                 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.iconName()"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet">
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet">
                 <mml:attr name="intent.layout" value="UI_HINT"/>
                 <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.layout()"/>
                 <mml:attr name="origin" value="LayoutMethod"/>

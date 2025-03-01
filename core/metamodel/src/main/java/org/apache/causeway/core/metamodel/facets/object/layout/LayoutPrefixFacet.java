@@ -49,7 +49,7 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
  * @see TitleFacet
  * @see IconFacet
  */
-public record LayoutFacet(
+public record LayoutPrefixFacet(
     @NonNull String origin,
     @NonNull LayoutProvider layoutProvider,
     @NonNull FacetHolder facetHolder,
@@ -57,7 +57,7 @@ public record LayoutFacet(
 ) implements Facet, HasImperativeAspect {
 
     public interface LayoutProvider {
-        String layout(LayoutFacet layoutFacet, @Nullable ManagedObject managedObject);
+        String layout(LayoutPrefixFacet layoutFacet, @Nullable ManagedObject managedObject);
         default void visitAttributes(final BiConsumer<String, Object> visitor) {}
     }
 
@@ -65,7 +65,7 @@ public record LayoutFacet(
 
     private record LayoutProviderForImperativeAspect(
         ImperativeAspect imperativeAspect) implements LayoutProvider {
-        @Override public String layout(final LayoutFacet layoutFacet, @Nullable final ManagedObject managedObject) {
+        @Override public String layout(final LayoutPrefixFacet layoutFacet, @Nullable final ManagedObject managedObject) {
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) return null;
             try {
                 return (String) imperativeAspect.invokeSingleMethod(managedObject);
@@ -80,8 +80,8 @@ public record LayoutFacet(
 
     private record LayoutProviderForUiEvent(
         Class<? extends LayoutUiEvent<Object>> layoutUiEventClass,
-        MetamodelEventService metamodelEventService) implements LayoutFacet.LayoutProvider {
-        @Override public String layout(final LayoutFacet layoutFacet, final ManagedObject managedObject) {
+        MetamodelEventService metamodelEventService) implements LayoutPrefixFacet.LayoutProvider {
+        @Override public String layout(final LayoutPrefixFacet layoutFacet, final ManagedObject managedObject) {
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) return null;
 
             final LayoutUiEvent<Object> layoutUiEvent = newLayoutUiEvent(managedObject);
@@ -93,7 +93,7 @@ public record LayoutFacet(
 
             // ie no subscribers out there, then fallback to the underlying ...
             return layoutFacet.getSharedFacetRanking()
-                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutFacet.class))
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutPrefixFacet.class))
                 .map(underlyingLayoutFacet->underlyingLayoutFacet.layout(managedObject))
                 .orElse(null);
         }
@@ -107,11 +107,11 @@ public record LayoutFacet(
 
     // -- FACTORIES
 
-    public static LayoutFacet fallback(final FacetHolder facetHolder) {
-        return new LayoutFacet("Fallback", (lf, mo)->null, facetHolder, Precedence.FALLBACK);
+    public static LayoutPrefixFacet fallback(final FacetHolder facetHolder) {
+        return new LayoutPrefixFacet("Fallback", (lf, mo)->null, facetHolder, Precedence.FALLBACK);
     }
 
-    public static Optional<LayoutFacet> forLayoutMethod(
+    public static Optional<LayoutPrefixFacet> forLayoutMethod(
         final @Nullable ResolvedMethod methodIfAny,
         final FacetHolder holder) {
 
@@ -119,10 +119,10 @@ public record LayoutFacet(
             .map(method->ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT))
             .map(LayoutProviderForImperativeAspect::new)
             .map(layoutProvider->
-                new LayoutFacet("LayoutMethod", layoutProvider, holder, Precedence.DEFAULT));
+                new LayoutPrefixFacet("LayoutMethod", layoutProvider, holder, Precedence.DEFAULT));
     }
 
-    public static Optional<LayoutFacet> forDomainObjectLayoutAnnotationUsingLayoutUiEvent(
+    public static Optional<LayoutPrefixFacet> forDomainObjectLayoutAnnotationUsingLayoutUiEvent(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final FacetHolder facetHolder) {
@@ -136,7 +136,7 @@ public record LayoutFacet(
                         facetHolder.getConfiguration().getApplib().getAnnotation()
                             .getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
                 .map(layoutUiEvent -> new LayoutProviderForUiEvent(_Casts.uncheckedCast(layoutUiEvent), metamodelEventService))
-                .map(layoutProvider -> new LayoutFacet("DomainObjectLayoutAnnotationWithLayoutUiEvent",
+                .map(layoutProvider -> new LayoutPrefixFacet("DomainObjectLayoutAnnotationWithLayoutUiEvent",
                     layoutProvider,
                         facetHolder, Precedence.EVENT));
     }

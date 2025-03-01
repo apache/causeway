@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -55,8 +55,8 @@ implements GridFacet {
 
     private final GridService gridService;
 
-    private final _Lazy<LayoutFacet> layoutFacetLazy = _Lazy.threadSafe(()->
-        getFacetHolder().getFacet(LayoutFacet.class));
+    private final _Lazy<LayoutPrefixFacet> layoutFacetLazy = _Lazy.threadSafe(()->
+        getFacetHolder().getFacet(LayoutPrefixFacet.class));
 
     private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
 
