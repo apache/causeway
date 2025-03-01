@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,7 +47,6 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForAction
 import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.PromptStyleFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.CssClassFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutXml;
@@ -65,13 +65,13 @@ import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFac
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberDescribedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberNamedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyLayoutXml;
-import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyLayoutXml;
@@ -269,7 +269,9 @@ implements GridSystemService<G> {
                         MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
                 updateFacetIfPresent(
-                        PromptStyleFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                    Optional.ofNullable(actionLayoutData)
+                        .map(ActionLayoutData::getPromptStyle)
+                        .map(promptStyle->new PromptStyleFacet("ActionLayoutXml", promptStyle, objectAction, precedence, true)));
 
                 updateFacetIfPresent(
                         RedirectFacetFromActionLayoutXml.create(actionLayoutData, objectAction, precedence));
@@ -300,7 +302,9 @@ implements GridSystemService<G> {
                         MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
                 updateFacetIfPresent(
-                        PromptStyleFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        Optional.ofNullable(propertyLayoutData)
+                            .map(PropertyLayoutData::getPromptStyle)
+                            .map(promptStyle->new PromptStyleFacet("PropertyLayoutXml", promptStyle, oneToOneAssociation, precedence, true)));
 
                 updateFacetIfPresent(
                         RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));

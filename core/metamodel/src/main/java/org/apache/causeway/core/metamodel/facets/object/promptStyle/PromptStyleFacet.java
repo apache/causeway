@@ -18,15 +18,50 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.promptStyle;
 
+import java.util.function.BiConsumer;
+
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 /**
- * Indicates that the editing of the property should be published.
+ * Provides the prompt style for editing of a property.
  */
-public interface PromptStyleFacet extends SingleValueFacet<PromptStyle> {
+public record PromptStyleFacet(
+       @NonNull String origin,
+       @NonNull PromptStyle value,
+       @NonNull FacetHolder facetHolder,
+       Facet.@NonNull Precedence precedence,
+       boolean isObjectTypeSpecific
+   ) implements Facet {
 
-    @Override
-    PromptStyle value();
+   public static PromptStyleFacet compositeValueEdit(final FacetHolder facetHolder) {
+       return new PromptStyleFacet("CompositeValueEdit", PromptStyle.INLINE_AS_IF_EDIT, facetHolder, Precedence.SYNTHESIZED, false);
+   }
+   public static PromptStyleFacet asConfgured(final CausewayConfiguration configuration, final FacetHolder facetHolder) {
+       return new PromptStyleFacet("Configuration", configuration.getViewer().getWicket().getPromptStyle(), facetHolder, Precedence.DEFAULT, false);
+   }
+
+   @Override public Class<? extends Facet> facetType() { return getClass(); }
+   @Override public Precedence getPrecedence() { return precedence(); }
+   @Override public FacetHolder getFacetHolder() { return facetHolder(); }
+
+   public PromptStyleFacet(final String origin, final PromptStyle of, final FacetHolder holder) {
+       this(origin, of, holder, Precedence.DEFAULT, false);
+   }
+
+   public PromptStyleFacet(final String origin, final PromptStyle of, final FacetHolder holder, final boolean isObjectTypeSpecific) {
+       this(origin, of, holder, Precedence.DEFAULT, isObjectTypeSpecific);
+   }
+
+   @Override
+   public void visitAttributes(final BiConsumer<String, Object> visitor) {
+       visitor.accept("origin", origin());
+       visitor.accept("precedence", getPrecedence().name());
+       visitor.accept("promptStyle", value);
+   }
 
 }

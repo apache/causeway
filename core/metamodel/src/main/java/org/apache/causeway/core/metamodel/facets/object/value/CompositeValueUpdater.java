@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetForCompositeValueEdit;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -61,9 +60,9 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
     default CompositeValueUpdater overrideFacets() {
         FacetUtil.computeIfAbsentExact(mixedInAction().getFacetHolder(),
             PromptStyleFacet.class,
-            PromptStyleFacetForCompositeValueEdit.class,
+            PromptStyleFacet.class,
             Precedence.HIGH,
-            PromptStyleFacetForCompositeValueEdit::new);
+            PromptStyleFacet::compositeValueEdit);
         return this;
     }
 

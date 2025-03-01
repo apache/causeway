@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.properties.promptstyle;
+package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
@@ -36,8 +36,6 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
-import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
 
 class PromptStyleFacetFromPropertyAnnotationTest {
 
@@ -57,11 +55,11 @@ class PromptStyleFacetFromPropertyAnnotationTest {
 
         Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.DIALOG);
 
-        PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+        PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(
+                    Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                 .orElse(null);
 
-        assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+        assertThat(facet.origin(), is("PropertyLayoutAnnotation"));
         assertThat(facet.value(), is(PromptStyle.DIALOG));
     }
 
@@ -70,11 +68,11 @@ class PromptStyleFacetFromPropertyAnnotationTest {
 
         Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.INLINE);
 
-        PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+        PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(
+                    Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                 .orElse(null);
 
-        assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
+        assertThat(facet.origin(), is("PropertyLayoutAnnotation"));
         assertThat(facet.value(), is(PromptStyle.INLINE));
     }
 
@@ -87,11 +85,12 @@ class PromptStyleFacetFromPropertyAnnotationTest {
         Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
         .thenReturn(false);
 
-        PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+        PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(
+                    Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                 .orElse(null);
 
-        assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
+        assertThat(facet, is(anInstanceOf(PromptStyleFacet.class)));
+        assertThat(facet.origin(), is("Configuration"));
         assertThat(facet.value(), is(PromptStyle.INLINE));
     }
 
@@ -102,8 +101,8 @@ class PromptStyleFacetFromPropertyAnnotationTest {
         Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
         .thenReturn(true);
 
-        PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+        PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(
+                    Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                 .orElse(null);
 
         assertThat(facet, is(nullValue()));
@@ -116,12 +115,14 @@ class PromptStyleFacetFromPropertyAnnotationTest {
         Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
         .thenReturn(false);
 
-        PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+        PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(
+                    Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                 .orElse(null);
 
+
+        assertThat(facet, is(anInstanceOf(PromptStyleFacet.class)));
+        assertThat(facet.origin(), is("Configuration"));
         assertThat(facet.value(), is(PromptStyle.INLINE));
-        assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
     }
 
     @Test
@@ -131,8 +132,8 @@ class PromptStyleFacetFromPropertyAnnotationTest {
         Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
         .thenReturn(true);
 
-        PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
+        PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(
+                    Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
                 .orElse(null);
 
         assertThat(facet, is(nullValue()));
@@ -150,6 +151,11 @@ class PromptStyleFacetFromPropertyAnnotationTest {
                 description.appendText("an instance of ").appendValue(expected);
             }
         };
+    }
+
+    static Optional<PromptStyleFacet> createPromptStyleFacetForPropertyLayoutAnnotation(
+        final Optional<PropertyLayout> p, final CausewayConfiguration c, final FacetHolder f) {
+        return PropertyLayoutFacetFactory.createPromptStyleFacetForPropertyLayoutAnnotation(p, c, f);
     }
 
 }

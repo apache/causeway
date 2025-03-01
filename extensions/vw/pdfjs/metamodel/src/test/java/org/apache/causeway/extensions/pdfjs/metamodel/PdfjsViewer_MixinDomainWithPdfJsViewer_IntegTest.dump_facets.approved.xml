@@ -190,8 +190,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -326,8 +326,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -486,8 +486,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -750,8 +750,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -917,8 +917,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -1031,8 +1031,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -1145,8 +1145,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -1344,8 +1344,8 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>

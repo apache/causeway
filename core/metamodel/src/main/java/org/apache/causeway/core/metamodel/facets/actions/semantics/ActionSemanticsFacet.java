@@ -49,7 +49,7 @@ public record ActionSemanticsFacet(
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("origin", origin());
-        visitor.accept("precedence", getPrecedence().name());
+        visitor.accept("precedence", precedence().name());
         visitor.accept("value", value);
     }
 
