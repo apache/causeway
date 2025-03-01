@@ -30,6 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 class LayoutFacetMethodTest {
@@ -52,7 +53,7 @@ class LayoutFacetMethodTest {
 
         var iconNameMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
-        facet = LayoutPrefixFacet.forLayoutMethod(
+        facet = LayoutPrefixFacetViaMethod.create(
                         iconNameMethod, Mockito.mock(FacetHolder.class))
                     .orElse(null);
 

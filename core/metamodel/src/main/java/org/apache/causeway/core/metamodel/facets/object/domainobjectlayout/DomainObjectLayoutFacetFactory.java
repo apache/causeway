@@ -24,7 +24,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutAnnotation;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetForUiEvent;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
 public class DomainObjectLayoutFacetFactory
@@ -51,7 +51,7 @@ extends FacetFactoryAbstract {
         addFacetIfPresent(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
                 .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
-        addFacetIfPresent(LayoutPrefixFacet.forDomainObjectLayoutAnnotationUsingLayoutUiEvent(
+        addFacetIfPresent(LayoutPrefixFacetForUiEvent.create(
                     domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(CssClassFacetForDomainObjectLayoutAnnotation
