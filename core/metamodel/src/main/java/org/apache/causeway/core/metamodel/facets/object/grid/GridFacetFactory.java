@@ -34,13 +34,11 @@ extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        if(gridService.get()==null) {
-            return;
-        }
+        if(gridService.get()==null) return;
+
         var facetHolder = processClassContext.getFacetHolder();
-        addFacet(
-                GridFacetDefault
-                .create(facetHolder, gridService.get()));
+        addFacet(GridFacetDefault
+            .create(facetHolder, gridService.get()));
     }
 
     private final _Lazy<GridService> gridService = _Lazy.threadSafe(()->

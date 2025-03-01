@@ -29,11 +29,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 /**
  * Obtain the current grid, derived either from a <code>.layout.xml</code> file, and normalized, or synthesized from
  * existing layout metadata (annotations or <code>layout.json</code>).
- *
  * <p>
- *     Most of the heavy lifting is done by delegating to the {@link LayoutService} and {@link GridSystemService}
- *     services.
- * </p>
+ * Most of the heavy lifting is done by delegating to the {@link LayoutService} and {@link GridSystemService} services.
  */
 public interface GridFacet extends Facet {
 

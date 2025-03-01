@@ -21,7 +21,9 @@ package org.apache.causeway.core.metamodel.facets.object.grid;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
@@ -30,67 +32,59 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.jspecify.annotations.NonNull;
-
-public class GridFacetDefault
-extends FacetAbstract
+record GridFacetDefault(
+    GridService gridService,
+    Map<String, Grid> gridByLayoutPrefix,
+    _Lazy<LayoutPrefixFacet> layoutFacetLazy,
+    @NonNull FacetHolder facetHolder,
+    Facet.@NonNull Precedence precedence)
 implements GridFacet {
 
-    private static final Class<? extends Facet> type() {
-        return GridFacet.class;
-    }
+    // -- FACTORIES
 
     public static GridFacet create(
             final FacetHolder facetHolder,
             final GridService gridService) {
-        return new GridFacetDefault(facetHolder, gridService);
+        return new GridFacetDefault(gridService, new ConcurrentHashMap<>(),
+            _Lazy.threadSafe(()->facetHolder.getFacet(LayoutPrefixFacet.class)),
+            facetHolder, Precedence.DEFAULT);
     }
 
-    private final GridService gridService;
+    // -- METHODS
 
-    private final _Lazy<LayoutPrefixFacet> layoutFacetLazy = _Lazy.threadSafe(()->
-        getFacetHolder().getFacet(LayoutPrefixFacet.class));
-
-    private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
-
-    private GridFacetDefault(
-            final FacetHolder facetHolder,
-            final GridService gridService) {
-        super(GridFacetDefault.type(), facetHolder);
-        this.gridService = gridService;
-    }
+    @Override public Class<? extends Facet> facetType() { return GridFacet.class; }
+    @Override public Precedence getPrecedence() { return precedence(); }
+    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
     public Grid getGrid(final @Nullable ManagedObject objectAdapter) {
-
         guardAgainstObjectOfDifferentType(objectAdapter);
 
         // gridByLayoutName is used as cache, unless gridService.supportsReloading() returns true
-        return gridByLayoutName.compute(layoutNameFor(objectAdapter),
-                (layoutName, cachedLayout)->
+        return gridByLayoutPrefix.compute(layoutPrefixFor(objectAdapter),
+                (layoutPrefix, cachedLayout)->
                     (cachedLayout==null
                             || gridService.supportsReloading())
-                    ? this.load(layoutName)
+                    ? this.load(layoutPrefix)
                     : cachedLayout
         );
+    }
 
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        visitor.accept("precedence", getPrecedence().name());
     }
 
     // -- HELPER
 
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
-
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
-            return; // cannot introspect
-        }
-
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return; // cannot introspect
         if(!getSpecification().equals(objectAdapter.getSpecification())) {
             throw _Exceptions.unrecoverable(
                     "getGrid(adapter) was called passing an adapter (type: %s), "
@@ -101,26 +95,24 @@ implements GridFacet {
         }
     }
 
-    private String layoutNameFor(final @Nullable ManagedObject objectAdapter) {
-        if(!hasLayoutFacet()
-                || ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) {
+    private String layoutPrefixFor(final @Nullable ManagedObject objectAdapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
+            || !hasLayoutPrefixFacet()) {
             return "";
         }
         var layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layoutPrefix(objectAdapter));
         return layoutName;
     }
 
-    private boolean hasLayoutFacet() {
+    private boolean hasLayoutPrefixFacet() {
         return layoutFacetLazy.get()!=null;
     }
 
-    private Grid load(final @NonNull String layoutName) {
-
+    private Grid load(final @NonNull String layoutPrefix) {
         var domainClass = getSpecification().getCorrespondingClass();
-
         var grid = Optional.ofNullable(
                 // loads from object's XML if available
-                gridService.load(domainClass, _Strings.emptyToNull(layoutName)))
+                gridService.load(domainClass, _Strings.emptyToNull(layoutPrefix)))
                 // loads from default-XML if available
                 .orElseGet(()->gridService.defaultGridFor(domainClass));
         return gridService.normalize(grid);
