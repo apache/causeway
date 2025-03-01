@@ -24,6 +24,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
 public class DomainObjectLayoutFacetFactory
@@ -41,48 +42,37 @@ extends FacetFactoryAbstract {
         var domainObjectLayoutIfAny = processClassContext.synthesizeOnType(DomainObjectLayout.class);
         var metamodelEventService = this.metamodelEventService.get();
 
-        addFacetIfPresent(
-                TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
+        addFacetIfPresent(TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
                 .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
-        addFacetIfPresent(
-                IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
+        addFacetIfPresent(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent
                 .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
-        addFacetIfPresent(
-                CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
+        addFacetIfPresent(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
                 .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
-        addFacetIfPresent(
-                LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        addFacetIfPresent(LayoutFacet.forDomainObjectLayoutAnnotationUsingLayoutUiEvent(
+                    domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
-        addFacetIfPresent(
-                CssClassFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(CssClassFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-                FaFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(FaFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-                ObjectDescribedFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(ObjectDescribedFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-                ObjectNamedFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(ObjectNamedFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-                TableDecoratorFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(TableDecoratorFacetForDomainObjectLayoutAnnotation
                         .create(domainObjectLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-                PagedFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(PagedFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
-        addFacetIfPresent(
-                BookmarkPolicyFacetForDomainObjectLayoutAnnotation
+        addFacetIfPresent(BookmarkPolicyFacetForDomainObjectLayoutAnnotation
                 .create(domainObjectLayoutIfAny, facetHolder));
 
         return;

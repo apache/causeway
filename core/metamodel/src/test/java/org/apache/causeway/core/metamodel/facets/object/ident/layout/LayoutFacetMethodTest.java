@@ -29,12 +29,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 class LayoutFacetMethodTest {
 
-    private LayoutFacetViaLayoutMethod facet;
+    private LayoutFacet facet;
     private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInLayoutMethod pojo;
@@ -46,14 +46,14 @@ class LayoutFacetMethodTest {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInLayoutMethod();
 
         var iconNameMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
-        facet = (LayoutFacetViaLayoutMethod) LayoutFacetViaLayoutMethod
-                    .create(iconNameMethod, Mockito.mock(FacetHolder.class))
+        facet = LayoutFacet.forLayoutMethod(
+                        iconNameMethod, Mockito.mock(FacetHolder.class))
                     .orElse(null);
 
         mockOwningAdapter = Mockito.mock(ManagedObject.class);
@@ -61,12 +61,12 @@ class LayoutFacetMethodTest {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    void tearDown() throws Exception {
         facet = null;
     }
 
     @Test
-    public void when_layout_throws_exception() {
+    void when_layout_throws_exception() {
         //assertThrows(NullPointerException.class, ()->facet.layout(mockOwningAdapter));
         final String layout = facet.layout(mockOwningAdapter);
         assertThat(layout, is(nullValue()));
