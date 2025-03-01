@@ -24,6 +24,8 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
@@ -66,7 +68,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -144,8 +145,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     @Override
     public SemanticsOf getSemantics() {
         return lookupFacet(ActionSemanticsFacet.class)
-        .map(ActionSemanticsFacet::value)
-        .orElse(SemanticsOf.NON_IDEMPOTENT);
+            .map(ActionSemanticsFacet::value)
+            .orElse(SemanticsOf.NON_IDEMPOTENT);
     }
 
     // -- ELEMENT TYPE

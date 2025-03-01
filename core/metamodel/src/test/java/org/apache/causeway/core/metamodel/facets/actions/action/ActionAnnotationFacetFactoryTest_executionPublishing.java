@@ -31,7 +31,7 @@ import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
 
@@ -59,7 +59,7 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.SAFE, facetedMethod));
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -73,7 +73,7 @@ extends ActionAnnotationFacetFactoryTest {
         // given
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(ActionAnnotationFacetFactoryTest.Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.IDEMPOTENT, facetedMethod));
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -136,7 +136,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.SAFE, facetedMethod));
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -156,7 +156,7 @@ extends ActionAnnotationFacetFactoryTest {
 
         allowingPublishingConfigurationToReturn(ActionConfigOptions.PublishingPolicy.IGNORE_QUERY_ONLY);
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.IDEMPOTENT, facetedMethod));
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
             // then
@@ -201,7 +201,7 @@ extends ActionAnnotationFacetFactoryTest {
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
 
             // given
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.SAFE, facetedMethod));
 
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
@@ -226,7 +226,7 @@ extends ActionAnnotationFacetFactoryTest {
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
 
             // given
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.IDEMPOTENT, facetedMethod));
 
             // when
             processExecutionPublishing(facetFactory, processMethodContext);
@@ -251,7 +251,7 @@ extends ActionAnnotationFacetFactoryTest {
         actionScenario(Customer.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
 
             // given
-            facetedMethod.addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.IDEMPOTENT, facetedMethod) {});
+            facetedMethod.addFacet(new ActionSemanticsFacet("Test", SemanticsOf.IDEMPOTENT, facetedMethod));
 
             // when
             processExecutionPublishing(facetFactory, processMethodContext);

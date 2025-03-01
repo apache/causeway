@@ -23,6 +23,7 @@ import java.util.Optional;
 import jakarta.inject.Inject;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -35,9 +36,9 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
 import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
-import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacetForActionAnnotation;
@@ -155,8 +156,12 @@ extends FacetFactoryAbstract {
 
         // check for @Action(semantics=...)
         addFacet(
-                ActionSemanticsFacetForActionAnnotation
-                .create(actionIfAny, facetedMethod));
+            actionIfAny
+                .map(Action::semantics)
+                .filter(semanticsOf -> semanticsOf != SemanticsOf.NOT_SPECIFIED)
+                .map(semanticsOf -> new ActionSemanticsFacet("ActionAnnotation", semanticsOf, facetedMethod))
+                .orElseGet(()->new ActionSemanticsFacet("FallbackToNonIdempotent", SemanticsOf.NON_IDEMPOTENT, facetedMethod))
+        );
     }
 
     void processCommandPublishing(

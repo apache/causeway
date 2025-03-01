@@ -250,8 +250,8 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>
@@ -410,8 +410,8 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
@@ -674,8 +674,8 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
@@ -841,8 +841,8 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
@@ -955,8 +955,8 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
           </mml:facet>
@@ -1069,8 +1069,8 @@
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
-            <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="IDEMPOTENT"/>
           </mml:facet>

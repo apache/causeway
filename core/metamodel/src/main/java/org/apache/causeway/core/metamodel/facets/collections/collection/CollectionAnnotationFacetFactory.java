@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.typeof.TypeOfFacetForCollectionAnnotation;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -71,7 +71,7 @@ extends FacetFactoryAbstract {
     void inferMixinSort(final Collection collection, final FacetedMethod facetedMethod) {
         /* if @Collection detected on method or type level infer:
          * @Action(semantics=SAFE) */
-        addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        addFacet(new ActionSemanticsFacet("InferSafeForMixedInCollection", SemanticsOf.SAFE, facetedMethod));
         addFacet(ContributingFacetAbstract.createAsCollection(facetedMethod));
     }
 

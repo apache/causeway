@@ -18,15 +18,39 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.semantics;
 
+import java.util.function.BiConsumer;
+
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
 /**
  * Represents the semantics of an action.
- *
  * <p>
  * Specifically, whether it is safe, idempotent or non-idempotent.
  */
-public interface ActionSemanticsFacet extends SingleValueFacet<SemanticsOf> {
+public record ActionSemanticsFacet(
+    @NonNull String origin,
+    @NonNull SemanticsOf value,
+    @NonNull FacetHolder facetHolder,
+    Facet.@NonNull Precedence precedence
+    ) implements Facet {
+
+    @Override public Class<? extends Facet> facetType() { return getClass(); }
+    @Override public Precedence getPrecedence() { return precedence(); }
+    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
+
+    public ActionSemanticsFacet(final String origin, final SemanticsOf of, final FacetHolder holder) {
+        this(origin, of, holder, Precedence.DEFAULT);
+    }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+        visitor.accept("origin", origin());
+        visitor.accept("precedence", getPrecedence().name());
+        visitor.accept("value", value);
+    }
 
 }

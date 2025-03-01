@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet;
 import org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
@@ -99,7 +99,7 @@ extends FacetFactoryAbstract {
     void inferMixinSort(final Property property, final FacetedMethod facetedMethod) {
         /* if @Property detected on method or type level infer:
          * @Action(semantics=SAFE) */
-        addFacet(new ActionSemanticsFacetAbstract(SemanticsOf.SAFE, facetedMethod) {});
+        addFacet(new ActionSemanticsFacet("InferSafeForMixedInProperty", SemanticsOf.SAFE, facetedMethod));
         addFacet(ContributingFacetAbstract.createAsProperty(facetedMethod));
     }
 

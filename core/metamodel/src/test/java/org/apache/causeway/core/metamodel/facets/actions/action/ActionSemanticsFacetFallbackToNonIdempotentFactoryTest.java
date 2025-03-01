@@ -22,14 +22,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetFallbackToNonIdempotent;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 
 class ActionSemanticsFacetFallbackToNonIdempotentFactoryTest
@@ -63,9 +62,9 @@ extends FacetFactoryTestAbstract {
             //when
             processSemantics(facetFactory, processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
+            var facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof ActionSemanticsFacetFallbackToNonIdempotent);
+            assertEquals(SemanticsOf.NON_IDEMPOTENT, facet.value());
 
             assertNoMethodsRemoved();
         });

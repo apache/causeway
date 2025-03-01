@@ -25,7 +25,7 @@ import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class ExecutionPublishingFacetForActionAnnotation extends ExecutionPublishingFacetAbstract {
 
@@ -70,7 +70,7 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
                                     return new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
                                 case IGNORE_QUERY_ONLY:
                                 case IGNORE_SAFE:
-                                    return hasSafeSemantics(holder)
+                                    return Facets.hasSafeSemantics(holder)
                                             ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
                                             : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
                                 case ALL:
@@ -86,11 +86,6 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
                             throw new IllegalStateException(String.format("@Action#executionPublishing '%s' not recognised", publishing));
                     }
                 });
-    }
-
-    static boolean hasSafeSemantics(final FacetHolder holder) {
-        var actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
     }
 
     ExecutionPublishingFacetForActionAnnotation(final FacetHolder holder) {

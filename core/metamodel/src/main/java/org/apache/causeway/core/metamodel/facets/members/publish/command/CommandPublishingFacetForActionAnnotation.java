@@ -27,7 +27,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class CommandPublishingFacetForActionAnnotation extends CommandPublishingFacetAbstract {
 
@@ -80,7 +80,7 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                                     return new CommandPublishingFacetForActionAnnotationAsConfigured.None(holder, servicesInjector);
                                 case IGNORE_QUERY_ONLY:
                                 case IGNORE_SAFE:
-                                    return hasSafeSemantics(holder)
+                                    return Facets.hasSafeSemantics(holder)
                                             ? new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder, servicesInjector)
                                             : new CommandPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder, servicesInjector);
                                 case ALL:
@@ -96,11 +96,6 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                             throw new IllegalStateException(String.format("@Action#commandPublishing '%s' not recognised", publishing));
                     }
                 });
-    }
-
-    static boolean hasSafeSemantics(final FacetHolder holder) {
-        var actionSemanticsFacet = holder.getFacet(ActionSemanticsFacet.class);
-        return actionSemanticsFacet != null && actionSemanticsFacet.value().isSafeInNature();
     }
 
     CommandPublishingFacetForActionAnnotation(

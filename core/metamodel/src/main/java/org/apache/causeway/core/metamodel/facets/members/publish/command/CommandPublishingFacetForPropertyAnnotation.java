@@ -32,6 +32,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class CommandPublishingFacetForPropertyAnnotation extends CommandPublishingFacetAbstract {
 
@@ -115,7 +116,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                             return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
                         case IGNORE_QUERY_ONLY:
                         case IGNORE_SAFE:
-                            return CommandPublishingFacetForActionAnnotation.hasSafeSemantics(holder)
+                            return Facets.hasSafeSemantics(holder)
                                     ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
                                     : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
                         case ALL:

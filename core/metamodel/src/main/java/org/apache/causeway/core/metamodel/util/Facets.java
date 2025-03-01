@@ -30,6 +30,7 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.LabelPosition;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
@@ -47,6 +48,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -198,6 +200,13 @@ public final class Facets {
                 // just enough to ask for the metadata.
                 // This will cause the current ObjectSpec to be updated as a side effect.
                 gridFacet.getGrid(objectAdapter));
+    }
+
+    public boolean hasSafeSemantics(final FacetHolder holder) {
+        return holder.lookupFacet(ActionSemanticsFacet.class)
+            .map(ActionSemanticsFacet::value)
+            .map(SemanticsOf::isSafeInNature)
+            .orElse(false);
     }
 
     public Optional<Where> hiddenWhere(final ObjectFeature feature) {
@@ -375,7 +384,6 @@ public final class Facets {
             .orElse(false);
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<ObjectAction> valueCompositeMixinForParameter(
             final ObjectFeature param,
             final ParameterNegotiationModel parameterNegotiationModel,
@@ -387,7 +395,6 @@ public final class Facets {
                         parameterNegotiationModel,paramIndex));
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<ObjectAction> valueCompositeMixinForProperty(
             final ObjectFeature prop,
             final ManagedProperty managedProperty) {
@@ -397,7 +404,6 @@ public final class Facets {
                 valueFacet.selectCompositeValueMixinForProperty(managedProperty));
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Stream<X> valueStreamSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
         return objectSpec.valueFacet()
@@ -405,7 +411,6 @@ public final class Facets {
             .orElseGet(Stream::empty);
     }
 
-    @SuppressWarnings("unchecked")
     public <X> boolean valueHasSemantics(
             final ObjectSpecification objectSpec, final Class<X> requiredType) {
         return objectSpec.valueFacet()
@@ -415,7 +420,6 @@ public final class Facets {
             .orElse(false);
     }
 
-    @SuppressWarnings("unchecked")
     public <X> Optional<ValueSemanticsProvider<X>> valueDefaultSemantics(
             final ObjectSpecification objectSpec,
             final Class<X> requiredType) {

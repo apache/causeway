@@ -30,6 +30,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.TypedFacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public abstract class ExecutionPublishingFacetForPropertyAnnotation
 extends ExecutionPublishingFacetAbstract {
@@ -106,7 +107,7 @@ extends ExecutionPublishingFacetAbstract {
                             return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
                         case IGNORE_QUERY_ONLY:
                         case IGNORE_SAFE:
-                            return ExecutionPublishingFacetForActionAnnotation.hasSafeSemantics(holder)
+                            return Facets.hasSafeSemantics(holder)
                                     ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
                                     : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
                         case ALL:
