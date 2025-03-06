@@ -18,252 +18,229 @@
   under the License.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:wicket="http://wicket.apache.org" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en" lang="en">
+
 <body>
-	<wicket:panel>
-		<div wicket:id="scalarTypeContainer"
-			class="scalarNameAndValueComponentType">
+    <wicket:panel>
+        <div wicket:id="scalarTypeContainer" class="scalarNameAndValueComponentType">
 
-			<!-- regular frame with label -->
-			<div class="form-group" wicket:id="scalarIfRegular">
+            <!-- regular frame with label -->
+            <div class="form-group" wicket:id="scalarIfRegular">
 
-				<label wicket:id="scalarNameBeforeValue"
-					class="scalarName col-form-label">[scalarNameBeforeValue]</label>
-				<span class="scalarValueWrapper">
-					<div class="scalarPlaceholder">
+                <label wicket:id="scalarNameBeforeValue"
+                    class="scalarName col-form-label">[scalarNameBeforeValue]</label>
+                <span class="scalarValueWrapper">
+                    <div class="scalarPlaceholder">
 
-						<wicket:container
-							wicket:id="container-fieldFrame" />
+                        <wicket:container wicket:id="container-fieldFrame" />
 
-						<span wicket:id="associatedActionLinksRight"
-							class="associatedActionLinksRight">[drop down]</span>
-					</div>
-					<span wicket:id="feedback" class="form-text"/>
-					<span wicket:id="associatedActionLinksBelow"/>
-				</span>
-				<label wicket:id="scalarNameAfterValue"
-					class="scalarName col-form-label">[scalarNameAfterValue]</label>
-				<div class="clearfix"/>
-			</div>
+                        <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight">[drop
+                            down]</span>
+                    </div>
+                    <span wicket:id="feedback" class="form-text" />
+                    <span wicket:id="associatedActionLinksBelow" />
+                </span>
+                <label wicket:id="scalarNameAfterValue" class="scalarName col-form-label">[scalarNameAfterValue]</label>
+                <div class="clearfix" />
+            </div>
 
-			<!-- prompt form frame -->
-			<div wicket:id="scalarIfRegularInlinePromptForm"
-				class="inlinePromptForm">
-				<div>
-					<span>[inline edit form]</span>
-				</div>
-			</div>
+            <!-- prompt form frame -->
+            <div wicket:id="scalarIfRegularInlinePromptForm" class="inlinePromptForm">
+                <div>
+                    <span>[inline edit form]</span>
+                </div>
+            </div>
 
-			<!-- compact frame -->
-			<wicket:container
-				wicket:id="scalarIfCompact"/>
+            <!-- compact frame -->
+            <wicket:container wicket:id="scalarIfCompact" />
 
-		</div>
+        </div>
 
-		<!-- FIELD FRAME FRAGMENTS -->
+        <!-- FIELD FRAME FRAGMENTS -->
 
-		<wicket:fragment wicket:id="fragment-fieldFrame-withLink">
-			<span class="scalarValueInput input-group fragment-fieldFrame-withLink">
-				<div wicket:id="scalarValueInlinePromptLink"
-					class="scalarValueInlinePromptLink"
-                    ondragover="scalarValueAllowDrop(event)"
-                    ondrop="scalarValueDrop(event)">
-					<!-- output format -->
-					<wicket:container
-						wicket:id="container-scalarValue"
-						class="no-event-prop" />
+        <wicket:fragment wicket:id="fragment-fieldFrame-withLink">
+            <span class="scalarValueInput input-group fragment-fieldFrame-withLink">
+                <div wicket:id="scalarValueInlinePromptLink" class="scalarValueInlinePromptLink"
+                    ondragover="scalarValueAllowDrop(event)" ondrop="scalarValueDrop(event)">
+                    <!-- output format -->
+                    <wicket:container wicket:id="container-scalarValue" class="no-event-prop" />
 
-					<span class="position-absolute top-0 end-0">
-              			<div class="btn-group btn-group-sm shadow-sm" role="group">
-	                		<button type="button" class="btn btn-primary">
-	                			<i class="fa-solid fa-edit"></i></button>
+                    <span class="position-absolute top-0 end-0">
+                        <div class="btn-group btn-group-sm shadow-sm" role="group">
+                            <button type="button" class="btn btn-primary">
+                                <i class="fa-solid fa-edit"></i></button>
 
-	                		<!-- additional buttons (scalarValueInlinePromptLink) -->
-            				<button wicket:id="scalarValueInlinePromptLink-buttons"
-            					class="btn" type="button">
-							</button>
+                            <!-- additional buttons (scalarValueInlinePromptLink) -->
+                            <button wicket:id="scalarValueInlinePromptLink-buttons" class="btn" type="button">
+                            </button>
 
-	             		</div>
-	            	</span>
-				</div>
-			</span>
-		</wicket:fragment>
+                        </div>
+                    </span>
+                </div>
+            </span>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-viewing">
-			<span class="scalarValueInput fragment-fieldFrame-withoutLink-viewing">
-				<!-- input format (when read-only) -->
-				<wicket:container
-					wicket:id="container-scalarValue" />
+        <wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-viewing">
+            <span class="scalarValueInput fragment-fieldFrame-withoutLink-viewing">
+                <!-- input format (when read-only) -->
+                <wicket:container wicket:id="container-scalarValue" />
 
-				<div class="btn-group btn-group-sm additionalButtons" role="group">
-       				<!-- additional buttons (scalarValueView) -->
-       				<button wicket:id="scalarValueView-buttons"
-       					class="btn" type="button">
-					</button>
-       			</div>
+                <div class="btn-group btn-group-sm additionalButtons" role="group">
+                    <!-- additional buttons (scalarValueView) -->
+                    <button wicket:id="scalarValueView-buttons" class="btn" type="button">
+                    </button>
+                </div>
 
-			</span>
-		</wicket:fragment>
+            </span>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-editing">
-			<span class="scalarValueInput input-group fragment-fieldFrame-withoutLink-editing">
-				<!-- input format (when editing or action dialog) -->
-				<wicket:container
-					wicket:id="container-scalarValue"/>
+        <wicket:fragment wicket:id="fragment-fieldFrame-withoutLink-editing">
+            <span class="scalarValueInput input-group fragment-fieldFrame-withoutLink-editing">
+                <!-- input format (when editing or action dialog) -->
+                <wicket:container wicket:id="container-scalarValue" />
 
-				<!-- honor bootstrap modal dialog z-index of 1055-->
-				<span class="position-absolute top-0 end-0" style="z-index: 1080;">
-           			<div class="btn-group btn-group-sm shadow" role="group">
-           				<!-- additional buttons (scalarValueInput) -->
-         				<button wicket:id="scalarValueInput-buttons"
-         					class="btn" type="button">
-						</button>
-           			</div>
-            	</span>
-			</span>
-		</wicket:fragment>
+                <!-- honor bootstrap modal dialog z-index of 1055-->
+                <span class="position-absolute top-0 end-0" style="z-index: 1080;">
+                    <div class="btn-group btn-group-sm shadow" role="group">
+                        <!-- additional buttons (scalarValueInput) -->
+                        <button wicket:id="scalarValueInput-buttons" class="btn" type="button">
+                        </button>
+                    </div>
+                </span>
+            </span>
+        </wicket:fragment>
 
-		<!-- INPUT FRAGMENTS -->
+        <!-- INPUT FRAGMENTS -->
 
-		<wicket:fragment wicket:id="fragment-input-text">
-			<input wicket:id="scalarValue"
-				type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue fragment-input-text"
-                ondragover="scalarValueAllowDrop(event)"
-                ondrop="scalarValueDrop(event)"
-                />
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-input-text">
+            <input wicket:id="scalarValue" type="text" name="scalarValue"
+                class="form-control form-control-sm scalarValue fragment-input-text"
+                ondragover="scalarValueAllowDrop(event)" ondrop="scalarValueDrop(event)" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-textarea">
-			<textarea wicket:id="scalarValue" name="scalarValue"
-				class="form-control form-control-sm scalarValue fragment-input-textarea"
-				data-causeway-focus="true" />
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-input-textarea">
+            <textarea wicket:id="scalarValue" name="scalarValue"
+                class="form-control form-control-sm scalarValue fragment-input-textarea" data-causeway-focus="true" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-checkbox">
-	        <input wicket:id="scalarValue" type="checkbox" name="scalarValue fragment-input-checkbox"
-	        	class="scalarValue"/>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-input-checkbox">
+            <input wicket:id="scalarValue" type="checkbox" name="scalarValue fragment-input-checkbox"
+                class="scalarValue" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-file">
-			<span class="uploadFile form-text fragment-input-file">
-      			<input wicket:id="scalarValue" type="file" name="scalarValue"/>
-         	</span>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-input-file">
+            <span class="uploadFile form-text fragment-input-file">
+                <input wicket:id="scalarValue" type="file" name="scalarValue" />
+            </span>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-temporal">
-			<input wicket:id="scalarValue"
-				type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue fragment-input-date"/>
-		</wicket:fragment>
-		
-		<wicket:fragment wicket:id="fragment-input-temporal-with-offset">
-			<input wicket:id="scalarValue"
-				type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue fragment-input-date"/>
-			<div class="input-group input-group-sm">
-			    <span class="input-group-text">Offset:</span>
-				<select class="form-control" wicket:id="timeoffset" name="timeoffset" data-noreset="true" style="width: auto;" />
-			</div>	
-		</wicket:fragment>
-		
-		<wicket:fragment wicket:id="fragment-input-temporal-with-zone">
-			<input wicket:id="scalarValue"
-				type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue fragment-input-date"/>
-			<div class="input-group input-group-sm">
-			    <span class="input-group-text">Zone:</span>
-				<select class="form-control" wicket:id="timezone" name="timezone" data-noreset="true" style="width: auto;" />
-			</div>	
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-input-temporal">
+            <input wicket:id="scalarValue" type="text" name="scalarValue"
+                class="form-control form-control-sm scalarValue fragment-input-date" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-select_value">
-			<select wicket:id="scalarValue"
-				class="choices form-control-sm select2-remote fragment-input-select_value"/>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-input-temporal-with-offset">
+            <input wicket:id="scalarValue" type="text" name="scalarValue"
+                class="form-control form-control-sm scalarValue fragment-input-date" />
+            <div class="input-group input-group-sm">
+                <span class="input-group-text">Offset:</span>
+                <select class="form-control" wicket:id="timeoffset" name="timeoffset" data-noreset="true"
+                    style="width: auto;" />
+            </div>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-input-select_object">
+        <wicket:fragment wicket:id="fragment-input-temporal-with-zone">
+            <input wicket:id="scalarValue" type="text" name="scalarValue"
+                class="form-control form-control-sm scalarValue fragment-input-date" />
+            <div class="input-group input-group-sm">
+                <span class="input-group-text">Zone:</span>
+                <select class="form-control" wicket:id="timezone" name="timezone" data-noreset="true"
+                    style="width: auto;" />
+            </div>
+        </wicket:fragment>
+
+        <wicket:fragment wicket:id="fragment-input-select_value">
+            <select wicket:id="scalarValue"
+                class="choices form-control-sm select2-remote fragment-input-select_value" />
+        </wicket:fragment>
+
+        <wicket:fragment wicket:id="fragment-input-select_object">
             <span class="fragment-input-select_object w-100">
                 <span wicket:id="objectLink" class="w-100">link or drop down</span>
                 <span wicket:id="objectTitleIfNull">(none)</span>
             </span>
-		</wicket:fragment>
+        </wicket:fragment>
 
-		<!-- PROMPT FRAGMENTS -->
+        <!-- PROMPT FRAGMENTS -->
 
-		<wicket:fragment wicket:id="fragment-prompt-editicon">
-			<button wicket:id="scalarValue" class="edit btn btn-sm btn-link fragment-prompt-editicon">
-				<span class="editIcon fa fa-edit"/>
-			</button>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-prompt-editicon">
+            <button wicket:id="scalarValue" class="edit btn btn-sm btn-link fragment-prompt-editicon">
+                <span class="editIcon fa fa-edit" />
+            </button>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-prompt-label">
-			<span wicket:id="scalarValue" class="fragment-prompt-label"/>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-prompt-label">
+            <span wicket:id="scalarValue" class="fragment-prompt-label" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-prompt-textarea">
-			<textarea wicket:id="scalarValue"
-				class="form-control form-control-sm scalarPrompt fragment-prompt-textarea" readonly="true"/>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-prompt-textarea">
+            <textarea wicket:id="scalarValue" class="form-control form-control-sm scalarPrompt fragment-prompt-textarea"
+                readonly="true" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-prompt-checkboxYes">
-			<label class="fs-4 fragment-prompt-checkboxYes" style="color: green;"><i
-				class="fa-regular fa-check-square"></i></label>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-prompt-checkboxYes">
+            <label class="fs-4 fragment-prompt-checkboxYes" style="color: green;"><i
+                    class="fa-regular fa-check-square"></i></label>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-prompt-checkboxNo">
-			<label class="fs-4 fragment-prompt-checkboxNo"><i
-				class="fa-regular fa-square"></i></label>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-prompt-checkboxNo">
+            <label class="fs-4 fragment-prompt-checkboxNo"><i class="fa-regular fa-square"></i></label>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
-			<label class="fs-4 fragment-prompt-checkboxIntermediate" style="color: silver;"><i
-				class="fa-regular fa-square-minus"></i></label>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-prompt-checkboxIntermediate">
+            <label class="fs-4 fragment-prompt-checkboxIntermediate" style="color: silver;"><i
+                    class="fa-regular fa-square-minus"></i></label>
+        </wicket:fragment>
 
-		<!-- COMPACT FRAGMENTS -->
+        <!-- COMPACT FRAGMENTS -->
 
-		<wicket:fragment wicket:id="fragment-compact-checkboxYes">
-			<label class="fs-5 fragment-compact-checkboxYes" style="color: green;"><i
-				class="fa-regular fa-check-square"></i></label>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-compact-checkboxYes">
+            <label class="fs-5 fragment-compact-checkboxYes" style="color: green;"><i
+                    class="fa-regular fa-check-square"></i></label>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-compact-checkboxNo">
-			<label class="fs-5 fragment-compact-checkboxNo"><i
-				class="fa-regular fa-square"></i></label>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-compact-checkboxNo">
+            <label class="fs-5 fragment-compact-checkboxNo"><i class="fa-regular fa-square"></i></label>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-compact-checkboxIntermediate">
-			<label class="fs-5 fragment-compact-checkboxIntermediate" style="color: silver;"><i
-				class="fa-regular fa-square-minus"></i></label>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-compact-checkboxIntermediate">
+            <label class="fs-5 fragment-compact-checkboxIntermediate" style="color: silver;"><i
+                    class="fa-regular fa-square-minus"></i></label>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-compact-label">
-			<span wicket:id="scalarValue" class="fragment-compact-label"/>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-compact-label">
+            <span wicket:id="scalarValue" class="fragment-compact-label" />
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-compact-link">
-			<a wicket:id="scalarValue" class="no-click-bubbling fragment-compact-link">
-				<span wicket:id="linkLabel" />
-			</a>
-		</wicket:fragment>
+        <wicket:fragment wicket:id="fragment-compact-link">
+            <a wicket:id="scalarValue" class="no-click-bubbling fragment-compact-link">
+                <span wicket:id="linkLabel" />
+            </a>
+        </wicket:fragment>
 
-		<wicket:fragment wicket:id="fragment-compact-badge">
-			<div class="badge bg-light fragment-compact-badge">
-				<span wicket:id="scalarValue"></span>
-			</div>
-		</wicket:fragment>
-
-		<wicket:fragment wicket:id="fragment-compact-objectLink">
-			<div class="scalarValue fragment-compact-objectLink">
-                <div class="objectLink"
-                     wicket:id="objectLink"
-                >[property or parameter value]</div>
+        <wicket:fragment wicket:id="fragment-compact-badge">
+            <div class="badge bg-light fragment-compact-badge">
+                <span wicket:id="scalarValue"></span>
             </div>
-		</wicket:fragment>
+        </wicket:fragment>
 
-	</wicket:panel>
+        <wicket:fragment wicket:id="fragment-compact-objectLink">
+            <div class="scalarValue fragment-compact-objectLink">
+                <div class="objectLink" wicket:id="objectLink">[property or parameter value]</div>
+            </div>
+        </wicket:fragment>
+
+    </wicket:panel>
 </body>
-</html>
 
+</html>

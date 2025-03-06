@@ -311,7 +311,6 @@ function scalarValueAllowDrop(ev) { ev.preventDefault(); }
 function scalarValueDrop(ev) {
   ev.preventDefault();
   const data = ev.dataTransfer.getData("text");
-  console.log("event: " + data);
   if(ev.target.tagName === 'INPUT') {
     const inputElement = ev.target;
     inputElement.value = data;
