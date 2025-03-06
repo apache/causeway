@@ -66,7 +66,9 @@
 		<wicket:fragment wicket:id="fragment-fieldFrame-withLink">
 			<span class="scalarValueInput input-group fragment-fieldFrame-withLink">
 				<div wicket:id="scalarValueInlinePromptLink"
-					class="scalarValueInlinePromptLink">
+					class="scalarValueInlinePromptLink"
+                    ondragover="scalarValueAllowDrop(event)"
+                    ondrop="scalarValueDrop(event)">
 					<!-- output format -->
 					<wicket:container
 						wicket:id="container-scalarValue"
@@ -127,7 +129,10 @@
 		<wicket:fragment wicket:id="fragment-input-text">
 			<input wicket:id="scalarValue"
 				type="text" name="scalarValue"
-				class="form-control form-control-sm scalarValue fragment-input-text"/>
+				class="form-control form-control-sm scalarValue fragment-input-text"
+                ondragover="scalarValueAllowDrop(event)"
+                ondrop="scalarValueDrop(event)"
+                />
 		</wicket:fragment>
 
 		<wicket:fragment wicket:id="fragment-input-textarea">

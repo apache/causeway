@@ -304,3 +304,35 @@ $(function() {
     })
 });
 
+/**
+ * (drag &) drop support on text style input elements
+ */
+function scalarValueAllowDrop(ev) { ev.preventDefault(); }
+function scalarValueDrop(ev) {
+  ev.preventDefault();
+  const data = ev.dataTransfer.getData("text");
+  console.log("event: " + data);
+  if(ev.target.tagName === 'INPUT') {
+    const inputElement = ev.target;
+    inputElement.value = data;
+  } else {
+    // the ev.target element will be replaced after the click below, so we need to anchor ourselfs up the DOM hierarchy
+    const anchor = ev.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+
+    // before we emulate the click (below), we install an observer to listen on the server sent dom update
+    new MutationObserver((mutationsList, observer) => {
+      mutationsList.forEach(mutation => {
+        observer.disconnect();
+        if (mutation.type === 'childList') {
+          const inputElement = anchor.querySelector('input[type="text"].fragment-input-text')
+          if(inputElement!=null) {
+              inputElement.value = data;
+          }
+        }
+      });
+    })
+    .observe(anchor, { childList: true, attributes: false, subtree: true });
+    
+    ev.target.click();
+  }
+}

@@ -40,7 +40,7 @@ extends WktHeaderItems.HeaderContributor {
     public CausewayWicketViewerJsResourceReference() {
         super(WktHeaderItems.forScriptReference(
                 CausewayWicketViewerJsResourceReference.class,
-                "causeway-jquery-wicket-viewer.nocompress.js"));
+                "causeway-wicket-viewer.nocompress.js"));
     }
 
     public static HeaderItem asHeaderItem() {
