@@ -18,74 +18,72 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
+import java.io.Serializable;
+import java.util.Optional;
+
+import org.apache.wicket.model.IModel;
+import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a standalone value (used for standalone value page).
  */
 public final class ValueModel
-extends ModelAbstract<ManagedObject> {
+implements IModel<ManagedObject>, HasMetaModelContext {
 
     private static final long serialVersionUID = 1L;
 
-    // --
+    private final ObjectMember objectMember;
+    private final ObjectMemento objectMemento;
+    private transient ManagedObject managedObjectTransient;
 
-    private final ObjectMemento adapterMemento;
+    public ValueModel(@NonNull final ActionModel actionModel, final ManagedObject managedObject) {
+        this(unwrap(actionModel.getAction()), managedObject);
+    }
 
+    // canonical constructor
     public ValueModel(
             final @NonNull ObjectMember objectMember,
-            final @NonNull ManagedObject valueAdapter) {
-        super();
-        this.objectMemberMemento = objectMember;
-        this.adapterMemento = valueAdapter.getMemento().orElseThrow();
+            final @NonNull ManagedObject managedObject) {
+        this.objectMember = objectMember instanceof Serializable
+            ? objectMember
+            : null;
+        this.managedObjectTransient = managedObject;
+        this.objectMemento = managedObject.getMemento().orElseThrow();
     }
 
     @Override
-    protected ManagedObject load() {
-        return getObjectManager().demementify(adapterMemento);
+    public ManagedObject getObject() {
+        if(managedObjectTransient==null) {
+            this.managedObjectTransient = getObjectManager().demementify(objectMemento);
+        }
+        return managedObjectTransient;
     }
 
-    // -- META MODEL
-
-    private final ObjectMember objectMemberMemento;
+    public ObjectSpecification elementType() {
+        return getObject().getSpecification();
+    }
 
     /**
      * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
      */
-    public ObjectMember getObjectMember() {
-        return objectMemberMemento;
+    public Optional<ObjectMember> objectMember() {
+        return Optional.ofNullable(objectMember);
     }
 
-//    @SuppressWarnings("unchecked")
-//    public Optional<Renderer<?>> lookupRenderer() {
-//        return getObjectMember().getElementType().lookupFacet(ValueFacet.class)
-//                .flatMap(valueFacet->valueFacet.selectRendererForFeature(getObjectMember()));
-//    }
+    // -- HELPER
 
-    // -- HINTING SUPPORT
-
-    private ActionModel actionModelHint;
-    /**
-     * The {@link ActionModel} of the {@link ObjectAction action}
-     * that generated this {@link ValueModel}.
-     *
-     * @see #setActionHint(ActionModel)
-     */
-    public ActionModel getActionModelHint() {
-        return actionModelHint;
-    }
-    /**
-     * Called by action.
-     *
-     * @see #getActionModelHint()
-     */
-    public void setActionHint(final ActionModel actionModelHint) {
-        this.actionModelHint = actionModelHint;
+    private static @NonNull ObjectAction unwrap(final ObjectAction action) {
+        return action instanceof CompositeValueUpdater compositeValueUpdater
+            ? compositeValueUpdater.mixedInAction()
+            : action;
     }
 
 }

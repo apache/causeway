@@ -128,8 +128,7 @@ public class MarkupComponent extends WebComponent {
             return Optional.of(uiParameter.getMetaModel());
         }
         if(model instanceof ValueModel valueModel) {
-            return Optional.ofNullable(valueModel.getActionModelHint())
-                    .map(act->act.getAction());
+            return valueModel.objectMember().map(ObjectFeature.class::cast);
         }
         return Optional.empty();
     }

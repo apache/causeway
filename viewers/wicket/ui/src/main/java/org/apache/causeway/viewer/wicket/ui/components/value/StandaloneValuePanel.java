@@ -26,6 +26,7 @@ import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmValueUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.wicket.model.models.ValueModel;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -45,11 +46,13 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         super(id, valueModel);
 
         //XXX StandaloneValuePanel has its limitations compared to the ScalarPanel infrastructure,
-        // which has far better rendering support
+        // which has better rendering support
         // (we probably need to remove StandaloneValuePanel and utilize the ScalarPanel for standalone values instead)
-        if(isProbablySimpleInlineHtml(valueModel.getObjectMember().getElementType())) {
+        if(isProbablySimpleInlineHtml(valueModel.elementType())) {
             Wkt.markupAdd(this, ID_STANDALONE_VALUE, ()->
-                MmValueUtils.htmlStringForValueType(getModel().getObjectMember(), getModel().getObject())
+                MmValueUtils.htmlStringForValueType(
+                    getModel().objectMember().map(ObjectFeature.class::cast).orElse(null),
+                    getModel().getObject())
             );
         } else {
             // resort to (textual) title rendering
