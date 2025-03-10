@@ -26,6 +26,7 @@ import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsCssResourceReference;
 
+@Deprecated // no longer available since fullcalendar 6.x
 public class FullCalendarCssReference
 extends WebjarsCssResourceReference {
 
@@ -36,7 +37,7 @@ extends WebjarsCssResourceReference {
         new FullCalendarCssReference();
 
     private FullCalendarCssReference() {
-        super("fullcalendar/5.11.3/main.min.css");
+        super("fullcalendar/6.1.9/index.global.min.css");
     }
 
     /**
