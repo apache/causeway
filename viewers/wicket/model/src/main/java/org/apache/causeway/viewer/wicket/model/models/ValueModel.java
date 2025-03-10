@@ -19,71 +19,63 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.Optional;
-
 import org.apache.wicket.model.IModel;
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.ref.TransientObjectRef;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Represents a standalone value (used for standalone value page).
  */
-public final class ValueModel
+public record ValueModel(
+        /**
+         * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
+         */
+        ObjectMember objectMember,
+        ObjectMemento objectMemento,
+        TransientObjectRef<ManagedObject> managedObjectRef)
 implements IModel<ManagedObject>, HasMetaModelContext {
 
-    private static final long serialVersionUID = 1L;
-
-    private final ObjectMember objectMember;
-    private final ObjectMemento objectMemento;
-    private transient ManagedObject managedObjectTransient;
-
     public ValueModel(@NonNull final ActionModel actionModel, final ManagedObject managedObject) {
-        this(unwrap(actionModel.getAction()), managedObject);
+        this(actionModel.getAction(), managedObject);
+    }
+
+    public ValueModel(
+            final @NonNull ObjectMember objectMember,
+            final @NonNull ManagedObject managedObject) {
+        this(objectMember,
+            managedObject.getMemento().orElseThrow(),
+            new TransientObjectRef<>(managedObject));
     }
 
     // canonical constructor
     public ValueModel(
-            final @NonNull ObjectMember objectMember,
-            final @NonNull ManagedObject managedObject) {
-        this.objectMember = objectMember instanceof Serializable
-            ? objectMember
-            : null;
-        this.managedObjectTransient = managedObject;
-        this.objectMemento = managedObject.getMemento().orElseThrow();
+            final ObjectMember objectMember,
+            final ObjectMemento objectMemento,
+            final TransientObjectRef<ManagedObject> managedObjectRef) {
+        this.objectMember = objectMember instanceof CompositeValueUpdater compositeValueUpdater
+            ? compositeValueUpdater.mixedInAction()
+            : objectMember;
+        this.objectMemento = objectMemento;
+        this.managedObjectRef = managedObjectRef;
+
+        _Assert.assertTrue(this.objectMember instanceof Serializable);
     }
 
     @Override
     public ManagedObject getObject() {
-        if(managedObjectTransient==null) {
-            this.managedObjectTransient = getObjectManager().demementify(objectMemento);
-        }
-        return managedObjectTransient;
+        return managedObjectRef.computeIfAbsent(()->getObjectManager().demementify(objectMemento));
     }
 
     public ObjectSpecification elementType() {
         return getObject().getSpecification();
-    }
-
-    /**
-     * The originating {@link ObjectMember} this {@link ValueModel} is provided by.
-     */
-    public Optional<ObjectMember> objectMember() {
-        return Optional.ofNullable(objectMember);
-    }
-
-    // -- HELPER
-
-    private static @NonNull ObjectAction unwrap(final ObjectAction action) {
-        return action instanceof CompositeValueUpdater compositeValueUpdater
-            ? compositeValueUpdater.mixedInAction()
-            : action;
     }
 
 }

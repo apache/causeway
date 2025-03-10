@@ -53,6 +53,7 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.os;
     exports org.apache.causeway.commons.internal.primitives;
     exports org.apache.causeway.commons.internal.proxy;
+    exports org.apache.causeway.commons.internal.ref;
     exports org.apache.causeway.commons.internal.reflection;
     exports org.apache.causeway.commons.internal.resources;
     exports org.apache.causeway.commons.internal.testing;
