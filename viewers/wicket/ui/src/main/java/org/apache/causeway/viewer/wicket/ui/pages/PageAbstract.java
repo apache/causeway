@@ -74,7 +74,6 @@ import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;
-import org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js.LiveQueryJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css.SidebarCssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicketViewerJsResourceReference;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -242,8 +241,6 @@ implements ActionPromptProvider {
             .contributeThemeSpecificOverrides(getApplication(), response);
 
         response.render(SidebarCssResourceReference.asHeaderItem());
-
-        response.render(LiveQueryJsResourceReference.asHeaderItem());
         response.render(CausewayWicketViewerJsResourceReference.asHeaderItem());
 
         new JGrowlBehaviour()

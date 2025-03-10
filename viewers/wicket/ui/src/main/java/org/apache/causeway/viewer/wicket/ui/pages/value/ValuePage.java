@@ -56,34 +56,30 @@ public class ValuePage extends PageAbstract {
     @Override
     public void onRendering(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
         onRenderingOrRendered(enabledObjectRenderSubscribers, (pageRenderSubscriber, value) -> {
-            pageRenderSubscriber.onRenderingValue(value);
-            return null;
-        });
+                pageRenderSubscriber.onRenderingValue(value);
+                return null;
+            });
     }
 
     @Override
     public void onRendered(final Can<PageRenderSubscriber> enabledObjectRenderSubscribers) {
         onRenderingOrRendered(enabledObjectRenderSubscribers, (pageRenderSubscriber, value) -> {
-            pageRenderSubscriber.onRenderedValue(value);
-            return null;
-        });
+                pageRenderSubscriber.onRenderedValue(value);
+                return null;
+            });
     }
 
     private void onRenderingOrRendered(
             final Can<PageRenderSubscriber> pageRenderSubscribers,
             final BiFunction<PageRenderSubscriber, Object, Void> handler) {
 
-        if(pageRenderSubscribers.isEmpty()) {
-            return;
-        }
+        if(pageRenderSubscribers.isEmpty()) return;
 
         // guard against unspecified
         ManagedObjects.asSpecified(valueModel.getObject())
-        .ifPresent(managedObject->{
-
-            var nullableValuePojo = managedObject.getPojo();
-
-            pageRenderSubscribers.forEach(subscriber -> handler.apply(subscriber, nullableValuePojo));
-        });
+            .ifPresent(managedObject->{
+                var nullableValuePojo = managedObject.getPojo();
+                pageRenderSubscribers.forEach(subscriber -> handler.apply(subscriber, nullableValuePojo));
+            });
     }
 }

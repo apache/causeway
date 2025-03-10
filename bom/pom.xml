@@ -220,27 +220,16 @@ identified
             JavaScript libraries:
 
             * Twitter Bootstrap, licensed under MIT [1]
-            *
-            Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
-            *
-            LiveQuery (JQuery plugin), licensed under MIT license [3]
-            * Wicket
-            Bootstrap, licenced under ASL 2 [4]
-            * Bootstrap Datetimepicker,
-            licensed under MIT licence [5]
-            * Moment.js, licenced under MIT licence
-            [6]
+            * Bootstrap-Growl (JQuery plugin), licensed under MIT license [2]
+            * Wicket Bootstrap, licenced under ASL 2 [3]
+            * Bootstrap Datetimepicker, licensed under MIT licence [4]
+            * Moment.js, licenced under MIT licence [5]
 
             [1] https://github.com/twbs/bootstrap/blob/master/LICENSE
-            [2]
-            https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
-            [3]
-            https://github.com/brandonaaron/livequery#license
-            [4]
-            https://github.com/l0rdn1kk0n/wicket-bootstrap
-            [5]
-            https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
-            [6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
+            [2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
+            [3] https://github.com/l0rdn1kk0n/wicket-bootstrap
+            [4] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+            [5] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
     </properties>
     <dependencyManagement>
 
@@ -2589,7 +2578,6 @@ identified
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
                             <exclude>**/schema.gql</exclude>
-                            <exclude>**/jquery.livequery.js</exclude>
                             <exclude>**/*._.gql</exclude>
                             <exclude>**/.gitkeep</exclude>
 

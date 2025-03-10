@@ -158,14 +158,6 @@ $(function() {
     $('.buttons .ok:not(.noVeil)').click(causewayFadeInVeil);
     $('.cssSubMenuItemsPanel .cssSubMenuItem a:not(.noVeil)').click(causewayFadeInVeil);
 
-    $('div.collectionContentsAsAjaxTablePanel > table.contents > tbody > tr.reloaded-after-concurrency-exception')
-        .livequery(function(){
-            var x = $(this);
-            $(this).animate({ "backgroundColor": "#FFF" }, 1000, "linear", function() {
-                $(x).css('background-color','').removeClass("reloaded-after-concurrency-exception");
-            });
-        });
-
     /**
      * Show/hide the CopyLink modal window with alt+]
      */

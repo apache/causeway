@@ -95,7 +95,6 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome;
-    exports org.apache.causeway.viewer.wicket.ui.pages.common.livequery.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.sidebar.css;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js;
