@@ -29,7 +29,6 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import org.approvaltests.Approvals;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,34 +75,30 @@ class JaxbUtilsTest {
         a.setNested(b);
     }
 
-    @Nested
-    class tryRead {
 
-        /**
-         * Works for arbitrary {@link XmlRootElement#name()} combinations,
-         * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
-         * <p>
-         * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
-         * We are testing whether type-safe recovery especially for type {@link A} works as desired.
-         */
-        @Test
-        void typesafeUnmarshallingFromAmbiguousContext() {
+    /**
+     * Works for arbitrary {@link XmlRootElement#name()} combinations,
+     * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.
+     * <p>
+     * As {@link A} contains {@link B}, the {@link JAXBContext} for {@link A} should also bind type {@link B}.
+     * We are testing whether type-safe recovery especially for type {@link A} works as desired.
+     */
+    @Test
+    void typesafeUnmarshallingFromAmbiguousContext() {
 
-            // when ... doing a round trip
-            var aXml = JaxbUtils.toStringUtf8(a);
-            var bXml = JaxbUtils.toStringUtf8(b);
+        // when ... doing a round trip
+        var aXml = JaxbUtils.toStringUtf8(a);
+        var bXml = JaxbUtils.toStringUtf8(b);
 
-            assertTrue(_Strings.isNotEmpty(aXml));
-            assertTrue(_Strings.isNotEmpty(bXml));
+        assertTrue(_Strings.isNotEmpty(aXml));
+        assertTrue(_Strings.isNotEmpty(bXml));
 
-            var aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
-            var bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
+        var aRecovered = JaxbUtils.tryRead(A.class, aXml).valueAsNonNullElseFail();
+        var bRecovered = JaxbUtils.tryRead(B.class, bXml).valueAsNonNullElseFail();
 
-            // then
-            assertEquals(a, aRecovered);
-            assertEquals(b, bRecovered);
-
-        }
+        // then
+        assertEquals(a, aRecovered);
+        assertEquals(b, bRecovered);
     }
 
     @Test

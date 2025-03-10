@@ -34,7 +34,7 @@ import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 
 @Programmatic
 public record ValueDecomposition(
-    @Nullable ValueWithTypeDto fundamental, 
+    @Nullable ValueWithTypeDto fundamental,
     @Nullable TypedTupleDto composite)
 implements Serializable {
 
@@ -52,22 +52,27 @@ implements Serializable {
             ? ofComposite(CommonDtoUtils.getCompositeValueFromJson(json))
             : ofFundamental(CommonDtoUtils.getFundamentalValueFromJson(vType, json));
     }
-    
+
     // for transport over REST
     public static ValueDecomposition destringify(final ValueType vType, final String string) {
         return fromJson(vType, _Strings.base64UrlDecodeZlibCompressed(string));
     }
-    
+
+    // as of time of writing there is no JAXB support for record types
+    ValueDecomposition() {
+        this(null, null);
+    }
+
     public Optional<ValueWithTypeDto> fundamentalAsOptional() {
         return Optional.ofNullable(fundamental);
     }
     public Optional<TypedTupleDto> compositeAsOptional() {
         return Optional.ofNullable(composite);
     }
-    
+
     // used by RO-Viewer to render values
     public String toJson() {
-        return fundamental!=null 
+        return fundamental!=null
                 ? CommonDtoUtils.getFundamentalValueAsJson(fundamental)
                 : CommonDtoUtils.getCompositeValueAsJson(composite);
     }
@@ -76,7 +81,7 @@ implements Serializable {
     public String stringify() {
         return _Strings.base64UrlEncodeZlibCompressed(toJson());
     }
-    
+
     public void accept(
         final @NonNull Consumer<ValueWithTypeDto> fundamentalConsumer,
         final @NonNull Consumer<TypedTupleDto> compositeConsumer) {
@@ -88,7 +93,7 @@ implements Serializable {
         }
 
     // -- DEPRECATIONS
-    
+
     /** @deprecated use {@link #fundamental()} instead */
     @Deprecated public @Nullable ValueWithTypeDto leftIfAny() { return fundamental(); }
     /** @deprecated use {@link #composite()} instead */
