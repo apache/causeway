@@ -167,7 +167,7 @@ identified
         <ognl.version>3.4.6</ognl.version>
 
         <pdfbox.version>3.0.4</pdfbox.version>
-        <picocontainer.version>2.15.1</picocontainer.version>
+        <picocontainer.version>2.15.2</picocontainer.version>
         <poi.version>5.4.0</poi.version>
 
         <prismjs.version>1.29.0</prismjs.version>
