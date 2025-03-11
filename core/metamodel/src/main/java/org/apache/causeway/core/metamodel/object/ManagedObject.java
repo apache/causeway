@@ -421,7 +421,7 @@ extends
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectValue(spec, pojo)
+                ? new ManagedObjectValue(spec, pojo)
                 : empty(spec);
     }
     /**
