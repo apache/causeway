@@ -47,11 +47,6 @@ public interface Bookmarkable {
               _Exceptions.unrecoverable("failed to bookmark %s", ((ManagedObject)this).objSpec()));
     }
 
-    /**
-     * Identical to {@link #getBookmark()}, except it has no return.
-     */
-    default void bookmark() { getBookmark(); }
-
     boolean isBookmarkMemoized();
 
     /**

@@ -435,7 +435,7 @@ extends
     static ManagedObject service(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo) {
-        return new _ManagedObjectService(spec, pojo);
+        return new ManagedObjectService(spec, pojo);
     }
     /**
      * VIEWMODEL

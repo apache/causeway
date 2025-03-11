@@ -71,7 +71,7 @@ implements ViewModelFacet {
 
         initialize(viewModel.getPojo());
 
-        viewModel.bookmark(); // trigger bookmark memoization, if not memoized already
+        viewModel.getBookmark(); // trigger bookmark memoization, if not memoized already
 
         _Assert.assertTrue(viewModel.isBookmarkMemoized(),
                 ()->"Framework Bug: Viewmodel should have its bookmark memoized once initialized.");
