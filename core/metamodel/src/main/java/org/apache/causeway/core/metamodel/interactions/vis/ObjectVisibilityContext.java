@@ -55,7 +55,7 @@ implements VisibilityContext, ProposedHolder {
             final Where where) {
         return new ObjectVisibilityContext(
                 InteractionHead.regular(domainObject),
-                domainObject.getSpecification().getFeatureIdentifier(),
+                domainObject.objSpec().getFeatureIdentifier(),
                 initiatedBy,
                 where,
                 InteractionUtils.renderPolicy(domainObject));

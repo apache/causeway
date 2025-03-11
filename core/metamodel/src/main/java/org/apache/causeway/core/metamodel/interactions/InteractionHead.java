@@ -67,31 +67,31 @@ public interface InteractionHead {
     }
 
     // -- HELPER
-    
+
     /**
-     * Immutable implementation of {@link InteractionHead} with consistency checks. 
+     * Immutable implementation of {@link InteractionHead} with consistency checks.
      */
     record InteractionHeadRecord(
         ManagedObject owner,
         ManagedObject target) implements InteractionHead {
-       
+
         // canonical constructor with consistency checks
         public InteractionHeadRecord(
-            ManagedObject owner,
-            ManagedObject target) {
+            final ManagedObject owner,
+            final ManagedObject target) {
             if(ManagedObjects.isSpecified(owner)
-                && owner.getSpecification().getBeanSort().isMixin()) {
+                && owner.objSpec().getBeanSort().isMixin()) {
                 throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
             }
             if(ManagedObjects.isSpecified(target)
-                && target.getSpecification().getBeanSort().isMixin()
+                && target.objSpec().getBeanSort().isMixin()
                 && target.getPojo()==null) {
                 throw _Exceptions.unrecoverable("target not spec. %s", target);
             }
             this.owner = owner;
             this.target = target;
         }
-        
+
     }
 
 }

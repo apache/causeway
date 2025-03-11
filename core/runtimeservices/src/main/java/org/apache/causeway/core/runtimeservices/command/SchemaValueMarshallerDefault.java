@@ -72,7 +72,7 @@ extends SchemaValueMarshallerAbstract {
             final ManagedObject value) {
 
         valueDto.setType(context.schemaValueType());
-        if (value.getSpecialization().isEmpty()) {
+        if (value.specialization().isEmpty()) {
             valueDto.setNull(true);
         }
 

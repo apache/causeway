@@ -120,7 +120,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
-        var objectSpec = domainObject.getSpecification();
+        var objectSpec = domainObject.objSpec();
         var objectModel = UiObjectWkt.ofAdapter(domainObject);
 
         assertEquals(domainObject.getBookmark().get(), objectModel.getOwnerBookmark());

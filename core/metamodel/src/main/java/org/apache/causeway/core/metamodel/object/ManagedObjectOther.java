@@ -18,36 +18,47 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#OTHER}
  * @see ManagedObject.Specialization#OTHER
  */
-final class _ManagedObjectOther
-extends _ManagedObjectSpecified
-implements Bookmarkable.NoBookmark {
+record ManagedObjectOther(
+    @NonNull ObjectSpecification objSpec,
+    @NonNull Object pojo)
+implements ManagedObject, Bookmarkable.NoBookmark {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
-    private final @NonNull Object pojo;
-
-    _ManagedObjectOther(
-            final ObjectSpecification spec,
+    ManagedObjectOther(
+            final ObjectSpecification objSpec,
             final Object pojo) {
-        super(ManagedObject.Specialization.OTHER, spec);
-        _Assert.assertTrue(!spec.isValue());
-        _Assert.assertTrue(!spec.isEntityOrViewModel());
+        this.objSpec = objSpec;
+        _Assert.assertTrue(!objSpec.isValue());
+        _Assert.assertTrue(!objSpec.isEntityOrViewModel());
         this.pojo = assertCompliance(pojo);
     }
 
     @Override
     public String getTitle() {
-        return "other object, not recognized by the framework's meta-model";
+        return "other object, not recognized by the framework";
+    }
+
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.OTHER;
+    }
+
+    @Override
+    public <T> T assertCompliance(@NonNull final T pojo) {
+        return _Compliance.assertCompliance(objSpec, specialization(), pojo);
+    }
+
+    @Override
+    public Object getPojo() {
+        return pojo;
     }
 
 }

@@ -66,7 +66,7 @@ extends PanelAbstract<Object, IModel<Object>> {
             var attributeAdapter = attributeModel.getObject();
             if(ManagedObjects.isSpecified(attributeAdapter)) {
                 buf.append(String.format("??? spec=%s, value='%s'",
-                        attributeAdapter.getSpecification(), attributeAdapter.getPojo()));
+                        attributeAdapter.objSpec(), attributeAdapter.getPojo()));
             } else {
                 buf.append("??? scalarAdapter is NULL or UNSPECIFIED");
             }

@@ -60,6 +60,10 @@ public interface ObjectFeature extends Specification {
      * @see #getFeatureIdentifier()
      */
     String getFriendlyName(Supplier<ManagedObject> domainObjectProvider);
+    default String getFriendlyName(final ManagedObject domainObject) {
+        return getFriendlyName(()->domainObject);
+    }
+
 
     /**
      * Optionally returns the (translated friendly) name for this member -
@@ -107,6 +111,9 @@ public interface ObjectFeature extends Specification {
      *
      */
     Optional<String> getDescription(final Supplier<ManagedObject> domainObjectProvider);
+    default Optional<String> getDescription(final ManagedObject domainObject) {
+        return getDescription(()->domainObject);
+    }
 
     /**
      * Optionally returns the (translated) description of how the member is used,

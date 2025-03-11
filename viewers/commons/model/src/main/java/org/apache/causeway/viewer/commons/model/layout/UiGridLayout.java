@@ -80,7 +80,7 @@ public class UiGridLayout implements UiModel {
     }
 
     private Optional<BSGrid> initGridData() {
-        return Facets.bootstrapGrid(managedObject.getSpecification(), managedObject)
+        return Facets.bootstrapGrid(managedObject.objSpec(), managedObject)
         .map(this::attachAssociatedActions);
     }
 
@@ -90,7 +90,7 @@ public class UiGridLayout implements UiModel {
         var primedActions = bSGrid.getAllActionsById();
         final Set<String> actionIdsAlreadyAdded = _Sets.newHashSet(primedActions.keySet());
 
-        managedObject.getSpecification().streamProperties(MixedIn.INCLUDED)
+        managedObject.objSpec().streamProperties(MixedIn.INCLUDED)
         .forEach(property->{
             Optional.ofNullable(
                     bSGrid.getAllPropertiesById().get(property.getId()))

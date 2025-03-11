@@ -61,7 +61,7 @@ public class MmValueUtils {
 
         if(!ManagedObjects.isSpecified(adapter)) return "";
 
-        var spec = adapter.getSpecification();
+        var spec = adapter.objSpec();
         var valueFacet = spec.valueFacet().orElse(null);
         if(valueFacet==null) {
             return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
@@ -114,7 +114,7 @@ public class MmValueUtils {
 
     private <T> Optional<ValueFacet<T>> valueFacet(final @Nullable ManagedObject valueObject, final Class<T> valueClass) {
         return ManagedObjects.isSpecified(valueObject)
-            ? valueFacet(valueObject.getSpecification(), valueClass)
+            ? valueFacet(valueObject.objSpec(), valueClass)
             : Optional.empty();
     }
 

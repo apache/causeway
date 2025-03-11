@@ -79,7 +79,7 @@ implements
         if(!(getFacetHolder() instanceof ObjectSpecification)) return null;
 
         final ObjectSpecification objectSpec = getObjectSpecification();
-        return objectSpec == target.getSpecification()? null: "Invalid type";
+        return objectSpec == target.objSpec()? null: "Invalid type";
     }
 
     private ObjectSpecification getObjectSpecification() {

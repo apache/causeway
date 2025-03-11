@@ -110,7 +110,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final @NonNull ActionInteraction actionInteraction) {
         var managedAction = actionInteraction.getManagedActionElseFail();
         assertEquals(domainObject.getClass(),
-                managedAction.getOwner().getSpecification().getCorrespondingClass());
+                managedAction.getOwner().objSpec().getCorrespondingClass());
         var actionTester = getServiceInjector().injectServicesInto(
                 new ActionTester<>(domainObject, actionInteraction, managedAction));
         actionTester.init();
@@ -667,7 +667,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @SuppressWarnings("unchecked")
         static void updatePojo(final ManagedValue managedValue, @SuppressWarnings("rawtypes") final UnaryOperator replacer) {
             managedValue.update(v->ManagedObject.adaptSingular(
-                    v.getSpecification(),
+                    v.objSpec(),
                     replacer.apply(v.getPojo())));
         }
 
@@ -1191,7 +1191,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 final @NonNull T domainObject) {
             this.domainObjectType = _Casts.uncheckedCast(domainObject.getClass());
             this.vm = MetaModelContext.instanceElseFail().getObjectManager().adapt(domainObject);
-            this.objectSpecification = vm.getSpecification();
+            this.objectSpecification = vm.objSpec();
         }
 
     }

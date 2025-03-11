@@ -26,13 +26,13 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetA
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public class CssClassFacetFromProjectionFacet 
+public class CssClassFacetFromProjectionFacet
 extends CssClassFacetAbstract {
 
     private final ProjectionFacet projectionFacet;
 
     public CssClassFacetFromProjectionFacet(
-            final ProjectionFacet projectionFacet, 
+            final ProjectionFacet projectionFacet,
             final FacetHolder holder) {
         super(holder);
         this.projectionFacet = projectionFacet;
@@ -41,9 +41,9 @@ extends CssClassFacetAbstract {
     @Override
     public String cssClass(final ManagedObject targetAdapter) {
         var projectedAdapter = projectionFacet.projected(targetAdapter);
-        var cssClassFacet = projectedAdapter.getSpecification().getFacet(CssClassFacet.class);
-        return cssClassFacet != null 
-                ? cssClassFacet.cssClass(projectedAdapter) 
+        var cssClassFacet = projectedAdapter.objSpec().getFacet(CssClassFacet.class);
+        return cssClassFacet != null
+                ? cssClassFacet.cssClass(projectedAdapter)
                 : null;
     }
 

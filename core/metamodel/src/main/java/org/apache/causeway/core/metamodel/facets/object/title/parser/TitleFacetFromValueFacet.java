@@ -57,7 +57,7 @@ implements TitleFacet {
          * and alternatively object-support method 'title()',
          * by letting the SpecificationLoader introspect enum types and populate the meta-model
          * with TitleFacets (that have higher priority than this one). */
-        if(renderRequest.object().getSpecification().getCorrespondingClass().isEnum()) {
+        if(renderRequest.object().objSpec().getCorrespondingClass().isEnum()) {
             return Enums.getFriendlyNameOf((Enum<?>)pojo);
         }
 
@@ -89,7 +89,7 @@ implements TitleFacet {
             .map(renderer->(Renderer) renderer)
             .map(renderer->renderer.titlePresentation(valueFacet.createValueSemanticsContext(feature), pojo))
             .orElseGet(()->String.format("Value type %s has no value semantics for title rendering.",
-                    renderRequest.object().getSpecification().getCorrespondingClass()));
+                    renderRequest.object().objSpec().getCorrespondingClass()));
 
     }
 

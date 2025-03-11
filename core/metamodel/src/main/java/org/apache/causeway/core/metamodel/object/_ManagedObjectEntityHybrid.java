@@ -75,14 +75,14 @@ implements _Refetchable {
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityTransient _transient) {
-        super(ManagedObject.Specialization.ENTITY, _transient.getSpecification());
+        super(ManagedObject.Specialization.ENTITY, _transient.objSpec());
         this.variant = _transient;
         this.morphState = MorphState.TRANSIENT;
     }
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityBookmarked bookmarked) {
-        super(ManagedObject.Specialization.ENTITY, bookmarked.getSpecification());
+        super(ManagedObject.Specialization.ENTITY, bookmarked.objSpec());
         this.variant = bookmarked;
         this.morphState = MorphState.BOOKMARKED;
         _Assert.assertTrue(bookmarked.getBookmark().isPresent(),
@@ -92,14 +92,14 @@ implements _Refetchable {
     @Override
     public Optional<Bookmark> getBookmark() {
         return (variant instanceof Bookmarkable)
-                ? ((Bookmarkable)variant).getBookmark()
+                ? variant.getBookmark()
                 : Optional.empty();
     }
 
     @Override
     public boolean isBookmarkMemoized() {
         return (variant instanceof Bookmarkable)
-                ? ((Bookmarkable)variant).isBookmarkMemoized()
+                ? variant.isBookmarkMemoized()
                 : false;
     }
 
@@ -148,14 +148,6 @@ implements _Refetchable {
                 : null;
     }
 
-    @Override
-    protected boolean isInjectionPointsResolved() {
-        // overriding the default for optimization, let the EntityFacet handle injection
-        // as a side-effect potentially injects if required
-        return getSpecification().entityFacetElseFail()
-                .isInjectionPointsResolved(peekAtPojo());
-    }
-
     // -- HELPER
 
     private void triggerReassessment() {
@@ -197,7 +189,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeBookmarked(final Object pojo) {
-        var attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, Optional.empty());
+        var attached = new _ManagedObjectEntityBookmarked(objSpec(), pojo, Optional.empty());
         this.variant = attached;
         _Assert.assertTrue(attached.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
@@ -205,7 +197,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeRemoved() {
-        var removed = new _ManagedObjectEntityRemoved(getSpecification());
+        var removed = new _ManagedObjectEntityRemoved(objSpec());
         this.variant = removed;
     }
 

@@ -51,7 +51,7 @@ extends AssociationColumnAbstract {
         var dataRow = dataRowWkt.getObject();
         var rowElement = dataRow.rowElement();
         var rowElementModel = UiObjectWkt.ofAdapter(rowElement);
-        var property = rowElement.getSpecification().getPropertyElseFail(memberId);
+        var property = rowElement.objSpec().getPropertyElseFail(memberId);
 
         var propertyModel = rowElementModel
                 .getPropertyModel(

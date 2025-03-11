@@ -122,7 +122,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
             ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
             .orElseThrow(()->_Exceptions.noSuchElement("property '%s' in %s",
                     memberId,
-                    getBookmarkedOwner().getSpecification())));
+                    getBookmarkedOwner().objSpec())));
     }
 
     /**

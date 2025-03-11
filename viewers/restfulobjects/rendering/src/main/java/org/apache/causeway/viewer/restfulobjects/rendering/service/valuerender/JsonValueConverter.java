@@ -111,7 +111,7 @@ public interface JsonValueConverter {
             private Can<FacetHolder> facetHolders(final @Nullable ManagedObject value) {
                 return ManagedObjects.isNullOrUnspecifiedOrEmpty(value)
                     ? Can.of(objectFeature)
-                    : Can.of(objectFeature, value.getSpecification());
+                    : Can.of(objectFeature, value.objSpec());
             }
         }
 

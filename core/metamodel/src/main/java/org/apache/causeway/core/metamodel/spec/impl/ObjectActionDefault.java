@@ -532,7 +532,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        if(head.owner().getSpecification().isValue()) {
+        if(head.owner().objSpec().isValue()) {
             return; // do not record value type mixin actions
         }
 

@@ -83,7 +83,7 @@ implements _Refetchable {
 
         var entityState = entityFacet.getEntityState(pojo);
         if(!entityState.isPersistable()) {
-            throw _Exceptions.illegalState("not persistable %s", getSpecification());
+            throw _Exceptions.illegalState("not persistable %s", objSpec());
         }
         if(entityState.isAttached()) {
             return pojo; // is attached
@@ -134,13 +134,13 @@ implements _Refetchable {
             throw new ObjectNotFoundException("" + bookmark);
         }
 
-        _XrayEvent.event("Entity %s refetched from persistence.", getSpecification());
+        _XrayEvent.event("Entity %s refetched from persistence.", objSpec());
 
         return refetchedPojo;
     }
 
     private EntityFacet entityFacet() {
-        return getSpecification().entityFacetElseFail();
+        return objSpec().entityFacetElseFail();
     }
 
     @SuppressWarnings("deprecation")
@@ -163,7 +163,7 @@ implements _Refetchable {
                     "The persistence layer does not recognize given object %s, "
                     + "meaning the object has no identifier that associates it with the persistence layer. "
                     + "(most likely, because the object is detached, eg. was not persisted after being new-ed up)",
-                    getSpecification());
+                    objSpec());
 
             // in case of the exception getting swallowed, also write a log
             log.error(msg);

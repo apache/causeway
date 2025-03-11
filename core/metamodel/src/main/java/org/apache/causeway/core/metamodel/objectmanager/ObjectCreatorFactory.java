@@ -73,10 +73,10 @@ record ObjectCreatorFactory() {
             var domainObject = ManagedObject.adaptSingular(spec, pojo);
 
             // initialize new object
-            domainObject.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+            domainObject.objSpec().streamAssociations(MixedIn.EXCLUDED)
                 .forEach(field->field.toDefault(domainObject));
 
-            if (domainObject.getSpecification().isEntity()) {
+            if (domainObject.objSpec().isEntity()) {
                 persistenceLifecyclePublisher().get().onPostCreate(domainObject);
             }
 

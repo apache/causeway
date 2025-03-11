@@ -94,7 +94,7 @@ public final class MmVisibilityUtils {
             // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
         }
-        var spec = adapter.getSpecification();
+        var spec = adapter.objSpec();
         if(spec.isEntity()) {
             if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
                 return false;

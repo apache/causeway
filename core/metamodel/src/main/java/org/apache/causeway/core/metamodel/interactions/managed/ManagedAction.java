@@ -93,7 +93,7 @@ public final class ManagedAction extends ManagedMember {
             may still want to provide an action result, that does not need the mixee instance to be produced;
             eg. delete ApplicationUser mixin that returns a collection of all remaining users
             after deleting the selected one */
-        if(!owner.getSpecialization().isEntity()) {
+        if(!owner.specialization().isEntity()) {
             _Assert.assertFalse(ManagedObjects.isNullOrUnspecifiedOrEmpty(owner), ()->
                     String.format("cannot create managed-action for action %s with an empty owner %s",
                             action.getFeatureIdentifier(),

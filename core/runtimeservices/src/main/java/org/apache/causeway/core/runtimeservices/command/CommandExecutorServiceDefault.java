@@ -266,7 +266,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             final ManagedObject targetAdapter,
             final String logicalMemberIdentifier) throws RuntimeException {
 
-        var objectSpecification = targetAdapter.getSpecification();
+        var objectSpecification = targetAdapter.objSpec();
 
         // we use the local identifier because the fullyQualified version includes the class name.
         // that is a problem for us if the property is inherited, because it will be the class name of the declaring
@@ -289,7 +289,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         // superclass, rather than the concrete class of the target that we are inspecting here.
         var localPropertyId = localPartOf(logicalMemberIdentifier);
 
-        var objectSpecification = targetAdapter.getSpecification();
+        var objectSpecification = targetAdapter.objSpec();
 
         var property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
         if(property == null) {

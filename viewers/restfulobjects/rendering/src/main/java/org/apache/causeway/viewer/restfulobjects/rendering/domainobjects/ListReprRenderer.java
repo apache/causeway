@@ -57,7 +57,7 @@ extends ReprRendererAbstract<Stream<ManagedObject>> {
     public ListReprRenderer with(final Stream<ManagedObject> objectAdapters) {
         this.objectAdapters = objectAdapters!=null
                 ? objectAdapters
-                        .filter(adapter->!adapter.getSpecification().isHidden())
+                        .filter(adapter->!adapter.objSpec().isHidden())
                         .collect(Collectors.toList())
                         : null;
                         return this;

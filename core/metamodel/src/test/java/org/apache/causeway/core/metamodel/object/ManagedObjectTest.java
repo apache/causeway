@@ -89,7 +89,7 @@ class ManagedObjectTest {
         assertNotNull(emptyObject);
 
         var presentObject = ManagedObject.adaptSingular(specLoader, 3);
-        assertEquals(Specialization.VALUE, presentObject.getSpecialization());
+        assertEquals(Specialization.VALUE, presentObject.specialization());
 
         presentObject.assertCompliance(6);
 
@@ -118,7 +118,7 @@ class ManagedObjectTest {
         var pojo = constructor.newInstance(_Constants.emptyObjects);
 
         var presentObject = ManagedObject.adaptSingular(specLoader, pojo);
-        assertEquals(Specialization.VIEWMODEL, presentObject.getSpecialization());
+        assertEquals(Specialization.VIEWMODEL, presentObject.specialization());
 
         presentObject.assertCompliance(pojo);
 

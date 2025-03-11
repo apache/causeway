@@ -58,7 +58,7 @@ public record ActionResultModel(
             return new ActionResultModel(ActionResultResponseType.VOID_AS_EMPTY, resultAdapter);
         }
 
-        var resultSpec = resultAdapter.getSpecification();
+        var resultSpec = resultAdapter.objSpec();
         if (!(resultAdapter instanceof PackedManagedObject)) {
 
             // scalar ...

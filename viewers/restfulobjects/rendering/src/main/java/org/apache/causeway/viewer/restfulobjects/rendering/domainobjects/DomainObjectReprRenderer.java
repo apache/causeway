@@ -150,7 +150,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 .newLinkToBuilder(
                         getResourceContext(),
                         Rel.DOMAIN_TYPE,
-                        objectAdapter.getSpecification())
+                        objectAdapter.objSpec())
                 .build()
                 .getString("href");
         addMediaTypeParams(X_RO_DOMAIN_TYPE, domainTypeHref);
@@ -164,7 +164,7 @@ extends ReprRendererAbstract<ManagedObject> {
             return null;
         }
 
-        final boolean isService = objectAdapter.getSpecification().isInjectable();
+        final boolean isService = objectAdapter.objSpec().isInjectable();
 
         if (!(mode.isArgs())) {
 
@@ -187,7 +187,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
             // serviceId or instance Id
             if (isService) {
-                representation.mapPutString("serviceId", objectAdapter.getSpecification().logicalTypeName());
+                representation.mapPutString("serviceId", objectAdapter.objSpec().logicalTypeName());
             } else {
                 oidIfAny.ifPresent(oid->{
                     Optional.ofNullable(oid.logicalTypeName())
@@ -223,7 +223,7 @@ extends ReprRendererAbstract<ManagedObject> {
             getExtensions().mapPutBoolean("isPersistent", ManagedObjects.isIdentifiable(objectAdapter));
             if(isService) {
 
-                Facets.domainServiceLayoutMenuBar(objectAdapter.getSpecification())
+                Facets.domainServiceLayoutMenuBar(objectAdapter.objSpec())
                 .ifPresent(menuBar->
                         getExtensions().mapPut("menuBar", menuBar));
 
@@ -248,12 +248,12 @@ extends ReprRendererAbstract<ManagedObject> {
     }
 
     private void addLinkToDescribedBy() {
-        final JsonRepresentation link = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification()).build();
+        final JsonRepresentation link = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.objSpec()).build();
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(objectAdapter.getSpecification());
+            renderer.with(objectAdapter.objSpec());
             link.mapPutJsonRepresentation("value", renderer.render());
         }
         getLinks().arrayAdd(link);
@@ -281,7 +281,7 @@ extends ReprRendererAbstract<ManagedObject> {
     private DomainObjectReprRenderer withMembers(final ManagedObject objectAdapter) {
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
-        final List<ObjectAssociation> associations = objectAdapter.getSpecification()
+        final List<ObjectAssociation> associations = objectAdapter.objSpec()
                 .streamAssociations(MixedIn.INCLUDED)
                 .collect(Collectors.toList());
 
@@ -293,7 +293,7 @@ extends ReprRendererAbstract<ManagedObject> {
             }
 
             if (mode.isRegular()) {
-                final Stream<ObjectAction> actions = objectAdapter.getSpecification()
+                final Stream<ObjectAction> actions = objectAdapter.objSpec()
                         .streamAnyActions(MixedIn.INCLUDED);
 
                 addActions(objectAdapter, actions, appendTo);
@@ -405,7 +405,7 @@ extends ReprRendererAbstract<ManagedObject> {
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
-        final String domainType = objectAdapter.getSpecification().logicalTypeName();
+        final String domainType = objectAdapter.objSpec().logicalTypeName();
         final LinkBuilder persistLinkBuilder = LinkBuilder.newBuilder(getResourceContext(), Rel.PERSIST.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s", domainType).withHttpMethod(RestfulHttpMethod.POST).withArguments(domainObjectRepr);
         getLinks().arrayAdd(persistLinkBuilder.build());
     }
@@ -433,7 +433,7 @@ extends ReprRendererAbstract<ManagedObject> {
         if (!ManagedObjects.isIdentifiable(objectAdapter)) {
             return;
         }
-        final boolean isService = objectAdapter.getSpecification().isInjectable();
+        final boolean isService = objectAdapter.objSpec().isInjectable();
         if(isService) {
             return;
         }
@@ -455,7 +455,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonValueEncoderService jsonValueEncoder,
             final ManagedObject domainObject) {
 
-        var spec = domainObject.getSpecification();
+        var spec = domainObject.objSpec();
         if(spec.isValue()) {
             var context2 = JsonValueConverter.Context.of(objectFeature, context.config().isSuppressMemberExtensions());
             return jsonValueEncoder.asObject(domainObject, context2);

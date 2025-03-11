@@ -125,10 +125,10 @@ implements
 
     @Inject
     public EntityChangeTrackerDefault(
-            EntityPropertyChangePublisher entityPropertyChangePublisher,
-            EntityChangesPublisher entityChangesPublisher,
-            Provider<InteractionProvider> interactionProviderProvider,
-            PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
+            final EntityPropertyChangePublisher entityPropertyChangePublisher,
+            final EntityChangesPublisher entityChangesPublisher,
+            final Provider<InteractionProvider> interactionProviderProvider,
+            final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
 
         if(log.isDebugEnabled()) {
             var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
@@ -163,13 +163,13 @@ implements
     /**
      * As used when {@link #enlistCreated(ManagedObject)} or {@link #enlistUpdating(ManagedObject, Function)}
      */
-    private void addPropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, PropertyChangeRecord pcr) {
+    private void addPropertyChangeRecordIfAbsent(final PropertyChangeRecordId pcrId, final PropertyChangeRecord pcr) {
         enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, id -> pcr);
     }
     /**
      * As used when {@link #enlistDeleting(ManagedObject)}.
      */
-    private void addPropertyChangeRecordIfAbsent(PropertyChangeRecordId pcrId, Function<PropertyChangeRecordId, PropertyChangeRecord> func) {
+    private void addPropertyChangeRecordIfAbsent(final PropertyChangeRecordId pcrId, final Function<PropertyChangeRecordId, PropertyChangeRecord> func) {
         enlistedPropertyChangeRecordsById.computeIfAbsent(pcrId, func);
     }
 
@@ -232,7 +232,7 @@ implements
      * when iterating over the original value set, if any of the properties causes the entity to change state as it is
      * evaluated then a ConcurrentModificationException will be thrown because an enlist will occur.
      */
-    private Set<PropertyChangeRecord> changedRecords(Collection<PropertyChangeRecord> propertyChangeRecords)
+    private Set<PropertyChangeRecord> changedRecords(final Collection<PropertyChangeRecord> propertyChangeRecords)
             throws ConcurrentModificationException {
         return propertyChangeRecords.stream()
                 // set post values, which have been left empty up to now
@@ -309,7 +309,7 @@ implements
             return true;
         }
 
-        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
+        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec())) {
             return true; // ignore entities that are not enabled for entity change publishing
         }
 
@@ -325,7 +325,7 @@ implements
     }
 
     @Override
-    public void beforeCommit(boolean readOnly) {
+    public void beforeCommit(final boolean readOnly) {
         _Xray.publish(this, interactionProviderProvider);
 
         if(log.isDebugEnabled()) {
@@ -341,7 +341,7 @@ implements
     }
 
     @Override
-    public void afterCompletion(int status) {
+    public void afterCompletion(final int status) {
 
         if(log.isDebugEnabled()) {
             var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
@@ -351,7 +351,7 @@ implements
         clearAndReset();
     }
 
-    private static String decodeStatus(int status) {
+    private static String decodeStatus(final int status) {
         if (status == STATUS_COMMITTED) return "STATUS_COMMITTED";
         if (status == STATUS_ROLLED_BACK) return "STATUS_ROLLED_BACK";
         if (status == STATUS_UNKNOWN) return "STATUS_UNKNOWN";
@@ -372,7 +372,7 @@ implements
             final String userName) {
 
         // a defensive copy of
-        var changeKindByEnlistedAdapter = (Map<Bookmark, EntityChangeKind>) new HashMap<>(this.changeKindByEnlistedAdapter);
+        var changeKindByEnlistedAdapter = new HashMap<>(this.changeKindByEnlistedAdapter);
         if(changeKindByEnlistedAdapter.isEmpty()) {
             return Optional.empty();
         }

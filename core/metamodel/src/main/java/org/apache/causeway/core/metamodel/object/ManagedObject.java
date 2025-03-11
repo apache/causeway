@@ -20,8 +20,8 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
@@ -40,7 +40,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -316,16 +315,18 @@ extends
      * Returns the specific {@link Specialization} this {@link ManagedObject} implements,
      * which governs this object's behavior.
      */
-    Specialization getSpecialization();
+    Specialization specialization();
+
+    @Deprecated default Specialization getSpecialization() { return specialization(); }
+
     @Override default BookmarkPolicy getBookmarkPolicy() {
-        return getSpecialization().getBookmarkPolicy();
+        return specialization().getBookmarkPolicy();
     }
 
     /**
      * Returns the specification that details the structure (meta-model) of this object.
      */
-    @Override
-    ObjectSpecification getSpecification();
+    @Override ObjectSpecification objSpec();
 
     /**
      * Returns the adapted domain object, the 'plain old java' object this managed object
@@ -338,11 +339,9 @@ extends
         return EntityState.NOT_PERSISTABLE;
     }
 
-    Supplier<ManagedObject> asSupplier();
-
     /**
-     * Unary operator asserting that {@code pojo} and {@link #getSpecification()} are
-     * compliant with the policies from {@link #getSpecialization()}.
+     * Unary operator asserting that {@code pojo} and {@link #objSpec()} are
+     * compliant with the policies from {@link #specialization()}.
      */
     <T> T assertCompliance(@NonNull T pojo);
 
@@ -361,11 +360,11 @@ extends
      * May return <code>null</code> if no icon is specified.
      */
     default String getIconName() {
-        return getSpecification().getIconName(this);
+        return objSpec().getIconName(this);
     }
 
     default ObjectIcon getIcon() {
-        return getSpecification().getIcon(this);
+        return objSpec().getIcon(this);
     }
 
     /**
@@ -374,7 +373,7 @@ extends
      */
     default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
         var iconName = getIconName();
-        var faLayers = getSpecification().getFaLayers(this).orElse(null);
+        var faLayers = objSpec().getFaLayers(this).orElse(null);
         if (iconName != null
                 || faLayers == null) {
             return Either.left(getIcon());
@@ -398,7 +397,7 @@ extends
      * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
      */
     static ManagedObject unspecified() {
-        return _ManagedObjectUnspecified.INSTANCE;
+        return ManagedObjectUnspecified.INSTANCE;
     }
     /**
      * EMPTY
@@ -518,7 +517,7 @@ extends
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new _ManagedObjectOther(spec, pojo)
+                ? new ManagedObjectOther(spec, pojo)
                 : empty(spec);
     }
     /**

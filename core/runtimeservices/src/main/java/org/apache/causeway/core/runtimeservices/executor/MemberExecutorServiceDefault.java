@@ -183,7 +183,7 @@ implements MemberExecutorService {
 
         // assert has bookmark, unless non-scalar
         ManagedObjects.asScalarNonEmpty(returnedAdapter)
-        .filter(scalarNonEmpty->!scalarNonEmpty.getSpecialization().isOther()) // don't care
+        .filter(scalarNonEmpty->!scalarNonEmpty.specialization().isOther()) // don't care
         // if its a transient entity, flush the current transaction, so we get an OID
         .filter(scalarNonEmpty->{
             MmEntityUtils.ifHasNoOidThenFlush(scalarNonEmpty);
@@ -191,7 +191,7 @@ implements MemberExecutorService {
         })
         .ifPresent(scalarNonEmpty->{
             _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
-                var returnTypeSpec = scalarNonEmpty.getSpecification();
+                var returnTypeSpec = scalarNonEmpty.objSpec();
                 var violation = returnTypeSpec.isEntity()
                         ? MessageTemplate.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
                         : MessageTemplate.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;

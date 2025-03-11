@@ -31,7 +31,7 @@ public class MmHintUtils {
 
     public String hintId(final @Nullable ManagedObject adapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) return null;
-        var spec = adapter.getSpecification();
+        var spec = adapter.objSpec();
         return (spec.isIdentifiable() || spec.isParented())
                 && adapter.getPojo() instanceof HintIdProvider hp
              ? hp.hintId()

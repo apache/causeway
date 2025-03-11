@@ -108,7 +108,7 @@ public class IdentifierUtil {
                 if (interactionHead instanceof ActionInteractionHead) {
                     ObjectAction objectActionOnMixee =
                             ((ActionInteractionHead) interactionHead).getMetaModel();
-                    ObjectSpecification specificationOfMixee = interactionHead.owner().getSpecification();
+                    ObjectSpecification specificationOfMixee = interactionHead.owner().objSpec();
                     return logicalMemberIdentifierFor(specificationOfMixee, objectActionOnMixee);
                 }
             }

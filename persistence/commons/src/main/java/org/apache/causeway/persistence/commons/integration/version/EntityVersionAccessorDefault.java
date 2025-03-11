@@ -40,7 +40,7 @@ public class EntityVersionAccessorDefault implements EntityVersionAccessor {
     @Override
     public Object versionOf(final Object domainObject) {
         ManagedObject managedObject = objectManager.adapt(domainObject);
-        EntityFacet facet = managedObject.getSpecification().getFacet(EntityFacet.class);
+        EntityFacet facet = managedObject.objSpec().getFacet(EntityFacet.class);
         if (facet != null) {
             return facet.versionOf(domainObject);
         }

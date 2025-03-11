@@ -134,7 +134,7 @@ implements DomainObjectResource {
                     .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value"));
         }
 
-        final Consent validity = adapter.getSpecification().isValid(adapter, InteractionInitiatedBy.USER);
+        final Consent validity = adapter.objSpec().isValid(adapter, InteractionInitiatedBy.USER);
         if (validity.isVetoed()) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
@@ -211,7 +211,7 @@ implements DomainObjectResource {
                             HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value"));
         }
 
-        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter, InteractionInitiatedBy.USER);
+        final Consent validity = objectAdapter.objSpec().isValid(objectAdapter, InteractionInitiatedBy.USER);
         if (validity.isVetoed()) {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException

@@ -52,7 +52,7 @@ public final class MmSpecUtils {
         }
         var pojo = ManagedObjects.peekAtPojoOf(obj);
         var requiredType = pojo.getClass();
-        var currentSpec = obj.getSpecification();
+        var currentSpec = obj.objSpec();
         if(currentSpec.getCorrespondingClass().equals(requiredType)) {
             return obj;
         }
@@ -121,8 +121,8 @@ public final class MmSpecUtils {
 
     /**
      * Whether given {@link ObjectSpecification} represents a FixtureScript (from testing.fixtures.applib).
-     * @implNote if testing.fixtures.applib is not available on the class-path, 
-     *      then given spec cannot be a fixture-script 
+     * @implNote if testing.fixtures.applib is not available on the class-path,
+     *      then given spec cannot be a fixture-script
      */
     public boolean isFixtureScript(final @Nullable ObjectSpecification spec) {
         if(spec==null) return false;

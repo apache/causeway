@@ -19,29 +19,25 @@
 package org.apache.causeway.core.metamodel.object;
 
 import java.util.Objects;
-import java.util.function.Supplier;
-
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#UNSPECIFIED}
  * @see ManagedObject.Specialization#UNSPECIFIED
  */
-final class _ManagedObjectUnspecified
+record ManagedObjectUnspecified()
 implements ManagedObject, Bookmarkable.NoBookmark {
 
-    static final ManagedObject INSTANCE = new _ManagedObjectUnspecified();
+    static final ManagedObject INSTANCE = new ManagedObjectUnspecified();
 
     @Override
-    public Specialization getSpecialization() {
+    public Specialization specialization() {
         return Specialization.UNSPECIFIED;
     }
 
     @Override
-    public ObjectSpecification getSpecification() {
+    public ObjectSpecification objSpec() {
         throw _Exceptions.unsupportedOperation();
     }
 
@@ -51,12 +47,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     }
 
     @Override
-    public Supplier<ManagedObject> asSupplier() {
-        return ()->this;
-    }
-
-    @Override
-    public <T> T assertCompliance(final @NonNull T pojo) {
+    public <T> T assertCompliance(final T pojo) {
         return pojo; // no-op
     }
 

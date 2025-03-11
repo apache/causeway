@@ -66,7 +66,7 @@ implements HasUiParameter {
     public String validate(final @NonNull ManagedObject proposedArg) {
         //TODO[CAUSEWAY-3764] workaround for org.apache.wicket.markup.html.form.upload.FileUpload leaking into the meta-model
         //  find the root cause then clean-up
-        if(proposedArg.getSpecification().getBeanSort().isUnknown()) {
+        if(proposedArg.objSpec().getBeanSort().isUnknown()) {
             return null;
         }
         proposedValue().getValue().setValue(proposedArg); // updates the pending parameter value

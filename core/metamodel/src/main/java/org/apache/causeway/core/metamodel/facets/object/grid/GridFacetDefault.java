@@ -85,12 +85,12 @@ implements GridFacet {
 
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return; // cannot introspect
-        if(!getSpecification().equals(objectAdapter.getSpecification())) {
+        if(!getSpecification().equals(objectAdapter.objSpec())) {
             throw _Exceptions.unrecoverable(
                     "getGrid(adapter) was called passing an adapter (type: %s), "
                     + "for which this GridFacet (type: %s) is not responsible; "
                     + "indicates that some framework internals are wired up in a wrong way",
-                    objectAdapter.getSpecification().getCorrespondingClass().getName(),
+                    objectAdapter.objSpec().getCorrespondingClass().getName(),
                     getSpecification().getCorrespondingClass().getName());
         }
     }

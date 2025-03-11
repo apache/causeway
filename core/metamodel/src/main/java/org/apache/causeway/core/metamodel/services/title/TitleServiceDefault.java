@@ -64,7 +64,7 @@ public class TitleServiceDefault implements TitleService {
         return MmEntityUtils.getEntityState(objectAdapter).isTransientOrRemoved()
             // here we just mean NOT-ATTACHED (and not the concrete DETACHED entity state)
             ? "[DETACHED]"
-            : objectAdapter.getSpecification().getTitle(TitleRenderRequest.forObject(objectAdapter));
+            : objectAdapter.objSpec().getTitle(TitleRenderRequest.forObject(objectAdapter));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class TitleServiceDefault implements TitleService {
 
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
             ? "unspecified"
-            : objectAdapter.getSpecification().getIconName(objectAdapter);
+            : objectAdapter.objSpec().getIconName(objectAdapter);
     }
 
     //-- HELPER

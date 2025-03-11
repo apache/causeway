@@ -1022,7 +1022,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         final Class<?> classUnderTest = scenario.recordClass;
         final Object sample = scenario.samples.getFirstElseFail();
         var viewModel = MetaModelContext.instanceElseFail().getObjectManager().adapt(sample);
-        var elementType = viewModel.getSpecification();
+        var elementType = viewModel.objSpec();
         var viewmodelFacet = elementType.getFacet(ViewModelFacet.class);
 
         assertEquals(BeanSort.VIEW_MODEL, elementType.getBeanSort());

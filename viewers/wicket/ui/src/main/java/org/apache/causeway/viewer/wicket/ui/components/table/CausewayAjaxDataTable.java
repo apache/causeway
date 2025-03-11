@@ -91,7 +91,7 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
             return null;
         }
         var rowElement = model.rowElement();
-        return rowElement.getSpecification().getCssClass(rowElement);
+        return rowElement.objSpec().getCssClass(rowElement);
     }
 
 }

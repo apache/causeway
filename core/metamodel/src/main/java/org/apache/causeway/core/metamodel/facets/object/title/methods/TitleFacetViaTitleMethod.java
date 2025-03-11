@@ -93,7 +93,7 @@ implements HasImperativeAspect {
                     .map(CausewaySystemEnvironment::isUnitTesting)
                     .orElse(false);
             if(!isUnitTesting) {
-                log.warn("Failed Title {}", owningAdapter.getSpecification(), ex);
+                log.warn("Failed Title {}", owningAdapter.objSpec(), ex);
             }
             return "Failed Title";
         }

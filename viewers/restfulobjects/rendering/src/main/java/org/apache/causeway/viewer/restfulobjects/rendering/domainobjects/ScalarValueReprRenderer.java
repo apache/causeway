@@ -64,7 +64,7 @@ implements HasObjectFeature {
 
     @Override
     public ScalarValueReprRenderer with(final ManagedObject objectAdapter) {
-        if (!objectAdapter.getSpecification().isValue()) {
+        if (!objectAdapter.objSpec().isValue()) {
             throw ReprRendererException.create("Not an (encodable) value", objectAdapter.getTitle());
         }
 

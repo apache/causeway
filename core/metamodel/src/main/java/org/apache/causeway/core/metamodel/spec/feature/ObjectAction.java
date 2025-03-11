@@ -368,7 +368,7 @@ public interface ObjectAction extends ObjectMember {
         public static Stream<ObjectAction> streamTopBarActions(
                 final ManagedObject adapter) {
 
-            var spec = adapter.getSpecification();
+            var spec = adapter.objSpec();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates
@@ -382,7 +382,7 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject adapter,
                 final ObjectAssociation association) {
 
-            var spec = adapter.getSpecification();
+            var spec = adapter.objSpec();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates.isSameLayoutGroupAs(association))
@@ -411,9 +411,9 @@ public interface ObjectAction extends ObjectMember {
 
             if(mixeeAdapter != null) {
                 var mixinSpec = action.getDeclaringType();
-                var ownerSpec = mixeeAdapter.getSpecification();
+                var ownerSpec = mixeeAdapter.objSpec();
                 return ownerSpec.lookupMixedInMember(mixinSpec)
-                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asSupplier()))
+                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);
             }
             return action.getFriendlyName(head::owner);

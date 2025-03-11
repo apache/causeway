@@ -137,7 +137,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @ParameterizedTest
@@ -152,7 +152,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @ParameterizedTest
@@ -167,7 +167,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @ParameterizedTest
@@ -182,7 +182,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @Test
@@ -196,7 +196,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @Test
@@ -210,7 +210,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @Test
@@ -223,7 +223,7 @@ extends JsonValueEncoderTestAbstract {
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
 }

@@ -75,7 +75,7 @@ implements IModel<ManagedObject>, HasMetaModelContext {
     }
 
     public ObjectSpecification elementType() {
-        return getObject().getSpecification();
+        return getObject().objSpec();
     }
 
 }

@@ -73,7 +73,7 @@ class _MembersAsColumns implements HasMetaModelContext {
         // the type that has the properties and collections that make up this table's columns
         var elementClass = elementType.getCorrespondingClass();
 
-        var parentSpecIfAny = parentObject.getSpecification();
+        var parentSpecIfAny = parentObject.objSpec();
 
         var assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 

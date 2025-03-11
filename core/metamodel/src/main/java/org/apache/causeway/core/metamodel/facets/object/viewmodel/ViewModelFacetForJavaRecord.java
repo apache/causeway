@@ -95,7 +95,7 @@ extends ViewModelFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        var viewmodelSpec = viewModel.getSpecification();
+        var viewmodelSpec = viewModel.objSpec();
 
         streamRecordComponents(viewmodelSpec)
         .forEach(association->{

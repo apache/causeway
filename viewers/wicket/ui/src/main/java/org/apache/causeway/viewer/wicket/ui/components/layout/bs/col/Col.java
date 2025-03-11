@@ -225,7 +225,7 @@ implements HasDynamicallyVisibleContent {
         }
 
         final UiObjectWkt objectModel = getModel();
-        var ownerSpec = objectModel.getManagedObject().getSpecification();
+        var ownerSpec = objectModel.getManagedObject().objSpec();
 
         // collection layout data by collection id (the collection's member-id)
         // preserving order, as order matters

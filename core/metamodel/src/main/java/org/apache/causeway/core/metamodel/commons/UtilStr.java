@@ -32,7 +32,7 @@ public class UtilStr {
     /**
      * String representation of bookmark for entities (otherwise empty string is returned).
      */
-    public static String entityAsStr(Bookmark bookmark, SpecificationLoader specificationLoader) {
+    public static String entityAsStr(final Bookmark bookmark, final SpecificationLoader specificationLoader) {
         var logicalTypeName = bookmark.logicalTypeName();
         var isEntity = specificationLoader
                             .lookupLogicalType(logicalTypeName)
@@ -57,17 +57,17 @@ public class UtilStr {
         return namedArgStr(paramName, managedObject);
     }
 
-    public static String namedArgStr(String paramName, ManagedObject managedObject) {
+    public static String namedArgStr(final String paramName, final ManagedObject managedObject) {
         if (isSensitiveName(paramName)) {
             return "********";
         }
-        if(managedObject.getSpecialization().isEmpty()) {
+        if(managedObject.specialization().isEmpty()) {
             return "<none>";
         }
         return managedObject.getTitle();
     }
 
-    private static boolean isSensitiveName(String name) {
+    private static boolean isSensitiveName(final String name) {
         return name.equalsIgnoreCase("password") ||
                 name.equalsIgnoreCase("secret") ||
                 name.equalsIgnoreCase("apikey") ||

@@ -26,14 +26,15 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
-import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -50,8 +51,6 @@ import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
-
-import org.jspecify.annotations.NonNull;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -97,7 +96,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(spec.isCompositeValue()) {
             _Assert.assertTrue(valueRepr.isString(), ()->"expected to receive a String originating from ValueDecomposition#stringify");
             var valueFacet = spec.valueFacetElseFail();
-            var valSemantics = (ValueSemanticsProvider<?>)valueFacet.selectDefaultSemantics().orElseThrow();
+            var valSemantics = valueFacet.selectDefaultSemantics().orElseThrow();
             var valDecomposition = ValueDecomposition.destringify(ValueType.COMPOSITE, valueRepr.asString());
             var pojo = valSemantics.compose(valDecomposition);
             return ManagedObject.value(spec, pojo);
@@ -167,7 +166,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation repr,
             final Context context) {
 
-        var valueSpec = valueAdapter.getSpecification();
+        var valueSpec = valueAdapter.objSpec();
         var valueClass = valueSpec.getCorrespondingClass();
         var jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
@@ -222,11 +221,11 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)) {
             return Optional.empty();
         }
-        var valueClass = valueAdapter.getSpecification().getCorrespondingClass();
-        var decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
+        var valueClass = valueAdapter.objSpec().getCorrespondingClass();
+        var decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.objSpec(), valueClass)
                 .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
         if(decompositionIfAny.isEmpty()) {
-            var valueSpec = valueAdapter.getSpecification();
+            var valueSpec = valueAdapter.objSpec();
             log.warn("{Could not resolve a ValueComposer for {}, "
                     + "falling back to rendering as 'null'. "
                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
@@ -242,7 +241,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context) {
 
-        var objectSpec = adapter.getSpecification();
+        var objectSpec = adapter.objSpec();
         var cls = objectSpec.getCorrespondingClass();
 
         var jsonValueConverter = converterByClass.get(cls);

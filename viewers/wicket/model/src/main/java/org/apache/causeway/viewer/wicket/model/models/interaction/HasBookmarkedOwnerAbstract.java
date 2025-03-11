@@ -44,7 +44,7 @@ implements
 
     public final ObjectSpecification getTypeOfSpecification() {
         // serving this from a potentially unattached entity seems safe
-        return bookmarkedObjectModel().getObject().getSpecification();
+        return bookmarkedObjectModel().getObject().objSpec();
     }
 
     /** governs how to populate the BookmarkPanel in the UI */

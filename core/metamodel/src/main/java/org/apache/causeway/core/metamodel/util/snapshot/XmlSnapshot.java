@@ -206,7 +206,7 @@ public class XmlSnapshot implements Snapshot {
             log.debug("appendXml({})", log("obj", object));
         }
 
-        final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
+        final String fullyQualifiedClassName = object.objSpec().getFullIdentifier();
 
         schema.setUri(fullyQualifiedClassName); // derive URI from fully qualified name
 
@@ -446,7 +446,7 @@ public class XmlSnapshot implements Snapshot {
         }
 
         // locate the field in the object's class
-        final ObjectSpecification nos = object.getSpecification();
+        final ObjectSpecification nos = object.objSpec();
         // HACK: really want a ObjectSpecification.hasField method to
         // check first.
         var field = nos.getAssociation(fieldName).orElse(null);
@@ -628,7 +628,7 @@ public class XmlSnapshot implements Snapshot {
             log.debug("objectToElement({})", log("object", adapter));
         }
 
-        final ObjectSpecification spec = adapter.getSpecification();
+        final ObjectSpecification spec = adapter.objSpec();
 
         if (log.isDebugEnabled()) {
             log.debug("objectToElement(NO): create element and causeway:title");
@@ -666,7 +666,7 @@ public class XmlSnapshot implements Snapshot {
 
             // Skip field if we have seen the name already
             for (int j = 0; j < i; j++) {
-                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter.asSupplier()))) {
+                if (Objects.equals(fieldName, fields.get(i).getFriendlyName(adapter))) {
                     log.debug("objectToElement(NO): {} SKIPPED", log("field", fieldName));
                     continue eachField;
                 }
@@ -702,7 +702,7 @@ public class XmlSnapshot implements Snapshot {
                 try {
                     value = valueAssociation.get(adapter, InteractionInitiatedBy.PASS_THROUGH);
 
-                    var valueSpec = value.getSpecification();
+                    var valueSpec = value.objSpec();
 
                     // XML
                     causewayMetaModel.setAttributesForValue(xmlValueElement, valueSpec.getShortIdentifier());

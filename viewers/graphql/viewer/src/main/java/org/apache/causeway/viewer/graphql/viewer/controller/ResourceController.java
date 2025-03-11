@@ -192,13 +192,13 @@ public class ResourceController {
 
     @Nullable
     private static Grid gridOf(final ManagedObject managedObject) {
-        var facet = managedObject.getSpecification().getFacet(GridFacet.class);
+        var facet = managedObject.objSpec().getFacet(GridFacet.class);
         return facet != null ? facet.getGrid(managedObject) : null;
     }
 
     private Optional<Object> valueOfProperty(final String logicalTypeName, final String id, final String propertyId) {
         return lookup(logicalTypeName, id)
-                .map(managedObject -> new ManagedObjectAndPropertyIfAny(managedObject, managedObject.getSpecification().getProperty(propertyId)))
+                .map(managedObject -> new ManagedObjectAndPropertyIfAny(managedObject, managedObject.objSpec().getProperty(propertyId)))
                 .filter(ManagedObjectAndPropertyIfAny::isPropertyPresent)
                 .map(ManagedObjectAndProperty::of)
                 .map(ManagedObjectAndProperty::value)

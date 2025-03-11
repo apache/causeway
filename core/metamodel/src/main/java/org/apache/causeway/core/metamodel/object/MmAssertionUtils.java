@@ -42,7 +42,7 @@ public class MmAssertionUtils {
         }
         var pojo = ManagedObjects.peekAtPojoOf(obj);
         var requiredType = pojo.getClass();
-        var actualSpec = obj.getSpecification();
+        var actualSpec = obj.objSpec();
         _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
     }
 
@@ -89,7 +89,7 @@ public class MmAssertionUtils {
                 return object;
             }
             var upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
-            var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+            var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().getCorrespondingClass());
             throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),
@@ -133,7 +133,7 @@ public class MmAssertionUtils {
     /** check is free of side-effects - also fails on non-attached entities */
     public void assertIsBookmarkSupported(final @Nullable ManagedObject adapter) {
         assertSpecifiedAndNotEmpty(adapter);
-        _Assert.assertFalse(adapter.getSpecialization().getBookmarkPolicy().isNoBookmark(),
+        _Assert.assertFalse(adapter.specialization().getBookmarkPolicy().isNoBookmark(),
                 ()->String.format("object %s does not provide a bookmark", adapter));
     }
 

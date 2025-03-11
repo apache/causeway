@@ -36,7 +36,7 @@ implements ObjectMemento {
     // -- FACTORIES
 
     static ObjectMementoSingular create(final @NonNull ManagedObject adapter) {
-        var spec = adapter.getSpecification();
+        var spec = adapter.objSpec();
 
         _Assert.assertTrue(spec.isIdentifiable()
                 || spec.isParented()
@@ -49,7 +49,7 @@ implements ObjectMemento {
                         .formatted(spec));
 
         return new ObjectMementoSingular(
-                adapter.getLogicalType(),
+                adapter.logicalType(),
                 MmHintUtils.bookmarkElseFail(adapter),
                 MmTitleUtils.titleOf(adapter));
     }

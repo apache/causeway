@@ -64,7 +64,7 @@ public class ObjectAdapterUpdateHelper {
 
         var allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
 
-        objectAdapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+        objectAdapter.objSpec().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only
         .forEach(association->{
 
@@ -116,9 +116,9 @@ public class ObjectAdapterUpdateHelper {
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
             if(invalidReason != null) {
-                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter.asSupplier()));
+                propertiesMap.mapPutString("x-ro-invalidReason", invalidReason + "; " + property.getFriendlyName(objectAdapter));
             } else {
-                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter.asSupplier()));
+                propertiesMap.mapPutString("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getFriendlyName(objectAdapter));
             }
             allOk = false;
             return allOk;

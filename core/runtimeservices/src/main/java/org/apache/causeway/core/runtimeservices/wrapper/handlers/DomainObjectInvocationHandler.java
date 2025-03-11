@@ -111,11 +111,11 @@ extends DelegatingInvocationHandlerAbstract<T> {
             final SyncControl syncControl,
             final ProxyGenerator proxyGenerator) {
         super(
-                targetAdapter.getSpecification().getMetaModelContext(),
+                targetAdapter.objSpec().getMetaModelContext(),
                 domainObject,
                 syncControl);
 
-        this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
+        this.mmContext = targetAdapter.objSpec().getMetaModelContext();
         this.proxyGenerator = proxyGenerator;
 
         try {
@@ -134,7 +134,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
                     nsme);
         }
 
-        entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
+        entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
 
         this.mixeeAdapter = mixeeAdapter;
     }
@@ -159,7 +159,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
         final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
 
-        if(!targetAdapter.getSpecialization().isMixin()) {
+        if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
         }
 
@@ -167,7 +167,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
             return handleTitleMethod(targetAdapter);
         }
 
-        final ObjectSpecification targetSpec = targetAdapter.getSpecification();
+        final ObjectSpecification targetSpec = targetAdapter.objSpec();
         var resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
                 .orElseThrow();
 
@@ -272,7 +272,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
         if(domainObjectAdapter == null) {
             return null;
         }
-        var specification = domainObjectAdapter.getSpecification();
+        var specification = domainObjectAdapter.objSpec();
         var objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
         var objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
 
@@ -303,7 +303,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
         resolveIfRequired(targetAdapter);
 
-        var targetNoSpec = targetAdapter.getSpecification();
+        var targetNoSpec = targetAdapter.objSpec();
         var titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
         var titleEvent = titleContext.createInteractionEvent();
@@ -320,7 +320,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
-        var spec = targetAdapter.getSpecification();
+        var spec = targetAdapter.objSpec();
         if(spec.isEntity()) {
             return runExecutionTask(()->{
                 MmEntityUtils.persistInCurrentTransaction(targetAdapter);

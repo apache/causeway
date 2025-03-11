@@ -215,7 +215,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
     private void startDialogWithParams(final AjaxRequestTarget target) {
         var actionModel = this.getActionModel();
-        var actionOwnerSpec = actionModel.getActionOwner().getSpecification();
+        var actionOwnerSpec = actionModel.getActionOwner().objSpec();
         var actionPrompt = ActionPromptProvider
                 .getFrom(this.getPage())
                 .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());

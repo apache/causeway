@@ -19,23 +19,18 @@
 package org.apache.causeway.core.metamodel.object;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -43,42 +38,16 @@ import lombok.experimental.Accessors;
 abstract class _ManagedObjectSpecified
 implements ManagedObject {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull Specialization specialization;
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
-    private final @NonNull ObjectSpecification specification;
-
-    @Override
-    public final Supplier<ManagedObject> asSupplier() {
-        return ()->this;
-    }
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
+    private final @NonNull ObjectSpecification objSpec;
 
     @Override
     public final <T> T assertCompliance(final @NonNull T pojo) {
-        MmAssertionUtils.assertPojoNotWrapped(pojo);
-        if(specification.isAbstract()) {
-            _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired(),
-                    ()->String.format("Specialization %s does not allow abstract type %s",
-                            specialization,
-                            specification));
-        }
-        if(specialization.getTypePolicy().isExactTypeRequired()) {
-            MmAssertionUtils.assertExactType(specification, pojo);
-        }
-        if(getSpecialization().getInjectionPolicy().isAlwaysInject()) {
-            if(!isInjectionPointsResolved()) {
-                getServiceInjector().injectServicesInto(pojo); // might be redundant
-            }
-        }
-        return pojo;
+        return _Compliance.assertCompliance(objSpec, specialization, pojo);
     }
-
-    /**
-     * override if there is optimization available
-     * @apiNote must only be called by {@link #assertCompliance(Object)}
-     */
-    protected boolean isInjectionPointsResolved() { return false; }
 
     @Override
     public String getTitle() {
@@ -98,7 +67,7 @@ implements ManagedObject {
         return ObjectMemento.singular(adapter)
                 .orElseGet(()->
                     ManagedObjects.isSpecified(adapter)
-                        ? ObjectMemento.empty(adapter.getLogicalType())
+                        ? ObjectMemento.empty(adapter.logicalType())
                         : null);
     }
 
@@ -107,74 +76,23 @@ implements ManagedObject {
                 .map(this::mementoForScalar)
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMemento.packed(
-                packedAdapter.getLogicalType(),
+                packedAdapter.logicalType(),
                 listOfMementos);
     }
 
-    //XXX compares pojos by their 'equals' semantics -
-    // note though: some value-types have an explicit order-relation which could potentially say differently
     @Override
     public final boolean equals(final Object obj) {
-        // make sure equals(Object) is without side-effects!
-        if(this == obj) {
-            return true;
-        }
-        if(!(obj instanceof ManagedObject)) {
-            return false;
-        }
-        var other = (ManagedObject)obj;
-        if(!this.getSpecialization().equals(other.getSpecialization())) {
-            return false;
-        }
-        if(!this.getSpecification().equals(other.getSpecification())) {
-            return false;
-        }
-        var canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
-        if(canGetPojosWithoutSideeffect) {
-            // expected to work for packed variant just fine, as it compares lists
-            return Objects.equals(this.getPojo(), other.getPojo());
-        }
-
-        if(this.isBookmarkMemoized()
-                && other.isBookmarkMemoized()) {
-            return Objects.equals(
-                    sideEffectFreeBookmark(),
-                    other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
-        }
-
-        var a = (_Refetchable) this;
-        var b = (_Refetchable) this;
-        return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
+        return _Compliance.equals(this, obj);
     }
 
     @Override
     public final int hashCode() {
-        // make sure hashCode() is without side-effects!
-        var canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
-        return canGetPojosWithoutSideeffect
-                // expected to work for packed variant just fine, as it compares lists
-                ? Objects.hash(getSpecification().getCorrespondingClass(), getPojo())
-                : Objects.hash(getSpecification().getCorrespondingClass(), sideEffectFreeBookmark());
+        return _Compliance.hashCode(this);
     }
 
     @Override
     public final String toString() {
-        // make sure toString() is without side-effects!
-        return String.format("ManagedObject(%s, spec=%s, pojo=%s)",
-                getSpecialization().name(),
-                getSpecification(),
-                !getSpecialization().getPojoPolicy().isRefetchable()
-                    ? getPojo() // its safe to get pojo side-effect free
-                    : isBookmarkMemoized()
-                        ? String.format("(refetchable, %s)", sideEffectFreeBookmark())
-                        : "(refetchable, suppressed to not cause side effects)");
-    }
-
-    // -- HELPER
-
-    private Bookmark sideEffectFreeBookmark() {
-        _Assert.assertTrue(isBookmarkMemoized());
-        return getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach);
+        return _Compliance.toString(this);
     }
 
 }

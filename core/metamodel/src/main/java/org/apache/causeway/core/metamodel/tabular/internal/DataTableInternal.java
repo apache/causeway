@@ -453,7 +453,7 @@ implements DataTableInteractive {
             var dataTableInteractive = new DataTableInternal(managedMember, where,
                     dataTable.streamDataElements()
                     .peek(obj->{
-                        if(obj.getSpecialization().isViewmodel()) {
+                        if(obj.specialization().isViewmodel()) {
                             // make sure any referenced entities are made live if currently hollow
                             ManagedObjects.refreshViewmodel(obj, /*bookmark supplier*/ null);
                         }

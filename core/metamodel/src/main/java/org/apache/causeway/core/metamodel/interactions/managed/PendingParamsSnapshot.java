@@ -145,7 +145,7 @@ public class PendingParamsSnapshot implements Serializable {
                                 paramModel.getMetaModel().getFeatureIdentifier()));
                 if(isPlural) {
                     cardinalityConstraints[paramModel.paramIndex()] =
-                            Objects.requireNonNull(((PackedManagedObject)paramValue).getLogicalType());
+                            Objects.requireNonNull(paramValue.logicalType());
                 }
             }
             return isPlural

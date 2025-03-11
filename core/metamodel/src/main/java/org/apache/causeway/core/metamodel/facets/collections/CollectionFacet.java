@@ -104,7 +104,7 @@ public interface CollectionFacet extends Facet {
 
     public static Optional<CollectionFacet> lookup(final @Nullable ManagedObject container) {
         return container!=null
-            ? container.getSpecification().lookupFacet(CollectionFacet.class)
+            ? container.objSpec().lookupFacet(CollectionFacet.class)
             : Optional.empty();
     }
 

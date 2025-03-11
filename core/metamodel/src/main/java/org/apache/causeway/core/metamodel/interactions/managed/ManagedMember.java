@@ -156,7 +156,7 @@ implements ManagedFeature {
             final Identifier.@NonNull Type memberType,
             final @NonNull String memberId) {
 
-        var onwerSpec = owner.getSpecification();
+        var onwerSpec = owner.objSpec();
         switch (memberType) {
         case ACTION:     return _Casts.uncheckedCast(onwerSpec.getAction(memberId));
         case PROPERTY:   return _Casts.uncheckedCast(onwerSpec.getProperty(memberId));

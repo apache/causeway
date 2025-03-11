@@ -192,7 +192,7 @@ class MediatorFactory {
             final @NonNull MetaModelContext mmc,
             final @NonNull ManagedObject resultAdapter) {
 
-        if (resultAdapter.getSpecification().isSingular()) return resultAdapter;
+        if (resultAdapter.objSpec().isSingular()) return resultAdapter;
 
         // will only be a single element
         final Object pojo = _NullSafe

@@ -195,7 +195,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
                 .streamRegisteredBeans()
                 .map(this::toManagedObject)
                 .collect(Collectors.toMap(
-                        service->service.getSpecification().logicalTypeName(),
+                        service->service.objSpec().logicalTypeName(),
                         v->v,
                         (o,n)->n,
                         LinkedHashMap::new));

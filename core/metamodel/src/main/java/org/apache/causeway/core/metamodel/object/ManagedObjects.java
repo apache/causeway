@@ -58,8 +58,8 @@ public final class ManagedObjects {
     public boolean isNullOrUnspecifiedOrEmpty(final @Nullable ManagedObject adapter) {
         if(adapter==null
                 || adapter==ManagedObject.unspecified()
-                || adapter.getSpecialization()==null
-                || adapter.getSpecialization().isEmpty()) {
+                || adapter.specialization()==null
+                || adapter.specialization().isEmpty()) {
             return true;
         }
         if(adapter instanceof PackedManagedObject) {
@@ -108,7 +108,7 @@ public final class ManagedObjects {
      */
     public Optional<ManagedObject> asScalar(final @Nullable ManagedObject adapter) {
         return asSpecified(adapter)
-                .filter(obj->!obj.getSpecialization().isPacked());
+                .filter(obj->!obj.specialization().isPacked());
     }
 
     /**
@@ -118,7 +118,7 @@ public final class ManagedObjects {
      */
     public Optional<ManagedObject> asScalarNonEmpty(final @Nullable ManagedObject adapter) {
         return asScalar(adapter)
-                .filter(obj->!obj.getSpecialization().isEmpty());
+                .filter(obj->!obj.specialization().isEmpty());
     }
 
     /**
@@ -172,14 +172,14 @@ public final class ManagedObjects {
             return ((PackedManagedObject)object).unpack().stream()
             .allMatch(element->isInstanceOf(element, elementType));
         }
-        var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+        var objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().getCorrespondingClass());
         return upperBound.isAssignableFrom(objectActualType);
     }
 
     // -- IDENTIFICATION
 
     public Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
-        return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
+        return isSpecified(managedObject) ? Optional.of(managedObject.objSpec()) : Optional.empty();
     }
 
     public Optional<Bookmark> bookmark(final @Nullable ManagedObject managedObject) {
@@ -240,7 +240,7 @@ public final class ManagedObjects {
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseGet(()->isSpecified(managedObject)
-                        ? managedObject.getSpecification().logicalTypeName() + separator + "?"
+                        ? managedObject.objSpec().logicalTypeName() + separator + "?"
                         : "?" + separator + "?");
     }
 
@@ -396,7 +396,7 @@ public final class ManagedObjects {
             return Try.success(null);
         }
 
-        var mmc = object.getSpecification().getMetaModelContext();
+        var mmc = object.objSpec().getMetaModelContext();
 
         var result =  Try.call(()->{
             final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), object);

@@ -106,7 +106,7 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
                 //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
-                && propertyOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                && propertyOwner.objSpec().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
             var compositeValueNullable = prop.get(propertyOwner);
             var compositeValue =
@@ -144,7 +144,7 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
                 //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
-                && actionOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                && actionOwner.objSpec().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
             var compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
             var compositeValue =

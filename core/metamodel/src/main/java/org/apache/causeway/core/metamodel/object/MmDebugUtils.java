@@ -92,7 +92,7 @@ public record MmDebugUtils() {
     private static String formatPendingValue(final @Nullable ManagedObject managedObject) {
         return ManagedObjects.isSpecified(managedObject)
                 ? String.format("(%s,cls=%s) pojo=%s",
-                    managedObject.getSpecialization().name(),
+                    managedObject.specialization().name(),
                     managedObject.getCorrespondingClass().getName(),
                     ""+managedObject.getPojo())
                 : "(unspecified) pojo=null";

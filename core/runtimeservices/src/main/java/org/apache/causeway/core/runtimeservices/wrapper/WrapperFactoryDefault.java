@@ -283,7 +283,7 @@ implements WrapperFactory, HasMetaModelContext {
             final AsyncControl<R> asyncControl) {
 
         var targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
-        if(targetAdapter.getSpecification().isMixin()) {
+        if(targetAdapter.objSpec().isMixin()) {
             throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
@@ -435,7 +435,7 @@ implements WrapperFactory, HasMetaModelContext {
             final ResolvedMethod method,
             final ManagedObject targetAdapter) {
 
-        var objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
+        var objectMember = targetAdapter.objSpec().getMember(method).orElse(null);
         if(objectMember == null) {
             return MemberAndTarget.notFound();
         }
@@ -457,7 +457,7 @@ implements WrapperFactory, HasMetaModelContext {
             final T mixee,
             final ManagedObject mixinAdapter) {
 
-        var mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
+        var mixinMember = mixinAdapter.objSpec().getMember(method).orElse(null);
         if (mixinMember == null) {
             return MemberAndTarget.notFound();
         }
@@ -560,7 +560,7 @@ implements WrapperFactory, HasMetaModelContext {
 
         var adapter = getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || !adapter.getSpecification().getBeanSort().policy().isWrappingSupported()) {
+                || !adapter.objSpec().getBeanSort().policy().isWrappingSupported()) {
             throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
                     domainObject.getClass().getName());
         }

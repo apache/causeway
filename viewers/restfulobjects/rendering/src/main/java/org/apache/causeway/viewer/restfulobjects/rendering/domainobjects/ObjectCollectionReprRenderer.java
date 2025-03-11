@@ -161,7 +161,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         }
         final JsonRepresentation link =
                 CollectionDescriptionReprRenderer
-                .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+                .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

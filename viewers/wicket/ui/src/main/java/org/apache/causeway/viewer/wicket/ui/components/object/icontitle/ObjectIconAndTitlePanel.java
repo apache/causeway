@@ -224,8 +224,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         return this.cachedTitle = TitleRecord.builder()
                 .fullTitle(fullTitle)
                 .abbreviatedTitle(titleAbbreviated(fullTitle))
-                .tooltipTitle(_Strings.nullToEmpty(linkedDomainObject.getSpecification().getSingularName()))
-                .tooltipBody(_Strings.nonEmpty(linkedDomainObject.getSpecification().getDescription())
+                .tooltipTitle(_Strings.nullToEmpty(linkedDomainObject.objSpec().getSingularName()))
+                .tooltipBody(_Strings.nonEmpty(linkedDomainObject.objSpec().getDescription())
                         .orElseGet(()->fullTitle))
                 .build();
     }
@@ -268,7 +268,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 ()->String.format("model for EntityIconAndTitlePanel, "
                         + "when non-empty, must not represent abstract types; "
                         + "however, got an abstract %s for object of type %s",
-                        obj.getSpecification(),
+                        obj.objSpec(),
                         obj.getPojo().getClass().getName()));
     }
 
@@ -278,7 +278,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
                 || ManagedObjects.isPacked(obj)) {
             return false;
         }
-        return obj.getSpecification().isAbstract();
+        return obj.objSpec().isAbstract();
     }
 
 }

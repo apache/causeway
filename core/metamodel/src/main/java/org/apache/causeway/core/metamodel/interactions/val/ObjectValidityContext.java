@@ -49,7 +49,7 @@ public record ObjectValidityContext(
         this(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.regular(targetAdapter),
                 identifier,
-                ()->targetAdapter.getSpecification().getSingularName(),
+                ()->targetAdapter.objSpec().getSingularName(),
                 initiatedBy);
     }
 

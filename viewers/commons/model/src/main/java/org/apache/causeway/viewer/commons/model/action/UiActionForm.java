@@ -60,7 +60,7 @@ extends
         }
 
         // check whether action owner type is hidden
-        if (getActionOwner().getSpecification().isHidden()) {
+        if (getActionOwner().objSpec().isHidden()) {
             return Veto.DEFAULT;
         }
 

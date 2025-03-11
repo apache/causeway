@@ -75,7 +75,7 @@ class JpaNonGeneratedStringIdEntityLifecycleTest {
         var entity = objectManager.adapt(
                 repository.detachedEntity(new JpaEntityNonGeneratedStringId("test")));
 
-        assertTrue(entity.getSpecification().isEntity());
+        assertTrue(entity.objSpec().isEntity());
         assertEquals(
                 EntityState.TRANSIENT_OR_REMOVED,
                 MmEntityUtils.getEntityState(entity));

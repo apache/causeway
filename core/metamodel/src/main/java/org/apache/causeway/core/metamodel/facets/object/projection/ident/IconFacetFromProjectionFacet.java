@@ -43,7 +43,7 @@ extends IconFacetAbstract {
     @Override
     public String iconName(final ManagedObject targetAdapter) {
         var projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.getSpecification().getIconName(projectedAdapter);
+        return projectedAdapter.objSpec().getIconName(projectedAdapter);
     }
 
     @Override

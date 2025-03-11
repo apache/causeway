@@ -37,9 +37,9 @@ final class _InternalTitleUtil {
 
         var managedObject = titleRenderRequest.object();
 
-        if(managedObject.getSpecialization().isUnspecified()) return managedObject.getTitle();
+        if(managedObject.specialization().isUnspecified()) return managedObject.getTitle();
 
-        var objSpec = managedObject.getSpecification();
+        var objSpec = managedObject.objSpec();
 
         return objSpec.isSingular()
             ? objectTitleString(titleRenderRequest)
@@ -61,13 +61,13 @@ final class _InternalTitleUtil {
         //TODO we have value-semantics now, don't skip it for strings
         if (managedObject.getPojo() instanceof String) return (String) managedObject.getPojo();
 
-        var spec = managedObject.getSpecification();
+        var spec = managedObject.objSpec();
         return Optional.ofNullable(spec.getTitle(titleRenderRequest))
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
     private String getDefaultTitle(final ManagedObject managedObject) {
-        return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
+        return "A" + (" " + managedObject.objSpec().getSingularName()).toLowerCase();
     }
 
     private String formatAnyCardinalityAsTitle(final @NonNull ObjectSpecification objSpec, final @NonNull ManagedObject managedObject) {

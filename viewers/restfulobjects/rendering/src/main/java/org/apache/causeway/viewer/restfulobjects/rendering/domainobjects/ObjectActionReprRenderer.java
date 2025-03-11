@@ -145,8 +145,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPutInt("num", paramMeta.getParameterIndex());
         paramRep.mapPutString("id", paramMeta.getId());
-        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter.asSupplier()));
-        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter.asSupplier()));
+        paramRep.mapPutString("name", paramMeta.getFriendlyName(objectAdapter));
+        paramRep.mapPut("description", paramMeta.getDescription(objectAdapter));
         final Object paramChoices = choicesFor(paramMod, paramNeg);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);
@@ -195,7 +195,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         if(resourceContext.config().isSuppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

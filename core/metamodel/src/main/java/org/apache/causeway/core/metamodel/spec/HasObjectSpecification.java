@@ -20,41 +20,43 @@ package org.apache.causeway.core.metamodel.spec;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Introduced as a shortcut provider.
  */
 public interface HasObjectSpecification {
 
-    ObjectSpecification getSpecification();
+    @Deprecated default ObjectSpecification getSpecification() { return objSpec(); }
+
+    ObjectSpecification objSpec();
 
     // -- SHORTCUTS
 
     default Class<?> getCorrespondingClass() {
-        return getSpecification().getCorrespondingClass();
+        return objSpec().getCorrespondingClass();
     }
 
-    default LogicalType getLogicalType() {
-        return getSpecification().logicalType();
+    default LogicalType logicalType() {
+        return objSpec().logicalType();
     }
 
-    default String getLogicalTypeName() {
-        return getSpecification().logicalTypeName();
+    default String logicalTypeName() {
+        return objSpec().logicalTypeName();
     }
 
     /**
      * As used for the element type of collections.
      */
     default Optional<ObjectSpecification> getElementSpecification() {
-        return getSpecification().getElementSpecification();
+        return objSpec().getElementSpecification();
     }
 
     default Bookmark createBookmark(final @NonNull String urlSafeIdentifier) {
-        return Bookmark.forLogicalTypeAndIdentifier(getLogicalType(), urlSafeIdentifier);
+        return Bookmark.forLogicalTypeAndIdentifier(logicalType(), urlSafeIdentifier);
     }
 
 }

@@ -58,7 +58,7 @@ final class _Utils {
 
         var objectManager = mmc.getObjectManager();
         var entity = objectManager.adapt(entityPojo);
-        _Assert.assertTrue(entity.getSpecification().isEntity());
+        _Assert.assertTrue(entity.objSpec().isEntity());
         return entity;
     }
 

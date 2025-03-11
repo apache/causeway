@@ -128,7 +128,7 @@ public record ObjectManager(
      */
     public Bookmark bookmark(final @NonNull ManagedObject managedObj) {
         return ManagedObjects.bookmark(managedObj)
-                .orElseGet(()->Bookmark.empty(managedObj.getLogicalType()));
+                .orElseGet(()->Bookmark.empty(managedObj.logicalType()));
     }
     /**
      * Introduced for de-serializing action parameter values from bookmarks and vice versa.
@@ -148,7 +148,7 @@ public record ObjectManager(
     public ManagedObject loadObjectElseFail(final @NonNull Bookmark bookmark) {
         var adapter = loadObject(bookmark)
                 .orElseThrow(() -> new BookmarkNotFoundException(String.format("Bookmark %s was not found.", bookmark)));
-        if(adapter.getSpecialization().isEntity()) {
+        if(adapter.specialization().isEntity()) {
             _Assert.assertEquals(bookmark, adapter.getBookmark().orElse(null),
                     ()->"object loaded from bookmark must itself return an equal bookmark");
         }
@@ -238,7 +238,7 @@ public record ObjectManager(
     public ObjectMemento mementifyElseFail(final @NonNull ManagedObject object) {
         return object.getMemento()
                 .orElseThrow(()->
-                    _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
+                    _Exceptions.unrecoverable("failed to create memento for  %s", object.objSpec()));
     }
 
     public ManagedObject demementify(final @Nullable ObjectMemento memento) {

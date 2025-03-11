@@ -127,7 +127,7 @@ extends ViewModelFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        var viewmodelSpec = viewModel.getSpecification();
+        var viewmodelSpec = viewModel.objSpec();
 
         streamPersistableProperties(viewmodelSpec)
         .forEach(property->{
