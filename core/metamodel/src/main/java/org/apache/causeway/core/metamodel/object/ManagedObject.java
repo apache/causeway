@@ -407,7 +407,7 @@ extends
      * @see ManagedObject.Specialization.PojoPolicy#NO_POJO
      */
     static ManagedObject empty(final @NonNull ObjectSpecification spec) {
-        return new _ManagedObjectEmpty(spec);
+        return new ManagedObjectEmpty(spec);
     }
     /**
      * VALUE

@@ -18,19 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#EMPTY}
  * @see ManagedObject.Specialization#EMPTY
  */
-final class _ManagedObjectEmpty
-extends _ManagedObjectSpecified
-implements Bookmarkable.NoBookmark {
+record ManagedObjectEmpty(
+    @NonNull ObjectSpecification objSpec)
+implements ManagedObject, Bookmarkable.NoBookmark {
 
-    _ManagedObjectEmpty(
-            final ObjectSpecification spec) {
-        super(ManagedObject.Specialization.EMPTY, spec);
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.EMPTY;
     }
 
     @Override
@@ -41,6 +43,13 @@ implements Bookmarkable.NoBookmark {
     @Override
     public String getTitle() {
         return "empty " + objSpec().logicalTypeName();
+    }
+
+    // -- HELPER
+
+    @Override
+    public <T> T assertCompliance(@NonNull final T pojo) {
+        return null; // no-op
     }
 
 }
