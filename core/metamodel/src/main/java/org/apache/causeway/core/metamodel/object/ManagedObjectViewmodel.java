@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -30,42 +31,76 @@ import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
+import org.apache.causeway.commons.internal.ref.TransientObjectRef;
+import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#VIEWMODEL}
  * @see ManagedObject.Specialization#VIEWMODEL
  */
-final class _ManagedObjectViewmodel
-extends _ManagedObjectSpecified
+record ManagedObjectViewmodel(
+    @NonNull ObjectSpecification objSpec,
+    @NonNull TransientObjectRef<Object> pojoRef,
+    @NonNull TransientObjectRef<TransactionId> txIdDuringWhichRefreshed,
+    @NonNull _Lazy<Bookmark> bookmarkLazy)
 implements
+    ManagedObject,
     Bookmarkable.BookmarkRefreshable,
     _RefreshableViewmodel {
 
-    @Getter(onMethod_ = {@Override})
-    @Nullable private /*final*/ Object pojo;
-
-    protected final _Lazy<Optional<Bookmark>> bookmarkLazy =
-            _Lazy.threadSafe(()->createBookmark());
-
-    _ManagedObjectViewmodel(
-            final ObjectSpecification spec,
+    ManagedObjectViewmodel(
+            final ObjectSpecification objSpec,
             final Object pojo,
             final Optional<Bookmark> bookmarkIfKnown) {
-        super(ManagedObject.Specialization.VIEWMODEL, spec);
-        _Assert.assertTrue(spec.isViewModel());
-        this.pojo = assertCompliance(pojo);
-        if(bookmarkIfKnown.isPresent()) {
-            this.bookmarkLazy.set(bookmarkIfKnown);
-        }
+
+        this(
+            objSpec,
+            new TransientObjectRef<>(pojo),
+            new TransientObjectRef<TransactionId>(null),
+            null);
+        bookmarkIfKnown.ifPresent(bookmarkLazy::set);
+    }
+
+    // canonical constructor
+    ManagedObjectViewmodel(
+        final ObjectSpecification objSpec,
+        final TransientObjectRef<Object> pojoRef,
+        final TransientObjectRef<TransactionId> txIdDuringWhichRefreshed,
+        final _Lazy<Bookmark> bookmarkLazy) {
+        _Assert.assertTrue(objSpec.isViewModel());
+        _Compliance.assertCompliance(objSpec, specialization(), pojoRef.getObject());
+        this.objSpec = objSpec;
+        this.pojoRef = pojoRef;
+        this.txIdDuringWhichRefreshed = txIdDuringWhichRefreshed;
+        this.bookmarkLazy = _Lazy.threadSafe(()->objSpec.viewmodelFacetElseFail().serializeToBookmark(this));
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return ObjectMemento.singular(this);
+    }
+
+    @Override
+    public String getTitle() {
+        return _InternalTitleUtil.titleString(
+            TitleRenderRequest.forObject(this));
+    }
+
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.VIEWMODEL;
+    }
+
+    @Override
+    public Object getPojo() {
+        return pojoRef.getObject();
     }
 
     @Override
     public final Optional<Bookmark> getBookmark() {
-        return bookmarkLazy.get();
+        return Optional.of(bookmarkLazy.get());
     }
 
     @Override
@@ -78,21 +113,7 @@ implements
         bookmarkLazy.clear();
     }
 
-    private void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
-        final Bookmark old = bookmarkLazy.isMemoized()
-                ? bookmarkLazy.get().orElse(null)
-                : null;
-        bookmarkLazy.clear();
-        bookmarkLazy.set(Optional.ofNullable(replacer.apply(old)));
-    }
-
-    private Optional<Bookmark> createBookmark() {
-        return Optional.ofNullable(objSpec().viewmodelFacetElseFail().serializeToBookmark(this));
-    }
-
     // -- REFRESH OPTIMIZATION
-
-    private TransactionId txIdDuringWhichRefreshed = null;
 
     @Override
     public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
@@ -114,13 +135,40 @@ implements
         }
     }
 
+    // -- OBJECT CONTRACT
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return obj instanceof ManagedObjectViewmodel other
+            ? Objects.equals(this.objSpec().logicalTypeName(), other.objSpec().logicalTypeName())
+                && Objects.equals(this.getPojo(), other.getPojo())
+            : false;
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hash(objSpec().logicalTypeName(), getPojo());
+    }
+
+    @Override
+    public final String toString() {
+        return "ManagedObjectViewmodel[logicalTypeName=%s]".formatted(objSpec().logicalTypeName());
+    }
+
     // -- HELPER
 
+    private void replaceBookmark(final UnaryOperator<Bookmark> replacer) {
+        final Bookmark old = bookmarkLazy.isMemoized()
+                ? bookmarkLazy.get()
+                : null;
+        bookmarkLazy.clear();
+        bookmarkLazy.set(replacer.apply(old));
+    }
+
     private boolean shouldRefresh(final @NonNull TransactionId transactionId) {
-        if(Objects.equals(this.txIdDuringWhichRefreshed, transactionId)) {
-            return false; // already refreshed within current transaction
-        }
-        this.txIdDuringWhichRefreshed = transactionId;
+        // if already refreshed within current transaction, skip
+        if(Objects.equals(this.txIdDuringWhichRefreshed.getObject(), transactionId)) return false;
+        this.txIdDuringWhichRefreshed.setObject(transactionId);
         return true;
     }
 
@@ -151,7 +199,7 @@ implements
     }
 
     private void replacePojo(final UnaryOperator<Object> replacer) {
-        pojo = assertCompliance(replacer.apply(pojo));
+        pojoRef.update(pojo->_Compliance.assertCompliance(objSpec, specialization(), replacer.apply(pojo)));
     }
 
 }

@@ -29,7 +29,7 @@ import org.jspecify.annotations.NonNull;
  * @see ManagedObject.Specialization#ENTITY
  */
 final class _ManagedObjectEntityRemoved
-extends _ManagedObjectSpecified
+extends _ManagedObjectEntityAbstract
 implements Bookmarkable.NoBookmark {
 
     _ManagedObjectEntityRemoved(

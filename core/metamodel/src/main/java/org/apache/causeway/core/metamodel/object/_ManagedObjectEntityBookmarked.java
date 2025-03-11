@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 final class _ManagedObjectEntityBookmarked
-extends _ManagedObjectSpecified
+extends _ManagedObjectEntityAbstract
 implements _Refetchable {
 
     private /*final*/ @Nullable Object pojo;

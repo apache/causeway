@@ -20,6 +20,7 @@ package org.apache.causeway.commons.internal.ref;
 
 import java.io.Serializable;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.Nullable;
 
@@ -39,6 +40,16 @@ public final class TransientObjectRef<T> implements Serializable {
         return object!=null
             ? object
             : (this.object = supplier.get());
+    }
+
+    public T update(final UnaryOperator<T> updater) {
+        setObject(updater.apply(object));
+        return object;
+    }
+
+    @Override
+    public String toString() {
+        return "TransientObjectRef[%s]".formatted(object!=null ? "PRESENT" : "EMPTY");
     }
 
 }

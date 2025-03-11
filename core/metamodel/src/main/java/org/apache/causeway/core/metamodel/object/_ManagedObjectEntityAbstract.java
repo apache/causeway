@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract non-sealed class _ManagedObjectSpecified
+abstract non-sealed class _ManagedObjectEntityAbstract
 implements ManagedObject {
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)

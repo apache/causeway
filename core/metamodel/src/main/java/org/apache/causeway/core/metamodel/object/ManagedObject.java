@@ -62,7 +62,8 @@ permits
     ManagedObjectOther,
     ManagedObjectValue,
     ManagedObjectService,
-    _ManagedObjectSpecified,
+    ManagedObjectViewmodel,
+    _ManagedObjectEntityAbstract,
     PackedManagedObject {
 
     /**
@@ -452,7 +453,7 @@ permits
             final @Nullable Object pojo,
             final Optional<Bookmark> bookmarkIfKnown) {
         return pojo != null
-                ? new _ManagedObjectViewmodel(spec, pojo, bookmarkIfKnown)
+                ? new ManagedObjectViewmodel(spec, pojo, bookmarkIfKnown)
                 : empty(spec);
     }
     /**

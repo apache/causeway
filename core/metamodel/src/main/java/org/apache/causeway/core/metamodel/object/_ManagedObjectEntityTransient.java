@@ -33,7 +33,7 @@ import lombok.experimental.Accessors;
  * @see ManagedObject.Specialization#ENTITY
  */
 final class _ManagedObjectEntityTransient
-extends _ManagedObjectSpecified
+extends _ManagedObjectEntityAbstract
 implements Bookmarkable.NoBookmark, _Refetchable {
 
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
