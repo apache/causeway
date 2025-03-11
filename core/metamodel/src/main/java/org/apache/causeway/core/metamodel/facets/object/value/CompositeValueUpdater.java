@@ -68,7 +68,6 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
     // -- OBJECT ACTION MOCKUP
 
-    @Override default String getId() { return "delegatedCompositeValueUpdaterAction"; }
     @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
     @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
     @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
@@ -78,6 +77,11 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
             final InteractionHead head, final Can<ManagedObject> parameters,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return map(simpleExecute(head, parameters));
+    }
+    @Override default ManagedObject executeWithRuleChecking(
+        final InteractionHead head, final Can<ManagedObject> parameters,
+        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
+        return execute(head, parameters, interactionInitiatedBy);
     }
 
     // -- IMPLEMENTATIONS

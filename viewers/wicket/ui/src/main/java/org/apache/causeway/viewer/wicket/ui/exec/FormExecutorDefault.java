@@ -104,7 +104,7 @@ public record FormExecutorDefault(
             // negotiation model (instead of redirecting to a new page)
             if(formExecutorContext.getAssociatedParameter().isPresent()) {
                 formExecutorContext.getAssociatedParameter().get()
-                .setValue(resultAdapter);
+                    .setValue(resultAdapter);
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 
