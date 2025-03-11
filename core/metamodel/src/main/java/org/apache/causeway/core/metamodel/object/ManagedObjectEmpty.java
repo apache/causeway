@@ -45,11 +45,4 @@ implements ManagedObject, Bookmarkable.NoBookmark {
         return "empty " + objSpec().logicalTypeName();
     }
 
-    // -- HELPER
-
-    @Override
-    public <T> T assertCompliance(@NonNull final T pojo) {
-        return null; // no-op
-    }
-
 }

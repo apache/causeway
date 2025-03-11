@@ -91,10 +91,10 @@ class ManagedObjectTest {
         var presentObject = ManagedObject.adaptSingular(specLoader, 3);
         assertEquals(Specialization.VALUE, presentObject.specialization());
 
-        presentObject.assertCompliance(6);
+        _Compliance.assertCompliance(presentObject.objSpec(), presentObject.specialization(), 6);
 
         assertThrows(AssertionError.class, ()->{
-            presentObject.assertCompliance("incompatible");
+            _Compliance.assertCompliance(presentObject.objSpec(), presentObject.specialization(), "incompatible");
         });
     }
 
@@ -120,7 +120,7 @@ class ManagedObjectTest {
         var presentObject = ManagedObject.adaptSingular(specLoader, pojo);
         assertEquals(Specialization.VIEWMODEL, presentObject.specialization());
 
-        presentObject.assertCompliance(pojo);
+        _Compliance.assertCompliance(presentObject.objSpec(), presentObject.specialization(), pojo);
 
         //TODO
 //        assertThrows(AssertionError.class, ()->{

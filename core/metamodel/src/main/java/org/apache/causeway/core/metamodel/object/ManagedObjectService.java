@@ -45,7 +45,7 @@ implements ManagedObject {
         final Object pojo) {
         this(objSpec, pojo, Bookmark.forLogicalTypeAndIdentifier(objSpec.logicalType(), "1"));
         assertInjectable(objSpec);
-        assertCompliance(pojo);
+        _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
     @Override
@@ -102,11 +102,6 @@ implements ManagedObject {
         _Assert.assertTrue(spec.isInjectable(),
                 ()->"type %s must be injectable to be considered a service; bean-sort: %s"
                         .formatted(pojo.getClass(), spec.getBeanSort()));
-    }
-
-    @Override
-    public <T> T assertCompliance(@NonNull final T pojo) {
-        return _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
 }

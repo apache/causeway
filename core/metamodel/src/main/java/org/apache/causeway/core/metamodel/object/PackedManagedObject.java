@@ -18,15 +18,72 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
  * 'Collection' of {@link ManagedObject}s.
  * @see ManagedObject.Specialization#PACKED
  */
-public interface PackedManagedObject
-extends ManagedObject {
+public record PackedManagedObject(
+    /** element spec */
+    @NonNull ObjectSpecification objSpec,
+    @NonNull Can<ManagedObject> nonScalar)
+implements
+    ManagedObject, Bookmarkable.NoBookmark {
 
-    Can<ManagedObject> unpack();
+    public PackedManagedObject(
+            final ObjectSpecification objSpec,
+            final @Nullable Can<ManagedObject> nonScalar) {
+        this.objSpec = objSpec;
+        this.nonScalar = nonScalar!=null
+                ? nonScalar
+                : Can.empty();
+        _Assert.assertTrue(objSpec().isSingular(), "a PackedManagedObject cannot containt non-scalars");
+    }
+
+    @Override
+    public String getTitle() {
+        return nonScalar.stream()
+                    .map(ManagedObject::getTitle)
+                    .collect(Collectors.joining(","));
+    }
+
+    @Override
+    public Object getPojo() {
+        // this algorithm preserves null pojos ...
+        return nonScalar.stream()
+                .map(ManagedObject::getPojo)
+                .toList();
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        var listOfMementos = nonScalar.stream()
+            .map(scalar->scalar.getMementoElseFail())
+            .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
+        var memento = ObjectMemento.packed(
+            logicalType(),
+            listOfMementos);
+        return Optional.of(memento);
+    }
+
+    public Can<ManagedObject> unpack(){
+        return nonScalar;
+    }
+
+    @Override
+    public Specialization specialization() {
+        return Specialization.PACKED;
+    }
 
 }

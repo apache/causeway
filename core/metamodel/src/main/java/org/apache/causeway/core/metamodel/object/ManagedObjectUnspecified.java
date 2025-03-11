@@ -47,11 +47,6 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     }
 
     @Override
-    public <T> T assertCompliance(final T pojo) {
-        return pojo; // no-op
-    }
-
-    @Override
     public String getTitle() {
         return "unspecified object";
     }
@@ -68,7 +63,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
 
     @Override
     public final String toString() {
-        return "ManagedObject(UNSPECIFIED)";
+        return "ManagedObjectUnspecified";
     }
 
 }

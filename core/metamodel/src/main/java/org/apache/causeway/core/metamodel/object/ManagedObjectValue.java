@@ -47,7 +47,7 @@ implements ManagedObject {
             final Object pojo) {
         this(objSpec, pojo, _Lazy.threadSafe(()->createBookmark(objSpec, pojo)));
         _Assert.assertTrue(objSpec.isValue());
-        assertCompliance(pojo);
+        _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
     @Override
@@ -104,11 +104,6 @@ implements ManagedObject {
         String urlSafeIdentifier = objSpec.valueFacetElseFail()
             .enstring(Format.URL_SAFE, _Casts.uncheckedCast(pojo));
         return Bookmark.forLogicalTypeAndIdentifier(objSpec.logicalType(), urlSafeIdentifier);
-    }
-
-    @Override
-    public <T> T assertCompliance(@NonNull final T pojo) {
-        return _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
 }

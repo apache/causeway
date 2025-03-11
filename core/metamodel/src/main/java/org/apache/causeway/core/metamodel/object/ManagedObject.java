@@ -32,7 +32,6 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization.BookmarkPolicy;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -51,11 +50,20 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}}
  *
  */
-public interface ManagedObject
+public sealed interface ManagedObject
 extends
     Bookmarkable,
     HasMetaModelContext,
-    HasObjectSpecification {
+    HasObjectSpecification
+permits
+    ManagedObjectEmpty,
+    ManagedObjectUnspecified,
+    ManagedObjectMixin,
+    ManagedObjectOther,
+    ManagedObjectValue,
+    ManagedObjectService,
+    _ManagedObjectSpecified,
+    PackedManagedObject {
 
     /**
      * ManagedObject specializations have varying contract/behavior.
@@ -319,7 +327,7 @@ extends
 
     @Deprecated default Specialization getSpecialization() { return specialization(); }
 
-    @Override default BookmarkPolicy getBookmarkPolicy() {
+    @Override default Specialization.BookmarkPolicy getBookmarkPolicy() {
         return specialization().getBookmarkPolicy();
     }
 
@@ -338,12 +346,6 @@ extends
     default EntityState getEntityState() {
         return EntityState.NOT_PERSISTABLE;
     }
-
-    /**
-     * Unary operator asserting that {@code pojo} and {@link #objSpec()} are
-     * compliant with the policies from {@link #specialization()}.
-     */
-    <T> T assertCompliance(@NonNull T pojo);
 
     // -- TITLE
 
@@ -531,7 +533,7 @@ extends
     static PackedManagedObject packed(
             final @NonNull ObjectSpecification elementSpec,
             final @Nullable Can<ManagedObject> nonScalar) {
-        return new _ManagedObjectPacked(elementSpec, nonScalar);
+        return new PackedManagedObject(elementSpec, nonScalar);
     }
 
     /**

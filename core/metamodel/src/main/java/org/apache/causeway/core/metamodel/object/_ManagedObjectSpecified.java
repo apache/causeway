@@ -18,10 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -35,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-abstract class _ManagedObjectSpecified
+abstract non-sealed class _ManagedObjectSpecified
 implements ManagedObject {
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
@@ -44,8 +41,7 @@ implements ManagedObject {
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
     private final @NonNull ObjectSpecification objSpec;
 
-    @Override
-    public final <T> T assertCompliance(final @NonNull T pojo) {
+    final <T> T assertCompliance(final @NonNull T pojo) {
         return _Compliance.assertCompliance(objSpec, specialization, pojo);
     }
 
@@ -57,9 +53,7 @@ implements ManagedObject {
 
     @Override
     public Optional<ObjectMemento> getMemento() {
-        return this instanceof PackedManagedObject
-                ? Optional.ofNullable(mementoForPacked((PackedManagedObject)this))
-                : Optional.ofNullable(mementoForScalar(this));
+        return Optional.ofNullable(mementoForScalar(this));
     }
 
     private ObjectMemento mementoForScalar(final @Nullable ManagedObject adapter) {
@@ -69,15 +63,6 @@ implements ManagedObject {
                     ManagedObjects.isSpecified(adapter)
                         ? ObjectMemento.empty(adapter.logicalType())
                         : null);
-    }
-
-    private ObjectMemento mementoForPacked(final @NonNull PackedManagedObject packedAdapter) {
-        var listOfMementos = packedAdapter.unpack().stream()
-                .map(this::mementoForScalar)
-                .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
-        return ObjectMemento.packed(
-                packedAdapter.logicalType(),
-                listOfMementos);
     }
 
     @Override

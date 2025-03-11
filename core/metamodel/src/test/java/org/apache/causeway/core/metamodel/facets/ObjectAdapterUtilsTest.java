@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -29,8 +28,7 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 class ObjectAdapterUtilsTest {
 
-    private ManagedObject mockObjectAdapter = Mockito.mock(ManagedObject.class);
-    private Object underlyingDomainObject;
+    Mocking mocking = new Mocking();
 
     @Test
     void unwrapObjectWhenNull() {
@@ -39,9 +37,8 @@ class ObjectAdapterUtilsTest {
 
     @Test
     void unwrapObjectWhenNotNull() {
-        underlyingDomainObject = new Object();
-        expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals(underlyingDomainObject, MmUnwrapUtils.single(mockObjectAdapter));
+        var mo = mocking.asValue(new Object());
+        assertEquals(mo.getPojo(), MmUnwrapUtils.single(mo));
     }
 
     @Test
@@ -51,20 +48,14 @@ class ObjectAdapterUtilsTest {
 
     @Test
     void unwrapStringWhenNotNullButNotString() {
-        underlyingDomainObject = new Object();
-        expectAdapterWillReturn(underlyingDomainObject);
-        assertNull(MmUnwrapUtils.singleAsStringOrElse(mockObjectAdapter, null));
+        var mo = mocking.asValue(new Object());
+        assertNull(MmUnwrapUtils.singleAsStringOrElse(mo, null));
     }
 
     @Test
     void unwrapStringWhenNotNullAndString() {
-        underlyingDomainObject = "huzzah";
-        expectAdapterWillReturn(underlyingDomainObject);
-        assertEquals("huzzah", MmUnwrapUtils.singleAsStringOrElse(mockObjectAdapter, null));
-    }
-
-    private void expectAdapterWillReturn(final Object domainObject) {
-        Mockito.when(mockObjectAdapter.getPojo()).thenReturn(domainObject);
+        var mo = mocking.asValue("huzzah");
+        assertEquals("huzzah", MmUnwrapUtils.singleAsStringOrElse(mo, null));
     }
 
 }

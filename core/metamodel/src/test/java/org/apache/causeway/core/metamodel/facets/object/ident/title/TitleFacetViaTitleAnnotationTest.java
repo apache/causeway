@@ -29,14 +29,14 @@ import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 class TitleFacetViaTitleAnnotationTest {
 
+    private Mocking mocking = new Mocking();
     MetaModelContext metaModelContext;
     FacetHolder mockFacetHolder;
-    ManagedObject mockManagedObject;
 
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
         @Title
@@ -58,7 +58,6 @@ class TitleFacetViaTitleAnnotationTest {
                 .build();
 
         mockFacetHolder = Mockito.mock(FacetHolder.class);
-        mockManagedObject = Mockito.mock(ManagedObject.class);
     }
 
     @Test
@@ -92,7 +91,8 @@ class TitleFacetViaTitleAnnotationTest {
                 new DomainObjectWithProblemInItsAnnotatedTitleMethod();
 
         Mockito.when(mockFacetHolder.getMetaModelContext()).thenReturn(metaModelContext);
-        Mockito.when(mockManagedObject.getPojo()).thenReturn(screwedPojo);
+
+        var mockManagedObject = mocking.asViewmodel(screwedPojo);
 
         final String title = facet.title(mockManagedObject);
         assertThat(title, is("Failed Title"));

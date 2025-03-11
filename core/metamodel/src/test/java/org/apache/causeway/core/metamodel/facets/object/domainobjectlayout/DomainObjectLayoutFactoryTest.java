@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -128,7 +126,8 @@ extends FacetFactoryTestAbstract {
 
                 var facetImpl =
                         (CssClassFacetForDomainObjectLayoutAnnotation) facet;
-                var mockAdapter = Mockito.mock(ManagedObject.class);
+                ManagedObject mockAdapter = null; // not-used
+
                 assertThat(facetImpl.cssClass(mockAdapter), is("foobar"));
 
                 assertNoMethodsRemoved();

@@ -44,6 +44,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializerDefault;
@@ -54,6 +55,7 @@ import lombok.Getter;
 
 abstract class ValueSemanticsProviderAbstractTestCase<T> {
 
+    private Mocking mocking = new Mocking();
     protected InteractionService mockInteractionService;
     protected ManagedObject mockAdapter;
     protected CausewayConfiguration causewayConfiguration;
@@ -69,7 +71,6 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
         Locale.setDefault(Locale.UK);
 
         mockInteractionService = Mockito.mock(InteractionService.class);
-        mockAdapter = Mockito.mock(ManagedObject.class);
         causewayConfiguration = new CausewayConfiguration(null, Optional.empty());
 
         metaModelContext = MetaModelContext_forTesting.builder()
@@ -79,12 +80,11 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
     }
 
     protected void allowMockAdapterToReturn(final Object pojo) {
-        Mockito.when(mockAdapter.getPojo()).thenReturn(pojo);
+        mockAdapter = mocking.asValue(pojo);
     }
 
     protected void setSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
         this.semantics = valueSemantics;
-
         this.valueSerializer = new ValueSerializerDefault<>(valueSemantics);
     }
 

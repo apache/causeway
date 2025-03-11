@@ -38,7 +38,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
             final Object pojo) {
         _Assert.assertTrue(objSpec.isMixin());
         this.objSpec = objSpec;
-        this.pojo = assertCompliance(pojo);
+        this.pojo = _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
     @Override
@@ -55,13 +55,6 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     @Override
     public Object getPojo() {
         return pojo;
-    }
-
-    // -- HELPER
-
-    @Override
-    public <T> T assertCompliance(@NonNull final T pojo) {
-        return _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
 }

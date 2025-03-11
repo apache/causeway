@@ -29,11 +29,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 class IconFacetMethodTest {
 
+    private Mocking mocking = new Mocking();
     private IconFacetViaIconNameMethod facet;
     private ManagedObject mockOwningAdapter;
 
@@ -56,8 +58,7 @@ class IconFacetMethodTest {
                 .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                 .orElse(null);
 
-        mockOwningAdapter = Mockito.mock(ManagedObject.class);
-        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
+        mockOwningAdapter = mocking.asViewmodel(pojo);
     }
 
     @AfterEach

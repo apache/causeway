@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.navparent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,11 +28,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.navparent.method.NavigableParentFacetViaMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 class NavigableParentFacetMethodTest {
 
+    private Mocking mocking = new Mocking();
     private NavigableParentFacet facet;
     private FacetHolder simpleFacetHolder;
     private ManagedObject mockOwningAdapter;
@@ -55,13 +55,12 @@ class NavigableParentFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInNavigableParentMethod();
 
-        mockOwningAdapter = Mockito.mock(ManagedObject.class);
         var navigableParentMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInNavigableParentMethod.class, "parent");
         facet = NavigableParentFacetViaMethod.create(pojo.getClass(), navigableParentMethod, simpleFacetHolder)
                 .orElse(null);
 
-        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
+        mockOwningAdapter = mocking.asViewmodel(pojo);
     }
 
     @AfterEach

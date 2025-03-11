@@ -30,11 +30,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.Mocking;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 class CssClassFacetMethodWithProblemTest {
 
+    private Mocking mocking = new Mocking();
     private CssClassFacetViaCssClassMethod facet;
     private ManagedObject mockOwningAdapter;
 
@@ -57,8 +60,11 @@ class CssClassFacetMethodWithProblemTest {
                 .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                 .orElse(null);
 
-        mockOwningAdapter = Mockito.mock(ManagedObject.class);
-        Mockito.when(mockOwningAdapter.getPojo()).thenReturn(pojo);
+        var mockSpec = Mockito.mock(ObjectSpecification.class);
+        Mockito.when(mockSpec.isViewModel()).thenReturn(true);
+
+        mockOwningAdapter = mocking.asViewmodel(pojo);
+
     }
 
     @AfterEach
