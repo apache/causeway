@@ -18,31 +18,26 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#MIXIN}
  * @see ManagedObject.Specialization#MIXIN
  */
-final class _ManagedObjectMixin
-extends _ManagedObjectSpecified
-implements Bookmarkable.NoBookmark {
+record ManagedObjectMixin(
+    @NonNull ObjectSpecification objSpec,
+    @NonNull Object pojo)
+implements ManagedObject, Bookmarkable.NoBookmark {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
-    private final @NonNull Object pojo;
-
-    _ManagedObjectMixin(
-            final ObjectSpecification spec,
+    ManagedObjectMixin(
+            final ObjectSpecification objSpec,
             final Object pojo) {
-        super(ManagedObject.Specialization.MIXIN, spec);
-        _Assert.assertTrue(spec.isMixin());
+        _Assert.assertTrue(objSpec.isMixin());
+        this.objSpec = objSpec;
         this.pojo = assertCompliance(pojo);
     }
 
@@ -50,6 +45,23 @@ implements Bookmarkable.NoBookmark {
     public final String getTitle() {
         // mixins have no title
         throw _Exceptions.unexpectedCodeReach();
+    }
+
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.MIXIN;
+    }
+
+    @Override
+    public Object getPojo() {
+        return pojo;
+    }
+
+    // -- HELPER
+
+    @Override
+    public <T> T assertCompliance(@NonNull final T pojo) {
+        return _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
 }

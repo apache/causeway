@@ -503,7 +503,7 @@ extends
     static ManagedObject mixin(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo) {
-        return new _ManagedObjectMixin(spec, pojo);
+        return new ManagedObjectMixin(spec, pojo);
     }
     /**
      * OTHER
