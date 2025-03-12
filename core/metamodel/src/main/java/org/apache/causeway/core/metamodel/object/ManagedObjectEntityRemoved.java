@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.jspecify.annotations.NonNull;
@@ -28,14 +29,19 @@ import org.jspecify.annotations.NonNull;
  * (package private) specialization corresponding to a removed {@link Specialization#ENTITY}
  * @see ManagedObject.Specialization#ENTITY
  */
-final class _ManagedObjectEntityRemoved
-extends _ManagedObjectEntityAbstract
-implements Bookmarkable.NoBookmark {
+record ManagedObjectEntityRemoved(
+        @NonNull ObjectSpecification objSpec)
+implements ManagedObject, Bookmarkable.NoBookmark {
 
-    _ManagedObjectEntityRemoved(
-            final ObjectSpecification spec) {
-        super(ManagedObject.Specialization.ENTITY, spec);
-        _Assert.assertTrue(spec.isEntity());
+    ManagedObjectEntityRemoved(
+            final ObjectSpecification objSpec) {
+        _Assert.assertTrue(objSpec.isEntity());
+        this.objSpec = objSpec;
+    }
+
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.ENTITY;
     }
 
     @Override

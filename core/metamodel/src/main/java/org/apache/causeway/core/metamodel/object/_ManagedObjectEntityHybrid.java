@@ -165,7 +165,7 @@ implements _Refetchable {
     }
 
     private boolean isVariantRemoved() {
-        return variant instanceof _ManagedObjectEntityRemoved;
+        return variant instanceof ManagedObjectEntityRemoved;
     }
 
     @Synchronized
@@ -197,7 +197,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeRemoved() {
-        var removed = new _ManagedObjectEntityRemoved(objSpec());
+        var removed = new ManagedObjectEntityRemoved(objSpec());
         this.variant = removed;
     }
 

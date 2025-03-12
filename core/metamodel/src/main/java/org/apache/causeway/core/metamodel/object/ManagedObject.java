@@ -64,6 +64,7 @@ permits
     ManagedObjectService,
     ManagedObjectViewmodel,
     ManagedObjectEntityTransient,
+    ManagedObjectEntityRemoved,
     _ManagedObjectEntityAbstract,
     PackedManagedObject {
 
