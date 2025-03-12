@@ -24,26 +24,42 @@ import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.Nullable;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-@AllArgsConstructor
+/**
+ * non thread-safe
+ */
 public final class TransientObjectRef<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter
+    @Getter
     private transient @Nullable T object;
+    private transient boolean updating;
+
+    public TransientObjectRef(@Nullable final T object) {
+        this.object = object;
+    }
 
     public T computeIfAbsent(final Supplier<T> supplier) {
         return object!=null
             ? object
-            : (this.object = supplier.get());
+            : update(__->supplier.get());
     }
 
+    /**
+     * the updater itself must not directly modify this TransientObjectRef instance
+     */
     public T update(final UnaryOperator<T> updater) {
-        setObject(updater.apply(object));
+        if(updating) {
+            throw new UnsupportedOperationException("nested call to update detected");
+        }
+        this.updating = true;
+        try {
+            this.object = updater.apply(object);
+        } finally {
+            this.updating = false;
+        }
         return object;
     }
 

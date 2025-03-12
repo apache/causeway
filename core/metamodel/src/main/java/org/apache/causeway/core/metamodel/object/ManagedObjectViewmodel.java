@@ -168,7 +168,7 @@ implements
     private boolean shouldRefresh(final @NonNull TransactionId transactionId) {
         // if already refreshed within current transaction, skip
         if(Objects.equals(this.txIdDuringWhichRefreshed.getObject(), transactionId)) return false;
-        this.txIdDuringWhichRefreshed.setObject(transactionId);
+        this.txIdDuringWhichRefreshed.update(__->transactionId);
         return true;
     }
 

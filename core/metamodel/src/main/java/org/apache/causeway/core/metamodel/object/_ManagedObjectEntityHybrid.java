@@ -81,7 +81,7 @@ implements _Refetchable {
     }
 
     _ManagedObjectEntityHybrid(
-            final @NonNull _ManagedObjectEntityBookmarked bookmarked) {
+            final @NonNull ManagedObjectEntityBookmarked bookmarked) {
         super(ManagedObject.Specialization.ENTITY, bookmarked.objSpec());
         this.variant = bookmarked;
         this.morphState = MorphState.BOOKMARKED;
@@ -157,7 +157,7 @@ implements _Refetchable {
     }
 
     private boolean isVariantBookmarked() {
-        return variant instanceof _ManagedObjectEntityBookmarked;
+        return variant instanceof ManagedObjectEntityBookmarked;
     }
 
     private boolean isVariantTransient() {
@@ -189,7 +189,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeBookmarked(final Object pojo) {
-        var attached = new _ManagedObjectEntityBookmarked(objSpec(), pojo, Optional.empty());
+        var attached = new ManagedObjectEntityBookmarked(objSpec(), pojo, Optional.empty());
         this.variant = attached;
         _Assert.assertTrue(attached.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");

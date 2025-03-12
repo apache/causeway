@@ -25,12 +25,16 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.ref.TransientObjectRef;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
+import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.jspecify.annotations.NonNull;
@@ -41,22 +45,47 @@ import lombok.extern.log4j.Log4j2;
  * @see ManagedObject.Specialization#ENTITY
  */
 @Log4j2
-final class _ManagedObjectEntityBookmarked
-extends _ManagedObjectEntityAbstract
-implements _Refetchable {
+record ManagedObjectEntityBookmarked(
+    @NonNull ObjectSpecification objSpec,
+    @NonNull TransientObjectRef<Object> pojoRef,
+    @NonNull Bookmark bookmark)
+implements ManagedObject, _Refetchable {
 
-    private /*final*/ @Nullable Object pojo;
-    private final @NonNull Bookmark bookmark;
-
-    _ManagedObjectEntityBookmarked(
+    ManagedObjectEntityBookmarked(
             final ObjectSpecification objSpec,
             final Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        super(ManagedObject.Specialization.ENTITY, objSpec);
-        this.pojo = _Compliance.assertCompliance(objSpec, specialization, pojo);
+        this(objSpec, new TransientObjectRef<>(pojo), bookmarkIfKnown.orElse(null));
+    }
+
+    ManagedObjectEntityBookmarked(
+        final ObjectSpecification objSpec,
+        final TransientObjectRef<Object> pojoRef,
+        @Nullable final Bookmark bookmark) {
+        _Assert.assertTrue(objSpec.isEntity());
+        _Compliance.assertCompliance(objSpec, specialization(), pojoRef.getObject());
+        this.objSpec = objSpec;
+        this.pojoRef = pojoRef;
         //sanity check bookmark
-        this.bookmark = entityFacet().validateBookmark(bookmarkIfKnown
-                .orElseGet(this::createBookmark));
+        this.bookmark = Optional.ofNullable(bookmark)
+                .map(entityFacet()::validateBookmark)
+                .orElseGet(this::createBookmark);
+    }
+
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.ENTITY;
+    }
+
+    @Override
+    public String getTitle() {
+        return _InternalTitleUtil.titleString(
+                TitleRenderRequest.forObject(this));
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
     }
 
     @Override
@@ -71,49 +100,55 @@ implements _Refetchable {
 
     @Override
     public Object peekAtPojo() {
-        return pojo;
+        return pojoRef.getObject();
     }
 
     @Override
     public Object getPojo() {
 
-        // refetch if required ...
+        // refetch only if required ...
 
-        var entityFacet = entityFacet();
-
-        var entityState = entityFacet.getEntityState(pojo);
+        var entityState = getEntityState();
         if(!entityState.isPersistable()) {
             throw _Exceptions.illegalState("not persistable %s", objSpec());
         }
-        if(entityState.isAttached()) {
-            return pojo; // is attached
-        }
+        if(entityState.isAttached()) return pojoRef.getObject(); // is attached
 
         //[CAUSEWAY-3265] this getPojo() call might originate from a CausewayEntityListener.onPostLoad event,
-        // in which case potentially runs into a nested loop resulting in a stack overflow;
-        if(refetching) {
-            throw _Exceptions.unrecoverable("framework bug: nested call to getPojo() while already refetching");
-        }
-
-        refetching = true;
-        var refetchedPojo = refetchPojo(entityState);
-        refetching = false;
-
-        return this.pojo = _Compliance.assertCompliance(objSpec, specialization, refetchedPojo);
+        // in which case potentially runs into a nested loop, which we detect and throw
+        return pojoRef.update(old->{
+            var refetchedPojo = refetchPojo(entityState);
+            return _Compliance.assertCompliance(objSpec(), specialization(), refetchedPojo);
+        });
     }
 
     @Override
     public @NonNull EntityState getEntityState() {
-        var entityFacet = entityFacet();
-        return entityFacet.getEntityState(pojo);
+        return entityFacet().getEntityState(peekAtPojo());
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return _Compliance.equals(this, obj);
+    }
+
+    @Override
+    public final int hashCode() {
+        return _Compliance.hashCode(this);
+    }
+
+    @Override
+    public final String toString() {
+        return _Compliance.toString(this);
     }
 
     // -- HELPER
 
-    private boolean refetching;
+   // private boolean refetching;
 
     private Object refetchPojo(final EntityState entityState) {
 
+        var pojo = pojoRef.getObject();
         var entityFacet = entityFacet();
 
         // triggers live-cycle events
@@ -121,9 +156,8 @@ implements _Refetchable {
 
         if(refetchedIfSuccess.isEmpty()) {
             // if cannot refetch from this special JPA state, try again later
-            if(entityState.isDetached()) {
-                return pojo;
-            }
+            if(entityState.isDetached()) return pojo;
+
             // eg. throws on deleted entity
             throw new ObjectNotFoundException("" + bookmark);
         }
@@ -149,14 +183,10 @@ implements _Refetchable {
 
         // fail early when detached entities are detected
         // should have been re-fetched at start of this request-cycle
-        if(
-//                && EntityUtil.getPersistenceStandard(managedObject)
-//                    .map(PersistenceStandard::isJdo)
-//                    .orElse(false)
-                !entityFacet.getEntityState(pojo).hasOid()) {
+        if(!getEntityState().hasOid()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("detached entity detected %s", pojo);
+                _Debug.log("detached entity detected %s", peekAtPojo());
             });
 
             var msg = String.format(
@@ -171,7 +201,7 @@ implements _Refetchable {
             throw _Exceptions.illegalArgument(msg);
         }
 
-        return entityFacet.bookmarkForElseFail(pojo);
+        return entityFacet.bookmarkForElseFail(peekAtPojo());
     }
 
 }
