@@ -19,8 +19,8 @@
 package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
+
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
@@ -36,14 +36,10 @@ abstract non-sealed class _ManagedObjectEntityAbstract
 implements ManagedObject {
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
-    private final @NonNull Specialization specialization;
+    protected final @NonNull Specialization specialization;
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true, makeFinal = true)
-    private final @NonNull ObjectSpecification objSpec;
-
-    final <T> T assertCompliance(final @NonNull T pojo) {
-        return _Compliance.assertCompliance(objSpec, specialization, pojo);
-    }
+    protected final @NonNull ObjectSpecification objSpec;
 
     @Override
     public String getTitle() {
@@ -53,16 +49,7 @@ implements ManagedObject {
 
     @Override
     public Optional<ObjectMemento> getMemento() {
-        return Optional.ofNullable(mementoForScalar(this));
-    }
-
-    private ObjectMemento mementoForScalar(final @Nullable ManagedObject adapter) {
-        MmAssertionUtils.assertPojoIsScalar(adapter);
-        return ObjectMemento.singular(adapter)
-                .orElseGet(()->
-                    ManagedObjects.isSpecified(adapter)
-                        ? ObjectMemento.empty(adapter.logicalType())
-                        : null);
+        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
     }
 
     @Override

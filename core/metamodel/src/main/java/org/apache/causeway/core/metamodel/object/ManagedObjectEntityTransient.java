@@ -18,38 +18,45 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.Optional;
+
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
 
 /**
  * (package private) specialization corresponding to a detached {@link Specialization#ENTITY}
  * @see ManagedObject.Specialization#ENTITY
  */
-final class _ManagedObjectEntityTransient
-extends _ManagedObjectEntityAbstract
-implements Bookmarkable.NoBookmark, _Refetchable {
+record ManagedObjectEntityTransient(
+    @NonNull ObjectSpecification objSpec,
+    @NonNull Object pojo)
+implements ManagedObject, Bookmarkable.NoBookmark, _Refetchable {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
-    private final @NonNull Object pojo;
-
-    _ManagedObjectEntityTransient(
-            final ObjectSpecification spec,
+    ManagedObjectEntityTransient(
+            final ObjectSpecification objSpec,
             final Object pojo) {
-        super(ManagedObject.Specialization.ENTITY, spec);
-        _Assert.assertTrue(spec.isEntity());
-        this.pojo = assertCompliance(pojo);
+        _Assert.assertTrue(objSpec.isEntity());
+        this.objSpec = objSpec;
+        this.pojo = _Compliance.assertCompliance(objSpec, specialization(), pojo);
+    }
+
+    @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.ENTITY;
     }
 
     @Override
     public String getTitle() {
-        return "detached entity object";
+        return "transient entity object";
+    }
+
+    @Override
+    public Object getPojo() {
+        return pojo;
     }
 
     @Override
@@ -59,14 +66,27 @@ implements Bookmarkable.NoBookmark, _Refetchable {
 
     @Override
     public @NonNull EntityState getEntityState() {
-        var entityFacet = entityFacet();
-        return entityFacet.getEntityState(pojo);
+        return objSpec().entityFacetElseFail().getEntityState(pojo);
     }
 
-    // -- HELPER
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
+    }
 
-    private EntityFacet entityFacet() {
-        return objSpec().entityFacetElseFail();
+    @Override
+    public boolean equals(final Object obj) {
+        return _Compliance.equals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return _Compliance.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return _Compliance.toString(this);
     }
 
 }

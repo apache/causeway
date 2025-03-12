@@ -49,11 +49,11 @@ implements _Refetchable {
     private final @NonNull Bookmark bookmark;
 
     _ManagedObjectEntityBookmarked(
-            final ObjectSpecification spec,
+            final ObjectSpecification objSpec,
             final Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        super(ManagedObject.Specialization.ENTITY, spec);
-        this.pojo = assertCompliance(pojo);
+        super(ManagedObject.Specialization.ENTITY, objSpec);
+        this.pojo = _Compliance.assertCompliance(objSpec, specialization, pojo);
         //sanity check bookmark
         this.bookmark = entityFacet().validateBookmark(bookmarkIfKnown
                 .orElseGet(this::createBookmark));
@@ -99,7 +99,7 @@ implements _Refetchable {
         var refetchedPojo = refetchPojo(entityState);
         refetching = false;
 
-        return this.pojo = assertCompliance(refetchedPojo);
+        return this.pojo = _Compliance.assertCompliance(objSpec, specialization, refetchedPojo);
     }
 
     @Override

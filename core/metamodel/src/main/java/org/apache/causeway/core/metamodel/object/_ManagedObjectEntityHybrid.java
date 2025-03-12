@@ -74,7 +74,7 @@ implements _Refetchable {
     private MorphState morphState;
 
     _ManagedObjectEntityHybrid(
-            final @NonNull _ManagedObjectEntityTransient _transient) {
+            final @NonNull ManagedObjectEntityTransient _transient) {
         super(ManagedObject.Specialization.ENTITY, _transient.objSpec());
         this.variant = _transient;
         this.morphState = MorphState.TRANSIENT;
@@ -161,7 +161,7 @@ implements _Refetchable {
     }
 
     private boolean isVariantTransient() {
-        return variant instanceof _ManagedObjectEntityTransient;
+        return variant instanceof ManagedObjectEntityTransient;
     }
 
     private boolean isVariantRemoved() {

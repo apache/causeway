@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 
 /**
  * @since 2.0
@@ -66,6 +67,17 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 ? Optional.empty()
                 : Optional.of(ObjectMementoSingular.create(adapter));
+    }
+    /**
+     * returns null for null
+     */
+    @Nullable static ObjectMemento singularOrEmpty(final @Nullable ManagedObject adapter) {
+        MmAssertionUtils.assertPojoIsScalar(adapter);
+        return !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                ? ObjectMementoSingular.create(adapter)
+                : ManagedObjects.isSpecified(adapter)
+                    ? ObjectMemento.empty(adapter.logicalType())
+                    : null;
     }
     static ObjectMemento packed(
             final LogicalType logicalType,

@@ -63,6 +63,7 @@ permits
     ManagedObjectValue,
     ManagedObjectService,
     ManagedObjectViewmodel,
+    ManagedObjectEntityTransient,
     _ManagedObjectEntityAbstract,
     PackedManagedObject {
 
@@ -492,7 +493,7 @@ permits
             final @Nullable Object pojo) {
         return pojo != null
                 ? new _ManagedObjectEntityHybrid(
-                        new _ManagedObjectEntityTransient(spec, pojo))
+                        new ManagedObjectEntityTransient(spec, pojo))
                 : empty(spec);
     }
     /**

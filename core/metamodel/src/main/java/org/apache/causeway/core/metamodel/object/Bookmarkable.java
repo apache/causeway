@@ -59,7 +59,7 @@ public interface Bookmarkable {
                 bookmarkRefreshable.invalidateBookmark();
                 return bookmarkRefreshable.getBookmark();
             })
-            .orElse(getBookmark());
+            .orElseGet(this::getBookmark);
     }
 
     /**
