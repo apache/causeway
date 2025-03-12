@@ -20,16 +20,18 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Blackhole;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
+import org.apache.causeway.commons.internal.ref.TransientObjectRef;
+import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.Synchronized;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,18 +39,18 @@ import lombok.extern.log4j.Log4j2;
  * @see ManagedObject.Specialization#ENTITY
  */
 @Log4j2
-final class _ManagedObjectEntityHybrid
-extends _ManagedObjectEntityAbstract
-implements _Refetchable {
-
+record ManagedObjectEntityHybrid(
+    @NonNull ObjectSpecification objSpec,
     /**
-     * One of {_ManagedObjectEntityTransient, _ManagedObjectEntityBookmarked, _ManagedObjectEntityRemoved}.
+     * One of {ManagedObjectEntityTransient, ManagedObjectEntityBookmarked, ManagedObjectEntityRemoved}.
      * <p>
      * May dynamically mutate from 'left' to 'right' based on pojo's persistent state.
      * However, the pojo reference must be kept identical, unless the entity becomes 'removed',
      * in which case the pojo reference is invalidated and should no longer be accessible to callers.
      */
-    private @NonNull ManagedObject variant;
+    @NonNull TransientObjectRef<ManagedObject> variantRef,
+    @NonNull TransientObjectRef<MorphState> morphStateRef)
+implements ManagedObject, _Refetchable {
 
     private enum MorphState {
         /** Has no bookmark yet; can be transitioned to BOOKMARKED once
@@ -71,26 +73,37 @@ implements _Refetchable {
         }
     }
 
-    private MorphState morphState;
-
-    _ManagedObjectEntityHybrid(
-            final @NonNull ManagedObjectEntityTransient _transient) {
-        super(ManagedObject.Specialization.ENTITY, _transient.objSpec());
-        this.variant = _transient;
-        this.morphState = MorphState.TRANSIENT;
+    ManagedObjectEntityHybrid(
+            final @NonNull ManagedObjectEntityTransient transientEntity) {
+        this(transientEntity.objSpec(), new TransientObjectRef<>(transientEntity), new TransientObjectRef<>(MorphState.TRANSIENT));
     }
 
-    _ManagedObjectEntityHybrid(
-            final @NonNull ManagedObjectEntityBookmarked bookmarked) {
-        super(ManagedObject.Specialization.ENTITY, bookmarked.objSpec());
-        this.variant = bookmarked;
-        this.morphState = MorphState.BOOKMARKED;
-        _Assert.assertTrue(bookmarked.getBookmark().isPresent(),
+    ManagedObjectEntityHybrid(
+            final @NonNull ManagedObjectEntityBookmarked bookmarkedEntity) {
+        this(bookmarkedEntity.objSpec(), new TransientObjectRef<>(bookmarkedEntity), new TransientObjectRef<>(MorphState.BOOKMARKED));
+        _Assert.assertTrue(bookmarkedEntity.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
     }
 
     @Override
+    public Specialization specialization() {
+        return ManagedObject.Specialization.ENTITY;
+    }
+
+    @Override
+    public String getTitle() {
+        return _InternalTitleUtil.titleString(
+                TitleRenderRequest.forObject(this));
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
+    }
+
+    @Override
     public Optional<Bookmark> getBookmark() {
+        var variant = variant();
         return (variant instanceof Bookmarkable)
                 ? variant.getBookmark()
                 : Optional.empty();
@@ -98,6 +111,7 @@ implements _Refetchable {
 
     @Override
     public boolean isBookmarkMemoized() {
+        var variant = variant();
         return (variant instanceof Bookmarkable)
                 ? variant.isBookmarkMemoized()
                 : false;
@@ -105,11 +119,10 @@ implements _Refetchable {
 
     @Override
     public @NonNull EntityState getEntityState() {
-
-        var entityState = variant.getEntityState();
+        var entityState = variant().getEntityState();
         var newMorphState = MorphState.valueOf(entityState);
 
-        if(this.morphState!=newMorphState) {
+        if(morphStateRef.getObject()!=newMorphState) {
             log.debug("about to transition to {} variant given {}", newMorphState.name(), entityState);
             reassessVariant(entityState, peekAtPojo());
             if(newMorphState.isBookmarked()) {
@@ -117,20 +130,18 @@ implements _Refetchable {
             } else if(newMorphState.isRemoved()) {
                 _Assert.assertTrue(isVariantRemoved(), ()->"successful transition");
             }
-            this.morphState = newMorphState;
+            morphStateRef.update(__->newMorphState);
         }
         return entityState;
     }
 
     @Override @SneakyThrows
     public Object getPojo() {
-        if(isVariantRemoved()) {
-            return null; // don't reassess
-        }
+        if(isVariantRemoved()) return null; // don't reassess
 
         // handle the 'deleted' / 'not found' case gracefully ...
         try {
-            var pojo = variant.getPojo();
+            var pojo = variant().getPojo();
             triggerReassessment();
             //if(pojo==null) makeRemoved(); seems reasonable, not tested yet
             return pojo;
@@ -143,33 +154,51 @@ implements _Refetchable {
 
     @Override
     public Object peekAtPojo() {
-        return (variant instanceof _Refetchable)
-                ? ((_Refetchable)variant).peekAtPojo()
+        return (variant() instanceof _Refetchable refetchable)
+                ? refetchable.peekAtPojo()
                 : null;
+    }
+
+    @Override
+    public final boolean equals(final Object obj) {
+        return _Compliance.equals(this, obj);
+    }
+
+    @Override
+    public final int hashCode() {
+        return _Compliance.hashCode(this);
+    }
+
+    @Override
+    public final String toString() {
+        return _Compliance.toString(this);
     }
 
     // -- HELPER
 
+    private ManagedObject variant() {
+        return variantRef.getObject();
+    }
+
     private void triggerReassessment() {
-        if(morphState.isTransient()) {
-            _Blackhole.consume(getEntityState());
+        if(morphStateRef.getObject().isTransient()) {
+            getEntityState(); // has side-effects
         }
     }
 
     private boolean isVariantBookmarked() {
-        return variant instanceof ManagedObjectEntityBookmarked;
+        return variant() instanceof ManagedObjectEntityBookmarked;
     }
 
     private boolean isVariantTransient() {
-        return variant instanceof ManagedObjectEntityTransient;
+        return variant() instanceof ManagedObjectEntityTransient;
     }
 
     private boolean isVariantRemoved() {
-        return variant instanceof ManagedObjectEntityRemoved;
+        return variant() instanceof ManagedObjectEntityRemoved;
     }
 
-    @Synchronized
-    private void reassessVariant(final EntityState entityState, final Object pojo) {
+    private synchronized void reassessVariant(final EntityState entityState, final Object pojo) {
         if(isVariantTransient()
                 && entityState.hasOid()) {
             makeBookmarked(pojo);
@@ -190,7 +219,7 @@ implements _Refetchable {
     // morph into attached
     private void makeBookmarked(final Object pojo) {
         var attached = new ManagedObjectEntityBookmarked(objSpec(), pojo, Optional.empty());
-        this.variant = attached;
+        variantRef.update(__->attached);
         _Assert.assertTrue(attached.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
     }
@@ -198,7 +227,7 @@ implements _Refetchable {
     // morph into attached
     private void makeRemoved() {
         var removed = new ManagedObjectEntityRemoved(objSpec());
-        this.variant = removed;
+        variantRef.update(__->removed);
     }
 
 }
