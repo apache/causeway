@@ -22,6 +22,7 @@ import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 record EntityPhaseTransient(
@@ -34,11 +35,12 @@ implements EntityPhase {
             final Object pojo) {
         _Assert.assertTrue(objSpec.isEntity());
         this.objSpec = objSpec;
-        this.pojo = _Compliance.assertCompliance(objSpec, specialization(), pojo);
+        this.pojo = _Compliance.assertCompliance(objSpec, ManagedObject.Specialization.ENTITY, pojo);
     }
 
-    public ManagedObject.Specialization specialization() {
-        return ManagedObject.Specialization.ENTITY;
+    @Override
+    public PhaseState phaseState() {
+        return PhaseState.TRANSIENT;
     }
 
     @Override
@@ -52,7 +54,7 @@ implements EntityPhase {
     }
 
     @Override
-    public @NonNull EntityState getEntityState() {
+    public @NonNull EntityState reassessEntityState() {
         return objSpec().entityFacetElseFail().getEntityState(pojo);
     }
 

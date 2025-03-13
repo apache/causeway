@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ref.TransientObjectRef;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
+import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.extern.log4j.Log4j2;
@@ -76,6 +77,11 @@ implements EntityPhase {
     }
 
     @Override
+    public PhaseState phaseState() {
+        return PhaseState.BOOKMARKED;
+    }
+
+    @Override
     public Object peekAtPojo() {
         return pojoRef.getObject();
     }
@@ -85,7 +91,7 @@ implements EntityPhase {
 
         // refetch only if required ...
 
-        var entityState = getEntityState();
+        var entityState = reassessEntityState();
         if(!entityState.isPersistable()) {
             throw _Exceptions.illegalState("not persistable %s", objSpec());
         }
@@ -100,7 +106,7 @@ implements EntityPhase {
     }
 
     @Override
-    public @NonNull EntityState getEntityState() {
+    public @NonNull EntityState reassessEntityState() {
         return entityFacet().getEntityState(peekAtPojo());
     }
 
@@ -147,7 +153,7 @@ implements EntityPhase {
 
         // fail early when detached entities are detected
         // should have been re-fetched at start of this request-cycle
-        if(!getEntityState().hasOid()) {
+        if(!reassessEntityState().hasOid()) {
 
             _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
                 _Debug.log("detached entity detected %s", peekAtPojo());

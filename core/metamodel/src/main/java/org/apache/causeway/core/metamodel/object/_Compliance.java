@@ -18,13 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.util.Objects;
-
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.experimental.UtilityClass;
@@ -56,57 +52,6 @@ class _Compliance {
             }
         }
         return pojo;
-    }
-
-    boolean equals(final ManagedObject mo, final Object obj) {
-        if(mo == obj) return true;
-        if(!(obj instanceof ManagedObject)) return false;
-
-        var other = (ManagedObject)obj;
-        if(!mo.specialization().equals(other.specialization())) return false;
-        if(!mo.objSpec().equals(other.objSpec())) return false;
-
-        if(!mo.specialization().getPojoPolicy().isRefetchable()) {
-            // expected to work for packed variant just fine, as it compares lists
-            return Objects.equals(mo.getPojo(), other.getPojo());
-        }
-
-        if(mo.isBookmarkMemoized()
-                && other.isBookmarkMemoized()) {
-            return Objects.equals(
-                    sideEffectFreeBookmark(mo),
-                    other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
-        }
-
-        var a = (ManagedObjectEntity) mo;
-        var b = (ManagedObjectEntity) other;
-        return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
-    }
-
-    int hashCode(final ManagedObject mo) {
-        // make sure hashCode() is without side-effects!
-        var canGetPojosWithoutSideeffect = !mo.specialization().getPojoPolicy().isRefetchable();
-        return canGetPojosWithoutSideeffect
-                // expected to work for packed variant just fine, as it compares lists
-                ? Objects.hash(mo.objSpec().getCorrespondingClass(), mo.getPojo())
-                : Objects.hash(mo.objSpec().getCorrespondingClass(), sideEffectFreeBookmark(mo));
-    }
-
-    String toString(final ManagedObject mo) {
-        // make sure toString() is without side-effects!
-        return String.format("ManagedObject(%s, spec=%s, pojo=%s)",
-            mo.specialization().name(),
-            mo.objSpec(),
-            !mo.specialization().getPojoPolicy().isRefetchable()
-                ? mo.getPojo() // its safe to get pojo side-effect free
-                : mo.isBookmarkMemoized()
-                    ? String.format("(refetchable, %s)", sideEffectFreeBookmark(mo))
-                    : "(refetchable, suppressed to not cause side effects)");
-    }
-
-    private Bookmark sideEffectFreeBookmark(final ManagedObject mo) {
-        _Assert.assertTrue(mo.isBookmarkMemoized());
-        return mo.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach);
     }
 
 }

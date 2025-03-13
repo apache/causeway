@@ -19,14 +19,16 @@
 package org.apache.causeway.core.metamodel.object;
 
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 
-public sealed interface EntityPhase
+sealed interface EntityPhase
 permits
     EntityPhaseTransient,
     EntityPhaseBookmarked,
     EntityPhaseRemoved {
 
-    EntityState getEntityState();
+    PhaseState phaseState();
+    EntityState reassessEntityState();
 
     Object getPojo();
 

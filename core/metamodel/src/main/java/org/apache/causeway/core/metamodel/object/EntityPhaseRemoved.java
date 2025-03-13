@@ -21,9 +21,15 @@ package org.apache.causeway.core.metamodel.object;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.repository.EntityState;
+import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 
 record EntityPhaseRemoved()
 implements EntityPhase {
+
+    @Override
+    public PhaseState phaseState() {
+        return PhaseState.REMOVED;
+    }
 
     @Override
     public Object getPojo() {
@@ -36,7 +42,7 @@ implements EntityPhase {
     }
 
     @Override
-    public @NonNull EntityState getEntityState() {
+    public @NonNull EntityState reassessEntityState() {
         return EntityState.REMOVED;
     }
 

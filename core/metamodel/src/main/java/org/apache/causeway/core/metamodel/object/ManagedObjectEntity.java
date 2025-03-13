@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
@@ -48,11 +49,10 @@ record ManagedObjectEntity(
      * However, the pojo reference must be kept identical, unless the entity becomes 'removed',
      * in which case the pojo reference is invalidated and should no longer be accessible to callers.
      */
-    @NonNull TransientObjectRef<EntityPhase> phaseRef,
-    @NonNull TransientObjectRef<PhaseState> morphStateRef)
+    @NonNull TransientObjectRef<EntityPhase> phaseRef)
 implements ManagedObject {
 
-    private enum PhaseState {
+    enum PhaseState {
         /** Has no bookmark yet; can be transitioned to BOOKMARKED once
          *  for accompanied pojo, an OID becomes available. */
         TRANSIENT,
@@ -75,12 +75,12 @@ implements ManagedObject {
 
     ManagedObjectEntity(
             final @NonNull EntityPhaseTransient transientPhase) {
-        this(transientPhase.objSpec(), new TransientObjectRef<>(transientPhase), new TransientObjectRef<>(PhaseState.TRANSIENT));
+        this(transientPhase.objSpec(), new TransientObjectRef<>(transientPhase));
     }
 
     ManagedObjectEntity(
             final @NonNull EntityPhaseBookmarked bookmarkedPhase) {
-        this(bookmarkedPhase.objSpec(), new TransientObjectRef<>(bookmarkedPhase), new TransientObjectRef<>(PhaseState.BOOKMARKED));
+        this(bookmarkedPhase.objSpec(), new TransientObjectRef<>(bookmarkedPhase));
     }
 
     @Override
@@ -108,30 +108,33 @@ implements ManagedObject {
 
     @Override
     public boolean isBookmarkMemoized() {
-        return isBookmarkedPhase();
+        return phaseState().isBookmarked();
     }
 
     @Override
     public @NonNull EntityState getEntityState() {
-        var entityState = phase().getEntityState();
-        var newMorphState = PhaseState.valueOf(entityState);
+        if(phaseState().isRemoved()) return EntityState.REMOVED; // don't reassess
 
-        if(morphStateRef.getObject()!=newMorphState) {
-            log.debug("about to transition to {} phase given {}", newMorphState.name(), entityState);
+        var entityState = phase().reassessEntityState();
+        var newPhaseState = PhaseState.valueOf(entityState);
+
+        if(!phaseState().equals(newPhaseState)) {
+            log.debug("about to transition to {} phase given {}", newPhaseState.name(), entityState);
             reassessPhase(entityState, peekAtPojo());
-            if(newMorphState.isBookmarked()) {
-                _Assert.assertTrue(isBookmarkedPhase(), ()->"successful transition");
-            } else if(newMorphState.isRemoved()) {
-                _Assert.assertTrue(isRemovedPhase(), ()->"successful transition");
+            switch (newPhaseState) {
+                case BOOKMARKED, REMOVED -> _Assert.assertEquals(newPhaseState, phaseState(), ()->"transition failed");
+                case TRANSIENT -> {
+                    //TODO fails when was requested to transition to TRANSIENT but turned out to be actually REMOVED
+                    //_Assert.assertEquals(newPhaseState, phaseState(), ()->"transition failed");
+                }
             }
-            morphStateRef.update(__->newMorphState);
         }
         return entityState;
     }
 
     @Override @SneakyThrows
     public Object getPojo() {
-        if(isRemovedPhase()) return null; // don't reassess
+        if(phaseState().isRemoved()) return null; // don't reassess
 
         // handle the 'deleted' / 'not found' case gracefully ...
         try {
@@ -152,17 +155,28 @@ implements ManagedObject {
 
     @Override
     public final boolean equals(final Object obj) {
-        return _Compliance.equals(this, obj);
+        return obj instanceof ManagedObjectEntity other
+            ? Objects.equals(this.objSpec().logicalTypeName(), other.objSpec().logicalTypeName())
+                && Objects.equals(this.phaseState(), other.phaseState())
+                && Objects.equals(this.peekAtPojo(), other.peekAtPojo())
+            : false;
     }
 
     @Override
     public final int hashCode() {
-        return _Compliance.hashCode(this);
+        return Objects.hash(objSpec().logicalTypeName(), phaseState());
     }
 
     @Override
     public final String toString() {
-        return _Compliance.toString(this);
+        return "ManagedObjectEntity[logicalTypeName=%s,state=%s%s]"
+            .formatted(
+                objSpec().logicalTypeName(),
+                phaseState().name(),
+                getBookmark()
+                    .map(Bookmark::identifier)
+                    .map(",id=%s"::formatted)
+                    .orElse(""));
     }
 
     // -- HELPER
@@ -171,26 +185,18 @@ implements ManagedObject {
         return phaseRef.getObject();
     }
 
+    private PhaseState phaseState() {
+        return phase().phaseState();
+    }
+
     private void triggerReassessment() {
-        if(morphStateRef.getObject().isTransient()) {
-            getEntityState(); // has side-effects
+        if(phaseState().isTransient()) {
+            getEntityState(); // has desired side-effects
         }
     }
 
-    private boolean isBookmarkedPhase() {
-        return phase() instanceof EntityPhaseBookmarked;
-    }
-
-    private boolean isTransientPhase() {
-        return phase() instanceof EntityPhaseTransient;
-    }
-
-    private boolean isRemovedPhase() {
-        return phase() instanceof EntityPhaseRemoved;
-    }
-
     private synchronized void reassessPhase(final EntityState entityState, final Object pojo) {
-        if(isTransientPhase()
+        if(phaseState().isTransient()
                 && entityState.hasOid()) {
             makeBookmarked(pojo);
             return;
@@ -199,8 +205,8 @@ implements ManagedObject {
          * - from BOOKMARKED
          * - as well as from TRANSIENT
          * to REMOVED */
-        if((isBookmarkedPhase()
-                || isTransientPhase())
+        if((phaseState().isBookmarked()
+                || phaseState().isTransient())
                 && entityState.isTransientOrRemoved()) {
             makeRemoved();
             return;
