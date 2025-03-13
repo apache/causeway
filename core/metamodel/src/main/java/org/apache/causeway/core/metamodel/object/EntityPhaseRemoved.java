@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import org.jspecify.annotations.NonNull;
+import java.util.function.BiConsumer;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
@@ -42,9 +42,8 @@ implements EntityPhase {
     }
 
     @Override
-    public @NonNull EntityState reassessEntityState() {
+    public EntityState reassessEntityState(final BiConsumer<EntityState, PhaseState> onNewPhaseRequired) {
         return EntityState.REMOVED;
     }
-
 
 }

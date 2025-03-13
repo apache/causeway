@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.NonNull;
 
@@ -64,12 +65,25 @@ implements ManagedObject {
         public boolean isTransient() { return this == TRANSIENT; }
         public boolean isBookmarked() { return this == BOOKMARKED; }
         public boolean isRemoved() { return this == REMOVED; }
-        static PhaseState valueOf(final EntityState entityState) {
-            return entityState.isRemoved()
-                    ? REMOVED
-                    : entityState.isAttached()
-                        ? BOOKMARKED
-                        : TRANSIENT;
+        void reassessPhase(final EntityState newEntityState, final BiConsumer<EntityState, PhaseState> onNewPhaseRequired) {
+            transitionAdvice(this, newEntityState)
+                .ifPresent(newPhase->onNewPhaseRequired.accept(newEntityState, newPhase));
+        }
+        private static Optional<PhaseState> transitionAdvice(final PhaseState previous, final EntityState entityState) {
+            return switch (previous) {
+                case BOOKMARKED->entityState.isTransientOrRemoved()
+                    ? Optional.of(PhaseState.REMOVED)
+                    : Optional.empty();
+                case TRANSIENT->{
+                    var stayTransient = !entityState.isRemoved()
+                        && !entityState.isAttached();
+                    if(stayTransient) yield Optional.empty();
+                    if(entityState.hasOid()) yield Optional.of(PhaseState.BOOKMARKED);
+                    if(entityState.isTransientOrRemoved()) yield Optional.of(PhaseState.REMOVED);
+                    yield Optional.empty();
+                }
+                case REMOVED->Optional.empty();
+            };
         }
     }
 
@@ -113,23 +127,17 @@ implements ManagedObject {
 
     @Override
     public @NonNull EntityState getEntityState() {
-        if(phaseState().isRemoved()) return EntityState.REMOVED; // don't reassess
-
-        var entityState = phase().reassessEntityState();
-        var newPhaseState = PhaseState.valueOf(entityState);
-
-        if(!phaseState().equals(newPhaseState)) {
+        return phase().reassessEntityState((entityState, newPhaseState)->{
             log.debug("about to transition to {} phase given {}", newPhaseState.name(), entityState);
-            reassessPhase(entityState, peekAtPojo());
             switch (newPhaseState) {
-                case BOOKMARKED, REMOVED -> _Assert.assertEquals(newPhaseState, phaseState(), ()->"transition failed");
+                case BOOKMARKED -> makeBookmarked(peekAtPojo());
+                case REMOVED -> makeRemoved();
                 case TRANSIENT -> {
-                    //TODO fails when was requested to transition to TRANSIENT but turned out to be actually REMOVED
-                    //_Assert.assertEquals(newPhaseState, phaseState(), ()->"transition failed");
+                    throw new UnsupportedOperationException("cannot transition to TRANSIENT (TRANSIENT is an initial state only)");
                 }
             }
-        }
-        return entityState;
+            _Assert.assertEquals(newPhaseState, phaseState(), ()->"transition failed");
+        });
     }
 
     @Override @SneakyThrows
@@ -139,7 +147,10 @@ implements ManagedObject {
         // handle the 'deleted' / 'not found' case gracefully ...
         try {
             var pojo = phase().getPojo();
-            triggerReassessment();
+
+            // trigger reassessment when transient
+            if(phaseState().isTransient()) getEntityState(); // has desired side-effects
+
             //if(pojo==null) makeRemoved(); seems reasonable, not tested yet
             return pojo;
         } catch (ObjectNotFoundException e) {
@@ -164,7 +175,10 @@ implements ManagedObject {
 
     @Override
     public final int hashCode() {
-        return Objects.hash(objSpec().logicalTypeName(), phaseState());
+        return Objects.hash(
+            objSpec().logicalTypeName(),
+            phaseState(),
+            getBookmark().map(Bookmark::identifier).orElse(null));
     }
 
     @Override
@@ -189,40 +203,14 @@ implements ManagedObject {
         return phase().phaseState();
     }
 
-    private void triggerReassessment() {
-        if(phaseState().isTransient()) {
-            getEntityState(); // has desired side-effects
-        }
-    }
-
-    private synchronized void reassessPhase(final EntityState entityState, final Object pojo) {
-        if(phaseState().isTransient()
-                && entityState.hasOid()) {
-            makeBookmarked(pojo);
-            return;
-        }
-        /* if the current EntityState is REMOVED, we handle phase transition
-         * - from BOOKMARKED
-         * - as well as from TRANSIENT
-         * to REMOVED */
-        if((phaseState().isBookmarked()
-                || phaseState().isTransient())
-                && entityState.isTransientOrRemoved()) {
-            makeRemoved();
-            return;
-        }
-    }
-
-    // transition to 'attached' state
+     // transition to 'attached' state
     private void makeBookmarked(final Object pojo) {
-        var attached = new EntityPhaseBookmarked(objSpec(), pojo);
-        phaseRef.update(__->attached);
+        phaseRef.update(__->new EntityPhaseBookmarked(objSpec(), pojo));
     }
 
     // transition to 'removed' state
     private void makeRemoved() {
-        var removed = new EntityPhaseRemoved();
-        phaseRef.update(__->removed);
+        phaseRef.update(__->new EntityPhaseRemoved());
     }
 
 }

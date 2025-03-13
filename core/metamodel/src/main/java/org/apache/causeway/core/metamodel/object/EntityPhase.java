@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.function.BiConsumer;
+
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 
@@ -28,7 +30,11 @@ permits
     EntityPhaseRemoved {
 
     PhaseState phaseState();
-    EntityState reassessEntityState();
+
+    /**
+     * Gives advice on whether a phase transition is required, based on the underlying entity's current state.
+     */
+    EntityState reassessEntityState(BiConsumer<EntityState, PhaseState> onNewPhaseRequired);
 
     Object getPojo();
 

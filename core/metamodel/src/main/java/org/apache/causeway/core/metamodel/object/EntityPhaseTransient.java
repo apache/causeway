@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.function.BiConsumer;
+
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.repository.EntityState;
@@ -54,8 +56,10 @@ implements EntityPhase {
     }
 
     @Override
-    public @NonNull EntityState reassessEntityState() {
-        return objSpec().entityFacetElseFail().getEntityState(pojo);
+    public EntityState reassessEntityState(final BiConsumer<EntityState, PhaseState> onNewPhaseRequired) {
+        var newEntityState = objSpec().entityFacetElseFail().getEntityState(pojo);
+        phaseState().reassessPhase(newEntityState, onNewPhaseRequired);
+        return newEntityState;
     }
 
 }
