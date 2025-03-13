@@ -18,25 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.util.Optional;
-
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
+import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
  * (package private) specialization corresponding to a detached {@link Specialization#ENTITY}
  * @see ManagedObject.Specialization#ENTITY
  */
-record ManagedObjectEntityTransient(
+record EntityPhaseTransient(
     @NonNull ObjectSpecification objSpec,
     @NonNull Object pojo)
-implements ManagedObject, Bookmarkable.NoBookmark, _Refetchable {
+implements EntityPhase, _Refetchable {
 
-    ManagedObjectEntityTransient(
+    EntityPhaseTransient(
             final ObjectSpecification objSpec,
             final Object pojo) {
         _Assert.assertTrue(objSpec.isEntity());
@@ -44,15 +42,14 @@ implements ManagedObject, Bookmarkable.NoBookmark, _Refetchable {
         this.pojo = _Compliance.assertCompliance(objSpec, specialization(), pojo);
     }
 
-    @Override
-    public Specialization specialization() {
+    public ManagedObject.Specialization specialization() {
         return ManagedObject.Specialization.ENTITY;
     }
 
-    @Override
-    public String getTitle() {
-        return "transient entity object";
-    }
+//    @Override
+//    public String getTitle() {
+//        return "transient entity object";
+//    }
 
     @Override
     public Object getPojo() {
@@ -69,24 +66,9 @@ implements ManagedObject, Bookmarkable.NoBookmark, _Refetchable {
         return objSpec().entityFacetElseFail().getEntityState(pojo);
     }
 
-    @Override
-    public Optional<ObjectMemento> getMemento() {
-        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return _Compliance.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return _Compliance.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return _Compliance.toString(this);
-    }
+//    @Override
+//    public Optional<ObjectMemento> getMemento() {
+//        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
+//    }
 
 }

@@ -18,35 +18,25 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * (package private) specialization corresponding to a removed {@link Specialization#ENTITY}
  * @see ManagedObject.Specialization#ENTITY
  */
-record ManagedObjectEntityRemoved(
+record EntityPhaseRemoved(
         @NonNull ObjectSpecification objSpec)
-implements ManagedObject, Bookmarkable.NoBookmark {
+implements EntityPhase {
 
-    ManagedObjectEntityRemoved(
+    EntityPhaseRemoved(
             final ObjectSpecification objSpec) {
         _Assert.assertTrue(objSpec.isEntity());
         this.objSpec = objSpec;
-    }
-
-    @Override
-    public Specialization specialization() {
-        return ManagedObject.Specialization.ENTITY;
-    }
-
-    @Override
-    public String getTitle() {
-        return "deleted entity object";
     }
 
     @Override

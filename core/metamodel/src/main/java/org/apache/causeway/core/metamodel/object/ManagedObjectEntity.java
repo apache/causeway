@@ -39,7 +39,7 @@ import lombok.extern.log4j.Log4j2;
  * @see ManagedObject.Specialization#ENTITY
  */
 @Log4j2
-record ManagedObjectEntityHybrid(
+record ManagedObjectEntity(
     @NonNull ObjectSpecification objSpec,
     /**
      * One of {ManagedObjectEntityTransient, ManagedObjectEntityBookmarked, ManagedObjectEntityRemoved}.
@@ -48,7 +48,7 @@ record ManagedObjectEntityHybrid(
      * However, the pojo reference must be kept identical, unless the entity becomes 'removed',
      * in which case the pojo reference is invalidated and should no longer be accessible to callers.
      */
-    @NonNull TransientObjectRef<ManagedObject> variantRef,
+    @NonNull TransientObjectRef<EntityPhase> variantRef,
     @NonNull TransientObjectRef<MorphState> morphStateRef)
 implements ManagedObject, _Refetchable {
 
@@ -73,16 +73,14 @@ implements ManagedObject, _Refetchable {
         }
     }
 
-    ManagedObjectEntityHybrid(
-            final @NonNull ManagedObjectEntityTransient transientEntity) {
-        this(transientEntity.objSpec(), new TransientObjectRef<>(transientEntity), new TransientObjectRef<>(MorphState.TRANSIENT));
+    ManagedObjectEntity(
+            final @NonNull EntityPhaseTransient transientPhase) {
+        this(transientPhase.objSpec(), new TransientObjectRef<>(transientPhase), new TransientObjectRef<>(MorphState.TRANSIENT));
     }
 
-    ManagedObjectEntityHybrid(
-            final @NonNull ManagedObjectEntityBookmarked bookmarkedEntity) {
-        this(bookmarkedEntity.objSpec(), new TransientObjectRef<>(bookmarkedEntity), new TransientObjectRef<>(MorphState.BOOKMARKED));
-        _Assert.assertTrue(bookmarkedEntity.getBookmark().isPresent(),
-                ()->"bookmarked entity must have bookmark");
+    ManagedObjectEntity(
+            final @NonNull EntityPhaseBookmarked bookmarkedPhase) {
+        this(bookmarkedPhase.objSpec(), new TransientObjectRef<>(bookmarkedPhase), new TransientObjectRef<>(MorphState.BOOKMARKED));
     }
 
     @Override
@@ -104,17 +102,14 @@ implements ManagedObject, _Refetchable {
     @Override
     public Optional<Bookmark> getBookmark() {
         var variant = variant();
-        return (variant instanceof Bookmarkable)
-                ? variant.getBookmark()
+        return (variant instanceof EntityPhaseBookmarked bookmarked)
+                ? Optional.of(bookmarked.bookmark())
                 : Optional.empty();
     }
 
     @Override
     public boolean isBookmarkMemoized() {
-        var variant = variant();
-        return (variant instanceof Bookmarkable)
-                ? variant.isBookmarkMemoized()
-                : false;
+        return isBookmarkedPhase();
     }
 
     @Override
@@ -126,9 +121,9 @@ implements ManagedObject, _Refetchable {
             log.debug("about to transition to {} variant given {}", newMorphState.name(), entityState);
             reassessVariant(entityState, peekAtPojo());
             if(newMorphState.isBookmarked()) {
-                _Assert.assertTrue(isVariantBookmarked(), ()->"successful transition");
+                _Assert.assertTrue(isBookmarkedPhase(), ()->"successful transition");
             } else if(newMorphState.isRemoved()) {
-                _Assert.assertTrue(isVariantRemoved(), ()->"successful transition");
+                _Assert.assertTrue(isRemovedPhase(), ()->"successful transition");
             }
             morphStateRef.update(__->newMorphState);
         }
@@ -137,7 +132,7 @@ implements ManagedObject, _Refetchable {
 
     @Override @SneakyThrows
     public Object getPojo() {
-        if(isVariantRemoved()) return null; // don't reassess
+        if(isRemovedPhase()) return null; // don't reassess
 
         // handle the 'deleted' / 'not found' case gracefully ...
         try {
@@ -176,7 +171,7 @@ implements ManagedObject, _Refetchable {
 
     // -- HELPER
 
-    private ManagedObject variant() {
+    private EntityPhase variant() {
         return variantRef.getObject();
     }
 
@@ -186,20 +181,20 @@ implements ManagedObject, _Refetchable {
         }
     }
 
-    private boolean isVariantBookmarked() {
-        return variant() instanceof ManagedObjectEntityBookmarked;
+    private boolean isBookmarkedPhase() {
+        return variant() instanceof EntityPhaseBookmarked;
     }
 
-    private boolean isVariantTransient() {
-        return variant() instanceof ManagedObjectEntityTransient;
+    private boolean isTransientPhase() {
+        return variant() instanceof EntityPhaseTransient;
     }
 
-    private boolean isVariantRemoved() {
-        return variant() instanceof ManagedObjectEntityRemoved;
+    private boolean isRemovedPhase() {
+        return variant() instanceof EntityPhaseRemoved;
     }
 
     private synchronized void reassessVariant(final EntityState entityState, final Object pojo) {
-        if(isVariantTransient()
+        if(isTransientPhase()
                 && entityState.hasOid()) {
             makeBookmarked(pojo);
             return;
@@ -208,25 +203,23 @@ implements ManagedObject, _Refetchable {
          * - from BOOKMARKED
          * - as well as from TRANSIENT
          * to REMOVED */
-        if((isVariantBookmarked()
-                || isVariantTransient())
+        if((isBookmarkedPhase()
+                || isTransientPhase())
                 && entityState.isTransientOrRemoved()) {
             makeRemoved();
             return;
         }
     }
 
-    // morph into attached
+    // transition to 'attached' state
     private void makeBookmarked(final Object pojo) {
-        var attached = new ManagedObjectEntityBookmarked(objSpec(), pojo, Optional.empty());
+        var attached = new EntityPhaseBookmarked(objSpec(), pojo, Optional.empty());
         variantRef.update(__->attached);
-        _Assert.assertTrue(attached.getBookmark().isPresent(),
-                ()->"bookmarked entity must have bookmark");
     }
 
-    // morph into attached
+    // transition to 'removed' state
     private void makeRemoved() {
-        var removed = new ManagedObjectEntityRemoved(objSpec());
+        var removed = new EntityPhaseRemoved(objSpec());
         variantRef.update(__->removed);
     }
 

@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
@@ -32,12 +33,9 @@ import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.ref.TransientObjectRef;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -45,20 +43,20 @@ import lombok.extern.log4j.Log4j2;
  * @see ManagedObject.Specialization#ENTITY
  */
 @Log4j2
-record ManagedObjectEntityBookmarked(
+record EntityPhaseBookmarked(
     @NonNull ObjectSpecification objSpec,
     @NonNull TransientObjectRef<Object> pojoRef,
     @NonNull Bookmark bookmark)
-implements ManagedObject, _Refetchable {
+implements EntityPhase, _Refetchable {
 
-    ManagedObjectEntityBookmarked(
+    EntityPhaseBookmarked(
             final ObjectSpecification objSpec,
             final Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
         this(objSpec, new TransientObjectRef<>(pojo), bookmarkIfKnown.orElse(null));
     }
 
-    ManagedObjectEntityBookmarked(
+    EntityPhaseBookmarked(
         final ObjectSpecification objSpec,
         final TransientObjectRef<Object> pojoRef,
         @Nullable final Bookmark bookmark) {
@@ -70,32 +68,6 @@ implements ManagedObject, _Refetchable {
         this.bookmark = Optional.ofNullable(bookmark)
                 .map(entityFacet()::validateBookmark)
                 .orElseGet(this::createBookmark);
-    }
-
-    @Override
-    public Specialization specialization() {
-        return ManagedObject.Specialization.ENTITY;
-    }
-
-    @Override
-    public String getTitle() {
-        return _InternalTitleUtil.titleString(
-                TitleRenderRequest.forObject(this));
-    }
-
-    @Override
-    public Optional<ObjectMemento> getMemento() {
-        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
-    }
-
-    @Override
-    public Optional<Bookmark> getBookmark() {
-        return Optional.of(bookmark);
-    }
-
-    @Override
-    public boolean isBookmarkMemoized() {
-        return true;
     }
 
     @Override
@@ -127,24 +99,11 @@ implements ManagedObject, _Refetchable {
         return entityFacet().getEntityState(peekAtPojo());
     }
 
-    @Override
-    public final boolean equals(final Object obj) {
-        return _Compliance.equals(this, obj);
-    }
-
-    @Override
-    public final int hashCode() {
-        return _Compliance.hashCode(this);
-    }
-
-    @Override
-    public final String toString() {
-        return _Compliance.toString(this);
-    }
-
     // -- HELPER
 
-   // private boolean refetching;
+    private Specialization specialization() {
+        return ManagedObject.Specialization.ENTITY;
+    }
 
     private Object refetchPojo(final EntityState entityState) {
 

@@ -63,10 +63,7 @@ permits
     ManagedObjectValue,
     ManagedObjectService,
     ManagedObjectViewmodel,
-    ManagedObjectEntityTransient,
-    ManagedObjectEntityRemoved,
-    ManagedObjectEntityBookmarked,
-    ManagedObjectEntityHybrid,
+    ManagedObjectEntity,
     PackedManagedObject {
 
     /**
@@ -486,16 +483,16 @@ permits
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        return new ManagedObjectEntityHybrid(
-                        new ManagedObjectEntityBookmarked(spec, pojo, bookmarkIfKnown));
+        return new ManagedObjectEntity(
+                        new EntityPhaseBookmarked(spec, pojo, bookmarkIfKnown));
     }
     // initially detached hybrid that can transition to bookmarked anytime on reassessment
     private static ManagedObject entityHybirdTransient(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
-                ? new ManagedObjectEntityHybrid(
-                        new ManagedObjectEntityTransient(spec, pojo))
+                ? new ManagedObjectEntity(
+                        new EntityPhaseTransient(spec, pojo))
                 : empty(spec);
     }
     /**
