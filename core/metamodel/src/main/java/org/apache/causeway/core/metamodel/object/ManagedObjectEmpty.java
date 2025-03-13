@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
+import java.util.Optional;
+
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -43,6 +46,11 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     @Override
     public String getTitle() {
         return "empty " + objSpec().logicalTypeName();
+    }
+
+    @Override
+    public Optional<ObjectMemento> getMemento() {
+        return Optional.of(ObjectMemento.empty(objSpec().logicalType()));
     }
 
 }
