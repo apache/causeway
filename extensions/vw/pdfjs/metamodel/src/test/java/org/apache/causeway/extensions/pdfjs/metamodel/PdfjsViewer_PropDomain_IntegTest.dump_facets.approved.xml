@@ -244,11 +244,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -403,11 +398,6 @@
             <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="origin" value="ActionAnnotation"/>
@@ -668,11 +658,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -835,11 +820,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -949,11 +929,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1062,11 +1037,6 @@
             <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="origin" value="ActionAnnotation"/>
