@@ -28,6 +28,8 @@ import java.util.stream.Collector;
 
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.util.ClassUtils;
+
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -128,7 +130,7 @@ public final class _Arrays {
      * @param length
      */
     public static <T> Collector<T,?,T[]> toArray(final @NonNull Class<T> componentType, final int length){
-        return new _Arrays_Collector<T>(componentType, length);
+        return new _Arrays_Collector<T>(resolvePrimitiveIfNecessary(componentType), length);
     }
 
     /**
@@ -136,7 +138,12 @@ public final class _Arrays {
      * @param componentType
      */
     public static <T> Collector<T,?,T[]> toArray(final @NonNull Class<T> componentType){
-        return new _Arrays_CollectorUnknownSize<T>(componentType);
+        return new _Arrays_CollectorUnknownSize<T>(resolvePrimitiveIfNecessary(componentType));
+    }
+
+    private static <T> Class<T> resolvePrimitiveIfNecessary(final Class<T> componentType) {
+        var nonPrimitive = ClassUtils.resolvePrimitiveIfNecessary(componentType);
+        return _Casts.uncheckedCast(nonPrimitive);
     }
 
     // -- CONCATENATION

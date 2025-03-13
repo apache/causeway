@@ -36,7 +36,9 @@ import org.apache.causeway.commons.internal.base._Casts;
  *
  * Collector for Arrays.
  */
-record _Arrays_CollectorUnknownSize<T>(Class<T> componentType) implements Collector<T, List<T>, T[]> {
+record _Arrays_CollectorUnknownSize<T>(
+    Class<T> componentType)
+implements Collector<T, List<T>, T[]> {
 
     @Override
     public Supplier<List<T>> supplier() {
