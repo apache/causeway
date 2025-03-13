@@ -19,13 +19,8 @@
 package org.apache.causeway.core.metamodel.object;
 
 import org.apache.causeway.applib.services.repository.EntityState;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 
 public sealed interface EntityPhase
-extends
-    HasMetaModelContext,
-    HasObjectSpecification
 permits
     EntityPhaseTransient,
     EntityPhaseBookmarked,
@@ -34,4 +29,7 @@ permits
     EntityState getEntityState();
 
     Object getPojo();
+
+    /** side-effect free for toString, equals and hashCode */
+    Object peekAtPojo();
 }

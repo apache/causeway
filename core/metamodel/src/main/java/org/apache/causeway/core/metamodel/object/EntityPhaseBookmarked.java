@@ -38,24 +38,29 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.extern.log4j.Log4j2;
 
-/**
- * (package private) specialization corresponding to a attached {@link Specialization#ENTITY}
- * @see ManagedObject.Specialization#ENTITY
- */
 @Log4j2
 record EntityPhaseBookmarked(
     @NonNull ObjectSpecification objSpec,
     @NonNull TransientObjectRef<Object> pojoRef,
     @NonNull Bookmark bookmark)
-implements EntityPhase, _Refetchable {
+implements EntityPhase {
 
+    // bookmark not required
+    EntityPhaseBookmarked(
+            final ObjectSpecification objSpec,
+            final Object pojo) {
+        this(objSpec, new TransientObjectRef<>(pojo), null);
+    }
+
+    // bookmark required
     EntityPhaseBookmarked(
             final ObjectSpecification objSpec,
             final Object pojo,
-            final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        this(objSpec, new TransientObjectRef<>(pojo), bookmarkIfKnown.orElse(null));
+            final @NonNull Bookmark bookmark) {
+        this(objSpec, new TransientObjectRef<>(pojo), bookmark);
     }
 
+    // canonical constructor
     EntityPhaseBookmarked(
         final ObjectSpecification objSpec,
         final TransientObjectRef<Object> pojoRef,

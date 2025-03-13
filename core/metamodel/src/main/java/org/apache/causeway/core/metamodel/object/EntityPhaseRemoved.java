@@ -21,23 +21,9 @@ package org.apache.causeway.core.metamodel.object;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.repository.EntityState;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-/**
- * (package private) specialization corresponding to a removed {@link Specialization#ENTITY}
- * @see ManagedObject.Specialization#ENTITY
- */
-record EntityPhaseRemoved(
-        @NonNull ObjectSpecification objSpec)
+record EntityPhaseRemoved()
 implements EntityPhase {
-
-    EntityPhaseRemoved(
-            final ObjectSpecification objSpec) {
-        _Assert.assertTrue(objSpec.isEntity());
-        this.objSpec = objSpec;
-    }
 
     @Override
     public Object getPojo() {
@@ -45,8 +31,14 @@ implements EntityPhase {
     }
 
     @Override
+    public Object peekAtPojo() {
+        return null;
+    }
+
+    @Override
     public @NonNull EntityState getEntityState() {
         return EntityState.REMOVED;
     }
+
 
 }

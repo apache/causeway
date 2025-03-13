@@ -469,25 +469,22 @@ permits
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo,
             final @NonNull Optional<Bookmark> bookmarkIfKnown) {
-        if(pojo == null) {
-            return empty(spec);
-        }
+        if(pojo == null) return empty(spec);
+
         var bookmarkIfAny = bookmarkIfKnown
                 .or(()->spec.entityFacetElseFail().bookmarkFor(pojo));
         return bookmarkIfAny
-            .map(bookmark->entityHypridBookmarked(spec, pojo, bookmarkIfAny))
-            .orElseGet(()->entityHybirdTransient(spec, pojo));
+            .map(bookmark->entityBookmarked(spec, pojo, bookmark))
+            .orElseGet(()->entityTransient(spec, pojo));
     }
-    // bookmarked hybrid in its final state (cannot transition)
-    private static ManagedObject entityHypridBookmarked(
+    private static ManagedObject entityBookmarked(
             final @NonNull ObjectSpecification spec,
             final @NonNull Object pojo,
-            final @NonNull Optional<Bookmark> bookmarkIfKnown) {
+            final @NonNull Bookmark bookmark) {
         return new ManagedObjectEntity(
-                        new EntityPhaseBookmarked(spec, pojo, bookmarkIfKnown));
+                        new EntityPhaseBookmarked(spec, pojo, bookmark));
     }
-    // initially detached hybrid that can transition to bookmarked anytime on reassessment
-    private static ManagedObject entityHybirdTransient(
+    private static ManagedObject entityTransient(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null

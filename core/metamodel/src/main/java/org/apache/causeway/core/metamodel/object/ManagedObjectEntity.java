@@ -48,11 +48,11 @@ record ManagedObjectEntity(
      * However, the pojo reference must be kept identical, unless the entity becomes 'removed',
      * in which case the pojo reference is invalidated and should no longer be accessible to callers.
      */
-    @NonNull TransientObjectRef<EntityPhase> variantRef,
-    @NonNull TransientObjectRef<MorphState> morphStateRef)
-implements ManagedObject, _Refetchable {
+    @NonNull TransientObjectRef<EntityPhase> phaseRef,
+    @NonNull TransientObjectRef<PhaseState> morphStateRef)
+implements ManagedObject {
 
-    private enum MorphState {
+    private enum PhaseState {
         /** Has no bookmark yet; can be transitioned to BOOKMARKED once
          *  for accompanied pojo, an OID becomes available. */
         TRANSIENT,
@@ -64,7 +64,7 @@ implements ManagedObject, _Refetchable {
         public boolean isTransient() { return this == TRANSIENT; }
         public boolean isBookmarked() { return this == BOOKMARKED; }
         public boolean isRemoved() { return this == REMOVED; }
-        static MorphState valueOf(final EntityState entityState) {
+        static PhaseState valueOf(final EntityState entityState) {
             return entityState.isRemoved()
                     ? REMOVED
                     : entityState.isAttached()
@@ -75,12 +75,12 @@ implements ManagedObject, _Refetchable {
 
     ManagedObjectEntity(
             final @NonNull EntityPhaseTransient transientPhase) {
-        this(transientPhase.objSpec(), new TransientObjectRef<>(transientPhase), new TransientObjectRef<>(MorphState.TRANSIENT));
+        this(transientPhase.objSpec(), new TransientObjectRef<>(transientPhase), new TransientObjectRef<>(PhaseState.TRANSIENT));
     }
 
     ManagedObjectEntity(
             final @NonNull EntityPhaseBookmarked bookmarkedPhase) {
-        this(bookmarkedPhase.objSpec(), new TransientObjectRef<>(bookmarkedPhase), new TransientObjectRef<>(MorphState.BOOKMARKED));
+        this(bookmarkedPhase.objSpec(), new TransientObjectRef<>(bookmarkedPhase), new TransientObjectRef<>(PhaseState.BOOKMARKED));
     }
 
     @Override
@@ -101,8 +101,7 @@ implements ManagedObject, _Refetchable {
 
     @Override
     public Optional<Bookmark> getBookmark() {
-        var variant = variant();
-        return (variant instanceof EntityPhaseBookmarked bookmarked)
+        return (phase() instanceof EntityPhaseBookmarked bookmarked)
                 ? Optional.of(bookmarked.bookmark())
                 : Optional.empty();
     }
@@ -114,12 +113,12 @@ implements ManagedObject, _Refetchable {
 
     @Override
     public @NonNull EntityState getEntityState() {
-        var entityState = variant().getEntityState();
-        var newMorphState = MorphState.valueOf(entityState);
+        var entityState = phase().getEntityState();
+        var newMorphState = PhaseState.valueOf(entityState);
 
         if(morphStateRef.getObject()!=newMorphState) {
-            log.debug("about to transition to {} variant given {}", newMorphState.name(), entityState);
-            reassessVariant(entityState, peekAtPojo());
+            log.debug("about to transition to {} phase given {}", newMorphState.name(), entityState);
+            reassessPhase(entityState, peekAtPojo());
             if(newMorphState.isBookmarked()) {
                 _Assert.assertTrue(isBookmarkedPhase(), ()->"successful transition");
             } else if(newMorphState.isRemoved()) {
@@ -136,7 +135,7 @@ implements ManagedObject, _Refetchable {
 
         // handle the 'deleted' / 'not found' case gracefully ...
         try {
-            var pojo = variant().getPojo();
+            var pojo = phase().getPojo();
             triggerReassessment();
             //if(pojo==null) makeRemoved(); seems reasonable, not tested yet
             return pojo;
@@ -147,11 +146,8 @@ implements ManagedObject, _Refetchable {
         }
     }
 
-    @Override
     public Object peekAtPojo() {
-        return (variant() instanceof _Refetchable refetchable)
-                ? refetchable.peekAtPojo()
-                : null;
+        return phase().peekAtPojo();
     }
 
     @Override
@@ -171,8 +167,8 @@ implements ManagedObject, _Refetchable {
 
     // -- HELPER
 
-    private EntityPhase variant() {
-        return variantRef.getObject();
+    private EntityPhase phase() {
+        return phaseRef.getObject();
     }
 
     private void triggerReassessment() {
@@ -182,24 +178,24 @@ implements ManagedObject, _Refetchable {
     }
 
     private boolean isBookmarkedPhase() {
-        return variant() instanceof EntityPhaseBookmarked;
+        return phase() instanceof EntityPhaseBookmarked;
     }
 
     private boolean isTransientPhase() {
-        return variant() instanceof EntityPhaseTransient;
+        return phase() instanceof EntityPhaseTransient;
     }
 
     private boolean isRemovedPhase() {
-        return variant() instanceof EntityPhaseRemoved;
+        return phase() instanceof EntityPhaseRemoved;
     }
 
-    private synchronized void reassessVariant(final EntityState entityState, final Object pojo) {
+    private synchronized void reassessPhase(final EntityState entityState, final Object pojo) {
         if(isTransientPhase()
                 && entityState.hasOid()) {
             makeBookmarked(pojo);
             return;
         }
-        /* if the current EntityState is REMOVED, we handle variant transition
+        /* if the current EntityState is REMOVED, we handle phase transition
          * - from BOOKMARKED
          * - as well as from TRANSIENT
          * to REMOVED */
@@ -213,14 +209,14 @@ implements ManagedObject, _Refetchable {
 
     // transition to 'attached' state
     private void makeBookmarked(final Object pojo) {
-        var attached = new EntityPhaseBookmarked(objSpec(), pojo, Optional.empty());
-        variantRef.update(__->attached);
+        var attached = new EntityPhaseBookmarked(objSpec(), pojo);
+        phaseRef.update(__->attached);
     }
 
     // transition to 'removed' state
     private void makeRemoved() {
-        var removed = new EntityPhaseRemoved(objSpec());
-        variantRef.update(__->removed);
+        var removed = new EntityPhaseRemoved();
+        phaseRef.update(__->removed);
     }
 
 }

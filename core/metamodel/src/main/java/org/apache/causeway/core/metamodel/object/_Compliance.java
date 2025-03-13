@@ -66,8 +66,7 @@ class _Compliance {
         if(!mo.specialization().equals(other.specialization())) return false;
         if(!mo.objSpec().equals(other.objSpec())) return false;
 
-        var canGetPojosWithoutSideeffect = !mo.specialization().getPojoPolicy().isRefetchable();
-        if(canGetPojosWithoutSideeffect) {
+        if(!mo.specialization().getPojoPolicy().isRefetchable()) {
             // expected to work for packed variant just fine, as it compares lists
             return Objects.equals(mo.getPojo(), other.getPojo());
         }
@@ -79,8 +78,8 @@ class _Compliance {
                     other.getBookmark().orElseThrow(_Exceptions::unexpectedCodeReach));
         }
 
-        var a = (_Refetchable) mo;
-        var b = (_Refetchable) mo;
+        var a = (ManagedObjectEntity) mo;
+        var b = (ManagedObjectEntity) other;
         return Objects.equals(a.peekAtPojo(), b.peekAtPojo());
     }
 

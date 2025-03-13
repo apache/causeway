@@ -293,8 +293,8 @@ public final class ManagedObjects {
     public Object peekAtPojoOf(final @Nullable ManagedObject obj) {
         return isNullOrUnspecifiedOrEmpty(obj)
                 ? null
-                : (obj instanceof _Refetchable)
-                    ? ((_Refetchable)obj).peekAtPojo()
+                : (obj instanceof ManagedObjectEntity entity)
+                    ? entity.peekAtPojo()
                     : obj.getPojo();
     }
 

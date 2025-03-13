@@ -22,17 +22,12 @@ import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-/**
- * (package private) specialization corresponding to a detached {@link Specialization#ENTITY}
- * @see ManagedObject.Specialization#ENTITY
- */
 record EntityPhaseTransient(
     @NonNull ObjectSpecification objSpec,
     @NonNull Object pojo)
-implements EntityPhase, _Refetchable {
+implements EntityPhase {
 
     EntityPhaseTransient(
             final ObjectSpecification objSpec,
@@ -45,11 +40,6 @@ implements EntityPhase, _Refetchable {
     public ManagedObject.Specialization specialization() {
         return ManagedObject.Specialization.ENTITY;
     }
-
-//    @Override
-//    public String getTitle() {
-//        return "transient entity object";
-//    }
 
     @Override
     public Object getPojo() {
@@ -65,10 +55,5 @@ implements EntityPhase, _Refetchable {
     public @NonNull EntityState getEntityState() {
         return objSpec().entityFacetElseFail().getEntityState(pojo);
     }
-
-//    @Override
-//    public Optional<ObjectMemento> getMemento() {
-//        return Optional.ofNullable(ObjectMemento.singularOrEmpty(this));
-//    }
 
 }
