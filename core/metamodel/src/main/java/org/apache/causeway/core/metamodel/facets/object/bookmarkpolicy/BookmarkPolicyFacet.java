@@ -18,16 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.core.metamodel.facets.SingleValueFacet;
 
 /**
  * Corresponds to annotating the class with {@link DomainObjectLayout#bookmarking()}.
- * or an action with {@link ActionLayout#bookmarking()}.
- *
- * @see ActionLayout
  * @see DomainObjectLayout
  */
 public interface BookmarkPolicyFacet extends SingleValueFacet<BookmarkPolicy> {

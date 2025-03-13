@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
 
 public sealed interface ValidityContext
 extends InteractionContext, InteractionEventSupplier<ValidityEvent>
-permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, ParseValueContext, PropertyModifyContext {
+permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, PropertyModifyContext {
 
     Supplier<String> friendlyNameProvider();
 

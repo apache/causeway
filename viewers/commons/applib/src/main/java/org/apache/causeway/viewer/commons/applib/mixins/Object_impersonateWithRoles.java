@@ -26,7 +26,6 @@ import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.layout.LayoutConstants;
@@ -54,7 +53,6 @@ import lombok.RequiredArgsConstructor;
         describedAs = "Switch to another user account with specified roles (for prototype/testing only)",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
-        redirectPolicy = Redirect.EVEN_IF_SAME,
         sequence = "850.2"
 )
 //mixin's don't need a logicalTypeName

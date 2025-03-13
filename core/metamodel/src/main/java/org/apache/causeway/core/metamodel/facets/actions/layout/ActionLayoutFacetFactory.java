@@ -30,7 +30,6 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
-import org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
@@ -95,17 +94,10 @@ extends FacetFactoryAbstract {
 
         addFacet(actionPositionFacet);
 
-        // redirectPolicy
-        var redirectFacet = RedirectFacetFromActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder)
-                .orElseGet(()->new RedirectFacetFallback(facetHolder));
-        addFacet(redirectFacet);
-
         // sequence (layout)
         addFacetIfPresent(
                 LayoutOrderFacetFromActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder));
-
     }
 
     // -- HELPER

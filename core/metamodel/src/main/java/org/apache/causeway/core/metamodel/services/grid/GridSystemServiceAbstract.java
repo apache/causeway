@@ -47,7 +47,6 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForAction
 import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.CssClassFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutXml;
@@ -272,9 +271,6 @@ implements GridSystemService<G> {
                     Optional.ofNullable(actionLayoutData)
                         .map(ActionLayoutData::getPromptStyle)
                         .map(promptStyle->new PromptStyleFacet("ActionLayoutXml", promptStyle, objectAction, precedence, true)));
-
-                updateFacetIfPresent(
-                        RedirectFacetFromActionLayoutXml.create(actionLayoutData, objectAction, precedence));
 
             }
 

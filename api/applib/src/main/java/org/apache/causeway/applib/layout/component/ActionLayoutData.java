@@ -27,7 +27,6 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
-import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.links.Link;
 
@@ -175,17 +174,6 @@ HasDescribedAs, HasHidden, HasNamed {
 
     public void setPromptStyle(final PromptStyle promptStyle) {
         this.promptStyle = promptStyle;
-    }
-
-    private Redirect redirect;
-
-    @XmlAttribute(required = false)
-    public Redirect getRedirect() {
-        return redirect;
-    }
-
-    public void setRedirect(final Redirect redirect) {
-        this.redirect = redirect;
     }
 
     private ActionLayoutDataOwner owner;

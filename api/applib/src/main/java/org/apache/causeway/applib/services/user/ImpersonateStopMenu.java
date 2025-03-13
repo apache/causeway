@@ -29,7 +29,6 @@ import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Publishing;
-import org.apache.causeway.applib.annotation.Redirect;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -74,7 +73,7 @@ public class ImpersonateStopMenu {
             restrictTo = RestrictTo.PROTOTYPING,
             semantics = SemanticsOf.IDEMPOTENT
     )
-    @ActionLayout(sequence = "100.3", redirectPolicy = Redirect.EVEN_IF_SAME)
+    @ActionLayout(sequence = "100.3")
     public class stopImpersonating{
 
         public class ActionDomainEvent extends ImpersonateStopMenu.ActionDomainEvent<stopImpersonating> { }

@@ -222,20 +222,6 @@ public @interface ActionLayout {
             default PromptStyle.AS_CONFIGURED;
 
     /**
-     * If the action returns its target, then determines whether to update the
-     * page or instead to redirect (forcing a re-rendering of a new page).
-     *
-     * <p>
-     *     Not re-rendering can provide a smoother UI experience.
-     * </p>
-     * @deprecated currently NOT supported by the Wicket viewer, but could be re-implemented with
-     *      a future release
-     */
-    @Deprecated(forRemoval = false, since = "2.0.0-RC1")
-    Redirect redirectPolicy()
-            default Redirect.AS_CONFIGURED;
-
-    /**
      * The order of this member relative to other members in the same (layout) group,
      * given in <i>Dewey-decimal</i> notation.
      * <p>

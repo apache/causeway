@@ -27,6 +27,6 @@ import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
  */
 public sealed interface AccessContext
 extends InteractionContext, InteractionEventSupplier<AccessEvent>
-permits CollectionAccessContext, ObjectTitleContext, PropertyAccessContext {
+permits ObjectTitleContext {
 
 }
