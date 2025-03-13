@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.object;
 
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -68,7 +67,7 @@ implements EntityPhase {
         final TransientObjectRef<Object> pojoRef,
         @Nullable final Bookmark bookmark) {
         _Assert.assertTrue(objSpec.isEntity());
-        _Compliance.assertCompliance(objSpec, specialization(), pojoRef.getObject());
+        specialization().assertCompliance(objSpec, pojoRef.getObject());
         this.objSpec = objSpec;
         this.pojoRef = pojoRef;
         //sanity check bookmark
@@ -88,11 +87,8 @@ implements EntityPhase {
     }
 
     @Override
-    public Object getPojo() {
-
+    public Object getPojo(final EntityState entityState) {
         // refetch only if required ...
-
-        var entityState = reassessEntityState();
         if(!entityState.isPersistable()) {
             throw _Exceptions.illegalState("not persistable %s", objSpec());
         }
@@ -102,25 +98,19 @@ implements EntityPhase {
         // in which case potentially runs into a nested loop, which we detect and throw
         return pojoRef.update(old->{
             var refetchedPojo = refetchPojo(entityState);
-            return _Compliance.assertCompliance(objSpec(), specialization(), refetchedPojo);
+            return specialization().assertCompliance(objSpec(), refetchedPojo);
         });
     }
 
     @Override
-    public EntityState reassessEntityState(final BiConsumer<EntityState, PhaseState> onNewPhaseRequired) {
-        var newEntityState = reassessEntityState();
-        phaseState().reassessPhase(newEntityState, onNewPhaseRequired);
-        return newEntityState;
+    public EntityState reassessEntityState() {
+        return entityFacet().getEntityState(peekAtPojo());
     }
 
     // -- HELPER
 
     private Specialization specialization() {
         return ManagedObject.Specialization.ENTITY;
-    }
-
-    private @NonNull EntityState reassessEntityState() {
-        return entityFacet().getEntityState(peekAtPojo());
     }
 
     private Object refetchPojo(final EntityState entityState) {

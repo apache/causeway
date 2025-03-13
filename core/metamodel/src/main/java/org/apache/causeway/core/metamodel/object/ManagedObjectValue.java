@@ -47,7 +47,7 @@ implements ManagedObject {
             final Object pojo) {
         this(objSpec, pojo, _Lazy.threadSafe(()->createBookmark(objSpec, pojo)));
         _Assert.assertTrue(objSpec.isValue());
-        _Compliance.assertCompliance(objSpec, specialization(), pojo);
+        specialization().assertCompliance(objSpec, pojo);
     }
 
     @Override

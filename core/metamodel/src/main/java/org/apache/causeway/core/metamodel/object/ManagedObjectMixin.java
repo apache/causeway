@@ -38,7 +38,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
             final Object pojo) {
         _Assert.assertTrue(objSpec.isMixin());
         this.objSpec = objSpec;
-        this.pojo = _Compliance.assertCompliance(objSpec, specialization(), pojo);
+        this.pojo = specialization().assertCompliance(objSpec, pojo);
     }
 
     @Override

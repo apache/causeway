@@ -70,7 +70,7 @@ implements
         final TransientObjectRef<TransactionId> txIdDuringWhichRefreshed,
         final _Lazy<Bookmark> bookmarkLazy) {
         _Assert.assertTrue(objSpec.isViewModel());
-        _Compliance.assertCompliance(objSpec, specialization(), pojoRef.getObject());
+        specialization().assertCompliance(objSpec, pojoRef.getObject());
         this.objSpec = objSpec;
         this.pojoRef = pojoRef;
         this.txIdDuringWhichRefreshed = txIdDuringWhichRefreshed;
@@ -199,7 +199,7 @@ implements
     }
 
     private void replacePojo(final UnaryOperator<Object> replacer) {
-        pojoRef.update(pojo->_Compliance.assertCompliance(objSpec, specialization(), replacer.apply(pojo)));
+        pojoRef.update(pojo->specialization().assertCompliance(objSpec, replacer.apply(pojo)));
     }
 
 }

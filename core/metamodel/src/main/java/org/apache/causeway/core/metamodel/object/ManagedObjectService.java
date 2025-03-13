@@ -21,14 +21,13 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
-import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * (package private) specialization corresponding to {@link Specialization#SERVICE}
@@ -45,7 +44,7 @@ implements ManagedObject {
         final Object pojo) {
         this(objSpec, pojo, Bookmark.forLogicalTypeAndIdentifier(objSpec.logicalType(), "1"));
         assertInjectable(objSpec);
-        _Compliance.assertCompliance(objSpec, specialization(), pojo);
+        specialization().assertCompliance(objSpec, pojo);
     }
 
     @Override

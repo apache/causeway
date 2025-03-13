@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.object;
 
-import java.util.function.BiConsumer;
-
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 
@@ -32,7 +30,7 @@ implements EntityPhase {
     }
 
     @Override
-    public Object getPojo() {
+    public Object getPojo(final EntityState entityState) {
         return null;
     }
 
@@ -42,7 +40,7 @@ implements EntityPhase {
     }
 
     @Override
-    public EntityState reassessEntityState(final BiConsumer<EntityState, PhaseState> onNewPhaseRequired) {
+    public EntityState reassessEntityState() {
         return EntityState.REMOVED;
     }
 

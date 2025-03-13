@@ -38,7 +38,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
         this.objSpec = objSpec;
         _Assert.assertTrue(!objSpec.isValue());
         _Assert.assertTrue(!objSpec.isEntityOrViewModel());
-        this.pojo = _Compliance.assertCompliance(objSpec, specialization(), pojo);
+        this.pojo = specialization().assertCompliance(objSpec, pojo);
     }
 
     @Override

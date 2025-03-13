@@ -29,6 +29,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -317,6 +318,31 @@ permits
             if(!spec.isAbstract()) { return OTHER; }
             log.warn("failed specialization attempt for {}", spec);
             return UNSPECIFIED;
+        }
+
+        <T> T assertCompliance(
+                final ObjectSpecification objSpec,
+                final @NonNull T pojo) {
+            final Specialization specialization = this;
+            MmAssertionUtils.assertPojoNotWrapped(pojo);
+            if(objSpec.isAbstract()) {
+                _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired(),
+                        ()->String.format("Specialization %s does not allow abstract type %s",
+                                specialization,
+                                objSpec));
+            }
+            if(specialization.getTypePolicy().isExactTypeRequired()) {
+                MmAssertionUtils.assertExactType(objSpec, pojo);
+            }
+            if(specialization.getInjectionPolicy().isAlwaysInject()) {
+                var isInjectionPointsResolved = objSpec.entityFacet()
+                    .map(entityFacet->entityFacet.isInjectionPointsResolved(pojo))
+                    .orElse(false);
+                if(!isInjectionPointsResolved) {
+                    objSpec.getServiceInjector().injectServicesInto(pojo); // might be redundant
+                }
+            }
+            return pojo;
         }
     }
 
