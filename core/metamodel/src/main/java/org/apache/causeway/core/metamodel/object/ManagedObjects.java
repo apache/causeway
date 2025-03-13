@@ -23,7 +23,9 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -31,7 +33,6 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -39,7 +40,6 @@ import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -423,12 +423,12 @@ public final class ManagedObjects {
     // -- VIEWMODEL UTILITIES
 
     public void refreshViewmodel(
-            final @Nullable ManagedObject viewmodel,
+            final @Nullable ManagedObject mo,
             final @Nullable Supplier<Bookmark> bookmarkSupplier) {
 
-        _Casts.castTo(_RefreshableViewmodel.class, viewmodel)
-        .ifPresent(refreshableViewmodel->
-            refreshableViewmodel.refreshViewmodel(bookmarkSupplier));
+        if(mo instanceof ManagedObjectViewmodel viewmodel) {
+            viewmodel.refreshViewmodel(bookmarkSupplier);
+        }
     }
 
 }

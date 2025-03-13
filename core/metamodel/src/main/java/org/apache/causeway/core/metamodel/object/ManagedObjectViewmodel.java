@@ -47,8 +47,7 @@ record ManagedObjectViewmodel(
     @NonNull _Lazy<Bookmark> bookmarkLazy)
 implements
     ManagedObject,
-    Bookmarkable.BookmarkRefreshable,
-    _RefreshableViewmodel {
+    Bookmarkable.BookmarkRefreshable {
 
     ManagedObjectViewmodel(
             final ObjectSpecification objSpec,
@@ -115,8 +114,12 @@ implements
 
     // -- REFRESH OPTIMIZATION
 
-    @Override
-    public final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
+    /**
+     * If the underlying domain object is a viewmodel, refreshes any referenced entities.
+     * (Acts as a no-op otherwise.)
+     * @apiNote usually should be sufficient to refresh once per interaction.
+     */
+    final void refreshViewmodel(final @Nullable Supplier<Bookmark> bookmarkSupplier) {
         var shouldRefresh = getTransactionService().currentTransactionId()
             .map(this::shouldRefresh)
             .orElse(true); // if there is no current transaction, refresh regardless; unexpected state, might fail later
