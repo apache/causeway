@@ -43,11 +43,8 @@ extends AttributePanelWithFormField<BufferedImage> {
 
     private static final long serialVersionUID = 1L;
 
-    private IModel<BufferedImage> unwrapped;
-
     public ImageAttributePanel(final String id, final UiAttributeWkt attributeModel) {
         super(id, attributeModel, BufferedImage.class);
-        this.unwrapped = attributeModel.unwrapped(type);
     }
 
     protected IModel<List<FileUpload>> fileUploadModel() {
@@ -95,7 +92,7 @@ extends AttributePanelWithFormField<BufferedImage> {
     }
 
     private Optional<BufferedImage> pojoOptional() {
-        return Optional.ofNullable(unwrapped.getObject());
+        return Optional.ofNullable(attributeModel().unwrapAs(type));
     }
 
 }

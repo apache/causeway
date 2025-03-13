@@ -42,7 +42,7 @@ implements HasUiProperty {
     private static final long serialVersionUID = 1L;
 
     @Getter(onMethod_={@Override})
-    private UiPropertyWkt uiProperty;
+    private final UiPropertyWkt uiProperty;
 
     public static PropertyModel wrap(
             final UiPropertyWkt uiProperty,

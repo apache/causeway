@@ -47,7 +47,7 @@ class BlobAttributePanel extends BlobOrClobAttributePanel<Blob> {
 
     @Override
     protected IResource newResource(final Blob blob) {
-        return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+        return new ByteArrayResource(blob.mimeType().getBaseType(), blob.bytes(), blob.name());
     }
 
 }

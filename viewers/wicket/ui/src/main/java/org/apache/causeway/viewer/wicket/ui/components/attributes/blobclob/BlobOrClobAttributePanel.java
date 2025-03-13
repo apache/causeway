@@ -29,14 +29,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.IResource;
 
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanelWithFormField;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragmentFactory.InputFragment;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanelWithFormField;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
@@ -45,12 +43,8 @@ extends AttributePanelWithFormField<T> {
 
     private static final long serialVersionUID = 1L;
 
-    /** Model that maps to either {@link Blob} or {@link Clob} */
-    private IModel<T> unwrapped;
-
     protected BlobOrClobAttributePanel(final String id, final UiAttributeWkt attributeModel, final Class<T> type) {
         super(id, attributeModel, type);
-        this.unwrapped = attributeModel.unwrapped(type);
     }
 
     protected abstract IModel<List<FileUpload>> fileUploadModel();
@@ -78,7 +72,7 @@ extends AttributePanelWithFormField<T> {
     @Override
     protected UiString obtainOutputFormat() {
         var caption = getBlobOrClobFromModel()
-                .map(NamedWithMimeType::getName)
+                .map(NamedWithMimeType::name)
                 .orElseGet(()->
                     getPlaceholderRenderService()
                     .asText(PlaceholderLiteral.NULL_REPRESENTATION));
@@ -100,7 +94,7 @@ extends AttributePanelWithFormField<T> {
     }
 
     private Optional<T> getBlobOrClobFromModel() {
-        return Optional.ofNullable(unwrapped.getObject());
+        return Optional.ofNullable(attributeModel().unwrapAs(type));
     }
 
     private Component createDownloadLink(final String id, final IModel<String> labelModel) {

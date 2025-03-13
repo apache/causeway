@@ -53,7 +53,7 @@ class ClobAttributePanel extends BlobOrClobAttributePanel<Clob> {
 
     @Override
     protected IResource newResource(final Clob clob) {
-        return new CharSequenceResource(clob.getMimeType().getBaseType(), clob.getChars(), clob.getName());
+        return new CharSequenceResource(clob.mimeType().getBaseType(), clob.chars(), clob.name());
     }
 
 }

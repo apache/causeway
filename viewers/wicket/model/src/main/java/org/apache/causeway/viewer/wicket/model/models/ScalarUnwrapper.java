@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.IModel;
 import org.jspecify.annotations.NonNull;
 
 import org.springframework.util.ClassUtils;
@@ -32,30 +31,28 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
  * Wraps and unwraps the contained value within {@link ManagedObject},
  * as provided by a {@link UiAttributeWkt}.
  */
-public record ScalarUnwrappingModel<T>(
+record ScalarUnwrapper<T>(
     Class<T> type,
-    UiAttributeWkt attributeModel) implements IModel<T> {
+    UiAttributeWkt attributeModel) {
 
     // canonical constructor
-    public ScalarUnwrappingModel(
+    public ScalarUnwrapper(
             final @NonNull Class<T> type,
             final @NonNull UiAttributeWkt attributeModel) {
-        this.attributeModel = attributeModel;
         this.type = type;
+        this.attributeModel = attributeModel;
         _Assert.assertTrue(attributeModel.getElementType().isAssignableFrom(type), ()->
                 String.format("cannot possibly unwrap model of type %s into target type %s",
                         attributeModel.getElementType().getCorrespondingClass(),
                         type));
     }
 
-    @Override
     public T getObject() {
         var objectAdapter = attributeModel().getObject();
         var pojo = unwrap(objectAdapter);
         return pojo;
     }
 
-    @Override
     public void setObject(final T object) {
         var attributeModel = attributeModel();
         if (object == null) {

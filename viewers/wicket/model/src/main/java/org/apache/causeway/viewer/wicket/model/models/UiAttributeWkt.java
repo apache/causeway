@@ -110,8 +110,20 @@ implements IModel<ManagedObject>, HasRenderingHints, UiAttribute, FormExecutorCo
                 : Either.right((PropertyModel) this);
     }
 
+    public <T> T unwrapAs(final Class<T> type) {
+        return new ScalarUnwrapper<T>(type, this).getObject();
+    }
+
     public <T> IModel<T> unwrapped(final Class<T> type) {
-        return new ScalarUnwrappingModel<T>(type, this);
+        return new IModel<T>() {
+            private static final long serialVersionUID = 1L;
+            @Override public T getObject() {
+                return new ScalarUnwrapper<T>(type, UiAttributeWkt.this).getObject();
+            }
+            @Override public void setObject(final T t) {
+                new ScalarUnwrapper<T>(type, UiAttributeWkt.this).setObject(t);
+            }
+        };
     }
 
     /**
