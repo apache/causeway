@@ -51,11 +51,11 @@ extends FacetFactoryAbstract {
 
         if(processMethodContext.getFeatureType().isProperty()) {
             if(collectionIfAny.isPresent()) {
-                // Collection annotation is not allowed on collection feature
+                // Collection annotation is not allowed on property feature
                 ValidationFailureUtils
                     .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Collection.class);
             }
-            return; // skip further processing, since this is a collection feature
+            return; // skip further processing, since this is a property feature
         }
 
         if(collectionIfAny.isPresent()) {

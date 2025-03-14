@@ -73,7 +73,7 @@ extends FacetFactoryAbstract {
                 ValidationFailureUtils
                     .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Property.class);
             }
-            return; // skip further processing, since this is a property feature
+            return; // skip further processing, since this is a collection feature
         }
 
         if(propertyIfAny.isPresent()) {
