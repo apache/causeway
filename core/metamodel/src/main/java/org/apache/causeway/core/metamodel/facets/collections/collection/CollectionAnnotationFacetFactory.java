@@ -51,15 +51,21 @@ extends FacetFactoryAbstract {
 
         if(processMethodContext.getFeatureType().isProperty()) {
             if(collectionIfAny.isPresent()) {
+                // Collection annotation is not allowed on collection feature
                 ValidationFailureUtils
                     .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Collection.class);
             }
-            return;
+            return; // skip further processing, since this is a collection feature
         }
 
-        if(processMethodContext.isMixinMain()
-                && collectionIfAny.isPresent()) {
-            inferMixinSort(processMethodContext.getFacetHolder());
+        if(collectionIfAny.isPresent()) {
+            if(processMethodContext.isMixinMain()) {
+                inferMixinSort(processMethodContext.getFacetHolder());
+            } else if(processMethodContext.getFeatureType().isAction()) {
+                // Collection annotation is not allowed on action feature (unless mixin main)
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Collection.class);
+            }
         }
 
         processDomainEvent(processMethodContext, collectionIfAny);

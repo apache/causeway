@@ -33,7 +33,7 @@ import lombok.Setter;
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class InvalidAssociationAnnotation {
 
-    @Property(fileAccept=".xlsx") // TODO as this is no getter representing a property, @Property should not be allowed here
+    @Property(fileAccept=".xlsx") // synthesis test, invalid anyway
     @Action
     public Blob exportToJson() {
         return null;
@@ -46,5 +46,29 @@ public class InvalidAssociationAnnotation {
     @Property // invalid
     @Getter @Setter
     private List<String> plural;
+
+    @Property // invalid
+    @Action
+    public String singularActionP() {
+        return null;
+    }
+
+    @Property // invalid
+    @Action
+    public List<String> pluralActionP() {
+        return null;
+    }
+
+    @Collection // invalid
+    @Action
+    public String singularActionC() {
+        return null;
+    }
+
+    @Collection // invalid
+    @Action
+    public List<String> pluralActionC() {
+        return null;
+    }
 
 }

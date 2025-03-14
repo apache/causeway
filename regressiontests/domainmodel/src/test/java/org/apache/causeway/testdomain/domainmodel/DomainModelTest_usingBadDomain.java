@@ -393,19 +393,35 @@ class DomainModelTest_usingBadDomain {
 
     @Test
     void invalidPropertyAnnotationOnCollection_shouldFail() {
-        var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "singular");
-        validator.assertAnyFailuresContaining(
-            origin,
-            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
-    }
-
-    @Test
-    void invalidCollectionAnnotationOnProperty_shouldFail() {
         var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "plural");
         validator.assertAnyFailuresContaining(
             origin,
             ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Property.class));
     }
+    @Test
+    void invalidCollectionAnnotationOnProperty_shouldFail() {
+        var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "singular");
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"singularActionP", "pluralActionP"})
+    void invalidPropertyAnnotationOnAction_shouldFail(final String actionName) {
+        var origin = Identifier.actionIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), actionName);
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Property.class));
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"singularActionC", "pluralActionC"})
+    void invalidCollectionAnnotationOnAction_shouldFail(final String actionName) {
+        var origin = Identifier.actionIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), actionName);
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
+    }
+
 
     // -- ELEMENT-TYPE
 
