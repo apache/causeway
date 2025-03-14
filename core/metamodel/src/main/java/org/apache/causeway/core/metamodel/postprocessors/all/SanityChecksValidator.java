@@ -98,7 +98,7 @@ implements
         if(elementType == null
                 || !elementType.getBeanSort().policy().isAllowedAsMemberElementType()) {
 
-            ValidationFailureUtils.raiseInvalidMemberElementType(facetHolder, declaringType, elementType);
+            ValidationFailureUtils.raiseMemberInvalidElementType(facetHolder, declaringType, elementType);
         }
     }
 

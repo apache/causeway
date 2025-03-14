@@ -60,18 +60,24 @@ extends FacetFactoryAbstract {
 
     @Inject
     public PropertyAnnotationFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.PROPERTIES_AND_ACTIONS);
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         var propertyIfAny = propertyIfAny(processMethodContext);
 
-        if(processMethodContext.isMixinMain()) {
-            propertyIfAny.ifPresent(property->{
-                inferMixinSort(property, processMethodContext.getFacetHolder());
-            });
+        if(processMethodContext.getFeatureType().isCollection()) {
+            if(propertyIfAny.isPresent()) {
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Property.class);
+            }
+            return;
+        }
+
+        if(processMethodContext.isMixinMain()
+                && propertyIfAny.isPresent()) {
+            inferMixinSort(processMethodContext.getFacetHolder());
         }
 
         processDomainEvent(processMethodContext, propertyIfAny);
@@ -96,7 +102,7 @@ extends FacetFactoryAbstract {
                         .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Property.class));
     }
 
-    void inferMixinSort(final Property property, final FacetedMethod facetedMethod) {
+    void inferMixinSort(final FacetedMethod facetedMethod) {
         /* if @Property detected on method or type level infer:
          * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacet("InferSafeForMixedInProperty", SemanticsOf.SAFE, facetedMethod));

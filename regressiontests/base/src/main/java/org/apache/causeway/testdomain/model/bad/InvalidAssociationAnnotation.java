@@ -18,20 +18,33 @@
  */
 package org.apache.causeway.testdomain.model.bad;
 
+import java.util.List;
+
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.value.Blob;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @DomainObject(nature = Nature.VIEW_MODEL)
-public class InvalidPropertyAnnotationOnAction {
+public class InvalidAssociationAnnotation {
 
-    // TODO as this is no getter representing a property, @Property should not be allowed here
-
-    @Action @Property(fileAccept=".xlsx")
+    @Property(fileAccept=".xlsx") // TODO as this is no getter representing a property, @Property should not be allowed here
+    @Action
     public Blob exportToJson() {
         return null;
     }
+
+    @Collection // invalid
+    @Getter @Setter
+    private String singular;
+
+    @Property // invalid
+    @Getter @Setter
+    private List<String> plural;
 
 }

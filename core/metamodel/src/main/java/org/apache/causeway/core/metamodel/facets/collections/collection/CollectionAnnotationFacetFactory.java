@@ -42,18 +42,24 @@ extends FacetFactoryAbstract {
 
     @Inject
     public CollectionAnnotationFacetFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.COLLECTIONS_AND_ACTIONS);
+        super(mmc, FeatureType.MEMBERS);
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         var collectionIfAny = collectionIfAny(processMethodContext);
 
-        if(processMethodContext.isMixinMain()) {
-            collectionIfAny.ifPresent(collection->{
-                inferMixinSort(collection, processMethodContext.getFacetHolder());
-            });
+        if(processMethodContext.getFeatureType().isProperty()) {
+            if(collectionIfAny.isPresent()) {
+                ValidationFailureUtils
+                    .raiseMemberInvalidAnnotation(processMethodContext.getFacetHolder(), Collection.class);
+            }
+            return;
+        }
+
+        if(processMethodContext.isMixinMain()
+                && collectionIfAny.isPresent()) {
+            inferMixinSort(processMethodContext.getFacetHolder());
         }
 
         processDomainEvent(processMethodContext, collectionIfAny);
@@ -68,7 +74,7 @@ extends FacetFactoryAbstract {
                     .raiseAmbiguousMixinAnnotations(processMethodContext.getFacetHolder(), Collection.class));
     }
 
-    void inferMixinSort(final Collection collection, final FacetedMethod facetedMethod) {
+    void inferMixinSort(final FacetedMethod facetedMethod) {
         /* if @Collection detected on method or type level infer:
          * @Action(semantics=SAFE) */
         addFacet(new ActionSemanticsFacet("InferSafeForMixedInCollection", SemanticsOf.SAFE, facetedMethod));

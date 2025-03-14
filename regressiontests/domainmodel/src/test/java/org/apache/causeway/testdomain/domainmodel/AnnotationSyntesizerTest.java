@@ -39,7 +39,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.Configuration_usingInvalidDomain;
-import org.apache.causeway.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.causeway.testdomain.model.bad.InvalidAssociationAnnotation;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
 
 @SpringBootTest(
@@ -65,7 +65,7 @@ class AnnotationSyntesizerTest {
     @Test
     void propertyAnnotationOnAction_shouldNotContributeToSynthesizedAction() {
 
-        var actionMethod = ReflectionUtils.findMethod(InvalidPropertyAnnotationOnAction.class, "exportToJson");
+        var actionMethod = ReflectionUtils.findMethod(InvalidAssociationAnnotation.class, "exportToJson");
         assertNotNull(actionMethod);
 
         var action = _Annotations.synthesize(actionMethod, Action.class).get();

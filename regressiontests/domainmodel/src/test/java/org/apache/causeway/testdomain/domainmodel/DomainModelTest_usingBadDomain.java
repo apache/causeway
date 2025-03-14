@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -56,6 +55,7 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.bad.AmbiguousMixinAnnotations;
 import org.apache.causeway.testdomain.model.bad.AmbiguousTitle;
@@ -71,7 +71,7 @@ import org.apache.causeway.testdomain.model.bad.InvalidObjectWithAlias;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedActionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedCollectionSupport;
 import org.apache.causeway.testdomain.model.bad.InvalidOrphanedPropertySupport;
-import org.apache.causeway.testdomain.model.bad.InvalidPropertyAnnotationOnAction;
+import org.apache.causeway.testdomain.model.bad.InvalidAssociationAnnotation;
 import org.apache.causeway.testdomain.model.bad.InvalidServiceWithAlias;
 import org.apache.causeway.testdomain.model.bad.OrphanedMemberSupportDetection;
 import org.apache.causeway.testdomain.util.interaction.DomainObjectTesterFactory;
@@ -389,6 +389,24 @@ class DomainModelTest_usingBadDomain {
             validator.assertAnyFailuresContaining(InvalidMemberIdClash.class, expectedMessageChunk));
     }
 
+    // -- MEMBER-FEATURE-TYPE
+
+    @Test
+    void invalidPropertyAnnotationOnCollection_shouldFail() {
+        var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "singular");
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
+    }
+
+    @Test
+    void invalidCollectionAnnotationOnProperty_shouldFail() {
+        var origin = Identifier.propertyIdentifier(LogicalType.fqcn(InvalidAssociationAnnotation.class), "plural");
+        validator.assertAnyFailuresContaining(
+            origin,
+            ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Property.class));
+    }
+
     // -- ELEMENT-TYPE
 
     @ParameterizedTest
@@ -433,13 +451,6 @@ class DomainModelTest_usingBadDomain {
     }
 
     // -- INCUBATING
-
-    @Test @Disabled("this case has no vaildation refiner yet")
-    void invalidPropertyAnnotationOnAction_shouldFail() {
-        validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidPropertyAnnotationOnAction.class)),
-                "TODO");
-    }
 
 //    @Test
 //    void orphanedActionSupportNotEnforced_shouldFail() {

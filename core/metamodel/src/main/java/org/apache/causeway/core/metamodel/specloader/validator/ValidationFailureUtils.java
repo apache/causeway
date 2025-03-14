@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.specloader.validator;
 
 import java.lang.annotation.Annotation;
 
+import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
@@ -34,8 +35,7 @@ public final class ValidationFailureUtils {
     public <A extends Annotation> void raiseAmbiguousMixinAnnotations(
             final FacetedMethod holder,
             final Class<A> annotationType) {
-
-        ValidationFailure.raiseFormatted(holder,
+        ValidationFailure.raise(holder,
                 ProgrammingModelConstants.MessageTemplate.AMBIGUOUS_MIXIN_ANNOTATIONS
                     .builder()
                     .addVariable("annot", "@" + annotationType.getSimpleName())
@@ -47,8 +47,7 @@ public final class ValidationFailureUtils {
             final ObjectSpecification declaringType,
             final ObjectMember memberA,
             final ObjectMember memberB) {
-
-        ValidationFailure.raiseFormatted(memberB,
+        ValidationFailure.raise(memberB,
                 ProgrammingModelConstants.MessageTemplate.MEMBER_ID_CLASH
                     .builder()
                     .addVariable("type", declaringType.fqcn())
@@ -58,16 +57,29 @@ public final class ValidationFailureUtils {
                     .buildMessage());
     }
 
-    public void raiseInvalidMemberElementType(
+    public void raiseMemberInvalidElementType(
             final FacetHolder facetHolder,
             final ObjectSpecification declaringType,
             final ObjectSpecification elementType) {
-        ValidationFailure.raiseFormatted(facetHolder,
-                ProgrammingModelConstants.MessageTemplate.INVALID_MEMBER_ELEMENT_TYPE
-                    .builder()
+        ValidationFailure.raise(facetHolder,
+                ProgrammingModelConstants.MessageTemplate.MEMBER_INVALID_ELEMENT_TYPE.builder()
                     .addVariable("type", declaringType.fqcn())
                     .addVariable("elementType", ""+elementType)
                     .buildMessage());
+    }
+
+    public <A extends Annotation> void raiseMemberInvalidAnnotation(
+            final FacetedMethod facetedMethod,
+            final Class<A> annotationType) {
+        ValidationFailure.raise(facetedMethod, formatMemberInvalidAnnotation(facetedMethod.getFeatureIdentifier(), annotationType));
+    }
+    public <A extends Annotation> String formatMemberInvalidAnnotation(
+            final Identifier identifier,
+            final Class<A> annotationType) {
+        return ProgrammingModelConstants.MessageTemplate.MEMBER_INVALID_ANNOTATION.builder()
+            .addVariable("member", identifier.getFullIdentityString())
+            .addVariable("annot", "@" + annotationType.getSimpleName())
+            .buildMessage();
     }
 
 }
