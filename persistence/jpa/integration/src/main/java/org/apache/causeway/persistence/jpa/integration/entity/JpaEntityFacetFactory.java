@@ -19,6 +19,7 @@
 package org.apache.causeway.persistence.jpa.integration.entity;
 
 import jakarta.inject.Inject;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -41,10 +42,11 @@ extends FacetFactoryAbstract {
 
         var facetHolder = processClassContext.getFacetHolder();
 
-        var entityAnnotation = processClassContext.synthesizeOnType(Entity.class);
-        if(!entityAnnotation.isPresent()) {
-            return;
-        }
+        var entityIfAny = processClassContext.synthesizeOnType(Entity.class);
+        if(!entityIfAny.isPresent()) return;
+
+        var embeddableIfAny = processClassContext.synthesizeOnType(Embeddable.class);
+        if(embeddableIfAny.isPresent()) return; // ignore when also has @Embeddable
 
         addFacet(
                 new JpaEntityFacet(facetHolder, cls));
