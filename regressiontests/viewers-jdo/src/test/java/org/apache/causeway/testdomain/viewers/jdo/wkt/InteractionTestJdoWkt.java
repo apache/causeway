@@ -20,9 +20,6 @@ package org.apache.causeway.testdomain.viewers.jdo.wkt;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
-
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
@@ -38,19 +35,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.SimulatedProperties;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.DomainObjectPageTester.SimulatedProperty;
 import org.apache.causeway.testdomain.conf.Configuration_usingWicket.WicketTesterFactory;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
+import org.apache.causeway.testdomain.jdo.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
@@ -327,7 +325,7 @@ class InteractionTestJdoWkt extends RegressionTestWithJdoFixtures {
     void loadNonExistentBookBookmark_shouldRender_BookmarkNotFoundException() {
         var pageParameters = PageParameterUtils.createPageParametersForBookmark(
                 Bookmark.forLogicalTypeAndIdentifier(
-                        LogicalType.eager(JpaBook.class, "simple.SimpleObject"),
+                        LogicalType.eager(JdoBook.class, "simple.SimpleObject"),
                         "999"));
         assertThrows(BookmarkNotFoundException.class, ()->{
             run(()->{

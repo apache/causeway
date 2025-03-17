@@ -53,14 +53,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.regressiontests</groupId>
-			<artifactId>causeway-regressiontests-base</artifactId>
-		</dependency>
+            <groupId>org.apache.causeway.regressiontests</groupId>
+            <artifactId>causeway-regressiontests-base-jpa</artifactId>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>

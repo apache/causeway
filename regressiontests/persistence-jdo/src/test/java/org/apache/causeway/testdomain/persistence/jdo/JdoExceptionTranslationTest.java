@@ -33,8 +33,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.TestPropertySources;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
+import org.apache.causeway.testdomain.jdo.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 
 @SpringBootTest(

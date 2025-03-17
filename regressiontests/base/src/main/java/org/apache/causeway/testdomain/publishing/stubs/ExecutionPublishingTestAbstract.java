@@ -32,14 +32,15 @@ import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.causeway.testdomain.publishing.subscriber.ExecutionSubscriberForTesting;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
+
+import lombok.SneakyThrows;
 
 public abstract class ExecutionPublishingTestAbstract
 extends PublishingTestAbstract {
@@ -109,12 +110,13 @@ extends PublishingTestAbstract {
 
     // -- HELPER
 
+    @SneakyThrows
     private Class<?> bookClass() {
         switch(getPersistenceStandard()) {
         case JDO:
-            return JdoBook.class;
+            return _Context.loadClass("org.apache.causeway.testdomain.jdo.entities.JdoBook");
         case JPA:
-            return JpaBook.class;
+            return _Context.loadClass("org.apache.causeway.testdomain.jpa.entities.JpaBook");
         default:
             throw _Exceptions.unmatchedCase(getPersistenceStandard());
         }

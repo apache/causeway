@@ -43,16 +43,10 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.apache.causeway.regressiontests</groupId>
-			<artifactId>causeway-regressiontests-base</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-			<scope>test</scope>
-		</dependency>
+            <groupId>org.apache.causeway.regressiontests</groupId>
+            <artifactId>causeway-regressiontests-base-jdo</artifactId>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>

@@ -36,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
+import org.apache.causeway.testdomain.jdo.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jdo.entities.JdoInventory;
 import org.apache.causeway.testdomain.jdo.entities.JdoProduct;

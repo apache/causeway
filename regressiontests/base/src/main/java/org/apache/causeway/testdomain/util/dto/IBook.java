@@ -18,7 +18,30 @@
  */
 package org.apache.causeway.testdomain.util.dto;
 
+import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.applib.events.lifecycle.ObjectCreatedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectPersistedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
+import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
+
 public interface IBook {
+    
+    // -- DOMAIN EVENTS
+    public static class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<IBook> {};
+    public static class PropertyDomainEvent extends CausewayModuleApplib.PropertyDomainEvent<IBook, Object> {};
+    public static class CollectionDomainEvent extends CausewayModuleApplib.CollectionDomainEvent<IBook, Object> {};
+
+    // -- LIFE CYCLE EVENTS
+    public static class CreatedLifecycleEvent extends ObjectCreatedEvent<IBook> {};
+    public static class LoadedLifecycleEvent extends ObjectLoadedEvent<IBook> {};
+    public static class PersistingLifecycleEvent extends ObjectPersistingEvent<IBook> {};
+    public static class PersistedLifecycleEvent extends ObjectPersistedEvent<IBook> {};
+    public static class UpdatingLifecycleEvent extends ObjectUpdatingEvent<IBook> {};
+    public static class UpdatedLifecycleEvent extends ObjectUpdatedEvent<IBook> {};
+    public static class RemovingLifecycleEvent extends ObjectRemovingEvent<IBook> {};
 
     default String title() {
         return String.format("%s [%s]", getName(), getIsbn());

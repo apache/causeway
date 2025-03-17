@@ -261,6 +261,17 @@
                 <artifactId>causeway-regressiontests-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.regressiontests</groupId>
+                <artifactId>causeway-regressiontests-base-jdo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.regressiontests</groupId>
+                <artifactId>causeway-regressiontests-base-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.apache.causeway.security</groupId>
@@ -319,6 +330,7 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -378,6 +390,8 @@
             </activation>
             <modules>
                 <module>base</module>
+                <module>base-jdo</module>
+                <module>base-jpa</module>
                 <module>bootstrapping</module>
                 <module>config</module>
                 <module>core-wrapperfactory</module>
@@ -391,7 +405,8 @@
                 <module>persistence-jpa</module>
                 <module>cmdexecauditsess</module>
                 <module>publishing-jpa</module>
-                <module>rest</module>
+                <module>rest-jdo</module>
+                <module>rest-jpa</module>
                 <module>value</module>
                 <module>viewers-common</module>
                 <module>viewers-jdo</module>
@@ -402,6 +417,7 @@
 
     <modules>
         <module>base</module>
+        <module>base-jpa</module>
         <module>bootstrapping</module>
         <module>config</module>
         <module>core-wrapperfactory</module>
@@ -414,7 +430,7 @@
         <module>persistence-jpa</module>
         <module>cmdexecauditsess</module>
         <module>publishing-jpa</module>
-        <module>rest</module>
+        <module>rest-jpa</module>
         <module>value</module>
         <module>viewers-common</module>
         <module>viewers-jpa</module>

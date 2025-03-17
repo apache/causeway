@@ -24,18 +24,23 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
+import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.HasPersistenceStandardJpa;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.jpa.event.LifecycleEventSubscriberJpaForTesting;
+import org.apache.causeway.testdomain.jpa.publishing.PublishingTestFactoryJpa;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
-import org.apache.causeway.testdomain.publishing.PublishingTestFactoryJpa;
-import org.apache.causeway.testdomain.publishing.conf.Configuration_usingLifecycleEventPublishing;
 import org.apache.causeway.testdomain.publishing.stubs.LifecycleEventPublishingTestAbstract;
+import org.apache.causeway.testdomain.util.dto.BookDto;
+import org.apache.causeway.testdomain.util.dto.IBook;
+import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class,
-                Configuration_usingLifecycleEventPublishing.class,
+                LifecycleEventSubscriberJpaForTesting.class,
                 PublishingTestFactoryJpa.class,
                 //XrayEnable.class
         },
@@ -57,6 +62,17 @@ implements HasPersistenceStandardJpa {
     @Override
     protected PublishingTestFactoryAbstract getTestFactory() {
         return testFactory;
+    }
+
+    @Override
+    protected final void clearPublishedEvents(KVStoreForTesting kvStore) {
+        LifecycleEventSubscriberJpaForTesting.clearPublishedEvents(kvStore);
+    }
+
+    @Override
+    protected Can<BookDto> getPublishedEvents(KVStoreForTesting kvStore,
+            Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass) {
+        return LifecycleEventSubscriberJpaForTesting.getPublishedEventsJpa(kvStore, eventClass);
     }
 
 }

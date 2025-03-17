@@ -44,7 +44,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.testdomain.conf.Configuration_usingSpringDataJpa;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingSpringDataJpa;
 import org.apache.causeway.testdomain.jpa.springdata.Employee;
 import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;

@@ -27,9 +27,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
 import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
 import org.apache.causeway.testdomain.jdo.RegressionTestWithJdoFixtures;
+import org.apache.causeway.testdomain.jdo.conf.Configuration_usingJdo;
 
 @SpringBootTest(
         classes = {

@@ -25,10 +25,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.HasPersistenceStandardJpa;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.jpa.publishing.PublishingTestFactoryJpa;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
-import org.apache.causeway.testdomain.publishing.PublishingTestFactoryJpa;
 import org.apache.causeway.testdomain.publishing.conf.Configuration_usingEntityPropertyChangePublishing;
 import org.apache.causeway.testdomain.publishing.stubs.PropertyPublishingTestAbstract;
 

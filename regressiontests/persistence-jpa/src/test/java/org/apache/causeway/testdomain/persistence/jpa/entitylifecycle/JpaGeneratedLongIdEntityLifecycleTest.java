@@ -42,7 +42,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
+import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaEntityGeneratedLongId;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 

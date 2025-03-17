@@ -22,20 +22,16 @@ import java.util.Objects;
 
 import jakarta.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
 import org.apache.causeway.testdomain.util.CollectionAssertions;
 import org.apache.causeway.testdomain.util.dto.BookDto;
-import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJdoForTesting;
-import org.apache.causeway.testdomain.util.event.LifecycleEventSubscriberJpaForTesting;
+import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 public abstract class LifecycleEventPublishingTestAbstract
@@ -48,10 +44,14 @@ extends PublishingTestAbstract {
         return changeScenario.isSupportsProgrammatic();
     }
 
+    protected abstract void clearPublishedEvents(final KVStoreForTesting kvStore);
+    protected abstract Can<BookDto> getPublishedEvents(
+            KVStoreForTesting kvStore,
+            Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass);
+    
     @Override
     protected void given() {
-        LifecycleEventSubscriberJdoForTesting.clearPublishedEvents(kvStore);
-        LifecycleEventSubscriberJpaForTesting.clearPublishedEvents(kvStore);
+        clearPublishedEvents(kvStore);
     }
 
     @Override
@@ -214,71 +214,54 @@ extends PublishingTestAbstract {
     // these events are emitted by the FactoryService only!
     private void assertHasCreatedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.CreatedLifecycleEvent.class,
-                JpaBook.CreatedLifecycleEvent.class,
+                IBook.CreatedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasLoadedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.LoadedLifecycleEvent.class,
-                JpaBook.LoadedLifecycleEvent.class,
+                IBook.LoadedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasPersistingLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.PersistingLifecycleEvent.class,
-                JpaBook.PersistingLifecycleEvent.class,
+                IBook.PersistingLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasPersistedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.PersistedLifecycleEvent.class,
-                JpaBook.PersistedLifecycleEvent.class,
+                IBook.PersistedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasUpdatingLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.UpdatingLifecycleEvent.class,
-                JpaBook.UpdatingLifecycleEvent.class,
+                IBook.UpdatingLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasUpdatedLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.UpdatedLifecycleEvent.class,
-                JpaBook.UpdatedLifecycleEvent.class,
+                IBook.UpdatedLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasRemovingLifecycleEvents(final Can<BookDto> expectedBooks) {
         assertHasLifecycleEvents(
-                JdoBook.RemovingLifecycleEvent.class,
-                JpaBook.RemovingLifecycleEvent.class,
+                IBook.RemovingLifecycleEvent.class,
                 expectedBooks);
     }
 
     private void assertHasLifecycleEvents(
-            final Class<? extends AbstractLifecycleEvent<JdoBook>> eventClassWhenJdo,
-            final Class<? extends AbstractLifecycleEvent<JpaBook>> eventClassWhenJpa,
+            final Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass,
             final Can<BookDto> expectedBooks) {
 
-        var jdoBooks = LifecycleEventSubscriberJdoForTesting
-                .getPublishedEventsJdo(kvStore, eventClassWhenJdo);
-        var jpaBooks = LifecycleEventSubscriberJpaForTesting
-                .getPublishedEventsJpa(kvStore, eventClassWhenJpa);
-
-        assertEquals(0, jdoBooks.size() * jpaBooks.size()); // its either JDO or JPA, cannot be both
-
-        var actualBooks = jdoBooks.isEmpty()
-                ? jpaBooks
-                : jdoBooks;
+        var books = getPublishedEvents(kvStore, eventClass);
 
         CollectionAssertions.assertComponentWiseEquals(
-                expectedBooks, actualBooks, this::bookDifference);
+                expectedBooks, books, this::bookDifference);
     }
 
     private String bookDifference(final BookDto a, final BookDto b) {
