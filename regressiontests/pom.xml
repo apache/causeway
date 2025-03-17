@@ -18,66 +18,67 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway</groupId>
-		<artifactId>causeway-bom</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-		<relativePath>../bom/pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway</groupId>
+        <artifactId>causeway-bom</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+        <relativePath>../bom/pom.xml</relativePath>
+    </parent>
 
-	<groupId>org.apache.causeway.regressiontests</groupId>
-	<artifactId>causeway-regressiontests</artifactId>
+    <groupId>org.apache.causeway.regressiontests</groupId>
+    <artifactId>causeway-regressiontests</artifactId>
 
-	<name>Apache Causeway Regression Tests</name>
-	<description>
-        Collection of JUnit tests covering core functionalities of the framework.
+    <name>Apache Causeway Regression Tests</name>
+    <description>
+        Collection of JUnit tests covering core functionalities of the
+        framework.
     </description>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<properties>
-		<skip.regressionTests>false</skip.regressionTests>
-		<skipTests>${skip.regressionTests}</skipTests>
+    <properties>
+        <skip.regressionTests>false</skip.regressionTests>
+        <skipTests>${skip.regressionTests}</skipTests>
 
-		<maven.install.skip>true</maven.install.skip>
-		<maven.deploy.skip>true</maven.deploy.skip>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
-		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/regressiontests</git-plugin.propertiesDir>
-	</properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.regressiontests</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/regressiontests</git-plugin.propertiesDir>
+    </properties>
 
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
 
-				<!-- APACHE CAUSEWAY customisation 4/7: start -->
-				<configuration>
-					<addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
-					<excludeSubProjects>true</excludeSubProjects>
-					<excludes>
+                <!-- APACHE CAUSEWAY customisation 4/7: start -->
+                <configuration>
+                    <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
+                    <excludeSubProjects>true</excludeSubProjects>
+                    <excludes>
                         <exclude>**/target/**</exclude>
                         <exclude>**/target-ide/**</exclude>
 
@@ -172,79 +173,82 @@
                         <exclude>**/viewer/wicket/ui/components/**/*.css</exclude>
                         <exclude>**/viewer/wicket/ui/components/**/*.js</exclude>
 
-                        <exclude>**/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
+                        <exclude>
+                            **/causeway/valuetypes/asciidoc/builder/src/test/resources/**</exclude>
 
-                        <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+                        <exclude>
+                            **/incubator/clients/kroviz/package.json.d/project.info</exclude>
                         <exclude>**/kroviz/webpack.config.d/**</exclude>
-					</excludes>
-					<licenses>
-						<license
-							implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-							<licenseFamilyCategory>AL2  </licenseFamilyCategory>
-							<licenseFamilyName>Apache License 2.0</licenseFamilyName>
-							<notes />
-							<patterns>
-								<pattern>Licensed to the Apache Software Foundation (ASF) under
-									one</pattern>
-							</patterns>
-						</license>
-					</licenses>
-					<licenseFamilies>
-						<licenseFamily
-							implementation="org.apache.rat.license.SimpleLicenseFamily">
-							<familyName>Apache License 2.0</familyName>
-						</licenseFamily>
-					</licenseFamilies>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+                    </excludes>
+                    <licenses>
+                        <license
+                            implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>AL2 </licenseFamilyCategory>
+                            <licenseFamilyName>Apache License 2.0</licenseFamilyName>
+                            <notes />
+                            <patterns>
+                                <pattern>Licensed to the Apache Software
+                                    Foundation (ASF) under
+                                    one</pattern>
+                            </patterns>
+                        </license>
+                    </licenses>
+                    <licenseFamilies>
+                        <licenseFamily
+                            implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>Apache License 2.0</familyName>
+                        </licenseFamily>
+                    </licenseFamilies>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-unittestsupport-applib</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-unittestsupport-applib</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-integtestsupport-applib</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-integtestsupport-applib</artifactId>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
 
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.causeway.valuetypes</groupId>
-				<artifactId>causeway-valuetypes</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.testing</groupId>
+                <artifactId>causeway-testing</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.valuetypes</groupId>
+                <artifactId>causeway-valuetypes</artifactId>
+                <version>3.0.0-SNAPSHOT</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
@@ -252,141 +256,168 @@
                 <type>pom</type>
             </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.regressiontests</groupId>
-				<artifactId>causeway-regressiontests-base</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.regressiontests</groupId>
+                <artifactId>causeway-regressiontests-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.security</groupId>
-				<artifactId>causeway-security-shiro</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.security</groupId>
+                <artifactId>causeway-security-shiro</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-commons-model</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.viewer</groupId>
+                <artifactId>causeway-viewer-commons-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.persistence</groupId>
-				<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.persistence</groupId>
+                <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.persistence</groupId>
-				<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.persistence</groupId>
+                <artifactId>causeway-persistence-jdo-datanucleus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing-fixtures-applib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.testing</groupId>
+                <artifactId>causeway-testing-fixtures-applib</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.viewer</groupId>
-				<artifactId>causeway-viewer-restfulobjects-client</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.viewer</groupId>
+                <artifactId>causeway-viewer-restfulobjects-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-secman-integration</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-secman-integration</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<dependency>
-				 <groupId>org.apache.causeway.extensions</groupId>
-				 <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
-			 </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
 
+            <!-- TEST DEPENDENCIES -->
 
-			<!-- TEST DEPENDENCIES -->
+            <dependency>
+                <groupId>org.glassfish.jersey.ext</groupId>
+                <artifactId>jersey-spring6</artifactId>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.glassfish.jersey.ext</groupId>
-				<artifactId>jersey-spring6</artifactId>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.json</artifactId>
+                <version>1.1.4</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.glassfish</groupId>
-				<artifactId>javax.json</artifactId>
-				<version>1.1.4</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.testing</groupId>
+                <artifactId>causeway-testing-specsupport-applib</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.testing</groupId>
-				<artifactId>causeway-testing-specsupport-applib</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.causeway.valuetypes</groupId>
+                <artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.causeway.valuetypes</groupId>
-				<artifactId>causeway-valuetypes-asciidoc-builder</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.apache.directory.server</groupId>
+                <artifactId>apacheds-test-framework</artifactId>
+                <version>2.0.0.AM27</version>
+                <scope>test</scope>
+            </dependency>
 
-			<dependency>
-				<groupId>org.apache.directory.server</groupId>
-				<artifactId>apacheds-test-framework</artifactId>
-				<version>2.0.0.AM27</version>
-				<scope>test</scope>
-			</dependency>
+        </dependencies>
 
-		</dependencies>
+    </dependencyManagement>
 
-	</dependencyManagement>
+    <profiles>
+        <profile>
+            <id>module-jdo</id>
+            <activation>
+                <property>
+                    <name>!skip-module-jdo</name>
+                </property>
+            </activation>
+            <modules>
+                <module>base</module>
+                <module>bootstrapping</module>
+                <module>config</module>
+                <module>core-wrapperfactory</module>
+                <module>cucumber</module>
+                <module>domainmodel</module>
+                <module>eventhandling</module>
+                <module>layouts</module>
+                <module>factory</module>
+                <module>interact</module>
+                <module>persistence-jdo</module>
+                <module>persistence-jpa</module>
+                <module>cmdexecauditsess</module>
+                <module>publishing-jpa</module>
+                <module>rest</module>
+                <module>value</module>
+                <module>viewers-common</module>
+                <module>viewers-jdo</module>
+                <module>viewers-jpa</module>
+            </modules>
+        </profile>
+    </profiles>
 
-	<modules>
-		<module>base</module>
-		<module>bootstrapping</module>
-		<module>config</module>
-		<module>core-wrapperfactory</module>
-		<module>cucumber</module>
-		<module>domainmodel</module>
-		<module>eventhandling</module>
-		<module>layouts</module>
-		<module>factory</module>
-		<module>interact</module>
-		<module>persistence-jdo</module>
-		<module>persistence-jpa</module>
-		<module>cmdexecauditsess</module>
-		<!-- <module>publishing-jdo</module> code is still incubating -->
-		<module>publishing-jpa</module>
-		<module>rest</module>
-		<module>value</module>
-		<module>viewers-common</module>
-		<module>viewers-jdo</module>
-		<module>viewers-jpa</module>
-		<!-- <module>incubating</module> -->
-	</modules>
+    <modules>
+        <module>base</module>
+        <module>bootstrapping</module>
+        <module>config</module>
+        <module>core-wrapperfactory</module>
+        <module>cucumber</module>
+        <module>domainmodel</module>
+        <module>eventhandling</module>
+        <module>layouts</module>
+        <module>factory</module>
+        <module>interact</module>
+        <module>persistence-jpa</module>
+        <module>cmdexecauditsess</module>
+        <module>publishing-jpa</module>
+        <module>rest</module>
+        <module>value</module>
+        <module>viewers-common</module>
+        <module>viewers-jpa</module>
+    </modules>
 
 </project>

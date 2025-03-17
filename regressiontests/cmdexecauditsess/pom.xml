@@ -66,9 +66,24 @@
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <profile>
+            <id>module-jdo</id>
+            <activation>
+                <property>
+                    <name>!skip-module-jdo</name>
+                </property>
+            </activation>
+            <modules>
+                <module>generic</module>
+                <module>persistence-jdo</module>
+                <module>persistence-jpa</module>
+            </modules>
+        </profile>
+    </profiles>
+
     <modules>
         <module>generic</module>
-        <module>persistence-jdo</module>
         <module>persistence-jpa</module>
     </modules>
 

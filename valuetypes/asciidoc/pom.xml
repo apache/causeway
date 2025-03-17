@@ -18,34 +18,52 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.valuetypes</groupId>
-		<artifactId>causeway-valuetypes</artifactId>
-		<version>3.0.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway.valuetypes</groupId>
+        <artifactId>causeway-valuetypes</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>causeway-valuetypes-asciidoc</artifactId>
-	<name>Apache Causeway Val - Asciidoctor (parent)</name>
-	<description>
-		Asciidoc value type.
-	</description>
+    <artifactId>causeway-valuetypes-asciidoc</artifactId>
+    <name>Apache Causeway Val - Asciidoctor (parent)</name>
+    <description>
+        Asciidoc value type.
+    </description>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<properties>
-	</properties>
+    <properties>
+    </properties>
 
-	<modules>
-		<module>applib</module>
-		<module>builder</module>
-		<module>metamodel</module>
-		<module>persistence-jdo</module>
-		<module>persistence-jpa</module>
-		<module>ui</module>
-	</modules>
+    <profiles>
+        <profile>
+            <id>module-jdo</id>
+            <activation>
+                <property>
+                    <name>!skip-module-jdo</name>
+                </property>
+            </activation>
+            <modules>
+                <module>applib</module>
+                <module>builder</module>
+                <module>metamodel</module>
+                <module>persistence-jdo</module>
+                <module>persistence-jpa</module>
+                <module>ui</module>
+            </modules>
+        </profile>
+    </profiles>
+
+    <modules>
+        <module>applib</module>
+        <module>builder</module>
+        <module>metamodel</module>
+        <module>persistence-jpa</module>
+        <module>ui</module>
+    </modules>
 
 </project>

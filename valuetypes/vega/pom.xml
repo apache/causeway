@@ -39,10 +39,27 @@
 	<properties>
 	</properties>
 
+    <profiles>
+        <profile>
+            <id>module-jdo</id>
+            <activation>
+                <property>
+                    <name>!skip-module-jdo</name>
+                </property>
+            </activation>
+            <modules>
+                <module>applib</module>
+                <module>metamodel</module>
+                <module>persistence-jdo</module>
+                <module>persistence-jpa</module>
+                <module>ui</module>
+            </modules>
+        </profile>
+    </profiles>
+
 	<modules>
 		<module>applib</module>
 		<module>metamodel</module>
-		<module>persistence-jdo</module>
 		<module>persistence-jpa</module>
 		<module>ui</module>
 	</modules>

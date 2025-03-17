@@ -78,17 +78,30 @@
     </dependencyManagement>
 
     <dependencies>
-
 		<dependency>
 			<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-metamodel</artifactId>
 		</dependency>
-
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>module-jdo</id>
+            <activation>
+                <property>
+                    <name>!skip-module-jdo</name>
+                </property>
+            </activation>
+            <modules>
+                <module>applib</module>
+                <module>persistence-jdo</module>
+                <module>persistence-jpa</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <modules>
     	<module>applib</module>
-    	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>
     </modules>
 </project>
