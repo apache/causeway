@@ -24,6 +24,7 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaContext;
 
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
 import org.jspecify.annotations.NonNull;
@@ -45,6 +46,12 @@ public class JpaSupportServiceUsingSpring implements JpaSupportService {
             log.error(String.format("failed to get an EntityManager for entity type %s", entityClass), e);
             return Try.failure(e);
         }
+    }
+
+    @Override
+    public void executeUpdate(String sql) {
+        // TODO Auto-generated method stub
+        throw _Exceptions.notImplemented();
     }
 
 }

@@ -488,8 +488,7 @@ public final class ProgrammingModelConstants {
                 + "Defaulting the object type from the package/class/package name can lead "
                 + "to data migration issues for apps deployed to production (if the class is "
                 + "subsequently refactored). "
-                + "Use @Discriminator, @Named or "
-                + "@PersistenceCapable(schema=...) to specify explicitly."),
+                + "Use @Discriminator or @Named to specify explicitly."),
         NON_UNIQUE_LOGICAL_TYPE_NAME_OR_ALIAS("Logical type name (or alias) ${logicalTypeName} "
                 + "mapped to multiple non-abstract classes:\n"
                 + "${csv}"),

@@ -107,13 +107,13 @@ under the License.
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- PERSISTENCE -->
-
-        <dependency>
-            <groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
+		<dependency>
+            <groupId>org.apache.causeway.commons</groupId>
+            <artifactId>causeway-commons</artifactId>
             <scope>test</scope>
         </dependency>
+		
+		<!-- PERSISTENCE -->
 
         <dependency>
             <groupId>org.hsqldb</groupId>

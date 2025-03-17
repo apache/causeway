@@ -22,11 +22,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-
-import org.apache.causeway.commons.internal.base._Strings;
-
 /**
  * @since 2.0 {@index}
  */
@@ -56,17 +51,5 @@ public class InjectUtils {
             return false;
         };
     }
-
-    public static final Predicate<? super Field> persistentMappedBy =
-            (Field f) -> {
-                final Persistent annotation = f.getAnnotation(Persistent.class);
-                return annotation!=null && !_Strings.isNullOrEmpty(annotation.mappedBy());
-            };
-
-            public static Predicate<? super Method> withEntityParameter() {
-                return (Method m) -> {
-                    final Class<?> parameterType = m.getParameterTypes()[0];
-                    return parameterType.isAnnotationPresent(PersistenceCapable.class); };
-            }
 
 }

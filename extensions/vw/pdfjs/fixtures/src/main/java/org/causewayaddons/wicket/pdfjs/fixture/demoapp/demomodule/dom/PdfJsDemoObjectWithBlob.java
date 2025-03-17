@@ -63,7 +63,7 @@ public class PdfJsDemoObjectWithBlob implements Comparable<PdfJsDemoObjectWithBl
     public static class CssClassUiEvent
             extends org.apache.causeway.applib.services.eventbus.CssClassUiEvent<PdfJsDemoObjectWithBlob> {}
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @javax.jdo.annotations.Column(nullable=false)
     @Title(sequence="1")
     @Property(editing = Editing.ENABLED)
     @Getter @Setter

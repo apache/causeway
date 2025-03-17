@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
@@ -34,7 +35,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.persistence.jdo.datanucleus.CausewayModulePersistenceJdoDatanucleus;
+import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testdomain.wrapperfactory.Counter;
 import org.apache.causeway.testdomain.wrapperfactory.CounterRepository;
@@ -43,7 +44,7 @@ import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstra
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 
 @SpringBootTest(
-        classes = CoreWrapperFactory_IntegTestAbstract.AppManifest.class
+        classes = CoreWrapperFactory_IntegTestAbstract.TestManifest.class
 )
 @ActiveProfiles("test")
 public abstract class CoreWrapperFactory_IntegTestAbstract extends CausewayIntegrationTestAbstractWithFixtures {
@@ -53,18 +54,17 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends CausewayInteg
     @Import({
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
-            CausewayModulePersistenceJdoDatanucleus.class,
+            CausewayModulePersistenceJpaEclipselink.class,
             CausewayModuleTestingFixturesApplib.class,
 
             WrapperTestFixtures.class,
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
-            @PropertySource(CausewayPresets.DatanucleusEagerlyCreateTables),
             @PropertySource(CausewayPresets.UseLog4j2Test),
     })
-    public static class AppManifest {
+    @EntityScan(basePackageClasses = {Counter.class})
+    public static class TestManifest {
     }
 
     @BeforeAll

@@ -94,7 +94,7 @@ under the License.
 
 		<dependency>
             <groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
+			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
         </dependency>
 
     </dependencies>

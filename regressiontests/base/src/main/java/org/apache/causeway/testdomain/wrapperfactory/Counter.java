@@ -20,12 +20,13 @@
 
 package org.apache.causeway.testdomain.wrapperfactory;
 
-import javax.jdo.annotations.Column;
-import javax.jdo.annotations.DatastoreIdentity;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-
 import jakarta.inject.Named;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -41,28 +42,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@PersistenceCapable(
-        schema = WrapperTestFixtures.SCHEMA,
-        table = "Counter"
+@Entity
+@Table(
+        schema = "public",
+        name = "Counter"
 )
-@DatastoreIdentity(strategy = IdGeneratorStrategy.IDENTITY, column = "id")
-@Named(WrapperTestFixtures.NAMESPACE + ".Counter")
+@Named("common.facade.test.Counter")
 @DomainObject(nature = Nature.ENTITY)
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Counter implements Comparable<Counter> {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Property(editing = Editing.ENABLED, commandPublishing = Publishing.ENABLED)
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Long num;
 
-    @Column(allowsNull = "false")
+    @Column(nullable = true)
     @Getter @Setter
     private String name;
 
-    @Column(allowsNull = "true")
+    @Column(nullable = true)
     @Getter @Setter
     private Long num2;
 

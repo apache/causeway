@@ -42,7 +42,6 @@
 	<modules>
 		<module>applib</module>
 		<module>metamodel</module>
-		<module>persistence-jdo</module>
 		<module>persistence-jpa</module>
 		<module>ui</module>
 	</modules>

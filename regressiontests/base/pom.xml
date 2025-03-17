@@ -54,12 +54,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.causeway.valuetypes</groupId>
 			<artifactId>causeway-valuetypes-asciidoc-metamodel</artifactId>
 		</dependency>
@@ -90,13 +84,6 @@
 			<optional>true</optional>
 		</dependency>
 
-<!--Shiro 2.0.0 has no jakarta namespaces, exclude from build-->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.causeway.security</groupId>-->
-<!--			<artifactId>causeway-security-shiro</artifactId>-->
-<!--			<optional>true</optional>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.apache.causeway.extensions</groupId>
 			<artifactId>causeway-extensions-secman-integration</artifactId>
@@ -106,12 +93,6 @@
 		<dependency>
 			<groupId>org.apache.causeway.extensions</groupId>
 			<artifactId>causeway-extensions-secman-encryption-jbcrypt</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.extensions</groupId>
-			<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
 			<optional>true</optional>
 		</dependency>
 
@@ -142,22 +123,6 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-tester</artifactId>
 		</dependency>
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.glassfish.jersey.ext</groupId> -->
-		<!-- <artifactId>jersey-spring5</artifactId> -->
-		<!-- <exclusions> -->
-		<!-- <exclusion> -->
-		<!-- <groupId>org.glassfish.jersey.core</groupId> -->
-		<!-- <artifactId>jersey-server</artifactId> -->
-		<!-- </exclusion> -->
-		<!-- </exclusions> -->
-		<!-- </dependency> -->
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.causeway.extensions</groupId> -->
-		<!-- <artifactId>causeway-extensions-cors-impl</artifactId> -->
-		<!-- </dependency> -->
 
 	</dependencies>
 </project>

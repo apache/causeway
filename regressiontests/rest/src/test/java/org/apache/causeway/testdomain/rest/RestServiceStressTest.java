@@ -38,7 +38,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug.swt._Swt;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.testdomain.conf.Configuration_usingJdo;
+import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.util.rest.RestEndpointService;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
-    Configuration_usingJdo.class,
+    Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
 @DisabledIfRunningWithSurefire

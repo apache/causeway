@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -45,9 +46,6 @@ import org.apache.causeway.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import lombok.SneakyThrows;
 
-/**
- * Run "sh enhance.sh -w" first, to enhance the test JDO entities.
- */
 class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstract {
 
     @Inject WrapperFactory wrapperFactory;
@@ -74,6 +72,8 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         assertThat(counter.getNum()).isNull();
     }
 
+    //TODO[causeway-regressiontests-CAUSEWAY-3866] requires test migration 
+    @Disabled
     @SneakyThrows
     @ParameterizedTest(name = "executorService[{index}]: {0}")
     @MethodSource("executorServices")

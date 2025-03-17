@@ -47,7 +47,7 @@ import org.apache.causeway.regressiontests.cmdexecauditsess.jpa.integtests.model
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 
 @SpringBootTest(
-        classes = CmdExecAuditSessLog_IntegTest.AppManifest.class
+        classes = CmdExecAuditSessLog_IntegTest.TestManifest.class
 )
 @ActiveProfiles("test")
 public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTestAbstract {
@@ -67,8 +67,8 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
             @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @EntityScan(basePackageClasses = {Counter.class})
-    @ComponentScan(basePackageClasses = {AppManifest.class, CmdExecAuditSessTestDomainModel.class})
-    public static class AppManifest {
+    @ComponentScan(basePackageClasses = {TestManifest.class, CmdExecAuditSessTestDomainModel.class})
+    public static class TestManifest {
     }
 
     @Override

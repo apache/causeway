@@ -1,4 +1,0 @@
-
-
-* xref:security:shiro:about.adoc[Shiro (Authenticator & Authorizor)]
-

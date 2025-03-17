@@ -60,11 +60,6 @@
                 <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
                 <version>3.0.0-SNAPSHOT</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-audittrail-persistence-jdo</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
@@ -88,7 +83,6 @@
 
     <modules>
     	<module>applib</module>
-    	<module>persistence-jdo</module>
     	<module>persistence-jpa</module>
     </modules>
 </project>

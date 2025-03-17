@@ -20,23 +20,22 @@
 
 package org.apache.causeway.testdomain.wrapperfactory;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.modules.ModuleWithFixtures;
-import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
+import org.apache.causeway.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
 @Configuration
 @ComponentScan
+@EntityScan
 public class WrapperTestFixtures implements ModuleWithFixtures {
-
-    public static final String NAMESPACE = "common.facade.test";
-    public static final String SCHEMA = "commonFacadeTest";
 
     @Override
     public FixtureScript getTeardownFixture() {
-        return new TeardownFixtureJdoAbstract() {
+        return new TeardownFixtureJpaAbstract() {
             @Override
             protected void execute(final ExecutionContext executionContext) {
                 deleteFrom(Counter.class);

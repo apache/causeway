@@ -45,7 +45,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
@@ -126,7 +125,7 @@ class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {
         assertNotNull(inventory.getProducts());
         assertEquals(3, inventory.getProducts().size());
 
-        var expectedBookTitles = JdoTestFixtures.expectedBookTitles();
+        var expectedBookTitles = JpaTestFixtures.expectedBookTitles();
 
         var multipleBooks = Can.ofCollection(inventory.getProducts())
                 .filter(book->expectedBookTitles.contains(book.getName()));

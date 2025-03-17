@@ -57,6 +57,8 @@ public interface JpaSupportService {
                 .orElseThrow(()->failureFor(entityType));
     }
 
+    void executeUpdate(String sql);
+    
     // -- HELPER
 
     private static IllegalStateException failureFor(final @NonNull Class<?> entityType, final Throwable cause) {

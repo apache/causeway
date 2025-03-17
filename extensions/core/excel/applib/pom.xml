@@ -42,11 +42,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.causeway.persistence</groupId>
-            <artifactId>causeway-persistence-jdo-applib</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-runtime</artifactId>
             <!-- so as not to pollute the classpath of the domain model in the IDE -->

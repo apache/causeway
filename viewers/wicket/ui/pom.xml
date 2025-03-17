@@ -259,17 +259,6 @@
 			<artifactId>guava</artifactId>
 		</dependency>
 
-		<!-- JDO API (non transient, provided by plugin) -->
-		<dependency>
-			<!-- v3.2 not available yet, use datanucleus staging for now -->
-			<!-- <groupId>javax.jdo</groupId> -->
-			<!-- <artifactId>jdo-api</artifactId> -->
-			<groupId>org.datanucleus</groupId>
-			<artifactId>javax.jdo</artifactId>
-			<!-- provided by plugins -->
-			<scope>provided</scope>
-		</dependency>
-
 	</dependencies>
 
 </project>

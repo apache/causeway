@@ -70,12 +70,6 @@
 
 		<dependency>
 			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-applib</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
 			<artifactId>causeway-persistence-jpa-applib</artifactId>
 			<scope>provided</scope>
 		</dependency>

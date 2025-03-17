@@ -33,7 +33,6 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.ChangeScenario;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.VerificationStage;
@@ -111,8 +110,6 @@ extends PublishingTestAbstract {
 
     private Class<?> bookClass() {
         switch(getPersistenceStandard()) {
-        case JDO:
-            return JdoBook.class;
         case JPA:
             return JpaBook.class;
         default:

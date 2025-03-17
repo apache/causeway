@@ -255,27 +255,6 @@
             </build>
         </profile>
 
-        <profile>
-            <id>datanucleusenhance</id>
-            <activation>
-                <property>
-                    <name>causeway-app-starter-datanucleusenhance</name>
-                    <value>true</value>
-                </property>
-                <!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists>
-                    </file> -->
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-maven-plugin</artifactId>
-                        <inherited>true</inherited>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
     </profiles>
 
     <modules>
@@ -310,12 +289,8 @@
 
         <module>../persistence/commons</module>
         <module>../persistence/jdbc</module>
-        <module>../persistence/jdo</module>
         <module>../persistence/jpa</module>
         <module>../persistence/querydsl</module>
-
-        <module>../retired/shiro/security/shiro</module>
-        <module>../retired/shiro/extensions/secman/delegated-shiro</module>
 
     </modules>
 

@@ -25,6 +25,8 @@ import jakarta.ws.rs.client.Invocation;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.xml.bind.JAXBException;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +38,9 @@ import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
-import org.apache.causeway.testdomain.jdo.JdoInventoryJaxbVm;
-import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
-import org.apache.causeway.testdomain.jdo.entities.JdoBook;
+import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
+import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
@@ -47,9 +49,7 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -60,7 +60,7 @@ public class RestEndpointService {
     private final Environment environment;
     private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
-    private final JdoTestFixtures jdoTestFixtures;
+    private final JpaTestFixtures jpaTestFixtures;
     private final InteractionService interactionService;
 
     public int getPort() {
@@ -70,7 +70,7 @@ public class RestEndpointService {
         return port;
     }
 
-    private static final String INVENTORY_RESOURCE = "services/testdomain.jdo.InventoryResourceAlias";
+    private static final String INVENTORY_RESOURCE = "services/testdomain.jpa.InventoryResource";
 
     // -- NEW CLIENT
 
@@ -116,7 +116,7 @@ public class RestEndpointService {
 
     // -- ENDPOINTS
 
-    public Try<JdoBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
+    public Try<JpaBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
 
         var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
@@ -124,7 +124,7 @@ public class RestEndpointService {
                 .build();
 
         var response = request.post(args);
-        var digest = client.digest(response, JdoBook.class);
+        var digest = client.digest(response, JpaBook.class);
 
         return digest;
     }
@@ -142,7 +142,7 @@ public class RestEndpointService {
         return digest;
     }
 
-    public Try<Can<JdoBook>> getMultipleBooks(final RestfulClient client) throws JAXBException {
+    public Try<Can<JpaBook>> getMultipleBooks(final RestfulClient client) throws JAXBException {
 
         var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
@@ -151,12 +151,12 @@ public class RestEndpointService {
                 .build();
 
         var response = request.post(args);
-        var digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
+        var digest = client.digestList(response, JpaBook.class, new GenericType<List<JpaBook>>() {});
 
         return digest;
     }
 
-    public Try<JdoBook> storeBook(final RestfulClient client, final JdoBook newBook) throws JAXBException {
+    public Try<JpaBook> storeBook(final RestfulClient client, final JpaBook newBook) throws JAXBException {
 
         var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/storeBook/invoke");
@@ -165,7 +165,7 @@ public class RestEndpointService {
                 .build();
 
         var response = request.post(args);
-        var digest = client.digest(response, JdoBook.class);
+        var digest = client.digest(response, JpaBook.class);
 
         return digest;
     }
@@ -197,7 +197,7 @@ public class RestEndpointService {
         return digest;
     }
 
-    public Try<JdoInventoryJaxbVm> getInventoryAsJaxbVm(final RestfulClient client) {
+    public Try<JpaInventoryJaxbVm> getInventoryAsJaxbVm(final RestfulClient client) {
 
         var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/inventoryAsJaxbVm/invoke");
@@ -205,25 +205,25 @@ public class RestEndpointService {
                 .build();
 
         var response = request.post(args);
-        var digest = client.digest(response, JdoInventoryJaxbVm.class);
+        var digest = client.digest(response, JpaInventoryJaxbVm.class);
         return digest;
     }
 
-    public Try<Can<JdoBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
+    public Try<Can<JpaBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
 
         var objectId = interactionService.callAnonymous(
-                ()->jdoTestFixtures.getInventoryJaxbVmAsBookmark().getIdentifier());
+                ()->jpaTestFixtures.getInventoryJaxbVmAsBookmark().identifier());
 
         // using domain object alias ...
         var request = newInvocationBuilder(client,
-                "objects/testdomain.jdo.JdoInventoryJaxbVmAlias/"
+                "objects/testdomain.jpa.JpaInventoryJaxbVmAlias/"
                         + objectId + "/actions/listBooks/invoke");
 
         var args = client.arguments()
                 .build();
 
         var response = request.post(args);
-        var digest = client.digestList(response, JdoBook.class, new GenericType<List<JdoBook>>() {});
+        var digest = client.digestList(response, JpaBook.class, new GenericType<List<JpaBook>>() {});
 
         return digest;
     }

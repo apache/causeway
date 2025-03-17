@@ -20,11 +20,13 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixture
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
 
+    @Inject JpaSupportService jpaSupport;
+    
     private final String user;
 
     public ExcelDemoToDoItem_tearDown2() {
@@ -40,18 +42,16 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
 
         final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
-        jdoSupport.executeUpdate(String.format(
+        jpaSupport.executeUpdate(String.format(
                 "delete "
                         + "from \"excelFixture\".\"ExcelDemoToDoItemDependencies\" "
                         + "where \"dependingId\" IN "
                         + "(select \"id\" from \"excelFixture\".\"ExcelDemoToDoItem\" where \"ownedBy\" = '%s') ",
                 ownedBy));
 
-        jdoSupport.executeUpdate(String.format(
+        jpaSupport.executeUpdate(String.format(
                 "delete from \"excelFixture\".\"ExcelDemoToDoItem\" "
                         + "where \"ownedBy\" = '%s'", ownedBy));
     }
-
-    @Inject JdoSupportService jdoSupport;
 
 }

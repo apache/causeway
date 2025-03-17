@@ -131,8 +131,6 @@
                         <exclude>**/*.ucls</exclude>
                         <exclude>**/*.puml</exclude>
 
-                        <exclude>**/datanucleus.log</exclude>
-
                         <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                         <exclude>**/bootstrap-datetimepicker.css</exclude>
 
@@ -277,12 +275,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.causeway.persistence</groupId>
-				<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.apache.causeway.testing</groupId>
 				<artifactId>causeway-testing-fixtures-applib</artifactId>
 				<version>${project.version}</version>
@@ -307,12 +299,6 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
 				 <groupId>org.apache.causeway.extensions</groupId>
 				 <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
 			 </dependency>
@@ -322,8 +308,6 @@
 				<artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
-
 
 			<!-- TEST DEPENDENCIES -->
 
@@ -376,17 +360,13 @@
 		<module>layouts</module>
 		<module>factory</module>
 		<module>interact</module>
-		<module>persistence-jdo</module>
 		<module>persistence-jpa</module>
 		<module>cmdexecauditsess</module>
-		<!-- <module>publishing-jdo</module> code is still incubating -->
 		<module>publishing-jpa</module>
 		<module>rest</module>
 		<module>value</module>
 		<module>viewers-common</module>
-		<module>viewers-jdo</module>
 		<module>viewers-jpa</module>
-		<!-- <module>incubating</module> -->
 	</modules>
 
 </project>

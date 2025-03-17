@@ -42,7 +42,7 @@ import lombok.experimental.Accessors;
                 "book"}
 )
 @XmlAccessorType(XmlAccessType.FIELD)
-@Named("testdomain.jdo.JdoBookView")
+@Named("testdomain.jpa.JdoBookView")
 public class JpaBookView implements BookView<JpaBook> {
 
     public static JpaBookView createForBook(final @NonNull FactoryService factory, final @NonNull JpaBook book) {

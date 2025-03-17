@@ -19,9 +19,9 @@
 package org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.fixturescripts;
 
 import org.apache.causeway.testing.fakedata.fixtures.demoapp.demomodule.dom.FakeDataDemoObjectWithAll;
-import org.apache.causeway.testing.fixtures.applib.teardown.jdo.TeardownFixtureJdoAbstract;
+import org.apache.causeway.testing.fixtures.applib.teardown.jpa.TeardownFixtureJpaAbstract;
 
-public class FakeDataDemoObjectWithAll_tearDown extends TeardownFixtureJdoAbstract {
+public class FakeDataDemoObjectWithAll_tearDown extends TeardownFixtureJpaAbstract {
 
     @Override
     protected void execute(final ExecutionContext executionContext) {
