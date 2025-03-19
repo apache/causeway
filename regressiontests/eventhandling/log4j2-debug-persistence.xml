@@ -41,11 +41,6 @@ under the License.
 		<Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
 		<logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
 		
-		<logger name="DataNucleus.Persistence" level="debug"/>
-		<logger name="DataNucleus.Transaction" level="debug"/>
-		<logger name="DataNucleus.Datastore.Schema" level="debug"/>
-		<logger name="DataNucleus.Datastore.Native" level="debug"/>
-		
 		<Root level="info">
 			<AppenderRef ref="Console" />
 		</Root>
