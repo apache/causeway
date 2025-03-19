@@ -96,7 +96,8 @@
                         <injectAllReactorProjects>true</injectAllReactorProjects>
 
                         <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                        <generateGitPropertiesFilename>${project.build.outputDirectory}/${git-plugin.propertiesDir}/git.properties</generateGitPropertiesFilename>
+                        <generateGitPropertiesFilename>
+                            ${project.build.outputDirectory}/${git-plugin.propertiesDir}/git.properties</generateGitPropertiesFilename>
 
                         <abbrevLength>7</abbrevLength>
                     </configuration>
@@ -106,7 +107,8 @@
             </plugins>
         </pluginManagement>
 
-        <!-- build plugins; apply to all inheriting modules. Note that some plugins
+        <!-- build plugins; apply to all inheriting modules. Note that some
+        plugins
             also come from the "super-POM" for the default bindings. For example, in
             the 'default' lifecycle, the resources, compiler, surefire, jar, install
             and deploy plugins are automatically included because they provide the default
@@ -262,7 +264,8 @@
                     <name>causeway-app-starter-datanucleusenhance</name>
                     <value>true</value>
                 </property>
-                <!-- <file> <exists>${basedir}/logging-dn-enhance.properties</exists>
+                <!-- <file>
+                <exists>${basedir}/logging-dn-enhance.properties</exists>
                     </file> -->
             </activation>
             <build>
