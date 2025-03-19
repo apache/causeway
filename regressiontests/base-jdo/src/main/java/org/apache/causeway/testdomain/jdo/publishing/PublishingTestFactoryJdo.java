@@ -51,7 +51,6 @@ import org.apache.causeway.testdomain.jdo.JdoTestFixtures;
 import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
-import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.PublishingTestContext;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 
 import static org.apache.causeway.applib.services.wrapper.control.AsyncControl.returningVoid;

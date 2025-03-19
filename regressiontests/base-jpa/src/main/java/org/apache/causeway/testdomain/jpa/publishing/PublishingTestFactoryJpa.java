@@ -52,7 +52,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
-import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.PublishingTestContext;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
