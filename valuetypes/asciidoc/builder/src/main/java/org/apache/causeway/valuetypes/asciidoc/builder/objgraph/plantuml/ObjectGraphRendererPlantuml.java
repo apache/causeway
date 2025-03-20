@@ -19,7 +19,7 @@
 package org.apache.causeway.valuetypes.asciidoc.builder.objgraph.plantuml;
 
 import org.apache.causeway.applib.services.metamodel.objgraph.ObjectGraph;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.base._Strings;
 
 public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
 
@@ -53,10 +53,10 @@ public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
 
     protected String render(final ObjectGraph.Object obj) {
         var sb = new StringBuilder()
-                .append(String.format("object %s as %s",
+                .append("object %s as %s".formatted(
                     doubleQuoted(obj.name()),
                     obj.stereotype()
-                        .map(stp->String.format("%s <<%s>>", obj.id(), stp)).orElse(obj.id())))
+                        .map(stp->"%s <<%s>>".formatted(obj.id(), stp)).orElse(obj.id())))
                 .append('\n');
 
         obj.fields().forEach(field->{
@@ -67,24 +67,28 @@ public class ObjectGraphRendererPlantuml implements ObjectGraph.Renderer {
 
     protected String render(final ObjectGraph.Field field) {
         return field.isPlural()
-                ? String.format("%s: [%s]", field.name(), field.elementTypeShortName())
-                : String.format("%s: %s", field.name(), field.elementTypeShortName());
+                ? "%s: [%s]".formatted(field.name(), field.elementTypeShortName())
+                : "%s: %s".formatted(field.name(), field.elementTypeShortName());
     }
 
     protected String render(final ObjectGraph.Relation rel) {
-        switch(rel.relationType()) {
-        case ONE_TO_ONE:
-        case ONE_TO_MANY:
-        case MERGED_ASSOCIATIONS:
-            return String.format("%s -> \"%s\" %s",
-                    rel.fromId(), rel.descriptionFormatted() /*NOTE: format has no effect if merged*/, rel.toId());
-        case BIDIR_ASSOCIATION:
-            return String.format("%s \"%s\" -- \"%s\" %s : %s",
-                    rel.fromId(), rel.nearLabel(), rel.farLabel(), rel.toId(), rel.description() /*NOTE: already formated*/);
-        case INHERITANCE:
-            return String.format("%s --|> %s", rel.fromId(), rel.toId());
-        }
-        throw _Exceptions.unmatchedCase(rel.relationType());
+        return switch(rel.relationType()) {
+            case ONE_TO_ONE, ONE_TO_MANY, MERGED_ASSOCIATIONS -> "%s -> \"%s\" %s".formatted(
+                    rel.fromId(),
+                    rel.descriptionFormatted() /*NOTE: format has no effect if merged*/,
+                    rel.toId());
+            case BIDIR_ASSOCIATION -> "%s \"%s\" -- \"%s\" %s%s".formatted(
+                    rel.fromId(),
+                    rel.nearLabel(),
+                    rel.farLabel(),
+                    rel.toId(),
+                    _Strings.nonEmpty(rel.description()/*NOTE: already formatted*/)
+                        .map(" : %s"::formatted)
+                        .orElse(""));
+            case INHERITANCE -> "%s --|> %s".formatted(
+                    rel.fromId(),
+                    rel.toId());
+        };
     }
 
     // -- HELPER
