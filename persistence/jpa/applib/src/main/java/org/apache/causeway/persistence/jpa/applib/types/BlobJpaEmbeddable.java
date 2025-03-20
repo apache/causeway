@@ -88,9 +88,9 @@ public final class BlobJpaEmbeddable {
             return null;
         }
         var blobJpaEmbeddable = new BlobJpaEmbeddable();
-        blobJpaEmbeddable.bytes = blob.getBytes();
-        blobJpaEmbeddable.mimeType = blob.getMimeType().toString();
-        blobJpaEmbeddable.name = blob.getName();
+        blobJpaEmbeddable.bytes = blob.bytes();
+        blobJpaEmbeddable.mimeType = blob.mimeType().toString();
+        blobJpaEmbeddable.name = blob.name();
         return blobJpaEmbeddable;
     }
 

@@ -31,6 +31,7 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.Cau
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayMarkupConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayPasswordConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.awt.JavaAwtBufferedImageByteArrayConverter;
+import org.apache.causeway.persistence.jpa.integration.typeconverters.java.net.JavaNetURLConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.time.OffsetDateTimeConverterForJpa;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.time.OffsetTimeConverterForJpa;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.java.time.ZonedDateTimeConverterForJpa;
@@ -68,6 +69,7 @@ import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJp
         CausewayInteractionDtoConverter.class,
         CausewayOidDtoConverter.class,
         JavaAwtBufferedImageByteArrayConverter.class,
+        JavaNetURLConverter.class,
         JavaUtilLocaleConverter.class,
         JavaUtilUuidConverter.class,
         OffsetTimeConverterForJpa.class,
