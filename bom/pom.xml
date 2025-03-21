@@ -39,7 +39,7 @@ identified
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.4.4</version>
         <relativePath />
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -190,7 +190,7 @@ identified
 
         <sql-formatter.version>2.0.5</sql-formatter.version>
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.4.3</spring-boot.version>
+        <spring-boot.version>3.4.4</spring-boot.version>
 
         <surefire-plugin.argLine>
             -Xmx384m
