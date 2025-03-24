@@ -128,7 +128,7 @@ identified
         <error_prone_annotations.version>2.36.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
-        <graaljs.version>24.1.2</graaljs.version>
+        <graaljs.version>24.2.0</graaljs.version>
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
         <guava.version>33.4.0-jre</guava.version>
 
