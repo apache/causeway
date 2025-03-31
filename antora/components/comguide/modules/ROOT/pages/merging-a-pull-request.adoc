@@ -18,7 +18,7 @@ Once you are happy, you can commit.
 The overall process is as follows:
 
 * locate/raise corresponding JIRA ticket, eg CAUSEWAY-1162
-* checkout branch from which PR was forked (usually just 'master')
+* checkout branch from which PR was forked (usually just 'main')
 * merge PR into temporary branch using the `github-pr.sh` script
 * test the change locally (run the app, rebuild, manual regression tests etc)
 * if required, tidy up/refactor code as required
@@ -85,11 +85,11 @@ $ sh github-pr.sh causeway 1162 31
 
 Found JIRA ticket
 Found github PR
-branch_name_local: master
+branch_name_local: main
 username         : sebadiaz
 repo_full_name   : sebadiaz/causeway
 repo_clone_url   : https://github.com/sebadiaz/causeway.git
-branch_name_fork : master
+branch_name_fork : main
 
 merging into: CAUSEWAY-1162_pr-31
 
@@ -97,9 +97,9 @@ Deleting branch 'CAUSEWAY-1162_pr-31'
 Deleted branch CAUSEWAY-1162_pr-31 (was bd2e3c2).
 Creating the branch CAUSEWAY-1162_pr-31
 Switched to a new branch 'CAUSEWAY-1162_pr-31'
-Pulling the changes from https://github.com/sebadiaz/causeway.git master
+Pulling the changes from https://github.com/sebadiaz/causeway.git main
 From https://github.com/sebadiaz/causeway
- * branch            master     -> FETCH_HEAD
+ * branch            main     -> FETCH_HEAD
 Auto-merging core/pom.xml
 Merge made by the 'recursive' strategy.
  core/pom.xml                                       |   3 +-
@@ -116,7 +116,7 @@ Once done, the script continues:
 ----
 If build successful and happy to merge, execute:
 
-git checkout master && git merge --no-ff CAUSEWAY-1162_pr-31 && git branch -d CAUSEWAY-1162_pr-31
+git checkout main && git merge --no-ff CAUSEWAY-1162_pr-31 && git branch -d CAUSEWAY-1162_pr-31
 ----
 
 The screenshot belows shows the history we end up with:

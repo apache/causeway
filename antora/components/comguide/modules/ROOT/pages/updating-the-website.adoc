@@ -13,7 +13,7 @@ This branch can then be used for documentation updates.
 
 If we need to make a change:
 
-* make the change on `master` as normal (so that the docs will be there for the next release)
+* make the change on `main` as normal (so that the docs will be there for the next release)
 * cherry-pick the changes onto these documentation branches.
 
 Then publish as per the main release process:

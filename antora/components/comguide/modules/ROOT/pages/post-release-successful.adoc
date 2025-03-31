@@ -167,7 +167,7 @@ Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 TIP: For more on DOAP files, see these link:http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the link:https://github.com/apache/causeway/blob/master/STATUS[STATUS] file (in root of Apache Causeway' source) should be updated with details of the new release.
+* Update the link:https://github.com/apache/causeway/blob/main/STATUS[STATUS] file (in root of Apache Causeway' source) should be updated with details of the new release.
 
 * commit the changes
 +
@@ -388,7 +388,7 @@ git push origin {page-causewayreleaseversion} -u
 
 To build the site, we need to update the `site.yml`.
 
-This can be done from any branch, normally the release branch (`$CAUSEWAYBRANCH`) or `master`.
+This can be done from any branch, normally the release branch (`$CAUSEWAYBRANCH`) or `main`.
 
 NOTE: All that will be picked up from this branch is the `supplementary-ui` files (top-level index) and the `site.yml` playbook that identifies which branch(es) to include in the website.
 
@@ -464,17 +464,17 @@ include::partial$publish-and-index-website.adoc[]
 
 == Merge in release branch
 
-Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `master` branch.
+Because we release from a branch, the changes made in the branch should be merged back from the release branch back into the `main` branch.
 
 In the `causeway` repo:
 
 [source,bash,subs="attributes+"]
 ----
 RC=RC1                                                <.>
-git checkout master
+git checkout main
 git pull
 git merge release-{page-causewayreleaseversion}-$RC
-git push origin master
+git push origin main
 git branch -d release-{page-causewayreleaseversion}-$RC
 git push origin release-{page-causewayreleaseversion}-$RC --delete
 ----

@@ -49,11 +49,11 @@ In most cases a JIRA ticket will have been created at the beginning of the previ
 === Pull down code to release
 
 Set the HEAD of your local git repo to the commit to be released.
-This will usually be the tip of the origin's `master` branch:
+This will usually be the tip of the origin's `main` branch:
 
 [source,bash,subs="attributes+"]
 ----
-git checkout master
+git checkout main
 git pull --ff-only
 ----
 
@@ -215,7 +215,7 @@ git commit -m "$CAUSEWAYJIRA: updates to pom.xml etc for release"
 
 === Create a release branch
 
-The release is performed on a branch; if we are successful, this branch will be merged back into master.
+The release is performed on a branch; if we are successful, this branch will be merged back into `main`.
 We also recommend creating a separate git worktree to capture any documentation fixes that you might notice along the way.
 
 * create and checkout a release branch for the version number being released; eg:
