@@ -96,7 +96,7 @@ identified
 
         <archunit.version>1.4.0</archunit.version>
         <asciidoctorj.version>3.0.0</asciidoctorj.version>
-        <asm.version>9.7.1</asm.version> <!-- keep in sync with
+        <asm.version>9.8</asm.version> <!-- keep in sync with
         org.eclipse.persistence:org.eclipse.persistence.asm -->
         <approvaltests.version>24.19.0</approvaltests.version>
 
