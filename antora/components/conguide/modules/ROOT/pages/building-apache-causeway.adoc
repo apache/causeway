@@ -118,7 +118,7 @@ will open up a basic GUI client to staging changes and making commits.
 * `gitk --all` +
 +
 will open the commit history for all branches.
-In particular, you should be able to see the local `master`, which branch you are working on (the `HEAD`), and also the last known position of the `master` branch from the central repo, called `origin/master`.
+In particular, you should be able to see the local `main`, which branch you are working on (the `HEAD`), and also the last known position of the `main` branch from the central repo, called `origin/main`.
 
 You might also want to explore using a freely available equivalent such as link:https://www.sourcetreeapp.com/[Atlassian SourceTree].
 

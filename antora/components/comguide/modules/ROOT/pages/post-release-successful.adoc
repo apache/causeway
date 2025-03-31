@@ -667,7 +667,7 @@ Nightly builds of the framework's packages are available in two different locati
 
 * First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
 +
-Bump the `BASELINE` variable in link:https://github.com/apache/causeway/blob/master/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
+Bump the `BASELINE` variable in link:https://github.com/apache/causeway/blob/main/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
 
 * But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
 +
