@@ -220,7 +220,7 @@ implements
         final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
         if(cacheable) {
             final QueryResultsCache queryResultsCache = getQueryResultsCache();
-            final Object[] targetPojoPlusExecutionParameters = _Arrays.combine(executionParameters, targetPojo);
+            final Object[] targetPojoPlusExecutionParameters = _Arrays.combineWithExplicitType(Object.class, executionParameters, targetPojo);
             return queryResultsCache.execute(
                     ()->CanonicalInvoker.invoke(method, targetPojo, executionParameters),
                     targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
