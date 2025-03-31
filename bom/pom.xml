@@ -147,7 +147,7 @@ identified
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.13.1</jmock.version>
-        <joda-time.version>2.13.1</joda-time.version>
+        <joda-time.version>2.14.0</joda-time.version>
 
         <jquery-ui.version>1.14.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
