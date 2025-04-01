@@ -159,7 +159,7 @@ identified
         <junit-platform.version>1.12.1</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <lombok.version>1.18.36</lombok.version> <!-- overriding Spring -->
+        <lombok.version>1.18.38</lombok.version> <!-- overriding Spring -->
 
         <momentjs.version>2.30.1</momentjs.version> <!-- keep in sync:
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
