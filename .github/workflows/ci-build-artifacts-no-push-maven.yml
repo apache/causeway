@@ -1,4 +1,4 @@
-name: Build, Test (JDK 23)
+name: Build, Test (JDK 24)
 
 on:
   push:
@@ -53,12 +53,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up JDK (zulu 23)
+    - name: Set up JDK (zulu 24)
       if: matrix.language == 'java'
       uses: actions/setup-java@v4
       with:
         distribution: 'zulu'
-        java-version: 23
+        java-version: 24
     - name: Set up Maven (3.9.9)
       uses: stCarolas/setup-maven@v5
       with:
