@@ -28,7 +28,7 @@ auto-create-schemas
 | 
 | List of additional schemas to be auto-created.
 
-Explicitly creates given list of schemas by using the specified ``#getCreateSchemaSqlTemplate()`` to generate the actual SQL statement against the configured data-source.
+Explicitly creates given list of schemas by using the specified `#getCreateSchemaSqlTemplate()` to generate the actual SQL statement against the configured data-source.
 
 This configuration mechanism does not consider any schema-auto-creation configuration (if any), that independently is provided the standard JPA way.
 
@@ -41,11 +41,11 @@ create-schema-sql-template
 |  CREATE SCHEMA IF NOT EXISTS %S
 | Vendor specific SQL syntax to create a DB schema.
 
-This template is passed through ``String#format(String, Object...)`` to make the actual SQL statement thats to be used against the configured data-source.
+This template is passed through `)` to make the actual SQL statement thats to be used against the configured data-source.
 
-Default template is \{@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name converted to upper-case.
+Default template is ++{++@literal CREATE SCHEMA IF NOT EXISTS %S} with the schema name converted to upper-case.
 
-For MYSQL/MARIADB use escape like \{@code `%S`}
+For MYSQL/MARIADB use escape like ++{++@code ++`++%S++`++}
 
 
 

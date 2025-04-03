@@ -2282,7 +2282,7 @@ org.springframework.data:spring-data-jpa:jar:<managed> +
 
 .Document Index Entries
 ****
-xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayBookmarkConverter.adoc[CausewayBookmarkConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayLocalResourcePathConverter.adoc[CausewayLocalResourcePathConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayMarkupConverter.adoc[CausewayMarkupConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayPasswordConverter.adoc[CausewayPasswordConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/awt/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/time/OffsetDateTimeConverterForJpa.adoc[OffsetDateTimeConverterForJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/java/time/OffsetTimeConverterForJpa.adoc[OffsetTimeConverterForJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/java/time/ZonedDateTimeConverterForJpa.adoc[ZonedDateTimeConverterForJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/java/util/JavaUtilLocaleConverter.adoc[JavaUtilLocaleConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/util/JavaUtilUuidConverter.adoc[JavaUtilUuidConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayChangesDtoConverter.adoc[CausewayChangesDtoConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayCommandDtoConverter.adoc[CausewayCommandDtoConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayInteractionDtoConverter.adoc[CausewayInteractionDtoConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayOidDtoConverter.adoc[CausewayOidDtoConverter]
+xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayBookmarkConverter.adoc[CausewayBookmarkConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayLocalResourcePathConverter.adoc[CausewayLocalResourcePathConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayMarkupConverter.adoc[CausewayMarkupConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/applib/CausewayPasswordConverter.adoc[CausewayPasswordConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/awt/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/net/JavaNetURLConverter.adoc[JavaNetURLConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/time/OffsetDateTimeConverterForJpa.adoc[OffsetDateTimeConverterForJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/java/time/OffsetTimeConverterForJpa.adoc[OffsetTimeConverterForJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/java/time/ZonedDateTimeConverterForJpa.adoc[ZonedDateTimeConverterForJpa], xref:refguide:persistence:index/jpa/integration/typeconverters/java/util/JavaUtilLocaleConverter.adoc[JavaUtilLocaleConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/java/util/JavaUtilUuidConverter.adoc[JavaUtilUuidConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayChangesDtoConverter.adoc[CausewayChangesDtoConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayCommandDtoConverter.adoc[CausewayCommandDtoConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayInteractionDtoConverter.adoc[CausewayInteractionDtoConverter], xref:refguide:persistence:index/jpa/integration/typeconverters/schema/v2/CausewayOidDtoConverter.adoc[CausewayOidDtoConverter]
 ****
 
 |Apache Causeway Persistence - JPA (metamodel)
@@ -5226,7 +5226,7 @@ Directory: /extensions/vw/pdfjs/wicket/integration
 ****
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
-org.webjars.npm:pdfjs-dist:jar:4.10.38 +
+org.webjars.npm:pdfjs-dist:jar:5.0.375 +
 ****
 
 .Document Index Entries
@@ -5846,7 +5846,6 @@ o.a.i.extensions.excel.applib.service.ExcelServiceDefault +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
 org.apache.poi:poi-ooxml:jar:<managed> +
 org.apache.poi:poi-ooxml-lite:jar:<managed> +
 ****
@@ -6892,6 +6891,18 @@ skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsBase>> {
   BorderColor #2e6295
   shadowing false
 }
+skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsBaseJDO>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsBaseJPA>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
 skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsBootstrapping>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -6988,7 +6999,13 @@ skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsPublishingJPA>
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsRest>> {
+skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsRestJDO>> {
+  BackgroundColor #438dd5
+  FontColor #fffffe
+  BorderColor #2e6295
+  shadowing false
+}
+skinparam rectangle<<RegressionTests.ApacheCausewayRegressionTestsRestJPA>> {
   BackgroundColor #438dd5
   FontColor #fffffe
   BorderColor #2e6295
@@ -7025,6 +7042,8 @@ skinparam rectangle<<RegressionTests>> {
 }
 
 rectangle "Regression Tests\n<size:10>[Software System]</size>" <<RegressionTests>> {
+  rectangle "==Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - JPA\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionJPA>> as RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionJPA
+  rectangle "==Apache Causeway Regression Tests - Config\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsConfig>> as RegressionTests.ApacheCausewayRegressionTestsConfig
   rectangle "==Apache Causeway Regression Tests - Core WrapperFactory\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCoreWrapperFactory>> as RegressionTests.ApacheCausewayRegressionTestsCoreWrapperFactory
   rectangle "==Apache Causeway Regression Tests - Cucumber\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCucumber>> as RegressionTests.ApacheCausewayRegressionTestsCucumber
   rectangle "==Apache Causeway Regression Tests - Domain Model\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsDomainModel>> as RegressionTests.ApacheCausewayRegressionTestsDomainModel
@@ -7033,24 +7052,27 @@ rectangle "Regression Tests\n<size:10>[Software System]</size>" <<RegressionTest
   rectangle "==Apache Causeway Regression Tests - Interact\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsInteract>> as RegressionTests.ApacheCausewayRegressionTestsInteract
   rectangle "==Apache Causeway Regression Tests - Layouts\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsLayouts>> as RegressionTests.ApacheCausewayRegressionTestsLayouts
   rectangle "==Apache Causeway Regression Tests - Persistence (JDO)\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsPersistenceJDO>> as RegressionTests.ApacheCausewayRegressionTestsPersistenceJDO
+  rectangle "==Apache Causeway Regression Tests\n<size:10>[Container: packaging: pom]</size>" <<RegressionTests.ApacheCausewayRegressionTests>> as RegressionTests.ApacheCausewayRegressionTests
   rectangle "==Apache Causeway Regression Tests - Persistence (JPA)\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsPersistenceJPA>> as RegressionTests.ApacheCausewayRegressionTestsPersistenceJPA
   rectangle "==Apache Causeway Regression Tests - Publishing (JPA)\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsPublishingJPA>> as RegressionTests.ApacheCausewayRegressionTestsPublishingJPA
-  rectangle "==Apache Causeway Regression Tests\n<size:10>[Container: packaging: pom]</size>" <<RegressionTests.ApacheCausewayRegressionTests>> as RegressionTests.ApacheCausewayRegressionTests
-  rectangle "==Apache Causeway Regression Tests - Rest\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsRest>> as RegressionTests.ApacheCausewayRegressionTestsRest
+  rectangle "==Apache Causeway Regression Tests - Rest JDO\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsRestJDO>> as RegressionTests.ApacheCausewayRegressionTestsRestJDO
+  rectangle "==Apache Causeway Regression Tests - Rest JPA\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsRestJPA>> as RegressionTests.ApacheCausewayRegressionTestsRestJPA
   rectangle "==Apache Causeway Regression Tests - Value Types\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsValueTypes>> as RegressionTests.ApacheCausewayRegressionTestsValueTypes
   rectangle "==Apache Causeway Regression Tests - Viewers Common\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsViewersCommon>> as RegressionTests.ApacheCausewayRegressionTestsViewersCommon
   rectangle "==Apache Causeway Regression Tests - Viewers JDO\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsViewersJDO>> as RegressionTests.ApacheCausewayRegressionTestsViewersJDO
   rectangle "==Apache Causeway Regression Tests - Viewers JPA\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsViewersJPA>> as RegressionTests.ApacheCausewayRegressionTestsViewersJPA
   rectangle "==Apache Causeway Regression Tests - Base\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsBase>> as RegressionTests.ApacheCausewayRegressionTestsBase
+  rectangle "==Apache Causeway Regression Tests - Base JDO\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsBaseJDO>> as RegressionTests.ApacheCausewayRegressionTestsBaseJDO
+  rectangle "==Apache Causeway Regression Tests - Base JPA\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsBaseJPA>> as RegressionTests.ApacheCausewayRegressionTestsBaseJPA
   rectangle "==Apache Causeway Regression Tests - Bootstrapping\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsBootstrapping>> as RegressionTests.ApacheCausewayRegressionTestsBootstrapping
   rectangle "==Apache Causeway Regression Tests - Cmd/Exec/Audit/Session\n<size:10>[Container: packaging: pom]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSession>> as RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSession
   rectangle "==Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - Generic\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionGeneric>> as RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionGeneric
   rectangle "==Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - JDO\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionJDO>> as RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionJDO
-  rectangle "==Apache Causeway Regression Tests - Cmd/Exec/Audit/Session - JPA\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionJPA>> as RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSessionJPA
-  rectangle "==Apache Causeway Regression Tests - Config\n<size:10>[Container: packaging: jar]</size>" <<RegressionTests.ApacheCausewayRegressionTestsConfig>> as RegressionTests.ApacheCausewayRegressionTestsConfig
 }
 
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsBase : "<color:#707070>"
+RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsBaseJDO : "<color:#707070>"
+RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsBaseJPA : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsBootstrapping : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSession : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsConfig : "<color:#707070>"
@@ -7064,7 +7086,8 @@ RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> Regressio
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsPersistenceJDO : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsPersistenceJPA : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsPublishingJPA : "<color:#707070>"
-RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsRest : "<color:#707070>"
+RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsRestJDO : "<color:#707070>"
+RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsRestJPA : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsValueTypes : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsViewersCommon : "<color:#707070>"
 RegressionTests.ApacheCausewayRegressionTests .[#707070,thickness=2].> RegressionTests.ApacheCausewayRegressionTestsViewersJDO : "<color:#707070>"
@@ -7088,7 +7111,8 @@ Artifact: causeway-regressiontests
 Type: pom
 Directory: /regressiontests
 ----
-|Collection of JUnit tests covering core functionalities of the framework.
+|Collection of JUnit tests covering core functionalities of the
+framework.
 
 .Dependencies
 ****
@@ -7134,7 +7158,6 @@ o.a.i.testdomain.wrapperfactory.CounterRepository +
 org.apache.causeway.extensions:causeway-extensions-fullcalendar-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-encryption-jbcrypt:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-integration:jar:<managed> +
-org.apache.causeway.extensions:causeway-extensions-secman-persistence-jdo:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sse-metamodel:jar:<managed> +
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
@@ -7148,6 +7171,44 @@ org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 org.apache.wicket:wicket-tester:jar:<managed> +
+****
+
+|Apache Causeway Regression Tests - Base JDO
+[source,yaml]
+----
+Group: org.apache.causeway.regressiontests
+Artifact: causeway-regressiontests-base-jdo
+Type: jar
+Directory: /regressiontests/base-jdo
+----
+|.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-secman-persistence-jdo:jar:<managed> +
+org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
+****
+
+|Apache Causeway Regression Tests - Base JPA
+[source,yaml]
+----
+Group: org.apache.causeway.regressiontests
+Artifact: causeway-regressiontests-base-jpa
+Type: jar
+Directory: /regressiontests/base-jpa
+----
+|.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-secman-persistence-jpa:jar:<managed> +
+org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 ****
 
 |Apache Causeway Regression Tests - Bootstrapping
@@ -7360,8 +7421,7 @@ Directory: /regressiontests/persistence-jdo
 ----
 |.Dependencies
 ****
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
-org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jdo:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 ****
 
@@ -7376,7 +7436,7 @@ Directory: /regressiontests/persistence-jpa
 |.Dependencies
 ****
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jpa:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 ****
 
@@ -7391,24 +7451,42 @@ Directory: /regressiontests/publishing-jpa
 |.Dependencies
 ****
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jpa:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 ****
 
-|Apache Causeway Regression Tests - Rest
+|Apache Causeway Regression Tests - Rest JDO
 [source,yaml]
 ----
 Group: org.apache.causeway.regressiontests
-Artifact: causeway-regressiontests-rest
+Artifact: causeway-regressiontests-rest-jdo
 Type: jar
-Directory: /regressiontests/rest
+Directory: /regressiontests/rest-jdo
 ----
 |.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-cors-impl:jar:<managed> +
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
-org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jdo:jar:<managed> +
+org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
+org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
+****
+
+|Apache Causeway Regression Tests - Rest JPA
+[source,yaml]
+----
+Group: org.apache.causeway.regressiontests
+Artifact: causeway-regressiontests-rest-jpa
+Type: jar
+Directory: /regressiontests/rest-jpa
+----
+|.Dependencies
+****
+org.apache.causeway.extensions:causeway-extensions-cors-impl:jar:<managed> +
+org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
+org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jpa:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
@@ -7453,8 +7531,7 @@ Directory: /regressiontests/viewers-jdo
 |.Dependencies
 ****
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
-org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jdo:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 ****
@@ -7470,8 +7547,7 @@ Directory: /regressiontests/viewers-jpa
 |.Dependencies
 ****
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
-org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
+org.apache.causeway.regressiontests:causeway-regressiontests-base-jpa:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 ****

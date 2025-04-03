@@ -25,7 +25,7 @@ causeway.viewer.graphql. +
 api-variant
 
 |  query-and-mutations
-| Which variant of API to expose: ``ApiVariant#QUERY_ONLY`` (which suppresses any actions that mutate the state of the system), or as ``ApiVariant#QUERY_AND_MUTATIONS`` (which additionally exposes actions that mutate the system as mutations) or alternatively as ``ApiVariant#QUERY_WITH_MUTATIONS_NON_SPEC_COMPLIANT``, a query-only schema that relaxes the read-only rule by exposing actions that mutate the system; it is therefore not compliant with the GraphQL spec),
+| Which variant of API to expose: `ApiVariant#QUERY++_++ONLY` (which suppresses any actions that mutate the state of the system), or as `ApiVariant#QUERY++_++AND++_++MUTATIONS` (which additionally exposes actions that mutate the system as mutations) or alternatively as `ApiVariant#QUERY++_++WITH++_++MUTATIONS++_++NON++_++SPEC++_++COMPLIANT`, a query-only schema that relaxes the read-only rule by exposing actions that mutate the system; it is therefore not compliant with the GraphQL spec),
 
 
 |
@@ -79,7 +79,7 @@ causeway.viewer.graphql.meta-data. +
 field-name
 
 |  _meta
-| Note that field names _cannot_ being with "__", as that is reserved by the underlying GraphQL implementation.
+| Note that field names _cannot_ being with "++__++", as that is reserved by the underlying GraphQL implementation.
 
 
 |
@@ -97,9 +97,9 @@ causeway.viewer.graphql.resources. +
 response-type
 
 |  forbidden
-| How resources (``Blob`` bytes, ``Clob`` chars, grids and icons) can be downloaded from the resource controller.
+| How resources (`Blob` bytes, `Clob` chars, grids and icons) can be downloaded from the resource controller.
 
-By default the download of these resources if ``ResponseType#FORBIDDEN``, but alternatively they can be enabled to download either ``ResponseType#DIRECT``ly or as an ``ResponseType#ATTACHMENT``.
+By default the download of these resources if `ResponseType#FORBIDDEN`, but alternatively they can be enabled to download either `ResponseType#DIRECT`ly or as an `ResponseType#ATTACHMENT`.
 
 
 |
@@ -109,7 +109,7 @@ scalar-marshaller. +
 local-date-format
 
 |  yyyy-MM-dd
-| For both JDK8's ``LocalDate`` and JodaTime's ``LocalDate``
+| For both JDK8's `LocalDate` and JodaTime's `LocalDate`
 
 
 |
@@ -119,7 +119,7 @@ scalar-marshaller. +
 local-time-format
 
 |  HH:mm:ss
-| For both JDK8's ``LocalTime`` and JodaTime's ``LocalTime``
+| For both JDK8's `LocalTime` and JodaTime's `LocalTime`
 
 
 |
@@ -129,7 +129,7 @@ scalar-marshaller. +
 zoned-date-time-format
 
 |  yyyy-MM-dd'T'HH:mm:ssXXX
-| for JDK8's ``ZonedDateTime`` and JodaTime's ``DateTime``
+| for JDK8's `ZonedDateTime` and JodaTime's `DateTime`
 
 
 |
@@ -138,7 +138,7 @@ causeway.viewer.graphql. +
 schema-style
 
 |  rich-and-simple
-| Which ``SchemaStyle`` to expose, "simple" or "rich". By default both are exposed under top-level field names. @see Schema.Rich#getTopLevelFieldName() @see Schema.Simple#getTopLevelFieldName()
+| Which `SchemaStyle` to expose, "simple" or "rich". By default both are exposed under top-level field names. @see Schema.Rich#getTopLevelFieldName() @see Schema.Simple#getTopLevelFieldName()
 
 
 |
@@ -147,9 +147,9 @@ causeway.viewer.graphql.schema. +
 rich.enable-scenario-testing
 
 | 
-| If the ``#getSchemaStyle()`` is set to either ``SchemaStyle#RICH_ONLY`` or ``SchemaStyle#SIMPLE_AND_RICH``, then determines whether the "Scenario" field is included in order to allow given/when/then tests to be expressed.
+| If the `#getSchemaStyle()` is set to either `SchemaStyle#RICH++_++ONLY` or `SchemaStyle#SIMPLE++_++AND++_++RICH`, then determines whether the "Scenario" field is included in order to allow given/when/then tests to be expressed.
 
-Ignored if the ``#getSchemaStyle()`` is ``SchemaStyle#SIMPLE_ONLY``.
+Ignored if the `#getSchemaStyle()` is `SchemaStyle#SIMPLE++_++ONLY`.
 
 
 |
@@ -158,9 +158,9 @@ causeway.viewer.graphql.schema. +
 rich.top-level-field-name
 
 |  rich
-| If the ``#getSchemaStyle()`` is set to ``SchemaStyle#SIMPLE_AND_RICH``, defines the name of the top-level field under which the "rich" schema resides.
+| If the `#getSchemaStyle()` is set to `SchemaStyle#SIMPLE++_++AND++_++RICH`, defines the name of the top-level field under which the "rich" schema resides.
 
-Ignored for any other ``#getSchemaStyle()``.
+Ignored for any other `#getSchemaStyle()`.
 
 
 |
@@ -169,9 +169,9 @@ causeway.viewer.graphql.schema. +
 simple.top-level-field-name
 
 |  simple
-| If the ``#getSchemaStyle()`` is set to ``SchemaStyle#SIMPLE_AND_RICH``, defines the name of the top-level field under which the "simple" schema resides.
+| If the `#getSchemaStyle()` is set to `SchemaStyle#SIMPLE++_++AND++_++RICH`, defines the name of the top-level field under which the "simple" schema resides.
 
-Ignored for any other ``#getSchemaStyle()``.
+Ignored for any other `#getSchemaStyle()`.
 
 
 

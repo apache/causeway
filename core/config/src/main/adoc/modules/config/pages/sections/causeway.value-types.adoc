@@ -17,9 +17,9 @@ causeway.value-types.big-decimal. +
 display.min-scale
 
 | 
-| The minimum scale to use for all ``BigDecimal``s.
+| The minimum scale to use for all `BigDecimal`s.
 
-Is only used if the minimum scale has not been specified explicitly by some other means, typically either ``Digits#fraction()`` or an ORM semantic such as the (JPA) ``Column#scale()``.
+Is only used if the minimum scale has not been specified explicitly by some other means, typically either `Digits#fraction()` or an ORM semantic such as the (JPA) `Column#scale()`.
 
 
 |
@@ -46,13 +46,13 @@ causeway.value-types.big-decimal. +
 editing.use-grouping-separator
 
 | 
-| A common use of ``BigDecimal`` is as a money value. In some locales (eg English), the "," (comma) is the grouping (thousands) separator wihle the "." (period) acts as a decimal point, but in others (eg France, Italy) it is the other way around.
+| A common use of `BigDecimal` is as a money value. In some locales (eg English), the "," (comma) is the grouping (thousands) separator wihle the "." (period) acts as a decimal point, but in others (eg France, Italy) it is the other way around.
 
-Surprisingly perhaps, a string such as "123,99", when parsed ((by ``DecimalFormat``) in an English locale, is not rejected but instead is evaluated as the value 12399L. That's almost certainly not what the end-user would have expected, and results in a money value 100x too large.
+Surprisingly perhaps, a string such as "123,99", when parsed ((by `DecimalFormat`) in an English locale, is not rejected but instead is evaluated as the value 12399L. That's almost certainly not what the end-user would have expected, and results in a money value 100x too large.
 
 The purpose of this configuration property is to remove the confusion by simply disallowing the thousands separator from being part of the input string.
 
-For maximum safety, allowing the grouping separator is disallowed, but the alternate (original) behaviour can be reinstated by setting this config property back to ``true``.
+For maximum safety, allowing the grouping separator is disallowed, but the alternate (original) behaviour can be reinstated by setting this config property back to `true`.
 
 The same configuration property is also used for rendering the value.
 
@@ -67,11 +67,11 @@ use-scale-for-min-fractional-facet
 |  true
 | Indicates how to derive the min fractional facet (the minimum number of digits after the decimal point).
 
-If this flag is set, then the ``Digits#fraction()`` annotation or ORM equivalent (the JDO ``@Column#scale`` or the JPA ``Column#scale()``) should be used for the ``MinFractionalFacet`` as well as the ``MaxFractionalFacet``.
+If this flag is set, then the `Digits#fraction()` annotation or ORM equivalent (the JDO `@Column#scale` or the JPA `Column#scale()`) should be used for the `MinFractionalFacet` as well as the `MaxFractionalFacet`.
 
 What this means in practice is that a numeric values will be rendered to the same number of fractional digits, irrespective of whether they are whole numbers or fractional. For example, with a scale of 2, then "123.4532" will be rendered as "123.45", while "123" will be rendered as "123.00".
 
-If this flag is NOT set, or if it is set but there is no annotation, then the ``#minScale`` config property is used as a fallback.
+If this flag is NOT set, or if it is set but there is no annotation, then the `#minScale` config property is used as a fallback.
 
 If there is no fallback, then it means that a big decimal such as "123.00" will be presented as just "123" (that is, the shortest possible textual representation).
 
@@ -84,7 +84,7 @@ backend-url
 | 
 | If set, adds plantuml support to the AsciiDoc value type.
 
-Eg. via docker instance like \{@literal yuzutech/kroki}.
+Eg. via docker instance like ++{++@literal yuzutech/kroki}.
 
 
 |
@@ -93,7 +93,7 @@ causeway.value-types.kroki. +
 request-timeout
 
 |  5000ms
-| Max time for requests to the ``#getBackendUrl()``, when waiting for a response. (default: 5 seconds)
+| Max time for requests to the `#getBackendUrl()`, when waiting for a response. (default: 5 seconds)
 
 
 |
@@ -219,9 +219,9 @@ causeway.value-types.big-decimal. +
 min-scale
 
 | 
-| The minimum scale to use for all ``BigDecimal``s.
+| The minimum scale to use for all `BigDecimal`s.
 
-Is only used if the minimum scale has not been specified explicitly by some other means, typically either ``Digits#fraction()`` or an ORM semantic such as the (JPA) ``Column#scale()``. @deprecated - use ``Display#getMinScale()`` instead
+Is only used if the minimum scale has not been specified explicitly by some other means, typically either `Digits#fraction()` or an ORM semantic such as the (JPA) `Column#scale()`. @deprecated - use `Display#getMinScale()` instead
 
 
 |
@@ -230,17 +230,17 @@ causeway.value-types.big-decimal. +
 use-grouping-separator
 
 | 
-| A common use of ``BigDecimal`` is as a money value. In some locales (eg English), the "," (comma) is the grouping (thousands) separator wihle the "." (period) acts as a decimal point, but in others (eg France, Italy) it is the other way around.
+| A common use of `BigDecimal` is as a money value. In some locales (eg English), the "," (comma) is the grouping (thousands) separator wihle the "." (period) acts as a decimal point, but in others (eg France, Italy) it is the other way around.
 
-Surprisingly perhaps, a string such as "123,99", when parsed ((by ``DecimalFormat``) in an English locale, is not rejected but instead is evaluated as the value 12399L. That's almost certainly not what the end-user would have expected, and results in a money value 100x too large.
+Surprisingly perhaps, a string such as "123,99", when parsed ((by `DecimalFormat`) in an English locale, is not rejected but instead is evaluated as the value 12399L. That's almost certainly not what the end-user would have expected, and results in a money value 100x too large.
 
 The purpose of this configuration property is to remove the confusion by simply disallowing the thousands separator from being part of the input string.
 
-For maximum safety, allowing the grouping separator is disallowed, but the alternate (original) behaviour can be reinstated by setting this config property back to ``true``.
+For maximum safety, allowing the grouping separator is disallowed, but the alternate (original) behaviour can be reinstated by setting this config property back to `true`.
 
 The same configuration property is also used for rendering the value.
 
-@deprecated - use ``Editing#isUseGroupingSeparator()`` instead.
+@deprecated - use `Editing#isUseGroupingSeparator()` instead.
 
 
 

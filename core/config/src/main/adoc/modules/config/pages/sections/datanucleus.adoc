@@ -18,7 +18,7 @@ datanucleus.cache.level2.mode
 |  unspecified
 | The mode of operation of the L2 cache, deciding which entities are cached.
 
-The default (UNSPECIFIED) is the same as DISABLE_SELECTIVE.
+The default (UNSPECIFIED) is the same as DISABLE++_++SELECTIVE.
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#cache_level2[DataNucleus Cache docs].
 
@@ -141,9 +141,9 @@ generate-database.mode
 |  none
 | Whether to eagerly create all tables at startup.
 
-For integration testing, this is generally preferred to using datanucleus.schema.autoCreateAll, because the ``autoCreateAll`` will only create tables lazily, when first persisted to. While lazily initialization is potentially quicker, it can cause issues (eg with rollup mapping to super class tables).
+For integration testing, this is generally preferred to using datanucleus.schema.autoCreateAll, because the `autoCreateAll` will only create tables lazily, when first persisted to. While lazily initialization is potentially quicker, it can cause issues (eg with rollup mapping to super class tables).
 
-Valid values: `**none**`, ``create``, ``drop-and-create``, ``drop``.
+Valid values: *`none`*, `create`, `drop-and-create`, `drop`.
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 
@@ -153,7 +153,7 @@ For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jd
 datanucleus.schema.validate-all
 
 | 
-| Alias for defining ``validateTables``, ``validateColumns`` and ``validateConstraints`` as true.
+| Alias for defining `validateTables`, `validateColumns` and `validateConstraints` as true.
 
 For more details, see https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#pmf_properties[DataNucleus Config Property docs] and the https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#schema[DataNucleus Schema Guide].
 

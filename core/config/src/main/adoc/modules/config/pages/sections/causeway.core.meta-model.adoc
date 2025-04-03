@@ -29,7 +29,7 @@ programming-model. +
 ignore-deprecated
 
 | 
-| If set, then any aspects of the programming model (as implemented by ``FacetFactory``s that have been indicated as deprecated will simply be ignored/excluded from the metamodel.
+| If set, then any aspects of the programming model (as implemented by `FacetFactory`s that have been indicated as deprecated will simply be ignored/excluded from the metamodel.
 
 
 

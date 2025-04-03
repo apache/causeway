@@ -17,7 +17,7 @@ causeway.core.runtime-services. +
 application-features.init
 
 |  not-specified
-| Whether the ``ApplicationFeatureRepository`` (or the default implementation of that service, at least) should compute the set of ``ApplicationFeature`` that describe the metamodel eagerly, or lazily.
+| Whether the `ApplicationFeatureRepository` (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel eagerly, or lazily.
 
 
 |
@@ -26,7 +26,7 @@ causeway.core.runtime-services. +
 email.override.bcc
 
 | 
-| Intended for testing purposes only, if set then the requested ``bcc:`` of the email will be ignored, and instead sent to this email address instead.
+| Intended for testing purposes only, if set then the requested `bcc:` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
@@ -35,7 +35,7 @@ causeway.core.runtime-services. +
 email.override.cc
 
 | 
-| Intended for testing purposes only, if set then the requested ``cc:`` of the email will be ignored, and instead sent to this email address instead.
+| Intended for testing purposes only, if set then the requested `cc:` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
@@ -44,7 +44,7 @@ causeway.core.runtime-services. +
 email.override.to
 
 | 
-| Intended for testing purposes only, if set then the requested ``to:`` of the email will be ignored, and instead sent to this email address instead.
+| Intended for testing purposes only, if set then the requested `to:` of the email will be ignored, and instead sent to this email address instead.
 
 
 |
@@ -57,7 +57,7 @@ email.sender.address
 
 If the username is not specified, is also used as the username to connect to the SMTP service.
 
-This configuration property is mandatory (for the default implementation of the ``EmailService``, at least).
+This configuration property is mandatory (for the default implementation of the `EmailService`, at least).
 
 
 |
@@ -66,7 +66,7 @@ causeway.core.runtime-services. +
 email.throw-exception-on-fail
 
 |  true
-| If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (``EmailService#send(List, List, List, String, String, DataSource...)`` that's being called.
+| If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (`)` that's being called.
 
 
 |
@@ -78,7 +78,7 @@ bulk.threshold
 |  1
 | Determines the threshold as to whether to execute a set of entity changes in blk, in other words without a transaction flush in between.
 
-If the threshold is passed (by default, anything more than 1 entity to persist), then the ``RepositoryService#execInBulk(Callable)`` API is used.
+If the threshold is passed (by default, anything more than 1 entity to persist), then the `RepositoryService#execInBulk(Callable)` API is used.
 
 
 |
@@ -87,7 +87,7 @@ causeway.core.runtime-services. +
 exception-recognizer.dae.disable
 
 | 
-| Whether the ``ExceptionRecognizer`` implementation for Spring's DataAccessException - which attempts to sanitize any exceptions arising from object stores - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
+| Whether the `ExceptionRecognizer` implementation for Spring's DataAccessException - which attempts to sanitize any exceptions arising from object stores - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
 
 
 |
@@ -113,7 +113,7 @@ translation.resource-location
 | 
 | Specifies the relative resource path to look for translation files.
 
-If \{@code null} uses \{@code servletContext.getResource("/WEB-INF/")}.
+If ++{++@code null} uses ++{++@code servletContext.getResource("/WEB-INF/")}.
 
 Replaces the former Servlet context parameter 'causeway.config.dir';
 

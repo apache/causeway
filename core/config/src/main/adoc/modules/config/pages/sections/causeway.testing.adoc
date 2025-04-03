@@ -36,7 +36,7 @@ multiple-execution-strategy
 
 The default is to fixture scripts are executed only once per class.
 
-Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements ``FixtureScriptWithExecutionStrategy``.
+Note that this policy can be overridden on a fixture-by-fixture basis if the fixture implements `FixtureScriptWithExecutionStrategy`.
 
 
 |
@@ -58,7 +58,7 @@ package-prefix
 | 
 | Specifies the base package from which to search for fixture scripts.
 
-Either this or ``#getContextClass()`` must be specified; ``#getContextClass()`` is used by preference.
+Either this or `#getContextClass()` must be specified; `#getContextClass()` is used by preference.
 
 @see #getContextClass()
 

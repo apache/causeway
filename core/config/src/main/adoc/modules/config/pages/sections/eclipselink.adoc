@@ -320,16 +320,16 @@ eclipselink.logging.timestamp
 eclipselink.profiler
 
 |  NoProfiler
-| The "``profiler``" property configures the type of profiler used to capture runtime statistics.
+| The "`profiler`" property configures the type of profiler used to capture runtime statistics.
 
 *Allowed Values:*
 
-* "``NoProfiler``" (DEFAULT)
-* "``PerformanceMonitor``" - use ``PerformanceMonitor``
-* "``PerformanceProfiler``" - use ``PerformanceProfiler``
-* "``QueryMonitor``" - use ``QueryMonitor``
-* "``DMSProfiler``" - use ``DMSPerformanceProfiler``
-* the fully qualified name for a class that implements ``SessionProfiler`` interface
+* "`NoProfiler`" (DEFAULT)
+* "`PerformanceMonitor`" - use `PerformanceMonitor`
+* "`PerformanceProfiler`" - use `PerformanceProfiler`
+* "`QueryMonitor`" - use `QueryMonitor`
+* "`DMSProfiler`" - use `DMSPerformanceProfiler`
+* the fully qualified name for a class that implements `SessionProfiler` interface
 
 @see https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#profiler[eclipselink.profiler]
 

@@ -17,9 +17,9 @@ causeway.extensions.audit-trail. +
 persist
 
 |  enabled
-| Whether the ``EntityPropertyChangeSubscriber`` implementation provided by this extension (which persists property changes to the audit trail) is enabled or not.
+| Whether the `EntityPropertyChangeSubscriber` implementation provided by this extension (which persists property changes to the audit trail) is enabled or not.
 
-One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``EntityPropertyChangeSubscriber`` that is provided by the _audittrail_ extension. Because entity property changes are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of `EntityPropertyChangeSubscriber` that is provided by the _audittrail_ extension. Because entity property changes are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
 
 
 |
@@ -28,9 +28,9 @@ causeway.extensions.command-log. +
 persist
 
 |  enabled
-| Whether the ``CommandSubscriber`` implementation provided by this extension (which persists commands to the command log) is enabled or not.
+| Whether the `CommandSubscriber` implementation provided by this extension (which persists commands to the command log) is enabled or not.
 
-One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``CommandSubscriber`` that is provided by the _commandlog_ extension. Because commands are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of `CommandSubscriber` that is provided by the _commandlog_ extension. Because commands are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
 
 
 |
@@ -39,7 +39,7 @@ causeway.extensions.command-log. +
 run-background-commands.batch-size
 
 |  25
-| Limits the number of pending commands that the ``RunBackgroundCommandsJob`` will execute. After these have been executed, any ``RunBackgroundCommandsJobListener``s are called.
+| Limits the number of pending commands that the `RunBackgroundCommandsJob` will execute. After these have been executed, any `RunBackgroundCommandsJobListener`s are called.
 
 By default, quartz runs this command every 10 seconds, so the size should be proportion to that.
 
@@ -178,7 +178,7 @@ This flag is exposed as part of 'Access-Control-Allow-Credentials' header in a p
 
 By default this is not set (i.e. user credentials are not supported).
 
-For more information, check the usage of the ``credentials`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the `credentials` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 |
@@ -191,7 +191,7 @@ allowed-headers
 
 These header will also be returned as part of 'Access-Control-Allow-Headers' header in a pre-flight response.
 
-For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the `headers` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 |
@@ -204,9 +204,9 @@ allowed-methods
 
 A comma separated list of HTTP methods that can be used to access the resource, using cross-origin requests. These are the methods which will also be included as part of 'Access-Control-Allow-Methods' header in a pre-flight response.
 
-Default is ``GET``, ``POST``, ``HEAD``, ``OPTIONS``.
+Default is `GET`, `POST`, `HEAD`, `OPTIONS`.
 
-For more information, check the usage of the ``methods`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the `methods` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 |
@@ -217,11 +217,11 @@ allowed-origins
 |  *
 | Which origins are allowed to make CORS requests.
 
-The default is the wildcard ("*"), meaning any origin is allowed to access the resource, but this can be made more restrictive if necessary using a whitelist of comma separated origins eg:
+The default is the wildcard ("++*++"), meaning any origin is allowed to access the resource, but this can be made more restrictive if necessary using a whitelist of comma separated origins eg:
 
-``org``
+`org`
 
-For more information, check the usage of the ``origins`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the `origins` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 |
@@ -236,7 +236,7 @@ A comma separated list of headers other than the simple response headers that br
 
 Default is none.
 
-For more information, check the usage of the ``headers`` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
+For more information, check the usage of the `headers` init parameter for https://github.com/eBay/cors-filter[EBay CORSFilter].
 
 
 |
@@ -245,9 +245,9 @@ causeway.extensions.execution-log. +
 persist
 
 |  enabled
-| Whether the ``ExecutionSubscriber`` implementation provided by this extension (which persists executions to the execution log) is enabled or not.
+| Whether the `ExecutionSubscriber` implementation provided by this extension (which persists executions to the execution log) is enabled or not.
 
-One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of ``ExecutionSubscriber`` that is provided by the _executionLog_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the default implementation of `ExecutionSubscriber` that is provided by the _executionLog_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the default implementation from doing anything using this setting.
 
 
 |
@@ -256,9 +256,9 @@ causeway.extensions. +
 execution-outbox.persist
 
 |  enabled
-| Whether the ``ExecutionSubscriber`` implementation provided by this extension (which persists executions to the outbox) is enabled or not.
+| Whether the `ExecutionSubscriber` implementation provided by this extension (which persists executions to the outbox) is enabled or not.
 
-One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the outbox implementation of ``ExecutionSubscriber`` that is provided by the _executionOutbox_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the outbox implementation from doing anything using this setting.
+One reason to use this option is if you wish to provide your own implementation that wraps or delegates to the outbox implementation of `ExecutionSubscriber` that is provided by the _executionOutbox_ extension. Because executions are published to _all_ subscribers on the class path, you can disable the outbox implementation from doing anything using this setting.
 
 
 |
@@ -277,7 +277,7 @@ causeway.extensions.layout-loaders. +
 github.api-key
 
 | 
-| As per https://github.com/settings/tokens, must have permissions to the ``/search`` and ``/contents`` APIs for the specified repository.
+| As per https://github.com/settings/tokens, must have permissions to the `/search` and `/contents` APIs for the specified repository.
 
 
 |
@@ -286,7 +286,7 @@ causeway.extensions.layout-loaders. +
 github.repository
 
 | 
-| eg ``apache/causeway-app-simpleapp``
+| eg `apache/causeway-app-simpleapp`
 
 
 |
@@ -310,7 +310,7 @@ delegated-users.initial-role-names
 | 
 | The set of roles that users that have been automatically created are granted automatically.
 
-Typically the regular user role (as per ``role-name``, default value of ``causeway-ext-secman-user``) will be one of the roles listed here, to provide the ability for the end-user to logout, among other things (!).
+Typically the regular user role (as per `role-name`, default value of `causeway-ext-secman-user`) will be one of the roles listed here, to provide the ability for the end-user to logout, among other things (!).
 
 
 |
@@ -333,7 +333,7 @@ permissions-evaluation-policy
 |  allow-beats-veto
 | If there are conflicting (allow vs veto) permissions at the same scope, then this policy determines whether to prefer to allow the permission or to veto it.
 
-This is only used an implementation of secman's ``PermissionsEvaluationService`` SPI has not been provided explicitly.
+This is only used an implementation of secman's `PermissionsEvaluationService` SPI has not been provided explicitly.
 
 
 |
@@ -384,7 +384,7 @@ These namespaces are intended to be sufficient to allow users with this admin ro
 
 These roles cannot be removed via user interface
 
-WARNING: normally these should not be overridden. Instead, specify additional namespaces using ``NamespacePermissions#getAdditional()``.
+WARNING: normally these should not be overridden. Instead, specify additional namespaces using `NamespacePermissions#getAdditional()`.
 
 @see NamespacePermissions#getAdditional()
 
@@ -406,7 +406,7 @@ admin.role-name
 | 
 | The name of security admin role.
 
-Users with this role (in particular, the default user are granted access to a set of namespaces (``NamespacePermissions#getSticky()`` and ``NamespacePermissions#getAdditional()``) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
+Users with this role (in particular, the default user are granted access to a set of namespaces (`NamespacePermissions#getSticky()` and `NamespacePermissions#getAdditional()`) which are intended to be sufficient to allow users with this admin role to be able to administer the security module itself, for example to manage users and roles.
 
 @see Admin#getUserName() @see NamespacePermissions#getSticky() @see NamespacePermissions#getAdditional()
 
@@ -421,7 +421,7 @@ admin.user-name
 
 This user is automatically made a member of the role, from which it is granted permissions to administer other users.
 
-The password for this user is set in ``Admin#getPassword()``.
+The password for this user is set in `Admin#getPassword()`.
 
 @see #getPassword() @see #getRoleName()
 
@@ -434,7 +434,7 @@ regular-user.role-name
 | 
 | The role name for regular users of the application, granting them access to basic security features.
 
-The exact set of permissions is hard-wired in the ``CausewayExtSecmanRegularUserRoleAndPermissions`` fixture.
+The exact set of permissions is hard-wired in the `CausewayExtSecmanRegularUserRoleAndPermissions` fixture.
 
 
 |
@@ -445,7 +445,7 @@ yaml-file
 | 
 | Path to local YAML file, if present, to use as an alternative seeding strategy.
 
-Eg. seed from a YAML file, that was previously exported by SecMan's ApplicationRoleManager_exportAsYaml mixin.
+Eg. seed from a YAML file, that was previously exported by SecMan's ApplicationRoleManager++_++exportAsYaml mixin.
 
 
 |
@@ -454,9 +454,9 @@ causeway.extensions.secman. +
 user-menu-me-action-policy
 
 |  hide
-| Whether the presence of SecMan should result in the automatic suppression of the ``UserMenu``'s ``me#act() me()`` action.
+| Whether the presence of SecMan should result in the automatic suppression of the `UserMenu`'s `me#act() me()` action.
 
-This is normally what is required as SecMan's ``ApplicationUser`` is a more comprehensive representation of the current user. If the default ``me#act() me()`` action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
+This is normally what is required as SecMan's `ApplicationUser` is a more comprehensive representation of the current user. If the default `me#act() me()` action is not suppressed, then the end-user will see two actions with the name "me" in the tertiary menu.
 
 
 |
@@ -468,7 +468,7 @@ initial-role-names
 | 
 | The set of roles that users registering with the app are granted automatically.
 
-If using the wicket viewer, also requires causeway.viewer.wicket.suppress-signup to be set ``false``, along with any other of its other prereqs.
+If using the wicket viewer, also requires causeway.viewer.wicket.suppress-signup to be set `false`, along with any other of its other prereqs.
 
 
 |

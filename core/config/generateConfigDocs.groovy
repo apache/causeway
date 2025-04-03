@@ -382,22 +382,19 @@ static String toAsciidoc(String str) {
     str = str.replaceAll( /\{@link[ ]+(?:[^ }]+)[^}]+?[ ]+([^})]+)}/, '$1')          // {@link org.apache.causeway.applib.events.lifecycle.ObjectLoadedEvent.Noop ObjectLoadedEvent.Noop}: ObjectLoadedEvent.Noop
     str = str.replaceAll( /\{@link[ ]+?(?:[^ }]+?[ ]+?([^})]+))}/, '$1')             // {@link Foo foo bar} and {@link Foo#bar foo bar} : "foo bar"
     str = str.replaceAll( /\{@link[ ]+?(?:[^}]+?[ ]+?([^})]+))}/, '$1') // {@link Foo#bar(abc, def) foo bar} and {@link Foo#bar() foo bar} : "foo bar" ;
-    str = str.replaceAll( /\{@link (?:(?:[^} ]|[.])+[.])*([^}]+)}/, '``$1``')        // {@link org.apache.causeway.applib.annotation.Action#domainEvent()} : ``Action#domainEvent()``
-    str = str.replaceAll( /<tt>(?:(?:[^<]|[.])+[.])*([^<]+)<\/tt>/, '``$1``')
-    str = str.replaceAll( /<code>(?:(?:[^<]|[.])+[.])*([^<]+)<\/code>/, '``$1``')
+    str = str.replaceAll( /\{@link (?:(?:[^} ]|[.])+[.])*([^}]+)}/, '<tt>$1</tt>')        // {@link org.apache.causeway.applib.annotation.Action#domainEvent()} : <tt>Action#domainEvent()</tt>
+    str = str.replaceAll( /<tt>(?:(?:[^<]|[.])+[.])*([^<]+)<\/tt>/, '<tt>$1</tt>')
+    str = str.replaceAll( /<code>(?:(?:[^<]|[.])+[.])*([^<]+)<\/code>/, '<tt>$1</tt>')
     str = str.replaceAll( /@apiNote -/, 'TIP:')
     str = str.replaceAll( /@apiNote/, 'TIP:')
     str = str.replaceAll( /@implNote -/, 'NOTE:')
     str = str.replaceAll( /@implNote/, 'NOTE:')
-    str = str.replaceAll( /<tt>/, '`')
-    str = str.replaceAll( /<\/tt>/, '`')
-    str = str.replaceAll( /<code>/, '`')
-    str = str.replaceAll( /<\/code>/, '`')
 
     File tf = File.createTempFile("input",".html")
     tf.write(str)   // write to the file
 
     if (str.contains("@link")) {
+        // debugging... there shouldn't be any @link left
         System.out.println(str);
     }
 
