@@ -10,6 +10,8 @@ Enumerates the state of an entity.
 ----
 enum EntityState {
   NOT_PERSISTABLE     // <.>
+  SNAPSHOT     // <.>
+  SNAPSHOT_NO_OID     // <.>
   ATTACHED     // <.>
   ATTACHED_NO_OID     // <.>
   DETACHED     // <.>
@@ -31,6 +33,16 @@ enum EntityState {
 +
 --
 Object with this state is not an entity (for example it might be a view model, value type or a domain service).
+--
+<.> xref:#SNAPSHOT[SNAPSHOT]
++
+--
+Object with this state is an entity that has no session.
+--
+<.> xref:#SNAPSHOT_NO_OID[SNAPSHOT_NO_OID]
++
+--
+Object with this state is an entity that has no session and has no OID yet. On pre-store.
 --
 <.> xref:#ATTACHED[ATTACHED]
 +
@@ -80,6 +92,16 @@ Object is an entity, hence is persistable to the database.
 === NOT_PERSISTABLE
 
 Object with this state is not an entity (for example it might be a view model, value type or a domain service).
+
+[#SNAPSHOT]
+=== SNAPSHOT
+
+Object with this state is an entity that has no session.
+
+[#SNAPSHOT_NO_OID]
+=== SNAPSHOT_NO_OID
+
+Object with this state is an entity that has no session and has no OID yet. On pre-store.
 
 [#ATTACHED]
 === ATTACHED

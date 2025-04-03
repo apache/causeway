@@ -1,4 +1,4 @@
-= Clob
+= Clob _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents a character large object.
@@ -14,7 +14,7 @@ Conceptually you can consider it as a set of characters (an RTF or XML document,
 [source,java]
 .Clob.java
 ----
-class Clob {
+record Clob {
   Clob(String name, String primaryType, String subType, char[] chars)
   Clob(String name, String mimeTypeBase, char[] chars)
   Clob(String name, MimeType mimeType, char[] chars)
@@ -25,9 +25,7 @@ class Clob {
   Try<Clob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource, Charset charset)     // <.>
   Try<Clob> tryRead(String name, CommonMimeType mimeType, File file, Charset charset)     // <.>
   Try<Clob> tryReadUtf8(String name, CommonMimeType mimeType, File file)     // <.>
-  String getName()
-  MimeType getMimeType()
-  CharSequence getChars()
+  CharSequence getChars()     // <.>
   Blob toBlob(Charset charset)     // <.>
   Blob toBlobUtf8()     // <.>
   void writeCharsTo(Writer wr)
@@ -59,6 +57,16 @@ Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file), charset)_
 +
 --
 Shortcut for _#tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)_ using _StandardCharsets#UTF_8_ .
+--
+<.> xref:#getChars_[getChars()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#chars()_ instead
+====
 --
 <.> xref:#toBlob_Charset[toBlob(Charset)]
 +
@@ -110,6 +118,16 @@ Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file), charset)_
 === tryReadUtf8(String, CommonMimeType, File)
 
 Shortcut for _#tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)_ using _StandardCharsets#UTF_8_ .
+
+[#getChars_]
+=== getChars()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#chars()_ instead
+====
 
 [#toBlob_Charset]
 === toBlob(Charset)

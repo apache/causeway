@@ -1,4 +1,4 @@
-= RoleMemento
+= RoleMemento _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Immutable serializable value held by xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] .
@@ -8,9 +8,14 @@ Immutable serializable value held by xref:refguide:applib:index/services/user/Us
 [source,java]
 .RoleMemento.java
 ----
-class RoleMemento {
+record RoleMemento {
+  static final String LOGICAL_TYPE_NAME;
   RoleMemento(String name)     // <.>
   RoleMemento(String name, String description)     // <.>
+  boolean equals(Object obj)
+  int hashCode()
+  String getName()     // <.>
+  String getDescription()     // <.>
 }
 ----
 
@@ -24,6 +29,26 @@ Creates a new role with the specified name. Description is left blank.
 --
 Creates a new role with the specified name and description.
 --
+<.> xref:#getName_[getName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#name()_ instead
+====
+--
+<.> xref:#getDescription_[getDescription()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#description()_ instead
+====
+--
 
 == Members
 
@@ -36,3 +61,23 @@ Creates a new role with the specified name. Description is left blank.
 === RoleMemento(String, String)
 
 Creates a new role with the specified name and description.
+
+[#getName_]
+=== getName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#name()_ instead
+====
+
+[#getDescription_]
+=== getDescription()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#description()_ instead
+====

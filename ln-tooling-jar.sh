@@ -15,6 +15,5 @@
 #
 # - symlink
 #
-#   # mkdir -p tooling/cli/target
-#   # ln -s ../../../apache-causeway-committers/causewaystuff/tooling/cli/target/causeway-tooling-cli.jar tooling/cli/target/causewaystuff-tooling-cli.jar
-
+mkdir -p tooling/cli/target
+ln -sF /Users/danhaywood/repos/github/apache-causeway-committers/causewaystuff/tooling/cli/target/causeway-tooling-cli-spring-boot.jar tooling/cli/target/causewaystuff-tooling-cli.jar

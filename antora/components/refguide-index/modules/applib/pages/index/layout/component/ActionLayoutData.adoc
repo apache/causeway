@@ -29,8 +29,6 @@ class ActionLayoutData {
   void setPosition(org.apache.causeway.applib.annotation.ActionLayout.Position position)
   PromptStyle getPromptStyle()
   void setPromptStyle(PromptStyle promptStyle)
-  Redirect getRedirect()
-  void setRedirect(Redirect redirect)
   ActionLayoutDataOwner getOwner()     // <.>
   void setOwner(ActionLayoutDataOwner owner)
   String getMetadataError()     // <.>

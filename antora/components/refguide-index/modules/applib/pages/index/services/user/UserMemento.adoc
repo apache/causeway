@@ -1,4 +1,4 @@
-= UserMemento
+= UserMemento _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Immutable serializable value holding details about a user and its roles.
@@ -8,7 +8,7 @@ Immutable serializable value holding details about a user and its roles.
 [source,java]
 .UserMemento.java
 ----
-class UserMemento {
+record UserMemento {
   public static final String LOGICAL_TYPE_NAME;
   public static final String AUTHORIZED_USER_ROLE;     // <.>
   UserMemento system()     // <.>
@@ -18,7 +18,6 @@ class UserMemento {
   UserMemento ofNameAndRoleNames(String name, List<String> roleNames)     // <.>
   UserMemento ofNameAndRoleNames(String name, Stream<String> roleNames)     // <.>
   String nameFormatted()
-  List<RoleMemento> getRoles()     // <.>
   UserMemento withRoleAdded(String role)
   boolean isCurrentUser(String userName)     // <.>
   Stream<String> streamRoleNames()
@@ -26,6 +25,28 @@ class UserMemento {
   boolean hasSudoAccessAllRole()     // <.>
   UserMementoBuilder asBuilder()
   UserLocale asUserLocale()
+  UserMementoBuilder builder(String name)
+  UserMemento withRealName(String realName)
+  UserMemento withAvatarUrl(URL avatarUrl)
+  UserMemento withImpersonating(boolean impersonating)
+  UserMemento withAuthenticationCode(String authenticationCode)
+  UserMemento withAuthenticationSource(AuthenticationSource authenticationSource)
+  UserMemento withMultiTenancyToken(String multiTenancyToken)
+  UserMemento withLanguageLocale(Locale languageLocale)
+  UserMemento withNumberFormatLocale(Locale numberFormatLocale)
+  UserMemento withTimeFormatLocale(Locale timeFormatLocale)
+  boolean equals(Object obj)
+  int hashCode()
+  String getName()     // <.>
+  String getAuthenticationCode()     // <.>
+  AuthenticationSource getAuthenticationSource()     // <.>
+  URL getAvatarUrl()     // <.>
+  String getRealName()     // <.>
+  Locale getLanguageLocale()     // <.>
+  Locale getnumberFormatLocale()     // <.>
+  Locale getTimeFormatLocale()     // <.>
+  String getMultiTenancyToken()     // <.>
+  List<RoleMemento> getRoles()     // <.>
 }
 ----
 
@@ -64,11 +85,6 @@ Creates a new user with the specified name and assigned role names.
 --
 Creates a new user with the specified name and assigned role names.
 --
-<.> xref:#getRoles_[getRoles()]
-+
---
-The roles associated with this user.
---
 <.> xref:#isCurrentUser_String[isCurrentUser(String)]
 +
 --
@@ -77,7 +93,107 @@ Determine if the specified name is this user.
 <.> xref:#hasSudoAccessAllRole_[hasSudoAccessAllRole()]
 +
 --
-Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] 's _UserMemento#getRoles() roles_ contains the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] 's _SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE_ role (meaning that security checks are disabled).
+Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] 's _UserMemento#roles() roles_ contains the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] 's _SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE_ role (meaning that security checks are disabled).
+--
+<.> xref:#getName_[getName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#name()_ instead
+====
+--
+<.> xref:#getAuthenticationCode_[getAuthenticationCode()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#authenticationCode()_ instead
+====
+--
+<.> xref:#getAuthenticationSource_[getAuthenticationSource()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#authenticationSource()_ instead
+====
+--
+<.> xref:#getAvatarUrl_[getAvatarUrl()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#avatarUrl()_ instead
+====
+--
+<.> xref:#getRealName_[getRealName()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#realName()_ instead
+====
+--
+<.> xref:#getLanguageLocale_[getLanguageLocale()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#languageLocale()_ instead
+====
+--
+<.> xref:#getnumberFormatLocale_[getnumberFormatLocale()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#numberFormatLocale()_ instead
+====
+--
+<.> xref:#getTimeFormatLocale_[getTimeFormatLocale()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#timeFormatLocale()_ instead
+====
+--
+<.> xref:#getMultiTenancyToken_[getMultiTenancyToken()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#multiTenancyToken()_ instead
+====
+--
+<.> xref:#getRoles_[getRoles()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#roles()_ instead
+====
 --
 
 == Members
@@ -117,11 +233,6 @@ Creates a new user with the specified name and assigned role names.
 
 Creates a new user with the specified name and assigned role names.
 
-[#getRoles_]
-=== getRoles()
-
-The roles associated with this user.
-
 [#isCurrentUser_String]
 === isCurrentUser(String)
 
@@ -130,4 +241,104 @@ Determine if the specified name is this user.
 [#hasSudoAccessAllRole_]
 === hasSudoAccessAllRole()
 
-Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] 's _UserMemento#getRoles() roles_ contains the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] 's _SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE_ role (meaning that security checks are disabled).
+Whether this xref:refguide:applib:index/services/user/UserMemento.adoc[UserMemento] 's _UserMemento#roles() roles_ contains the xref:refguide:applib:index/services/sudo/SudoService.adoc[SudoService] 's _SudoService#ACCESS_ALL_ROLE ACCESS_ALL_ROLE_ role (meaning that security checks are disabled).
+
+[#getName_]
+=== getName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#name()_ instead
+====
+
+[#getAuthenticationCode_]
+=== getAuthenticationCode()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#authenticationCode()_ instead
+====
+
+[#getAuthenticationSource_]
+=== getAuthenticationSource()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#authenticationSource()_ instead
+====
+
+[#getAvatarUrl_]
+=== getAvatarUrl()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#avatarUrl()_ instead
+====
+
+[#getRealName_]
+=== getRealName()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#realName()_ instead
+====
+
+[#getLanguageLocale_]
+=== getLanguageLocale()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#languageLocale()_ instead
+====
+
+[#getnumberFormatLocale_]
+=== getnumberFormatLocale()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#numberFormatLocale()_ instead
+====
+
+[#getTimeFormatLocale_]
+=== getTimeFormatLocale()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#timeFormatLocale()_ instead
+====
+
+[#getMultiTenancyToken_]
+=== getMultiTenancyToken()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#multiTenancyToken()_ instead
+====
+
+[#getRoles_]
+=== getRoles()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#roles()_ instead
+====
