@@ -3038,9 +3038,9 @@ identified
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.github.qsy7.org.projectlombok</groupId>
+                        <groupId>dev.pcms</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>1.18.30</version>
+                        <version>1.18.36.2</version>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
                             <outputDirectory>${delombok.output}</outputDirectory>
