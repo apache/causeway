@@ -1,4 +1,4 @@
-= Blob
+= Blob _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 Represents a binary large object.
@@ -14,16 +14,14 @@ Conceptually you can consider it as a set of bytes (a picture, a video etc), tho
 [source,java]
 .Blob.java
 ----
-class Blob {
+record Blob {
   Blob(String name, String primaryType, String subtype, byte[] bytes)
   Blob(String name, String mimeTypeBase, byte[] bytes)
   Blob(String name, MimeType mimeType, byte[] bytes)
   Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, File file)     // <.>
-  String getName()
-  MimeType getMimeType()
-  byte[] getBytes()
+  byte[] getBytes()     // <.>
   Clob toClob(Charset charset)     // <.>
   void writeBytesTo(OutputStream os)     // <.>
   void writeTo(File file)     // <.>
@@ -56,6 +54,16 @@ Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ ,
 +
 --
 Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
+--
+<.> xref:#getBytes_[getBytes()]
++
+--
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#bytes()_ instead
+====
 --
 <.> xref:#toClob_Charset[toClob(Charset)]
 +
@@ -113,6 +121,16 @@ For more fine-grained control use one of the xref:refguide:applib:index/value/Bl
 === tryRead(String, CommonMimeType, File)
 
 Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
+
+[#getBytes_]
+=== getBytes()
+
+[WARNING]
+====
+[red]#_deprecated:_#
+
+use _#bytes()_ instead
+====
 
 [#toClob_Charset]
 === toClob(Charset)

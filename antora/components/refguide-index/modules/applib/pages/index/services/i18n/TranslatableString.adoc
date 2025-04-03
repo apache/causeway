@@ -1,4 +1,4 @@
-= TranslatableString
+= TranslatableString _(record)_
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 == API
@@ -6,20 +6,15 @@
 [source,java]
 .TranslatableString.java
 ----
-class TranslatableString {
+record TranslatableString {
   TranslatableString tr(String pattern, Object... paramArgs)     // <.>
   TranslatableString trn(String singularPattern, String pluralPattern, int number, Object... paramArgs)     // <.>
-  String getSingularText()     // <.>
-  String getPluralText()     // <.>
-  boolean isPluralForm()
-  Map<String, Object> getArgumentsByParameterName()     // <.>
   String translate(TranslationService translationService, TranslationContext context)     // <.>
-  String getPattern()     // <.>
-  String translated(String translatedText)
-  String format(String format, Map<String, Object> values)
+  String pattern()     // <.>
   boolean equals(Object o)
   int hashCode()
   String toString()
+  String translated(String translatedText)
 }
 ----
 
@@ -33,27 +28,12 @@ A translatable string with a single pattern for both singular and plural forms.
 --
 A translatable string with different patterns for singular and plural forms, selected automatically by the number
 --
-<.> xref:#getSingularText_[getSingularText()]
-+
---
-The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `true` then used only for the singular form.
---
-<.> xref:#getPluralText_[getPluralText()]
-+
---
-The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `null` if _#isPluralForm()_ is `false` .
---
-<.> xref:#getArgumentsByParameterName_[getArgumentsByParameterName()]
-+
---
-The arguments; excluded from _#equals(Object)_ comparison.
---
 <.> xref:#translate_TranslationService_TranslationContext[translate(TranslationService, TranslationContext)]
 +
 --
-Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
+Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#pattern()_ .
 --
-<.> xref:#getPattern_[getPattern()]
+<.> xref:#pattern_[pattern()]
 +
 --
 The text to be translated; depends on whether _#isPluralForm()_ and whether to be translated.
@@ -71,28 +51,13 @@ A translatable string with a single pattern for both singular and plural forms.
 
 A translatable string with different patterns for singular and plural forms, selected automatically by the number
 
-[#getSingularText_]
-=== getSingularText()
-
-The text as provided in (either of the _#tr(String, Object...) factory_ _#trn(String, String, int, Object...) method_ s, with placeholders rather than substituted arguments; if _#isPluralForm()_ is `true` then used only for the singular form.
-
-[#getPluralText_]
-=== getPluralText()
-
-The plural text as provided in the _#trn(String, String, int, Object...) factory method_ , with placeholders rather than substituted arguments; but will be `null` if _#isPluralForm()_ is `false` .
-
-[#getArgumentsByParameterName_]
-=== getArgumentsByParameterName()
-
-The arguments; excluded from _#equals(Object)_ comparison.
-
 [#translate_TranslationService_TranslationContext]
 === translate(TranslationService, TranslationContext)
 
-Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#getPattern()_ .
+Translates this string using the provided xref:refguide:applib:index/services/i18n/TranslationService.adoc[TranslationService] , selecting either the single or plural form as per _#pattern()_ .
 
-[#getPattern_]
-=== getPattern()
+[#pattern_]
+=== pattern()
 
 The text to be translated; depends on whether _#isPluralForm()_ and whether to be translated.
 

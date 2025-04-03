@@ -117,7 +117,7 @@ Find the only instance that matches the provided xref:refguide:applib:index/quer
 <.> xref:#firstMatch_Class_Predicate[firstMatch(Class, Predicate)]
 +
 --
-Find the only instance of the specified type (including subtypes) that satifies the provided (client-side) predicate.
+Find the only instance of the specified type (including subtypes) that satisfies the provided (client-side) predicate.
 --
 <.> xref:#firstMatch_Query[firstMatch(Query)]
 +
@@ -264,7 +264,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 [#firstMatch_Class_Predicate]
 === firstMatch(Class, Predicate)
 
-Find the only instance of the specified type (including subtypes) that satifies the provided (client-side) predicate.
+Find the only instance of the specified type (including subtypes) that satisfies the provided (client-side) predicate.
 
 This method is useful during exploration/prototyping, but - because the filtering is performed client-side - this method is only really suitable for initial development/prototyping, or for classes with very few instances. Use _#firstMatch(Query)_ for production code.
 

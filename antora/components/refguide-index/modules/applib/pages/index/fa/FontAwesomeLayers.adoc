@@ -1,0 +1,56 @@
+= FontAwesomeLayers _(record)_
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+EXPERIMENTAL FEATURE WARNINGThis class is still subject to changes without warning or notice!
+
+Model for a single or multiple (layered) _Font Awesome_ icon(s).
+
+== API
+
+[source,java]
+.FontAwesomeLayers.java
+----
+record FontAwesomeLayers {
+  FontAwesomeLayers empty()
+  FontAwesomeLayers blank()
+  FontAwesomeLayers singleIcon(String faClasses)
+  FontAwesomeLayers iconStack(String containerCssClasses, String containerCssStyle, IconEntry baseEntry, IconEntry overlayEntry, IconEntry... additionalOverlayEntries)
+  FontAwesomeLayers fromJson(String json)
+  FontAwesomeLayers fromQuickNotation(String quickNotation)     // <.>
+  StackBuilder stackBuilder()
+  String normalizeCssClasses(String cssClasses, String... mandatory)
+  String toHtml()
+  String toJson()
+  String toQuickNotation()     // <.>
+  FontAwesomeLayers withPosition(CssClassFaPosition newPosition)
+  FontAwesomeLayers emptyToBlank()
+}
+----
+
+<.> xref:#fromQuickNotation_String[fromQuickNotation(String)]
++
+--
+Example:
+--
+<.> xref:#toQuickNotation_[toQuickNotation()]
++
+--
+If this instance was not created from a quick-notation, the result may loose style information.
+--
+
+== Members
+
+[#fromQuickNotation_String]
+=== fromQuickNotation(String)
+
+Example:
+
+----
+solid person-walking-arrow-right .my-color,
+solid scale-balanced .my-color .bottom-right-overlay
+----
+
+[#toQuickNotation_]
+=== toQuickNotation()
+
+If this instance was not created from a quick-notation, the result may loose style information.

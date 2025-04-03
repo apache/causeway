@@ -71,7 +71,7 @@ Looks up a domain service of the requested type (same as _#lookupService(Class)_
 <.> xref:#clearRegisteredBeans_[clearRegisteredBeans()]
 +
 --
-Invalidates any cached service adapters that might hold a reference to the current _SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _ObjectSpecification_ cache.
+Invalidates any cached service adapters that might hold a reference to the current _org.apache.causeway.core.metamodel.specloader.SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _org.apache.causeway.core.metamodel.spec.ObjectSpecification_ cache.
 --
 
 == Members
@@ -111,7 +111,7 @@ Returns a registered bean of given _name_ , or throws when no such bean.
 
 Returns a domain service implementing the requested type.
 
-If this lookup is ambiguous, the service annotated with highest priority is returned. see _Priority_
+If this lookup is ambiguous, the service annotated with highest priority is returned. see _jakarta.annotation.Priority_
 
 [#lookupService_Class_Comparator]
 === lookupService(Class, Comparator)
@@ -128,7 +128,7 @@ Looks up a domain service of the requested type (same as _#lookupService(Class)_
 [#clearRegisteredBeans_]
 === clearRegisteredBeans()
 
-Invalidates any cached service adapters that might hold a reference to the current _SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _ObjectSpecification_ cache.
+Invalidates any cached service adapters that might hold a reference to the current _org.apache.causeway.core.metamodel.specloader.SpecificationLoader_ . Particularly useful when discarding a meta-model instance, that is, purging the _org.apache.causeway.core.metamodel.spec.ObjectSpecification_ cache.
 
 include::hooks/ServiceRegistry_010-implementation.adoc[]
 
