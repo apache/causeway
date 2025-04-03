@@ -50,8 +50,8 @@ public final class ManagedCollection extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<OneToManyAssociation>lookup(owner, Identifier.Type.COLLECTION, memberId)
-        .map(objectAction -> of(owner, objectAction, where));
+        return ManagedMember.<OneToManyAssociation>lookup(owner.objSpec(), Identifier.Type.COLLECTION, memberId)
+            .map(objectAction -> of(owner, objectAction, where));
     }
 
     // -- IMPLEMENTATION

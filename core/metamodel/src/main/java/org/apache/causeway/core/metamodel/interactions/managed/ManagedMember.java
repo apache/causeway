@@ -152,18 +152,15 @@ implements ManagedFeature {
     }
 
     protected static <T extends ObjectMember> Optional<T> lookup(
-            final @NonNull ManagedObject owner,
+            final @NonNull ObjectSpecification ownerSpec,
             final Identifier.@NonNull Type memberType,
             final @NonNull String memberId) {
-
-        var onwerSpec = owner.objSpec();
-        switch (memberType) {
-        case ACTION:     return _Casts.uncheckedCast(onwerSpec.getAction(memberId));
-        case PROPERTY:   return _Casts.uncheckedCast(onwerSpec.getProperty(memberId));
-        case COLLECTION: return _Casts.uncheckedCast(onwerSpec.getCollection(memberId));
-        default:
-            return Optional.empty();
-        }
+        return switch (memberType) {
+            case ACTION -> _Casts.uncheckedCast(ownerSpec.getAction(memberId));
+            case PROPERTY -> _Casts.uncheckedCast(ownerSpec.getProperty(memberId));
+            case COLLECTION -> _Casts.uncheckedCast(ownerSpec.getCollection(memberId));
+            default -> Optional.empty();
+        };
     }
 
 }

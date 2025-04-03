@@ -26,6 +26,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -42,7 +43,6 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
-import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
@@ -61,7 +61,6 @@ import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
 public class DataTableInternal
@@ -180,9 +179,9 @@ implements DataTableInteractive {
 
         this.dataColumnsObservable = _Observables.lazy(()->
             managedMember.getElementType()
-            .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
-            .map(assoc->new DataColumnInternal(this, assoc))
-            .collect(Can.toCan()));
+                .streamAssociationsForColumnRendering(managedMember.getIdentifier(), managedMember.getOwner())
+                .map(assoc->new DataColumnInternal(this, assoc))
+                .collect(Can.toCan()));
 
         //XXX future extension: the title could dynamically reflect the number of elements selected
         //eg... 5 Orders selected
@@ -358,6 +357,12 @@ implements DataTableInteractive {
 
     @Override
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
+
+        if(managedMember.getOwner().specialization().isEmpty()
+            || managedMember.getOwner().getEntityState().isTransientOrRemoved()) {
+            throw _Exceptions.illegalArgument("cannot start action interaction on missing or deleted action owner");
+        }
+
         var featureId = managedMember.getIdentifier();
         if(!featureId.type().isPropertyOrCollection()) {
             return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
@@ -407,6 +412,10 @@ implements DataTableInteractive {
      * Either originates from a <i>Collection</i> or an <i>Action</i>'s
      * non-scalar result.
      * <p>
+     * Corner case of owner (if entity) having been deleted, must be handled successfully,
+     * that is an owner's action result is still semantically valid, even if it was deleted in the process.
+     * (e.g. SecMan's {@code ApplicationUser_delete} returning a list of all remaining users)
+     * <p>
      * Responsibility for recreation of the owner is with the caller
      * to allow for simpler object graph reconstruction (shared owner).
      */
@@ -435,20 +444,14 @@ implements DataTableInteractive {
         private DataTableInteractive.@Nullable ColumnSort columnSort;
 
         @Override
-        public DataTableInternal getDataTableModel(final ManagedObject owner) {
-
-            if(owner.getPojo()==null) {
-                // owner (if entity) might have been deleted
-                throw _Exceptions.illegalArgument("cannot recreate from memento for deleted object");
-            }
-
+        public DataTableInternal recreateDataTableModel(final ManagedObject owner) {
             var memberId = featureId.memberLogicalName();
 
             final ManagedMember managedMember = featureId.type().isPropertyOrCollection()
-                    ? CollectionInteraction.start(owner, memberId, where)
-                        .getManagedCollection().orElseThrow()
-                    : ActionInteraction.start(owner, memberId, where)
-                        .getManagedActionElseFail();
+                    ? ManagedCollection.lookupCollection(owner, memberId, where)
+                        .orElseThrow()
+                    : ManagedAction.lookupAction(owner, memberId, where)
+                        .orElseThrow();
 
             var dataTableInteractive = new DataTableInternal(managedMember, where,
                     dataTable.streamDataElements()

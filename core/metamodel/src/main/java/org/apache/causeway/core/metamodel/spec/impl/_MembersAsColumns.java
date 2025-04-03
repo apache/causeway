@@ -61,10 +61,13 @@ class _MembersAsColumns implements HasMetaModelContext {
         if(elementType.isValue()) return Stream.empty();
 
         return elementType.streamRuntimeActions(MixedIn.INCLUDED)
-                .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
-                .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
+            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
+            .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
     }
 
+    /**
+     * @param parentObject not used for standalone tables and allowed to be empty for parented ones
+     */
     public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final ObjectSpecification elementType,
             final Identifier memberIdentifier,
@@ -78,24 +81,24 @@ class _MembersAsColumns implements HasMetaModelContext {
         var assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
-        .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
-        .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
-        .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
-        .forEach(assoc->assocById.put(assoc.getId(), assoc));
+            .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
+            .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
+            .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
+            .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
         var assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
-        .ifPresent(assocIdsInOrder::sort);
+            .ifPresent(assocIdsInOrder::sort);
 
         // optional SPI to reorder columns
         sortColumnsUsingSpi(memberIdentifier, parentObject, assocIdsInOrder, elementClass);
 
         // add all ordered columns to the table
         return assocIdsInOrder.stream()
-                .map(assocById::get)
-                .filter(_NullSafe::isPresent);
+            .map(assocById::get)
+            .filter(_NullSafe::isPresent);
     }
 
     // -- HELPER
@@ -104,9 +107,9 @@ class _MembersAsColumns implements HasMetaModelContext {
             final ObjectAssociation assoc,
             final Class<?> elementType) {
         return getServiceRegistry()
-                .select(TableColumnVisibilityService.class)
-                .stream()
-                .noneMatch(x -> x.hides(elementType, assoc.getId()));
+            .select(TableColumnVisibilityService.class)
+            .stream()
+            .noneMatch(x -> x.hides(elementType, assoc.getId()));
     }
 
     // comparator based on grid facet, that is by order of occurrence within associated layout
@@ -118,9 +121,7 @@ class _MembersAsColumns implements HasMetaModelContext {
         // one object of that type has been rendered via DomainObjectPage.
         var elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
 
-        if(elementTypeGridFacet == null) {
-            return Optional.empty();
-        }
+        if(elementTypeGridFacet == null) return Optional.empty();
 
         // the facet should always exist, in fact
         // just enough to ask for the metadata.
@@ -145,6 +146,7 @@ class _MembersAsColumns implements HasMetaModelContext {
 
     private void sortColumnsUsingSpi(
             final Identifier memberIdentifier,
+            // not used for standalone tables, and allowed to be empty in parented ones
             final ManagedObject parentObject,
             final List<String> propertyIdsInOrder,
             final Class<?> elementType) {
@@ -163,10 +165,10 @@ class _MembersAsColumns implements HasMetaModelContext {
                     elementType,
                     propertyIdsInOrder)
             : tableColumnOrderService.orderParented(
-                        parentObject.getPojo(),
-                        memberIdentifier.memberLogicalName(),
-                        elementType,
-                        propertyIdsInOrder))
+                    parentObject.getPojo(),
+                    memberIdentifier.memberLogicalName(),
+                    elementType,
+                    propertyIdsInOrder))
         .filter(_NullSafe::isPresent)
         .findFirst()
         .filter(propertyReorderedIds->propertyReorderedIds!=propertyIdsInOrder) // skip if its the same object

@@ -63,7 +63,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<ObjectAction>lookup(owner, Identifier.Type.ACTION, memberId)
+        return ManagedMember.<ObjectAction>lookup(owner.objSpec(), Identifier.Type.ACTION, memberId)
         .map(objectAction -> of(owner, objectAction, where));
     }
 
@@ -73,7 +73,7 @@ public final class ManagedAction extends ManagedMember {
             final @NonNull Where where,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        return ManagedMember.<ObjectAction>lookup(owner, Identifier.Type.ACTION, memberId)
+        return ManagedMember.<ObjectAction>lookup(owner.objSpec(), Identifier.Type.ACTION, memberId)
                 .map(objectAction -> new ManagedAction(owner, objectAction, where, multiselectChoices));
     }
 

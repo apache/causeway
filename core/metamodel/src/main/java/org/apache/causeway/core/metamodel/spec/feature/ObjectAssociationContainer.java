@@ -132,6 +132,7 @@ public interface ObjectAssociationContainer {
 
     /**
      * Properties and Collections visible as columns, honoring order and visibility.
+     * @param parentObject not used for standalone tables and allowed to be empty for parented ones
      */
     Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             Identifier memberIdentifier,

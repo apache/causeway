@@ -109,6 +109,7 @@ implements CollectionCountProvider {
 
     private void buildGui() {
         var collectionModel = collectionModel();
+
         if(collectionModel.isHidden()) {
             WktComponents.permanentlyHide(this, ID_TABLE);
             WktComponents.permanentlyHide(this, ID_TABLE_FILTER_BAR);
@@ -124,10 +125,10 @@ implements CollectionCountProvider {
         // prepend title column, which may have distinct rendering hints,
         // based on whether there are any property columns or not
         prependTitleColumn(
-                elementType,
-                collectionModel.getVariant(),
-                getWicketViewerSettings(),
-                columns);
+            elementType,
+            collectionModel.getVariant(),
+            getWicketViewerSettings(),
+            columns);
 
         // last append action column
         addActionsColumnIfRequired(elementType, columns);
@@ -150,8 +151,8 @@ implements CollectionCountProvider {
         if(collectionModel() instanceof CollectionModelParented collModel) {
             var collMetaModel = collModel.getMetaModel();
             return collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new ToggleboxColumn(collModel.getElementType(), dataTable))
-                    : Optional.empty();
+                ? Optional.of(new ToggleboxColumn(collModel.getElementType(), dataTable))
+                : Optional.empty();
         }
         return Optional.empty();
     }
@@ -163,8 +164,8 @@ implements CollectionCountProvider {
     private void addFilterToolbar(
             final CausewayAjaxDataTable dataTableComponent) {
         Wkt.addIfElseHide(dataTableInteractive().isSearchSupported(),
-                this, ID_TABLE_FILTER_BAR,
-                id -> new FilterToolbar(id, dataTableComponent));
+            this, ID_TABLE_FILTER_BAR,
+            id -> new FilterToolbar(id, dataTableComponent));
     }
 
     private void prependTitleColumn(
@@ -174,15 +175,15 @@ implements CollectionCountProvider {
             final List<GenericColumn> columns) {
 
         var contextBookmark = collectionModel().getParentObject().getBookmark()
-                .orElse(null);
+            .orElse(null);
 
         final int maxColumnTitleLength = getModel().getVariant().isParented()
-                    ? wktConfig.getMaxTitleLengthInParentedTables()
-                    : wktConfig.getMaxTitleLengthInStandaloneTables();
+            ? wktConfig.getMaxTitleLengthInParentedTables()
+            : wktConfig.getMaxTitleLengthInStandaloneTables();
 
         var opts = new ColumnAbbreviationOptions(columns.size()==0
-                            ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
-                            : -1 /* don't override */);
+            ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
+            : -1 /* don't override */);
 
         columns.add(0, new TitleColumn(elementType, variant, contextBookmark, maxColumnTitleLength, opts));
     }
@@ -199,11 +200,11 @@ implements CollectionCountProvider {
 
         // add all ordered columns to the table
         elementType.streamAssociationsForColumnRendering(memberIdentifier, parentObject)
-        .map(ObjectAssociation::getSpecialization)
-        .map(spez->spez.fold(
-                this::createSingularColumn,
-                this::createPluralColumn))
-        .forEach(columns::add);
+            .map(ObjectAssociation::getSpecialization)
+            .map(spez->spez.fold(
+                    this::createSingularColumn,
+                    this::createPluralColumn))
+            .forEach(columns::add);
     }
 
     private SingularColumn createSingularColumn(
@@ -211,17 +212,17 @@ implements CollectionCountProvider {
         var collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().logicalTypeName();
         final Optional<String> sortability = property.getElementType().isComparableOrOrdered()
-                ? Optional.of(property.getId())
-                : Optional.empty();
+            ? Optional.of(property.getId())
+            : Optional.empty();
 
         return new SingularColumn(
-                collectionModel.getElementType(),
-                collectionModel.getVariant(),
-                Model.of(property.getCanonicalFriendlyName()),
-                sortability,
-                property.getId(),
-                parentTypeName,
-                property.getCanonicalDescription());
+            collectionModel.getElementType(),
+            collectionModel.getVariant(),
+            Model.of(property.getCanonicalFriendlyName()),
+            sortability,
+            property.getId(),
+            parentTypeName,
+            property.getCanonicalDescription());
     }
 
     private PluralColumn createPluralColumn(
@@ -230,14 +231,14 @@ implements CollectionCountProvider {
         final String parentTypeName = collection.getDeclaringType().logicalTypeName();
 
         return new PluralColumn(
-                collectionModel.getElementType(),
-                collectionModel.getVariant(),
-                Model.of(collection.getCanonicalFriendlyName()),
-                collection.getId(),
-                parentTypeName,
-                collection.getCanonicalDescription(),
-                // future work: can hook up with global config
-                new RenderOptions(50, 5, true));
+            collectionModel.getElementType(),
+            collectionModel.getVariant(),
+            Model.of(collection.getCanonicalFriendlyName()),
+            collection.getId(),
+            parentTypeName,
+            collection.getCanonicalDescription(),
+            // future work: can hook up with global config
+            new RenderOptions(50, 5, true));
     }
 
     private void addActionsColumnIfRequired(

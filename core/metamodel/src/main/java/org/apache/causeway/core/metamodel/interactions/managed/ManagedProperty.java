@@ -56,8 +56,8 @@ extends ManagedMember {
             final @NonNull String memberId,
             final @NonNull Where where) {
 
-        return ManagedMember.<OneToOneAssociation>lookup(owner, Identifier.Type.PROPERTY, memberId)
-        .map(objectAction -> of(owner, objectAction, where));
+        return ManagedMember.<OneToOneAssociation>lookup(owner.objSpec(), Identifier.Type.PROPERTY, memberId)
+            .map(objectAction -> of(owner, objectAction, where));
     }
 
     // -- IMPLEMENTATION

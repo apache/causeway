@@ -70,7 +70,8 @@ permits CollectionModelParented, CollectionModelStandalone {
 
     @Override
     protected DataTableInteractive load() {
-        var tableInteractive = tableMemento.getDataTableModel(bookmarkedObject.managedObject());
+        var owner = bookmarkedObject.managedObject();
+        var tableInteractive = tableMemento.recreateDataTableModel(owner);
         tableMemento.setupBindings(tableInteractive);
         return tableInteractive;
     }
