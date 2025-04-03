@@ -23,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,12 +39,10 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Testing the LocalDateTimeValueSemantics under the hood.
  */
-class JavaTimeValueSemanticsProviderTest
+class JavaUtilDateValueSemanticsProviderTest
 extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
 
     @SuppressWarnings("deprecation")
@@ -135,8 +134,7 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
         };
 
         return new JavaUtilDateValueSemantics() {
-            @Override public ValueSemanticsAbstract<LocalDateTime> getDelegate() {
-                return delegate; }
+            @Override public ValueSemanticsAbstract<LocalDateTime> getDelegate() { return delegate; }
         };
     }
 
@@ -147,8 +145,9 @@ extends ValueSemanticsProviderAbstractTestCase<java.util.Date> {
 
     @Override
     protected void assertValueEncodesToJsonAs(final Date a, final String json) {
-        // TODO
-        assertEquals("todo", json);
+        //TODO not used
+        //SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //assertEquals(formatter.format(a), json);
     }
 
 }

@@ -42,7 +42,6 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
 
     @BeforeEach
     void setUpObjects() throws Exception {
-
         date = new Date(0);
 
         ValueSemanticsAbstract<LocalDate> delegate =
@@ -87,7 +86,7 @@ extends ValueSemanticsProviderAbstractTestCase<Date> {
 
     @Override
     protected void assertValueEncodesToJsonAs(final Date a, final String json) {
-        assertEquals("1970-01-01", json);
+        assertEquals(a.toString(), json);
     }
 
 }
