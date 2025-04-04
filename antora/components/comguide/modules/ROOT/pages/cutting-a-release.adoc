@@ -573,7 +573,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly  # <.>
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly  # <.>
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -610,7 +610,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -666,7 +666,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly  # <.>
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly  # <.>
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -703,7 +703,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
