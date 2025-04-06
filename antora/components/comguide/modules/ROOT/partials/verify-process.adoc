@@ -2,8 +2,12 @@ VERSION={page-causewayreleaseversion}
 RC=RC1
 NEXUSREPONUM=11xx
 
-curl https://downloads.apache.org/causeway/KEYS > /tmp/KEYS
-gpg --import /tmp/KEYS
+curl https://downloads.apache.org/causeway/KEYS | gpg --import
+gpg --list-keys --with-colons --with-fingerprint \
+  | awk -F: '
+    $1 == "pub" { in_pub = 1; next }
+    in_pub && $1 == "fpr" { print $10 ":3:"; in_pub = 0 }
+  ' | gpg --import-ownertrust
 
 rm -rf causeway-$VERSION
 

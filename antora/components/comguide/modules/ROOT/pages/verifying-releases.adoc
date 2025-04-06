@@ -44,11 +44,22 @@ You will also require the following commands/tools:
 == Verifying source artifacts
 
 The easiest way to verify the source artifacts is to use a script that automates the steps.
-Run these commands, with the environment variables set correctly.
-(The full details should also be in the VOTE email):
+For extra safety, run within a docker container as a clean room.
+These same details should also be in the VOTE email:
 
+* Start the docker container:
++
 [source,bash,subs="attributes+"]
 ----
+include::partial$verify-process-docker-container.adoc[]
+----
+
+* and then within the docker container, install prerqs and verify (update the envirnment variables as necessary):
++
+[source,bash,subs="attributes+"]
+----
+include::partial$verify-process-docker-container-prep.adoc[]
+
 include::partial$verify-process.adoc[]
 ----
 
