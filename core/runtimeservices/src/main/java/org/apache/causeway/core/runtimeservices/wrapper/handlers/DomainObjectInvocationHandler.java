@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
@@ -96,6 +98,11 @@ extends DelegatingInvocationHandlerDefault<T> {
     protected Method __causeway_wrappedMethod;
 
     /**
+     * The <tt>__causeway_wrapperInvocationContext()</tt> method from {@link WrappingObject#__causeway_wrapperInvocationContext()}.
+     */
+    protected Method __causeway_wrapperInvocationContextMethod;
+
+    /**
      * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
      */
     protected Method __causeway_executionModes;
@@ -125,9 +132,8 @@ extends DelegatingInvocationHandlerDefault<T> {
         try {
             __causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
             __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
+            __causeway_wrapperInvocationContextMethod = WrappingObject.class.getMethod("__causeway_wrapperInvocationContext", _Constants.emptyClasses);
             __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
-
-
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
                     "Could not locate reserved declared methods in the WrappingObject interfaces",
@@ -139,14 +145,30 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     /**
      *
-     * @param proxyObjectUnused - not used.
+     * @param proxyObject - not used.
      * @param method - the method invoked on the proxy
      * @param args - the args to the method invoked on the proxy
      * @throws Throwable
      */
     @Override
-    public Object invoke(final Object proxyObjectUnused, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object proxyObject, final Method method, final Object[] args) throws Throwable {
 
+        if(proxyObject instanceof WrappingObject) {
+            Class<?> proxyObjectClass = proxyObject.getClass();
+            final var causewayWrapperInvocationContextField = proxyObjectClass.getDeclaredField("__causeway_wrapperInvocationContext");
+            causewayWrapperInvocationContextField.setAccessible(true);
+            final var wrapperInvocationContext = causewayWrapperInvocationContextField.get(proxyObject);
+            WrapperInvocationContext wic =
+                    (WrapperInvocationContext) wrapperInvocationContext;
+            if(wic != null) {
+                return wic.call(() -> doInvoke(proxyObject, method, args));
+            }
+        }
+
+        return doInvoke(proxyObject, method, args);
+    }
+
+    private Object doInvoke(Object proxyObject, Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
         if (isObjectMethod(method)) {
             return delegate(method, args);
         }
@@ -174,6 +196,10 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
 
         if (method.equals(__causeway_wrappedMethod)) {
+            return getDelegate();
+        }
+
+        if (method.equals(__causeway_wrapperInvocationContextMethod)) {
             return getDelegate();
         }
 
@@ -241,13 +267,13 @@ extends DelegatingInvocationHandlerDefault<T> {
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(mixeeAdapter, args, (ObjectAction)mixinMember);
+                        return handleActionMethod(mixeeAdapter, args, (ObjectAction) mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
-                        return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
+                        return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation) mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberId);
+                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation) mixinMember, memberId);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(

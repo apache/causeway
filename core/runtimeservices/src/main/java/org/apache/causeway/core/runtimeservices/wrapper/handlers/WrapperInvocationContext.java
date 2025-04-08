@@ -18,24 +18,29 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.Callable;
 
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 @RequiredArgsConstructor
-public class Params {
+@Getter
+public class WrapperInvocationContext {
 
-    final Object domainObject;
-    final ManagedObject mixeeAdapter; // ignored if not handling a mixin
-    final ManagedObject targetAdapter;
+    /**
+     * Either a domain object or a mixin.
+     */
+    final Object targetPojo;
+    /**
+     * Not applicable if a domain object.
+     */
+    final Object mixeePojo;
     final SyncControl syncControl;
-    final ProxyContextHandler proxyContextHandler;
 
-    private static final ThreadLocal<Params> THREAD_LOCAL = new ThreadLocal<>();
+    private static final ThreadLocal<WrapperInvocationContext> THREAD_LOCAL = new ThreadLocal<>();
 
     public void run(Runnable runnable) {
         THREAD_LOCAL.set(this);

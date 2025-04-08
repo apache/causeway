@@ -21,10 +21,12 @@ package org.apache.causeway.core.codegen.bytebuddy.services;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.function.Function;
 
 import org.apache.causeway.commons.memory.MemoryUsage;
 
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.lang.Nullable;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.stereotype.Service;
@@ -40,6 +42,7 @@ import lombok.val;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
+import net.bytebuddy.description.modifier.ModifierContributor;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ImplementationDefinition;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
@@ -61,10 +64,12 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
         final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler-> {
             ImplementationDefinition<T> tImplementationDefinition =
                     MemoryUsage.measureMetaspace("handler.nextProxyDef", ()->nextProxyDef(base, interfaces));
-            DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition<T> intercept =
-                    MemoryUsage.measureMetaspace("handler.intercept   ", ()->tImplementationDefinition.intercept(InvocationHandlerAdapter.of(handler)));
+            final var typeDefn =
+                    MemoryUsage.measureMetaspace("handler.intercept   ", ()->tImplementationDefinition.intercept(InvocationHandlerAdapter.of(handler)
+                    ));
+            final var typeDefnWithField = typeDefn.defineField("__causeway_wrapperInvocationContext", Object.class, Modifier.PUBLIC);
             DynamicType.Unloaded<T> make =
-                    MemoryUsage.measureMetaspace("handler.make        ", ()->intercept.make());
+                    MemoryUsage.measureMetaspace("handler.make        ", ()->typeDefnWithField.make());
             DynamicType.Loaded<T> load =
                     MemoryUsage.measureMetaspace("handler.load        ", ()->make.load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base)));
             Class<? extends T> loaded =

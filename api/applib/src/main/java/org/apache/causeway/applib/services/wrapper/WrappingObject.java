@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.services.wrapper;
 
+import java.sql.Wrapper;
+
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -58,6 +60,11 @@ public interface WrappingObject {
      * <tt>DomainObjectInvocationHandler</tt>, so it should not be changed.</b>.
      */
     Object __causeway_wrapped();
+
+    /**
+     * Will be an instance of <code>WrapperInvocationContext</code>.
+     */
+    <T> T __causeway_wrapperInvocationContext();
 
     /**
      * The {@link ExecutionMode}(s) inferred from the

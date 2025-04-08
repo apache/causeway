@@ -18,18 +18,11 @@
  */
 package org.apache.causeway.testdomain.wrapper.jdo;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryPoolMXBean;
-
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.memory.MemoryUsage;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -38,14 +31,9 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
-import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
 import org.apache.causeway.testdomain.jpa.JpaInventoryManager;
-import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
-import org.apache.causeway.testdomain.jpa.entities.JpaBook;
-import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.Value;
 import lombok.val;
 
 
@@ -62,20 +50,6 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
 
     @Inject private RepositoryService repository;
     @Inject private WrapperFactory wrapper;
-    @Inject private JpaTestFixtures testFixtures;
-
-//    protected EntityTestFixtures.Lock lock;
-
-//    @BeforeEach
-//    void installFixture() {
-//        this.lock = testFixtures.aquireLock();
-//        lock.install();
-//    }
-
-//    @AfterEach
-//    void uninstallFixture() {
-//        this.lock.release();
-//    }
 
     @Test
     void testWrapper_waitingOnDomainEvent() {

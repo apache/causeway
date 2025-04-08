@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal._Constants;
@@ -95,6 +96,13 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     @Override
     public Object invoke(final Object object, final Method method, final Object[] args) throws Throwable {
+        if(object instanceof WrappingObject) {
+            val wrappingObject = (WrappingObject) object;
+            WrapperInvocationContext wic = wrappingObject.__causeway_wrapperInvocationContext();
+            if(wic != null) {
+                return wic.call(() -> method.invoke(object, args));
+            }
+        }
         return method.invoke(object, args);
     }
 

@@ -31,6 +31,7 @@ import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class ProxyContextHandler {
 
     @NonNull private final ProxyCreator proxyCreator;
 
+    @SneakyThrows
     public <T> T proxy(
             final MetaModelContext metaModelContext,
             final ObjectSpecification targetSpecification,
@@ -52,9 +54,13 @@ public class ProxyContextHandler {
                 syncControl
         );
 
-        return proxyCreator.instantiateProxy(invocationHandler);
+        T proxyObject = proxyCreator.instantiateProxy(invocationHandler);
+        capture(proxyObject, new WrapperInvocationContext(targetPojo, null, syncControl));
+
+        return proxyObject;
     }
 
+    @SneakyThrows
     public <T> T mixinProxy(
             final MetaModelContext metaModelContext,
             final ObjectSpecification targetSpecification,
@@ -69,7 +75,19 @@ public class ProxyContextHandler {
                 mixeePojo,
                 syncControl);
 
-        return proxyCreator.instantiateProxy(invocationHandler);
+        T proxyObject = proxyCreator.instantiateProxy(invocationHandler);
+        capture(proxyObject, new WrapperInvocationContext(targetMixinPojo, mixeePojo, syncControl));
+
+        return proxyObject;
+    }
+
+    private static <T> T capture(T proxyObject, WrapperInvocationContext wic) throws NoSuchFieldException, IllegalAccessException {
+        Class<?> proxyObjectClass = proxyObject.getClass();
+        final var causewayWrapperInvocationContextField = proxyObjectClass.getDeclaredField("__causeway_wrapperInvocationContext");
+        causewayWrapperInvocationContextField.setAccessible(true);
+        causewayWrapperInvocationContextField.set(proxyObject, wic);
+
+        return proxyObject;
     }
 
 

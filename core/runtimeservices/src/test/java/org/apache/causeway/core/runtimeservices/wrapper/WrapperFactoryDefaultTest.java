@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
+import org.apache.causeway.core.runtimeservices.wrapper.handlers.WrapperInvocationContext;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -57,6 +59,11 @@ class WrapperFactoryDefaultTest {
         @Override
         public Object __causeway_wrapped() {
             return wrappedObject;
+        }
+
+        @Override
+        public Object __causeway_wrapperInvocationContext() {
+            return new WrapperInvocationContext(wrappedObject, null, SyncControl.control());
         }
 
         @Override

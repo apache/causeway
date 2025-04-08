@@ -113,6 +113,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 /**
@@ -289,6 +290,7 @@ implements WrapperFactory, HasMetaModelContext {
 
     // -- ASYNC WRAPPING
 
+    @SneakyThrows
     @Override
     public <T,R> T asyncWrap(
             final @NonNull T targetPojo,
@@ -303,7 +305,7 @@ implements WrapperFactory, HasMetaModelContext {
         val proxyFactory = proxyFactoryService
                 .<T>factory(_Casts.uncheckedCast(targetPojo.getClass()), WrappingObject.class);
 
-        return proxyFactory.createInstance((proxy, method, args) -> {
+        T proxyObject = proxyFactory.createInstance((proxy, method, args) -> {
 
             val resolvedMethod = _GenericResolver.resolveMethod(method, targetPojo.getClass())
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
@@ -323,12 +325,18 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             val memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
-            if( ! memberAndTarget.isMemberFound()) {
+            if (!memberAndTarget.isMemberFound()) {
                 return method.invoke(targetPojo, args);
             }
 
             return submitAsync(memberAndTarget, args, asyncControl);
         }, false);
+
+        Class<?> proxyObjectClass = proxyObject.getClass();
+        final var causewayWrapperInvocationContextField = proxyObjectClass.getDeclaredField("__causeway_wrapperInvocationContext");
+        causewayWrapperInvocationContextField.setAccessible(true);
+
+        return proxyObject;
     }
 
     private boolean shouldCheckRules(final AsyncControl<?> asyncControl) {
@@ -337,6 +345,7 @@ implements WrapperFactory, HasMetaModelContext {
         return !skipRules;
     }
 
+    @SneakyThrows
     @Override
     public <T, R> T asyncWrapMixin(
             final @NonNull Class<T> mixinClass,
@@ -353,7 +362,7 @@ implements WrapperFactory, HasMetaModelContext {
         val proxyFactory = proxyFactoryService
                 .factory(mixinClass, new Class[]{WrappingObject.class}, mixinConstructor.getParameterTypes());
 
-        return proxyFactory.createInstance((proxy, method, args) -> {
+        T proxyObject = proxyFactory.createInstance((proxy, method, args) -> {
 
             val resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
@@ -374,12 +383,18 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixeePojo, targetSpecification);
-            if (! actionAndTarget.isMemberFound()) {
+            if (!actionAndTarget.isMemberFound()) {
                 return method.invoke(mixinPojo, args);
             }
 
             return submitAsync(actionAndTarget, args, asyncControl);
-        }, new Object[]{ mixeePojo });
+        }, new Object[]{mixeePojo});
+
+        Class<?> proxyObjectClass = proxyObject.getClass();
+        final var causewayWrapperInvocationContextField = proxyObjectClass.getDeclaredField("__causeway_wrapperInvocationContext");
+        causewayWrapperInvocationContextField.setAccessible(true);
+
+        return proxyObject;
     }
 
     private boolean isInheritedFromJavaLangObject(final Method method) {
