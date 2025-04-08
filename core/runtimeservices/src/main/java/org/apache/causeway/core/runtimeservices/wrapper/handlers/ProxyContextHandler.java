@@ -40,13 +40,13 @@ public class ProxyContextHandler {
 
     public <T> T proxy(
             final MetaModelContext metaModelContext,
-            final T targetDomainObject,
+            final T targetPojo,
             final ManagedObject targetAdapter,
             final SyncControl syncControl
     ) {
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetDomainObject,
+                targetPojo,
                 null, // mixee ignored
                 targetAdapter,
                 null, // mixeeAdapter ignored
@@ -58,16 +58,17 @@ public class ProxyContextHandler {
 
     public <T> T mixinProxy(
             final MetaModelContext metaModelContext,
-            final T targetMixin,
-            final Object mixee,
+            final T targetMixinPojo,
+            final Object mixeePojo,
             final ManagedObject targetMixinAdapter,
             final ManagedObject mixeeAdapter,
             final SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetMixin,
-                mixee, targetMixinAdapter,
+                targetMixinPojo,
+                mixeePojo,
+                targetMixinAdapter,
                 mixeeAdapter,
                 syncControl, this);
 

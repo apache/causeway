@@ -87,10 +87,10 @@ class WrapperFactoryDefaultTest {
             }
 
             @Override
-            protected <T> T createProxy(final T targetDomainObject, final SyncControl syncControl) {
+            protected <T> T createProxy(final T targetPojo, final SyncControl syncControl) {
                 WrapperFactoryDefaultTest.this.createProxyCalledWithSyncControl = syncControl;
-                WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) targetDomainObject;
-                return targetDomainObject;
+                WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) targetPojo;
+                return targetPojo;
             }
         };
 

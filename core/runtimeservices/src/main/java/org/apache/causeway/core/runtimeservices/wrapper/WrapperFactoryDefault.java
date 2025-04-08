@@ -252,20 +252,20 @@ implements WrapperFactory, HasMetaModelContext {
         return createMixinProxy(mixin, mixee, syncControl);
     }
 
-    protected <T> T createProxy(final T targetDomainObject, final SyncControl syncControl) {
-        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(targetDomainObject);
+    protected <T> T createProxy(final T targetPojo, final SyncControl syncControl) {
+        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(targetPojo);
 
-        return proxyContextHandler.proxy(metaModelContext, targetDomainObject, targetAdapter, syncControl);
+        return proxyContextHandler.proxy(metaModelContext, targetPojo, targetAdapter, syncControl);
     }
 
     protected <T> T createMixinProxy(
-            final T targetMixin,
-            final Object mixee,
+            final T targetMixinPojo,
+            final Object mixeePojo,
             final SyncControl syncControl
     ) {
-        val targetMixinAdapter = adaptAndGuardAgainstWrappingNotSupported(targetMixin);
-        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        return proxyContextHandler.mixinProxy(metaModelContext, targetMixin, mixee, targetMixinAdapter, mixeeAdapter, syncControl);
+        val targetMixinAdapter = adaptAndGuardAgainstWrappingNotSupported(targetMixinPojo);
+        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
+        return proxyContextHandler.mixinProxy(metaModelContext, targetMixinPojo, mixeePojo, targetMixinAdapter, mixeeAdapter, syncControl);
     }
 
     @Override
