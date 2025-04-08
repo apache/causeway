@@ -49,7 +49,7 @@ public class ProxyContextHandler {
                 targetPojo,
                 null, // mixee ignored
                 targetAdapter,
-                null, // mixeeAdapter ignored
+                // mixeeAdapter ignored
                 syncControl,
                 this);
 
@@ -61,7 +61,6 @@ public class ProxyContextHandler {
             final T targetMixinPojo,
             final Object mixeePojo,
             final ManagedObject targetMixinAdapter,
-            final ManagedObject mixeeAdapter,
             final SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
@@ -69,7 +68,6 @@ public class ProxyContextHandler {
                 targetMixinPojo,
                 mixeePojo,
                 targetMixinAdapter,
-                mixeeAdapter,
                 syncControl, this);
 
         return proxyCreator.instantiateProxy(invocationHandler);

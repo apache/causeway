@@ -265,7 +265,7 @@ implements WrapperFactory, HasMetaModelContext {
     ) {
         val targetMixinAdapter = adaptAndGuardAgainstWrappingNotSupported(targetMixinPojo);
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
-        return proxyContextHandler.mixinProxy(metaModelContext, targetMixinPojo, mixeePojo, targetMixinAdapter, mixeeAdapter, syncControl);
+        return proxyContextHandler.mixinProxy(metaModelContext, targetMixinPojo, mixeePojo, targetMixinAdapter, syncControl);
     }
 
     @Override
@@ -313,7 +313,7 @@ implements WrapperFactory, HasMetaModelContext {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
                         domainObject,  // mixeeAdapter ignored
-                        mixee, targetAdapter, null,
+                        mixee, targetAdapter,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
@@ -364,7 +364,7 @@ implements WrapperFactory, HasMetaModelContext {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
                         mixin,
-                        mixee, mixinAdapter, mixeeAdapter,
+                        mixee, mixinAdapter,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }

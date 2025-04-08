@@ -108,7 +108,6 @@ extends DelegatingInvocationHandlerDefault<T> {
             final T targetPojo,
             final Object mixeePojo, // ignored if not handling a mixin
             final ManagedObject targetAdapter,
-            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
         super(
