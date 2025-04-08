@@ -43,7 +43,7 @@ extends DelegatingInvocationHandlerAbstract<P> {
     private final CollectionSemantics collectionSemantics;
 
     @Getter
-    private final P delegate;
+    private final P target;
 
     protected PluralInvocationHandlerAbstract(
             final P collectionOrMapToBeProxied,
@@ -55,7 +55,7 @@ extends DelegatingInvocationHandlerAbstract<P> {
                 (Class<P>)collectionOrMapToBeProxied.getClass()
         );
 
-        this.delegate = collectionOrMapToBeProxied;
+        this.target = collectionOrMapToBeProxied;
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getTarget();
         this.collectionSemantics = collectionSemantics;

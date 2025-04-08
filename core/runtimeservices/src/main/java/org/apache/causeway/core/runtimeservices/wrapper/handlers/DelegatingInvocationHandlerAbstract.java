@@ -42,7 +42,7 @@ public abstract class DelegatingInvocationHandlerAbstract<T> implements Delegati
     @Getter protected final MetaModelContext metaModelContext;
 
     @Getter(onMethod_ = {@Override})
-    private final Class<T> delegateClass;
+    private final Class<T> targetClass;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
@@ -50,14 +50,14 @@ public abstract class DelegatingInvocationHandlerAbstract<T> implements Delegati
 
     public DelegatingInvocationHandlerAbstract(
             final @NonNull MetaModelContext metaModelContext,
-            final Class<T> delegateClass) {
+            final Class<T> targetClass) {
         this.metaModelContext = metaModelContext;
-        this.delegateClass = delegateClass;
+        this.targetClass = targetClass;
 
         try {
-            equalsMethod = this.delegateClass.getMethod("equals", _Constants.classesOfObject);
-            hashCodeMethod = this.delegateClass.getMethod("hashCode", _Constants.emptyClasses);
-            toStringMethod = this.delegateClass.getMethod("toString", _Constants.emptyClasses);
+            equalsMethod = this.targetClass.getMethod("equals", _Constants.classesOfObject);
+            hashCodeMethod = this.targetClass.getMethod("hashCode", _Constants.emptyClasses);
+            toStringMethod = this.targetClass.getMethod("toString", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF
             throw new RuntimeException("An Object method could not be found: " + e.getMessage());
