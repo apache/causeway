@@ -40,6 +40,8 @@ import javax.inject.Provider;
 
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
+import org.apache.causeway.core.runtimeservices.wrapper.handlers.WrapperInvocationContext;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -319,9 +321,17 @@ implements WrapperFactory, HasMetaModelContext {
                         metaModelContext,
                         null, targetAdapter.getSpecification(),
                         targetPojo,
-                        null, // mixee ignored
-                        control().withNoExecute());
-                doih.invoke(null, method, args);
+                        null // mixee ignored
+                );
+                final var wrapperInvocationContext =
+                        new WrapperInvocationContext(targetPojo, null, control().withNoExecute(), asyncControl);
+                wrapperInvocationContext.call(() -> {
+                    try {
+                        return doih.invoke(null, method, args);
+                    } catch (Throwable e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
 
             val memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
@@ -377,9 +387,17 @@ implements WrapperFactory, HasMetaModelContext {
                         metaModelContext,
                         null, targetSpecification,
                         mixinPojo,
-                        mixeePojo,
-                        control().withNoExecute());
-                doih.invoke(null, method, args);
+                        mixeePojo
+                );
+                final var wrapperInvocationContext =
+                        new WrapperInvocationContext(mixinPojo, null, control().withNoExecute(), asyncControl);
+                wrapperInvocationContext.call(() -> {
+                    try {
+                        return doih.invoke(null, method, args);
+                    } catch (Throwable e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
 
             val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixeePojo, targetSpecification);

@@ -24,6 +24,7 @@ import lombok.SneakyThrows;
 
 import java.util.concurrent.Callable;
 
+import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 
 @RequiredArgsConstructor
@@ -38,7 +39,9 @@ public class WrapperInvocationContext {
      * Not applicable if a domain object.
      */
     final Object mixeePojo;
+
     final SyncControl syncControl;
+    final AsyncControl<?> asyncControl;
 
     private static final ThreadLocal<WrapperInvocationContext> THREAD_LOCAL = new ThreadLocal<>();
 
@@ -54,6 +57,7 @@ public class WrapperInvocationContext {
             THREAD_LOCAL.remove();
         }
     }
+
     @SneakyThrows
     public <T> T call(Callable<T> callable) {
         THREAD_LOCAL.set(this);

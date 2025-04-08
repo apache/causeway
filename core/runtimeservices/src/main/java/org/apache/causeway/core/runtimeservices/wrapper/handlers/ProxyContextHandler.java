@@ -50,12 +50,11 @@ public class ProxyContextHandler {
                 metaModelContext,
                 this, targetSpecification,
                 targetPojo,
-                null, // mixeePojo ignored
-                syncControl
+                null // mixeePojo ignored
         );
 
         T proxyObject = proxyCreator.instantiateProxy(invocationHandler);
-        capture(proxyObject, new WrapperInvocationContext(targetPojo, null, syncControl));
+        capture(proxyObject, new WrapperInvocationContext(targetPojo, null, syncControl, null));
 
         return proxyObject;
     }
@@ -72,11 +71,11 @@ public class ProxyContextHandler {
                 metaModelContext,
                 this, targetSpecification,
                 targetMixinPojo,
-                mixeePojo,
-                syncControl);
+                mixeePojo
+        );
 
         T proxyObject = proxyCreator.instantiateProxy(invocationHandler);
-        capture(proxyObject, new WrapperInvocationContext(targetMixinPojo, mixeePojo, syncControl));
+        capture(proxyObject, new WrapperInvocationContext(targetMixinPojo, mixeePojo, syncControl, null));
 
         return proxyObject;
     }

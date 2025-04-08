@@ -63,7 +63,7 @@ class WrapperFactoryDefaultTest {
 
         @Override
         public Object __causeway_wrapperInvocationContext() {
-            return new WrapperInvocationContext(wrappedObject, null, SyncControl.control());
+            return new WrapperInvocationContext(wrappedObject, null, SyncControl.control(), null);
         }
 
         @Override

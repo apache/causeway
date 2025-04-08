@@ -113,8 +113,8 @@ extends DelegatingInvocationHandlerAbstract<T> {
             final ProxyContextHandler proxyContextHandler,
             final ObjectSpecification targetSpecification,
             final T targetPojo,
-            final Object mixeePojo, // ignored if not handling a mixin
-            final SyncControl syncControl) {
+            final Object mixeePojo // ignored if not handling a mixin
+    ) {
         super(
                 metaModelContext,
                 (Class<T>)targetPojo.getClass()
@@ -152,6 +152,11 @@ extends DelegatingInvocationHandlerAbstract<T> {
     @Override
     public Object invoke(final Object proxyObject, final Method method, final Object[] args) throws Throwable {
 
+        Object wicObj = WrapperInvocationContext.get();
+        if(wicObj instanceof WrapperInvocationContext) {
+            return doInvoke(method, args);
+        }
+
         if(proxyObject instanceof WrappingObject) {
             Class<?> proxyObjectClass = proxyObject.getClass();
             final var causewayWrapperInvocationContextField = proxyObjectClass.getDeclaredField("__causeway_wrapperInvocationContext");
@@ -164,7 +169,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
             }
         }
 
-        return doInvoke(method, args);
+        throw new IllegalStateException("Unable to find the wrapper invocation context");
     }
 
     @Override
