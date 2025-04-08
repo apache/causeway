@@ -46,11 +46,11 @@ public class ProxyContextHandler {
     ) {
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetSpecification,
+                this, targetSpecification,
                 targetPojo,
                 null, // mixeePojo ignored
-                syncControl,
-                this);
+                syncControl
+        );
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }
@@ -64,10 +64,10 @@ public class ProxyContextHandler {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetSpecification,
+                this, targetSpecification,
                 targetMixinPojo,
                 mixeePojo,
-                syncControl, this);
+                syncControl);
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }

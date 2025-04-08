@@ -21,7 +21,6 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -52,7 +51,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
@@ -106,18 +104,18 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
+            final ProxyContextHandler proxyContextHandler,
             final ObjectSpecification targetSpecification,
             final T targetPojo,
             final Object mixeePojo, // ignored if not handling a mixin
-            final SyncControl syncControl,
-            final ProxyContextHandler proxyContextHandler) {
+            final SyncControl syncControl) {
         super(
                 metaModelContext,
                 targetPojo,
                 syncControl);
-        this.targetSpecification = targetSpecification;
-
         this.proxyContextHandler = proxyContextHandler;
+
+        this.targetSpecification = targetSpecification;
 
         try {
             titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
