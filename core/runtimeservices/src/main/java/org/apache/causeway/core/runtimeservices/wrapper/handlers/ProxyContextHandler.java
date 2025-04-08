@@ -46,9 +46,8 @@ public class ProxyContextHandler {
     ) {
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetPojo,
+                targetAdapter.getSpecification(), targetPojo,
                 null, // mixee ignored
-                targetAdapter,
                 // mixeeAdapter ignored
                 syncControl,
                 this);
@@ -65,9 +64,9 @@ public class ProxyContextHandler {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
+                targetMixinAdapter.getSpecification(),
                 targetMixinPojo,
                 mixeePojo,
-                targetMixinAdapter,
                 syncControl, this);
 
         return proxyCreator.instantiateProxy(invocationHandler);

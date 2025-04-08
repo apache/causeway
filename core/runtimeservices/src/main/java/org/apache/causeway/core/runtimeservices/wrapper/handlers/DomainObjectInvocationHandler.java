@@ -105,9 +105,9 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
+            final ObjectSpecification targetSpecification,
             final T targetPojo,
             final Object mixeePojo, // ignored if not handling a mixin
-            final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
         super(
@@ -134,7 +134,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                     nsme);
         }
 
-        entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
+        entityFacet = targetSpecification.entityFacet().orElse(null);
 
         this.mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
     }

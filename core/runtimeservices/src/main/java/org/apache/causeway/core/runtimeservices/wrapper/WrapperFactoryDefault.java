@@ -312,8 +312,8 @@ implements WrapperFactory, HasMetaModelContext {
             if (shouldCheckRules(asyncControl)) {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
-                        domainObject,  // mixeeAdapter ignored
-                        mixee, targetAdapter,
+                        targetAdapter.getSpecification(), domainObject,  // mixeeAdapter ignored
+                        mixee,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
@@ -363,8 +363,8 @@ implements WrapperFactory, HasMetaModelContext {
             if (shouldCheckRules(asyncControl)) {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
-                        mixin,
-                        mixee, mixinAdapter,
+                        mixinAdapter.getSpecification(), mixin,
+                        mixee,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
