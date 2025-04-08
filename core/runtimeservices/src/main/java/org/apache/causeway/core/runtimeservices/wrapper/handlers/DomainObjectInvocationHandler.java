@@ -106,25 +106,23 @@ extends DelegatingInvocationHandlerAbstract<T> {
      */
     protected Method __causeway_executionModes;
 
-    private final ManagedObject mixeeAdapter;
 
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
             final ProxyContextHandler proxyContextHandler,
             final ObjectSpecification targetSpecification,
-            final T targetPojo,
             final Object mixeePojo // ignored if not handling a mixin
     ) {
         super(
                 metaModelContext,
-                (Class<T>)targetPojo.getClass()
+                (Class<T>) targetSpecification.getCorrespondingClass()
         );
         this.proxyContextHandler = proxyContextHandler;
 
         this.targetSpecification = targetSpecification;
 
         try {
-            titleMethod = targetPojo.getClass().getMethod("title", _Constants.emptyClasses);
+            titleMethod = getDelegateClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -138,8 +136,6 @@ extends DelegatingInvocationHandlerAbstract<T> {
                     "Could not locate reserved declared methods in the WrappingObject interfaces",
                     nsme);
         }
-
-        this.mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
     }
 
     /**
@@ -175,6 +171,12 @@ extends DelegatingInvocationHandlerAbstract<T> {
     @Override
     public T getDelegate() {
         return (T) WrapperInvocationContext.<WrapperInvocationContext>get().targetPojo;
+    }
+
+
+    public ManagedObject getMixeeAdapter() {
+        T mixeePojo = (T) WrapperInvocationContext.<WrapperInvocationContext>get().mixeePojo;
+        return adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
     }
 
     public SyncControl getSyncControl() {
@@ -269,24 +271,24 @@ extends DelegatingInvocationHandlerAbstract<T> {
             val objectAction = (ObjectAction) objectMember;
 
             if(Facets.mixinIsPresent(targetSpecification)) {
-                if (mixeeAdapter == null) {
+                if (getMixeeAdapter() == null) {
                     throw _Exceptions.illegalState(
                             "Missing the required mixeeAdapter for action '%s'",
                             objectAction.getId());
                 }
-                MmAssertionUtils.assertIsBookmarkSupported(mixeeAdapter);
+                MmAssertionUtils.assertIsBookmarkSupported(getMixeeAdapter());
 
-                final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
+                final ObjectMember mixinMember = determineMixinMember(getMixeeAdapter(), objectAction);
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(mixeeAdapter, args, (ObjectAction) mixinMember);
+                        return handleActionMethod(getMixeeAdapter(), args, (ObjectAction) mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
-                        return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation) mixinMember);
+                        return handleGetterMethodOnProperty(getMixeeAdapter(), new Object[0], (OneToOneAssociation) mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation) mixinMember, memberId);
+                        return handleGetterMethodOnCollection(getMixeeAdapter(), new Object[0], (OneToManyAssociation) mixinMember, memberId);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
@@ -675,6 +677,5 @@ extends DelegatingInvocationHandlerAbstract<T> {
                     "Invoking '%s' should have no arguments", name));
         }
     }
-
 
 }

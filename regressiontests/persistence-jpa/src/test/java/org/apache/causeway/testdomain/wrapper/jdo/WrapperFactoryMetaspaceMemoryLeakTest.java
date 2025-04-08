@@ -56,7 +56,7 @@ import java.util.List;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstract {
 
-    @Inject private RepositoryService repository;
+    //@Inject private RepositoryService repository;
     @Inject private WrapperFactory wrapper;
     @Inject private JpaTestFixtures testFixtures;
 

@@ -320,7 +320,6 @@ implements WrapperFactory, HasMetaModelContext {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
                         null, targetAdapter.getSpecification(),
-                        targetPojo,
                         null // mixee ignored
                 );
                 final var wrapperInvocationContext =
@@ -386,11 +385,10 @@ implements WrapperFactory, HasMetaModelContext {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
                         null, targetSpecification,
-                        mixinPojo,
                         mixeePojo
                 );
                 final var wrapperInvocationContext =
-                        new WrapperInvocationContext(mixinPojo, null, control().withNoExecute(), asyncControl);
+                        new WrapperInvocationContext(mixinPojo, mixeePojo, control().withNoExecute(), asyncControl);
                 wrapperInvocationContext.call(() -> {
                     try {
                         return doih.invoke(null, method, args);
