@@ -339,6 +339,14 @@ asciidoc:
     jdk-version: '{page-causewayjdkversion}'
 ----
 
+* Commit all these changes:
++
+[source,bash,subs="attributes+"]
+----
+git add .
+git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
+----
+
 * build framework
 +
 [source,bash,subs="attributes+"]
@@ -365,13 +373,6 @@ git add .
 git commit -m "$CAUSEWAYJIRA: updates docs on new release branch"
 ----
 
-* Commit all these changes:
-+
-[source,bash,subs="attributes+"]
-----
-git add .
-git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
-----
 
 * Push the documentation branch:
 +
