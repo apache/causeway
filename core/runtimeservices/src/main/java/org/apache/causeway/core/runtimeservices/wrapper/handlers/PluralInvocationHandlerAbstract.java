@@ -22,7 +22,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -53,9 +52,8 @@ extends DelegatingInvocationHandlerAbstract<P> {
             final CollectionSemantics collectionSemantics) {
 
         super(otma.getMetaModelContext(),
-                collectionOrMapToBeProxied,
-                (Class<P>)collectionOrMapToBeProxied.getClass(),
-                handler.getSyncControl());
+                (Class<P>)collectionOrMapToBeProxied.getClass()
+        );
 
         this.delegate = collectionOrMapToBeProxied;
         this.oneToManyAssociation = otma;

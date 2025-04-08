@@ -117,9 +117,8 @@ extends DelegatingInvocationHandlerAbstract<T> {
             final SyncControl syncControl) {
         super(
                 metaModelContext,
-                targetPojo,
-                (Class<T>)targetPojo.getClass(),
-                syncControl);
+                (Class<T>)targetPojo.getClass()
+        );
         this.proxyContextHandler = proxyContextHandler;
 
         this.targetSpecification = targetSpecification;

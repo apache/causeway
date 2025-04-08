@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
-import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -42,18 +41,16 @@ public abstract class DelegatingInvocationHandlerAbstract<T> implements Delegati
     // getter is API
     @Getter protected final MetaModelContext metaModelContext;
 
+    @Getter(onMethod_ = {@Override})
+    private final Class<T> delegateClass;
+
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    @Getter(onMethod_ = {@Override})
-    private final Class<T> delegateClass;
-
     public DelegatingInvocationHandlerAbstract(
             final @NonNull MetaModelContext metaModelContext,
-            final @NonNull T delegate,
-            final Class<T> delegateClass,
-            final SyncControl syncControl) {
+            final Class<T> delegateClass) {
         this.metaModelContext = metaModelContext;
         this.delegateClass = delegateClass;
 
