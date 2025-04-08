@@ -140,7 +140,7 @@ sh scripts/jira-release-notes.sh CAUSEWAY $CAUSEWAYREL > /tmp/$CAUSEWAYREL.adoc
 +
 [NOTE]
 ====
-This script uses 'jq' to parse JSON.
+This script uses `jq` to parse JSON.
 See the script itself for details of how to install this utility.
 ====
 
@@ -528,7 +528,7 @@ In the `apache-causeway-committers/causeway-nightly` repo, similarly bump the ve
 [source,bash,subs="attributes+"]
 ----
 git fetch
-git reset --hard origin/master
+git reset --hard origin/main
 ----
 
 * update the `apache-causeway-ci-nightly.yml` file:
