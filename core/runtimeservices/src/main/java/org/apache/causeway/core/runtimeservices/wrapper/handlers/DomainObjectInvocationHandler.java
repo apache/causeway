@@ -66,6 +66,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -74,11 +75,14 @@ import lombok.extern.log4j.Log4j2;
  *
  * @param <T>
  */
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Log4j2
 public class DomainObjectInvocationHandler<T>
 extends DelegatingInvocationHandlerAbstract<T> {
 
     private final ProxyContextHandler proxyContextHandler;
+
+    @EqualsAndHashCode.Include // this is the only state that is significant to distinguish one handler from another
     private final ObjectSpecification targetSpecification;
 
     /**
@@ -117,7 +121,6 @@ extends DelegatingInvocationHandlerAbstract<T> {
                 (Class<T>) targetSpecification.getCorrespondingClass()
         );
         this.proxyContextHandler = proxyContextHandler;
-
         this.targetSpecification = targetSpecification;
 
         try {

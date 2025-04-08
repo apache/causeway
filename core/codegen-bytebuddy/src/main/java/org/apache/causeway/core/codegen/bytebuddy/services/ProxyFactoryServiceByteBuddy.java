@@ -22,8 +22,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.memory.MemoryUsage;
 
 import org.springframework.beans.BeanWrapperImpl;
@@ -52,6 +54,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor();
+    private Map<InvocationHandler, Class<?>> proxyClassByInvocationHandler = _Maps.newConcurrentHashMap();
 
     @Override
     public <T> _ProxyFactory<T> factory(
@@ -61,20 +64,28 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
         val objenesis = new ObjenesisStd();
 
-        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler-> {
-            ImplementationDefinition<T> tImplementationDefinition =
-                    MemoryUsage.measureMetaspace("handler.nextProxyDef", ()->nextProxyDef(base, interfaces));
-            final var typeDefn =
-                    MemoryUsage.measureMetaspace("handler.intercept   ", ()->tImplementationDefinition.intercept(InvocationHandlerAdapter.of(handler)
-                    ));
-            final var typeDefnWithField = typeDefn.defineField("__causeway_wrapperInvocationContext", Object.class, Modifier.PUBLIC);
-            DynamicType.Unloaded<T> make =
-                    MemoryUsage.measureMetaspace("handler.make        ", ()->typeDefnWithField.make());
-            DynamicType.Loaded<T> load =
-                    MemoryUsage.measureMetaspace("handler.load        ", ()->make.load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base)));
-            Class<? extends T> loaded =
-                    MemoryUsage.measureMetaspace("handler.getLoaded   ", ()->load.getLoaded());
-            return loaded;
+        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = new Function<InvocationHandler, Class<? extends T>>() {
+            @Override
+            public Class<? extends T> apply(InvocationHandler handler) {
+//                return (Class) proxyClassByInvocationHandler.computeIfAbsent(handler, ih -> createClass(ih));
+                return createClass(handler);
+            }
+
+            private Class<? extends T> createClass(InvocationHandler handler) {
+                ImplementationDefinition<T> tImplementationDefinition =
+                        MemoryUsage.measureMetaspace("handler.nextProxyDef", () -> nextProxyDef(base, interfaces));
+                final var typeDefn =
+                        MemoryUsage.measureMetaspace("handler.intercept   ", () -> tImplementationDefinition.intercept(InvocationHandlerAdapter.of(handler)
+                        ));
+                final var typeDefnWithField = typeDefn.defineField("__causeway_wrapperInvocationContext", Object.class, Modifier.PUBLIC);
+                DynamicType.Unloaded<T> make =
+                        MemoryUsage.measureMetaspace("handler.make        ", () -> typeDefnWithField.make());
+                DynamicType.Loaded<T> load =
+                        MemoryUsage.measureMetaspace("handler.load        ", () -> make.load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base)));
+                Class<? extends T> loaded =
+                        MemoryUsage.measureMetaspace("handler.getLoaded   ", () -> load.getLoaded());
+                return loaded;
+            }
         };
 
         return new _ProxyFactory<T>() {

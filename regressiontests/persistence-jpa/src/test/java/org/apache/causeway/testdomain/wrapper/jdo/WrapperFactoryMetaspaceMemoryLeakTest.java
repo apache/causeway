@@ -33,7 +33,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_usingJpa;
@@ -56,7 +55,6 @@ import java.util.List;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstract {
 
-    //@Inject private RepositoryService repository;
     @Inject private WrapperFactory wrapper;
     @Inject private JpaTestFixtures testFixtures;
 
@@ -75,26 +73,35 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
 
     @Test
     void testWrapper_waitingOnDomainEvent() {
+// with caching
+        MemoryUsage.measureMetaspace("whole thing", ()->{
+//            extracted(1, 1);     // 1,980 KB
+//            extracted(1, 2000);  // 3,794 KB
+//            extracted(20, 1);    // 2,468 KB
+//            extracted(20, 2000); // 3,818 KB
+//
+// without caching
+//            extracted(1, 1);     // 2,114 KB
+//            extracted(1, 1000);  // 9,846 KB
+//            extracted(20, 1);     // 2,635 KB
+            extracted(20, 2000);  // 217,582 KB
+        });
+    }
 
-        val inventoryManager = factoryService.viewModel(JpaInventoryManager.class);
-        val inventoryManager2 = factoryService.viewModel(JpaInventoryManager.class);
+    private void extracted(int instances, int loops) {
+        for(int i = 0; i < instances; i++) {
+            val inventoryManager = factoryService.viewModel(JpaInventoryManager.class);
 
-        // multiple calls with first target
-        for (var i = 0; i<2 ; i++) {
-            MemoryUsage.measureMetaspace("target #1." + i, ()->{
-                List<JpaProduct> allProducts = wrapper.wrap(inventoryManager).getAllProducts();
-                allProducts.forEach(product -> {
-                    System.out.println(product.getName());
+            for (var j = 0; j< loops; j++) {
+                MemoryUsage.measureMetaspace("target #" + i + "." + j, ()->{
+                    List<JpaProduct> allProducts = wrapper.wrap(inventoryManager).getAllProducts();
+                    allProducts.forEach(product -> {
+                        System.out.println(product.getName());
+                    });
                 });
-            });
+            }
         }
 
-        // multiple calls with first target
-        for (var i = 0; i<2 ; i++) {
-            MemoryUsage.measureMetaspace("target #2." + i, ()->{
-                wrapper.wrap(inventoryManager2).getAllProducts();
-            });
-        }
     }
 }
 
