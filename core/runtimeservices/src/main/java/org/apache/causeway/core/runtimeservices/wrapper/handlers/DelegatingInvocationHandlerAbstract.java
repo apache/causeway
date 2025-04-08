@@ -37,7 +37,7 @@ import lombok.val;
 /**
  * @param <T>
  */
-public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
+public abstract class DelegatingInvocationHandlerAbstract<T> implements DelegatingInvocationHandler<T> {
 
     // getter is API
     @Getter protected final MetaModelContext metaModelContext;
@@ -46,22 +46,16 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    @Getter(onMethod = @__(@Override))
-    private final T delegate;
+    @Getter(onMethod_ = {@Override})
+    private final Class<T> delegateClass;
 
-    private final Class<?> delegateClass;
-
-    @Getter private final SyncControl syncControl;
-
-    public DelegatingInvocationHandlerDefault(
+    public DelegatingInvocationHandlerAbstract(
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
-            final Class<?> delegateClass,
+            final Class<T> delegateClass,
             final SyncControl syncControl) {
         this.metaModelContext = metaModelContext;
-        this.delegate = delegate;
         this.delegateClass = delegateClass;
-        this.syncControl = syncControl;
 
         try {
             equalsMethod = this.delegateClass.getMethod("equals", _Constants.classesOfObject);

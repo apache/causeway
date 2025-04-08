@@ -68,6 +68,11 @@ class ProxyCreatorTestUsingCodegenPlugin {
             return delegate;
         }
 
+        @Override
+        public Class<Employee> getDelegateClass() {
+            return Employee.class;
+        }
+
         public boolean wasInvoked(final String methodName) {
             return invoked.contains(methodName);
         }

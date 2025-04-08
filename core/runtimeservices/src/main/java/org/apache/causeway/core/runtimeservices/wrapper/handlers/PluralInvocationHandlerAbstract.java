@@ -22,10 +22,12 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 
+import lombok.Getter;
 import lombok.val;
 
 /**
@@ -35,11 +37,14 @@ import lombok.val;
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
 abstract class PluralInvocationHandlerAbstract<T, P>
-extends DelegatingInvocationHandlerDefault<P> {
+extends DelegatingInvocationHandlerAbstract<P> {
 
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
     private final CollectionSemantics collectionSemantics;
+
+    @Getter
+    private final P delegate;
 
     protected PluralInvocationHandlerAbstract(
             final P collectionOrMapToBeProxied,
@@ -49,9 +54,10 @@ extends DelegatingInvocationHandlerDefault<P> {
 
         super(otma.getMetaModelContext(),
                 collectionOrMapToBeProxied,
-                collectionOrMapToBeProxied.getClass(),
+                (Class<P>)collectionOrMapToBeProxied.getClass(),
                 handler.getSyncControl());
 
+        this.delegate = collectionOrMapToBeProxied;
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getDelegate();
         this.collectionSemantics = collectionSemantics;

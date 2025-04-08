@@ -38,8 +38,7 @@ public class ProxyCreator {
     @NonNull private final _ProxyFactoryService proxyFactoryService;
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
-        final T classToBeProxied = handler.getDelegate();
-        final Class<T> base = _Casts.uncheckedCast(classToBeProxied.getClass());
+        final Class<T> base = _Casts.uncheckedCast(handler.getDelegateClass());
         return instantiateProxy(base, handler);
     }
 

@@ -42,6 +42,10 @@ public class WrapperInvocationContext {
 
     private static final ThreadLocal<WrapperInvocationContext> THREAD_LOCAL = new ThreadLocal<>();
 
+    public static <T> T get() {
+        return (T) THREAD_LOCAL.get();
+    }
+
     public void run(Runnable runnable) {
         THREAD_LOCAL.set(this);
         try {

@@ -76,7 +76,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class DomainObjectInvocationHandler<T>
-extends DelegatingInvocationHandlerDefault<T> {
+extends DelegatingInvocationHandlerAbstract<T> {
 
     private final ProxyContextHandler proxyContextHandler;
     private final ObjectSpecification targetSpecification;
@@ -118,14 +118,14 @@ extends DelegatingInvocationHandlerDefault<T> {
         super(
                 metaModelContext,
                 targetPojo,
-                targetPojo.getClass(),
+                (Class<T>)targetPojo.getClass(),
                 syncControl);
         this.proxyContextHandler = proxyContextHandler;
 
         this.targetSpecification = targetSpecification;
 
         try {
-            titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
+            titleMethod = targetPojo.getClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -161,14 +161,23 @@ extends DelegatingInvocationHandlerDefault<T> {
             WrapperInvocationContext wic =
                     (WrapperInvocationContext) wrapperInvocationContext;
             if(wic != null) {
-                return wic.call(() -> doInvoke(proxyObject, method, args));
+                return wic.call(() -> doInvoke(method, args));
             }
         }
 
-        return doInvoke(proxyObject, method, args);
+        return doInvoke(method, args);
     }
 
-    private Object doInvoke(Object proxyObject, Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
+    @Override
+    public T getDelegate() {
+        return (T) WrapperInvocationContext.<WrapperInvocationContext>get().targetPojo;
+    }
+
+    public SyncControl getSyncControl() {
+        return WrapperInvocationContext.<WrapperInvocationContext>get().syncControl;
+    }
+
+    private Object doInvoke(Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
         if (isObjectMethod(method)) {
             return delegate(method, args);
         }

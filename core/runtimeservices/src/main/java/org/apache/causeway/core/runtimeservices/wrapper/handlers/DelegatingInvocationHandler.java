@@ -20,10 +20,14 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.InvocationHandler;
 
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
+
 /**
  * @param <T>
  */
 public interface DelegatingInvocationHandler<T> extends InvocationHandler {
+
+    Class<T> getDelegateClass();
 
     T getDelegate();
 
