@@ -244,24 +244,28 @@ implements WrapperFactory, HasMetaModelContext {
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return mixin;
             }
-            return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
+            return _Casts.uncheckedCast(createMixinProxy(mixin, underlyingMixee, syncControl));
         }
 
         getServiceInjector().injectServicesInto(mixee);
 
-        return createMixinProxy(mixee, mixin, syncControl);
+        return createMixinProxy(mixin, mixee, syncControl);
     }
 
-    protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
-        val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+    protected <T> T createProxy(final T targetDomainObject, final SyncControl syncControl) {
+        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(targetDomainObject);
 
-        return proxyContextHandler.proxy(metaModelContext, domainObject, objAdapter, syncControl);
+        return proxyContextHandler.proxy(metaModelContext, targetDomainObject, targetAdapter, syncControl);
     }
 
-    protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
+    protected <T> T createMixinProxy(
+            final T targetMixin,
+            final Object mixee,
+            final SyncControl syncControl
+    ) {
+        val targetMixinAdapter = adaptAndGuardAgainstWrappingNotSupported(targetMixin);
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
-        return proxyContextHandler.mixinProxy(metaModelContext, mixin, mixeeAdapter, mixinAdapter, syncControl);
+        return proxyContextHandler.mixinProxy(metaModelContext, targetMixin, mixee, targetMixinAdapter, mixeeAdapter, syncControl);
     }
 
     @Override
@@ -309,8 +313,7 @@ implements WrapperFactory, HasMetaModelContext {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
                         domainObject,  // mixeeAdapter ignored
-                        null,
-                        targetAdapter,
+                        mixee, targetAdapter, null,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
@@ -361,8 +364,7 @@ implements WrapperFactory, HasMetaModelContext {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
                         mixin,
-                        mixeeAdapter,
-                        mixinAdapter,
+                        mixee, mixinAdapter, mixeeAdapter,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }

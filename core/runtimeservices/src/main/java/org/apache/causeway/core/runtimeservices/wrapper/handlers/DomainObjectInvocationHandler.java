@@ -105,14 +105,15 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
-            final T domainObject,
-            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
+            final T targetDomainObject,
+            final Object mixee, // ignored if not handling a mixin
             final ManagedObject targetAdapter,
+            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
         super(
                 metaModelContext,
-                domainObject,
+                targetDomainObject,
                 syncControl);
 
         this.proxyContextHandler = proxyContextHandler;

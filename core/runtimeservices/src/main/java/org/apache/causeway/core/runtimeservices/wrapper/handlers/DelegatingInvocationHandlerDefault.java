@@ -25,10 +25,14 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.val;
 
 /**
  * @param <T>
@@ -62,6 +66,19 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             throw new RuntimeException("An Object method could not be found: " + e.getMessage());
             // ///CLOVER:ON
         }
+    }
+
+    protected ManagedObject adaptAndGuardAgainstWrappingNotSupported(
+            final @NonNull Object domainObject) {
+
+        val adapter = metaModelContext.getObjectManager().adapt(domainObject);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
+            throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
+                    domainObject.getClass().getName());
+        }
+
+        return adapter;
     }
 
     protected Object delegate(final Method method, final Object[] args)
