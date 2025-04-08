@@ -86,7 +86,6 @@ class JpaWrapperSyncTest extends CausewayIntegrationTestAbstract {
 
         assertEquals(167d, sumOfPrices, 1E-6);
 
-
         val products = wrapper.wrap(inventoryManager).getAllProducts();
 
         assertEquals(3, products.size());

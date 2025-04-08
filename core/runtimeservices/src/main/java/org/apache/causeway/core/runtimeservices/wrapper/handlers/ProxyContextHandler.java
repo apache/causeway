@@ -107,7 +107,8 @@ public class ProxyContextHandler {
                 .valueOfElseFail(collectionToBeProxied.getClass())
                 .getContainerType();
 
-        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
+        Collection<E> proxyCollection = proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
+        return proxyCollection;
     }
 
     /**

@@ -22,6 +22,12 @@ import javax.inject.Inject;
 
 import org.apache.causeway.commons.memory.MemoryUsage;
 
+import org.apache.causeway.testdomain.fixtures.EntityTestFixtures;
+import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
+import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +41,8 @@ import org.apache.causeway.testdomain.jpa.JpaInventoryManager;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
 import lombok.val;
+
+import java.util.List;
 
 
 @SpringBootTest(
@@ -50,6 +58,20 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
 
     @Inject private RepositoryService repository;
     @Inject private WrapperFactory wrapper;
+    @Inject private JpaTestFixtures testFixtures;
+
+    protected EntityTestFixtures.Lock lock;
+
+    @BeforeEach
+    void installFixture() {
+        this.lock = testFixtures.aquireLock();
+        lock.install();
+    }
+
+    @AfterEach
+    void uninstallFixture() {
+        this.lock.release();
+    }
 
     @Test
     void testWrapper_waitingOnDomainEvent() {
@@ -60,7 +82,10 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
         // multiple calls with first target
         for (var i = 0; i<2 ; i++) {
             MemoryUsage.measureMetaspace("target #1." + i, ()->{
-                wrapper.wrap(inventoryManager).getAllProducts();
+                List<JpaProduct> allProducts = wrapper.wrap(inventoryManager).getAllProducts();
+                allProducts.forEach(product -> {
+                    System.out.println(product.getName());
+                });
             });
         }
 
