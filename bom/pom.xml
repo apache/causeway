@@ -1639,7 +1639,7 @@ identified
             <dependency>
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>org.eclipse.persistence.asm</artifactId>
-                <version>9.7.1</version>
+                <version>9.8.0</version>
             </dependency>
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
