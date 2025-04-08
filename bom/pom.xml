@@ -72,7 +72,7 @@ identified
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2024-12-31T16:13:49Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2025-04-04T07:43:19Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -194,7 +194,7 @@ identified
 
         <surefire-plugin.argLine>
             -Xmx384m
-            -XX:+EnableDynamicAgentLoading 
+            -XX:+EnableDynamicAgentLoading
         </surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
         module-path for testing, that is, put everything on the class-path -->
@@ -1903,7 +1903,7 @@ identified
                 <artifactId>prism</artifactId>
                 <version>${prismjs.version}</version>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.graalvm.polyglot</groupId>
                 <artifactId>polyglot</artifactId>
@@ -3038,9 +3038,9 @@ identified
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>io.github.qsy7.org.projectlombok</groupId>
+                        <groupId>dev.pcms</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>1.18.30</version>
+                        <version>1.18.36.2</version>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
                             <outputDirectory>${delombok.output}</outputDirectory>

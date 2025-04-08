@@ -573,7 +573,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly  # <.>
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly  # <.>
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -610,7 +610,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -666,7 +666,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly  # <.>
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly  # <.>
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -703,7 +703,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvnd versions:update-parent -DparentVersion=[$CAUSEWAYREL,$CAUSEWAYREL] -Dskip.nightly
+mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 
 git add .
@@ -853,12 +853,20 @@ https://repository.apache.org, along with its corresponding .asc signature.
 In the source code repo the code has been tagged as causeway-{page-causewayreleaseversion}-RC1;
 see https://github.com/apache/causeway/tags
 
-To verify the source code itself, you can use the following commands
-(in an empty directory):
+To verify the source code itself, we recommend you start a docker container as
+a clean room:
 
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
+include::partial$verify-process-docker-container.adoc[]
+-------------------------------------------------------------------------------
+
+then use the following commands to install prereqs and verify:
+
+-------------------------------------------------------------------------------
+include::partial$verify-process-docker-container-prep.adoc[]
+
 include::partial$verify-process.adoc[]
-----------------------------------------------------------------
+-------------------------------------------------------------------------------
 
 You can then test the helloworld or simpleapp starter apps, see:
 https://causeway.staged.apache.org/comguide/latest/verifying-releases.html.

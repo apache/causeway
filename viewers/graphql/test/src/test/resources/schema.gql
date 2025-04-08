@@ -372,19 +372,19 @@ type rich__causeway_applib_UserMemento {
   authenticationSource: rich__causeway_applib_UserMemento__authenticationSource__gqlv_property
   "Avatar Url"
   avatarUrl: rich__causeway_applib_UserMemento__avatarUrl__gqlv_property
-  "Impersonating"
-  impersonating: rich__causeway_applib_UserMemento__impersonating__gqlv_property
+  "impersonating"
+  isImpersonating: rich__causeway_applib_UserMemento__isImpersonating__gqlv_property
   "Language Locale"
   languageLocale: rich__causeway_applib_UserMemento__languageLocale__gqlv_property
-  "Multi Tenancy Token"
+  "tenancy (or tenancies) this user has access to"
   multiTenancyToken: rich__causeway_applib_UserMemento__multiTenancyToken__gqlv_property
-  "Name"
+  "user's login name"
   name: rich__causeway_applib_UserMemento__name__gqlv_property
   "Number Format Locale"
   numberFormatLocale: rich__causeway_applib_UserMemento__numberFormatLocale__gqlv_property
   "Real Name"
   realName: rich__causeway_applib_UserMemento__realName__gqlv_property
-  "Roles"
+  "roles associated with this user"
   roles: rich__causeway_applib_UserMemento__roles__gqlv_collection
   "Time Format Locale"
   timeFormatLocale: rich__causeway_applib_UserMemento__timeFormatLocale__gqlv_property
@@ -429,13 +429,13 @@ type rich__causeway_applib_UserMemento__gqlv_meta {
   title: String!
 }
 
-type rich__causeway_applib_UserMemento__impersonating__gqlv_property {
+type rich__causeway_applib_UserMemento__isImpersonating__gqlv_property {
   datatype: String
   disabled: String
   get: Boolean!
   hidden: Boolean
-  set(impersonating: Boolean!): rich__causeway_applib_UserMemento
-  validate(impersonating: Boolean): String
+  set(isImpersonating: Boolean!): rich__causeway_applib_UserMemento
+  validate(isImpersonating: Boolean): String
 }
 
 type rich__causeway_applib_UserMemento__languageLocale__gqlv_property {
@@ -447,6 +447,7 @@ type rich__causeway_applib_UserMemento__languageLocale__gqlv_property {
   validate(languageLocale: String): String
 }
 
+"tenancy (or tenancies) this user has access to"
 type rich__causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
   datatype: String
   disabled: String
@@ -456,6 +457,7 @@ type rich__causeway_applib_UserMemento__multiTenancyToken__gqlv_property {
   validate(multiTenancyToken: String): String
 }
 
+"user's login name"
 type rich__causeway_applib_UserMemento__name__gqlv_property {
   datatype: String
   disabled: String
@@ -483,6 +485,7 @@ type rich__causeway_applib_UserMemento__realName__gqlv_property {
   validate(realName: String): String
 }
 
+"roles associated with this user"
 type rich__causeway_applib_UserMemento__roles__gqlv_collection {
   datatype: String
   disabled: String
@@ -4946,13 +4949,13 @@ type simple__causeway_applib_UserMemento {
   authenticationCode: String!
   authenticationSource: rich__org_apache_causeway_applib_services_user_UserMemento_AuthenticationSource__gqlv_enum!
   avatarUrl: String
-  impersonating: Boolean!
+  isImpersonating: Boolean!
   languageLocale: String
   multiTenancyToken: String
   name: String!
   numberFormatLocale: String
   realName: String
-  "Roles"
+  "roles associated with this user"
   roles: [simple__causeway_applib_RoleMemento]
   timeFormatLocale: String
 }

@@ -1,0 +1,2 @@
+docker run -p8080:8080 \
+    -it --platform linux/amd64 eclipse-temurin:21-jdk /bin/bash
