@@ -24,7 +24,6 @@ import java.util.Optional;
 import jakarta.inject.Inject;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
@@ -60,7 +59,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
     private static final String ID_BOOKMARKED_PAGE_ICON = "bookmarkedPageImage";
     private static final String ID_BOOKMARKED_PAGE_ICON_FA = "bookmarkedPageFontAwesome";
 
-    private static final String CLEAR_BOOKMARKS = "clearBookmarks";
+    private static final String ID_CLEAR_ALL = "clearBookmarks";
 
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
@@ -77,12 +76,18 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         super.renderHead(response);
     }
 
+    private BookmarkedPagesModel bookmarkedPagesModel() {
+        return getModel();
+    }
+
     private void buildGui() {
 
-        final BookmarkedPagesModel bookmarkedPagesModel = getModel();
+        var bookmarkedPagesModel = bookmarkedPagesModel();
 
-        Component helpText = addHelpText(bookmarkedPagesModel);
-        addOrReplace(helpText);
+        addOrReplace(helpTextLabel(bookmarkedPagesModel
+            .map(x->bookmarkedPagesModel.isEmpty()
+                ? "You have no bookmarks!"
+                : "")));
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_BOOKMARK_LIST) {
             private static final long serialVersionUID = 1L;
@@ -97,7 +102,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         Wkt.ajaxEnable(container);
         add(container);
 
-        var clearAllBookmarksLink = Wkt.linkAdd(this, CLEAR_BOOKMARKS, target->{
+        var clearAllBookmarksLink = Wkt.linkAdd(this, ID_CLEAR_ALL, target->{
             BookmarkedPagesPanel.this.getModel().clear();
             setEnabled(false);
             target.add(container, this);
@@ -111,13 +116,15 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         Wkt.listViewAdd(container, ID_BOOKMARKED_PAGE_ITEM, bookmarkedPagesModel, item->{
             final BookmarkTreeNode bookmarkNode = item.getModelObject();
             try {
-                final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT);
-
                 var clearBookmarkLink = Wkt.linkAdd(item, ID_CLEAR_BOOKMARK_LINK, target->{
                     bookmarkedPagesModel.remove(bookmarkNode);
-                    if(bookmarkedPagesModel.isEmpty()) {
-                        WktComponents.permanentlyHide(this, CLEAR_BOOKMARKS);
-                    }
+                    // [CAUSEWAY-3881] does not work, that is, it does not hide the "Clear all' link.
+                    // Instead, we keep the link and its associated behavior setup up, such that we don't
+                    // run into an exception later, where Wicket cannot find the behavior.
+                    // ...
+                    //if(bookmarkedPagesModel.isEmpty()) {
+                    //    WktComponents.permanentlyHide(BookmarkedPagesPanel.this, ID_CLEAR_ALL);
+                    //}
                     target.add(container, clearAllBookmarksLink);
                 });
 
@@ -129,7 +136,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
                 var link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
                                 bookmarkNode.getPageParameters(),
-                                pageClass));
+                                pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT)));
 
                 bookmarkNode.eitherIconOrFaClass()
                 .accept(
@@ -160,29 +167,17 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
         });
     }
 
-    protected Component addHelpText(final BookmarkedPagesModel bookmarkedPagesModel) {
-
-        IModel<String> helpTextModel = new IModel<String>() {
-            private static final long serialVersionUID = 1;
-
-            @Override
-            public String getObject() {
-                return bookmarkedPagesModel.isEmpty() ? "You have no bookmarks!" : "";
-            }
-        };
-
-        Label helpText = new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
+    protected Component helpTextLabel(final IModel<String> helpTextModel) {
+        return new Label(ID_BOOKMARKS_HELP_TEXT, helpTextModel) {
             private static final long serialVersionUID = 1;
 
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-
                 setVisible(!Strings.isEmpty(getDefaultModelObjectAsString()));
+                this.setOutputMarkupPlaceholderTag(true);
             }
         };
-        helpText.setOutputMarkupPlaceholderTag(true);
-        return helpText;
     }
 
 }
