@@ -57,7 +57,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
@@ -80,7 +79,6 @@ public class DomainObjectInvocationHandler<T>
 extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxyContextHandler;
-    private final MetaModelContext mmContext;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -117,7 +115,6 @@ extends DelegatingInvocationHandlerDefault<T> {
                 domainObject,
                 syncControl);
 
-        this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
         this.proxyContextHandler = proxyContextHandler;
 
         try {
@@ -160,7 +157,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             return delegate(method, args);
         }
 
-        final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
+        final ManagedObject targetAdapter =  metaModelContext.getObjectManager().adapt(getDelegate());
 
         if(!targetAdapter.getSpecialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -378,7 +375,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             checkUsability(targetAdapter, property);
         });
 
-        val argumentAdapter = getObjectManager().adapt(singleArg);
+        val argumentAdapter = metaModelContext.getObjectManager().adapt(singleArg);
 
         runValidationTask(()->{
             val interactionResult = property.isAssociationValid(
@@ -470,7 +467,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             final ObjectAction objectAction) {
 
         val head = objectAction.interactionHead(targetAdapter);
-        val objectManager = getObjectManager();
+        val objectManager = metaModelContext.getObjectManager();
 
         // adapt argument pojos to managed objects
         val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
@@ -643,10 +640,5 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
     }
 
-    // -- DEPENDENCIES
-
-    private ObjectManager getObjectManager() {
-        return mmContext.getObjectManager();
-    }
 
 }

@@ -25,15 +25,10 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 /**
  * @param <T>
@@ -41,20 +36,21 @@ import lombok.Setter;
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
     // getter is API
-    @Getter(onMethod = @__(@Override)) private final T delegate;
-    @Getter protected final WrapperFactory wrapperFactory;
-    @Getter private final SyncControl syncControl;
+    @Getter protected final MetaModelContext metaModelContext;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
+    @Getter(onMethod = @__(@Override)) private final T delegate;
+    @Getter private final SyncControl syncControl;
+
     public DelegatingInvocationHandlerDefault(
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
             final SyncControl syncControl) {
+        this.metaModelContext = metaModelContext;
         this.delegate = delegate;
-        this.wrapperFactory = metaModelContext.getWrapperFactory();
         this.syncControl = syncControl;
 
         try {
@@ -83,7 +79,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     }
 
     protected InteractionEvent notifyListeners(final InteractionEvent interactionEvent) {
-        wrapperFactory.notifyListeners(interactionEvent);
+        metaModelContext.getWrapperFactory().notifyListeners(interactionEvent);
         return interactionEvent;
     }
 
