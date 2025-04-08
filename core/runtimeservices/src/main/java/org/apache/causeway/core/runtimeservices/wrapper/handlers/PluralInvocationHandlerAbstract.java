@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
@@ -72,8 +73,6 @@ extends DelegatingInvocationHandlerDefault<P> {
         val policy = collectionSemantics.getInvocationHandlingPolicy();
 
         if (policy.getIntercepted().contains(method)) {
-
-            resolveIfRequired(domainObject);
 
             val event =
                     new CollectionMethodEvent(
