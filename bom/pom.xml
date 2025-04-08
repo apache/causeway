@@ -168,7 +168,7 @@ identified
 
         <pdfbox.version>3.0.4</pdfbox.version>
         <picocontainer.version>2.15.2</picocontainer.version>
-        <poi.version>5.4.0</poi.version>
+        <poi.version>5.4.1</poi.version>
 
         <prismjs.version>1.29.0</prismjs.version>
 
