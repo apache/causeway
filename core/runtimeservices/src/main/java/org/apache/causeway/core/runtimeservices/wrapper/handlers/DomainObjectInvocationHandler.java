@@ -106,13 +106,14 @@ extends DelegatingInvocationHandlerDefault<T> {
     private final ManagedObject mixeeAdapter;
 
     public DomainObjectInvocationHandler(
+            final MetaModelContext metaModelContext,
             final T domainObject,
             final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyContextHandler proxyContextHandler) {
         super(
-                targetAdapter.getSpecification().getMetaModelContext(),
+                metaModelContext,
                 domainObject,
                 syncControl);
 

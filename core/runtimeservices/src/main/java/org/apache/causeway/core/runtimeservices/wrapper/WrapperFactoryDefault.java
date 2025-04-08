@@ -254,7 +254,8 @@ implements WrapperFactory, HasMetaModelContext {
 
     protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
         val objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
-        return proxyContextHandler.proxy(domainObject, objAdapter, syncControl);
+
+        return proxyContextHandler.proxy(metaModelContext, domainObject, objAdapter, syncControl);
     }
 
     protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
@@ -306,11 +307,11 @@ implements WrapperFactory, HasMetaModelContext {
 
             if (shouldCheckRules(asyncControl)) {
                 val doih = new DomainObjectInvocationHandler<>(
-                        domainObject,
-                        null, // mixeeAdapter ignored
+                        metaModelContext,
+                        domainObject,  // mixeeAdapter ignored
+                        null,
                         targetAdapter,
-                        control().withNoExecute(),
-                        null);
+                        control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
 
@@ -358,11 +359,11 @@ implements WrapperFactory, HasMetaModelContext {
 
             if (shouldCheckRules(asyncControl)) {
                 val doih = new DomainObjectInvocationHandler<>(
+                        metaModelContext,
                         mixin,
                         mixeeAdapter,
                         mixinAdapter,
-                        control().withNoExecute(),
-                        null);
+                        control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
 
