@@ -49,6 +49,7 @@ extends DelegatingInvocationHandlerDefault<P> {
 
         super(otma.getMetaModelContext(),
                 collectionOrMapToBeProxied,
+                collectionOrMapToBeProxied.getClass(),
                 handler.getSyncControl());
 
         this.oneToManyAssociation = otma;

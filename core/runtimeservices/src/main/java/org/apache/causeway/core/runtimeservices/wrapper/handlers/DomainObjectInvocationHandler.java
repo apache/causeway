@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -119,6 +118,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         super(
                 metaModelContext,
                 targetPojo,
+                targetPojo.getClass(),
                 syncControl);
         this.proxyContextHandler = proxyContextHandler;
 

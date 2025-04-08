@@ -21,7 +21,6 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
@@ -47,21 +46,27 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    @Getter(onMethod = @__(@Override)) private final T delegate;
+    @Getter(onMethod = @__(@Override))
+    private final T delegate;
+
+    private final Class<?> delegateClass;
+
     @Getter private final SyncControl syncControl;
 
     public DelegatingInvocationHandlerDefault(
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
+            final Class<?> delegateClass,
             final SyncControl syncControl) {
         this.metaModelContext = metaModelContext;
         this.delegate = delegate;
+        this.delegateClass = delegateClass;
         this.syncControl = syncControl;
 
         try {
-            equalsMethod = delegate.getClass().getMethod("equals", _Constants.classesOfObject);
-            hashCodeMethod = delegate.getClass().getMethod("hashCode", _Constants.emptyClasses);
-            toStringMethod = delegate.getClass().getMethod("toString", _Constants.emptyClasses);
+            equalsMethod = this.delegateClass.getMethod("equals", _Constants.classesOfObject);
+            hashCodeMethod = this.delegateClass.getMethod("hashCode", _Constants.emptyClasses);
+            toStringMethod = this.delegateClass.getMethod("toString", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF
             throw new RuntimeException("An Object method could not be found: " + e.getMessage());
