@@ -137,7 +137,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
 
-        this.mixeeAdapter = mixeeAdapter;
+        this.mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
     }
 
     /**

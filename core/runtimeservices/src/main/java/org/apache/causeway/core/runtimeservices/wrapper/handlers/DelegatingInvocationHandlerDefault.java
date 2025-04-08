@@ -69,8 +69,11 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     }
 
     protected ManagedObject adaptAndGuardAgainstWrappingNotSupported(
-            final @NonNull Object domainObject) {
+            final Object domainObject) {
 
+        if(domainObject == null) {
+            return null;
+        }
         val adapter = metaModelContext.getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
                 || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
