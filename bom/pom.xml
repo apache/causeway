@@ -3404,7 +3404,7 @@ identified
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.12</version>
+                        <version>0.8.13</version>
                         <executions>
                             <execution>
                                 <goals>
