@@ -304,8 +304,6 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     private Object handleTitleMethod(final ManagedObject targetAdapter) {
 
-        resolveIfRequired(targetAdapter);
-
         val targetNoSpec = targetAdapter.getSpecification();
         val titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
@@ -348,8 +346,6 @@ extends DelegatingInvocationHandlerDefault<T> {
             checkVisibility(targetAdapter, property);
         });
 
-        resolveIfRequired(targetAdapter);
-
         return runExecutionTask(()->{
 
             val interactionInitiatedBy = getInteractionInitiatedBy();
@@ -383,8 +379,6 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         val argumentAdapter = getObjectManager().adapt(singleArg);
 
-        resolveIfRequired(targetAdapter);
-
         runValidationTask(()->{
             val interactionResult = property.isAssociationValid(
                     targetAdapter, argumentAdapter, getInteractionInitiatedBy())
@@ -412,8 +406,6 @@ extends DelegatingInvocationHandlerDefault<T> {
         runValidationTask(()->{
             checkVisibility(targetAdapter, collection);
         });
-
-        resolveIfRequired(targetAdapter);
 
         return runExecutionTask(()->{
 

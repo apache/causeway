@@ -68,15 +68,6 @@ class ProxyCreatorTestUsingCodegenPlugin {
             return delegate;
         }
 
-        @Override
-        public boolean isResolveObjectChangedEnabled() {
-            return false;
-        }
-
-        @Override
-        public void setResolveObjectChangedEnabled(final boolean resolveObjectChangedEnabled) {
-        }
-
         public boolean wasInvoked(final String methodName) {
             return invoked.contains(methodName);
         }

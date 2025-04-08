@@ -80,8 +80,6 @@ public class ProxyContextHandler {
 
         val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
                         collectionToBeProxied, handler, otma);
-        collectionInvocationHandler.setResolveObjectChangedEnabled(
-                handler.isResolveObjectChangedEnabled());
 
         val proxyBase = CollectionSemantics
                 .valueOfElseFail(collectionToBeProxied.getClass())
@@ -101,7 +99,6 @@ public class ProxyContextHandler {
 
         val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
                 collectionToBeProxied, handler, otma);
-        mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         val proxyBase = Map.class;
 

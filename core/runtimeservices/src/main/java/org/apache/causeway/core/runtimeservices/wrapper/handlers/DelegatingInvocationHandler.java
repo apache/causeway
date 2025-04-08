@@ -27,8 +27,4 @@ public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
     T getDelegate();
 
-    public boolean isResolveObjectChangedEnabled();
-
-    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
-
 }

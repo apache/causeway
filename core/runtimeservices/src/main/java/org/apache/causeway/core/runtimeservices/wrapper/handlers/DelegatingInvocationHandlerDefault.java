@@ -40,8 +40,6 @@ import lombok.Setter;
  */
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
-    private ObjectManager objectManager;
-
     // getter is API
     @Getter(onMethod = @__(@Override)) private final T delegate;
     @Getter protected final WrapperFactory wrapperFactory;
@@ -51,16 +49,11 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    // getter and setter are API
-    @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
-    private boolean resolveObjectChangedEnabled;
-
     public DelegatingInvocationHandlerDefault(
             final @NonNull MetaModelContext metaModelContext,
             final @NonNull T delegate,
             final SyncControl syncControl) {
         this.delegate = delegate;
-        this.objectManager = metaModelContext.getObjectManager();
         this.wrapperFactory = metaModelContext.getWrapperFactory();
         this.syncControl = syncControl;
 
@@ -73,25 +66,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             throw new RuntimeException("An Object method could not be found: " + e.getMessage());
             // ///CLOVER:ON
         }
-    }
-
-    protected void resolveIfRequired(final ManagedObject adapter) {
-
-        if(!resolveObjectChangedEnabled) {
-            return;
-        }
-        if(adapter==null) {
-            return;
-        }
-        if(!ManagedObjects.isEntity(adapter)) {
-            return;
-        }
-
-        _Blackhole.consume(adapter.getPojo());
-    }
-
-    protected void resolveIfRequired(final Object domainObject) {
-        resolveIfRequired(objectManager.adapt(domainObject));
     }
 
     protected Object delegate(final Method method, final Object[] args)
