@@ -394,7 +394,7 @@ This can be done from any branch, normally the release branch (`$CAUSEWAYBRANCH`
 NOTE: All that will be picked up from this branch is the `supplementary-ui` files (top-level index) and the `site.yml` playbook that identifies which branch(es) to include in the website.
 
 
-* Update `site.yml` using `site.NEXT.yml`:
+Update `site.yml` using `site.NEXT.yml`:
 
 * move `site.yml` to one side, and replace with `site.NEXT.yml`:
 +
