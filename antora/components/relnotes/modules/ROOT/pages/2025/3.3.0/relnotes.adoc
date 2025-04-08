@@ -4,3 +4,51 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+
+NOTE: TODO - add description
+
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3854[CAUSEWAY-3854] - [Wicket Viewer] PDF Tabular Export
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3853[CAUSEWAY-3853] - [Wicket Viewer] Excel Export to Support BufferedImage
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3874[CAUSEWAY-3874] - [Persistence] JPA integration support for URL to textual column
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3867[CAUSEWAY-3867] - [Persistence] JPA Embeddable should override Entity
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3865[CAUSEWAY-3865] - [Validation] don't allow Collection annotation on scalars and vice versa
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3864[CAUSEWAY-3864] - Remove dependence on livequery
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3862[CAUSEWAY-3862] - [Wicket Viewer] (Drag &) Drop Support on Text Input
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3860[CAUSEWAY-3860] - [Introspection] Treat Java Record canonical Constructors as quasi public
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3859[CAUSEWAY-3859] - [Refactor] Convert regular classes to Java records
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3857[CAUSEWAY-3857] - [Performance] Wicket Viewer Table Rendering triggers a lot of XHR for Prism Resources
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3852[CAUSEWAY-3852] - [Wicket Viewer] File Upload UI Improvements
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3851[CAUSEWAY-3851] - [Wicket Viewer] Cannot edit BufferedImage property or use as action param
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3850[CAUSEWAY-3850] - [Testing] ApprovalUtils to support Scrubber creation that ignores line ending conventions in sources
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3848[CAUSEWAY-3848] - Don't enforce testing.fixtures.applib to be required on the class-path
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3843[CAUSEWAY-3843] - [Metamodel] Simplified Action Parameter Negotiation Default Calculation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3834[CAUSEWAY-3834] - Meta-model Introspection: Encapsulation of Implementations (ObjectSpecification and its Loader)
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3880[CAUSEWAY-3880] - [Testing] JavaSqlDateValueSemanticsProviderTest potentially fails with expected: <1970-01-01> but was: <1969-12-31>
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3878[CAUSEWAY-3878] - [Wicket Viewer] Potential UI exception when deleting an Entity (as surfaces with SecMan)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3876[CAUSEWAY-3876] - Array type error in actions with semantics of SAFE_AND_REQUEST_CACHEABLE
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3873[CAUSEWAY-3873] - Help Pages - Invalid PlantUML Syntax
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3868[CAUSEWAY-3868] - [Persistence] JPA integration needs java.util.Locale support (broken secman regional tab)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3861[CAUSEWAY-3861] - [Wicket Viewer] Action's multiselect param when required but empty, is still accepted.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3846[CAUSEWAY-3846] - [Wicket Viewer] Regression Upstream - When editing multiline text field, ENTER will close dialogs.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3844[CAUSEWAY-3844] - [Validation] Potential false positive when checking for orphaned support methods
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3841[CAUSEWAY-3841] - Regression - Calendar view throws NPE with the recently reworked tabular model
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3877[CAUSEWAY-3877] - Rename git default branch 'master' to 'main'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3845[CAUSEWAY-3845] - Rename branches master->v2 v3->main
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3842[CAUSEWAY-3842] - Release activities 3.3.0
