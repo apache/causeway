@@ -38,14 +38,14 @@ public class ProxyCreator {
     @NonNull private final _ProxyFactoryService proxyFactoryService;
 
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
-        final Class<T> base = _Casts.uncheckedCast(handler.getDelegateClass());
+        final Class<T> base = _Casts.uncheckedCast(handler.getTargetClass());
         return instantiateProxy(base, handler);
     }
 
     /**
      * Creates a proxy, using given {@code base} type as the proxy's base.
      * @implNote introduced to circumvent access issues on cases,
-     *      where {@code handler.getDelegate().getClass()} is not visible
+     *      where {@code handler.getTarget().getClass()} is not visible
      *      (eg. nested private type)
      */
     public <T> T instantiateProxy(final Class<T> base, final DelegatingInvocationHandler<? extends T> handler) {

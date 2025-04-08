@@ -110,8 +110,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
     public DomainObjectInvocationHandler(
             final MetaModelContext metaModelContext,
             final ProxyContextHandler proxyContextHandler,
-            final ObjectSpecification targetSpecification,
-            final Object mixeePojo // ignored if not handling a mixin
+            final ObjectSpecification targetSpecification
     ) {
         super(
                 metaModelContext,
@@ -122,7 +121,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
         this.targetSpecification = targetSpecification;
 
         try {
-            titleMethod = getDelegateClass().getMethod("title", _Constants.emptyClasses);
+            titleMethod = getTargetClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -168,14 +167,18 @@ extends DelegatingInvocationHandlerAbstract<T> {
         throw new IllegalStateException("Unable to find the wrapper invocation context");
     }
 
+    /**
+     * The target, either a domain object or mixin instance (wrapping a mixee).
+     * @return
+     */
     @Override
-    public T getDelegate() {
+    public T getTarget() {
         return (T) WrapperInvocationContext.<WrapperInvocationContext>get().targetPojo;
     }
 
 
     public ManagedObject getMixeeAdapter() {
-        T mixeePojo = (T) WrapperInvocationContext.<WrapperInvocationContext>get().mixeePojo;
+        Object mixeePojo = WrapperInvocationContext.<WrapperInvocationContext>get().mixeePojo;
         return adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
     }
 
@@ -192,7 +195,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
             return delegate(method, args);
         }
 
-        final ManagedObject targetAdapter =  metaModelContext.getObjectManager().adapt(getDelegate());
+        final ManagedObject targetAdapter =  metaModelContext.getObjectManager().adapt(getTarget());
 
         if(!targetAdapter.getSpecialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -211,11 +214,11 @@ extends DelegatingInvocationHandlerAbstract<T> {
         }
 
         if (method.equals(__causeway_wrappedMethod)) {
-            return getDelegate();
+            return getTarget();
         }
 
         if (method.equals(__causeway_wrapperInvocationContextMethod)) {
-            return getDelegate();
+            return getTarget();
         }
 
         if (method.equals(__causeway_executionModes)) {
@@ -231,7 +234,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
-            return method.invoke(getDelegate(), args);
+            return method.invoke(getTarget(), args);
         }
 
         if (objectMember.isOneToOneAssociation()) {
@@ -391,7 +394,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
 
             val propertyAccessEvent = new PropertyAccessEvent(
-                    getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
+                    getTarget(), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
 
@@ -450,7 +453,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
             val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
+            val collectionAccessEvent = new CollectionAccessEvent(getTarget(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
                 val collectionViewObject = lookupWrappingObject(

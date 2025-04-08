@@ -57,7 +57,7 @@ extends DelegatingInvocationHandlerAbstract<P> {
 
         this.delegate = collectionOrMapToBeProxied;
         this.oneToManyAssociation = otma;
-        this.domainObject = handler.getDelegate();
+        this.domainObject = handler.getTarget();
         this.collectionSemantics = collectionSemantics;
     }
 
@@ -81,7 +81,7 @@ extends DelegatingInvocationHandlerAbstract<P> {
 
             val event =
                     new CollectionMethodEvent(
-                            getDelegate(),
+                            getTarget(),
                             getCollection().getFeatureIdentifier(),
                             getDomainObject(),
                             method.getName(),

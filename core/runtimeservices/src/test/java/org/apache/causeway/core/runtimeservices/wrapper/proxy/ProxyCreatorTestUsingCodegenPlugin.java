@@ -64,12 +64,12 @@ class ProxyCreatorTestUsingCodegenPlugin {
         }
 
         @Override
-        public Employee getDelegate() {
+        public Employee getTarget() {
             return delegate;
         }
 
         @Override
-        public Class<Employee> getDelegateClass() {
+        public Class<Employee> getTargetClass() {
             return Employee.class;
         }
 

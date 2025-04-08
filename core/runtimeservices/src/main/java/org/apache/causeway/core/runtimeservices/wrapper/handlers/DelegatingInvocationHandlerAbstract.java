@@ -65,8 +65,7 @@ public abstract class DelegatingInvocationHandlerAbstract<T> implements Delegati
         }
     }
 
-    protected ManagedObject adaptAndGuardAgainstWrappingNotSupported(
-            final Object domainObject) {
+    protected ManagedObject adaptAndGuardAgainstWrappingNotSupported(final Object domainObject) {
 
         if(domainObject == null) {
             return null;
@@ -83,7 +82,7 @@ public abstract class DelegatingInvocationHandlerAbstract<T> implements Delegati
 
     protected Object delegate(final Method method, final Object[] args)
             throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        return method.invoke(getDelegate(), args);
+        return method.invoke(getTarget(), args);
     }
 
     protected boolean isObjectMethod(final Method method) {
