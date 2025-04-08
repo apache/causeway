@@ -26,6 +26,7 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.memory.MemoryUsage;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.DelegatingInvocationHandler;
 
 import lombok.NonNull;
@@ -56,9 +57,11 @@ public class ProxyCreator {
                             _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
                             handler));
         } else {
-            final _ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
-            return proxyFactory.createInstance(handler, false);
+            final _ProxyFactory<T> proxyFactory = MemoryUsage.measureMetaspace("proxyFactoryService.factory", () -> proxyFactoryService.factory(base, WrappingObject.class));
+            T instance = MemoryUsage.measureMetaspace("proxyFactory.createInstance", () -> proxyFactory.createInstance(handler, false));
+            return instance;
         }
     }
+
 
 }

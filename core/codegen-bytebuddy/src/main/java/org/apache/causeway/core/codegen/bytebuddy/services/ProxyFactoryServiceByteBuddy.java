@@ -18,9 +18,12 @@
  */
 package org.apache.causeway.core.codegen.bytebuddy.services;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Function;
+
+import org.apache.causeway.commons.memory.MemoryUsage;
 
 import org.springframework.lang.Nullable;
 import org.springframework.objenesis.ObjenesisStd;
@@ -37,6 +40,7 @@ import lombok.val;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.NamingStrategy;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ImplementationDefinition;
 import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
@@ -54,13 +58,19 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
         val objenesis = new ObjenesisStd();
 
-        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
-        nextProxyDef(base, interfaces)
-        .intercept(InvocationHandlerAdapter.of(handler))
-        .make()
-        .load(_Context.getDefaultClassLoader(),
-                strategyAdvisor.getSuitableStrategy(base))
-        .getLoaded();
+        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler-> {
+            ImplementationDefinition<T> tImplementationDefinition =
+                    MemoryUsage.measureMetaspace("handler.nextProxyDef", ()->nextProxyDef(base, interfaces));
+            DynamicType.Builder.MethodDefinition.ReceiverTypeDefinition<T> intercept =
+                    MemoryUsage.measureMetaspace("handler.intercept   ", ()->tImplementationDefinition.intercept(InvocationHandlerAdapter.of(handler)));
+            DynamicType.Unloaded<T> make =
+                    MemoryUsage.measureMetaspace("handler.make        ", ()->intercept.make());
+            DynamicType.Loaded<T> load =
+                    MemoryUsage.measureMetaspace("handler.load        ", ()->make.load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base)));
+            Class<? extends T> loaded =
+                    MemoryUsage.measureMetaspace("handler.getLoaded   ", ()->load.getLoaded());
+            return loaded;
+        };
 
         return new _ProxyFactory<T>() {
 
@@ -100,8 +110,10 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             // -- HELPER (create w/o initialize)
 
             private Object createNotUsingConstructor(final InvocationHandler invocationHandler) {
-                final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
-                final Object object = objenesis.newInstance(proxyClass);
+                final Class<? extends T> proxyClass =
+                        MemoryUsage.measureMetaspace("proxyClassFactory.apply", () -> proxyClassFactory.apply(invocationHandler));
+                final Object object =
+                        MemoryUsage.measureMetaspace("objenesis.newInstance", () -> objenesis.newInstance(proxyClass));
                 return object;
             }
 
@@ -109,10 +121,12 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
             private Object createUsingConstructor(final InvocationHandler invocationHandler, @Nullable final Object[] constructorArgs)
                     throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-                final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
-                return proxyClass
-                        .getConstructor(constructorArgTypes==null ? _Constants.emptyClasses : constructorArgTypes)
-                        .newInstance(constructorArgs==null ? _Constants.emptyObjects : constructorArgs);
+                final Class<? extends T> proxyClass =
+                        MemoryUsage.measureMetaspace("proxyClassFactory.apply", () -> proxyClassFactory.apply(invocationHandler));
+                Constructor<? extends T> constructor =
+                        MemoryUsage.measureMetaspace("proxyClass.getConstructor", () -> proxyClass.getConstructor(constructorArgTypes == null ? _Constants.emptyClasses : constructorArgTypes));
+                T t = MemoryUsage.measureMetaspace("proxyClass.newInstance", () -> constructor.newInstance(constructorArgs == null ? _Constants.emptyObjects : constructorArgs));;
+                return t;
             }
 
         };
