@@ -72,19 +72,20 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
     }
 
     @Test
-    void testWrapper_waitingOnDomainEvent() {
+    void testWrapper_waitingOnDomainEvent() throws InterruptedException {
+
 // with caching
         MemoryUsage.measureMetaspace("whole thing", ()->{
-//            extracted(1, 1);     // 1,980 KB
-//            extracted(1, 2000);  // 3,794 KB
-//            extracted(20, 1);    // 2,468 KB
-//            extracted(20, 2000); // 3,818 KB
+//            extracted(1, 1);      // 1,980 KB
+//            extracted(1, 2000);   // 3,794 KB
+//            extracted(20, 1);     // 2,468 KB
+            extracted(20, 2000);    // 3,636 KB
 //
 // without caching
-//            extracted(1, 1);     // 2,114 KB
-//            extracted(1, 1000);  // 9,846 KB
-//            extracted(20, 1);     // 2,635 KB
-            extracted(20, 2000);  // 217,582 KB
+//            extracted(1, 1);      //   2,114 KB
+//            extracted(1, 1000);   //   9,846 KB
+//            extracted(20, 1);     //   2,635 KB
+//            extracted(20, 2000);  // 217,582 KB
         });
     }
 
@@ -93,15 +94,12 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
             val inventoryManager = factoryService.viewModel(JpaInventoryManager.class);
 
             for (var j = 0; j< loops; j++) {
-                MemoryUsage.measureMetaspace("target #" + i + "." + j, ()->{
-                    List<JpaProduct> allProducts = wrapper.wrap(inventoryManager).getAllProducts();
-                    allProducts.forEach(product -> {
-                        System.out.println(product.getName());
-                    });
+                List<JpaProduct> allProducts = wrapper.wrap(inventoryManager).getAllProducts();
+                allProducts.forEach(product -> {
+                    String unused = product.getName();
                 });
             }
         }
-
     }
 }
 

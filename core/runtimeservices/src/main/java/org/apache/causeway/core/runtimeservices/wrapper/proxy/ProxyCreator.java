@@ -56,11 +56,8 @@ public class ProxyCreator {
                             _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
                             handler));
         } else {
-            final _ProxyFactory<T> proxyFactory =
-                    MemoryUsage.measureMetaspace("proxyFactoryService.factory", () -> proxyFactoryService.factory(base, WrappingObject.class));
-            T instance =
-                    MemoryUsage.measureMetaspace("proxyFactory.createInstance", () -> proxyFactory.createInstance(handler, false));
-            return instance;
+            final _ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
+            return proxyFactory.createInstance(handler, false);
         }
     }
 

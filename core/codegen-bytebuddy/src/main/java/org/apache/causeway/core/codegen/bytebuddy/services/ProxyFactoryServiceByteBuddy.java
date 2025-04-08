@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.codegen.bytebuddy.services;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -64,27 +66,25 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
         val objenesis = new ObjenesisStd();
 
-        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = new Function<InvocationHandler, Class<? extends T>>() {
+        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = new Function<>() {
+
             @Override
             public Class<? extends T> apply(InvocationHandler handler) {
-//                return (Class) proxyClassByInvocationHandler.computeIfAbsent(handler, ih -> createClass(ih));
-                return createClass(handler);
+                return (Class<? extends T>) proxyClassByInvocationHandler.computeIfAbsent(handler, this::createClass);
             }
 
             private Class<? extends T> createClass(InvocationHandler handler) {
-                ImplementationDefinition<T> tImplementationDefinition =
-                        MemoryUsage.measureMetaspace("handler.nextProxyDef", () -> nextProxyDef(base, interfaces));
-                final var typeDefn =
-                        MemoryUsage.measureMetaspace("handler.intercept   ", () -> tImplementationDefinition.intercept(InvocationHandlerAdapter.of(handler)
-                        ));
-                final var typeDefnWithField = typeDefn.defineField("__causeway_wrapperInvocationContext", Object.class, Modifier.PUBLIC);
-                DynamicType.Unloaded<T> make =
-                        MemoryUsage.measureMetaspace("handler.make        ", () -> typeDefnWithField.make());
-                DynamicType.Loaded<T> load =
-                        MemoryUsage.measureMetaspace("handler.load        ", () -> make.load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base)));
-                Class<? extends T> loaded =
-                        MemoryUsage.measureMetaspace("handler.getLoaded   ", () -> load.getLoaded());
-                return loaded;
+                try (final var unloaded = nextProxyDef(base, interfaces)
+                        .intercept(InvocationHandlerAdapter.of(handler))
+                        .defineField("__causeway_wrapperInvocationContext", Object.class, Modifier.PUBLIC)
+                        .make()
+                ) {
+                    return unloaded
+                            .load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base))
+                            .getLoaded();
+                } catch (IOException e) {
+                    throw new UncheckedIOException("Failed to generate proxy class", e);
+                }
             }
         };
 
@@ -94,7 +94,6 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             public T createInstance(final InvocationHandler handler, final boolean initialize) {
 
                 try {
-
                     if(initialize) {
                         ensureSameSize(constructorArgTypes, null);
                         return _Casts.uncheckedCast( createUsingConstructor(handler, null) );
@@ -126,23 +125,17 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             // -- HELPER (create w/o initialize)
 
             private Object createNotUsingConstructor(final InvocationHandler invocationHandler) {
-                final Class<? extends T> proxyClass =
-                        MemoryUsage.measureMetaspace("proxyClassFactory.apply", () -> proxyClassFactory.apply(invocationHandler));
-                final Object object =
-                        MemoryUsage.measureMetaspace("objenesis.newInstance", () -> objenesis.newInstance(proxyClass));
-                return object;
+                final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
+                return objenesis.newInstance(proxyClass);
             }
 
             // -- HELPER (create with initialize)
 
             private Object createUsingConstructor(final InvocationHandler invocationHandler, @Nullable final Object[] constructorArgs)
                     throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-                final Class<? extends T> proxyClass =
-                        MemoryUsage.measureMetaspace("proxyClassFactory.apply", () -> proxyClassFactory.apply(invocationHandler));
-                Constructor<? extends T> constructor =
-                        MemoryUsage.measureMetaspace("proxyClass.getConstructor", () -> proxyClass.getConstructor(constructorArgTypes == null ? _Constants.emptyClasses : constructorArgTypes));
-                T t = MemoryUsage.measureMetaspace("proxyClass.newInstance", () -> constructor.newInstance(constructorArgs == null ? _Constants.emptyObjects : constructorArgs));;
-                return t;
+                final var proxyClass = proxyClassFactory.apply(invocationHandler);
+                final var constructor = proxyClass.getConstructor(constructorArgTypes == null ? _Constants.emptyClasses : constructorArgTypes);
+                return constructor.newInstance(constructorArgs == null ? _Constants.emptyObjects : constructorArgs);
             }
 
         };
