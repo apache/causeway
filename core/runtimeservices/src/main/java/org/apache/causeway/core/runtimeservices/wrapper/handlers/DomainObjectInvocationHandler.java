@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -79,6 +80,7 @@ public class DomainObjectInvocationHandler<T>
 extends DelegatingInvocationHandlerDefault<T> {
 
     private final ProxyContextHandler proxyContextHandler;
+    private final ObjectSpecification targetSpecification;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -100,7 +102,6 @@ extends DelegatingInvocationHandlerDefault<T> {
      */
     protected Method __causeway_executionModes;
 
-    private final EntityFacet entityFacet;
     private final ManagedObject mixeeAdapter;
 
     public DomainObjectInvocationHandler(
@@ -114,6 +115,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                 metaModelContext,
                 targetPojo,
                 syncControl);
+        this.targetSpecification = targetSpecification;
 
         this.proxyContextHandler = proxyContextHandler;
 
@@ -133,8 +135,6 @@ extends DelegatingInvocationHandlerDefault<T> {
                     "Could not locate reserved declared methods in the WrappingObject interfaces",
                     nsme);
         }
-
-        entityFacet = targetSpecification.entityFacet().orElse(null);
 
         this.mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
     }
@@ -167,13 +167,12 @@ extends DelegatingInvocationHandlerDefault<T> {
             return handleTitleMethod(targetAdapter);
         }
 
-        final ObjectSpecification targetSpec = targetAdapter.getSpecification();
-        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpecification.getCorrespondingClass())
                 .orElseThrow();
 
         // save method, through the proxy
         if (method.equals(__causeway_saveMethod)) {
-            return handleSaveMethod(targetAdapter, targetSpec);
+            return handleSaveMethod(targetAdapter, targetSpecification);
         }
 
         if (method.equals(__causeway_wrappedMethod)) {
@@ -184,7 +183,7 @@ extends DelegatingInvocationHandlerDefault<T> {
             return getSyncControl().getExecutionModes();
         }
 
-        val objectMember = targetSpec.getMemberElseFail(resolvedMethod);
+        val objectMember = targetSpecification.getMemberElseFail(resolvedMethod);
         val memberId = objectMember.getId();
 
         val intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
@@ -232,7 +231,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             val objectAction = (ObjectAction) objectMember;
 
-            if(Facets.mixinIsPresent(targetSpec)) {
+            if(Facets.mixinIsPresent(targetSpecification)) {
                 if (mixeeAdapter == null) {
                     throw _Exceptions.illegalState(
                             "Missing the required mixeeAdapter for action '%s'",
@@ -254,7 +253,7 @@ extends DelegatingInvocationHandlerDefault<T> {
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
-                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpec));
+                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpecification));
                 }
             }
 
@@ -294,9 +293,9 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
-        return entityFacet!=null
-                ? entityFacet.isProxyEnhancement(method)
-                : false;
+        return targetSpecification.entityFacet()
+                .map(x -> x.isProxyEnhancement(method))
+                .orElse(false);
     }
 
 
