@@ -38,6 +38,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -234,6 +236,7 @@ implements WrapperFactory, HasMetaModelContext {
         T mixin = factoryService.mixin(mixinClass, mixee);
         // no need to inject services into the mixin, factoryService does it for us.
 
+        final var targetSpecification = getSpecificationLoader().loadSpecification(mixinClass);
         if (isWrapper(mixee)) {
             val wrapperObject = (WrappingObject) mixee;
             val executionMode = wrapperObject.__causeway_executionModes();
@@ -244,28 +247,29 @@ implements WrapperFactory, HasMetaModelContext {
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return mixin;
             }
-            return _Casts.uncheckedCast(createMixinProxy(mixin, underlyingMixee, syncControl));
+            return _Casts.uncheckedCast(createMixinProxy(targetSpecification, mixin, underlyingMixee, syncControl));
         }
 
         getServiceInjector().injectServicesInto(mixee);
 
-        return createMixinProxy(mixin, mixee, syncControl);
+        return createMixinProxy(targetSpecification, mixin, mixee, syncControl);
     }
 
     protected <T> T createProxy(final T targetPojo, final SyncControl syncControl) {
         val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(targetPojo);
 
-        return proxyContextHandler.proxy(metaModelContext, targetPojo, targetAdapter, syncControl);
+        return proxyContextHandler.proxy(metaModelContext, targetAdapter.getSpecification(), targetPojo, syncControl);
     }
 
     protected <T> T createMixinProxy(
+            final ObjectSpecification targetSpecification,
             final T targetMixinPojo,
             final Object mixeePojo,
             final SyncControl syncControl
     ) {
         val targetMixinAdapter = adaptAndGuardAgainstWrappingNotSupported(targetMixinPojo);
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
-        return proxyContextHandler.mixinProxy(metaModelContext, targetMixinPojo, mixeePojo, targetMixinAdapter, syncControl);
+        return proxyContextHandler.mixinProxy(metaModelContext, targetSpecification, targetMixinPojo, mixeePojo, syncControl);
     }
 
     @Override
@@ -285,42 +289,42 @@ implements WrapperFactory, HasMetaModelContext {
 
     // -- ASYNC WRAPPING
 
-
     @Override
     public <T,R> T asyncWrap(
-            final @NonNull T domainObject,
+            final @NonNull T targetPojo,
             final AsyncControl<R> asyncControl) {
 
-        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(targetPojo);
         if(targetAdapter.getSpecification().isMixin()) {
             throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
 
         val proxyFactory = proxyFactoryService
-                .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
+                .<T>factory(_Casts.uncheckedCast(targetPojo.getClass()), WrappingObject.class);
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
-            val resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
+            val resolvedMethod = _GenericResolver.resolveMethod(method, targetPojo.getClass())
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
             if (isInheritedFromJavaLangObject(method)) {
-                return method.invoke(domainObject, args);
+                return method.invoke(targetPojo, args);
             }
 
             if (shouldCheckRules(asyncControl)) {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
-                        targetAdapter.getSpecification(), domainObject,  // mixeeAdapter ignored
-                        mixee,
+                        targetAdapter.getSpecification(),
+                        targetPojo,
+                        null, // mixee ignored
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
 
             val memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
             if( ! memberAndTarget.isMemberFound()) {
-                return method.invoke(domainObject, args);
+                return method.invoke(targetPojo, args);
             }
 
             return submitAsync(memberAndTarget, args, asyncControl);
@@ -336,16 +340,15 @@ implements WrapperFactory, HasMetaModelContext {
     @Override
     public <T, R> T asyncWrapMixin(
             final @NonNull Class<T> mixinClass,
-            final @NonNull Object mixee,
+            final @NonNull Object mixeePojo,
             final @NonNull AsyncControl<R> asyncControl) {
 
-        T mixin = factoryService.mixin(mixinClass, mixee);
+        T mixinPojo = factoryService.mixin(mixinClass, mixeePojo);
 
-        val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        ObjectSpecification targetSpecification = getSpecificationLoader().loadSpecification(mixinClass);
 
         val mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
-                .getConstructorElseFail(mixinClass, mixee.getClass());
+                .getConstructorElseFail(mixinClass, mixeePojo.getClass());
 
         val proxyFactory = proxyFactoryService
                 .factory(mixinClass, new Class[]{WrappingObject.class}, mixinConstructor.getParameterTypes());
@@ -357,25 +360,26 @@ implements WrapperFactory, HasMetaModelContext {
 
             final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
             if (inheritedFromObject) {
-                return method.invoke(mixin, args);
+                return method.invoke(mixinPojo, args);
             }
 
             if (shouldCheckRules(asyncControl)) {
                 val doih = new DomainObjectInvocationHandler<>(
                         metaModelContext,
-                        mixinAdapter.getSpecification(), mixin,
-                        mixee,
+                        targetSpecification,
+                        mixinPojo,
+                        mixeePojo,
                         control().withNoExecute(), null);
                 doih.invoke(null, method, args);
             }
 
-            val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
+            val actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixeePojo, targetSpecification);
             if (! actionAndTarget.isMemberFound()) {
-                return method.invoke(mixin, args);
+                return method.invoke(mixinPojo, args);
             }
 
             return submitAsync(actionAndTarget, args, asyncControl);
-        }, new Object[]{ mixee });
+        }, new Object[]{ mixeePojo });
     }
 
     private boolean isInheritedFromJavaLangObject(final Method method) {
@@ -461,16 +465,17 @@ implements WrapperFactory, HasMetaModelContext {
 
     private <T> MemberAndTarget memberAndTargetForMixin(
             final ResolvedMethod method,
-            final T mixee,
-            final ManagedObject mixinAdapter) {
+            final T mixeePojo,
+            final ObjectSpecification targetSpecification
+    ) {
 
-        val mixinMember = mixinAdapter.getSpecification().getMember(method).orElse(null);
+        val mixinMember = targetSpecification.getMember(method).orElse(null);
         if (mixinMember == null) {
             return MemberAndTarget.notFound();
         }
 
         // find corresponding action of the mixee (this is the 'real' target, the target usable for invocation).
-        val mixeeClass = mixee.getClass();
+        val mixeeClass = mixeePojo.getClass();
 
         // don't care about anything other than actions
         // (contributed properties and collections are read-only).
@@ -483,7 +488,7 @@ implements WrapperFactory, HasMetaModelContext {
                 "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
                 mixinMember.getId(), mixeeClass.getName())));
 
-        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method.method());
+        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixeePojo), method.method());
     }
 
     private static <R> InteractionContext interactionContextFrom(

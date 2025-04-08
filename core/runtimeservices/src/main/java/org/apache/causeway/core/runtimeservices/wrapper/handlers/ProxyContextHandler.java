@@ -25,7 +25,7 @@ import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
 
@@ -40,15 +40,15 @@ public class ProxyContextHandler {
 
     public <T> T proxy(
             final MetaModelContext metaModelContext,
+            final ObjectSpecification targetSpecification,
             final T targetPojo,
-            final ManagedObject targetAdapter,
             final SyncControl syncControl
     ) {
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetAdapter.getSpecification(), targetPojo,
-                null, // mixee ignored
-                // mixeeAdapter ignored
+                targetSpecification,
+                targetPojo,
+                null, // mixeePojo ignored
                 syncControl,
                 this);
 
@@ -57,14 +57,14 @@ public class ProxyContextHandler {
 
     public <T> T mixinProxy(
             final MetaModelContext metaModelContext,
+            final ObjectSpecification targetSpecification,
             final T targetMixinPojo,
             final Object mixeePojo,
-            final ManagedObject targetMixinAdapter,
             final SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
                 metaModelContext,
-                targetMixinAdapter.getSpecification(),
+                targetSpecification,
                 targetMixinPojo,
                 mixeePojo,
                 syncControl, this);
