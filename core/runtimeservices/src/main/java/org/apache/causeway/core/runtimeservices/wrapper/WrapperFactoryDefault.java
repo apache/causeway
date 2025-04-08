@@ -261,7 +261,7 @@ implements WrapperFactory, HasMetaModelContext {
     protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
         val mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         val mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
-        return proxyContextHandler.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
+        return proxyContextHandler.mixinProxy(metaModelContext, mixin, mixeeAdapter, mixinAdapter, syncControl);
     }
 
     @Override

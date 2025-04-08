@@ -56,12 +56,14 @@ public class ProxyContextHandler {
     }
 
     public <T> T mixinProxy(
+            MetaModelContext metaModelContext,
             final T mixin,
             final ManagedObject mixeeAdapter,
             final ManagedObject mixinAdapter,
             final SyncControl syncControl) {
 
-        val invocationHandler = new DomainObjectInvocationHandler<T>(,
+        val invocationHandler = new DomainObjectInvocationHandler<T>(
+                metaModelContext,
                 mixin,
                 mixeeAdapter,
                 mixinAdapter,
