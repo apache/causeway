@@ -5,8 +5,9 @@
 :page-partial:
 
 
-NOTE: TODO - add description
+This is primarily a maintenance release, bumping the version of Spring Boot to 3.4.4, and updating other dependencies to their latest versions.
 
+It also includes a new feature for exporting tabular data to PDF format, as well as a number of improvements and bug fixes.
 
 
 

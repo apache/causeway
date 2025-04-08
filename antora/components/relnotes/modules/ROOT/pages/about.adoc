@@ -23,8 +23,8 @@ a| Apache Causeway 3.3.0
 | 14
 | 9
 |
-* xref:relnotes:ROOT:2025/3.2.0/relnotes.adoc[Release Notes]
-* xref:relnotes:ROOT:2025/3.2.0/mignotes.adoc[Migration Notes]
+* xref:relnotes:ROOT:2025/3.3.0/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2025/3.3.0/mignotes.adoc[Migration Notes]
 
 | 4th Jan 2025
 | 3.2.0
