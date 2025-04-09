@@ -70,6 +70,7 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
             @Override
             public Class<? extends T> apply(InvocationHandler handler) {
+//                return createClass(handler);
                 return (Class<? extends T>) proxyClassByInvocationHandler.computeIfAbsent(handler, this::createClass);
             }
 
@@ -137,7 +138,6 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
                 final var constructor = proxyClass.getConstructor(constructorArgTypes == null ? _Constants.emptyClasses : constructorArgTypes);
                 return constructor.newInstance(constructorArgs == null ? _Constants.emptyObjects : constructorArgs);
             }
-
         };
 
     }

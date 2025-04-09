@@ -73,28 +73,35 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
 
     @Test
     void testWrapper_waitingOnDomainEvent() throws InterruptedException {
-
+        MemoryUsage.measureMetaspace("exercise", ()->{
 // with caching
-        MemoryUsage.measureMetaspace("whole thing", ()->{
-//            extracted(1, 1);      // 1,980 KB
-//            extracted(1, 2000);   // 3,794 KB
-//            extracted(20, 1);     // 2,468 KB
-            extracted(20, 2000);    // 3,636 KB
-//
+//            exercise(1, 0);         // 2,053 KB
+//            exercise(1, 2000);      // 3,839 KB. // some leakage from collections
+//            exercise(20, 0);        // 2,112 KB
+//            exercise(20, 2000);     // 3,875 KB
+//            exercise(2000, 0);      // 3,260 KB. // ? increased some, is it significant; a lot less than without caching
+//            exercise(2000, 200);    // 4,294 KB.
+//            exercise(20000, 0);     // 3,265 KB  // no noticeable leakage compared to 2000; MUCH less than without caching
+
 // without caching
-//            extracted(1, 1);      //   2,114 KB
-//            extracted(1, 1000);   //   9,846 KB
-//            extracted(20, 1);     //   2,635 KB
-//            extracted(20, 2000);  // 217,582 KB
+//            exercise(1, 0);        //   2,244 KB
+//            exercise(1, 2000);     //.  3,669 KB // some leakage from collections
+//            exercise(20, 0);       //   2,440 KB
+//            exercise(20, 2000);    //.  4,286 KB
+//            exercise(2000, 0);     //  15,148 KB // significant leakage from 20
+//            exercise(2000, 200);   //  20,423 KB
+//            exercise(20000, 0);    //.115,729 KB
         });
     }
 
-    private void extracted(int instances, int loops) {
-        for(int i = 0; i < instances; i++) {
+    private void exercise(int instances, int loops) {
+        for (int i = 0; i < instances; i++) {
             val inventoryManager = factoryService.viewModel(JpaInventoryManager.class);
+            JpaInventoryManager jpaInventoryManager = wrapper.wrap(inventoryManager);
+            jpaInventoryManager.foo();
 
-            for (var j = 0; j< loops; j++) {
-                List<JpaProduct> allProducts = wrapper.wrap(inventoryManager).getAllProducts();
+            for (var j = 0; j < loops; j++) {
+                List<JpaProduct> allProducts = jpaInventoryManager.getAllProducts();
                 allProducts.forEach(product -> {
                     String unused = product.getName();
                 });
