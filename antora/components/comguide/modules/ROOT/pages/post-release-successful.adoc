@@ -483,6 +483,15 @@ git push origin release-{page-causewayreleaseversion}-$RC --delete
 
 == Bump baselines for nightly/weekly builds
 
+Nightly builds of the framework's packages are available in two different locations:
+
+* First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
+
+* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
+
+Bump the `BASELINE` variables for each, as explained below.
+
+
 === Main repo (weekly builds)
 
 In the main repo, in `.github/workflows`, update the `BASELINE` variable in all scripts:
@@ -496,8 +505,9 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayreleaseversion}
+      BASELINE: {page-causewayreleaseversion}   # <.>
 ----
+<.> adjust as necessary
 
 * in `ci-build-site-no-push.yml`:
 +
@@ -508,8 +518,9 @@ jobs:
   build:
 
     env:
-      BASELINE: {page-causewayreleaseversion}
+      BASELINE: {page-causewayreleaseversion}   # <.>
 ----
+<.> adjust as necessary
 
 * commit and push:
 +
@@ -543,9 +554,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE_MAIN: {page-causewayreleaseversion}
-      BASELINE_EDGE: {page-causewayreleaseversion}
+      BASELINE_MAIN: {page-causewayreleaseversion}      # <.>
+      BASELINE_EDGE: {page-causewayreleaseversion}      # <1>
 ----
+<.> adjust as necessary
 
 * update any other CI scripts that might exist there.
 
@@ -662,14 +674,3 @@ Announce the release using the `@ApacheCauseway` Twitter account.
 
 
 
-== Update BASELINE for the (non-ASF) nightly builds
-
-Nightly builds of the framework's packages are available in two different locations:
-
-* First, they can be found as packages of the main link:https://github.com/apache/causeway[github.com/apache/causeway] repo; these can be accessed using your github credentials.
-+
-Bump the `BASELINE` variable in link:https://github.com/apache/causeway/blob/main/.github/workflows/ci-build-artifacts-no-push-maven.yml#L20[ci-build-artifacts-no-push-maven.yml] (workflow file).
-
-* But they are also to be found as packages within the (non-ASF) link:https://github.com/apache-causeway-committers/causeway-nightly[github.com/apache-causeway-committers/causeway-nightly] repo; no credentials are required for these because the git repo is used as a package repository directly.
-+
-Bump the `BASELINE` variable in link:https://github.com/apache-causeway-committers/causeway-nightly/blob/0fdea0c4e7419b40acc9a03746e4c3cac3f262b2/.github/workflows/apache-causeway-ci-nightly.yml#L15[apache-causeway-ci-nightly.yml] (workflow file).
