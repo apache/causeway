@@ -25,8 +25,10 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceUnitUtil;
 
-import org.springframework.data.jpa.repository.JpaContext;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.data.jpa.repository.JpaContext;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.NamedQuery;
@@ -47,7 +49,6 @@ import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLo
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -58,6 +59,7 @@ class JpaEntityFacet
     // self managed injections via constructor
     @Inject private JpaContext jpaContext;
     @Inject private IdStringifierLookupService idStringifierLookupService;
+    @Inject private OrmMetadataProvider ormMetadataProvider;
 
     private final Class<?> entityClass;
     private PrimaryKeyType<?> primaryKeyType;
@@ -267,7 +269,7 @@ class JpaEntityFacet
     // lazily looks up the ORM metadata (needs an EntityManager)
     @Getter(lazy=true)
     private final EntityOrmMetadata ormMetadata =
-            _MetadataUtil.ormMetadataFor(getEntityManager(), entityClass);
+            ormMetadataProvider.ormMetadataFor(getEntityManager(), entityClass);
 
     // -- DEPENDENCIES
 

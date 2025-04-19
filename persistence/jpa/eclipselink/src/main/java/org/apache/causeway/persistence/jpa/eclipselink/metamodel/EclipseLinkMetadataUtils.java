@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.persistence.jpa.integration.entity;
+package org.apache.causeway.persistence.jpa.eclipselink.metamodel;
 
 import java.util.Optional;
 
@@ -24,59 +24,73 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SingularAttribute;
 
+import org.eclipse.persistence.mappings.foundation.AbstractColumnMapping;
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata.ColumnOrmMetadata;
 
-import org.jspecify.annotations.NonNull;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
+/**
+ * Utility that provides vendor independent ORM metadata {@link EntityOrmMetadata}.
+ * @since 3.4.0 
+ */
 @UtilityClass
-class _MetadataUtil {
-
-    EntityOrmMetadata ormMetadataFor(
+public class EclipseLinkMetadataUtils {
+    
+    public EntityOrmMetadata ormMetadataFor(
             final @NonNull EntityManager entityManager,
             final @NonNull Class<?> entityClass) {
 
-        final EntityType<?> typeMetadata = lookupJpaMetamodel(entityManager, entityClass)
+        final EntityType<?> typeMetadata = lookupJpaMetadata(entityManager, entityClass)
                 .orElseThrow(()->
                     _Exceptions.noSuchElement("cannot find JPA metadata for entity %s", entityClass));
+        var classDescriptor = _EclipseLinkInternals.getClassDescriptor(typeMetadata);
 
         return new EntityOrmMetadata(
                 PersistenceStack.JPA,
-                Optional.empty(), // if somebody knows how to implement this, feel free to inform us
-                Optional.empty(), // if somebody knows how to implement this, feel free to inform us
+                Optional.of(classDescriptor.getTableName()),
+                //TODO not sure if this is the correct method to lookup the schema String
+                Optional.of(classDescriptor.getDefaultTable().getTableQualifier()), 
                 typeMetadata.getIdType().getJavaType(),
                 columns(typeMetadata),
-                typeMetadata);
+                classDescriptor);
     }
 
     // -- HELPER
-
+    
     private Can<ColumnOrmMetadata> columns(final EntityType<?> typeMetadata) {
         return _NullSafe.stream(typeMetadata.getSingularAttributes())
-                .map(_MetadataUtil::column)
+                .map(EclipseLinkMetadataUtils::column)
                 .collect(Can.toCan());
     }
-
-    private ColumnOrmMetadata column(final SingularAttribute sa) {
-        // if somebody knows how to implement this, feel free to inform us
-        return null;
+    
+    @SneakyThrows
+    private ColumnOrmMetadata column(final SingularAttribute<?, ?> sa) {
+        var databaseMapping = _EclipseLinkInternals.getDatabaseMapping(sa);
+        String colName = (databaseMapping instanceof AbstractColumnMapping abstractColumnMapping)
+                ? abstractColumnMapping.getField().getName()
+                : "?";
+        return new ColumnOrmMetadata(colName, sa.getName(), sa.getBindableJavaType().getName(), databaseMapping);
     }
 
     /**
      * find the JPA meta-model associated with this (corresponding) entity
      */
-    private Optional<EntityType<?>> lookupJpaMetamodel(
+    private <T> Optional<EntityType<T>> lookupJpaMetadata(
             final EntityManager entityManager,
-            final Class<?> entityClass) {
-        return entityManager.getMetamodel().getEntities()
-                .stream()
-                .filter(type -> type.getJavaType().equals(entityClass))
-                .findFirst();
+            final Class<T> entityClass) {
+        
+        var entityType = Try.call(()->entityManager.getMetamodel().entity(entityClass))
+                .getValue();
+        return entityType;
     }
-
+    
 }

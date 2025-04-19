@@ -34,6 +34,7 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
+    requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.persistence.jpa.integration;
     requires org.apache.logging.log4j;
     requires org.eclipse.persistence.core;
@@ -45,5 +46,6 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     requires spring.jdbc;
     requires spring.orm;
     requires spring.tx;
+    requires org.eclipse.persistence.jpa;
 
 }

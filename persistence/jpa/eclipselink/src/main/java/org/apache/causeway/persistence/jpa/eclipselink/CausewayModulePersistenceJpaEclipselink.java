@@ -20,6 +20,7 @@ package org.apache.causeway.persistence.jpa.eclipselink;
 
 import java.sql.SQLException;
 import java.util.Map;
+
 import javax.sql.DataSource;
 
 import jakarta.inject.Inject;
@@ -44,6 +45,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings;
+import org.apache.causeway.persistence.jpa.eclipselink.metamodel.EclipseLinkMetadataService;
 import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 
 import lombok.SneakyThrows;
@@ -61,7 +63,8 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration
 @Import({
-    CausewayModulePersistenceJpaIntegration.class
+    CausewayModulePersistenceJpaIntegration.class,
+    EclipseLinkMetadataService.class
 })
 @EnableConfigurationProperties(ElSettings.class)
 @Log4j2
