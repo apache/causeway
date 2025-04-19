@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.object;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -36,8 +35,9 @@ implements ManagedObject, Bookmarkable.NoBookmark {
             final ObjectSpecification objSpec,
             final Object pojo) {
         this.objSpec = objSpec;
-        _Assert.assertTrue(!objSpec.isValue());
-        _Assert.assertTrue(!objSpec.isEntityOrViewModel());
+        // don't make any assumptions on potential use-cases, hence commented out ... 
+        //_Assert.assertTrue(!objSpec.isValue());
+        //_Assert.assertTrue(!objSpec.isEntityOrViewModel());
         this.pojo = specialization().assertCompliance(objSpec, pojo);
     }
 

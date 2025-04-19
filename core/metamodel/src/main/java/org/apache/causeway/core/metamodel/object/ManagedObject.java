@@ -533,13 +533,17 @@ permits
     }
     /**
      * OTHER
+     * @apiNote potential use case: allows to work with detached entity pojos
+     *      in a light weight fashion,
+     *      treating them as data snapshots, not considering state changes
+     *      (e.g. reuse of ORM metadata while accessing a secondary data store)
      * @param spec - required
      * @param pojo - if <code>null</code> maps to {@link #empty(ObjectSpecification)}
      * @see ManagedObject.Specialization.TypePolicy#EXACT_TYPE_REQUIRED
      * @see ManagedObject.Specialization.BookmarkPolicy#NO_BOOKMARK
      * @see ManagedObject.Specialization.PojoPolicy#STATEFUL
      */
-    private static ManagedObject other(
+    public static ManagedObject other(
             final @NonNull ObjectSpecification spec,
             final @Nullable Object pojo) {
         return pojo != null
