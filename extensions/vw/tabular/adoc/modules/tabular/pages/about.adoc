@@ -60,19 +60,29 @@ public class AppManifest {
 
 == Custom Export (SPI)
 
-To provide a custom exporter, simply implement `CollectionContentsExporter` and register with _Spring_.
+To provide a custom exporter, simply implement `TabularExporter` and register with _Spring_.
 
 [source, java]
-.Collection Contents Exporter (SPI)
+.Tabular Exporter (SPI)
 ----
+package org.apache.causeway.applib.tabular;
+
 /**
  * SPI to provide file export to table views.
  *
- * @since 2.0 {@index}}
+ * @since 3.2
  */
-public interface CollectionContentsExporter {
+public interface TabularExporter {
 
-    File createExportFile(DataTable dataTable);
+    /**
+     * Implementing exporters need to write given tabular data from
+     * {@link org.apache.causeway.commons.tabular.TabularModel.TabularSheet} into the {@link File exportFile},
+     * which is provided by the framework for the duration of a single request cycle.
+     *
+     * @param dataTable data model for the table
+     * @param exportFile destination, this exporter writes its data to
+     */
+    void export(TabularModel.TabularSheet tabularSheet, File exportFile);
 
     CommonMimeType getMimeType();
 
@@ -100,8 +110,57 @@ public interface CollectionContentsExporter {
     int orderOfAppearanceInUiDropdown();
 
     /**
-     * Whether activation of this table presentation view should result in a full page reload.
+     * Whether this exporter applies to given {@code elementType}.
+     * If <code>false</code>, this exporter is not provided to end users.
      */
-    default boolean isPageReloadRequiredOnTableViewActivation() { return false; }
+    default boolean appliesTo(final Class<?> elementType) { return true; }
+
+    /**
+     * Writes given tabular data to a {@link Blob}, using given sheet's name as blob name.
+     */
+    @SneakyThrows
+    default Blob exportToBlob(final TabularModel.TabularSheet tabularSheet) {
+        var tempFile = File.createTempFile(this.getClass().getCanonicalName(), tabularSheet.sheetName());
+        try {
+            export(tabularSheet, tempFile);
+            return Blob.of(tabularSheet.sheetName(), getMimeType(), DataSource.ofFile(tempFile).bytes());
+        } finally {
+            Files.deleteIfExists(tempFile.toPath()); // cleanup
+        }
+    }
+
 }
+
+----
+
+== Tabular Model
+
+Underneath a general purpose tabular model is used, with simple buildings blocks
+
+* Cell
+* Column
+* Row
+* Sheet
+
+[source, java]
+.Tabular Model Example
+----
+import org.apache.causeway.commons.tabular.*;
+import org.apache.causeway.commons.collections.Can;
+
+// create a TabularModel with 2 columns and 2 rows ..  
+        
+var col1 = new TabularModel.TabularColumn(0, "Col-1", "Column Description 1");
+var col2 = new TabularModel.TabularColumn(1, "Col-2", "Column Description 2");
+
+var row1 = new TabularModel.TabularRow(Can.of(
+        TabularModel.TabularCell.single("cell1-1"), 
+        TabularModel.TabularCell.single("cell1-2")));
+var row2 = new TabularModel.TabularRow(Can.of(
+        TabularModel.TabularCell.single("cell1-1"), 
+        TabularModel.TabularCell.single("cell1-2")));
+
+var sheet = new TabularModel.TabularSheet("sheet-1", Can.of(col1, col2), Can.of(row1, row2));
+
+var tabularModel = new TabularModel(sheet);
 ----
