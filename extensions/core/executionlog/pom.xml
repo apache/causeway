@@ -56,6 +56,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.causeway.extensions</groupId>
+				<artifactId>causeway-extensions-executionlog-persistence-jdo-qclasses</artifactId>
+				<version>2.0.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.causeway.extensions</groupId>
 				<artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
 				<version>2.0.0-SNAPSHOT</version>
 			</dependency>
@@ -65,6 +70,7 @@
 	<modules>
 		<module>applib</module>
 		<module>persistence-jdo</module>
+		<module>persistence-jdo-qclasses</module>
 		<module>persistence-jpa</module>
 	</modules>
 

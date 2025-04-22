@@ -35,6 +35,25 @@
         <git-plugin.propertiesDir>org/apache/causeway/extensions/audittrail/persistence-jdo</git-plugin.propertiesDir>
     </properties>
 
+    <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+
     <dependencies>
 
         <dependency>
@@ -45,6 +64,13 @@
         <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
             <artifactId>causeway-persistence-jdo-datanucleus</artifactId>
+            <exclusions>
+                <!-- Prevent the JDO query classes from being generated -->
+                <exclusion>
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-jdo-query</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -58,12 +84,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>javax.jdo</artifactId>
-            <version>${datanucleus-jdo-api.version}</version>
-            <optional>true</optional>  <!-- for datanucleus-jdo-query annotation processor, brought in via profile -->
-        </dependency>
 
         <!-- testing -->
 
