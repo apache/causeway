@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
@@ -51,12 +52,24 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
 
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor();
+
     /**
      * Cached proxy class by invocation handler.
      *
      * <p>
-     *     The only state held in invocation handler is the org.apache.causeway.core.metamodel.spec.ObjectSpecification,
-     *.    in effect the target class.
+     *     For the wrapper factory, the passed in implementation of invocation handler
+     *     (<code>org.apache.causeway.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler</code>)
+     *     implements equals/hashCode based only on the
+     *     <code>org.apache.causeway.core.metamodel.spec.ObjectSpecification</code> (effectively the target class,
+     *     which might be a mixin class); the corresponding proxied class is therefore cached.
+     * </p>
+     *
+     * <p>
+     *     For other implementations, if the invocation handler does not explicitly implement equals/hashCode, then
+     *     effectively there is no caching, and therefore there will be a metaclass memory leak.  Use
+     *     {@link org.apache.causeway.commons.memory.MemoryUsage#measureMetaspace(String, Callable)} to determine
+     *     whether this is a problem.  Note that at the time of writing, the proxy classes for parented collections
+     *     of (wrapped) domain objects are <i>not</i> proxied; but these are rarely used.
      * </p>
      *
      * <p>
