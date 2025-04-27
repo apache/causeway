@@ -18,8 +18,12 @@
  */
 package org.apache.causeway.core.codegen.bytebuddy.services;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.lang.Nullable;
@@ -29,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryServiceAbstract;
@@ -44,7 +49,22 @@ import net.bytebuddy.matcher.ElementMatchers;
 @Service
 public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
+
     private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor();
+    /**
+     * Cached proxy class by invocation handler.
+     *
+     * <p>
+     *     The only state held in invocation handler is the org.apache.causeway.core.metamodel.spec.ObjectSpecification,
+     *.    in effect the target class.
+     * </p>
+     *
+     * <p>
+     *     The remaining state (defined by WrapperInvocationContext) is held in the proxy object itself as a field.
+     * </p>
+     * @return
+     */
+    private Map<InvocationHandler, Class<?>> proxyClassByInvocationHandler = _Maps.newConcurrentHashMap();
 
     @Override
     public <T> _ProxyFactory<T> factory(
@@ -54,13 +74,27 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
         val objenesis = new ObjenesisStd();
 
-        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
-        nextProxyDef(base, interfaces)
-        .intercept(InvocationHandlerAdapter.of(handler))
-        .make()
-        .load(_Context.getDefaultClassLoader(),
-                strategyAdvisor.getSuitableStrategy(base))
-        .getLoaded();
+        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = new Function<>() {
+
+            @Override
+            public Class<? extends T> apply(InvocationHandler handler) {
+                return (Class<? extends T>) proxyClassByInvocationHandler.computeIfAbsent(handler, this::createClass);
+            }
+
+            private Class<? extends T> createClass(InvocationHandler handler) {
+                try (final var unloaded = nextProxyDef(base, interfaces)
+                        .intercept(InvocationHandlerAdapter.of(handler))
+                        .defineField(WRAPPER_INVOCATION_CONTEXT_FIELD_NAME, Object.class, Modifier.PUBLIC)
+                        .make()
+                ) {
+                    return unloaded
+                            .load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base))
+                            .getLoaded();
+                } catch (IOException e) {
+                    throw new UncheckedIOException("Failed to generate proxy class", e);
+                }
+            }
+        };
 
         return new _ProxyFactory<T>() {
 
@@ -68,7 +102,6 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
             public T createInstance(final InvocationHandler handler, final boolean initialize) {
 
                 try {
-
                     if(initialize) {
                         ensureSameSize(constructorArgTypes, null);
                         return _Casts.uncheckedCast( createUsingConstructor(handler, null) );
@@ -101,20 +134,18 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
             private Object createNotUsingConstructor(final InvocationHandler invocationHandler) {
                 final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
-                final Object object = objenesis.newInstance(proxyClass);
-                return object;
+                return objenesis.newInstance(proxyClass);
             }
 
             // -- HELPER (create with initialize)
 
             private Object createUsingConstructor(final InvocationHandler invocationHandler, @Nullable final Object[] constructorArgs)
                     throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-                final Class<? extends T> proxyClass = proxyClassFactory.apply(invocationHandler);
-                return proxyClass
-                        .getConstructor(constructorArgTypes==null ? _Constants.emptyClasses : constructorArgTypes)
-                        .newInstance(constructorArgs==null ? _Constants.emptyObjects : constructorArgs);
+                final var proxyClass = proxyClassFactory.apply(invocationHandler);  // creates or fetches from cache
+                final var constructor =
+                        proxyClass.getConstructor(constructorArgTypes == null ? _Constants.emptyClasses : constructorArgTypes);
+                return constructor.newInstance(constructorArgs == null ? _Constants.emptyObjects : constructorArgs);
             }
-
         };
 
     }

@@ -25,10 +25,8 @@ import java.lang.reflect.InvocationHandler;
  */
 public interface DelegatingInvocationHandler<T> extends InvocationHandler {
 
-    T getDelegate();
+    Class<T> getTargetClass();
 
-    public boolean isResolveObjectChangedEnabled();
-
-    public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled);
+    T getTarget(Object proxyObject);
 
 }
