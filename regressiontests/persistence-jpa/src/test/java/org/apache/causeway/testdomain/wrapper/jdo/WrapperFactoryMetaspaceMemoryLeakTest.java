@@ -73,20 +73,20 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
     void testWrapper_waitingOnDomainEvent() throws InterruptedException {
         MemoryUsage.measureMetaspace("exercise", ()->{
 // with caching
-//            exercise(1, 0);         // 2,053 KB
+//            exercise(1, 0);         // 2,221 KB
 //            exercise(1, 2000);      // 3,839 KB. // some leakage from collections
 //            exercise(20, 0);        // 2,112 KB
 //            exercise(20, 2000);     // 3,875 KB
-//            exercise(2000, 0);      // 3,260 KB. // ? increased some, is it significant; a lot less than without caching
+//            exercise(2000, 0);      // 3,263 KB. // ? increased some, is it significant; a lot less than without caching
 //            exercise(2000, 200);    // 4,294 KB.
-//            exercise(20000, 0);     // 3,265 KB  // no noticeable leakage compared to 2000; MUCH less than without caching
+//            exercise(20000, 0);     // 3,243 KB  // no noticeable leakage compared to 2000; MUCH less than without caching
 
 // without caching
 //            exercise(1, 0);        //   2,244 KB
 //            exercise(1, 2000);     //.  3,669 KB // some leakage from collections
 //            exercise(20, 0);       //   2,440 KB
 //            exercise(20, 2000);    //.  4,286 KB
-//            exercise(2000, 0);     //  15,148 KB // significant leakage from 20
+            exercise(2000, 0);     //  14,580 KB // significant leakage from 20
 //            exercise(2000, 200);   //  20,423 KB
 //            exercise(20000, 0);    //.115,729 KB
         });
