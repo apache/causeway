@@ -64,17 +64,13 @@ class ProxyCreatorTestUsingCodegenPlugin {
         }
 
         @Override
-        public Employee getDelegate() {
+        public Employee getTarget(Object proxyObject) {
             return delegate;
         }
 
         @Override
-        public boolean isResolveObjectChangedEnabled() {
-            return false;
-        }
-
-        @Override
-        public void setResolveObjectChangedEnabled(final boolean resolveObjectChangedEnabled) {
+        public Class<Employee> getTargetClass() {
+            return Employee.class;
         }
 
         public boolean wasInvoked(final String methodName) {

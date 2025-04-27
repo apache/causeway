@@ -32,6 +32,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.quartz.JobExecutionContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -106,7 +107,8 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             val counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
             val control = AsyncControl.returning(Counter.class);
-            wrapperFactory.asyncWrap(counter, control).bumpUsingDeclaredAction();
+            Counter counter1 = wrapperFactory.asyncWrap(counter, control);
+            counter1.bumpUsingDeclaredAction();
 
             // wait til done
             control.getFuture().get();

@@ -24,12 +24,14 @@ import java.util.Map;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtimeservices.wrapper.proxy.ProxyCreator;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.val;
 
 @RequiredArgsConstructor
@@ -37,35 +39,42 @@ public class ProxyContextHandler {
 
     @NonNull private final ProxyCreator proxyCreator;
 
+    @SneakyThrows
     public <T> T proxy(
-            final T domainObject,
-            final ManagedObject adapter,
-            final SyncControl syncControl) {
-
+            final MetaModelContext metaModelContext,
+            final ObjectSpecification targetSpecification,
+            final T targetPojo,
+            final SyncControl syncControl
+    ) {
         val invocationHandler = new DomainObjectInvocationHandler<T>(
-                domainObject,
-                null, // mixeeAdapter ignored
-                adapter,
-                syncControl,
-                this);
+                metaModelContext,
+                this,
+                targetSpecification
+        );
 
-        return proxyCreator.instantiateProxy(invocationHandler);
+        T proxyObject = proxyCreator.instantiateProxy(invocationHandler);
+        WrapperInvocationContext.set(proxyObject, new WrapperInvocationContext(targetPojo, null, syncControl, null));
+
+        return proxyObject;
     }
 
+    @SneakyThrows
     public <T> T mixinProxy(
-            final T mixin,
-            final ManagedObject mixeeAdapter,
-            final ManagedObject mixinAdapter,
+            final MetaModelContext metaModelContext,
+            final ObjectSpecification targetSpecification,
+            final T targetMixinPojo,
+            final Object mixeePojo,
             final SyncControl syncControl) {
 
         val invocationHandler = new DomainObjectInvocationHandler<T>(
-                mixin,
-                mixeeAdapter,
-                mixinAdapter,
-                syncControl,
-                this);
+                metaModelContext,
+                this, targetSpecification
+        );
 
-        return proxyCreator.instantiateProxy(invocationHandler);
+        T proxyObject = proxyCreator.instantiateProxy(invocationHandler);
+        WrapperInvocationContext.set(proxyObject, new WrapperInvocationContext(targetMixinPojo, mixeePojo, syncControl, null));
+
+        return proxyObject;
     }
 
 
@@ -74,20 +83,22 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, E> Collection<E> proxy(
+            final Object proxyObject,
             final Collection<E> collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
+        // TODO: to introduce caching of proxy classes, we'd need to pull collectionToBeProxied
+        //  out of the handler's state, and move into a variant of WrapperInvocationContext, set into the proxyCollection
         val collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
-                        collectionToBeProxied, handler, otma);
-        collectionInvocationHandler.setResolveObjectChangedEnabled(
-                handler.isResolveObjectChangedEnabled());
+                proxyObject, collectionToBeProxied, handler, otma);
 
         val proxyBase = CollectionSemantics
                 .valueOfElseFail(collectionToBeProxied.getClass())
                 .getContainerType();
 
-        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
+        final var proxyCollection = proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
+        return proxyCollection;
     }
 
     /**
@@ -95,17 +106,20 @@ public class ProxyContextHandler {
      * handler.
      */
     public <T, P, Q> Map<P, Q> proxy(
-            final Map<P, Q> collectionToBeProxied,
+            final Object proxyObject,
+            final Map<P, Q> mapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
+        // TODO: to introduce caching of proxy classes, we'd need to pull mapToBeProxied
+        //  out of the handler's state, and move into a variant of WrapperInvocationContext, set into the proxyMap
         val mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
-                collectionToBeProxied, handler, otma);
-        mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
+                proxyObject, mapToBeProxied, handler, otma);
 
         val proxyBase = Map.class;
 
-        return proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
+        final var proxyMap = proxyCreator.instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
+        return proxyMap;
     }
 
 

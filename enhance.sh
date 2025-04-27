@@ -28,8 +28,9 @@ usage() {
   echo "  -m : secman (extensions/security)"                                   >&2
   echo "  -s : session log (extensions/security)"                              >&2
   echo "  -d : demo (examples/demo/domain)"                                    >&2
-  echo "  -t : JDO regression tests (regressiontests/stable)"                  >&2
-  echo "  -u : JDO regression tests (regressiontests/stable-cmdexecauditsess)" >&2
+  echo "  -r : JDO regression tests (all)"                                     >&2
+  echo "  -u : JDO regression tests (cmdexecauditsess only)"                   >&2
+  echo "  -w : JDO regression tests (wrapperfactory only)"                     >&2
   echo "  -A : add -am (also make)"     >&2
 }
 
@@ -42,6 +43,7 @@ EXECUTIONLOG=""
 EXECUTIONOUTBOX=""
 REGRESSIONTESTS_STABLE=""
 REGRESSIONTESTS_CMDEXECAUDITSESS=""
+REGRESSIONTESTS_WRAPPERFACTORY=""
 SECMAN=""
 SESSIONLOG=""
 ALSO_MAKE=""
@@ -49,7 +51,7 @@ ALSO_MAKE=""
 PATHS=()
 ALL_IF_REQUIRED=""
 
-while getopts ":acdeomshtuwA" arg; do
+while getopts ":acdeomsrhtuwA" arg; do
   case $arg in
     h)
       usage
@@ -83,14 +85,19 @@ while getopts ":acdeomshtuwA" arg; do
       DEMO="enhance"
       PATHS+=( "examples/demo/domain" )
       ;;
-    t)
-      REGRESSIONTESTS_STABLE="enhance"
-      PATHS+=( "regressiontests/stable" )
+    r)
+      REGRESSIONTESTS="enhance"
+      PATHS+=( "regressiontests" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     u)
       REGRESSIONTESTS_CMDEXECAUDITSESS="enhance"
-      PATHS+=( "regressiontests/stable-cmdexecauditsess/persistence-jdo" )
+      PATHS+=( "regressiontests/cmdexecauditsess/persistence-jdo" )
+      ALL_IF_REQUIRED="-Dmodule-all"
+      ;;
+    w)
+      REGRESSIONTESTS_WRAPPERFACTORY="enhance"
+      PATHS+=( "regressiontests/core-wrapperfactory" )
       ALL_IF_REQUIRED="-Dmodule-all"
       ;;
     A)
@@ -111,8 +118,9 @@ echo "EXECUTIONOUTBOX                     : $EXECUTIONOUTBOX"
 echo "SECMAN                              : $SECMAN"
 echo "SESSIONLOG                          : $SESSIONLOG"
 echo "DEMO                                : $DEMO"
-echo "REGRESSIONTESTS_STABLE              : $REGRESSIONTESTS_STABLE"
+echo "REGRESSIONTESTS                     : $REGRESSIONTESTS"
 echo "REGRESSIONTESTS_CMDEXECAUDITSESS    : $REGRESSIONTESTS_CMDEXECAUDITSESS"
+echo "REGRESSIONTESTS_WRAPPERFACTORY      : $REGRESSIONTESTS_WRAPPERFACTORY"
 echo ""
 echo "ALSO_MAKE                           : $ALSO_MAKE"
 
