@@ -136,7 +136,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
     /**
      *
-     * @param proxyObject - not used.
+     * @param proxyObject - holds the reference to {@link WrapperInvocationContext} which in turn references the target pojo (and mixee pojo if target is a mixin).
      * @param method - the method invoked on the proxy
      * @param args - the args to the method invoked on the proxy
      * @throws Throwable
