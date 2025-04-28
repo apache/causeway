@@ -200,7 +200,7 @@ identified
         module-path for testing, that is, put everything on the class-path -->
         <swagger-core.version>2.2.30</swagger-core.version>
 
-        <wicket.version>10.4.0</wicket.version>
+        <wicket.version>10.5.0</wicket.version>
         <wicket-bootstrap.version>7.0.9</wicket-bootstrap.version> <!--
         de.agilecoders.wicket:wicket-bootstrap... -->
         <wicket-webjars.version>4.0.6</wicket-webjars.version> <!--
