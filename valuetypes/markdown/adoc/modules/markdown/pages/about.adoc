@@ -98,7 +98,8 @@ And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest]
 @Configuration
 @Import({
         CausewayModuleValMarkdownUiWkt.class,
-        CausewayModuleValMarkdownPersistenceXxx.class,  <!--.-->
+		CausewayModuleValMarkdownMetaModel.class,
+        
         ...
 })
 public class AppManifest {
