@@ -207,7 +207,7 @@ identified
         de.agilecoders.wicket.webjars:wicket-webjars -->
         <wicket-viewer-jquery.version>3.7.1</wicket-viewer-jquery.version> <!--
         as served by wicket via webjars -->
-        <wicketstuff.version>10.4.0</wicketstuff.version> <!--
+        <wicketstuff.version>10.5.0</wicketstuff.version> <!--
         org.wicketstuff:wicketstuff-select2 -->
 
         <!-- OTHER -->
