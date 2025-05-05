@@ -23,10 +23,10 @@ import java.awt.image.BufferedImage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFDrawing;
+import org.apache.poi.xssf.streaming.SXSSFPicture;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
-import org.apache.poi.xssf.usermodel.XSSFDrawing;
-import org.apache.poi.xssf.usermodel.XSSFPicture;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import org.apache.causeway.commons.internal.image._Images;
 
@@ -35,11 +35,11 @@ import org.apache.causeway.commons.internal.image._Images;
  * @see <a href="https://www.baeldung.com/java-add-image-excel">baeldung</a>
  */
 record ExcelImageHandler(
-    XSSFWorkbook workbook,
-    XSSFDrawing drawing) {
+    SXSSFWorkbook workbook,
+    SXSSFDrawing drawing) {
     
     ExcelImageHandler(Sheet sheet) {
-        this((XSSFWorkbook) sheet.getWorkbook(), (XSSFDrawing) sheet.createDrawingPatriarch());
+        this((SXSSFWorkbook) sheet.getWorkbook(), (SXSSFDrawing) sheet.createDrawingPatriarch());
     }
 
     void addImage(BufferedImage value, Cell cell) {
@@ -59,7 +59,7 @@ record ExcelImageHandler(
     
     // -- HELPER
     
-    private XSSFPicture addImage(BufferedImage image, int rowIndex, int colIndex) {
+    private SXSSFPicture addImage(BufferedImage image, int rowIndex, int colIndex) {
         var imgId = workbook.addPicture(_Images.toBytes(_Images.resizeToMaxHeight(image, 120)), Workbook.PICTURE_TYPE_PNG);
         var anchor = new XSSFClientAnchor();
         

@@ -29,8 +29,8 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
@@ -84,7 +84,7 @@ public record ExcelFileWriter(@Nullable Options options) {
 
     @SneakyThrows
     public void write(final TabularModel tabular, final File tempFile) {
-        try(final Workbook wb = new XSSFWorkbook()) {
+        try(final Workbook wb = new SXSSFWorkbook()) {
             tabular.sheets().forEach(sheet->writeSheet(wb, sheet));
             try(var fos = new FileOutputStream(tempFile)) {
                 wb.write(fos);
@@ -124,6 +124,9 @@ public record ExcelFileWriter(@Nullable Options options) {
         Row row;
         
         var sheet = wb.createSheet(sheetName);
+        if(sheet instanceof SXSSFSheet sxssfSheet) {
+            sxssfSheet.trackAllColumnsForAutoSizing();
+        }
         var cellWriter = new ExcelCellWriter(5, new ExcelImageHandler(sheet));
         
         var cellStyleProvider = CellStyleProvider.create(wb, options);
