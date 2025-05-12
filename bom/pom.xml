@@ -106,7 +106,7 @@ identified
         <commons-httpclient.version>4.5.12</commons-httpclient.version>
         <commons-io.version>2.19.0</commons-io.version>
 
-        <cucumber.version>7.22.1</cucumber.version>
+        <cucumber.version>7.22.2</cucumber.version>
 
         <datanucleus-api-jdo.version>6.0.5</datanucleus-api-jdo.version>
         <datanucleus-api-jpa.version>6.0.2</datanucleus-api-jpa.version>
