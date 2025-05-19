@@ -37,7 +37,7 @@ extends WebjarsCssResourceReference {
         new FullCalendarCssReference();
 
     private FullCalendarCssReference() {
-        super("fullcalendar/6.1.9/index.global.min.css");
+        super("fullcalendar/6.1.10/index.global.min.css");
     }
 
     /**

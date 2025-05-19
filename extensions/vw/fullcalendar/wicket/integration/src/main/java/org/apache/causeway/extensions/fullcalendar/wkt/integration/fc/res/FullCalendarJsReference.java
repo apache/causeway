@@ -36,7 +36,7 @@ extends WebjarsJavaScriptResourceReference {
         new FullCalendarJsReference();
 
     private FullCalendarJsReference() {
-        super("fullcalendar/6.1.9/index.global.min.js");
+        super("fullcalendar/6.1.10/index.global.min.js");
     }
 
     /**
