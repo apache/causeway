@@ -36,11 +36,7 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.integrations.junit5.JupiterApprovals;
@@ -305,21 +301,13 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
             options = new Options();
         }
         return options.withScrubber(s -> {
-                    try {
-                        var objectMapper = JsonMapper.builder()
-                            .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
-                            .build();
-
-                        String prettyJson = objectMapper
-                            .writerWithDefaultPrettyPrinter()
-                            .writeValueAsString(objectMapper.readTree(s));
-                        if (bookmarkOptions == BookmarkOptions.SCRUB) {
-                            prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
-                        }
-                        return prettyJson;
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
+                    String prettyJson = org.apache.causeway.testing.unittestsupport.applib.util.ApprovalUtils
+                        .jsonPropertiesSortedWhenParentedBy(parentKey->"locations".equals(parentKey))
+                        .scrub(s);
+                    if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                        prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
                     }
+                    return prettyJson;
                 })
                 .forFile().withExtension(".json");
     }
