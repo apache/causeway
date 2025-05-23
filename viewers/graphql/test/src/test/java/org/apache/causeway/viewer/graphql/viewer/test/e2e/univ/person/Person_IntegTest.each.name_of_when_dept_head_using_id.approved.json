@@ -2,8 +2,8 @@
   "errors" : [ {
     "message" : "Exception while fetching data (/rich/Scenario/When/university_dept_People/nameOf/invoke/results) : The 'logicalTypeName' is required along with the 'id', because the input type 'university.dept.Person' is abstract",
     "locations" : [ {
-      "line" : 9,
-      "column" : 15
+      "column" : 15,
+      "line" : 9
     } ],
     "path" : [ "rich", "Scenario", "When", "university_dept_People", "nameOf", "invoke", "results" ],
     "extensions" : {
