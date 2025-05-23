@@ -37,7 +37,9 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
@@ -180,8 +182,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
      */
     protected TestInfo testInfo;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     protected HttpGraphQlTester graphQlTester() {
         WebTestClient client =
                 WebTestClient.bindToServer()
@@ -192,10 +192,10 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
 
     /**
      * Builds an HTTP request based on the current {@link TestInfo}, with suffix <code>.submit.gql</code>,
-     * and unmarshalls the response as a string
+     * and unmarshalls the response as a string.
+     * (throws an exception if an error occurs during the submission)
      *
      * @return the response body as a string
-     * @throws Exception if an error occurs during the submission
      */
     protected String submit() {
         return submit(Collections.emptyMap());
@@ -245,7 +245,7 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         var uri = URI.create(String.format("http://0.0.0.0:%d/graphql", port));
 
         var gqlBody = new GqlBody(resourceContent);
-        var gqlBodyStr = objectMapper.writeValueAsString(gqlBody);
+        var gqlBodyStr = new ObjectMapper().writeValueAsString(gqlBody);
         var bodyPublisher = HttpRequest.BodyPublishers.ofString(gqlBodyStr);
 
         return HttpRequest.newBuilder().
@@ -306,7 +306,13 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
         }
         return options.withScrubber(s -> {
                     try {
-                        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                        var objectMapper = JsonMapper.builder()
+                            .configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+                            .build();
+
+                        String prettyJson = objectMapper
+                            .writerWithDefaultPrettyPrinter()
+                            .writeValueAsString(objectMapper.readTree(s));
                         if (bookmarkOptions == BookmarkOptions.SCRUB) {
                             prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
                         }
