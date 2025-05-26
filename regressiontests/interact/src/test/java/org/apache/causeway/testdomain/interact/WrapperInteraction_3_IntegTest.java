@@ -18,21 +18,26 @@
  */
 package org.apache.causeway.testdomain.interact;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.inject.Inject;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
-import org.apache.causeway.applib.services.wrapper.InvalidException;
+import org.apache.causeway.applib.annotation.Optionality;
+import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -40,8 +45,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
-import org.apache.causeway.testdomain.model.interaction.InteractionDemo;
-import org.apache.causeway.testdomain.model.interaction.InteractionDemo_biArgEnabled;
 import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
 
 import lombok.Data;
@@ -52,53 +55,62 @@ import lombok.val;
         classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class,
-                WrapperInteractionTest.Customer.class,
-                WrapperInteractionTest.ConcreteMixin.class,
-                WrapperInteractionTest.ConcreteMixin2.class,
+
+                WrapperInteraction_3_IntegTest.Task.class,
+                WrapperInteraction_3_IntegTest.Task.Succeeded.class,
+                WrapperInteraction_3_IntegTest.Task.Failed.class,
         }
 )
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class WrapperInteractionTest
+class WrapperInteraction_3_IntegTest
 extends InteractionTestAbstract {
 
     @Data @DomainObject(nature = Nature.VIEW_MODEL)
-    static class Customer {
-        String name;
-        @Action public String who() { return name; }
-    }
+    public static class Task {
 
-    // an abstract mixin class
-    static abstract class MixinAbstract<T extends Object> {
-        public T act(final String startTime, final String endTime) {
-            return null;
+        @RequiredArgsConstructor
+        enum Outcome {
+            SUPER(true),
+            GREAT(true),
+            OK(true),
+            BAD(false),
+            TERRIBLE(false),
+            JUST_GIVE_UP(false),;
+
+            final boolean representsSuccess;
+
+            public static List<Outcome> successes() {
+                return Arrays.stream(Outcome.values()).filter(x -> x.representsSuccess).collect(Collectors.toList());
+            }
+            public static List<Outcome> failures() {
+                return Arrays.stream(Outcome.values()).filter(x -> ! x.representsSuccess).collect(Collectors.toList());
+            }
         }
-    }
 
-    @Action
-    @RequiredArgsConstructor
-    public static class ConcreteMixin
-    extends MixinAbstract<String> {
-        @SuppressWarnings("unused")
-        private final Customer mixee;
-        @Override
-        public String act(final String startTime, final String endTime) {
-            return "acted";
+        @Property(optionality = Optionality.OPTIONAL)
+        Outcome outcome;
+
+        @Action
+        public class Succeeded
+        extends MixinAbstract {
+            public List<Task.Outcome> choices0Act() { return Task.Outcome.successes(); }
         }
-    }
 
-    @Action
-    @RequiredArgsConstructor
-    public static class ConcreteMixin2
-    extends MixinAbstract<String> {
-        @SuppressWarnings("unused")
-        private final Customer mixee;
+        @Action
+        public class Failed
+        extends MixinAbstract {
+            public List<Task.Outcome> choices0Act() { return Task.Outcome.failures(); }
+        }
 
-        @Override
-        public String act(final String startTime, final String endTime) {
-            return "acted2";
+        // an abstract (inner) mixin class (required public if introspection policy does not process private methods)
+        public abstract class MixinAbstract {
+            public Task act(final Task.Outcome outcome) {
+                Task.this.outcome = outcome;
+                return Task.this;
+            }
         }
     }
 
@@ -106,14 +118,23 @@ extends InteractionTestAbstract {
 
     @Test
     void mixinMemberNamedFacet_whenSharingSameAbstractMixin() {
-        val objectSpec = specificationLoader.specForType(Customer.class).get();
+
+        val mixinSpec1 = specificationLoader.specForType(Task.Succeeded.class).get();
+        val mixinSpec2 = specificationLoader.specForType(Task.Failed.class).get();
+
+        assertTrue(mixinSpec1.isMixin());
+        assertTrue(mixinSpec2.isMixin());
+
+        assertTrue(mixinSpec1.mixinFacetElseFail().isMixinFor(Task.class));
+        assertTrue(mixinSpec2.mixinFacetElseFail().isMixinFor(Task.class));
+
+        val objectSpec = specificationLoader.specForType(Task.class).get();
 
         assertEquals(
                 2L,
                 objectSpec.streamRuntimeActions(MixedIn.INCLUDED)
                 .filter(ObjectAction::isMixedIn)
                 .peek(act->{
-                    //System.out.println("act: " + act);
                     val memberNamedFacet = act.getFacet(MemberNamedFacet.class);
                     assertNotNull(memberNamedFacet);
                     assertTrue(memberNamedFacet.getSpecialization().isLeft());
@@ -123,26 +144,14 @@ extends InteractionTestAbstract {
 
     @Test
     void mixinActionValidation() {
-        InvalidException cause = assertThrows(InvalidException.class, ()-> {
-            wrapMixin(ConcreteMixin.class, new Customer()).act(null, "17:00");
-        });
-        assertEquals("'Start Time' is mandatory", cause.getMessage());
 
-        InvalidException cause2 = assertThrows(InvalidException.class, ()-> {
-            wrapMixin(ConcreteMixin2.class, new Customer()).act(null, "17:00");
-        });
-        assertEquals("'Start Time' is mandatory", cause2.getMessage());
+        final Task task = new Task();
+
+        wrapMixin(Task.Succeeded.class, task).act(Task.Outcome.SUPER);
+        Assertions.assertThat(task).extracting(Task::getOutcome).isEqualTo(Task.Outcome.SUPER);
+
+        wrapMixin(Task.Failed.class, task).act(Task.Outcome.JUST_GIVE_UP);
+        Assertions.assertThat(task).extracting(Task::getOutcome).isEqualTo(Task.Outcome.JUST_GIVE_UP);
     }
-
-    @Test
-    void regularPropertyAccess() {
-        assertEquals("initial", wrapper.wrap(new InteractionDemo()).getString2());
-    }
-
-    @Test
-    void mixinActionAccess() {
-        assertEquals(3, wrapper.wrapMixin(InteractionDemo_biArgEnabled.class, new InteractionDemo()).act(1, 2));
-    }
-
 
 }

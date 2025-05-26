@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
@@ -34,24 +35,35 @@ import lombok.val;
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
 abstract class PluralInvocationHandlerAbstract<T, P>
-extends DelegatingInvocationHandlerDefault<P> {
+extends DelegatingInvocationHandlerAbstract<P> {
 
     private final OneToManyAssociation oneToManyAssociation;
     private final T domainObject;
     private final CollectionSemantics collectionSemantics;
 
+    private final Object proxyObject;
+
+    private final P target;
+
+    public P getTarget(Object proxyObject) {
+        return target;
+    }
+
     protected PluralInvocationHandlerAbstract(
+            final Object proxyObject,
             final P collectionOrMapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma,
             final CollectionSemantics collectionSemantics) {
 
         super(otma.getMetaModelContext(),
-                collectionOrMapToBeProxied,
-                handler.getSyncControl());
+                (Class<P>)collectionOrMapToBeProxied.getClass()
+        );
+        this.proxyObject = proxyObject;
 
+        this.target = collectionOrMapToBeProxied;
         this.oneToManyAssociation = otma;
-        this.domainObject = handler.getDelegate();
+        this.domainObject = handler.getTarget(proxyObject);
         this.collectionSemantics = collectionSemantics;
     }
 
@@ -67,17 +79,15 @@ extends DelegatingInvocationHandlerDefault<P> {
     public Object invoke(final Object collectionObject, final Method method, final Object[] args) throws Throwable {
 
         // delegate
-        final Object returnValueObj = delegate(method, args);
+        final Object returnValueObj = delegate(proxyObject, method, args);
 
         val policy = collectionSemantics.getInvocationHandlingPolicy();
 
         if (policy.getIntercepted().contains(method)) {
 
-            resolveIfRequired(domainObject);
-
             val event =
                     new CollectionMethodEvent(
-                            getDelegate(),
+                            getTarget(proxyObject),
                             getCollection().getFeatureIdentifier(),
                             getDomainObject(),
                             method.getName(),

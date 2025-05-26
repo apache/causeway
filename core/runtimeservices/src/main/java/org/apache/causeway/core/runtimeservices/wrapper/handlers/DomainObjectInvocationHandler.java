@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
@@ -51,13 +52,11 @@ import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
@@ -67,6 +66,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.val;
 import lombok.extern.log4j.Log4j2;
@@ -75,12 +75,15 @@ import lombok.extern.log4j.Log4j2;
  *
  * @param <T>
  */
+@EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Log4j2
 public class DomainObjectInvocationHandler<T>
-extends DelegatingInvocationHandlerDefault<T> {
+extends DelegatingInvocationHandlerAbstract<T> {
 
     private final ProxyContextHandler proxyContextHandler;
-    private final MetaModelContext mmContext;
+
+    @EqualsAndHashCode.Include // this is the only state that is significant to distinguish one handler from another
+    private final ObjectSpecification targetSpecification;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -102,25 +105,21 @@ extends DelegatingInvocationHandlerDefault<T> {
      */
     protected Method __causeway_executionModes;
 
-    private final EntityFacet entityFacet;
-    private final ManagedObject mixeeAdapter;
 
     public DomainObjectInvocationHandler(
-            final T domainObject,
-            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
-            final ManagedObject targetAdapter,
-            final SyncControl syncControl,
-            final ProxyContextHandler proxyContextHandler) {
+            final MetaModelContext metaModelContext,
+            final ProxyContextHandler proxyContextHandler,
+            final ObjectSpecification targetSpecification
+    ) {
         super(
-                targetAdapter.getSpecification().getMetaModelContext(),
-                domainObject,
-                syncControl);
-
-        this.mmContext = targetAdapter.getSpecification().getMetaModelContext();
+                metaModelContext,
+                (Class<T>) targetSpecification.getCorrespondingClass()
+        );
         this.proxyContextHandler = proxyContextHandler;
+        this.targetSpecification = targetSpecification;
 
         try {
-            titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
+            titleMethod = getTargetClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -128,38 +127,60 @@ extends DelegatingInvocationHandlerDefault<T> {
             __causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
             __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
             __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
-
-
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
                     "Could not locate reserved declared methods in the WrappingObject interfaces",
                     nsme);
         }
-
-        entityFacet = targetAdapter.getSpecification().entityFacet().orElse(null);
-
-        this.mixeeAdapter = mixeeAdapter;
     }
 
     /**
      *
-     * @param proxyObjectUnused - not used.
+     * @param proxyObject - holds the reference to {@link WrapperInvocationContext} which in turn references the target pojo (and mixee pojo if target is a mixin).
      * @param method - the method invoked on the proxy
      * @param args - the args to the method invoked on the proxy
      * @throws Throwable
      */
     @Override
-    public Object invoke(final Object proxyObjectUnused, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object proxyObject, final Method method, final Object[] args) throws Throwable {
 
+        final var wic = WrapperInvocationContext.get(proxyObject);
+        if(wic != null) {
+            return doInvoke(proxyObject, method, args);
+        }
+
+        throw new IllegalStateException("Unable to find the wrapper invocation context");
+    }
+
+    /**
+     * The target, either a domain object or mixin instance (wrapping a mixee).
+     * @return
+     */
+    @Override
+    public T getTarget(Object proxyObject) {
+        return (T) WrapperInvocationContext.get(proxyObject).targetPojo;
+    }
+
+
+    public ManagedObject getMixeeAdapter(Object proxyObject) {
+        Object mixeePojo = WrapperInvocationContext.get(proxyObject).mixeePojo;
+        return adaptAndGuardAgainstWrappingNotSupported(mixeePojo);
+    }
+
+    public SyncControl getSyncControl(Object proxyObject) {
+        return WrapperInvocationContext.get(proxyObject).syncControl;
+    }
+
+    private Object doInvoke(Object proxyObject, Method method, Object[] args) throws IllegalAccessException, InvocationTargetException {
         if (isObjectMethod(method)) {
-            return delegate(method, args);
+            return delegate(proxyObject, method, args);
         }
 
         if(isEnhancedEntityMethod(method)) {
-            return delegate(method, args);
+            return delegate(proxyObject, method, args);
         }
 
-        final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
+        final ManagedObject targetAdapter =  metaModelContext.getObjectManager().adapt(getTarget(proxyObject));
 
         if(!targetAdapter.getSpecialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -169,24 +190,23 @@ extends DelegatingInvocationHandlerDefault<T> {
             return handleTitleMethod(targetAdapter);
         }
 
-        final ObjectSpecification targetSpec = targetAdapter.getSpecification();
-        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+        val resolvedMethod = _GenericResolver.resolveMethod(method, targetSpecification.getCorrespondingClass())
                 .orElseThrow();
 
         // save method, through the proxy
         if (method.equals(__causeway_saveMethod)) {
-            return handleSaveMethod(targetAdapter, targetSpec);
+            return handleSaveMethod(proxyObject, targetAdapter, targetSpecification);
         }
 
         if (method.equals(__causeway_wrappedMethod)) {
-            return getDelegate();
+            return getTarget(proxyObject);
         }
 
         if (method.equals(__causeway_executionModes)) {
-            return getSyncControl().getExecutionModes();
+            return getSyncControl(proxyObject).getExecutionModes();
         }
 
-        val objectMember = targetSpec.getMemberElseFail(resolvedMethod);
+        val objectMember = targetSpecification.getMemberElseFail(resolvedMethod);
         val memberId = objectMember.getId();
 
         val intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
@@ -195,7 +215,7 @@ extends DelegatingInvocationHandlerDefault<T> {
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
-            return method.invoke(getDelegate(), args);
+            return method.invoke(getTarget(proxyObject), args);
         }
 
         if (objectMember.isOneToOneAssociation()) {
@@ -207,11 +227,11 @@ extends DelegatingInvocationHandlerDefault<T> {
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
 
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnProperty(targetAdapter, args, otoa);
+                return handleGetterMethodOnProperty(proxyObject, targetAdapter, args, otoa);
             }
 
             if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION) {
-                return handleSetterMethodOnProperty(targetAdapter, args, otoa);
+                return handleSetterMethodOnProperty(proxyObject, targetAdapter, args, otoa);
             }
         }
         if (objectMember.isOneToManyAssociation()) {
@@ -222,7 +242,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(targetAdapter, args, otma, memberId);
+                return handleGetterMethodOnCollection(proxyObject, targetAdapter, args, otma, memberId);
             }
         }
 
@@ -234,34 +254,34 @@ extends DelegatingInvocationHandlerDefault<T> {
 
             val objectAction = (ObjectAction) objectMember;
 
-            if(Facets.mixinIsPresent(targetSpec)) {
-                if (mixeeAdapter == null) {
+            if(Facets.mixinIsPresent(targetSpecification)) {
+                if (getMixeeAdapter(proxyObject) == null) {
                     throw _Exceptions.illegalState(
                             "Missing the required mixeeAdapter for action '%s'",
                             objectAction.getId());
                 }
-                MmAssertionUtils.assertIsBookmarkSupported(mixeeAdapter);
+                MmAssertionUtils.assertIsBookmarkSupported(getMixeeAdapter(proxyObject));
 
-                final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
+                final ObjectMember mixinMember = determineMixinMember(getMixeeAdapter(proxyObject), objectAction);
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(mixeeAdapter, args, (ObjectAction)mixinMember);
+                        return handleActionMethod(proxyObject, getMixeeAdapter(proxyObject), args, (ObjectAction) mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
-                        return handleGetterMethodOnProperty(mixeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
+                        return handleGetterMethodOnProperty(proxyObject, getMixeeAdapter(proxyObject), new Object[0], (OneToOneAssociation) mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberId);
+                        return handleGetterMethodOnCollection(proxyObject, getMixeeAdapter(proxyObject), new Object[0], (OneToManyAssociation) mixinMember, memberId);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
-                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpec));
+                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpecification));
                 }
             }
 
             // this is just a regular non-mixin action.
-            return handleActionMethod(targetAdapter, args, objectAction);
+            return handleActionMethod(proxyObject, targetAdapter, args, objectAction);
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
@@ -289,22 +309,20 @@ extends DelegatingInvocationHandlerDefault<T> {
         // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
     }
 
-    public InteractionInitiatedBy getInteractionInitiatedBy() {
-        return shouldEnforceRules()
+    public InteractionInitiatedBy getInteractionInitiatedBy(Object proxyObject) {
+        return shouldEnforceRules(proxyObject)
                 ? InteractionInitiatedBy.USER
                 : InteractionInitiatedBy.FRAMEWORK;
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
-        return entityFacet!=null
-                ? entityFacet.isProxyEnhancement(method)
-                : false;
+        return targetSpecification.entityFacet()
+                .map(x -> x.isProxyEnhancement(method))
+                .orElse(false);
     }
 
 
     private Object handleTitleMethod(final ManagedObject targetAdapter) {
-
-        resolveIfRequired(targetAdapter);
 
         val targetNoSpec = targetAdapter.getSpecification();
         val titleContext = targetNoSpec
@@ -316,18 +334,18 @@ extends DelegatingInvocationHandlerDefault<T> {
 
 
     private Object handleSaveMethod(
-            final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
+            Object proxyObject, final ManagedObject targetAdapter, final ObjectSpecification targetNoSpec) {
 
-        runValidationTask(()->{
+        runValidationTask(proxyObject, ()->{
             val interactionResult =
-                    targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
+                    targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy(proxyObject));
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
 
         val spec = targetAdapter.getSpecification();
         if(spec.isEntity()) {
-            return runExecutionTask(()->{
+            return runExecutionTask(proxyObject, ()->{
                 MmEntityUtils.persistInCurrentTransaction(targetAdapter);
                 return null;
             });
@@ -338,28 +356,27 @@ extends DelegatingInvocationHandlerDefault<T> {
 
 
     private Object handleGetterMethodOnProperty(
+            final Object proxyObject,
             final ManagedObject targetAdapter,
             final Object[] args,
             final OneToOneAssociation property) {
 
         zeroArgsElseThrow(args, "get");
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, property);
+        runValidationTask(proxyObject, ()->{
+            checkVisibility(proxyObject, targetAdapter, property);
         });
 
-        resolveIfRequired(targetAdapter);
+        return runExecutionTask(proxyObject, ()->{
 
-        return runExecutionTask(()->{
-
-            val interactionInitiatedBy = getInteractionInitiatedBy();
+            val interactionInitiatedBy = getInteractionInitiatedBy(proxyObject);
             val currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
             val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
 
             val propertyAccessEvent = new PropertyAccessEvent(
-                    getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
+                    getTarget(proxyObject), property.getFeatureIdentifier(), currentReferencedObj);
             notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
 
@@ -370,30 +387,29 @@ extends DelegatingInvocationHandlerDefault<T> {
 
 
     private Object handleSetterMethodOnProperty(
+            final Object proxyObject,
             final ManagedObject targetAdapter,
             final Object[] args,
             final OneToOneAssociation property) {
 
         val singleArg = singleArgUnderlyingElseNull(args, "setter");
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, property);
-            checkUsability(targetAdapter, property);
+        runValidationTask(proxyObject, ()->{
+            checkVisibility(proxyObject, targetAdapter, property);
+            checkUsability(proxyObject, targetAdapter, property);
         });
 
-        val argumentAdapter = getObjectManager().adapt(singleArg);
+        val argumentAdapter = metaModelContext.getObjectManager().adapt(singleArg);
 
-        resolveIfRequired(targetAdapter);
-
-        runValidationTask(()->{
+        runValidationTask(proxyObject, ()->{
             val interactionResult = property.isAssociationValid(
-                    targetAdapter, argumentAdapter, getInteractionInitiatedBy())
+                    targetAdapter, argumentAdapter, getInteractionInitiatedBy(proxyObject))
                     .getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
-        return runExecutionTask(()->{
-            property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
+        return runExecutionTask(proxyObject, ()->{
+            property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy(proxyObject));
             return null;
         });
 
@@ -402,6 +418,7 @@ extends DelegatingInvocationHandlerDefault<T> {
 
 
     private Object handleGetterMethodOnCollection(
+            final Object proxyObject,
             final ManagedObject targetAdapter,
             final Object[] args,
             final OneToManyAssociation collection,
@@ -409,28 +426,26 @@ extends DelegatingInvocationHandlerDefault<T> {
 
         zeroArgsElseThrow(args, "get");
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, collection);
+        runValidationTask(proxyObject, ()->{
+            checkVisibility(proxyObject, targetAdapter, collection);
         });
 
-        resolveIfRequired(targetAdapter);
+        return runExecutionTask(proxyObject, ()->{
 
-        return runExecutionTask(()->{
-
-            val interactionInitiatedBy = getInteractionInitiatedBy();
+            val interactionInitiatedBy = getInteractionInitiatedBy(proxyObject);
             val currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
             val currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            val collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
+            val collectionAccessEvent = new CollectionAccessEvent(getTarget(proxyObject), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
                 val collectionViewObject = lookupWrappingObject(
-                        (Collection<?>) currentReferencedObj, collection);
+                        proxyObject, (Collection<?>) currentReferencedObj, collection);
                 notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                val mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
+                val mapViewObject = lookupWrappingObject(proxyObject, (Map<?, ?>) currentReferencedObj,
                         collection);
                 notifyListeners(collectionAccessEvent);
                 return mapViewObject;
@@ -444,6 +459,7 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     private Collection<?> lookupWrappingObject(
+            final Object proxyObject,
             final Collection<?> collectionToLookup,
             final OneToManyAssociation otma) {
         if (collectionToLookup instanceof WrappingObject) {
@@ -453,10 +469,11 @@ extends DelegatingInvocationHandlerDefault<T> {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyContextHandler.proxy(collectionToLookup, this, otma);
+        return proxyContextHandler.proxy(proxyObject, collectionToLookup, this, otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
+            final Object proxyObject,
             final Map<?, ?> mapToLookup,
             final OneToManyAssociation otma) {
         if (mapToLookup instanceof WrappingObject) {
@@ -466,18 +483,19 @@ extends DelegatingInvocationHandlerDefault<T> {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyContextHandler.proxy(mapToLookup, this, otma);
+        return proxyContextHandler.proxy(proxyObject, mapToLookup, this, otma);
     }
 
 
 
     private Object handleActionMethod(
+            final Object proxyObject,
             final ManagedObject targetAdapter,
             final Object[] args,
             final ObjectAction objectAction) {
 
         val head = objectAction.interactionHead(targetAdapter);
-        val objectManager = getObjectManager();
+        val objectManager = metaModelContext.getObjectManager();
 
         // adapt argument pojos to managed objects
         val argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
@@ -488,14 +506,14 @@ extends DelegatingInvocationHandlerDefault<T> {
                     : ManagedObject.empty(paramSpec);
         }));
 
-        runValidationTask(()->{
-            checkVisibility(targetAdapter, objectAction);
-            checkUsability(targetAdapter, objectAction);
-            checkValidity(head, objectAction, argAdapters);
+        runValidationTask(proxyObject, ()->{
+            checkVisibility(proxyObject, targetAdapter, objectAction);
+            checkUsability(proxyObject, targetAdapter, objectAction);
+            checkValidity(proxyObject, head, objectAction, argAdapters);
         });
 
-        return runExecutionTask(()->{
-            val interactionInitiatedBy = getInteractionInitiatedBy();
+        return runExecutionTask(proxyObject, ()->{
+            val interactionInitiatedBy = getInteractionInitiatedBy(proxyObject);
 
             val returnedAdapter = objectAction.execute(
                     head, argAdapters,
@@ -507,12 +525,13 @@ extends DelegatingInvocationHandlerDefault<T> {
     }
 
     private void checkValidity(
+            final Object proxyObject,
             final ActionInteractionHead head,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 
         val interactionResult = objectAction
-                .isArgumentSetValid(head, argAdapters, getInteractionInitiatedBy())
+                .isArgumentSetValid(head, argAdapters, getInteractionInitiatedBy(proxyObject))
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
@@ -534,21 +553,23 @@ extends DelegatingInvocationHandlerDefault<T> {
     private final Where where = Where.ANYWHERE;
 
     private void checkVisibility(
+            final Object proxyObject,
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
 
-        val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(), where);
+        val visibleConsent = objectMember.isVisible(targetObjectAdapter, getInteractionInitiatedBy(proxyObject), where);
         val interactionResult = visibleConsent.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
     private void checkUsability(
+            final Object proxyObject,
             final ManagedObject targetObjectAdapter,
             final ObjectMember objectMember) {
 
         val interactionResult = objectMember.isUsable(
                 targetObjectAdapter,
-                getInteractionInitiatedBy(),
+                getInteractionInitiatedBy(proxyObject),
                 where)
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
@@ -590,39 +611,39 @@ extends DelegatingInvocationHandlerDefault<T> {
 
     // -- HELPER
 
-    private boolean shouldEnforceRules() {
-        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+    private boolean shouldEnforceRules(Object proxyObject) {
+        return !getSyncControl(proxyObject).getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
     }
 
-    private boolean shouldExecute() {
-        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
+    private boolean shouldExecute(Object proxyObject) {
+        return !getSyncControl(proxyObject).getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
     }
 
-    private void runValidationTask(final Runnable task) {
-        if(!shouldEnforceRules()) {
+    private void runValidationTask(Object proxyObject, final Runnable task) {
+        if(!shouldEnforceRules(proxyObject)) {
             return;
         }
         try {
             task.run();
         } catch(Exception ex) {
-            handleException(ex);
+            handleException(proxyObject, ex);
         }
     }
 
-    private <X> X runExecutionTask(final Supplier<X> task) {
-        if(!shouldExecute()) {
+    private <X> X runExecutionTask(Object proxyObject, final Supplier<X> task) {
+        if(!shouldExecute(proxyObject)) {
             return null;
         }
         try {
             return task.get();
         } catch(Exception ex) {
-            return _Casts.uncheckedCast(handleException(ex));
+            return _Casts.uncheckedCast(handleException(proxyObject, ex));
         }
     }
 
     @SneakyThrows
-    private Object handleException(final Exception ex) {
-        val exceptionHandler = getSyncControl().getExceptionHandler()
+    private Object handleException(Object proxyObject, final Exception ex) {
+        val exceptionHandler = getSyncControl(proxyObject).getExceptionHandler()
                 .orElse(null);
 
         if(exceptionHandler==null) {
@@ -648,12 +669,6 @@ extends DelegatingInvocationHandlerDefault<T> {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));
         }
-    }
-
-    // -- DEPENDENCIES
-
-    private ObjectManager getObjectManager() {
-        return mmContext.getObjectManager();
     }
 
 }

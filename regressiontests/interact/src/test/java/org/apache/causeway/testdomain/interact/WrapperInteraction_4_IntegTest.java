@@ -55,16 +55,16 @@ import lombok.val;
         classes = {
                 Configuration_headless.class,
                 Configuration_usingInteractionDomain.class,
-                WrapperInteractionTest4.Task.class,
-                WrapperInteractionTest4.Task.Succeeded.class,
-                WrapperInteractionTest4.Task.Failed.class,
+                WrapperInteraction_4_IntegTest.Task.class,
+                WrapperInteraction_4_IntegTest.Task.Succeeded.class,
+                WrapperInteraction_4_IntegTest.Task.Failed.class,
         }
 )
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
-class WrapperInteractionTest4
+class WrapperInteraction_4_IntegTest
 extends InteractionTestAbstract {
 
     @Data @DomainObject(nature = Nature.VIEW_MODEL)
