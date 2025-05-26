@@ -35,6 +35,7 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -87,10 +88,10 @@ class WrapperFactoryDefaultTest {
             }
 
             @Override
-            protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
+            protected <T> T createProxy(ObjectSpecification targetSpecification, final T targetPojo, final SyncControl syncControl) {
                 WrapperFactoryDefaultTest.this.createProxyCalledWithSyncControl = syncControl;
-                WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
-                return domainObject;
+                WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) targetPojo;
+                return targetPojo;
             }
         };
 

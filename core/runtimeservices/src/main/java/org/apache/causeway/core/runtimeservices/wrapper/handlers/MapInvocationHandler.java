@@ -28,11 +28,12 @@ class MapInvocationHandler<T, M extends Map<?,?>>
 extends PluralInvocationHandlerAbstract<T, M> {
 
     public MapInvocationHandler(
+            final Object proxyObject,
             final M mapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(mapToBeProxied, handler, otma,
+        super(proxyObject, mapToBeProxied, handler, otma,
                 CollectionSemantics.MAP);
 
         _Assert.assertTrue(Map.class.isAssignableFrom(mapToBeProxied.getClass()),

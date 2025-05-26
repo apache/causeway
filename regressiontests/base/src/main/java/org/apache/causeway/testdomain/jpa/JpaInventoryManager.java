@@ -50,6 +50,10 @@ public class JpaInventoryManager {
     // -- COUNT PRODUCTS
 
     @Action
+    public void foo() {
+    }
+
+    @Action
     public int countProducts() {
         return getAllProducts().size();
     }
