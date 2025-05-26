@@ -104,9 +104,11 @@ final class _DownloadHandler {
         if(downloadHandler==null) {
             return downloadHandler;
         }
-        if(downloadHandler instanceof ResourceStreamRequestHandler)
-            ((ResourceStreamRequestHandler) downloadHandler)
-            .setCacheDuration(Duration.ZERO);
+        if(downloadHandler instanceof ResourceStreamRequestHandler) {
+            final var requestHandler = (ResourceStreamRequestHandler) downloadHandler;
+            requestHandler.setCacheDuration(Duration.ZERO);
+            return requestHandler;
+        }
 
         return downloadHandler;
     }

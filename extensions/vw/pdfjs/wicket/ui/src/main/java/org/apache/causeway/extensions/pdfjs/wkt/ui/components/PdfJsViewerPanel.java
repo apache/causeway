@@ -186,13 +186,14 @@ implements IRequestListener {
 
         val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
+        CharSequence documentUrl = urlFor(
+                new ListenerRequestHandler(
+                        new PageAndComponentProvider(getPage(), this))) + "&noCache=" + System.currentTimeMillis();
         val pdfJsConfig =
                 scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
-                .withDocumentUrl(urlFor(
-                        new ListenerRequestHandler(
-                                new PageAndComponentProvider(getPage(), this))));
+                .withDocumentUrl(documentUrl);
 
         val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
