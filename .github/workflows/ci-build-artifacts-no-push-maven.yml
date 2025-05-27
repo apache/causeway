@@ -33,7 +33,6 @@ jobs:
     env:
       # to be shared among all steps of this job
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      BASELINE: 3.4.0
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
 
@@ -52,6 +51,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Print Branch Name
+      if: matrix.language == 'java'
+      run: |
+        echo BRANCH_NAME      \: $BRANCH_NAME
 
     - name: Set up JDK (zulu 24)
       if: matrix.language == 'java'
@@ -59,10 +62,18 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: 24
+
     - name: Set up Maven (3.9.9)
+      if: matrix.language == 'java' && env.BRANCH_NAME == 'main'
       uses: stCarolas/setup-maven@v5
       with:
         maven-version: 3.9.9
+    - name: Set up Maven (4.0.0-rc3)
+      if: matrix.language == 'java' && env.BRANCH_NAME == 'v4'
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: 4.0.0-rc3
+
     - name: Print Maven Version
       if: matrix.language == 'java'
       run: mvn --version
@@ -87,7 +98,6 @@ jobs:
       run: |
         echo ==============  ENV  =================
         echo BRANCH_NAME      \: $BRANCH_NAME
-        echo BASELINE         \: $BASELINE
         echo TIMESTAMP        \: $TIMESTAMP
         echo PROJECT_ROOT_PATH\: $PROJECT_ROOT_PATH
         echo CI_SCRIPTS_PATH  \: $CI_SCRIPTS_PATH
