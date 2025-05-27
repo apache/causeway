@@ -38,7 +38,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 1.x {@index}
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(ContentNegotiationServiceOrgApacheIsisV1.LOGICAL_TYPE_NAME)
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 200)
 @Qualifier("OrgApacheIsisV1")
-@Log4j2
+@Slf4j
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".ContentNegotiationServiceOrgApacheIsisV1";

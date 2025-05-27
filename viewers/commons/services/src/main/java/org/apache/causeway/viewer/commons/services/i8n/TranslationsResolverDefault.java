@@ -42,7 +42,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The default implementation of {@link TranslationsResolver}.
@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleViewerCommonsServices.NAMESPACE + ".TranslationsResolverDefault")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class TranslationsResolverDefault implements TranslationsResolver {
 
     private final ServletContext servletContext;

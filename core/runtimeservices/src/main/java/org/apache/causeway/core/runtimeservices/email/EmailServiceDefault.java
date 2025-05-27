@@ -40,7 +40,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link EmailService}, that uses Spring Boot's {@link JavaMailSender} API service
@@ -57,7 +57,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".EmailServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class EmailServiceDefault implements EmailService {
 
     private static final long serialVersionUID = 1L;

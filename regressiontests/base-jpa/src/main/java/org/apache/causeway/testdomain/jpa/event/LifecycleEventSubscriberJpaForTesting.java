@@ -31,11 +31,11 @@ import org.apache.causeway.testdomain.util.dto.IBook;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class LifecycleEventSubscriberJpaForTesting {
 
     private final KVStoreForTesting kvStore;

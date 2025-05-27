@@ -36,7 +36,7 @@ import lombok.Getter;
 @Service
 @Named("causeway.ext.commandReplaySecondary.SecondaryConfig")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-//@Log4j2
+//@Slf4j
 public class SecondaryConfig {
 
     @Getter final String primaryUser;

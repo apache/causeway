@@ -46,7 +46,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @InteractionScope
-//@Log4j2
+//@Slf4j
 public class ScratchpadDefault implements Scratchpad {
 
     /**

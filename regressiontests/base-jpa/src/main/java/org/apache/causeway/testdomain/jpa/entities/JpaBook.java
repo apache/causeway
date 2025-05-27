@@ -47,7 +47,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @EntityListeners(CausewayEntityListener.class)
@@ -71,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
-@Log4j2
+@Slf4j
 public class JpaBook
 extends JpaProduct
 implements IBook {

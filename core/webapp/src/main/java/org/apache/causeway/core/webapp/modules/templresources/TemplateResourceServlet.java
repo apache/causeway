@@ -41,12 +41,12 @@ import org.apache.causeway.core.metamodel.commons.ResourceUtil;
 
 import static org.apache.causeway.commons.internal.base._Strings.pair;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handles HTML-templates, where template's placeholders get replaced by their values.
  */
-@Log4j2
+@Slf4j
 public class TemplateResourceServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

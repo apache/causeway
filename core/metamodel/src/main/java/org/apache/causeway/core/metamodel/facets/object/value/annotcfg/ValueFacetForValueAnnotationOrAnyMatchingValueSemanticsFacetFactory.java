@@ -49,7 +49,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Processes the {@link Value} annotation.
@@ -72,7 +72,7 @@ import lombok.extern.log4j.Log4j2;
  * <p>
  * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
-@Log4j2
+@Slf4j
 public class ValueFacetForValueAnnotationOrAnyMatchingValueSemanticsFacetFactory
 extends FacetFactoryAbstract {
 

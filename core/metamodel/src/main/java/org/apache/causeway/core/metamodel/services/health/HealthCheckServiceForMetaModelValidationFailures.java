@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of {@link HealthCheckService} that checks if the metamodel has been built, and if so whether
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".HealthCheckServiceForMetaModelValidationFailures")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class HealthCheckServiceForMetaModelValidationFailures implements HealthCheckService {
 
     @Override
@@ -74,13 +74,13 @@ public class HealthCheckServiceForMetaModelValidationFailures implements HealthC
                 : Health.ok();
     }
 
-    static Exception ex(ValidationFailures validationFailures) {
+    static Exception ex(final ValidationFailures validationFailures) {
         var messages = validationFailures.getMessages("%d: %s");
         var joinedMessages = String.join("\n", messages);
         return new RuntimeException(joinedMessages);
     }
 
-    static Exception ex(Throwable x) {
+    static Exception ex(final Throwable x) {
         return x instanceof Exception ? (Exception) x : new RuntimeException(x);
     }
 }

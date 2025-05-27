@@ -28,7 +28,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 
-//@Log4j2
+//@Slf4j
 abstract class InternalBidirectionalBinding<T>
 implements ChangeListener<T>, InternalUtil.WeakListener {
 

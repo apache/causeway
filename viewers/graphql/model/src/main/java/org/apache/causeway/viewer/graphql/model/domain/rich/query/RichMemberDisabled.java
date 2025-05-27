@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
@@ -32,9 +31,9 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.MemberInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichMemberDisabled<T extends ObjectMember> extends Element {
 
     private final MemberInteractor<T> memberInteractor;
@@ -48,7 +47,7 @@ public class RichMemberDisabled<T extends ObjectMember> extends Element {
 
         setField(newFieldDefinition()
                 .name("disabled")
-                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class))
+                .type(context.typeMapper.outputTypeFor(String.class))
                 .build());
     }
 

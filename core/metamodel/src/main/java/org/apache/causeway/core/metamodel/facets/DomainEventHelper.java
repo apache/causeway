@@ -54,9 +54,9 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramAssignableFromValue;
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public record DomainEventHelper(
     @NonNull MetamodelEventService metamodelEventService) {
 

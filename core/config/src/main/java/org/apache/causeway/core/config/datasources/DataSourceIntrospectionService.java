@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * For a given <i>Spring</i> context, makes information about configured data-sources available.
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreConfig.NAMESPACE + "..DataSourceIntrospectionService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class DataSourceIntrospectionService {
 
     @Autowired(required = false)
@@ -82,8 +82,10 @@ public class DataSourceIntrospectionService {
 
         var registeredDataSources = Can.ofCollection(dataSources);
 
-        log.debug("about to introspect data-sources: {}",
-                ()->registeredDataSources.map(ds->ds.getClass().getName()));
+        if(log.isDebugEnabled()) {
+            log.debug("about to introspect data-sources: {}",
+                    registeredDataSources.map(ds->ds.getClass().getName()));
+        }
 
         return registeredDataSources
                 .stream()

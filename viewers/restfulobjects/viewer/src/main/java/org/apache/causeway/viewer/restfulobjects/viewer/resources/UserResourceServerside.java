@@ -40,10 +40,10 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Log4j2
+@Slf4j
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
     public UserResourceServerside() {

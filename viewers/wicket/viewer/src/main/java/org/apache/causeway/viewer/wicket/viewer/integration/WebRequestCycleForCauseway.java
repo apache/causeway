@@ -72,7 +72,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Causeway-specific implementation of the Wicket's {@link RequestCycle},
@@ -81,7 +81,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0
  */
-@Log4j2
+@Slf4j
 public class WebRequestCycleForCauseway
 implements
     HasMetaModelContext,
@@ -196,8 +196,8 @@ implements
 
         if(log.isTraceEnabled()) {
             log.trace("onRequestHandlerResolved in (handler: {}, hasSession: {})",
-                    ()->handler.getClass().getName(),
-                    ()->Session.exists() ? Session.get().hashCode() : "false");
+                    handler.getClass().getName(),
+                    Session.exists() ? Session.get().hashCode() : "false");
         }
 
         // this nested class is hidden; it seems it is always used to create a new session after one has expired

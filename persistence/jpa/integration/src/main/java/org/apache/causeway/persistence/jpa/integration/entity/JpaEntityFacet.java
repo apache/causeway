@@ -49,9 +49,9 @@ import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLo
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class JpaEntityFacet
         extends FacetAbstract
         implements EntityFacet {

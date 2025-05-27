@@ -62,7 +62,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link TransactionService}, which delegates to Spring's own transaction management
@@ -78,7 +78,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".TransactionServiceSpring")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Spring")
-@Log4j2
+@Slf4j
 public class TransactionServiceSpring
 implements
     TransactionService {

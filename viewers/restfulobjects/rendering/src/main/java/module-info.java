@@ -44,7 +44,7 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.schema;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires org.joda.time;
     requires spring.beans;
     requires spring.context;

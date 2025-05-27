@@ -29,7 +29,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This filter attempts to ensure that would-be users of the framework are
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * Only if the Accept header is set to application/json is the request allowed
  * to continue through.
  */
-@Log4j2
+@Slf4j
 public class RedirectToDocsFilter implements Filter {
 
     private static final String REDIRECT_TO_KEY = "redirectTo";

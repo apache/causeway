@@ -33,7 +33,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
 @Named("causeway.metamodel.value.LocalTimeValueSemantics")
-//@Log4j2
+//@Slf4j
 public class LocalTimeValueSemantics
 extends TemporalValueSemanticsProvider<LocalTime> {
 

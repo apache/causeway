@@ -54,7 +54,7 @@ import lombok.experimental.Accessors;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsMarshallerBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-//@Log4j2
+//@Slf4j
 public class MenuBarsMarshallerServiceBootstrap
 implements MenuBarsMarshallerService<BSMenuBars> {
 

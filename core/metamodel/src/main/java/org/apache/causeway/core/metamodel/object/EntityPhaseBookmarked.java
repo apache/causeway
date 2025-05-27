@@ -37,9 +37,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject.Specialization;
 import org.apache.causeway.core.metamodel.object.ManagedObjectEntity.PhaseState;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 record EntityPhaseBookmarked(
     @NonNull ObjectSpecification objSpec,
     @NonNull TransientObjectRef<Object> pojoRef,

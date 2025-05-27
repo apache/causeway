@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.graphql.model.registry;
 
-import static graphql.schema.GraphQLEnumType.newEnum;
-import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
@@ -31,24 +28,27 @@ import java.util.stream.Stream;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
+import graphql.schema.GraphQLEnumType;
+import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLNamedType;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLType;
+
+import static graphql.schema.GraphQLEnumType.newEnum;
+import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 
-import graphql.schema.GraphQLEnumType;
-import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLNamedType;
-import graphql.schema.GraphQLObjectType;
-import graphql.schema.GraphQLType;
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class GraphQLTypeRegistry {
 
     private final Provider<Context> contextProvider;

@@ -28,10 +28,10 @@ import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class JpaSupportServiceUsingSpring implements JpaSupportService {
 
     private final JpaContext jpaContextSpring;

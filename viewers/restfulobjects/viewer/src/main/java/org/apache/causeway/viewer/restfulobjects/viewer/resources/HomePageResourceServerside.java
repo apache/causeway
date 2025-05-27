@@ -38,10 +38,10 @@ import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Log4j2
+@Slf4j
 public class HomePageResourceServerside
 extends ResourceAbstract
 implements HomePageResource {

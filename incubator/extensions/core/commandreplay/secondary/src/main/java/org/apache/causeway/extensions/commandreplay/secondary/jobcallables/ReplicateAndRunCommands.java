@@ -37,7 +37,7 @@ import org.apache.causeway.extensions.commandreplay.secondary.spi.ReplayCommandE
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 import org.apache.causeway.extensions.commandreplay.secondary.status.StatusException;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Encodes the algorithm for fetching commands from the primary, and
@@ -51,7 +51,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class ReplicateAndRunCommands implements Callable<SecondaryStatus> {
 
     @Inject CommandExecutorService commandExecutorService;

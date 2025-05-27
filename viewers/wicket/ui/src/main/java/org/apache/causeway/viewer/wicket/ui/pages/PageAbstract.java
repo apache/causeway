@@ -79,14 +79,14 @@ import org.apache.causeway.viewer.wicket.ui.pages.common.viewer.js.CausewayWicke
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 /**
  * Convenience adapter for {@link WebPage}s built up using {@link UiComponentType}s.
  */
-@Log4j2
+@Slf4j
 public abstract class PageAbstract
 extends WebPageBase
 implements ActionPromptProvider {

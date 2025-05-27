@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@Log4j2
+@Slf4j
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer {
 
     @Inject protected TranslationService translationService;

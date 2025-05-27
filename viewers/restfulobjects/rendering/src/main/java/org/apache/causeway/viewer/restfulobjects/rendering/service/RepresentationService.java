@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Configures the Restful Objects viewer to emit custom representations (rather than the
@@ -65,13 +65,13 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".RepresentationService")
 @Priority(PriorityPrecedence.EARLY)
-@Log4j2
+@Slf4j
 public class RepresentationService {
 
     private final List<ContentNegotiationService> contentNegotiationServices;
 
     @Inject
-    public RepresentationService(List<ContentNegotiationService> contentNegotiationServices) {
+    public RepresentationService(final List<ContentNegotiationService> contentNegotiationServices) {
         this.contentNegotiationServices = contentNegotiationServices;
     }
 
@@ -207,19 +207,22 @@ public class RepresentationService {
      * @param connegServiceBuildResponse - the function to ask of the {@link ContentNegotiationService}.
      */
     Response.ResponseBuilder buildResponse(
-            Function<ContentNegotiationService, Response.ResponseBuilder> connegServiceBuildResponse) {
+            final Function<ContentNegotiationService, Response.ResponseBuilder> connegServiceBuildResponse) {
 
-        log.debug("ContentNegotiationServices:\n{}", ()->contentNegotiationServices.stream()
+        if(log.isDebugEnabled()) {
+            log.debug("ContentNegotiationServices:\n{}", contentNegotiationServices.stream()
                 .map(Object::getClass)
                 .map(Class::getSimpleName)
                 .map(s->" - "+s)
                 .collect(Collectors.joining("\n")));
+        }
 
         for (var contentNegotiationService : contentNegotiationServices) {
             var responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
-
-                log.debug("--> winner: {}", ()->contentNegotiationService.getClass().getSimpleName());
+                if(log.isDebugEnabled()) {
+                    log.debug("--> winner: {}", contentNegotiationService.getClass().getSimpleName());
+                }
                 return responseBuilder;
             }
         }

@@ -60,7 +60,7 @@ import org.apache.causeway.extensions.secman.applib.util.ApplicationSecurityDto;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Sets up roles and permissions for both Secman itself and also for all other modules that expose UI features
@@ -74,7 +74,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class SeedUsersAndRolesFixtureScript extends FixtureScript {
 
     @Inject private CausewayConfiguration config;
@@ -174,7 +174,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                     return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
                 }
                 @Override
-                protected void execute(ExecutionContext executionContext) {
+                protected void execute(final ExecutionContext executionContext) {
                     create(tenancyDto.get__name(), tenancyDto.getPath(),
                             tenancyDto.getParentPath(), executionContext);
                 }
@@ -193,7 +193,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                     return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
                 }
                 @Override
-                protected void execute(ExecutionContext executionContext) {
+                protected void execute(final ExecutionContext executionContext) {
 
                     // PERMISSIONS
 

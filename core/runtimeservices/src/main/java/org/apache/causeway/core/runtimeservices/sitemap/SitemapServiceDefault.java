@@ -59,7 +59,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+//@Slf4j
 public class SitemapServiceDefault implements SitemapService {
 
     private final SpecificationLoader specificationLoader;

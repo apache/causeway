@@ -41,7 +41,7 @@ import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
         AuthenticationConverterOfJwt.class,
 
 })
-//@Log4j2
+//@Slf4j
 public class CausewayModuleExtSpringSecurityOAuth2 {
 
 }

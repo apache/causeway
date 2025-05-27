@@ -50,7 +50,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.BookmarkedPagesModelProvider;
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Viewer-specific implementation of {@link AuthenticatedWebSession}, which
@@ -58,7 +58,7 @@ import lombok.extern.log4j.Log4j2;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-@Log4j2
+@Slf4j
 public class AuthenticatedWebSessionForCauseway
 extends AuthenticatedWebSession
 implements

@@ -38,13 +38,13 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Testing")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class EntityPropertyChangeSubscriberForTesting
 implements EntityPropertyChangeSubscriber {
 

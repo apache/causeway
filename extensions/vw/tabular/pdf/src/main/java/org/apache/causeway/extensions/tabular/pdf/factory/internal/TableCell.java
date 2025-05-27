@@ -36,9 +36,9 @@ import org.apache.causeway.extensions.tabular.pdf.factory.FontUtils;
 import org.apache.causeway.extensions.tabular.pdf.factory.HorizontalAlignment;
 import org.apache.causeway.extensions.tabular.pdf.factory.VerticalAlignment;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class TableCell extends Cell {
 
     private final String tableData;

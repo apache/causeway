@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier.ContextType;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The framework's stereotypes {@link DomainService}, {@link DomainObject}, etc.
@@ -56,7 +56,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Configuration(proxyBeanMethods = false)
 @Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewayBeanFactoryPostProcessor")
-@Log4j2
+@Slf4j
 public class CausewayBeanFactoryPostProcessor
 implements
     BeanFactoryPostProcessor,

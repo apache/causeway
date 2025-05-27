@@ -30,7 +30,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry;
 import org.apache.causeway.extensions.commandreplay.secondary.CausewayModuleExtCommandReplaySecondary;
 import org.apache.causeway.extensions.commandreplay.secondary.analyser.CommandReplayAnalyser;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -38,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Named(CausewayModuleExtCommandReplaySecondary.NAMESPACE + ".CommandReplayAnalysisService")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Log4j2
+@Slf4j
 public class CommandReplayAnalysisService {
 
     /**

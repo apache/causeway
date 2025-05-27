@@ -37,7 +37,7 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.core.config.datasources.DataSourceIntrospectionService.DataSourceInfo;
 import org.apache.causeway.extensions.hsqldbmgr.dom.CausewayModuleExtHsqldbMgr;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
         menuBar = DomainServiceLayout.MenuBar.SECONDARY
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
-@Log4j2
+@Slf4j
 public class HsqlDbManagerMenu {
 
     private final String url;

@@ -46,7 +46,7 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleExtCommandLogApplib.NAMESPACE_REPLAY_SECONDARY + ".CommandFetcher")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE) // JUnit Support
-@Log4j2
+@Slf4j
 public class CommandFetcher {
 
     static final String URL_SUFFIX =

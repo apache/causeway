@@ -72,7 +72,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link MenuBarsService}, supporting DTOs
@@ -85,7 +85,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("BS")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class MenuBarsServiceBootstrap
 implements MenuBarsService {
 

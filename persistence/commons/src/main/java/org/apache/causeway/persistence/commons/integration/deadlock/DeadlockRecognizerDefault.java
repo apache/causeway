@@ -19,7 +19,7 @@
 package org.apache.causeway.persistence.commons.integration.deadlock;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 
 import jakarta.annotation.Priority;
@@ -41,13 +41,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Priority(PriorityPrecedence.LATE)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class DeadlockRecognizerDefault implements DeadlockRecognizer {
 
     static final String SQL_SERVER_DEADLOCK_MESSAGE = "chosen as the deadlock victim";
 
     @Override
-    public boolean isDeadlock(Throwable ex) {
+    public boolean isDeadlock(final Throwable ex) {
         val whetherDeadlock = ex instanceof DeadlockLoserDataAccessException || isMessage(ex, SQL_SERVER_DEADLOCK_MESSAGE);
         if (whetherDeadlock) {
             log.warn("Detected deadlock");
@@ -56,11 +56,11 @@ public class DeadlockRecognizerDefault implements DeadlockRecognizer {
         return whetherDeadlock;
     }
 
-    private static boolean isMessage(Throwable ex, String message) {
+    private static boolean isMessage(final Throwable ex, final String message) {
         return isMessage(ex.getMessage(), message);
     }
 
-    private static boolean isMessage(String exMessage, String message) {
+    private static boolean isMessage(final String exMessage, final String message) {
         return exMessage != null && exMessage.contains(message);
     }
 

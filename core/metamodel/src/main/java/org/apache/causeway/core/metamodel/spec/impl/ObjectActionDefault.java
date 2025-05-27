@@ -68,9 +68,9 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class ObjectActionDefault
 extends ObjectMemberAbstract
 implements ObjectAction, HasSpecificationLoaderInternal {

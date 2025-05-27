@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * API for finding registered {@link ComponentFactory}s.
@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
  * Ultimately all requests to locate {@link ComponentFactory}s are routed
  * through to an object implementing this interface.
  */
-@Log4j2
+@Slf4j
 public final class ComponentFactoryRegistry {
 
     private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByComponentType =

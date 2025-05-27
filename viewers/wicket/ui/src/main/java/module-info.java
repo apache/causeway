@@ -132,7 +132,7 @@ module org.apache.causeway.viewer.wicket.ui {
     requires org.apache.causeway.viewer.commons.prism;
     requires org.apache.causeway.viewer.commons.services;
     requires transitive org.apache.causeway.viewer.wicket.model;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires org.apache.wicket.auth.roles;
     requires org.apache.wicket.core;
     requires org.apache.wicket.devutils;
@@ -141,7 +141,6 @@ module org.apache.causeway.viewer.wicket.ui {
     requires org.apache.wicket.util;
     requires org.danekja.jdk.serializable.functional;
     requires org.joda.time;
-    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

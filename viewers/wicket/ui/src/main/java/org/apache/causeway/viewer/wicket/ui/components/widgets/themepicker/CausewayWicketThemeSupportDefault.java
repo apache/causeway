@@ -35,7 +35,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.config.CausewayConfiguration;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import de.agilecoders.wicket.core.settings.NoopThemeProvider;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
@@ -49,7 +49,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 @Named("causeway.viewer.wicket.CausewayWicketThemeSupportDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSupport {
 
     private final _Lazy<ThemeProviderComposite> themeProvider = _Lazy.threadSafe(this::createThemeProvider);

@@ -36,7 +36,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Modifies the way in which an asynchronous action initiated through the
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class AsyncControl<R> extends ControlAbstract<AsyncControl<R>> {
 
     /**

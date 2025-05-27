@@ -83,9 +83,9 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class DomainObjectAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements

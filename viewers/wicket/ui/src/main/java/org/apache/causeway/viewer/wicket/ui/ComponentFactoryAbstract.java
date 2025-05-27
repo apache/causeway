@@ -29,13 +29,13 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Adapter implementation for {@link ComponentFactory}.
  */
 @ToString
-@Log4j2
+@Slf4j
 public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     @ToString.Exclude
@@ -72,7 +72,9 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
                     + componentTypeClass.getName());
         }
         this.componentTypeClass = componentTypeClass;
-        log.debug("new factory {}", this::toString);
+        if(log.isDebugEnabled()) {
+            log.debug("new factory {}", this.toString());
+        }
     }
 
     /**
@@ -110,7 +112,9 @@ public abstract class ComponentFactoryAbstract implements ComponentFactory {
 
     @Override
     public final Component createComponent(final IModel<?> model) {
-        log.debug("creating component {}", getComponentType()::toString);
+        if(log.isDebugEnabled()) {
+            log.debug("creating component {}", getComponentType().toString());
+        }
         return createComponent(getComponentType().getId(), model);
     }
 

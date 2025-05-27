@@ -35,7 +35,7 @@ import lombok.Getter;
 @Service
 @Named(CausewayModuleExtCommandReplayPrimary.NAMESPACE + ".PrimaryConfig")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-//@Log4j2
+//@Slf4j
 public class PrimaryConfig {
 
     @Getter final String secondaryBaseUrlWicket;

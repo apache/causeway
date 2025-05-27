@@ -35,7 +35,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -44,7 +44,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.testing.fixtures.InitialFixtureScriptsInstaller")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class InitialFixtureScriptsInstaller {
 
     private final FixtureScripts fixtureScripts;

@@ -32,6 +32,8 @@ import java.util.function.Predicate;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.core.MethodParameter;
 
@@ -48,10 +50,9 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.commons.ToString;
 
-import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 final class _ServiceInjectorLegacy implements ServiceInjector {
 
     @SuppressWarnings("unused")

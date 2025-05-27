@@ -18,18 +18,18 @@
  */
 package org.apache.causeway.extensions.tabular.pdf.factory.internal;
 
+import java.awt.Color;
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.util.Matrix;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-import java.awt.Color;
-import java.io.IOException;
-import java.util.Arrays;
-
-@Log4j2
+@Slf4j
 final class PageContentStreamOptimized {
     private static final Matrix ROTATION = Matrix.getRotateInstance(Math.PI * 0.5, 0, 0);
 

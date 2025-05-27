@@ -46,7 +46,7 @@ import org.apache.causeway.viewer.graphql.model.exceptions.InvalidException;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-//@Log4j2
+//@Slf4j
 public class RichMutationForProperty extends Element {
 
     private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;

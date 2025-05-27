@@ -42,9 +42,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class ObjectActionMixedIn
 extends ObjectActionDefault
 implements MixedInAction {

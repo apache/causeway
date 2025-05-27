@@ -53,7 +53,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * An implementation of a Quartz {@link Job} that queries for {@link CommandLogEntry}s that have been persisted by
@@ -72,7 +72,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
-@Log4j2
+@Slf4j
 public class RunBackgroundCommandsJob implements Job {
 
     final static int RETRY_COUNT = 3;

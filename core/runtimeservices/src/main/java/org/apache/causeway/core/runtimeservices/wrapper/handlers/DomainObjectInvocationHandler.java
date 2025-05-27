@@ -68,13 +68,13 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @param <T> type of delegate
  */
-@Log4j2
+@Slf4j
 public class DomainObjectInvocationHandler<T>
 extends DelegatingInvocationHandlerAbstract<T> {
 

@@ -39,7 +39,7 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link PageRenderSubscriber} that just
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class PageRenderCollectionLogger implements PageRenderSubscriber {
 
     private final UserService userService;

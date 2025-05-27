@@ -84,7 +84,7 @@ import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link org.apache.causeway.applib.services.grid.GridSystemService} using DTOs based on
@@ -96,7 +96,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Bootstrap")
-@Log4j2
+@Slf4j
 public class GridSystemServiceBootstrap
 extends GridSystemServiceAbstract<BSGrid> {
 

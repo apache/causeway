@@ -62,7 +62,7 @@ import lombok.RequiredArgsConstructor;
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Profile("commandreplay-primary")
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class CommandReplayOnPrimaryService {
 
     @Inject final CommandLogEntryRepository commandLogEntryRepository;

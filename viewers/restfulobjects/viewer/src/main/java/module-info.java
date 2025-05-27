@@ -47,7 +47,7 @@ module org.apache.causeway.viewer.restfulobjects.viewer {
     requires org.apache.causeway.viewer.commons.services;
     requires org.apache.causeway.viewer.restfulobjects.applib;
     requires org.apache.causeway.viewer.restfulobjects.rendering;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

@@ -69,7 +69,7 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 
 import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link InteractionService}, keeping track of the current {@link Interaction}
@@ -82,7 +82,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class InteractionServiceDefault
 implements
     InteractionService,

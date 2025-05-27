@@ -33,12 +33,12 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Handles injection and lifecycle callbacks.
  */
-@Log4j2
+@Slf4j
 record ObjectCreatorFactory() {
 
     static ChainOfResponsibility<ObjectSpecification, ManagedObject> createChain(final MetaModelContext mmc) {

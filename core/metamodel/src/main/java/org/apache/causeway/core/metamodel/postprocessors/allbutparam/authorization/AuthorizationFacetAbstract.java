@@ -28,9 +28,9 @@ import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public abstract class AuthorizationFacetAbstract
 extends FacetAbstract
 implements AuthorizationFacet {

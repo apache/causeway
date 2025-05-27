@@ -44,12 +44,12 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeaderFactory;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.x {@index}
  */
-@Log4j2
+@Slf4j
 public class OutboxClient {
 
     private final RestfulClient client;

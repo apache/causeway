@@ -66,7 +66,6 @@ module org.apache.causeway.commons {
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
-    requires transitive org.apache.logging.log4j;
     requires transitive org.jdom2;
     requires transitive org.jspecify;
     requires transitive org.jsoup;
@@ -81,6 +80,7 @@ module org.apache.causeway.commons {
     requires com.fasterxml.jackson.dataformat.yaml;
     requires com.fasterxml.jackson.datatype.jsr310;
     requires com.fasterxml.jackson.datatype.jdk8;
+    requires org.slf4j;
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;

@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Model used to negotiate the parameter values of an action by means of an UI dialog.
@@ -336,7 +336,7 @@ public class ParameterNegotiationModel {
 
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
-    @Log4j2
+    @Slf4j
     private record ParameterModel(
             int paramIndex,
             @NonNull ObjectActionParameter metaModel,

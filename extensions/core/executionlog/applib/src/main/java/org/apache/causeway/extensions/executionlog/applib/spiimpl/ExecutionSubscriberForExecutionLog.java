@@ -33,7 +33,7 @@ import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecu
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryRepository;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionSubscriberForExecutionLog";
@@ -57,7 +57,7 @@ public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
     }
 
     @Override
-    public void onExecution(Execution<?, ?> execution) {
+    public void onExecution(final Execution<?, ?> execution) {
         if (!isEnabled()) {
             return;
         }

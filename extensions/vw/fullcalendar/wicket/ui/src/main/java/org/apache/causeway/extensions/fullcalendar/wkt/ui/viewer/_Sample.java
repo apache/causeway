@@ -45,7 +45,7 @@ import lombok.experimental.UtilityClass;
  * For troubleshooting and debugging.
  */
 @UtilityClass
-//@Log4j2
+//@Slf4j
 class _Sample {
 
 	public void buildCalendar(final WebMarkupContainer container, final String id) {

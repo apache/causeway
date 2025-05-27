@@ -30,14 +30,14 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 record NavigableSubtreeFacetRecord (
-    Can<MethodHandle> subNodesMethodHandles, 
-    FacetHolder facetHolder) 
+    Can<MethodHandle> subNodesMethodHandles,
+    FacetHolder facetHolder)
 implements NavigableSubtreeFacet {
-    
+
     @Override
     public Class<? extends Facet> facetType() {
         return NavigableSubtreeFacet.class;
@@ -47,7 +47,7 @@ implements NavigableSubtreeFacet {
     public Precedence getPrecedence() {
         return Precedence.DEFAULT;
     }
-    
+
     @Override
     public FacetHolder getFacetHolder() {
         return facetHolder;
@@ -86,6 +86,6 @@ implements NavigableSubtreeFacet {
         visitor.accept("precedence", getPrecedence().name());
         visitor.accept("subNodesMethodHandles", subNodesMethodHandles.map(MethodHandle::toString));
     }
-    
+
 }
 

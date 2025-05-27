@@ -65,7 +65,7 @@ import lombok.experimental.Accessors;
  *
  * @param <T> implementing {@link java.time.temporal.Temporal} type
  */
-//@Log4j2
+//@Slf4j
 public abstract class TemporalValueSemanticsProvider<T extends Temporal>
 extends ValueSemanticsAbstract<T>
 implements TemporalValueSemantics<T> {

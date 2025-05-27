@@ -34,7 +34,7 @@ import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryCo
 import org.apache.causeway.extensions.commandreplay.secondary.jobcallables.ReplicateAndRunCommands;
 import org.apache.causeway.extensions.commandreplay.secondary.status.SecondaryStatus;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @DisallowConcurrentExecution
 @PersistJobDataAfterExecution
-@Log4j2
+@Slf4j
 public class ReplicateAndReplayJob implements Job {
 
     @Inject SecondaryConfig secondaryConfig;

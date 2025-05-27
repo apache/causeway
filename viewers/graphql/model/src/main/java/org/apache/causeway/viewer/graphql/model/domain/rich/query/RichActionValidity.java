@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 import java.util.Map;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
@@ -37,9 +36,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionValidity extends Element {
 
     private final ActionInteractor actionInteractor;
@@ -55,7 +54,7 @@ public class RichActionValidity extends Element {
 
         var fieldBuilder = newFieldDefinition()
                 .name("validate")
-                .type((GraphQLOutputType) this.context.typeMapper.outputTypeFor(String.class));
+                .type(this.context.typeMapper.outputTypeFor(String.class));
 
         actionInteractor.addGqlArguments(objectAction, fieldBuilder, TypeMapper.InputContext.VALIDATE, objectAction.getParameterCount());
         setField(fieldBuilder.build());

@@ -29,10 +29,10 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
-@Log4j2
+@Slf4j
 class _ValidateUtil{
 
     void runValidators(
@@ -50,7 +50,7 @@ class _ValidateUtil{
             try {
                 runValidator(validator, snapshot);
             } catch (Throwable t) {
-                log.error(t);
+                log.error("failure", t);
                 throw t;
             } finally {
                 log.debug("Done validator: {}", validator);

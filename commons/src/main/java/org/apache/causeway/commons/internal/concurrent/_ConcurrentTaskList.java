@@ -31,17 +31,15 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.LongAdder;
 
-import org.apache.logging.log4j.Level;
-
 import org.apache.causeway.commons.concurrent.AwaitableLatch;
 import org.apache.causeway.commons.internal.collections._Lists;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(staticName = "named")
-@Log4j2
+@Slf4j
 public class _ConcurrentTaskList {
 
     @Getter private final String name;
@@ -184,13 +182,12 @@ public class _ConcurrentTaskList {
             return;
         }
 
-        log.printf(Level.INFO,
-                "TaskList '%s' running %d/%d tasks %s, took %.3f milliseconds ",
-                getName(),
+        log.info("TaskList '%s' running %d/%d tasks %s, took %.3f milliseconds "
+            .formatted(getName(),
                 tasksExecuted.longValue(),
                 tasks.size(),
                 context.shouldRunSequential() ? "sequential" : "concurrent",
-                        0.000_001 * executionTimeNanos);
+                        0.000_001 * executionTimeNanos));
 
     }
 

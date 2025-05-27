@@ -34,7 +34,7 @@ import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.experimental.Accessors;
 
-//@Log4j2
+//@Slf4j
 public abstract class MixinFacetAbstract
 extends FacetAbstract
 implements MixinFacet {

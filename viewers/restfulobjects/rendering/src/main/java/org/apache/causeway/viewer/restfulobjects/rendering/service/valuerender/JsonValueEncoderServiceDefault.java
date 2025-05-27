@@ -52,13 +52,13 @@ import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRest
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".JsonValueEncoderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
     private final SpecificationLoader specificationLoader;

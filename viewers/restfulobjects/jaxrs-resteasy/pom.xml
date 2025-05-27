@@ -79,11 +79,6 @@
 			<artifactId>resteasy-spring-boot-starter</artifactId>
 			<exclusions>
 				<exclusion>
-					<!-- don't bring in Spring's backlog, we use log4j-2 instead -->
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-				<exclusion>
 					<groupId>org.jboss.logging</groupId>
 					<artifactId>jboss-logging</artifactId>
 				</exclusion>

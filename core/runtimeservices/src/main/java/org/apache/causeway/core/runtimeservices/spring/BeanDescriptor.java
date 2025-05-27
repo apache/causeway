@@ -25,12 +25,12 @@ import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.collections.Can;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public record BeanDescriptor(
     String beanName,
     Can<String> aliases,
@@ -41,7 +41,7 @@ public record BeanDescriptor(
     static BeanDescriptor of(
             final String beanName,
             final ConfigurableApplicationContext context) {
-        
+
         final ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
         final BeanDefinition definition = beanFactory.getBeanDefinition(beanName);
 

@@ -47,7 +47,7 @@ import org.apache.causeway.extensions.titlecache.applib.event.Cached;
 import org.apache.causeway.extensions.titlecache.applib.event.CachedWithCacheSettings;
 import org.apache.causeway.extensions.titlecache.caffeine.CausewayModuleExtTitlecacheCaffeine;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Holds a cache for each entity type that indicates its title should be cached.
@@ -63,7 +63,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(TitleCacheSubscriber.LOGICAL_TYPE_NAME)
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class TitleCacheSubscriber implements EntityTitleSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtTitlecacheCaffeine.NAMESPACE + ".TitleCacheSubscriber";
@@ -192,7 +192,7 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
             final String logicalTypeName, final CausewayModuleApplib.TitleUiEvent<?> ev) {
         return isCachedByLogicalTypeName.computeIfAbsent(logicalTypeName, ltn -> {
             if (!(ev instanceof Cached)) return false;
-            
+
             return specificationLoader
                 .lookupLogicalType(logicalTypeName)
                 .flatMap(specificationLoader::lookupBeanSort)

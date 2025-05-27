@@ -21,10 +21,12 @@ package org.apache.causeway.core.config.beans;
 import java.util.Map;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.id.LogicalType;
@@ -34,14 +36,13 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 
-import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @implNote we must not rely on CausewayConfiguration or other provisioned
  * services to be available; type classification happens before the post-construct phase
  */
-@Log4j2
+@Slf4j
 record CausewayComponentCollector(
         BeanDefinitionRegistry registry,
         CausewayBeanTypeClassifier causewayBeanTypeClassifier,

@@ -43,9 +43,8 @@ module org.apache.causeway.viewer.wicket.model {
     requires org.apache.causeway.core.webapp;
     requires transitive org.apache.causeway.viewer.commons.applib;
     requires transitive org.apache.causeway.viewer.commons.model;
-    requires org.apache.logging.log4j;
-    requires org.danekja.jdk.serializable.functional;
     requires org.slf4j;
+    requires org.danekja.jdk.serializable.functional;
     requires spring.context;
     requires spring.core;
     requires transitive org.apache.wicket.core;

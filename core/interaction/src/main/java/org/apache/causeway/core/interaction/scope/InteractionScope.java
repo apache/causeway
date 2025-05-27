@@ -34,12 +34,12 @@ import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0
  */
-@Log4j2
+@Slf4j
 class InteractionScope
 implements
     Scope,
@@ -177,7 +177,7 @@ implements
             try {
                 scopedObject.preDestroy();
             } catch (Exception e) {
-                log.error(e);
+                log.error("failure", e);
             }
         });
     }

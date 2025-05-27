@@ -52,7 +52,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+//@Slf4j
 public class EntityPropertyChangeSubscriberForAuditTrail implements EntityPropertyChangeSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".EntityPropertyChangeSubscriberForAuditTrail";

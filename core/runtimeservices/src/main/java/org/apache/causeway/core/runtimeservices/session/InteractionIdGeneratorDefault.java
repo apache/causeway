@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link InteractionIdGenerator}, which simply returns a
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".InteractionIdGenerator")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class InteractionIdGeneratorDefault implements InteractionIdGenerator {
 
     @Override

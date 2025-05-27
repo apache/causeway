@@ -175,38 +175,7 @@
                     <groupId>javax.validation</groupId>
                     <artifactId>validation-api</artifactId>
                 </exclusion>
-                <exclusion>
-                    <!-- we use log4j-2 instead -->
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
             </exclusions>
-        </dependency>
-
-        <!-- Add Log4j2 Dependency, as a replacement for Spring's default
-        'logback'.
-			This requires for the 'spring-boot-starter' to exclude the default logging
-			artifact 'org.springframework.boot:spring-boot-starter-logging' see
-        https://www.callicoder.com/spring-boot-log4j-2-example/ -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- convergence issues from spring-boot-starter-log4j2 -->
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <!-- version clash -->
-                    <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->

@@ -31,11 +31,11 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.resources._Resources;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Path("/image")
-@Log4j2
+@Slf4j
 public class ImageResourceServerside extends ResourceAbstract {
 
     public ImageResourceServerside() {

@@ -25,9 +25,9 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public record ActionInteractionHead(
     @NonNull InteractionHeadRecord interactionHeadRecord,
     @NonNull ObjectAction objectAction,
@@ -48,7 +48,7 @@ implements InteractionHead, HasMetaModel<ObjectAction> {
             final @NonNull MultiselectChoices multiselectChoices) {
         return new ActionInteractionHead(new InteractionHeadRecord(owner, target), objectAction, multiselectChoices);
     }
-    
+
     @Override public ObjectAction getMetaModel() { return objectAction(); }
     @Override public ManagedObject owner() { return interactionHeadRecord.owner(); }
     @Override public ManagedObject target() { return interactionHeadRecord.target(); }
@@ -64,16 +64,16 @@ implements InteractionHead, HasMetaModel<ObjectAction> {
         // init with empty values
         var pendingParamModel = ParameterNegotiationModel.of(managedAction, emptyParameterValues());
 
-        // fill in the parameter defaults with a single sweep through all default providing methods in order, 
+        // fill in the parameter defaults with a single sweep through all default providing methods in order,
         // updating the pendingParamModel at each iteration
         for(var param : getMetaModel().getParameters()) {
             pendingParamModel = pendingParamModel
                 .withParamValue(param.getParameterIndex(), param.getDefault(pendingParamModel));
         }
-        
+
         return pendingParamModel;
-    }    
-    
+    }
+
     // -- HELPER
 
     /**

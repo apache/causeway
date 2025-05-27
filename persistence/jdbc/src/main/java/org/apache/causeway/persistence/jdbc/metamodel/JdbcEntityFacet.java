@@ -23,11 +23,13 @@ import java.util.Optional;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
 import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity;
 import org.springframework.data.relational.core.query.Criteria;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;
 import org.apache.causeway.applib.query.Query;
@@ -46,10 +48,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class JdbcEntityFacet
 extends FacetAbstract
 implements EntityFacet {

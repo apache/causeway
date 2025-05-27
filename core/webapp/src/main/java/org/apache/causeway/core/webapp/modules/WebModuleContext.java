@@ -34,7 +34,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class WebModuleContext {
 
     private final StringBuilder protectedPath = new StringBuilder();
@@ -58,7 +58,7 @@ public class WebModuleContext {
      *  Adds to the list of protected path names (<tt>causeway.protected</tt> context param)
      * @param path
      */
-    public void addProtectedPath(String path) {
+    public void addProtectedPath(final String path) {
         if(protectedPath.length()>0) {
             protectedPath.append(",");
         }
@@ -89,14 +89,14 @@ public class WebModuleContext {
         activeListeners.forEach(listener->listener.contextInitialized(event));
     }
 
-    public void shutdown(ServletContextEvent event) {
+    public void shutdown(final ServletContextEvent event) {
         activeListeners.forEach(listener->shutdownListener(event, listener));
         activeListeners.clear();
     }
 
     // -- HELPER
 
-    private void addListener(ServletContext servletContext, WebModule webModule) {
+    private void addListener(final ServletContext servletContext, final WebModule webModule) {
         log.info(String.format("Setup ServletContext, adding WebModule '%s'", webModule.getName()));
         try {
             final Can<ServletContextListener> listeners = webModule.init(servletContext);
@@ -108,7 +108,7 @@ public class WebModuleContext {
         }
     }
 
-    private void shutdownListener(ServletContextEvent event, ServletContextListener listener) {
+    private void shutdownListener(final ServletContextEvent event, final ServletContextListener listener) {
         try {
             listener.contextDestroyed(event);
         } catch (Exception e) {

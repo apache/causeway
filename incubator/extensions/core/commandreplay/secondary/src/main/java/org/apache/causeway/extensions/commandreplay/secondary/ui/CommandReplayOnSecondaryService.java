@@ -53,7 +53,7 @@ import lombok.RequiredArgsConstructor;
 )
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class CommandReplayOnSecondaryService {
 
     @Inject CommandLogEntryRepository commandLogEntryRepository;

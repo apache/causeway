@@ -87,14 +87,14 @@ import org.apache.causeway.viewer.wicket.ui.components.welcome.WelcomePanelFacto
 import org.apache.causeway.viewer.wicket.ui.components.widgets.objectsimplelink.ObjectLinkSimplePanelFactory;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Registers a hardcoded set of built-in {@link ComponentFactory}s,
  * along with any implementations discovered by Spring.
  */
 @Configuration
-@Log4j2
+@Slf4j
 public class ComponentFactoryConfigWkt {
 
     @Bean

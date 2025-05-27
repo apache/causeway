@@ -30,7 +30,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import lombok.RequiredArgsConstructor;
 
 @Service
-//@Log4j2
+//@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class UserMementoRefinerFromApplicationUser implements UserMementoRefiner {
 

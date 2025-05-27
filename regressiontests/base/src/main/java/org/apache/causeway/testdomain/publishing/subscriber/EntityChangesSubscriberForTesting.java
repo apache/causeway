@@ -32,10 +32,10 @@ import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Log4j2
+@Slf4j
 public class EntityChangesSubscriberForTesting
 implements EntityChangesSubscriber {
 
@@ -56,7 +56,9 @@ implements EntityChangesSubscriber {
         publishedEntries.add(publishedObjects);
 
         kvStore.put(this, "publishedObjects", publishedEntries);
-        log.debug("publish objects {}", ()->ChangesDtoUtils.dtoMapper().toString(publishedObjects.getDto()));
+        if(log.isDebugEnabled()) {
+            log.debug("publish objects {}", ChangesDtoUtils.dtoMapper().toString(publishedObjects.getDto()));
+        }
 
     }
 

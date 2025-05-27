@@ -41,10 +41,10 @@ import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
-@Log4j2
+@Slf4j
 public final class InteractionUtils {
 
     public InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {

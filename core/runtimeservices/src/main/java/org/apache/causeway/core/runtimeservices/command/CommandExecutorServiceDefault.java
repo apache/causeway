@@ -69,7 +69,7 @@ import org.apache.causeway.schema.common.v2.InteractionType;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link CommandExecutorService}.
@@ -80,7 +80,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".CommandExecutorServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor
 public class CommandExecutorServiceDefault implements CommandExecutorService {
 

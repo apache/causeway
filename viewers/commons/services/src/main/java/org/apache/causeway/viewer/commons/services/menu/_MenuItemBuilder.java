@@ -33,9 +33,9 @@ import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiService
 
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 final class _MenuItemBuilder {
 
     static interface Visitor {

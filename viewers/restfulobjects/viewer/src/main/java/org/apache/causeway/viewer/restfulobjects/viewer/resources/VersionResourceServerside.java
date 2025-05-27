@@ -43,7 +43,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Path("/version")
-@Log4j2
+@Slf4j
 public class VersionResourceServerside
 extends ResourceAbstract
 implements VersionResource {

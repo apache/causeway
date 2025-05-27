@@ -30,7 +30,7 @@ module org.apache.causeway.core.interaction {
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.schema;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

@@ -33,9 +33,9 @@ import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaJsReference;
 import org.apache.causeway.valuetypes.vega.ui.wkt.components.js.VegaLiteJsReference;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.markup.MarkupComponent;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class VegaComponentWkt extends MarkupComponent {
 
     private static final long serialVersionUID = 1L;

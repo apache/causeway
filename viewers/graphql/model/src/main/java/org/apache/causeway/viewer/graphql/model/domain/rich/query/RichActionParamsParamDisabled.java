@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
@@ -27,15 +26,15 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
+import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionParamInteractor;
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionParamsParamDisabled extends Element {
 
     private final ActionParamInteractor actionParamInteractor;
@@ -48,7 +47,7 @@ public class RichActionParamsParamDisabled extends Element {
 
         var fieldBuilder = newFieldDefinition()
                 .name("disabled")
-                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
+                .type(context.typeMapper.outputTypeFor(String.class));
         actionParamInteractor.addGqlArguments(actionParamInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.DISABLE, actionParamInteractor.getParamNum()+1);
         setField(fieldBuilder.build());
     }

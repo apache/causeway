@@ -54,7 +54,7 @@ import org.apache.causeway.commons.io.ZipUtils.ZipOptions;
 
 import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents a binary large object.
@@ -79,7 +79,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleApplib.NAMESPACE + ".value.Blob")
 @Value
 @XmlJavaTypeAdapter(Blob.JaxbToStringAdapter.class)   // for JAXB view model support
-@Log4j2
+@Slf4j
 public record Blob(
     String name,
     MimeType mimeType,
@@ -165,6 +165,7 @@ public record Blob(
     /**
      * @deprecated use {@link #bytes()} instead
      */
+    @Deprecated
     public byte[] getBytes() { return bytes(); }
 
     // -- UTILITIES
@@ -183,7 +184,7 @@ public record Blob(
     @SneakyThrows
     public void writeBytesTo(final @Nullable OutputStream os) {
         if(os==null) return;
-        
+
         if(bytes!=null) {
             os.write(bytes);
         }
@@ -203,7 +204,7 @@ public record Blob(
     @SneakyThrows
     public void writeTo(final @Nullable File file) {
         if(file==null) return; // just ignore
-        
+
         try(var os = new FileOutputStream(file)){
             writeBytesTo(os);
         }

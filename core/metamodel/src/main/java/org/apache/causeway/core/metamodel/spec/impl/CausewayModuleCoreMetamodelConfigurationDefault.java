@@ -31,13 +31,13 @@ import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Import({
     SpecificationLoaderDefault.class,
 })
-@Log4j2
+@Slf4j
 public class CausewayModuleCoreMetamodelConfigurationDefault {
 
     @Bean(name=CausewayModuleCoreMetamodel.NAMESPACE + ".ProgrammingModelDefault")

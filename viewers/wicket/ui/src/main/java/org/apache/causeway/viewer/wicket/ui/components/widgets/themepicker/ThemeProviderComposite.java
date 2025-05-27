@@ -30,7 +30,7 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.ThemeProvider;
@@ -40,7 +40,8 @@ import de.agilecoders.wicket.core.settings.ThemeProvider;
  * @since 2.0
  *
  */
-@RequiredArgsConstructor(staticName = "of") @Log4j2
+@RequiredArgsConstructor(staticName = "of")
+@Slf4j
 public class ThemeProviderComposite implements ThemeProvider {
 
     private final Can<ThemeProvider> themeProviders;
@@ -51,7 +52,7 @@ public class ThemeProviderComposite implements ThemeProvider {
     private List<ITheme> availableThemes;
 
     @Override
-    public ITheme byName(String name) {
+    public ITheme byName(final String name) {
         if (!Strings.isEmpty(name)) {
             ensureInit();
             var theme = themesByName.get(name.toLowerCase());

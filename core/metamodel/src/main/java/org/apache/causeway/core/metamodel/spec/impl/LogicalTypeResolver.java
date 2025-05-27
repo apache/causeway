@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides a lookup table for the purpose of recreating domain objects from bookmarks,
@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
  * @apiNote only bookmark-able types will be ever registered
  * @see DomainObject#logicalTypeName()
  */
-@Log4j2
+@Slf4j
 record LogicalTypeResolver(
         Map<String, LogicalType> logicalTypeByName) {
 

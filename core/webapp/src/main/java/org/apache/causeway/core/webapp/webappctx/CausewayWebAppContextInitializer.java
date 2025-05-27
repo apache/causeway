@@ -37,7 +37,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Component
-@Log4j2
+@Slf4j
 public class CausewayWebAppContextInitializer implements ServletContextInitializer {
 
     private static final _Oneshot oneshot = new _Oneshot();

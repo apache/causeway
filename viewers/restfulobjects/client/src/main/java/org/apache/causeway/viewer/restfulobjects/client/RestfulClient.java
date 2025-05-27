@@ -41,7 +41,7 @@ import org.apache.causeway.viewer.restfulobjects.client.auth.AuthorizationHeader
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationLogger;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Setup the Restful Client with Basic-Auth:
@@ -87,7 +87,7 @@ if(digest.isSuccess()) {
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class RestfulClient implements AutoCloseable {
 
     private final RestfulClientConfig clientConfig;

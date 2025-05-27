@@ -33,10 +33,10 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Maps;
 
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Log4j2
+@Slf4j
 public class KVStoreForTesting {
 
     private Map<Key, Object> keyValueMap;

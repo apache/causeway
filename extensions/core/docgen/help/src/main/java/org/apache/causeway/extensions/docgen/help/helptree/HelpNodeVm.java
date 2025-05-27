@@ -41,14 +41,14 @@ import org.apache.causeway.extensions.docgen.help.applib.HelpNode.HelpTopic;
 import org.apache.causeway.valuetypes.asciidoc.applib.value.AsciiDoc;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Named(CausewayModuleExtDocgenHelp.NAMESPACE + ".HelpNodeVm")
 @DomainObject(
         nature=Nature.VIEW_MODEL)
 @DomainObjectLayout(
         named = "Application Help")
-@Log4j2
+@Slf4j
 public class HelpNodeVm implements ViewModel {
 
     // no longer required to be URL-safe (but nicer if does not get encoded)

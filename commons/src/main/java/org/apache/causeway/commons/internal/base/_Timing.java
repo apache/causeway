@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import lombok.Getter;
 

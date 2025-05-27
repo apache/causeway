@@ -21,6 +21,8 @@ package org.apache.causeway.applib.services.command;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.mixins.security.HasUsername;
@@ -36,9 +38,8 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.ToString;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents the <i>intention to</i> invoke either an action or modify a property.  There can be only one such
@@ -75,7 +76,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.x {@index}
  */
 @ToString
-@Log4j2
+@Slf4j
 public class Command implements HasInteractionId, HasUsername, HasCommandDto {
 
     private UUID interactionId;
@@ -345,7 +346,7 @@ public class Command implements HasInteractionId, HasUsername, HasCommandDto {
             }
             Command.this.publishingPhase = publishingPhase;
         }
-    };
+    }
 
     /**
      * <b>NOT API</b>: intended to be called only by the framework.

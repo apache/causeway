@@ -21,6 +21,8 @@ module org.apache.causeway.viewer.commons.prism {
 
     requires static lombok;
     requires org.jspecify;
+    requires org.slf4j;
+
     requires spring.core;
     requires org.jsoup;
     requires org.graalvm.polyglot;

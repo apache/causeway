@@ -22,17 +22,20 @@ module org.apache.causeway.security.spring {
     exports org.apache.causeway.security.spring.authentication;
     exports org.apache.causeway.security.spring.webmodule;
 
+    requires static lombok;
+    requires org.slf4j;
+
     requires jakarta.annotation;
     requires jakarta.inject;
     requires jakarta.servlet;
-    requires static lombok;
+
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.runtimeservices;
     requires org.apache.causeway.core.webapp;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
+
     requires spring.beans;
     requires spring.context;
     requires spring.core;

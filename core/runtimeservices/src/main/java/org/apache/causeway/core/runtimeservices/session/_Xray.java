@@ -27,7 +27,7 @@ import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.security.util.XrayUtil;
 
-//@Log4j2
+//@Slf4j
 final class _Xray {
 
     static void newInteractionLayer(final Stack<InteractionLayer> afterEnter) {

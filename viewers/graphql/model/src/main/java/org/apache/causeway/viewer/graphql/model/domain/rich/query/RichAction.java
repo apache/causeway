@@ -46,9 +46,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatur
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichAction
         extends RichMember<ObjectAction, ObjectInteractor>
         implements ActionInteractor,

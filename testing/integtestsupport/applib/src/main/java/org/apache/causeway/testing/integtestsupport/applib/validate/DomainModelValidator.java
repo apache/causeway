@@ -45,12 +45,12 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class DomainModelValidator {
 
     private final ValidationFailures validationFailures;

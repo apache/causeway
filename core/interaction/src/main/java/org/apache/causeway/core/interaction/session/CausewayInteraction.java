@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.core.interaction.session;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
@@ -36,13 +37,11 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
-
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class CausewayInteraction
 implements InteractionInternal {
 
@@ -218,7 +217,7 @@ implements InteractionInternal {
         }
         final Execution<?,?> popped = currentExecution;
 
-        final Timestamp completedAt = clockService.getClock().nowAsJavaSqlTimestamp();
+        var completedAt = clockService.getClock().nowAsJavaSqlTimestamp();
         popped.setCompletedAt(completedAt, metricsService);
 
         moveCurrentTo(currentExecution.getParent());

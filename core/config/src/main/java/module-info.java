@@ -44,8 +44,6 @@ module org.apache.causeway.core.config {
     requires jakarta.validation;
     requires jakarta.ws.rs;
     requires jakarta.inject;
-    requires org.apache.logging.log4j;
-    //requires org.eclipse.persistence.core;
     requires org.hibernate.validator;
     requires spring.aop;
     requires spring.beans;
@@ -53,6 +51,7 @@ module org.apache.causeway.core.config {
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires org.slf4j;
 
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;
     opens org.apache.causeway.core.config.environment to spring.core;

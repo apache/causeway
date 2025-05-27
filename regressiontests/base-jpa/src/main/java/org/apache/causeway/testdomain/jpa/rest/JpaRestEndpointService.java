@@ -50,10 +50,10 @@ import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
 import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class JpaRestEndpointService {
 

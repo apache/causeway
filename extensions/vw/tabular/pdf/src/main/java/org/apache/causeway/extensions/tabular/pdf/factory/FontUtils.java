@@ -27,10 +27,10 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @UtilityClass
-@Log4j2
+@Slf4j
 public class FontUtils {
 
     private record FontMetrics(

@@ -41,7 +41,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This service (API and implementation) provides a mechanism by which
@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.EARLY)
 @InteractionScope
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class QueryResultsCache implements DisposableBean {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".QueryResultsCache";

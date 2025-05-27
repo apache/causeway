@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link SessionSubscriber} that just logs to a debug log.
@@ -41,7 +41,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(SessionLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("logging")
-@Log4j2
+@Slf4j
 public class SessionLogger implements SessionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".SessionLogger";

@@ -29,9 +29,9 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
 
     private final _ClassCache classCache = _ClassCache.getInstance();

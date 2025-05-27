@@ -21,6 +21,8 @@ module org.apache.causeway.valuetypes.vega.ui.wkt {
     exports org.apache.causeway.valuetypes.vega.ui.wkt.components;
 
     requires static lombok;
+    requires org.slf4j;
+
     requires org.apache.causeway.applib;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.metamodel;

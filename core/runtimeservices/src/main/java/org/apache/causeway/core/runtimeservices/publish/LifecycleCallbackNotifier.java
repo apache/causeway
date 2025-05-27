@@ -69,7 +69,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Qualifier("Default")
-//@Log4j2
+//@Slf4j
 public class LifecycleCallbackNotifier {
 
     final @NonNull EventBusService eventBusService;

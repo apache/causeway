@@ -36,7 +36,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
 @Named("causeway.metamodel.value.LocalDateValueSemantics")
-//@Log4j2
+//@Slf4j
 public class LocalDateValueSemantics
 extends TemporalValueSemanticsProvider<LocalDate>
 implements OrderRelation<LocalDate, Duration> {

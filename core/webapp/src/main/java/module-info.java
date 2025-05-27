@@ -38,7 +38,7 @@ module org.apache.causeway.core.webapp {
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.boot;
     requires spring.boot.actuator;

@@ -73,7 +73,7 @@ import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAd
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Main application, subclassing the Wicket {@link Application} and
@@ -92,7 +92,7 @@ import lombok.extern.log4j.Log4j2;
  * See <tt>asciidoc</tt> extension for an example of this.
  *
  */
-@Log4j2
+@Slf4j
 public class CausewayWicketApplication
 extends AuthenticatedWebApplication
 implements

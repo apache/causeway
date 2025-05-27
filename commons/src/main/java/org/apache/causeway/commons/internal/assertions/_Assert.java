@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -30,9 +31,8 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Longs;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>- internal use only -</h1>
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0
  */
 @UtilityClass
-@Log4j2
+@Slf4j
 public final class _Assert {
 
     // -- TRUE
@@ -325,7 +325,7 @@ public final class _Assert {
         var error = _Exceptions.assertionError(
                 buildPrefix(message)
                 + String.format("expected: <%s> but was: <%s>", ""+expected, ""+actual));
-        log.error(error); // in case exceptions get swallowed, make sure errors at least get logged
+        log.error("assert", error); // in case exceptions get swallowed, make sure errors at least get logged
         throw error;
     }
     private static String buildPrefix(final String message) {

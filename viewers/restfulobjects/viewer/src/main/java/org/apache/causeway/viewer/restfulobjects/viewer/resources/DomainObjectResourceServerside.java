@@ -34,6 +34,8 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -66,13 +68,11 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
-import org.jspecify.annotations.NonNull;
-
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Path("/objects")
-@Log4j2
+@Slf4j
 public class DomainObjectResourceServerside
 extends ResourceAbstract
 implements DomainObjectResource {

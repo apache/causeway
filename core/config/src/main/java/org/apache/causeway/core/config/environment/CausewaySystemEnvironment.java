@@ -39,7 +39,7 @@ import org.apache.causeway.commons.internal.ioc._IocContainer;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents configuration, that is required in an early bootstrapping phase.
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
 @Singleton
-@Log4j2
+@Slf4j
 public class CausewaySystemEnvironment {
 
     @Inject private ApplicationContext springContext;

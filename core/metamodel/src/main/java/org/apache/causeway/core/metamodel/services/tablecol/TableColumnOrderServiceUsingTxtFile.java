@@ -39,7 +39,7 @@ import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides a simple mechanism to order the columns of both parented and standalone collections by reading a flat
@@ -96,7 +96,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TableColumnOrderServiceUsingTxtFile")
 @Priority(PriorityPrecedence.LATE - 100) // before Default
 @Qualifier("UsingFiles")
-@Log4j2
+@Slf4j
 public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderService {
 
     /**
@@ -121,7 +121,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      * <p>
      * Additional files can be provided by overriding {@link #addResourceNames(Class, String, Class, List)}
      * </p>
-     * 
+     *
      * @Returns {@code null}, if no matching resource was found
      */
     @Nullable
@@ -203,7 +203,7 @@ public class TableColumnOrderServiceUsingTxtFile implements TableColumnOrderServ
      * <p>
      * Additional files can be provided by overriding {@link #addResourceNames(Class, List)}.
      * </p>
-     * 
+     *
      * @Returns {@code null}, if no matching resource was found
      */
     @Nullable

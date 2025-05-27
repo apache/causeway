@@ -55,7 +55,7 @@ import org.apache.causeway.core.webapp.modules.WebModule;
 
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0
@@ -64,7 +64,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.webapp.ConfigurationViewServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ConfigurationViewServiceDefault
 implements

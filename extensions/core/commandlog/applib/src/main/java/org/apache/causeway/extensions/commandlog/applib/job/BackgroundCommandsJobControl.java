@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.Programmatic;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Is checked by {@link RunBackgroundCommandsJob} each time it is executed.
@@ -36,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
  * @see RunBackgroundCommandsJob
  */
 @Service
-@Log4j2
+@Slf4j
 public class BackgroundCommandsJobControl {
 
     public enum State {

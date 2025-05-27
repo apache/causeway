@@ -49,7 +49,7 @@ import org.jspecify.annotations.NonNull;
 @Named(CausewayModuleExtLayoutLoadersGithub.NAMESPACE + ".LayoutResourceLoaderFromGithub")
 @Priority(PriorityPrecedence.MIDPOINT - 100)
 @Qualifier("Github")
-//@Log4j2
+//@Slf4j
 public class LayoutResourceLoaderFromGithub implements LayoutResourceLoader {
 
     final RestTemplate restTemplateForSearch;

@@ -129,8 +129,6 @@
                         <exclude>**/*.ucls</exclude>
                         <exclude>**/*.puml</exclude>
 
-                        <exclude>**/datanucleus.log</exclude>
-
                         <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                         <exclude>**/bootstrap-datetimepicker.css</exclude>
 

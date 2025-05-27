@@ -59,7 +59,7 @@ import org.apache.causeway.testing.fixtures.applib.personas.PersonaWithBuilderSc
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Responsible for setting up the system (or more likely a part of the system)
@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 1.x {@index}
  */
-@Log4j2
+@Slf4j
 public abstract class FixtureScript {
 
     public static final FixtureScript NOOP = new FixtureScript() {

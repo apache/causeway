@@ -45,10 +45,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Log4j2
+@Slf4j
 public final class PropertyModifier
 implements
     HasMetaModelContext,

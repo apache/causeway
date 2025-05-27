@@ -87,7 +87,7 @@ import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The implementation provides for a degree of pluggability:
@@ -106,7 +106,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".SpecificationLoaderDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 class SpecificationLoaderDefault
 implements
     SpecificationLoaderInternal,
@@ -621,7 +621,7 @@ implements
             try {
                 spec.introspectUpTo(upTo);
             } catch (Throwable ex) {
-                log.error(ex);
+                log.error("failure", ex);
                 throw ex;
             }
         });

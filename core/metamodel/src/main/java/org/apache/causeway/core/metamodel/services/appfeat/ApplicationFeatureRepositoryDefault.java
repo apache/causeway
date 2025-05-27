@@ -63,7 +63,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import org.jspecify.annotations.NonNull;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -71,7 +71,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Named(ApplicationFeatureRepositoryDefault.LOGICAL_TYPE_NAME)
-@Log4j2
+@Slf4j
 public class ApplicationFeatureRepositoryDefault
 implements ApplicationFeatureRepository, MetamodelListener {
 

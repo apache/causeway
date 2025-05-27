@@ -56,7 +56,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-//@Log4j2
+//@Slf4j
 public class ObjectLifecyclePublisherDefault implements ObjectLifecyclePublisher {
 
     private final Provider<EntityChangeTracker> entityChangeTrackerProvider;

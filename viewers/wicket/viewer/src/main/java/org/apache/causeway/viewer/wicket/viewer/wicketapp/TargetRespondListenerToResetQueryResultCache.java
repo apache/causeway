@@ -25,9 +25,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
 
     @Inject private Provider<QueryResultsCache> queryResultsCacheProvider;

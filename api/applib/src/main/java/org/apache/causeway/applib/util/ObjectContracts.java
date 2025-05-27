@@ -25,13 +25,13 @@ import java.util.function.Function;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.
  * @since 1.x revised for 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public final class ObjectContracts {
 
     private ObjectContracts() {}

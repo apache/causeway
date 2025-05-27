@@ -45,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 )
 @ActionLayout(associateWith = "executeIn", sequence = "2")
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class CommandLogEntry_exclude {
 
     public static class ActionDomainEvent

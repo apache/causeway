@@ -34,7 +34,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
 @Named("causeway.metamodel.value.OffsetDateTimeValueSemantics")
-//@Log4j2
+//@Slf4j
 public class OffsetDateTimeValueSemantics
 extends TemporalValueSemanticsProvider<OffsetDateTime> {
 

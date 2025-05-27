@@ -38,14 +38,14 @@ import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @XmlRootElement(name = "BlobDemo")
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("regressiontests.BlobDemo")
 @DomainObject(nature=Nature.VIEW_MODEL)
-@Log4j2
+@Slf4j
 public class BlobDemo {
 
     public void initDefaults() {

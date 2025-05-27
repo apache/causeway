@@ -39,9 +39,9 @@ import org.apache.causeway.viewer.graphql.model.mmproviders.ObjectActionParamete
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionParamsParam
         extends ElementCustom
         implements ActionParamInteractor,
@@ -140,7 +140,7 @@ public class RichActionParamsParam
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
         return BookmarkedPojo.sourceFrom(dataFetchingEnvironment, context);
     }
 
@@ -162,7 +162,7 @@ public class RichActionParamsParam
     }
 
     @Override
-    public void addGqlArgument(ObjectAction objectAction, GraphQLFieldDefinition.Builder fieldBuilder, TypeMapper.InputContext inputContext, int paramNum) {
+    public void addGqlArgument(final ObjectAction objectAction, final GraphQLFieldDefinition.Builder fieldBuilder, final TypeMapper.InputContext inputContext, final int paramNum) {
         // TODO: what lives here?
     }
 

@@ -18,14 +18,14 @@
  */
 package org.apache.causeway.applib.services.wrapper.control;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public abstract class ExceptionHandlerAbstract implements ExceptionHandler {
     public static Logger getLog() {
         return log;

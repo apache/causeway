@@ -34,7 +34,7 @@ import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
 @Named("causeway.metamodel.value.ZonedDateTimeValueSemantics")
-//@Log4j2
+//@Slf4j
 public class ZonedDateTimeValueSemantics
 extends TemporalValueSemanticsProvider<ZonedDateTime> {
 

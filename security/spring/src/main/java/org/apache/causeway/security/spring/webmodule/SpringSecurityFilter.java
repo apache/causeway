@@ -46,7 +46,7 @@ import org.jspecify.annotations.NonNull;
 /**
  * @since 2.0 {@index}
  */
-//@Log4j2
+//@Slf4j
 public class SpringSecurityFilter implements Filter {
 
     @Autowired private InteractionService interactionService;

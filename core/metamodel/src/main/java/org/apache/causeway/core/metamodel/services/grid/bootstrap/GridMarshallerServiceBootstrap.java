@@ -54,7 +54,7 @@ import lombok.experimental.Accessors;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-//@Log4j2
+//@Slf4j
 public class GridMarshallerServiceBootstrap
 implements GridMarshallerService<BSGrid> {
 

@@ -35,14 +35,13 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Testing")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class CommandSubscriberForTesting
 implements CommandSubscriber {
 
@@ -56,19 +55,25 @@ implements CommandSubscriber {
     @Override
     public void onReady(final Command command) {
         on("readyCommands", command);
-        log.debug("publish ready command {}", ()->command.getCommandDto());
+        if(log.isDebugEnabled()) {
+            log.debug("publish ready command {}", command.getCommandDto());
+        }
     }
 
     @Override
     public void onStarted(final Command command) {
         on("startedCommands", command);
-        log.debug("publish started command {}", ()->command.getCommandDto());
+        if(log.isDebugEnabled()) {
+            log.debug("publish started command {}", command.getCommandDto());
+        }
     }
 
     @Override
     public void onCompleted(final Command command) {
         on("completedCommands", command);
-        log.debug("publish completed command {}", ()->command.getCommandDto());
+        if(log.isDebugEnabled()) {
+            log.debug("publish completed command {}", command.getCommandDto());
+        }
     }
 
     private void on(final String verb, final Command command) {

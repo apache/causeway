@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.services.objectlifecycle.ObjectLifecyc
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * EntityListener class for listing with the {@link jakarta.persistence.EntityListeners} annotation, to
@@ -61,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class CausewayEntityListener {
 
     // injection points resolved via BeanManagerForEntityListeners ...

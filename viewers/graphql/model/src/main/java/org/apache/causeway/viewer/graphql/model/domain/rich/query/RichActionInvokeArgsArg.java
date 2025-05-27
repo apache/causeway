@@ -31,9 +31,9 @@ import org.apache.causeway.viewer.graphql.model.domain.Element;
 import org.apache.causeway.viewer.graphql.model.domain.common.interactors.ActionInteractor;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionInvokeArgsArg
         extends Element {
 
@@ -52,7 +52,7 @@ public class RichActionInvokeArgsArg
         this.objectActionParameter = oap;
         this.paramNum = paramNum;
 
-        var elementType = oap.getElementType();;
+        var elementType = oap.getElementType();
 
         var gqlObjectTypeForElementType = context.typeMapper.outputTypeFor(elementType, actionInteractor.getSchemaType());
         if (gqlObjectTypeForElementType != null) {
@@ -70,7 +70,7 @@ public class RichActionInvokeArgsArg
     }
 
     @Override
-    protected Object fetchData(DataFetchingEnvironment dataFetchingEnvironment) {
+    protected Object fetchData(final DataFetchingEnvironment dataFetchingEnvironment) {
         var environment = new Environment.ForTunnelled(dataFetchingEnvironment);
         var managedObjects = actionInteractor.argumentManagedObjectsFor(environment, actionInteractor.getObjectMember(), context.bookmarkService);
         return managedObjects.get(paramNum).map(ManagedObject::getPojo).orElse(null);

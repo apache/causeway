@@ -139,13 +139,12 @@ module org.apache.causeway.applib {
     requires static lombok;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
-    requires org.apache.logging.log4j;
     requires transitive org.joda.time;
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
     requires spring.tx;
-    requires org.apache.logging.log4j.core;
+    requires org.slf4j;
 
     // JAXB viewmodels
     opens org.apache.causeway.applib.annotation;

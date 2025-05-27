@@ -49,7 +49,7 @@ import org.apache.causeway.extensions.sse.wicket.CausewayModuleExtSseWicket;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Server-sent events.
@@ -62,7 +62,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(SseServiceDefault.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 public class SseServiceDefault implements SseService {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSseWicket.NAMESPACE + ".SseServiceDefault";
@@ -189,7 +189,7 @@ public class SseServiceDefault implements SseService {
 
     // -- EVENT STREAM DEFAULT IMPLEMENTATION
 
-    @Log4j2
+    @Slf4j
     private record EventStreamDefault(
             UUID uuid,
             Class<?> sourceType,
@@ -214,7 +214,9 @@ public class SseServiceDefault implements SseService {
 
             }
 
-            log.debug("about to fire events to {} listeners", ()->defensiveCopyOfListeners.size());
+            if(log.isDebugEnabled()) {
+                log.debug("about to fire events to {} listeners", defensiveCopyOfListeners.size());
+            }
 
             final List<Predicate<SseSource>> markedForRemoval = _Lists.newArrayList();
 

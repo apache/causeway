@@ -48,7 +48,7 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(
         classes = {
@@ -60,7 +60,7 @@ import lombok.extern.log4j.Log4j2;
 @TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Log4j2
+@Slf4j
 @DisabledIfRunningWithSurefire
 class JpaEntityInjectingTest extends CausewayIntegrationTestAbstract {
 

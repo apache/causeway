@@ -39,7 +39,7 @@ module org.apache.causeway.persistence.jpa.integration {
     requires org.apache.causeway.persistence.jpa.applib;
     requires org.apache.causeway.persistence.jpa.metamodel;
     requires org.apache.causeway.schema;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires org.eclipse.persistence.core;
     requires spring.boot.autoconfigure;
     requires spring.context;

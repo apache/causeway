@@ -31,11 +31,11 @@ import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @TransactionScope
-@Log4j2
+@Slf4j
 public class InteractionBoundaryProbe implements TransactionSynchronization {
 
     @Inject private KVStoreForTesting kvStoreForTesting;

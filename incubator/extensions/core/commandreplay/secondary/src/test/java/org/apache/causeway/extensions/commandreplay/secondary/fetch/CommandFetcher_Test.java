@@ -48,7 +48,7 @@ import org.apache.causeway.extensions.commandreplay.secondary.status.StatusExcep
 })
 //intended only for manual verification.
 @DisabledIfRunningWithSurefire
-//@Log4j2
+//@Slf4j
 class CommandFetcher_Test {
 
     @Configuration

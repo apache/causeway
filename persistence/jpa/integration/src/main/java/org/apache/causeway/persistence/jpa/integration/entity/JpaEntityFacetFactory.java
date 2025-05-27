@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 
-//@Log4j2
+//@Slf4j
 public class JpaEntityFacetFactory
 extends FacetFactoryAbstract {
 

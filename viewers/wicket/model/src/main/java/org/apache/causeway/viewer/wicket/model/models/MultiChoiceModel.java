@@ -28,14 +28,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2MultiChoice</tt>;
  * synchronizes the {@link Model} of the <tt>Select2MultiChoice</tt>
  * with the parent {@link UiAttributeWkt}, allowing also for pending values.
  */
-@Log4j2
+@Slf4j
 public record MultiChoiceModel(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to

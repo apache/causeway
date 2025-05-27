@@ -165,7 +165,7 @@ open module org.apache.causeway.core.metamodel {
     requires transitive org.apache.causeway.core.config;
     requires transitive org.apache.causeway.schema;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires org.joda.time;
     requires spring.beans;
     requires spring.context;

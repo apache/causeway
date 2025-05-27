@@ -57,7 +57,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Traverses object graph from specified root, so that an XML representation of
@@ -96,7 +96,7 @@ import lombok.extern.log4j.Log4j2;
  *      Element customerAsXml = snapshot.toXml();
  * </pre>
  */
-@Log4j2
+@Slf4j
 public class XmlSnapshot implements Snapshot {
 
     private final CausewaySchema causewayMetaModel;

@@ -35,7 +35,7 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * {@link Authenticator} implementation that authenticates the {@link ApplicationUser}.
@@ -53,7 +53,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class AuthenticatorSecman implements Authenticator {
 
     private final ApplicationUserRepository applicationUserRepository;

@@ -33,4 +33,5 @@ module org.apache.causeway.extensions.titlecache.caffeine {
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.extensions.titlecache.applib;
     requires com.github.benmanes.caffeine;
+    requires org.slf4j;
 }

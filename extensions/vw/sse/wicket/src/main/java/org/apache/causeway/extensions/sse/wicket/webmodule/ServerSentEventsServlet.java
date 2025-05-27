@@ -37,7 +37,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.extensions.sse.applib.service.SseChannel;
 import org.apache.causeway.extensions.sse.applib.service.SseService;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Server-sent events.
@@ -48,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 //@WebServlet(value="/sse", asyncSupported=true)
-@Log4j2
+@Slf4j
 public class ServerSentEventsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
  * @since 2.0
  *
  */
-//@Log4j2
+//@Slf4j
 public class NavigableParentAnnotationFacetFactory
 extends FacetFactoryAbstract
 implements MetaModelRefiner {

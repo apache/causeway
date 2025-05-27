@@ -30,9 +30,9 @@ import org.apache.causeway.viewer.graphql.model.domain.common.interactors.Action
 import org.apache.causeway.viewer.graphql.model.fetcher.BookmarkedPojo;
 import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public class RichActionInvoke
         extends ElementCustom {
 
@@ -65,7 +65,7 @@ public class RichActionInvoke
         setField(fieldBuilder.build());
     }
 
-    private static String fieldNameForSemanticsOf(ObjectAction objectAction) {
+    private static String fieldNameForSemanticsOf(final ObjectAction objectAction) {
         switch (objectAction.getSemantics()) {
             case SAFE_AND_REQUEST_CACHEABLE:
             case SAFE:

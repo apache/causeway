@@ -46,7 +46,7 @@ import org.apache.causeway.core.webapp.modules.WebModuleContext;
 
 import lombok.Getter;
 import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
@@ -55,7 +55,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.test.WebModuleH2Console")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("H2Console")
-@Log4j2
+@Slf4j
 public class WebModuleH2Console extends WebModuleAbstract {
 
     private static final String SERVLET_NAME = "H2Console";

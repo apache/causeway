@@ -31,7 +31,7 @@ import org.apache.causeway.applib.services.publishing.spi.ExecutionSubscriber;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link ExecutionSubscriber} that just logs out the {@link Execution}'s
@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(ExecutionLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
-@Log4j2
+@Slf4j
 public class ExecutionLogger implements ExecutionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ExecutionLogger";

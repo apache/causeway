@@ -61,7 +61,7 @@ import lombok.Setter;
  * </pre>
  * @see UiAttribute
  */
-//@Log4j2
+//@Slf4j
 public abstract class UiAttributeWkt
 implements IModel<ManagedObject>, HasRenderingHints, UiAttribute, FormExecutorContext {
 

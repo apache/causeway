@@ -39,7 +39,7 @@ import org.apache.causeway.security.spring.authconverters.AuthenticationConverte
 import org.apache.causeway.security.spring.authentication.AuthenticatorSpring;
 import org.apache.causeway.security.spring.webmodule.WebModuleSpringSecurity;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Configuration Bean to support authentication using Spring Security.
@@ -61,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
         WebModuleSpringSecurity.class,
 
 })
-@Log4j2
+@Slf4j
 public class CausewayModuleSecuritySpring {
 
     public static final String NAMESPACE = "causeway.security.spring";
@@ -85,7 +85,7 @@ public class CausewayModuleSecuritySpring {
           .forEach(this::disable);
     }
 
-    private void disable(CsrfFilter csrfFilter) {
+    private void disable(final CsrfFilter csrfFilter) {
         log.info("disabling {}", csrfFilter.getClass().getName());
         // render the csrfFilter ineffective: filter never gets applied as matcher never matches
         csrfFilter.setRequireCsrfProtectionMatcher(request->false);

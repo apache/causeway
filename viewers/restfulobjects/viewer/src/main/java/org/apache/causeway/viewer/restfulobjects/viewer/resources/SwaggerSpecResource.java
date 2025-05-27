@@ -39,12 +39,11 @@ import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 
 import lombok.RequiredArgsConstructor;
-
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Path("/swagger")
-@Log4j2
+@Slf4j
 public class SwaggerSpecResource {
 
     private final SwaggerService swaggerService;

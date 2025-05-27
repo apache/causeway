@@ -72,7 +72,7 @@ import lombok.SneakyThrows;
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
 @RequiredArgsConstructor
-//@Log4j2
+//@Slf4j
 public class RepositoryServiceDefault
 implements RepositoryService, HasMetaModelContext {
 

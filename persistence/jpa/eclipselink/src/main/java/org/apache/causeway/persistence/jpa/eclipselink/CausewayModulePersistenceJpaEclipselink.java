@@ -49,7 +49,7 @@ import org.apache.causeway.persistence.jpa.eclipselink.metamodel.EclipseLinkMeta
 import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 
 import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * EclipseLink integration.
@@ -67,7 +67,7 @@ import lombok.extern.log4j.Log4j2;
     EclipseLinkMetadataService.class
 })
 @EnableConfigurationProperties(ElSettings.class)
-@Log4j2
+@Slf4j
 public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguration {
 
     @Inject private ElSettings elSettings;

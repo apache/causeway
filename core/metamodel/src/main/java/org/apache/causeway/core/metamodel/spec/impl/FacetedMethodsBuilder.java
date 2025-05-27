@@ -58,9 +58,9 @@ import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.I
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 class FacetedMethodsBuilder
 implements
     HasSpecificationLoaderInternal,

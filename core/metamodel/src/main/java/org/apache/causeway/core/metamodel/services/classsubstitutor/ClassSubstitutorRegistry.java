@@ -25,6 +25,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -33,7 +34,7 @@ import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Aggregates all {@link ClassSubstitutor}s.
@@ -41,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".ClassSubstitutorRegistry")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-@Log4j2
+@Slf4j
 public class ClassSubstitutorRegistry {
 
     private final List<ClassSubstitutor> classSubstitutors;

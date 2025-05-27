@@ -72,7 +72,7 @@ import lombok.SneakyThrows;
 @Named(CausewayModuleApplib.NAMESPACE + ".value.Clob")
 @Value
 @XmlJavaTypeAdapter(Clob.JaxbToStringAdapter.class)   // for JAXB view model support
-//@Log4j2
+//@Slf4j
 public record Clob(
     String name,
     MimeType mimeType,

@@ -54,7 +54,7 @@ import lombok.RequiredArgsConstructor;
 @Named(SessionSubscriberForSessionLog.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("sessionlog")
-//@Log4j2
+//@Slf4j
 public class SessionSubscriberForSessionLog implements SessionSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLoggingServiceDefault";

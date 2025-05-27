@@ -52,7 +52,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import lombok.Data;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.x {@index}
@@ -61,7 +61,7 @@ import lombok.extern.log4j.Log4j2;
 @Named("causeway.testing.fixtures.ModuleWithFixturesService")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@Log4j2
+@Slf4j
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ModuleWithFixturesService {
 
@@ -217,7 +217,7 @@ public class ModuleWithFixturesService {
     public void onContextRefreshed(final ContextRefreshedEvent event) {
         log.info("onContextRefreshed");
         for (final ModuleWithFixturesDescriptor descriptor : modules()) {
-            log.info(descriptor);
+            log.info("%s".formatted(descriptor));
         }
     }
 

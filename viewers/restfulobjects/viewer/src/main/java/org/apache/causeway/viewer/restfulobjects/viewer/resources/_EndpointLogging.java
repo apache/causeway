@@ -18,13 +18,16 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
+import java.util.Optional;
+
 import jakarta.ws.rs.core.Response;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.collections._Collections;
 import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
 import lombok.experimental.UtilityClass;
@@ -181,16 +184,17 @@ class _EndpointLogging {
         log.debug("<<< RESPONSE");
 
         var dto = response.getEntity();
-        if(dto==null
-                || dto instanceof String) {
-            log.debug(dto);
+        if(dto==null) {
+            log.debug("null");
+        } else if(dto instanceof String string) {
+            log.debug(string);
         } else if(_Collections.isAnyCollectionOrArrayType(dto.getClass())){
             log.debug("non-scalar content of type {}", dto.getClass());
         } else {
             Try.call(()->JaxbUtils.toStringUtf8(dto, opts->opts
                     .useContextCache(true)
                     .formattedOutput(true)))
-            .ifSuccess(xml->log.debug(xml))
+            .ifSuccess(xml->log.debug(xml.orElse("null")))
             .ifFailure(toXmlConversionError->
                 log
                 .debug("could not convert response content to XML for logging: {}",
@@ -209,7 +213,7 @@ class _EndpointLogging {
 
     private void logError(final Logger log, final RestfulObjectsApplicationException roException) {
         log.debug("<<< ERROR");
-        log.debug(roException.getBody());
+        log.debug(Optional.ofNullable(roException.getBody()).map(JsonRepresentation::toString).orElse("null"));
         log.debug("--- END ERROR");
     }
 

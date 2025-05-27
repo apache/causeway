@@ -39,7 +39,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntryRepos
 import org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Implementation of {@link CommandSubscriber} responsible for persisting the {@link Command} as a
@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT) // after JdoPersistenceLifecycleService
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
-@Log4j2
+@Slf4j
 public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandSubscriberForCommandLog";

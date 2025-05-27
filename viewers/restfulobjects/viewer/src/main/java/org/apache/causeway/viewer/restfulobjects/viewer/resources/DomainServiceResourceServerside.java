@@ -51,11 +51,11 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainS
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Path("/services")
-@Log4j2
+@Slf4j
 public class DomainServiceResourceServerside
 extends ResourceAbstract
 implements DomainServiceResource {

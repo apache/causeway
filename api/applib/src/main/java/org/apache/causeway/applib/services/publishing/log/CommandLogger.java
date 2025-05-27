@@ -30,7 +30,7 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.publishing.spi.CommandSubscriber;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Simple implementation of {@link CommandSubscriber} that just logs out the {@link Command Command}'s
@@ -42,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 @Named(CommandLogger.LOGICAL_TYPE_NAME)
 @Priority(PriorityPrecedence.LATE)
 @Qualifier("Logging")
-@Log4j2
+@Slf4j
 public class CommandLogger implements CommandSubscriber {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".CommandLogger";
@@ -53,12 +53,12 @@ public class CommandLogger implements CommandSubscriber {
     }
 
     @Override
-    public void onReady(Command command) {
+    public void onReady(final Command command) {
         on("ready", command);
     }
 
     @Override
-    public void onStarted(Command command) {
+    public void onStarted(final Command command) {
         on("started", command);
     }
 
@@ -68,7 +68,7 @@ public class CommandLogger implements CommandSubscriber {
         on("completed", command);
     }
 
-    private static void on(String verb, Command command) {
+    private static void on(final String verb, final Command command) {
         var commandDto = command.getCommandDto();
         var xml = CommandDtoUtils.dtoMapper().toString(commandDto);
 

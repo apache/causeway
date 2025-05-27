@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A collection of utilities for {@link ManagedObject}.
@@ -49,7 +49,7 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @UtilityClass
-@Log4j2
+@Slf4j
 public final class ManagedObjects {
 
     // -- CATEGORISATION

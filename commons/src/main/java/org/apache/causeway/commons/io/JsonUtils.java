@@ -58,7 +58,7 @@ import org.apache.causeway.commons.internal.reflection._Generics;
 import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Utilities to convert from and to JSON format.
@@ -66,7 +66,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 2.0 {@index}
  */
 @UtilityClass
-@Log4j2
+@Slf4j
 public class JsonUtils {
 
     /**

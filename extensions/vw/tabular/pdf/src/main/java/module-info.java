@@ -27,7 +27,7 @@ module org.apache.causeway.extensions.tabular.pdf {
 
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires org.apache.pdfbox;
     requires org.apache.pdfbox.io;
     requires org.jsoup;

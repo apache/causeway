@@ -33,9 +33,9 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
-@Log4j2
+@Slf4j
 public abstract class AutoCompleteFacetAbstract
 extends FacetAbstract
 implements AutoCompleteFacet {

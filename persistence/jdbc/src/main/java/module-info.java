@@ -20,13 +20,14 @@ module org.apache.causeway.persistence.jdbc {
     exports org.apache.causeway.persistence.jdbc;
 
     requires static lombok;
-    
+
+    requires org.slf4j;
     requires spring.context;
     requires spring.data.commons;
     requires spring.data.jdbc;
     requires spring.data.relational;
-    
+
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.persistence.commons;
-    
+
 }

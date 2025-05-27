@@ -34,14 +34,14 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.RestEasyConfiguration;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
 @Configuration
 @Qualifier("CORS")
-@Log4j2
+@Slf4j
 public class CausewayModuleExtCors {
 
     @Bean
@@ -65,7 +65,7 @@ public class CausewayModuleExtCors {
         return filterRegistrationBean;
     }
 
-    private CorsFilter createCorsFilter(CausewayConfiguration configuration) {
+    private CorsFilter createCorsFilter(final CausewayConfiguration configuration) {
 
         var causewayCorsConfig = configuration.getExtensions().getCors();
 

@@ -55,7 +55,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
  * Web page representing an entity.
  */
 @AuthorizeInstantiation(UserMemento.AUTHORIZED_USER_ROLE)
-//@Log4j2
+//@Slf4j
 public class DomainObjectPage extends PageAbstract {
 
     private static final long serialVersionUID = 144368606134796079L;

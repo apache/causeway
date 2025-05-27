@@ -33,8 +33,8 @@ module org.apache.causeway.viewer.restfulobjects.client {
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.viewer.restfulobjects.applib;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.core;
     requires org.apache.causeway.schema;
-    requires org.slf4j;
+
 }

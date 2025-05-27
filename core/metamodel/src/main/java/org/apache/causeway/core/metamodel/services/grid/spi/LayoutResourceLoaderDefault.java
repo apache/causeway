@@ -42,7 +42,7 @@ import lombok.RequiredArgsConstructor;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor //JUnit Support
-//@Log4j2
+//@Slf4j
 public class LayoutResourceLoaderDefault implements LayoutResourceLoader {
 
     @Override

@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
  * synchronizes the {@link Model} of the <tt>Select2Choice</tt>
  * with the parent {@link UiAttributeWkt}.
  */
-//@Log4j2
+//@Slf4j
 public record SingleChoiceModel(
     /**
      * chaining idiom: the {@link UiAttributeWkt} we are chained to

@@ -70,7 +70,7 @@ module org.apache.causeway.core.runtimeservices {
     requires org.apache.causeway.core.transaction;
     requires org.apache.causeway.schema;
     requires org.apache.causeway.security.api;
-    requires org.apache.logging.log4j;
+    requires org.slf4j;
     requires spring.beans;
     requires spring.context;
     requires spring.context.support;

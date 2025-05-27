@@ -30,12 +30,12 @@ import org.apache.causeway.applib.services.swagger.Format;
 import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0 {@index}
  */
-@Log4j2
+@Slf4j
 public class SwaggerExporter {
 
     private final SwaggerService swaggerService;
@@ -49,15 +49,15 @@ public class SwaggerExporter {
         this.swaggerService = swaggerService;
     }
 
-    public void export(Visibility visibility, Format format) throws IOException {
+    public void export(final Visibility visibility, final Format format) throws IOException {
         export(visibility, format, defaultOutputDir());
     }
 
-    public void export(Visibility visibility, Format format, File outputDir) throws IOException {
+    public void export(final Visibility visibility, final Format format, final File outputDir) throws IOException {
         export(visibility, format, outputDir, defaultFileNamePrefix());
     }
 
-    public void export(Visibility visibility, Format format, File outputDir, String fileNamePrefix) throws IOException {
+    public void export(final Visibility visibility, final Format format, final File outputDir, final String fileNamePrefix) throws IOException {
         final File swaggerSpecFile = buildSwaggerSpecFile(outputDir, fileNamePrefix, visibility, format);
         writeSwaggerSpec(visibility, format, swaggerSpecFile);
         swaggerService.generateSwaggerSpec(visibility, format);
@@ -81,7 +81,7 @@ public class SwaggerExporter {
         Files.write(swaggerSpecFile.toPath(), Collections.singletonList(swaggerSpec));
     }
 
-    private static void createParentDirs(File file) throws IOException {
+    private static void createParentDirs(final File file) throws IOException {
         File parent = file.getCanonicalFile().getParentFile();
         if (parent != null) {
             parent.mkdirs();

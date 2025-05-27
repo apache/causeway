@@ -54,7 +54,7 @@ import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link GridLoaderService}.
@@ -66,7 +66,7 @@ import lombok.extern.log4j.Log4j2;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 @RequiredArgsConstructor //JUnit Support
-@Log4j2
+@Slf4j
 public class GridLoaderServiceDefault implements GridLoaderService {
 
     private final MessageService messageService;

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>- internal use only -</h1>
@@ -46,7 +46,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  * @since 2.0
  */
-@Log4j2
+@Slf4j
 public class _Probe {
 
     public static enum MaxCallsReachedAction {

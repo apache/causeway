@@ -41,7 +41,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents an instance of some element of the meta-model recognized by the framework,
@@ -72,7 +72,7 @@ permits
      */
     @Getter
     @RequiredArgsConstructor
-    @Log4j2
+    @Slf4j
     enum Specialization {
         /**
          * <h1>Contract</h1><ul>
