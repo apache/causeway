@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      #- v2
+      - v4
   pull_request:
     branches:
       - main
-      #- v2
+      - v4
 
 jobs:
   # This is a matrix build {'java', 'javascript'},

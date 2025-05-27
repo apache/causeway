@@ -25,6 +25,21 @@ updates:
     labels:
       - "dependencies"
       - "Spring Boot 3.x"
+  
+  # Maintain dependencies for Maven (v4 branch)
+  - package-ecosystem: "maven"
+    target-branch: "v4"
+    directory: "/" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    # Allow up to 50 open pull requests for maven dependencies
+    open-pull-requests-limit: 50
+    # Use custom labels
+    labels:
+      - "dependencies"
+      - "Spring Boot 4.x"
+	  
+	  
       
 # EOL ... Maintain dependencies for Maven (v2 branch)
 #  - package-ecosystem: "maven"
