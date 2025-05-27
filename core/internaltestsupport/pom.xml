@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.causeway.core</groupId>
 		<artifactId>causeway-core</artifactId>
-		<version>3.4.0-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 
 	<artifactId>causeway-core-internaltestsupport</artifactId>
@@ -82,17 +82,6 @@
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy-agent</artifactId>
-		</dependency>
-
-		<!-- JDO API (non transient, provided by plugin) -->
-		<dependency>
-			<!-- v3.2 not available yet, use datanucleus staging for now -->
-			<!-- <groupId>javax.jdo</groupId> -->
-			<!-- <artifactId>jdo-api</artifactId> -->
-			<groupId>org.datanucleus</groupId>
-			<artifactId>javax.jdo</artifactId>
-			<!-- provided by plugins -->
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- SPRING -->

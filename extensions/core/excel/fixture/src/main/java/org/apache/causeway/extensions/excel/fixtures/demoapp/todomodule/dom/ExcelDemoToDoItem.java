@@ -28,10 +28,13 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.VersionStrategy;
-
 import jakarta.inject.Inject;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.jspecify.annotations.Nullable;
@@ -58,58 +61,57 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@javax.jdo.annotations.PersistenceCapable(
-        identityType=IdentityType.DATASTORE,
+@Entity
+@Table(
+        //identityType=IdentityType.DATASTORE,
         schema = "libExcelFixture"
 )
-@javax.jdo.annotations.DatastoreIdentity(
-        strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
-         column="id")
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER,
-        column="version")
-@javax.jdo.annotations.Uniques({
-    @javax.jdo.annotations.Unique(
-            name="ToDoItem_description_must_be_unique",
-            members={"ownedBy","description"})
-})
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-            name = "todo_all", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy"),
-    @javax.jdo.annotations.Query(
-            name = "todo_notYetComplete", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "   && complete == false"),
-    @javax.jdo.annotations.Query(
-            name = "findByDescription", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "   && description == :description"),
-    @javax.jdo.annotations.Query(
-            name = "todo_complete", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "&& complete == true"),
-    @javax.jdo.annotations.Query(
-            name = "todo_similarTo", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy "
-                    + "&& category == :category"),
-    @javax.jdo.annotations.Query(
-            name = "todo_autoComplete", language = "JDOQL",
-            value = "SELECT "
-                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
-                    + "WHERE ownedBy == :ownedBy && "
-                    + "description.indexOf(:description) >= 0")
-})
+//FIXME
+//@javax.jdo.annotations.Version(
+//        strategy=VersionStrategy.VERSION_NUMBER,
+//        column="version")
+//@javax.jdo.annotations.Uniques({
+//    @javax.jdo.annotations.Unique(
+//            name="ToDoItem_description_must_be_unique",
+//            members={"ownedBy","description"})
+//})
+//@javax.jdo.annotations.Queries( {
+//    @javax.jdo.annotations.Query(
+//            name = "todo_all", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
+//                    + "WHERE ownedBy == :ownedBy"),
+//    @javax.jdo.annotations.Query(
+//            name = "todo_notYetComplete", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
+//                    + "WHERE ownedBy == :ownedBy "
+//                    + "   && complete == false"),
+//    @javax.jdo.annotations.Query(
+//            name = "findByDescription", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
+//                    + "WHERE ownedBy == :ownedBy "
+//                    + "   && description == :description"),
+//    @javax.jdo.annotations.Query(
+//            name = "todo_complete", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
+//                    + "WHERE ownedBy == :ownedBy "
+//                    + "&& complete == true"),
+//    @javax.jdo.annotations.Query(
+//            name = "todo_similarTo", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
+//                    + "WHERE ownedBy == :ownedBy "
+//                    + "&& category == :category"),
+//    @javax.jdo.annotations.Query(
+//            name = "todo_autoComplete", language = "JDOQL",
+//            value = "SELECT "
+//                    + "FROM " + ExcelDemoToDoItem.FQCN + " "
+//                    + "WHERE ownedBy == :ownedBy && "
+//                    + "description.indexOf(:description) >= 0")
+//})
 @DomainObject(
         autoCompleteRepository = ExcelDemoToDoItemMenu.class
 )
@@ -134,6 +136,11 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Inject private ExcelDemoToDoItemMenu toDoItems;
     @Inject private ClockService clockService;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
+    long id;
+
     //region > title, iconName
 
     @ObjectSupport public String title() {
@@ -155,25 +162,26 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     //endregion
 
-    @javax.jdo.annotations.Column(allowsNull="false", length=100)
+    @Column(nullable=false, length=100)
     @Property(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*")
     @Getter @Setter
     private String description;
 
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
-    @javax.jdo.annotations.Column(allowsNull="true")
+    //FIXME
+    //@javax.jdo.annotations.Persistent(defaultFetchGroup="true")
+    //@javax.jdo.annotations.Column(allowsNull="true")
     @Getter @Setter
     private LocalDate dueBy;
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @Getter @Setter
     private Category category;
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @Getter @Setter
     private Subcategory subcategory;
 
-    @javax.jdo.annotations.Column(allowsNull="false")
+    @Column(nullable=false)
     @Getter @Setter
     private String ownedBy;
 
@@ -181,14 +189,14 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Getter @Setter
     private boolean complete;
 
-    @javax.jdo.annotations.Column(allowsNull="true", scale=2)
+    @Column(nullable=true, scale=2)
     //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
     //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
     @Property(editing = Editing.DISABLED, editingDisabledReason = "Update using action")
     @Getter @Setter
     private BigDecimal cost;
 
-    @javax.jdo.annotations.Column(allowsNull="true", scale=2)
+    @Column(nullable=true, scale=2)
     //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
     //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
     @Property(
@@ -199,20 +207,22 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     private BigDecimal previousCost;
 
     @Getter @Setter
-    @javax.jdo.annotations.Column(allowsNull="true", length=400)
+    @Column(nullable=true, length=400)
     @Property(editing = Editing.ENABLED)
     // @SummernoteEditor(height = 100, maxHeight = 300)
     private String notes;
 
     @Getter @Setter
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="false")
-    @javax.jdo.annotations.Column(allowsNull="true", jdbcType="BLOB", sqlType="LONGBINARY")
+    //FIXME
+    //@javax.jdo.annotations.Persistent(defaultFetchGroup="false")
+    //@javax.jdo.annotations.Column(allowsNull="true", jdbcType="BLOB", sqlType="LONGBINARY")
     private Blob attachment;
 
     @Getter @Setter
-    @javax.jdo.annotations.Persistent(table="ExcelDemoToDoItemDependencies")
-    @javax.jdo.annotations.Join(column="dependingId")
-    @javax.jdo.annotations.Element(column="dependentId")
+    //FIXME
+//    @javax.jdo.annotations.Persistent(table="ExcelDemoToDoItemDependencies")
+//    @javax.jdo.annotations.Join(column="dependingId")
+//    @javax.jdo.annotations.Element(column="dependentId")
     @CollectionLayout(sortedBy = DependenciesComparator.class)
     private SortedSet<ExcelDemoToDoItem> dependencies = new TreeSet<>();
 

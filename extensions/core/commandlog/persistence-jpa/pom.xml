@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-commandlog</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
@@ -92,12 +92,6 @@
         <dependency>
             <groupId>org.apache.causeway.testing</groupId>
             <artifactId>causeway-testing-fixtures-applib</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.causeway.persistence</groupId>
-                    <artifactId>causeway-persistence-jdo-applib</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
     </dependencies>

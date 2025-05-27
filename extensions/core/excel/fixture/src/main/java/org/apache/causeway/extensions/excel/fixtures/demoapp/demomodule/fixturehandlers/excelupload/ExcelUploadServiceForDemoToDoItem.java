@@ -23,6 +23,8 @@ import java.util.List;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -42,7 +44,7 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
         named = "Prototyping"
 )
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@Order(PriorityPrecedence.EARLY)
 public class ExcelUploadServiceForDemoToDoItem {
 
     private final FixtureScripts fixtureScripts;

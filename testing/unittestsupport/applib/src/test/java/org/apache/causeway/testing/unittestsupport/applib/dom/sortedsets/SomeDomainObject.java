@@ -21,9 +21,9 @@ package org.apache.causeway.testing.unittestsupport.applib.dom.sortedsets;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.jdo.annotations.PersistenceCapable;
+import jakarta.persistence.Entity;
 
-@PersistenceCapable
+@Entity
 public class SomeDomainObject {
 
     @SuppressWarnings("unused")

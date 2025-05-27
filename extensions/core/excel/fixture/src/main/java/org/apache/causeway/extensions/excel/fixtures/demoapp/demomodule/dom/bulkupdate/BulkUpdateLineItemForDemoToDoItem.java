@@ -21,10 +21,9 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bul
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import javax.jdo.annotations.Column;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.persistence.Column;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;

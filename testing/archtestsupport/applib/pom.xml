@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.testing</groupId>
         <artifactId>causeway-testing-archtestsupport</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>causeway-testing-archtestsupport-applib</artifactId>
@@ -99,23 +99,10 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
 
-        <!-- PROVIDED (to avoid polluting the classpath -->
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>javax.jdo</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
             <artifactId>causeway-persistence-jpa-integration</artifactId>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.causeway.persistence</groupId>
-            <artifactId>causeway-persistence-jdo-integration</artifactId>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.causeway.persistence</groupId>
 		<artifactId>causeway-persistence-querydsl</artifactId>
-		<version>3.4.0-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 
 	<artifactId>causeway-persistence-querydsl-applib</artifactId>
@@ -90,12 +90,6 @@
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-metamodel</artifactId>
-        </dependency>
-
-        <!-- TODO: move down and refactor AutoCompleteGeneratedQueryFacetFactory -->
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>javax.jdo</artifactId>
         </dependency>
 
         <dependency>

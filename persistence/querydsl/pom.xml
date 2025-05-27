@@ -16,7 +16,7 @@
 	<parent>
 		<groupId>org.apache.causeway.core</groupId>
 		<artifactId>causeway-core</artifactId>
-		<version>3.4.0-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../../core/pom.xml</relativePath>
 	</parent>
 
@@ -34,10 +34,8 @@
 		<module>applib</module>
 		<module>metamodel</module>
 		<module>integration</module>
-		<module>jdo</module>
 		<module>jpa</module>
 		<module>testsupport</module>
 	</modules>
-
 
 </project>

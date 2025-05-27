@@ -17,13 +17,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
@@ -31,7 +33,8 @@ under the License.
     <name>Apache Causeway Ext - Excel (Fixtures)</name>
 
     <properties>
-    	<jar-plugin.automaticModuleName>org.apache.causeway.extensions.excel.fixture</jar-plugin.automaticModuleName>
+        <jar-plugin.automaticModuleName>
+            org.apache.causeway.extensions.excel.fixture</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/extensions/excel/fixture</git-plugin.propertiesDir>
     </properties>
 
@@ -83,8 +86,18 @@ under the License.
         </dependency>
 
         <dependency>
+            <groupId>org.apache.causeway.commons</groupId>
+            <artifactId>causeway-commons</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-applib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jspecify</groupId>
+            <artifactId>jspecify</artifactId>
         </dependency>
 
         <dependency>
@@ -92,11 +105,10 @@ under the License.
             <artifactId>causeway-testing-fixtures-applib</artifactId>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
+            <artifactId>causeway-persistence-jpa-applib</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>

@@ -31,7 +31,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.excel.fixtures.CausewayModuleExtExcelFixtures;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
-import org.apache.causeway.persistence.jdo.applib.CausewayModulePersistenceJdoApplib;
+import org.apache.causeway.persistence.jpa.applib.CausewayModulePersistenceJpaApplib;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayIntegrationTestAbstractWithFixtures;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
@@ -49,13 +49,12 @@ public abstract class ExcelModuleIntegTestAbstract extends CausewayIntegrationTe
     @Configuration
     @PropertySources({
             @PropertySource(CausewayPresets.NoTranslations),
-            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate),
     })
     @Import({
             CausewayModuleCoreRuntimeServices.class,
             CausewayModulePersistenceCommons.class,
             CausewayModuleSecurityBypass.class,
-            CausewayModulePersistenceJdoApplib.class,
+            CausewayModulePersistenceJpaApplib.class,
             CausewayModuleTestingFixturesApplib.class,
 
             CausewayModuleExtExcelFixtures.class,

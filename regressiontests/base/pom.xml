@@ -25,7 +25,7 @@
 	<parent>
 		<groupId>org.apache.causeway.regressiontests</groupId>
 		<artifactId>causeway-regressiontests</artifactId>
-		<version>3.4.0-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -50,12 +50,6 @@
         <dependency>
 			<groupId>org.apache.causeway.persistence</groupId>
 			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
 			<optional>true</optional>
 		</dependency>
 

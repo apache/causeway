@@ -24,7 +24,7 @@
 
 	<groupId>org.apache.causeway</groupId>
 	<artifactId>causeway-all</artifactId>
-	<version>3.4.0-SNAPSHOT</version>
+	<version>${revision}</version>
 
 	<packaging>pom</packaging>
 
@@ -36,6 +36,7 @@
     </description>
 
     <properties>
+        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn -Drevision=2.7.8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
 

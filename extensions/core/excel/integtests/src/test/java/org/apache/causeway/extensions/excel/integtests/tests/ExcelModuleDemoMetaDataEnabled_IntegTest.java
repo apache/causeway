@@ -36,7 +36,8 @@ import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureResult;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScripts;
 
-public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTestAbstract {
+@Disabled("TODO[2033] removal of PlatformTransactionManager")
+class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @Inject protected FixtureScripts fixtureScripts;
 
@@ -54,7 +55,7 @@ public class ExcelModuleDemoMetaDataEnabled_IntegTest extends ExcelModuleIntegTe
         fixtureScripts.runFixtureScript(script, "");
     }
 
-    @Test @Disabled("TODO[2033] removal of PlatformTransactionManager")
+    @Test
     public void testResults() throws Exception{
 
         assertThat(fixtureResults.size()).isEqualTo(8);

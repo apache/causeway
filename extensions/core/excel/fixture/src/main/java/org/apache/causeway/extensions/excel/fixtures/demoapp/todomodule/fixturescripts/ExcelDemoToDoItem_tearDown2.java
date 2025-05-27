@@ -20,10 +20,13 @@ package org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixture
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.persistence.jdo.applib.services.JdoSupportService;
+import org.apache.causeway.extensions.excel.testing.ExcelFixture;
+import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 import org.apache.causeway.testing.fixtures.applib.fixturescripts.FixtureScript;
 
 public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
+
+    @Inject JpaSupportService jpaSupport;
 
     private final String user;
 
@@ -31,27 +34,29 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
         this(null);
     }
 
-    public ExcelDemoToDoItem_tearDown2(String ownedBy) {
+    public ExcelDemoToDoItem_tearDown2(final String ownedBy) {
         this.user = ownedBy;
     }
 
     @Override
-    public void execute(ExecutionContext executionContext) {
+    public void execute(final ExecutionContext executionContext) {
 
         final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
-        jdoSupport.executeUpdate(String.format(
-                "delete "
-                        + "from \"excelFixture\".\"ExcelDemoToDoItemDependencies\" "
-                        + "where \"dependingId\" IN "
-                        + "(select \"id\" from \"excelFixture\".\"ExcelDemoToDoItem\" where \"ownedBy\" = '%s') ",
-                ownedBy));
+        var em = jpaSupport.getEntityManagerElseFail(ExcelFixture.class);
 
-        jdoSupport.executeUpdate(String.format(
-                "delete from \"excelFixture\".\"ExcelDemoToDoItem\" "
-                        + "where \"ownedBy\" = '%s'", ownedBy));
+
+//FIXME
+//        jdoSupport.executeUpdate(String.format(
+//                "delete "
+//                        + "from \"excelFixture\".\"ExcelDemoToDoItemDependencies\" "
+//                        + "where \"dependingId\" IN "
+//                        + "(select \"id\" from \"excelFixture\".\"ExcelDemoToDoItem\" where \"ownedBy\" = '%s') ",
+//                ownedBy));
+//
+//        jdoSupport.executeUpdate(String.format(
+//                "delete from \"excelFixture\".\"ExcelDemoToDoItem\" "
+//                        + "where \"ownedBy\" = '%s'", ownedBy));
     }
-
-    @Inject JdoSupportService jdoSupport;
 
 }

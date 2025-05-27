@@ -45,9 +45,6 @@ import org.apache.causeway.testdomain.wrapperfactory.Counter_bumpUsingMixin;
 
 import lombok.SneakyThrows;
 
-/**
- * Run "sh enhance.sh -w" first, to enhance the test JDO entities.
- */
 class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstract {
 
     @Inject WrapperFactory wrapperFactory;

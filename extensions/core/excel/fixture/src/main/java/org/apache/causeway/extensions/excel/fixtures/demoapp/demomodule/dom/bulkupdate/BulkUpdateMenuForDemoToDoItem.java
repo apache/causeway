@@ -22,6 +22,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.XmlTransient;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -41,7 +43,7 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subc
 @DomainServiceLayout(
         named = "Excel"
 )
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@Order(PriorityPrecedence.EARLY)
 public class BulkUpdateMenuForDemoToDoItem {
 
     public BulkUpdateMenuForDemoToDoItem() {

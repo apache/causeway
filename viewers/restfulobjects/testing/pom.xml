@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.viewer</groupId>
         <artifactId>causeway-viewer-restfulobjects</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>causeway-viewer-restfulobjects-testing</artifactId>

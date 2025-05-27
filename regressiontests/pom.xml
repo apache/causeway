@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.causeway</groupId>
         <artifactId>causeway-bom</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../bom/pom.xml</relativePath>
     </parent>
 
@@ -230,28 +230,28 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-wicket</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -263,19 +263,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.regressiontests</groupId>
-                <artifactId>causeway-regressiontests-base-jdo</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.regressiontests</groupId>
                 <artifactId>causeway-regressiontests-base-jpa</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.apache.causeway.security</groupId>
-                <artifactId>causeway-security-shiro</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -288,12 +276,6 @@
             <dependency>
                 <groupId>org.apache.causeway.persistence</groupId>
                 <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.causeway.persistence</groupId>
-                <artifactId>causeway-persistence-jdo-datanucleus</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -323,19 +305,7 @@
 
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-persistence-jdo</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-secman-delegated-shiro</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -379,41 +349,6 @@
         </dependencies>
 
     </dependencyManagement>
-
-    <profiles>
-        <profile>
-            <id>module-jdo</id>
-            <activation>
-                <property>
-                    <name>!skip-module-jdo</name>
-                </property>
-            </activation>
-            <modules>
-                <module>base</module>
-                <module>base-jdo</module>
-                <module>base-jpa</module>
-                <module>bootstrapping</module>
-                <module>config</module>
-                <module>core-wrapperfactory</module>
-                <module>cucumber</module>
-                <module>domainmodel</module>
-                <module>eventhandling</module>
-                <module>layouts</module>
-                <module>factory</module>
-                <module>interact</module>
-                <module>persistence-jdo</module>
-                <module>persistence-jpa</module>
-                <module>cmdexecauditsess</module>
-                <module>publishing-jpa</module>
-                <module>rest-jdo</module>
-                <module>rest-jpa</module>
-                <module>value</module>
-                <module>viewers-common</module>
-                <module>viewers-jdo</module>
-                <module>viewers-jpa</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <modules>
         <module>base</module>

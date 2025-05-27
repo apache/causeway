@@ -22,26 +22,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.function.Predicate;
 
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-
-import org.apache.causeway.commons.internal.base._Strings;
-
 /**
  * @since 2.0 {@index}
  */
 public class InjectUtils {
 
     public static <T> Predicate<Field> withTypeAssignableFrom(final Class<T> type) {
-        return (Field input)-> input != null && input.getType().isAssignableFrom(type);
+        return (final Field input)-> input != null && input.getType().isAssignableFrom(type);
     }
 
     public static <T> Predicate<Method> withReturnTypeAssignableFrom(final Class<T> type) {
-        return (Method input) -> input != null && input.getReturnType().isAssignableFrom(type);
+        return (final Method input) -> input != null && input.getReturnType().isAssignableFrom(type);
     }
 
     public static Predicate<Method> withParametersAssignableFrom(final Class<?>... types) {
-        return (Method input) -> {
+        return (final Method input) -> {
             if (input != null) {
                 Class<?>[] parameterTypes = input.getParameterTypes();
                 if (parameterTypes.length == types.length) {
@@ -56,17 +51,5 @@ public class InjectUtils {
             return false;
         };
     }
-
-    public static final Predicate<? super Field> persistentMappedBy =
-            (Field f) -> {
-                final Persistent annotation = f.getAnnotation(Persistent.class);
-                return annotation!=null && !_Strings.isNullOrEmpty(annotation.mappedBy());
-            };
-
-            public static Predicate<? super Method> withEntityParameter() {
-                return (Method m) -> {
-                    final Class<?> parameterType = m.getParameterTypes()[0];
-                    return parameterType.isAnnotationPresent(PersistenceCapable.class); };
-            }
 
 }

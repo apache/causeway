@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
         <artifactId>causeway-regressiontests</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -46,14 +46,14 @@
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -61,26 +61,10 @@
             <dependency>
                 <groupId>org.apache.causeway.regressiontests</groupId>
                 <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <profiles>
-        <profile>
-            <id>module-jdo</id>
-            <activation>
-                <property>
-                    <name>!skip-module-jdo</name>
-                </property>
-            </activation>
-            <modules>
-                <module>generic</module>
-                <module>persistence-jdo</module>
-                <module>persistence-jpa</module>
-            </modules>
-        </profile>
-    </profiles>
 
     <modules>
         <module>generic</module>

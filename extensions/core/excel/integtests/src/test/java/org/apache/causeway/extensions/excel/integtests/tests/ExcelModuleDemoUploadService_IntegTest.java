@@ -37,7 +37,8 @@ import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Exce
 import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.fixturescripts.ExcelDemoToDoItem_tearDown;
 import org.apache.causeway.extensions.excel.integtests.ExcelModuleIntegTestAbstract;
 
-public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstract {
+@Disabled
+class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstract {
 
     @Inject private ExcelUploadServiceForDemoToDoItem uploadService;
     @Inject private ExcelDemoToDoItemMenu toDoItems;
@@ -47,7 +48,7 @@ public class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTest
         fixtureScripts.run(new ExcelDemoToDoItem_tearDown());
     }
 
-    @Test @Disabled
+    @Test
     public void uploadSpreadsheet() throws Exception{
 
         // Given

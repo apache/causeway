@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.causeway</groupId>
         <artifactId>causeway-bom</artifactId>
-        <version>3.4.0-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../bom/pom.xml</relativePath>
     </parent>
 
@@ -313,12 +313,8 @@
 
         <module>../persistence/commons</module>
         <module>../persistence/jdbc</module>
-        <module>../persistence/jdo</module>
         <module>../persistence/jpa</module>
         <module>../persistence/querydsl</module>
-
-        <module>../retired/shiro/security/shiro</module>
-        <module>../retired/shiro/extensions/secman/delegated-shiro</module>
 
     </modules>
 

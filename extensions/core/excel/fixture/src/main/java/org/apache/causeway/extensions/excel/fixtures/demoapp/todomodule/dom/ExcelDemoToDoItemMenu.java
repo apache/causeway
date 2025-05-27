@@ -29,6 +29,8 @@ import jakarta.inject.Named;
 
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.core.annotation.Order;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.DomainService;
@@ -47,7 +49,7 @@ import lombok.RequiredArgsConstructor;
 
 @DomainService
 @Named("libExcelFixture.ExcelDemoToDoItemMenu")
-@jakarta.annotation.Priority(PriorityPrecedence.EARLY)
+@Order(PriorityPrecedence.EARLY)
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 public class ExcelDemoToDoItemMenu {
 
