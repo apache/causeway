@@ -42,22 +42,6 @@
 				<artifactId>causeway-extensions-executionrepublisher-applib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-executionlog</artifactId>
-				<version>${project.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.causeway.extensions</groupId>
-				<artifactId>causeway-extensions-executionoutbox</artifactId>
-				<version>${project.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

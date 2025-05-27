@@ -29,10 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
-
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
@@ -45,9 +41,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
                 "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest",
         }
 )
-@TestPropertySources({
-    @TestPropertySource(CausewayPresets.UseLog4j2Test)
-})
 class JpaExceptionTranslationTest extends RegressionTestWithJpaFixtures {
 
     @BeforeAll

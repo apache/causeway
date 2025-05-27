@@ -22,11 +22,8 @@ import jakarta.inject.Inject;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.jpa.HasPersistenceStandardJpa;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.event.LifecycleEventSubscriberJpaForTesting;
@@ -49,9 +46,6 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
                 //"logging.level.org.springframework.orm.jpa.*=DEBUG",
                 "logging.level.org.apache.causeway.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
-@TestPropertySource({
-    CausewayPresets.UseLog4j2Test
-})
 @DirtiesContext
 class JpaLifecycleEventPublishingTest
 extends LifecycleEventPublishingTestAbstract
@@ -65,13 +59,13 @@ implements HasPersistenceStandardJpa {
     }
 
     @Override
-    protected final void clearPublishedEvents(KVStoreForTesting kvStore) {
+    protected final void clearPublishedEvents(final KVStoreForTesting kvStore) {
         LifecycleEventSubscriberJpaForTesting.clearPublishedEvents(kvStore);
     }
 
     @Override
-    protected Can<BookDto> getPublishedEvents(KVStoreForTesting kvStore,
-            Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass) {
+    protected Can<BookDto> getPublishedEvents(final KVStoreForTesting kvStore,
+            final Class<? extends AbstractLifecycleEvent<? extends IBook>> eventClass) {
         return LifecycleEventSubscriberJpaForTesting.getPublishedEventsJpa(kvStore, eventClass);
     }
 

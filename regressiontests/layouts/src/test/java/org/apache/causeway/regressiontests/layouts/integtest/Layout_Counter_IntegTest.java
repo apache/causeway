@@ -39,8 +39,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
@@ -86,9 +84,6 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModulePersistenceCommons.class,
             CausewayModuleSecurityBypass.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, LayoutTestDomainModel.class})
     public static class AppManifest {

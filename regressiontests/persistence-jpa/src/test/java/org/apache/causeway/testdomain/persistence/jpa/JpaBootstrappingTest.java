@@ -36,13 +36,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
@@ -57,7 +55,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaBootstrappingTest",//;TRACE_LEVEL_SYSTEM_OUT=3",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 // @DirtiesContext // doesn't seem to tidy up correctly ... I see InteractionService still injected into entities in the _next_ tests run (JpaExceptionTranslationTest_usingTransactional)
 class JpaBootstrappingTest extends CausewayIntegrationTestAbstract {

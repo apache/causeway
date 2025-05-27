@@ -22,9 +22,6 @@ import jakarta.inject.Inject;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
-
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.jpa.HasPersistenceStandardJpa;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.publishing.PublishingTestFactoryJpa;
@@ -44,9 +41,6 @@ import org.apache.causeway.testdomain.publishing.stubs.EntityPublishingTestAbstr
                 "logging.level.org.apache.causeway.core.runtimeservices.session.CausewayInteractionFactoryDefault=DEBUG",
                 "logging.level.org.apache.causeway.testdomain.util.kv.KVStoreForTesting=DEBUG",
         })
-@TestPropertySource({
-    CausewayPresets.UseLog4j2Test
-})
 @DirtiesContext
 class JpaEntityPublishingTest
 extends EntityPublishingTestAbstract

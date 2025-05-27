@@ -29,7 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 
 @SpringBootTest(
@@ -38,8 +37,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
         }
 )
 @TestPropertySource({
-    "classpath:/application-config-test.properties",
-    CausewayPresets.UseLog4j2Test
+    "classpath:/application-config-test.properties"
 })
 class CausewayConfigBeanTest_usingHeadless {
 

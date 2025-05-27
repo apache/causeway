@@ -35,57 +35,52 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.TestPropertySource;
-
-import org.apache.causeway.core.config.presets.CausewayPresets;
 
 @SpringBootTest(
-        classes = { 
+        classes = {
                 FooTest.Setup.class
-        }, 
+        },
         properties = {
-
                 "foo.flag=true",
                 "foo.uuid=${random.uuid}",
                 "foo.random-schema=test_${random.uuid}",
                 "foo.ConnectionURL=jdbc:h2:mem:test"
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @EnableConfigurationProperties(FooProperties.class)
 class FooTest {
-    
+
     @Configuration
     static class Setup {
-        
+
         @ConfigurationProperties(prefix = "foo")
         @Bean @Named("foo-as-map")
         public Map<String, String> getAsMap() {
             return new HashMap<>();
         }
-        
+
     }
 
-    @Inject 
+    @Inject
     private FooProperties foo;
-    
-    @Inject @Named("foo-as-map") 
+
+    @Inject @Named("foo-as-map")
     private Map<String, String> fooAsMap;
 
     @Test
     void foo() {
         assertNotNull(foo);
         assertTrue(foo.isFlag());
-        
+
         assertNotNull(foo.getUuid());
         assertNotNull(foo.getRandomSchema());
         assertNotNull(foo.getConnectionURL());
-        
+
         System.out.println(foo);
-        
+
         assertNotNull(fooAsMap);
         assertFalse(fooAsMap.isEmpty());
         System.out.println(fooAsMap);
-        
+
     }
 
 }

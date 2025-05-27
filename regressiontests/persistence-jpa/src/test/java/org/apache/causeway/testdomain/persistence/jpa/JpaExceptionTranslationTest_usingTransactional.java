@@ -38,13 +38,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.TestPropertySources;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.jpa.JpaInventoryDao;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
@@ -59,9 +56,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaInventory;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaExceptionTranslationTest_usingTransactional",
         })
-@TestPropertySources({
-    @TestPropertySource(CausewayPresets.UseLog4j2Test)
-})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class JpaExceptionTranslationTest_usingTransactional
 extends RegressionTestWithJpaFixtures {

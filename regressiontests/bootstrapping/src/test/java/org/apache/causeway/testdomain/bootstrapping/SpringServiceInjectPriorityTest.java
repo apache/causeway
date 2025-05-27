@@ -68,7 +68,6 @@ import lombok.Getter;
 @TestPropertySource({
         CausewayPresets.SilenceMetaModel,
         CausewayPresets.SilenceProgrammingModel,
-        CausewayPresets.UseLog4j2Test
 })
 class SpringServiceInjectPriorityTest {
 

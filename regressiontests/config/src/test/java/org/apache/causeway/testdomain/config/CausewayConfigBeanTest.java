@@ -30,15 +30,13 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 
 @SpringBootTest(
         classes = {
                 CausewayModuleCoreConfig.class
         })
 @TestPropertySource({
-    "classpath:/application-config-test.properties",
-    CausewayPresets.UseLog4j2Test
+    "classpath:/application-config-test.properties"
 })
 
 class CausewayConfigBeanTest {

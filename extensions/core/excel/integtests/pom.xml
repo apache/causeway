@@ -69,18 +69,6 @@ under the License.
         </testResources>
     </build>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing</artifactId>
-                <scope>import</scope>
-                <type>pom</type>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
 
         <dependency>

@@ -27,8 +27,6 @@ import org.approvaltests.Approvals;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
@@ -38,7 +36,6 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.Config;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
@@ -54,9 +51,6 @@ public abstract class PdfjsViewer_Abstract_IntegTest extends CausewayIntegration
             CausewayModuleSecurityBypass.class,
             CausewayModuleCoreRuntimeServices.class,
             CausewayModulePersistenceCommons.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     public static class AppManifestBase {
 

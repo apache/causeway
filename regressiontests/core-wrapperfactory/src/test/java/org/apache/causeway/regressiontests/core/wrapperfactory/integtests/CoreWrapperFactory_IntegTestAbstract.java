@@ -61,8 +61,7 @@ public abstract class CoreWrapperFactory_IntegTestAbstract extends CausewayInteg
     })
     @EntityScan(basePackageClasses = Counter.class)
     @PropertySources({
-            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.UseLog4j2Test),
+            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema)
     })
     public static class AppManifest {
     }

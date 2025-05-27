@@ -35,8 +35,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.applib.CausewayModuleApplibMixins;
@@ -76,9 +74,6 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
             CausewayModuleCoreRuntimeServices.class,
             CausewayModulePersistenceCommons.class,
             CausewayModuleSecurityBypass.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @ComponentScan(basePackageClasses = {AppManifest.class, LayoutTestDomainModel.class})
     public static class AppManifest {

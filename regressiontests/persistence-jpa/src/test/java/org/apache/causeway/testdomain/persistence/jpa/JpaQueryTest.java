@@ -37,12 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.query.Query;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.persistence.jpa.applib.services.JpaSupportService;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
@@ -59,7 +57,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaQueryTest",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
 class JpaQueryTest extends CausewayIntegrationTestAbstract {

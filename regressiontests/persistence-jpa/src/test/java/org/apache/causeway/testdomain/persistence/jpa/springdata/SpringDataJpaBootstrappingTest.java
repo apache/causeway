@@ -37,12 +37,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingSpringDataJpa;
 import org.apache.causeway.testdomain.jpa.springdata.Employee;
@@ -57,7 +55,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 @ContextConfiguration(classes = {
         Configuration_usingSpringDataJpa.class,
 })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
 // @Disabled // CAUSEWAY-2789 revert

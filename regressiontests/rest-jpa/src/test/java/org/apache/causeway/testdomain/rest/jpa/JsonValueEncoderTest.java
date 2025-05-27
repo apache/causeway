@@ -33,13 +33,10 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Temporals;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -51,7 +48,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
         Configuration_headless.class,
         CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 class JsonValueEncoderTest {
 
     @Inject MetaModelContext mmc;

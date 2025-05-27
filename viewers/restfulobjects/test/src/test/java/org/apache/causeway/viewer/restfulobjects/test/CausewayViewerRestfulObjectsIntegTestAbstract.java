@@ -110,13 +110,8 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.UseLog4j2Test),
             @PropertySource(CausewayPresets.SilenceMetaModel),
             @PropertySource(CausewayPresets.SilenceProgrammingModel),
-//            @PropertySource("classpath:/H2InMemory_withUniqueSchema.properties"),
-//            @PropertySource("classpath:/SilenceMetaModel.properties"),
-//            @PropertySource("classpath:/SilenceProgrammingModel.properties"),
-//            @PropertySource("classpath:/UseLog4j2Test.properties"),
     })
     public static class TestApp {
     }

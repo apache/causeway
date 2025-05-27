@@ -32,13 +32,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -54,7 +52,6 @@ import org.apache.causeway.testdomain.util.kv.KVStoreForTesting;
                 "spring.datasource.url=jdbc:h2:mem:JpaGeneratedLongIdEntityLifecycleTest",
         })
 @Transactional
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@DirtiesContext
 class JpaGeneratedLongIdEntityLifecycleTest {

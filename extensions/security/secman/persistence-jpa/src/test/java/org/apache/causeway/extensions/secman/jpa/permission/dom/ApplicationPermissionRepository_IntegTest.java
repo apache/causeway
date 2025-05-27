@@ -22,11 +22,8 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.secman.applib.ApplicationPermissionRepositoryIntegTestAbstract;
 import org.apache.causeway.extensions.secman.applib.mmm.MmmModule;
@@ -47,9 +44,6 @@ class ApplicationPermissionRepository_IntegTest extends ApplicationPermissionRep
             CausewayModuleExtSecmanPersistenceJpa.class,
 
             MmmModule.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test),
     })
     public static class AppManifest {
     }

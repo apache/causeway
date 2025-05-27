@@ -33,11 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug.swt._Swt;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
@@ -49,7 +46,6 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootTest(
         classes = {JpaRestEndpointService.class},
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
     Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class

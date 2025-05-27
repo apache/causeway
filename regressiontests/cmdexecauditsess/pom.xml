@@ -44,21 +44,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.causeway.regressiontests</groupId>
                 <artifactId>causeway-regressiontests-cmdexecauditsess-generic</artifactId>
                 <version>${project.version}</version>

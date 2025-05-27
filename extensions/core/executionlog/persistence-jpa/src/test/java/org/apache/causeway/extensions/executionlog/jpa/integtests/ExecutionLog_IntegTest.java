@@ -24,11 +24,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.executionlog.applib.integtest.ExecutionLog_IntegTestAbstract;
 import org.apache.causeway.extensions.executionlog.applib.integtest.model.ExecutionLogTestDomainModel;
@@ -48,9 +45,6 @@ public class ExecutionLog_IntegTest extends ExecutionLog_IntegTestAbstract {
             CausewayModuleCoreRuntimeServices.class,
             CausewayModuleSecurityBypass.class,
             CausewayModuleExtExecutionLogPersistenceJpa.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, ExecutionLogTestDomainModel.class})

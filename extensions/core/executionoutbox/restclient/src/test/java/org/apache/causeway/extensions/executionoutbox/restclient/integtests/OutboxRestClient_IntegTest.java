@@ -35,8 +35,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Propagation;
 
@@ -91,9 +89,6 @@ public class OutboxRestClient_IntegTest  {
 
     @EnableAutoConfiguration
     @Configuration
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
-    })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {TestManifest.class, Counter.class})
     public static class TestManifest {

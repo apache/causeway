@@ -26,11 +26,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.extensions.audittrail.jpa.CausewayModuleExtAuditTrailPersistenceJpa;
 import org.apache.causeway.extensions.audittrail.jpa.dom.AuditTrailEntry;
@@ -62,9 +59,6 @@ public class CmdExecAuditSessLog_IntegTest extends CmdExecAuditSessLog_IntegTest
             CausewayModuleExtExecutionOutboxPersistenceJpa.class,
             CausewayModuleExtAuditTrailPersistenceJpa.class,
             CausewayModuleExtSessionLogPersistenceJpa.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.UseLog4j2Test)
     })
     @EntityScan(basePackageClasses = {Counter.class})
     @ComponentScan(basePackageClasses = {AppManifest.class, CmdExecAuditSessTestDomainModel.class})

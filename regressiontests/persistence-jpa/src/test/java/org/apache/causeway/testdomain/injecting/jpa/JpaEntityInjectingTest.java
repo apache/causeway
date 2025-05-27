@@ -30,14 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.primitives._Longs.Bound;
 import org.apache.causeway.commons.internal.primitives._Longs.Range;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.fixtures.EntityTestFixtures.Lock;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
@@ -57,7 +55,6 @@ import lombok.extern.slf4j.Slf4j;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:XXX",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Slf4j

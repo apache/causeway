@@ -147,7 +147,6 @@ public abstract class CausewayViewerGraphqlIntegTestAbstract {
     })
     @PropertySources({
             @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.UseLog4j2Test),
             @PropertySource(CausewayPresets.SilenceMetaModel),
             @PropertySource(CausewayPresets.SilenceProgrammingModel),
     })

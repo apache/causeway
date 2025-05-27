@@ -47,7 +47,6 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.io.TextUtils;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.email.EmailServiceDefault;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -61,8 +60,7 @@ import org.apache.causeway.testdomain.conf.Configuration_headless;
         }
 )
 @TestPropertySource({
-    "classpath:/application-config-test.properties",
-    CausewayPresets.UseLog4j2Test
+    "classpath:/application-config-test.properties"
 })
 class EmailServiceDefault_IntegTest {
 

@@ -60,7 +60,6 @@ import static org.apache.causeway.commons.internal.collections._Sets.intersectSo
     //CausewayPresets.DebugDiscovery
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel,
-    CausewayPresets.UseLog4j2Test,
 })
 //@Incubating("with development work on 'v2' the reference list of services constantly changes")
 class SpringServiceProvisioningTest {

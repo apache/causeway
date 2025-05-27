@@ -61,8 +61,7 @@ import org.apache.causeway.testdomain.model.stereotypes.MyView;
         })
 @TestPropertySource({
     CausewayPresets.SilenceMetaModel,
-    CausewayPresets.SilenceProgrammingModel,
-    CausewayPresets.UseLog4j2Test,
+    CausewayPresets.SilenceProgrammingModel
 })
 class AutoConfigurationTest {
 

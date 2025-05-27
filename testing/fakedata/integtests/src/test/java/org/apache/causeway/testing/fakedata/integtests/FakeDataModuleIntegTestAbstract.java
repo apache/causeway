@@ -26,8 +26,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.persistence.jpa.applib.CausewayModulePersistenceJpaApplib;
@@ -39,7 +37,6 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 @SpringBootTest(
         classes = FakeDataModuleIntegTestAbstract.TestManifest.class
 )
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ContextConfiguration
 @Transactional
 public abstract class FakeDataModuleIntegTestAbstract extends CausewayIntegrationTestAbstractWithFixtures {

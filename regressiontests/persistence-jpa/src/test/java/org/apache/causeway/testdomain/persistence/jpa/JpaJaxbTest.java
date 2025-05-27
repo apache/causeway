@@ -23,10 +23,7 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
@@ -39,7 +36,6 @@ import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:JpaJaxbTest",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 //@Transactional
 class JpaJaxbTest extends RegressionTestWithJpaFixtures {
 

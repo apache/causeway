@@ -30,14 +30,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.TestPropertySource;
-
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Refs.ObjectReference;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 import org.apache.causeway.testdomain.jpa.JpaTestDomainPersona;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
@@ -56,7 +53,6 @@ import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIf
 //                "logging.level.org.springframework.test.context.transaction.*=DEBUG",
 //                "logging.level.org.springframework.orm.jpa.*=DEBUG",
         })
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @ExtendWith({CausewayInteractionHandler.class})
 @DirtiesContext
 @DisabledIfRunningWithSurefire

@@ -33,9 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestPropertySource;
-
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
@@ -52,7 +49,6 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
                 CalendarEventSemantics.class // register semantics for testing
                 },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(CausewayPresets.UseLog4j2Test)
 @Import({
     Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class

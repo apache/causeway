@@ -53,7 +53,6 @@ import lombok.Setter;
         })
 @TestPropertySource({
     CausewayPresets.IntrospectFully,
-    CausewayPresets.UseLog4j2Test,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })

@@ -226,35 +226,6 @@
         <dependencies>
 
             <dependency>
-                <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.testing</groupId>
-                <artifactId>causeway-testing</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.valuetypes</groupId>
-                <artifactId>causeway-valuetypes</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.viewer</groupId>
-                <artifactId>causeway-viewer-wicket</artifactId>
-                <version>${project.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.causeway.regressiontests</groupId>
                 <artifactId>causeway-regressiontests-base</artifactId>
                 <version>${project.version}</version>
