@@ -25,7 +25,7 @@ updates:
     labels:
       - "dependencies"
       - "Spring Boot 3.x"
-  
+
   # Maintain dependencies for Maven (v4 branch)
   - package-ecosystem: "maven"
     target-branch: "v4"
@@ -38,8 +38,7 @@ updates:
     labels:
       - "dependencies"
       - "Spring Boot 4.x"
-	  
-	  
+
       
 # EOL ... Maintain dependencies for Maven (v2 branch)
 #  - package-ecosystem: "maven"
