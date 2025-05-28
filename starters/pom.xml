@@ -23,19 +23,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- this must come before <parent> because the version is manually updated
-		in build-artifacts.sh -->
+    <parent>
+        <groupId>org.apache.causeway</groupId>
+        <artifactId>causeway-bom</artifactId>
+        <version>${revision}</version>
+        <relativePath>../bom/pom.xml</relativePath>
+    </parent>
+
 	<groupId>org.apache.causeway.app</groupId>
 	<artifactId>causeway-app-starter-parent</artifactId>
-	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
-		<relativePath />
-	</parent>
 
 	<name>Apache Causeway Starter Parent</name>
 	<description>
@@ -43,18 +40,6 @@
 		built with Maven. Builds on top of spring-boot-starter-parent.
 	</description>
 	<url>https://causeway.apache.org</url>
-
-	<properties>
-
-		<maven.compiler.release>17</maven.compiler.release>
-
-		<spring-boot.version>3.5.0</spring-boot.version>
-		<approvaltests.version>24.22.0</approvaltests.version>
-
-		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
-		<resteasy.version>6.0.0.Alpha2</resteasy.version>
-
-	</properties>
 
 	<build>
 		<pluginManagement>
@@ -100,16 +85,9 @@
             </plugins>
 		</pluginManagement>
 	</build>
+	
 	<dependencyManagement>
 		<dependencies>
-
-			<dependency>
-				<groupId>org.apache.causeway</groupId>
-				<artifactId>causeway-bom</artifactId>
-				<version>${project.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
 
 			<dependency>
 				<groupId>com.approvaltests</groupId>

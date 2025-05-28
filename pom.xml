@@ -18,350 +18,240 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.causeway</groupId>
-	<artifactId>causeway-all</artifactId>
-	<version>${revision}</version>
+    <groupId>org.apache.causeway</groupId>
+    <artifactId>causeway-all</artifactId>
+    <version>${revision}</version>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<name>Apache Causeway (Aggregator)</name>
-	<description>
-        Convenience aggregator POM that references all modules, some explicitely,
+    <name>Apache Causeway (Aggregator)</name>
+    <description>
+        Convenience aggregator POM that references all modules, some
+        explicitely,
         others via profiles, that are not activiated per default.
         The parent POM of the core framework is bom/pom.xml.
     </description>
 
     <properties>
-        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn -Drevision=2.7.8 -->
+        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn
+        -Drevision=2.7.8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
+        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the
+        aggregator -->
 
-		<maven-timeline.version>2.0.3</maven-timeline.version>
-	</properties>
+        <maven-timeline.version>2.0.3</maven-timeline.version>
+    </properties>
 
-	<scm>
-		<connection>scm:git:https://github.com/apache/causeway.git</connection>
-		<developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
-		<url>https://github.com/apache/causeway.git</url>
-		<tag>HEAD</tag>
-	</scm>
+    <scm>
+        <connection>scm:git:https://github.com/apache/causeway.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/causeway.git</developerConnection>
+        <url>https://github.com/apache/causeway.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
-	<build>
-		<extensions>
-			<extension>
-				<groupId>io.takari.maven</groupId>
-				<artifactId>maven-timeline</artifactId>
-				<version>${maven-timeline.version}</version>
-			</extension>
-		</extensions>
-	</build>
+    <build>
+        <extensions>
+            <extension>
+                <groupId>io.takari.maven</groupId>
+                <artifactId>maven-timeline</artifactId>
+                <version>${maven-timeline.version}</version>
+            </extension>
+        </extensions>
+    </build>
 
-	<profiles>
+    <profiles>
 
-		<!-- ESSENTIAL MODULES -->
+        <!-- RELEASED MODULES -->
 
-		<profile>
-			<id>essential</id>
-			<activation>
-				<property>
-					<name>!skip.essential</name>
-				</property>
-			</activation>
-			<modules>
-				<!--
-                essential modules required to run web applications and tests;
-                non-essential modules can be added to the build via profiles
-                (as defined below);
+        <profile>
+            <id>released</id>
+            <activation>
+                <property>
+                    <name>!skip.essential</name>
+                </property>
+            </activation>
+            <!--
+            essential modules required to run web applications and tests;
+            non-essential modules can be added to the build via profiles
+            (as defined below);
 
-                keep module declarations in alphabetical order!
+            keep module declarations in alphabetical order!
 
-                also keep profiles in sync with the site documentation
-                https://github.com/apache/causeway/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-causeway.adoc
-                    -->
+            also keep profiles in sync with the site documentation
+            https://github.com/apache/causeway/blob/master/antora/components/conguide/modules/ROOT/pages/building-apache-causeway.adoc
+            -->
+            <modules>
                 <module>bom</module>
-				<module>core</module>
-				<module>extensions</module>
-				<module>mavendeps</module>
-				<module>starters</module>
-				<module>testing</module>
-				<module>valuetypes</module>
-			</modules>
+                <module>core</module>
+                <module>extensions</module>
+                <module>mavendeps</module>
+                <module>starters</module>
+                <module>testing</module>
+                <module>valuetypes</module>
+            </modules>
+        </profile>
 
-		</profile>
+        <!-- ALL MODULES -->
 
-		<!-- RELEASED MODULES -->
+        <profile>
+            <id>module-all</id>
+            <activation>
+                <property>
+                    <name>module-all</name>
+                </property>
+            </activation>
+            <modules>
+                <module>antora</module>
+                <module>regressiontests</module>
+            </modules>
+        </profile>
 
-		<profile>
-			<id>released</id>
-			<activation>
-				<property>
-					<name>released</name>
-				</property>
-			</activation>
-			<modules>
-				<module>bom</module>
-				<module>core</module>
-				<module>extensions</module>
-				<module>mavendeps</module>
-				<module>starters</module>
-				<module>testing</module>
-				<module>valuetypes</module>
-			</modules>
-		</profile>
+        <!-- NON-ESSENTIAL MODULES -->
 
-		<!-- ALL MODULES -->
-		
-		<profile>
-		    <id>module-all</id>
-			<activation>
-				<property>
-					<name>module-all</name>
-				</property>
-			</activation>
-			<modules>
-				<module>antora</module>
+        <profile>
+            <id>module-antora</id>
+            <activation>
+                <property>
+                    <name>module-antora</name>
+                </property>
+            </activation>
+            <modules>
+                <module>antora</module>
+            </modules>
+        </profile>
 
-				<!-- incubator, without kroviz -->
-				<module>incubator/extensions/core/commandreplay</module>
+        <profile>
+            <id>module-regressiontests</id>
+            <activation>
+                <property>
+                    <name>module-regressiontests</name>
+                </property>
+            </activation>
+            <modules>
+                <module>regressiontests</module>
+            </modules>
+        </profile>
 
-				<module>regressiontests</module>
-			</modules>
-		</profile>
-
-		<!-- ALL MODULES - TROUBLE SHOOTING -->
-
-		<profile>
-			<id>module-all-except-incubator</id>
-			<activation>
-				<property>
-					<name>module-all-except-incubator</name>
-				</property>
-			</activation>
-			<modules>
-				<module>antora</module>
-				<module>regressiontests</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-all-except-kroviz</id>
-			<activation>
-				<property>
-					<name>module-all-except-kroviz</name>
-				</property>
-			</activation>
-			<modules>
-				<module>antora</module>
-
-				<!-- incubator, without kroviz -->
-				<module>incubator/extensions/core/commandreplay</module>
-
-				<module>regressiontests</module>
-			</modules>
-		</profile>
-
-		<!-- NON-ESSENTIAL MODULES -->
-
-		<profile>
-			<id>module-antora</id>
-			<activation>
-				<property>
-					<name>module-antora</name>
-				</property>
-			</activation>
-			<modules>
-				<module>antora</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-extensions</id>
-			<activation>
-				<property>
-					<name>module-extensions</name>
-				</property>
-			</activation>
-			<modules>
-				<module>extensions</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-ext-secman</id>
-			<activation>
-				<property>
-					<name>module-secman</name>
-				</property>
-			</activation>
-			<modules>
-				<module>extensions/security/secman</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-incubator-all</id>
-			<activation>
-				<property>
-					<name>module-incubator-all</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/clients/kroviz</module>
-				<module>incubator/extensions/core/commandreplay</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-incubator-commandreplay</id>
-			<activation>
-				<property>
-					<name>module-incubator-commandreplay</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/extensions/core/commandreplay</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-incubator-kroviz</id>
-			<activation>
-				<property>
-					<name>module-incubator-kroviz</name>
-				</property>
-			</activation>
-			<modules>
-				<module>incubator/clients/kroviz</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>module-regressiontests</id>
-			<activation>
-				<property>
-					<name>module-regressiontests</name>
-				</property>
-			</activation>
-			<modules>
-				<module>regressiontests</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>apache-release</id>
-			<activation>
-				<property>
-					<name>apache-release</name>
-				</property>
-			</activation>
-			<properties>
-				<skipTests>true</skipTests>
-				<altDeploymentRepository>apache.releases.https::default::https://repository.apache.org/service/local/staging/deploy/maven2</altDeploymentRepository>
-			</properties>
-			<build>
-				<plugins>
-					<!-- We want to sign the artifact, the POM, and all attached artifacts -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>3.2.7</version>
-						<executions>
-							<execution>
-								<id>sign-release-artifacts</id>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<gpgArguments>
-								<arg>--digest-algo=SHA512</arg>
-							</gpgArguments>
-						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>net.nicoulaj.maven.plugins</groupId>
-						<artifactId>checksum-maven-plugin</artifactId>
-						<version>1.11</version>
-						<executions>
-							<execution>
-								<id>source-release-checksum</id>
-								<goals>
-									<goal>files</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<algorithms>
-								<algorithm>SHA-512</algorithm>
-							</algorithms>
-							<csvSummary>false</csvSummary>
-							<fileSets>
-								<fileSet>
-									<directory>${project.build.directory}</directory>
-									<includes>
-										<include>${project.artifactId}-${project.version}-source-release.zip</include>
-										<include>${project.artifactId}-${project.version}-source-release.tar*</include>
-									</includes>
-								</fileSet>
-							</fileSets>
-							<failIfNoFiles>false</failIfNoFiles><!-- usually, no file to do checksum:
+        <profile>
+            <id>apache-release</id>
+            <activation>
+                <property>
+                    <name>apache-release</name>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+                <altDeploymentRepository>
+                    apache.releases.https::default::https://repository.apache.org/service/local/staging/deploy/maven2</altDeploymentRepository>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- We want to sign the artifact, the POM, and all attached
+                    artifacts -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--digest-algo=SHA512</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>net.nicoulaj.maven.plugins</groupId>
+                        <artifactId>checksum-maven-plugin</artifactId>
+                        <version>1.11</version>
+                        <executions>
+                            <execution>
+                                <id>source-release-checksum</id>
+                                <goals>
+                                    <goal>files</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <algorithms>
+                                <algorithm>SHA-512</algorithm>
+                            </algorithms>
+                            <csvSummary>false</csvSummary>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>
+                                            ${project.artifactId}-${project.version}-source-release.zip</include>
+                                        <include>
+                                            ${project.artifactId}-${project.version}-source-release.tar*</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                            <failIfNoFiles>false</failIfNoFiles><!-- usually, no
+                            file to do checksum:
 								don't consider error -->
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-		<profile>
-			<id>github</id>
-			<activation>
-				<property>
-					<name>github</name>
-				</property>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>github</id>
-					<name>Github Releases</name>
-					<url>https://maven.pkg.github.com/apache/causeway</url>
-				</repository>
-			</distributionManagement>
-		</profile>
+        <profile>
+            <id>github</id>
+            <activation>
+                <property>
+                    <name>github</name>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>Github Releases</name>
+                    <url>https://maven.pkg.github.com/apache/causeway</url>
+                </repository>
+            </distributionManagement>
+        </profile>
 
-		<profile>
-			<id>nightly-localfs-repo</id>
-			<activation>
-				<property>
-					<name>nightly-localfs-repo</name>
-				</property>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>nightly-localfs-repo</id>
-					<name>Temporary Local Filesystem Staging Repository</name>
-					<url>file://${MVN_SNAPSHOTS_PATH}</url>
-				</repository>
-			</distributionManagement>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-deploy-plugin</artifactId>
-						<version>3.1.4</version>
-						<configuration>
-							<altDeploymentRepository>
-								nightly-localfs-repo::file://${MVN_SNAPSHOTS_PATH}
-							</altDeploymentRepository>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+        <profile>
+            <id>nightly-localfs-repo</id>
+            <activation>
+                <property>
+                    <name>nightly-localfs-repo</name>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>nightly-localfs-repo</id>
+                    <name>Temporary Local Filesystem Staging Repository</name>
+                    <url>file://${MVN_SNAPSHOTS_PATH}</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>3.1.4</version>
+                        <configuration>
+                            <altDeploymentRepository>
+                                nightly-localfs-repo::file://${MVN_SNAPSHOTS_PATH}
+                            </altDeploymentRepository>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 
-	</profiles>
+    </profiles>
 
 </project>

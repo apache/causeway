@@ -120,7 +120,8 @@ identified
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
         <guava.version>33.4.8-jre</guava.version>
 
-        <hibernate-validator.version>9.0.0.Final</hibernate-validator.version> <!-- Spring Boot 4 preview, remove later -->
+        <hibernate-validator.version>9.0.0.Final</hibernate-validator.version> <!--
+        Spring Boot 4 preview, remove later -->
         <htmlparser.version>2.1</htmlparser.version>
 
         <javafaker.version>1.0.2</javafaker.version>
@@ -751,16 +752,13 @@ identified
                 <type>jar</type>
             </dependency>
 
-
             <!-- org.apache.causeway.mavendeps -->
             <dependency>
                 <groupId>org.apache.causeway.mavendeps</groupId>
                 <artifactId>causeway-mavendeps-webapp</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
-
 
             <!-- org.apache.causeway.extensions (commandlog) -->
             <dependency>
