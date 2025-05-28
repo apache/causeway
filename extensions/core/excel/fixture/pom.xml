@@ -36,6 +36,7 @@ under the License.
         <jar-plugin.automaticModuleName>
             org.apache.causeway.extensions.excel.fixture</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/extensions/excel/fixture</git-plugin.propertiesDir>
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <build>
