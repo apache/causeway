@@ -197,18 +197,18 @@ public class CausewayConfiguration {
      * The value of a specific configuration property
      *
      * @param configurationPropertyName  - eg as obtained from {@link #streamConfigurationPropertyNames()}.
-	 * @param onError - callback in case the value retrieval thorws any exception
+     * @param onError - callback in case the value retrieval throws any exception
      */
     public Optional<String> valueOf(final String configurationPropertyName, final @Nullable Consumer<Throwable> onError) {
         try {
-			return Optional.ofNullable(environment.getProperty(configurationPropertyName));
-		} catch (Throwable t) {
-			if(onError!=null) {
-				Try.run(()->onError.accept(t));
-			}
-			return Optional.empty();
-		}
-		
+            return Optional.ofNullable(environment.getProperty(configurationPropertyName));
+        } catch (Throwable t) {
+            if(onError!=null) {
+                Try.run(()->onError.accept(t));
+            }
+            return Optional.empty();
+        }
+        
     }
 
     private final Security security = new Security();
