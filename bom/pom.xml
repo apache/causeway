@@ -631,21 +631,18 @@ identified
                 <artifactId>causeway-testing</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fixtures</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fixtures-applib</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -653,14 +650,12 @@ identified
                 <artifactId>causeway-testing-unittestsupport</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-unittestsupport-applib</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -668,14 +663,12 @@ identified
                 <artifactId>causeway-testing-integtestsupport</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-integtestsupport-applib</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -683,14 +676,12 @@ identified
                 <artifactId>causeway-testing-specsupport</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-specsupport-applib</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -698,14 +689,12 @@ identified
                 <artifactId>causeway-testing-archtestsupport</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-archtestsupport-applib</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -713,28 +702,24 @@ identified
                 <artifactId>causeway-testing-fakedata</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fakedata-applib</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fakedata-fixtures</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-fakedata-integtests</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -742,14 +727,12 @@ identified
                 <artifactId>causeway-testing-h2console</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-h2console-ui</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
             <dependency>
@@ -757,14 +740,12 @@ identified
                 <artifactId>causeway-testing-hsqldbmgr</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.testing</groupId>
                 <artifactId>causeway-testing-hsqldbmgr-ui</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
-                <scope>compile</scope>
             </dependency>
 
 
