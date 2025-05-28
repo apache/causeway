@@ -192,7 +192,9 @@ implements
             configuration.streamConfigurationPropertyNames()
             .filter(propName->primaryPrefixes.stream().anyMatch(propName::startsWith))
             .forEach(propName -> {
-                String propertyValue = configuration.valueOf(propName).orElse(null);
+                String propertyValue = configuration
+                        .valueOf(propName, ex->logRetrievalFailure(propName, ex))
+                        .orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -218,7 +220,9 @@ implements
             configuration.streamConfigurationPropertyNames()
             .filter(propName->!toBeExcluded.contains(propName))
             .forEach(propName -> {
-                String propertyValue = configuration.valueOf(propName).orElse(null);
+                String propertyValue = configuration
+                        .valueOf(propName, ex->logRetrievalFailure(propName, ex))
+                        .orElse(null);
                 add(propName, propertyValue, map);
             });
 
@@ -228,6 +232,10 @@ implements
                     getConfigurationPropertyVisibilityPolicy().name(), map);
         }
         return map;
+    }
+    
+    private static void logRetrievalFailure(final String propName, Throwable error) {
+        log.warn("failed to load configuration property '{}'", propName, error);
     }
 
     private static void add(final String key, String value, final Map<String, ConfigurationProperty> map) {
