@@ -129,8 +129,9 @@ jobs:
           -Dmaven.compiler.proc=full
           -Denforcer.failFast=true
           -Dmaven.source.skip=true
-          -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z
+          -Dproject.build.outputTimestamp=2025-01-01T00:00:00Z
           -e
+          -X
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually
