@@ -23,29 +23,18 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
-		<version>${revision}</version>
-		<relativePath>../../core/pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway</groupId>
+        <artifactId>causeway-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../parent/pom.xml</relativePath>
+    </parent>
 
 	<groupId>org.apache.causeway.viewer</groupId>
 	<artifactId>causeway-viewer-graphql</artifactId>
 	<name>Apache Causeway Viewer - GraphQL</name>
 
 	<packaging>pom</packaging>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>javax.activation</groupId>
-				<artifactId>activation</artifactId>
-				<!-- TODO: dependency convergence force -->
-				<version>1.1.1</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 
 	<modules>
 		<module>applib</module>

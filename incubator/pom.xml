@@ -23,10 +23,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-parent</artifactId>
 		<version>${revision}</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.incubator</groupId>
@@ -40,8 +40,6 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.incubator</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/incubator</git-plugin.propertiesDir>
 	</properties>
 
 	<build>

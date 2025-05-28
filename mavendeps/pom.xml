@@ -23,10 +23,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-parent</artifactId>
 		<version>${revision}</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.mavendeps</groupId>
@@ -40,53 +40,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.mavendeps</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/mavendeps</git-plugin.propertiesDir>
-
-		<lombok.version>1.18.38</lombok.version>
-
 		<failOnMissingWebXml>false</failOnMissingWebXml>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
 	</properties>
-
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-
-	</build>
-
-	<dependencyManagement>
-		<dependencies>
-
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
-				<scope>provided</scope>
-			</dependency>
-
-		</dependencies>
-	</dependencyManagement>
 
 	<modules>
 		<module>webapp</module>

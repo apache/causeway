@@ -22,12 +22,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
-		<version>${revision}</version>
-		<relativePath>../core/pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway</groupId>
+        <artifactId>causeway-parent</artifactId>
+        <version>${revision}</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
 
 	<groupId>org.apache.causeway.valuetypes</groupId>
 	<artifactId>causeway-valuetypes</artifactId>
@@ -38,41 +38,6 @@
     </description>
 
 	<packaging>pom</packaging>
-
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/valuetypes</git-plugin.propertiesDir>
-	</properties>
-
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
 
 	<modules>
 		<module>jodatime</module>

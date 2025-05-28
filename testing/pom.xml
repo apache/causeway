@@ -23,10 +23,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
+		<groupId>org.apache.causeway</groupId>
+		<artifactId>causeway-parent</artifactId>
 		<version>${revision}</version>
-		<relativePath>../core/pom.xml</relativePath>
+		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>org.apache.causeway.testing</groupId>
@@ -38,36 +38,6 @@
     </description>
 
 	<packaging>pom</packaging>
-
-	<properties>
-		<maven.compiler.release>17</maven.compiler.release>
-
-		<jar-plugin.automaticModuleName>org.apache.causeway.testing</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/testing</git-plugin.propertiesDir>
-	</properties>
-
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
-
 
 	<modules>
 		<module>archtestsupport</module>
