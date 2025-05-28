@@ -22,18 +22,27 @@ import java.util.Optional;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
-import org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator;
+import jakarta.validation.constraints.Pattern;
 
 import org.springframework.stereotype.Component;
+
+import org.apache.causeway.commons.internal.context._Context;
+
+import lombok.SneakyThrows;
 
 @Component
 public class PatternOptionalStringConstraintValidator
 implements ConstraintValidator<jakarta.validation.constraints.Pattern, Optional<String>> {
 
-    private final PatternValidator patternValidator = new PatternValidator();
+    private final ConstraintValidator<Pattern, CharSequence> patternValidator;
 
+    @SneakyThrows
     public PatternOptionalStringConstraintValidator(){
+        var patternValidatorClass = _Context.loadClass("org.hibernate.validator.internal.constraintvalidators.bv.PatternValidator");
+        this.patternValidator = (ConstraintValidator<Pattern, CharSequence>)
+            patternValidatorClass
+                .getConstructor()
+                .newInstance();
     }
 
     @Override
@@ -46,7 +55,7 @@ implements ConstraintValidator<jakarta.validation.constraints.Pattern, Optional<
             final Optional<String> value,
             final ConstraintValidatorContext context) {
         if(!value.isPresent()) return true;
-        
+
         return patternValidator.isValid(value.get(), context);
     }
 }

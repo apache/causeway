@@ -39,7 +39,7 @@ identified
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath />
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -55,7 +55,8 @@ identified
     </description>
 
     <properties>
-        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn -Drevision=2.7.8 -->
+        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn
+        -Drevision=2.7.8 -->
 
         <!-- BUILD SPECIFICA -->
 
@@ -119,6 +120,7 @@ identified
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
         <guava.version>33.4.8-jre</guava.version>
 
+        <hibernate-validator.version>9.0.0.Final</hibernate-validator.version> <!-- Spring Boot 4 preview, remove later -->
         <htmlparser.version>2.1</htmlparser.version>
 
         <javafaker.version>1.0.2</javafaker.version>
@@ -176,7 +178,7 @@ identified
 
         <sql-formatter.version>2.0.5</sql-formatter.version>
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>3.5.0</spring-boot.version>
+        <spring-boot.version>4.0.0-SNAPSHOT</spring-boot.version>
 
         <surefire-plugin.argLine>
             -Xmx384m
@@ -214,7 +216,8 @@ identified
             [1] https://github.com/twbs/bootstrap/blob/master/LICENSE
             [2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
             [3] https://github.com/l0rdn1kk0n/wicket-bootstrap
-            [4] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+            [4]
+            https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
             [5] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
     </properties>
     <dependencyManagement>
@@ -1507,7 +1510,7 @@ identified
             </dependency>
 
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
                 <exclusions>
@@ -2037,7 +2040,24 @@ identified
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
     </repositories>
+
     <distributionManagement>
         <repository>
             <id>apache.releases.https</id>
@@ -2912,7 +2932,7 @@ identified
             </modules>
         </profile>
         <!--  END SNIPPET: release-profile  -->
-        
+
         <profile>
             <id>causeway-lombok-workaround</id>
             <activation>
