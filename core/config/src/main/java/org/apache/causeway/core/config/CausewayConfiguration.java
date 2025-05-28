@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,6 +58,8 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -88,6 +91,7 @@ import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.applib.services.userui.UserMenu;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalDisplayPattern;
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
@@ -187,6 +191,24 @@ public class CausewayConfiguration {
      */
     public Optional<String> valueOf(final String configurationPropertyName) {
         return Optional.ofNullable(environment.getProperty(configurationPropertyName));
+    }
+
+    /**
+     * The value of a specific configuration property
+     *
+     * @param configurationPropertyName  - eg as obtained from {@link #streamConfigurationPropertyNames()}.
+	 * @param onError - callback in case the value retrieval thorws any exception
+     */
+    public Optional<String> valueOf(final String configurationPropertyName, final @Nullable Consumer<Throwable> onError) {
+        try {
+			return Optional.ofNullable(environment.getProperty(configurationPropertyName));
+		} catch (Throwable t) {
+			if(onError!=null) {
+				Try.run(()->onError.accept(t));
+			}
+			return Optional.empty();
+		}
+		
     }
 
     private final Security security = new Security();
