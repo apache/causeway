@@ -24,9 +24,9 @@
 
     <parent>
         <groupId>org.apache.causeway</groupId>
-        <artifactId>causeway-bom</artifactId>
+        <artifactId>causeway-parent</artifactId>
         <version>${revision}</version>
-        <relativePath>../bom/pom.xml</relativePath>
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.causeway.core</groupId>
@@ -57,12 +57,6 @@
         <pmd.ruleset>${coreBaseDir}/codequality/pmd.xml</pmd.ruleset>
 
     </properties>
-
-    <pluginRepositories>
-    </pluginRepositories>
-
-    <repositories>
-    </repositories>
 
     <build>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
@@ -127,15 +121,6 @@
             </plugin>
         </plugins>
     </build>
-
-
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>

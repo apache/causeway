@@ -86,6 +86,7 @@
             -->
             <modules>
                 <module>bom</module>
+                <module>parent</module>
                 <module>core</module>
                 <module>extensions</module>
                 <module>mavendeps</module>
