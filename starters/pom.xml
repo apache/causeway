@@ -363,34 +363,5 @@
 			</distributionManagement>
 		</profile>
 
-		<profile>
-			<id>nightly-localfs-repo</id>
-			<activation>
-				<property>
-					<name>nightly-localfs-repo</name>
-				</property>
-			</activation>
-			<distributionManagement>
-				<repository>
-			        <id>nightly-localfs-repo</id>
-			        <name>Temporary Local Filesystem Staging Repository</name>
-			        <url>file://${MVN_SNAPSHOTS_PATH}</url>
-			    </repository>
-			</distributionManagement>
-			<build>
-				<plugins>
-					<plugin>
-					    <artifactId>maven-deploy-plugin</artifactId>
-					    <version>3.1.4</version>
-					    <configuration>
-					        <altDeploymentRepository>
-					            nightly-localfs-repo::file://${MVN_SNAPSHOTS_PATH}
-					        </altDeploymentRepository>
-					    </configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
 	</profiles>
 </project>
