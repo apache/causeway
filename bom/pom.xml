@@ -154,7 +154,7 @@ identified
         <jspecify.version>1.0.0</jspecify.version>
         <jsr305.version>3.0.2</jsr305.version>
         <jsoup.version>1.20.1</jsoup.version>
-        <junit-jupiter.version>5.12.2</junit-jupiter.version> <!-- overrides
+        <junit-jupiter.version>5.13.0</junit-jupiter.version> <!-- overrides
         spring -->
         <junit-platform.version>1.12.2</junit-platform.version>
 
