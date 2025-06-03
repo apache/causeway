@@ -79,11 +79,6 @@
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-interaction</artifactId>
         </dependency>
-        
-    	<dependency>
-			<groupId>org.apache.causeway.valuetypes</groupId>
-			<artifactId>causeway-valuetypes-jodatime-integration</artifactId>
-		</dependency>
 
 		<!--  TESTING -->
 

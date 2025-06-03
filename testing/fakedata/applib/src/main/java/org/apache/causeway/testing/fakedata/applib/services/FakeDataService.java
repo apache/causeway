@@ -108,13 +108,10 @@ public class FakeDataService {
         this.javaSqlDates = new JavaSqlDates(this);
         this.javaSqlTimestamps = new JavaSqlTimestamps(this);
 
-        this.javaTimeDateTimes = new JavaTimeDateTimes(this);
-        this.javaTimeLocalDates = new JavaTimeLocalDates(this);
-        this.javaTimePeriods = new JavaTimePeriods(this);
-
-        this.jodaDateTimes = new JodaDateTimes(this);
-        this.jodaLocalDates = new JodaLocalDates(this);
-        this.jodaPeriods = new JodaPeriods(this);
+        this.zonedDateTimes = new ZonedDateTimes(this);
+        this.offsetDateTimes = new OffsetDateTimes(this);
+        this.localDates = new LocalDates(this);
+        this.periods = new Periods(this);
 
         this.bigDecimals = new BigDecimals(this);
         this.bigIntegers = new BigIntegers(this);
@@ -151,13 +148,10 @@ public class FakeDataService {
     private JavaSqlDates javaSqlDates;
     private JavaSqlTimestamps javaSqlTimestamps;
 
-    private JavaTimeDateTimes javaTimeDateTimes;
-    private JavaTimeLocalDates javaTimeLocalDates;
-    private JavaTimePeriods javaTimePeriods;
-
-    private JodaDateTimes jodaDateTimes;
-    private JodaLocalDates jodaLocalDates;
-    private JodaPeriods jodaPeriods;
+    private ZonedDateTimes zonedDateTimes;
+    private OffsetDateTimes offsetDateTimes;
+    private LocalDates localDates;
+    private Periods periods;
 
     private BigDecimals bigDecimals;
     private BigIntegers bigIntegers;
@@ -254,28 +248,20 @@ public class FakeDataService {
         return javaSqlTimestamps;
     }
 
-    public JavaTimeLocalDates javaTimeLocalDates() {
-        return javaTimeLocalDates;
+    public LocalDates localDates() {
+        return localDates;
     }
 
-    public JavaTimeDateTimes javaTimeDateTimes() {
-        return javaTimeDateTimes;
+    public OffsetDateTimes offsetDateTimes() {
+        return offsetDateTimes;
     }
 
-    public JavaTimePeriods javaTimePeriods() {
-        return javaTimePeriods;
+    public ZonedDateTimes zonedDateTimes() {
+        return zonedDateTimes;
     }
 
-    public JodaLocalDates jodaLocalDates() {
-        return jodaLocalDates;
-    }
-
-    public JodaDateTimes jodaDateTimes() {
-        return jodaDateTimes;
-    }
-
-    public JodaPeriods jodaPeriods() {
-        return jodaPeriods;
+    public Periods periods() {
+        return periods;
     }
 
     public BigDecimals bigDecimals() {

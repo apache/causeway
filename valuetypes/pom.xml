@@ -40,7 +40,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>jodatime</module>
 		<module>asciidoc</module>
 		<module>markdown</module>
 		<module>vega</module>

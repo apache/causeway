@@ -63,12 +63,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.valuetypes</groupId>
-			<artifactId>causeway-valuetypes-jodatime-integration</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
 	</dependencies>
 
 </project>

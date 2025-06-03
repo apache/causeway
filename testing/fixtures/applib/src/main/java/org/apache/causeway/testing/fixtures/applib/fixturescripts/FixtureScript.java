@@ -22,6 +22,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +32,8 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -386,7 +388,13 @@ public abstract class FixtureScript {
 
         @Override
         @Programmatic
-        public void setParameter(final String parameterName, final org.joda.time.DateTime parameterValue) {
+        public void setParameter(final String parameterName, final OffsetDateTime parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        @Override
+        @Programmatic
+        public void setParameter(final String parameterName, final ZonedDateTime parameterValue) {
             executionParameters.setParameter(parameterName, parameterValue);
         }
 

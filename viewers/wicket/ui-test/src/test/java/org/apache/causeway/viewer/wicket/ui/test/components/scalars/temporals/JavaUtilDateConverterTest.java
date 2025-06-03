@@ -16,9 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.test.components.scalars.jodatime.jdk8time;
+package org.apache.causeway.viewer.wicket.ui.test.components.scalars.temporals;
 
-import java.time.LocalDateTime;
 import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,29 +27,33 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
 
 import lombok.Getter;
 import lombok.Setter;
 
-class LocalDateTimeConverterTest {
+class JavaUtilDateConverterTest {
 
-    final java.time.LocalDateTime valid = LocalDateTime.of(2013, 03, 13, 17, 59);
-    ConverterTester<LocalDateTime> converterTester;
+    @SuppressWarnings("deprecation")
+    final java.util.Date valid = new java.util.Date(2013-1900, 03-1, 13, 17, 15, 59);
+    ConverterTester<java.util.Date> converterTester;
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<LocalDateTime>(LocalDateTime.class,
+
+        converterTester = new ConverterTester<java.util.Date>(java.util.Date.class,
+                new JavaUtilDateValueSemantics(),
                 new LocalDateTimeValueSemantics());
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithLocalDateTime.class, "value", ViewOrEditMode.EDITING));
+                        CustomerWithJavaSqlDate.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test
     void happy_case() {
-        converterTester.assertRoundtrip(valid, "2013-03-13 17:59:00");
+        converterTester.assertRoundtrip(valid, "2013-03-13 17:15:59");
     }
 
     @Test
@@ -66,9 +69,9 @@ class LocalDateTimeConverterTest {
     // -- SCENARIOS
 
     @DomainObject
-    static class CustomerWithLocalDateTime {
+    static class CustomerWithJavaSqlDate {
         @Property @Getter @Setter
-        private LocalDateTime value;
+        private java.sql.Date value;
     }
 
 }

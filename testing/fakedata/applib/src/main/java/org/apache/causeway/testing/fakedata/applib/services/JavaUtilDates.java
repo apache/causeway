@@ -41,31 +41,31 @@ public class JavaUtilDates extends AbstractRandomValueGenerator {
      * Returns a random date either before or after 'now', within the specified {@link Period}.
      */
     public Date around(final Period period) {
-        return toJavaUtilDate(fake.javaTimeDateTimes().around(period));
+        return toJavaUtilDate(fake.offsetDateTimes().around(period));
     }
 
     /**
      * Returns a random date some time before 'now', within the specified {@link Period}.
      */
     public Date before(final Period period) {
-        return toJavaUtilDate(fake.javaTimeDateTimes().before(period));
+        return toJavaUtilDate(fake.offsetDateTimes().before(period));
     }
 
     /**
      * Returns a random date some time after 'now', within the specified {@link Period}.
      */
     public Date after(final Period period) {
-        return toJavaUtilDate(fake.javaTimeDateTimes().after(period));
+        return toJavaUtilDate(fake.offsetDateTimes().after(period));
     }
 
     /**
      * Returns a random date 5 years around 'now'.
      */
     public java.util.Date any() {
-        return toJavaUtilDate(fake.javaTimeDateTimes().any());
+        return toJavaUtilDate(fake.offsetDateTimes().any());
     }
 
-    private static Date toJavaUtilDate(OffsetDateTime dateTime) {
+    private static Date toJavaUtilDate(final OffsetDateTime dateTime) {
         var epochMillis = dateTime.toInstant().toEpochMilli();
         return new Date(epochMillis);
     }

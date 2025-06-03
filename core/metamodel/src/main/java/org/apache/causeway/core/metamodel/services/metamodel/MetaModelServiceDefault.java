@@ -163,7 +163,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {
         final String className = spec.getFullIdentifier();
-        return className.startsWith("java") || className.startsWith("org.joda");
+        return className.startsWith("java");
     }
 
     @Override

@@ -16,8 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.test.components.scalars.jdkdates;
+package org.apache.causeway.viewer.wicket.ui.test.components.scalars.temporals;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,32 +28,30 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
-import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
-import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
 
 import lombok.Getter;
 import lombok.Setter;
 
-class JavaSqlDateConverterTest {
+class OffsetDateTimeConverterTest {
 
-    final java.sql.Date valid = java.sql.Date.valueOf("2013-03-13");
-    ConverterTester<java.sql.Date> converterTester;
+    final java.time.OffsetDateTime valid = sample(2013, 05, 11, 17, 23, +03);
+    ConverterTester<OffsetDateTime> converterTester;
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<java.sql.Date>(java.sql.Date.class,
-                new JavaSqlDateValueSemantics(),
-                new LocalDateValueSemantics());
+        converterTester = new ConverterTester<OffsetDateTime>(OffsetDateTime.class,
+                new OffsetDateTimeValueSemantics());
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithJavaSqlDate.class, "value", ViewOrEditMode.EDITING));
+                        CustomerWithOffsetDateTime.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test
     void happy_case() {
-        converterTester.assertRoundtrip(valid, "2013-03-13");
+        converterTester.assertRoundtrip(valid, "2013-05-11 17:23:00 +03:00");
     }
 
     @Test
@@ -61,15 +61,21 @@ class JavaSqlDateConverterTest {
 
     @Test
     void invalid() {
-        converterTester.assertConversionFailure("junk", "Not recognised as a java.time.LocalDate: junk");
+        converterTester.assertConversionFailure("junk", "Not recognised as a java.time.OffsetDateTime: junk");
     }
 
     // -- SCENARIOS
 
     @DomainObject
-    static class CustomerWithJavaSqlDate {
+    static class CustomerWithOffsetDateTime {
         @Property @Getter @Setter
-        private java.sql.Date value;
+        private OffsetDateTime value;
+    }
+
+    private static OffsetDateTime sample(final int year, final int month, final int dayOfMonth,
+            final int hour, final int minute, final int offsetHours) {
+        return OffsetDateTime.of(year, month, dayOfMonth, hour, minute, 0, 0,
+                ZoneOffset.ofHours(offsetHours));
     }
 
 }

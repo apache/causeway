@@ -69,12 +69,6 @@
 		    <artifactId>jakarta.ws.rs-api</artifactId>
 		</dependency>
 
-        <!-- marked for deprecation -->
-    	<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
-
         <!-- TEST -->
 
 		<dependency>

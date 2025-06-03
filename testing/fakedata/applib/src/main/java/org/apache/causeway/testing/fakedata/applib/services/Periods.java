@@ -25,9 +25,9 @@ import java.time.Period;
  *
  * @since 2.0 {@index}
  */
-public class JavaTimePeriods extends AbstractRandomValueGenerator {
+public class Periods extends AbstractRandomValueGenerator {
 
-    public JavaTimePeriods(final FakeDataService fakeDataService) {
+    public Periods(final FakeDataService fakeDataService) {
         super(fakeDataService);
     }
 

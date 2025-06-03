@@ -28,6 +28,8 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service;
 
+    requires static lombok;
+
     requires org.apache.causeway.viewer.restfulobjects.applib;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
@@ -37,7 +39,6 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires java.sql;
     requires jakarta.ws.rs;
     requires jakarta.xml.bind;
-    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
@@ -45,7 +46,6 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires org.apache.causeway.core.runtime;
     requires org.apache.causeway.schema;
     requires org.slf4j;
-    requires org.joda.time;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

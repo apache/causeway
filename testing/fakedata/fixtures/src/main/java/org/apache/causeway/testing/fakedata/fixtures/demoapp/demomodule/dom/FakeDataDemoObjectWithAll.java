@@ -22,6 +22,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.UUID;
 
@@ -32,10 +35,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import org.jspecify.annotations.Nullable;
 
@@ -188,12 +187,12 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @Column(nullable = true)
     //FIXME @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     @Getter @Setter
-    private org.joda.time.LocalDate someJodaLocalDate;
+    private LocalDate someLocalDate;
 
     @Column(nullable = true)
     //FIXME @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     @Getter @Setter
-    private org.joda.time.DateTime someJodaDateTime;
+    private ZonedDateTime someZonedDateTime;
 
     @Column(nullable = true)
     @Getter @Setter
@@ -505,52 +504,52 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaLocalDate(final @Nullable LocalDate i) {
-        setSomeJodaLocalDate(i);
+    public FakeDataDemoObjectWithAll updateSomeLocalDate(final @Nullable LocalDate i) {
+        setSomeLocalDate(i);
         return this;
     }
-    @MemberSupport public org.joda.time.LocalDate default0UpdateSomeJodaLocalDate() {
-        return getSomeJodaLocalDate();
+    @MemberSupport public LocalDate default0UpdateSomeLocalDate() {
+        return getSomeLocalDate();
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeJodaLocalDate() {
-        setSomeJodaLocalDate(null);
+    public FakeDataDemoObjectWithAll resetSomeLocalDate() {
+        setSomeLocalDate(null);
         return this;
     }
 
     //FIXME @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     @Column(nullable = true)
     @Getter @Setter
-    private org.joda.time.LocalDateTime someJodaLocalDateTime;
+    private LocalDateTime someLocalDateTime;
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaLocalDateTime(final LocalDateTime i) {
-        setSomeJodaLocalDateTime(i);
+    public FakeDataDemoObjectWithAll updateSomeLocalDateTime(final LocalDateTime i) {
+        setSomeLocalDateTime(i);
         return this;
     }
-    @MemberSupport public org.joda.time.LocalDateTime default0UpdateSomeJodaLocalDateTime() {
-        return getSomeJodaLocalDateTime();
+    @MemberSupport public LocalDateTime default0UpdateSomeLocalDateTime() {
+        return getSomeLocalDateTime();
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeJodaLocalDateTime() {
-        setSomeJodaLocalDateTime(null);
+    public FakeDataDemoObjectWithAll resetSomeLocalDateTime() {
+        setSomeLocalDateTime(null);
         return this;
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll updateSomeJodaDateTime(final @Nullable DateTime i) {
-        setSomeJodaDateTime(i);
+    public FakeDataDemoObjectWithAll updateSomeZonedDateTime(final @Nullable ZonedDateTime i) {
+        setSomeZonedDateTime(i);
         return this;
     }
-    @MemberSupport public org.joda.time.DateTime default0UpdateSomeJodaDateTime() {
-        return getSomeJodaDateTime();
+    @MemberSupport public ZonedDateTime default0UpdateSomeZonedDateTime() {
+        return getSomeZonedDateTime();
     }
 
     @Action(semantics = SemanticsOf.IDEMPOTENT)
-    public FakeDataDemoObjectWithAll resetSomeJodaDateTime() {
-        setSomeJodaDateTime(null);
+    public FakeDataDemoObjectWithAll resetSomeZonedDateTime() {
+        setSomeZonedDateTime(null);
         return this;
     }
 

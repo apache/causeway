@@ -25,10 +25,11 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.ISODateTimeFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -341,10 +342,13 @@ public class ExecutionParametersDefault implements ExecutionParameters {
     }
 
     @Override
-    public void setParameter(final String parameterName, final DateTime parameterValue) {
-        final StringBuffer buf = new StringBuffer();
-        ISODateTimeFormat.dateTimeParser().printTo(buf, parameterValue);
-        setParameter(parameterName, parameterValue != null ? buf.toString() : null);
+    public void setParameter(final String parameterName, final OffsetDateTime parameterValue) {
+        setParameter(parameterName, parameterValue != null ? DateTimeFormatter.ISO_DATE_TIME.format(parameterValue) : null);
+    }
+
+    @Override
+    public void setParameter(final String parameterName, final ZonedDateTime parameterValue) {
+        setParameter(parameterName, parameterValue != null ? DateTimeFormatter.ISO_DATE_TIME.format(parameterValue) : null);
     }
 
     @Override

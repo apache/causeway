@@ -50,127 +50,112 @@ import lombok.SneakyThrows;
 public class Calculator {
 
     @Action(semantics = SemanticsOf.SAFE)
-    public byte addBytes(byte x, byte y) {
+    public byte addBytes(final byte x, final byte y) {
         return (byte)(x+y);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public int addByteWrappers(Byte x, @Parameter(optionality = Optionality.OPTIONAL) Byte y) {
+    public int addByteWrappers(final Byte x, @Parameter(optionality = Optionality.OPTIONAL) final Byte y) {
         return y != null ? x+y : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public short addShorts(short x, short y) {
+    public short addShorts(final short x, final short y) {
         return (short)(x+y);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Short addShortWrappers(Short x, @Parameter(optionality = Optionality.OPTIONAL) Short y) {
+    public Short addShortWrappers(final Short x, @Parameter(optionality = Optionality.OPTIONAL) final Short y) {
         return y != null ? (short)(x+y) : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public int addIntegers(int x, int y) {
+    public int addIntegers(final int x, final int y) {
         return x+y;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public int addIntegerWrappers(Integer x, @Parameter(optionality = Optionality.OPTIONAL) Integer y) {
+    public int addIntegerWrappers(final Integer x, @Parameter(optionality = Optionality.OPTIONAL) final Integer y) {
         return y != null ? x+y : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public double addDoubles(double x, double y) {
+    public double addDoubles(final double x, final double y) {
         return x+y;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Double addDoubleWrappers(Double x, @Parameter(optionality = Optionality.OPTIONAL) Double y) {
+    public Double addDoubleWrappers(final Double x, @Parameter(optionality = Optionality.OPTIONAL) final Double y) {
         return y != null ? x+y : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public float addFloats(float x, float y) {
+    public float addFloats(final float x, final float y) {
         return x+y;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Float addFloatWrappers(Float x, @Parameter(optionality = Optionality.OPTIONAL) Float y) {
+    public Float addFloatWrappers(final Float x, @Parameter(optionality = Optionality.OPTIONAL) final Float y) {
         return y != null ? (float)(x+y) : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public BigInteger addBigIntegers(BigInteger x, @Parameter(optionality = Optionality.OPTIONAL) BigInteger y) {
+    public BigInteger addBigIntegers(final BigInteger x, @Parameter(optionality = Optionality.OPTIONAL) final BigInteger y) {
         return y != null ? x.add(y) : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public BigDecimal addBigDecimals(BigDecimal x, @Parameter(optionality = Optionality.OPTIONAL) BigDecimal y) {
+    public BigDecimal addBigDecimals(final BigDecimal x, @Parameter(optionality = Optionality.OPTIONAL) final BigDecimal y) {
         return y != null ? x.add(y) : x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalDate jdk8LocalPlusDays(LocalDate date, int numDays) {
+    public LocalDate localDatePlusDays(final LocalDate date, final int numDays) {
         return date.plusDays(numDays);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public OffsetDateTime jdk8OffsetPlusDaysAndHoursAndMinutes(OffsetDateTime dateTime, int numDays, int numHours, int numMinutes) {
+    public OffsetDateTime offsetDateTimePlusDaysAndHoursAndMinutes(final OffsetDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public ZonedDateTime jdk8ZonedPlusDaysAndHoursAndMinutes(ZonedDateTime dateTime, int numDays, int numHours, int numMinutes) {
+    public ZonedDateTime zonedDateTimePlusDaysAndHoursAndMinutes(final ZonedDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public OffsetTime jdk8OffsetPlusHoursAndMinutes(OffsetTime time, int numHours, int numMinutes) {
+    public OffsetTime offsetTimePlusHoursAndMinutes(final OffsetTime time, final int numHours, final int numMinutes) {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalTime jdk8LocalPlusHoursAndMinutes(LocalTime time, int numHours, int numMinutes) {
+    public LocalTime localTimePlusHoursAndMinutes(final LocalTime time, final int numHours, final int numMinutes) {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalDate jodaLocalPlusDays(org.joda.time.LocalDate date, int numDays) {
-        return date.plusDays(numDays);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.DateTime jodaPlusDaysAndHoursAndMinutes(org.joda.time.DateTime dateTime, int numDays, int numHours, int numMinutes) {
-        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalTime jodaLocalPlusHoursAndMinutes(org.joda.time.LocalTime time, int numHours, int numMinutes) {
-        return time.plusHours(numHours).plusMinutes(numMinutes);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public boolean and(boolean x, boolean y) {
+    public boolean and(final boolean x, final boolean y) {
         return x & y;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public boolean or(boolean x, boolean y) {
+    public boolean or(final boolean x, final boolean y) {
         return x | y;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public boolean not(boolean x) {
+    public boolean not(final boolean x) {
         return !x;
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public Month nextMonth(Month month) {
+    public Month nextMonth(final Month month) {
         return month.nextMonth();
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public String concat(String prefix, @Parameter(optionality = Optionality.OPTIONAL) String suffix) {
+    public String concat(final String prefix, @Parameter(optionality = Optionality.OPTIONAL) final String suffix) {
         return prefix + suffix;
     }
 

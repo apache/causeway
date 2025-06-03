@@ -52,11 +52,13 @@ identified
     <description>
         Apache Causeway Bill of Material (BOM).
         All the build configuration goes into the parent POM,
-        which inherits from this BOM and is the parent for the core framework and extensions.
+        which inherits from this BOM and is the parent for the core framework
+        and extensions.
     </description>
 
     <properties>
-        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn -Drevision=2.7.8 -->
+        <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn
+        -Drevision=2.7.8 -->
 
         <!-- LIBRARY DEPENDENCIES -->
 
@@ -107,7 +109,6 @@ identified
 
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.13.1</jmock.version>
-        <joda-time.version>2.14.0</joda-time.version>
 
         <jquery-ui.version>1.14.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
@@ -1224,27 +1225,6 @@ identified
 
 
             <!-- org.apache.causeway.valuetypes -->
-            <dependency>
-                <groupId>org.apache.causeway.valuetypes</groupId>
-                <artifactId>causeway-valuetypes-jodatime</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.valuetypes</groupId>
-                <artifactId>causeway-valuetypes-jodatime-applib</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.valuetypes</groupId>
-                <artifactId>causeway-valuetypes-jodatime-integration</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
 
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
@@ -1495,12 +1475,6 @@ identified
                         <artifactId>org.osgi.core</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time.version}</version>
             </dependency>
 
             <dependency>
@@ -1991,7 +1965,7 @@ identified
 
         </dependencies>
     </dependencyManagement>
-    
+
     <repositories>
         <repository>
             <id>central</id>

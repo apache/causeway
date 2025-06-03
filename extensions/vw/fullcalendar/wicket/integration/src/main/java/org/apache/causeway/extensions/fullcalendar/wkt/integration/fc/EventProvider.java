@@ -23,25 +23,12 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-import org.joda.time.DateTime;
-
-import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
-
 public interface EventProvider extends Serializable {
 
 	Event getEventForId(String id) throws NoSuchElementException;
 
 	default Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
-	    return getEvents(JodaTimeConverters.toJoda(start), JodaTimeConverters.toJoda(end));
+	    return getEvents(start, end);
 	}
 
-	@Deprecated
-    default Collection<Event> getEvents(final DateTime start, final DateTime end) {
-        return getEvents(JodaTimeConverters.fromJoda(start), JodaTimeConverters.fromJoda(end));
-    }
-
-//
-//    default Collection<Event> getEvents(final @NonNull ImmutablePair<ZonedDateTime, ZonedDateTime> interval) {
-//        return getEvents(interval.getLeft(), interval.getRight());
-//    }
 }

@@ -25,7 +25,6 @@ import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
-import org.apache.causeway.valuetypes.jodatime.integration.CausewayModuleValJodatimeIntegration;
 
 @Configuration
 @Import({
@@ -34,14 +33,8 @@ import org.apache.causeway.valuetypes.jodatime.integration.CausewayModuleValJoda
         CausewayModuleCoreInteraction.class,
         CausewayModuleCoreTransaction.class,
 
-        // Joda Time support
-        CausewayModuleValJodatimeIntegration.class,
-
         // @Service's
         MetamodelEventService.class,
-
-        // @Configuration's
-
 })
 public class CausewayModuleCoreRuntime {
 

@@ -35,7 +35,6 @@ import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.R
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.SelectedRange;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback.View;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.selector.EventSourceSelector;
-import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.RequiredArgsConstructor;
@@ -76,8 +75,8 @@ class _Sample {
             @Override
 			protected void onDateRangeSelected(final SelectedRange range,
 					final CalendarResponse response) {
-				info2("Selected region: " + range.getStart() + " - "
-						+ range.getEnd() + " / allDay: " + range.isAllDay());
+				info2("Selected region: " + range.start() + " - "
+						+ range.end() + " / allDay: " + range.allDay());
 
 				response.getTarget().add(feedback);
 			}
@@ -112,9 +111,9 @@ class _Sample {
 
 			@Override
 			protected void onViewDisplayed(final View view, final CalendarResponse response) {
-			    info2("View displayed. viewType: " + view.getType().name()
-						+ ", start: " + view.getStart() + ", end: "
-						+ view.getEnd());
+			    info2("View displayed. viewType: " + view.type().name()
+						+ ", start: " + view.start() + ", end: "
+						+ view.end());
 				response.getTarget().add(feedback);
 			}
 		};
@@ -178,9 +177,9 @@ class _Sample {
                 Event event = new Event();
                 event.setId(id);
                 event.setTitle(title + (1 + i));
-                event.setStart(JodaTimeConverters.toJoda(time));
+                event.setStart(time);
                 time = time.plusHours(random.nextInt(8));
-                event.setEnd(JodaTimeConverters.toJoda(time));
+                event.setEnd(time);
 
                 eventsById.put(id, event);
             }

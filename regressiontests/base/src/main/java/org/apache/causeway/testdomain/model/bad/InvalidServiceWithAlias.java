@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.testdomain.model.bad;
 
-import jakarta.inject.Named;
+import java.time.LocalDateTime;
 
-import org.joda.time.LocalDateTime;
+import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainService;

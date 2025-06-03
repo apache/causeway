@@ -39,7 +39,7 @@ public interface JsonValueEncoderService {
 
     /**
      * The value recovered from {@link JsonRepresentation}
-     * as {@link ManagedObject} honoring {@link Context},
+     * as {@link ManagedObject} honoring {@link JsonValueConverter.Context},
      * otherwise <tt>null</tt>.
      */
     public ManagedObject asAdapter(
@@ -49,7 +49,7 @@ public interface JsonValueEncoderService {
 
     /**
      * Appends given value type representing {@link ManagedObject} to given
-     * {@link JsonRepresentation} honoring {@link Context}.
+     * {@link JsonRepresentation} honoring {@link JsonValueConverter.Context}.
      */
     public void appendValueAndFormat(
             final ManagedObject valueAdapter,
@@ -58,7 +58,7 @@ public interface JsonValueEncoderService {
 
     /**
      * A {@link JsonNode} or otherwise natively supported simple type from given {@link ManagedObject},
-     * honoring {@link Context}.
+     * honoring {@link JsonValueConverter.Context}.
      */
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context);

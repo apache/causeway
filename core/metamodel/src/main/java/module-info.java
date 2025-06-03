@@ -166,15 +166,9 @@ open module org.apache.causeway.core.metamodel {
     requires transitive org.apache.causeway.schema;
     requires org.apache.causeway.security.api;
     requires org.slf4j;
-    requires org.joda.time;
     requires spring.beans;
     requires spring.context;
     requires spring.core;
     requires spring.boot.autoconfigure;
 
-//JUnit testing stuff, not required as long this module is an 'open' one
-//    opens org.apache.causeway.core.metamodel.services to spring.core;
-//    opens org.apache.causeway.core.metamodel.services.registry to spring.core;
-//    opens org.apache.causeway.core.metamodel.services.grid to jakarta.xml.bind;
-//    opens org.apache.causeway.core.metamodel.services.metamodel to jakarta.xml.bind;
 }

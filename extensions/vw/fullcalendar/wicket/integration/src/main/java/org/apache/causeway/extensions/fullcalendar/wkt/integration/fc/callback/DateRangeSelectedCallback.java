@@ -19,8 +19,6 @@
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.request.Request;
-import org.joda.time.DateTime;
 
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.CalendarResponse;
 
@@ -45,14 +43,12 @@ implements CallbackWithHandler {
 
 	@Override
 	protected void respond(final AjaxRequestTarget target) {
-		Request r = getCalendar().getRequest();
+		var request = getCalendar().getRequest();
+		var start = request.getRequestParameters().getParameterValue("startDate").toLong();
+		var end = request.getRequestParameters().getParameterValue("endDate").toLong();
 
-		DateTime start = new DateTime(r.getRequestParameters().getParameterValue("startDate").toLong());
-		DateTime end = new DateTime(r.getRequestParameters().getParameterValue("endDate").toLong());
-
-		boolean allDay = r.getRequestParameters().getParameterValue("allDay").toBoolean();
+		boolean allDay = request.getRequestParameters().getParameterValue("allDay").toBoolean();
 		onSelect(new SelectedRange(start, end, allDay), new CalendarResponse(getCalendar(), target));
-
 	}
 
 	protected abstract void onSelect(SelectedRange range, CalendarResponse response);

@@ -20,6 +20,9 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.inte
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,10 +31,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Named;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
@@ -55,7 +54,7 @@ public class ValueSchemaFactoryDefault implements ValueSchemaFactory {
 
     private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();
 
-    private static interface Factory extends Supplier<Schema<?>> {};
+    private static interface Factory extends Supplier<Schema<?>> {}
 
     public ValueSchemaFactoryDefault() {
 
@@ -91,7 +90,7 @@ public class ValueSchemaFactoryDefault implements ValueSchemaFactory {
         propertyFactoryByClass.put(UUID.class, UUIDSchema::new);
 
         propertyFactoryByClass.put(java.util.Date.class, DateTimeSchema::new);
-        propertyFactoryByClass.put(DateTime.class, DateTimeSchema::new);
+        propertyFactoryByClass.put(ZonedDateTime.class, DateTimeSchema::new);
         propertyFactoryByClass.put(LocalDateTime.class, DateTimeSchema::new);
 
         propertyFactoryByClass.put(java.sql.Date.class, DateSchema::new);

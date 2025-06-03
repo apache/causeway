@@ -22,6 +22,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
 
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res.FullCalendarIntegrationJsReference;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res.FullCalendarJsReference;
 
@@ -34,12 +35,11 @@ abstract class AbstractFullCalendar extends MarkupContainer implements IHeaderCo
 
 	@Override
 	public void renderHead(final IHeaderResponse response) {
-//		response.render(FullCalendarCssReference.asHeaderItem());
 		response.render(FullCalendarJsReference.asHeaderItem());
 		response.render(FullCalendarIntegrationJsReference.asHeaderItem());
 	}
 
 	public final String toJson(final Object value) {
-		return _Json.toJson(value);
+		return JsonUtils.toStringUtf8(value);
 	}
 }

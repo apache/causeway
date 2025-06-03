@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.test.components.scalars.jodatime.jdk8time;
+package org.apache.causeway.viewer.wicket.ui.test.components.scalars.temporals;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,30 +27,30 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
-import org.apache.causeway.core.metamodel.valuesemantics.temporal.OffsetDateTimeValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
 
 import lombok.Getter;
 import lombok.Setter;
 
-class OffsetDateTimeConverterTest {
+class LocalDateTimeConverterTest {
 
-    final java.time.OffsetDateTime valid = sample(2013, 05, 11, 17, 23, +03);
-    ConverterTester<OffsetDateTime> converterTester;
+    final java.time.LocalDateTime valid = LocalDateTime.of(2013, 03, 13, 17, 59);
+    ConverterTester<LocalDateTime> converterTester;
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<OffsetDateTime>(OffsetDateTime.class,
-                new OffsetDateTimeValueSemantics());
+        converterTester = new ConverterTester<LocalDateTime>(LocalDateTime.class,
+                new LocalDateTimeValueSemantics());
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithOffsetDateTime.class, "value", ViewOrEditMode.EDITING));
+                        CustomerWithLocalDateTime.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test
     void happy_case() {
-        converterTester.assertRoundtrip(valid, "2013-05-11 17:23:00 +03:00");
+        converterTester.assertRoundtrip(valid, "2013-03-13 17:59:00");
     }
 
     @Test
@@ -61,21 +60,15 @@ class OffsetDateTimeConverterTest {
 
     @Test
     void invalid() {
-        converterTester.assertConversionFailure("junk", "Not recognised as a java.time.OffsetDateTime: junk");
+        converterTester.assertConversionFailure("junk", "Not recognised as a java.time.LocalDateTime: junk");
     }
 
     // -- SCENARIOS
 
     @DomainObject
-    static class CustomerWithOffsetDateTime {
+    static class CustomerWithLocalDateTime {
         @Property @Getter @Setter
-        private OffsetDateTime value;
-    }
-
-    private static OffsetDateTime sample(final int year, final int month, final int dayOfMonth,
-            final int hour, final int minute, final int offsetHours) {
-        return OffsetDateTime.of(year, month, dayOfMonth, hour, minute, 0, 0,
-                ZoneOffset.ofHours(offsetHours));
+        private LocalDateTime value;
     }
 
 }

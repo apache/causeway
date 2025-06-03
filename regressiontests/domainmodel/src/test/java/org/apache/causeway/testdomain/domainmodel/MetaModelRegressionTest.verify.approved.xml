@@ -37822,9 +37822,9 @@
                         <mml:attr name="facet" value="ActionInvocationFacetForAction"/>
                         <mml:attr name="intent.act" value="EXECUTE"/>
                         <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="methods" value="public org.joda.time.LocalDateTime org.apache.causeway.testdomain.model.good.ProperServiceWithMixin$Now.act()"/>
+                        <mml:attr name="methods" value="public java.time.LocalDateTime org.apache.causeway.testdomain.model.good.ProperServiceWithMixin$Now.act()"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                        <mml:attr name="returnType" value="org.joda.time.LocalDateTime"/>
+                        <mml:attr name="returnType" value="java.time.LocalDateTime"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet">
                         <mml:attr name="contributing" value="AS_ACTION"/>
@@ -37883,7 +37883,7 @@
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
                 </mml:facets>
-                <mml:returnType>org.joda.time.LocalDateTime</mml:returnType>
+                <mml:returnType>java.time.LocalDateTime</mml:returnType>
                 <mml:params/>
             </mml:act>
         </mml:actions>

@@ -46,7 +46,6 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import org.joda.time.DateTime;
 import org.opentest4j.AssertionFailedError;
 
 import org.apache.causeway.applib.value.Blob;
@@ -105,17 +104,18 @@ public class PojoTester {
 			this(null, Collections.emptyList());
 		}
 		@SafeVarargs
-        DatumFactoryImpl(Class<T> type, T... data) {
+        DatumFactoryImpl(final Class<T> type, final T... data) {
 			this.type = type;
 			this.dataArray = data;
 			index = data.length - 1;
 		}
-        DatumFactoryImpl(Class<T> type, List<T> data) {
+        DatumFactoryImpl(final Class<T> type, final List<T> data) {
 			this.type = type;
 			this.dataList = data;
 			index = dataList.size();
 		}
-		public T getNext() {
+		@Override
+        public T getNext() {
 			index = (index + 1) % dataArray.length;
 			return dataList != null ? dataList.get(0) : dataArray[index];
 		}
@@ -357,53 +357,21 @@ public class PojoTester {
 					OffsetDateTime.of(2012, 7, 20, 12, 20, 0, 0, ZoneOffset.UTC),
 					OffsetDateTime.of(2012, 8, 19, 13, 30, 0, 0, ZoneOffset.UTC),
 					OffsetDateTime.of(2013, 7, 19, 14, 45, 0, 0, ZoneOffset.UTC));
-
-		usingData(org.joda.time.LocalDate.class,
-					new org.joda.time.LocalDate(2012, 7, 19),
-					new org.joda.time.LocalDate(2012, 7, 20),
-					new org.joda.time.LocalDate(2012, 8, 19),
-					new org.joda.time.LocalDate(2013, 7, 19)
-		);
-
-		usingData(org.joda.time.LocalTime.class,
-					new org.joda.time.LocalTime(7, 19, 11, 15),
-					new org.joda.time.LocalTime(7, 20, 12, 20),
-					new org.joda.time.LocalTime(8, 19, 13, 30),
-					new org.joda.time.LocalTime(7, 19, 14, 45)
-		);
-
-		usingData(org.joda.time.LocalDateTime.class,
-					new org.joda.time.LocalDateTime(2012, 7, 19, 11, 15),
-					new org.joda.time.LocalDateTime(2012, 7, 20, 12, 20),
-					new org.joda.time.LocalDateTime(2012, 8, 19, 13, 30),
-					new org.joda.time.LocalDateTime(2013, 7, 19, 14, 45)
-		);
-
-		usingData(DateTime.class,
-					new org.joda.time.DateTime(2012, 7, 19, 11, 15),
-					new org.joda.time.DateTime(2012, 7, 20, 12, 20),
-					new org.joda.time.DateTime(2012, 8, 19, 13, 30),
-					new org.joda.time.DateTime(2013, 7, 19, 14, 45)
-		);
 	}
 
 	/**
 	 * Provides a {@link DatumFactory} to the {@link PojoTester} in order to exercise any getter/setters of this
 	 * type.
-	 *
 	 * <p>
 	 *     The {@link PojoTester} already knows how to exercise primitives, strings, enums and a number of other
 	 *     built-ins, so this is typically only necessary for custom value types.
 	 * </p>
-	 * @param factory
-	 * @param <T>
-	 * @return
 	 */
-	public <T> PojoTester usingData(DatumFactory<T> factory) {
+	public <T> PojoTester usingData(final DatumFactory<T> factory) {
 		dataByType.put(factory.getType(), factory);
 		return this;
 	}
-	<T> PojoTester usingData(final Class<?> type, DatumFactory<T> factory) {
+	<T> PojoTester usingData(final Class<?> type, final DatumFactory<T> factory) {
 		dataByType.put(type, factory);
 		return this;
 	}
@@ -411,12 +379,11 @@ public class PojoTester {
 	/**
 	 * Convenience overload to provide a {@link DatumFactory} to the {@link PojoTester}, specifying both
 	 * the type and a number of instances of that type.
-	 *
 	 * <p>
 	 *     There should be at least two and ideally three different data instances.
 	 * </p>
 	 */
-	public <T> PojoTester usingData(Class<T> c, final T... data) {
+	public <T> PojoTester usingData(final Class<T> c, final T... data) {
 		if (Enum.class.isAssignableFrom(c)) {
 			throw new IllegalArgumentException("No need to provide test data for enums");
 		}
@@ -425,7 +392,7 @@ public class PojoTester {
 		}
 		return usingData(new DatumFactoryImpl<>(c, data));
 	}
-	public <T> PojoTester usingData(Class<T> c, final List<T> data) {
+	public <T> PojoTester usingData(final Class<T> c, final List<T> data) {
 		return usingData(new DatumFactoryImpl<>(c, data));
 	}
 
@@ -435,7 +402,7 @@ public class PojoTester {
 	 * generated as required.
 	 */
 	@lombok.SneakyThrows
-	public <T> PojoTester usingData(Class<T> compileTimeType, Class<? extends T> runtimeType) {
+	public <T> PojoTester usingData(final Class<T> compileTimeType, final Class<? extends T> runtimeType) {
 		final var declaredConstructor = runtimeType.getDeclaredConstructor();
 		final T obj1 = declaredConstructor.newInstance();
 		final T obj2 = declaredConstructor.newInstance();
@@ -445,10 +412,10 @@ public class PojoTester {
 
 	/**
 	 * Convenience overload to provide a {@link DatumFactory} to the {@link PojoTester} for the specified
-	 * compile time type, also instantiatable as the runtime type (with a no-arg constructor).
+	 * compile time type, also instantiable as the runtime type (with a no-arg constructor).
 	 */
 	@lombok.SneakyThrows
-	public <T> PojoTester usingData(Class<T> compileTimeType) {
+	public <T> PojoTester usingData(final Class<T> compileTimeType) {
 		return usingData(compileTimeType, compileTimeType);
 	}
 
@@ -456,7 +423,7 @@ public class PojoTester {
 	 * Exercises all of the getters and setters of the provided bean, using the built-in {@link DatumFactory} and any
 	 * additional configured through previous calls to {@link #usingData(Class, Object[])} (or its overloads).
 	 */
-	public void exercise(Object bean) {
+	public void exercise(final Object bean) {
 		exercise(bean, FilterSet.excluding());
 	}
 
@@ -464,7 +431,7 @@ public class PojoTester {
 	 * As for {@link #exercise(Object)}, however only exercising the properties as defined by the provided
 	 * {@link FilterSet}, and omitting any others.
 	 */
-	public void exercise(Object bean, FilterSet filterSet) {
+	public void exercise(final Object bean, final FilterSet filterSet) {
 		// an array that fills as each property is tested, allowing
 		// subsequent properties to be tested against them
 		final List<Method> gettersDone = new ArrayList<>();
@@ -491,7 +458,7 @@ public class PojoTester {
 		handleExceptions(problems);
 	}
 
-	private static void handleExceptions(List<TestException> problems) {
+	private static void handleExceptions(final List<TestException> problems) {
 		if (!problems.isEmpty()) {
 			Throwable lastCause = null;
 			final var b = new StringBuilder();
@@ -507,7 +474,7 @@ public class PojoTester {
 		}
 	}
 
-	private static Map<String, Method> getMethodsAsMap(Object bean) {
+	private static Map<String, Method> getMethodsAsMap(final Object bean) {
 		final Map<String, Method> methodMap = new HashMap<>();
 		for (final var m : bean.getClass().getMethods()) {
 			methodMap.put(m.getName(), m);
@@ -516,7 +483,7 @@ public class PojoTester {
 	}
 
 	private void testOne(final Object bean, final Map<String, Method> methods,
-			String property, List<Method> earlierGetters) throws TestException {
+			final String property, final List<Method> earlierGetters) throws TestException {
 		final var setterName = getAccessor("set", property);
 		for (final var setterMethod : methods.values()) {
 			final var parameterTypes = setterMethod.getParameterTypes();
@@ -530,9 +497,9 @@ public class PojoTester {
 		throw new TestException(String.format("No matching setter found for %s.", property));
 	}
 
-	private void exercise(final Object bean, String property,
-			final Map<String, Method> methods, Method setterMethod,
-			final Class<?> parameterType, List<Method> earlierGetters)
+	private void exercise(final Object bean, final String property,
+			final Map<String, Method> methods, final Method setterMethod,
+			final Class<?> parameterType, final List<Method> earlierGetters)
 			throws AssertionFailedError, TestException {
 
 		final var setterName = setterMethod.getName();
@@ -612,7 +579,7 @@ public class PojoTester {
 		}
 	}
 
-	private static void checkMethodVisibility(String property,
+	private static void checkMethodVisibility(final String property,
 			final String accessorName, final Method method)
 			throws AssertionFailedError, TestException {
 		if (!Modifier.isPublic(method.getModifiers())) {
@@ -628,8 +595,8 @@ public class PojoTester {
 	}
 
 	private static void invokeSetterAndGetter(final Object bean,
-			String property, Method setterMethod, final Method getterMethod,
-			Object t) throws IllegalAccessException, InvocationTargetException,
+			final String property, final Method setterMethod, final Method getterMethod,
+			final Object t) throws IllegalAccessException, InvocationTargetException,
 			AssertionFailedError, TestException {
 
 		setterMethod.invoke(bean, t);
@@ -662,7 +629,7 @@ public class PojoTester {
 		}
 	}
 
-	private String getAccessor(String prefix, String property) {
+	private String getAccessor(final String prefix, final String property) {
 		if (property.length() == 1) {
 			return prefix + Character.toUpperCase(property.charAt(0));
 		}
@@ -674,11 +641,11 @@ public class PojoTester {
 
 		private static final long serialVersionUID = 7870820619976334343L;
 
-		public TestException(String message) {
+		public TestException(final String message) {
 			super(message);
 		}
 
-		public TestException(String message, Throwable t) {
+		public TestException(final String message, final Throwable t) {
 			super(message, t);
 		}
 	}
@@ -688,11 +655,11 @@ public class PojoTester {
 
 		private boolean include = false;
 
-		private FilterSet(String... string) {
+		private FilterSet(final String... string) {
 			super.addAll(Arrays.asList(string));
 		}
 
-		private boolean shouldInclude(String x) {
+		private boolean shouldInclude(final String x) {
 			if (include) {
 				return isEmpty() || contains(x);
 			} else {
@@ -700,13 +667,13 @@ public class PojoTester {
 			}
 		}
 
-		public static FilterSet includingOnly(String... property) {
+		public static FilterSet includingOnly(final String... property) {
 			final var filterSet = new FilterSet(property);
 			filterSet.include = true;
 			return filterSet;
 		}
 
-		public static FilterSet excluding(String... property) {
+		public static FilterSet excluding(final String... property) {
 			return new FilterSet(property);
 		}
 	}

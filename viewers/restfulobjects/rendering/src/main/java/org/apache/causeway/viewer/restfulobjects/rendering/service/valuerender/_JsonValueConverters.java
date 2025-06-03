@@ -20,16 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -44,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 final class _JsonValueConverters {
 
     @RequiredArgsConstructor
-    public static enum DefaultFormat {
+    enum DefaultFormat {
         STRING(String.class, null, "string"),
         BOOLEAN(Boolean.class, null, "boolean"),
         BYTE(Byte.class, "int", "byte"),
@@ -59,12 +51,12 @@ final class _JsonValueConverters {
         BIGINTEGER(BigInteger.class, "big-integer(18)", "javamathbiginteger"),
         @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         BIGDECIMAL(BigDecimal.class, "big-decimal", "javamathbigdecimal"),
-        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
-        JODALOCALDATE(LocalDate.class, "date", "jodalocaldate"),
-        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
-        JODALOCALDATETIME(LocalDateTime.class, "date-time", "jodalocaldatetime"),
-        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
-        JODADATETIME(DateTime.class, "date-time", "jodadatetime"),
+//        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
+//        JODALOCALDATE(LocalDate.class, "date", "jodalocaldate"),
+//        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
+//        JODALOCALDATETIME(LocalDateTime.class, "date-time", "jodalocaldatetime"),
+//        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
+//        JODADATETIME(DateTime.class, "date-time", "jodadatetime"),
         @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JAVAUTILDATE(java.util.Date.class, "date-time", "javautildate"),
         @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
@@ -465,293 +457,263 @@ final class _JsonValueConverters {
             }
         });
 
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODALOCALDATE){
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODALOCALDATE){
+//
+//            // these formatters do NOT use withZoneUTC()
+//            final List<DateTimeFormatter> formatters = _JodaLegacy.formattersJodaLocalDate();
+//
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    for (DateTimeFormatter formatter : formatters) {
+//                        try {
+//                            final LocalDate parsedDate = formatter.parseLocalDate(dateStr);
+//                            return parsedDate;
+//                        } catch (IllegalArgumentException ex) {
+//                            // fall through
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof LocalDate) {
+//                    final LocalDate date = (LocalDate) obj;
+//                    final String dateStr = formatters.get(0).print(date.toDateTimeAtStartOfDay());
+//                    repr.mapPutString("value", dateStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
+//
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODALOCALDATETIME){
+//
+//            final List<DateTimeFormatter> formatters = _JodaLegacy.formattersJodaLocalDateTime();
+//
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    for (DateTimeFormatter formatter : formatters) {
+//                        try {
+//                            final LocalDateTime parsedDate = formatter.parseLocalDateTime(dateStr);
+//                            return parsedDate;
+//                        } catch (IllegalArgumentException ex) {
+//                            // fall through
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof LocalDateTime) {
+//                    final LocalDateTime date = (LocalDateTime) obj;
+//                    final String dateStr = formatters.get(0).print(date.toDateTime());
+//                    repr.mapPutString("value", dateStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
+//
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODADATETIME){
+//
+//            final List<DateTimeFormatter> formatters = _JodaLegacy.formattersJodaDateTime();
+//
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    for (DateTimeFormatter formatter : formatters) {
+//                        try {
+//                            final DateTime parsedDate = formatter.parseDateTime(dateStr);
+//                            return parsedDate;
+//                        } catch (IllegalArgumentException ex) {
+//                            // fall through
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof DateTime) {
+//                    final DateTime date = (DateTime) obj;
+//                    final String dateStr = formatters.get(0).print(date.toDateTime());
+//                    repr.mapPutString("value", dateStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
 
-            // these formatters do NOT use withZoneUTC()
-            final List<DateTimeFormatter> formatters = Arrays.asList(
-                    ISODateTimeFormat.date(),
-                    ISODateTimeFormat.basicDate(),
-                    DateTimeFormat.forPattern("yyyyMMdd"),
-                    JsonRepresentation.yyyyMMdd
-                    );
-
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    for (DateTimeFormatter formatter : formatters) {
-                        try {
-                            final LocalDate parsedDate = formatter.parseLocalDate(dateStr);
-                            return parsedDate;
-                        } catch (IllegalArgumentException ex) {
-                            // fall through
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof LocalDate) {
-                    final LocalDate date = (LocalDate) obj;
-                    final String dateStr = formatters.get(0).print(date.toDateTimeAtStartOfDay());
-                    repr.mapPutString("value", dateStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
-
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODALOCALDATETIME){
-
-            final List<DateTimeFormatter> formatters = Arrays.asList(
-                    ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.dateTime().withZoneUTC(),
-                    ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.basicDateTime().withZoneUTC(),
-                    JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
-                    );
-
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    for (DateTimeFormatter formatter : formatters) {
-                        try {
-                            final LocalDateTime parsedDate = formatter.parseLocalDateTime(dateStr);
-                            return parsedDate;
-                        } catch (IllegalArgumentException ex) {
-                            // fall through
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof LocalDateTime) {
-                    final LocalDateTime date = (LocalDateTime) obj;
-                    final String dateStr = formatters.get(0).print(date.toDateTime());
-                    repr.mapPutString("value", dateStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
-
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JODADATETIME){
-
-            final List<DateTimeFormatter> formatters = Arrays.asList(
-                    ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.dateTime().withZoneUTC(),
-                    ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.basicDateTime().withZoneUTC(),
-                    JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
-                    );
-
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    for (DateTimeFormatter formatter : formatters) {
-                        try {
-                            final DateTime parsedDate = formatter.parseDateTime(dateStr);
-                            return parsedDate;
-                        } catch (IllegalArgumentException ex) {
-                            // fall through
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof DateTime) {
-                    final DateTime date = (DateTime) obj;
-                    final String dateStr = formatters.get(0).print(date.toDateTime());
-                    repr.mapPutString("value", dateStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
-
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVAUTILDATE){
-
-            final List<DateTimeFormatter> formatters = Arrays.asList(
-                    ISODateTimeFormat.dateTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.dateTime().withZoneUTC(),
-                    ISODateTimeFormat.basicDateTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.basicDateTime().withZoneUTC(),
-                    JsonRepresentation.yyyyMMddTHHmmssZ.withZoneUTC()
-                    );
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    for (DateTimeFormatter formatter : formatters) {
-                        try {
-                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
-                            final java.util.Date parsedDate = parseDateTime.toDate();
-                            return parsedDate;
-                        } catch (IllegalArgumentException ex) {
-                            // fall through
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof java.util.Date) {
-                    final java.util.Date date = (java.util.Date) obj;
-                    final DateTimeFormatter dateTimeFormatter = formatters.get(0);
-                    final String dateStr = dateTimeFormatter.print(new DateTime(date));
-                    repr.mapPutString("value", dateStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
-
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLDATE){
-
-            final List<DateTimeFormatter> formatters = Arrays.asList(
-                    ISODateTimeFormat.date().withZoneUTC(),
-                    ISODateTimeFormat.basicDate().withZoneUTC(),
-                    JsonRepresentation.yyyyMMdd.withZoneUTC()
-                    );
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    for (DateTimeFormatter formatter : formatters) {
-                        try {
-                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
-                            final java.sql.Date parsedDate = new java.sql.Date(parseDateTime.getMillis());
-                            return parsedDate;
-                        } catch (IllegalArgumentException ex) {
-                            // fall through
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof java.sql.Date) {
-                    final java.sql.Date date = (java.sql.Date) obj;
-                    final String dateStr = formatters.get(0).print(new DateTime(date));
-                    repr.mapPutString("value", dateStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
-
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLTIME){
-
-            final List<DateTimeFormatter> formatters = Arrays.asList(
-                    ISODateTimeFormat.hourMinuteSecond().withZoneUTC(),
-                    ISODateTimeFormat.basicTimeNoMillis().withZoneUTC(),
-                    ISODateTimeFormat.basicTime().withZoneUTC(),
-                    JsonRepresentation._HHmmss.withZoneUTC()
-                    );
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    for (DateTimeFormatter formatter : formatters) {
-                        try {
-                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
-                            final java.sql.Time parsedTime = new java.sql.Time(parseDateTime.getMillis());
-                            return parsedTime;
-                        } catch (IllegalArgumentException ex) {
-                            // fall through
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof java.sql.Time) {
-                    final java.sql.Time date = (java.sql.Time) obj;
-                    final String dateStr = formatters.get(0).print(new DateTime(date));
-                    repr.mapPutString("value", dateStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
-
-        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLTIMESTAMP){
-
-            @Override
-            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
-                if (repr.isLong()) {
-                    final Long millis = repr.asLong();
-                    final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(millis);
-                    return parsedTimestamp;
-                }
-                if (repr.isString()) {
-                    final String dateStr = repr.asString();
-                    try {
-                        final Long parseMillis = Long.parseLong(dateStr);
-                        final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(parseMillis);
-                        return parsedTimestamp;
-                    } catch (IllegalArgumentException ex) {
-                        // fall through
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
-                    final JsonRepresentation repr) {
-                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
-                if(obj instanceof java.sql.Timestamp) {
-                    final java.sql.Timestamp date = (java.sql.Timestamp) obj;
-                    final long millisStr = date.getTime();
-                    repr.mapPutLong("value", millisStr);
-                } else {
-                    repr.mapPut("value", obj);
-                }
-                appendFormats(repr, context);
-                return obj;
-            }
-        });
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVAUTILDATE){
+//
+//            final List<DateTimeFormatter> formatters = _JodaLegacy.formattersJavaUtilDate();
+//
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    for (DateTimeFormatter formatter : formatters) {
+//                        try {
+//                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
+//                            final java.util.Date parsedDate = parseDateTime.toDate();
+//                            return parsedDate;
+//                        } catch (IllegalArgumentException ex) {
+//                            // fall through
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof java.util.Date) {
+//                    final java.util.Date date = (java.util.Date) obj;
+//                    final DateTimeFormatter dateTimeFormatter = formatters.get(0);
+//                    final String dateStr = dateTimeFormatter.print(new DateTime(date));
+//                    repr.mapPutString("value", dateStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
+//
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLDATE){
+//
+//            final List<DateTimeFormatter> formatters = _JodaLegacy.formattersJavaSqlDate();
+//
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    for (DateTimeFormatter formatter : formatters) {
+//                        try {
+//                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
+//                            final java.sql.Date parsedDate = new java.sql.Date(parseDateTime.getMillis());
+//                            return parsedDate;
+//                        } catch (IllegalArgumentException ex) {
+//                            // fall through
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof java.sql.Date) {
+//                    final java.sql.Date date = (java.sql.Date) obj;
+//                    final String dateStr = formatters.get(0).print(new DateTime(date));
+//                    repr.mapPutString("value", dateStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
+//
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLTIME){
+//
+//            final List<DateTimeFormatter> formatters = _JodaLegacy.formattersJavaSqlTime();
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    for (DateTimeFormatter formatter : formatters) {
+//                        try {
+//                            final DateTime parseDateTime = formatter.parseDateTime(dateStr);
+//                            final java.sql.Time parsedTime = new java.sql.Time(parseDateTime.getMillis());
+//                            return parsedTime;
+//                        } catch (IllegalArgumentException ex) {
+//                            // fall through
+//                        }
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof java.sql.Time) {
+//                    final java.sql.Time date = (java.sql.Time) obj;
+//                    final String dateStr = formatters.get(0).print(new DateTime(date));
+//                    repr.mapPutString("value", dateStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
+//
+//        converters.add(new JsonValueConverter.Abstract(DefaultFormat.JAVASQLTIMESTAMP){
+//
+//            @Override
+//            public Object recoverValueAsPojo(final JsonRepresentation repr, final Context context) {
+//                if (repr.isLong()) {
+//                    final Long millis = repr.asLong();
+//                    final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(millis);
+//                    return parsedTimestamp;
+//                }
+//                if (repr.isString()) {
+//                    final String dateStr = repr.asString();
+//                    try {
+//                        final Long parseMillis = Long.parseLong(dateStr);
+//                        final java.sql.Timestamp parsedTimestamp = new java.sql.Timestamp(parseMillis);
+//                        return parsedTimestamp;
+//                    } catch (IllegalArgumentException ex) {
+//                        // fall through
+//                    }
+//                }
+//                return null;
+//            }
+//
+//            @Override
+//            public Object appendValueAndFormat(final ManagedObject objectAdapter, final Context context,
+//                    final JsonRepresentation repr) {
+//                final Object obj = unwrapAsObjectElseNullNode(objectAdapter);
+//                if(obj instanceof java.sql.Timestamp) {
+//                    final java.sql.Timestamp date = (java.sql.Timestamp) obj;
+//                    final long millisStr = date.getTime();
+//                    repr.mapPutLong("value", millisStr);
+//                } else {
+//                    repr.mapPut("value", obj);
+//                }
+//                appendFormats(repr, context);
+//                return obj;
+//            }
+//        });
 
         return converters;
     }

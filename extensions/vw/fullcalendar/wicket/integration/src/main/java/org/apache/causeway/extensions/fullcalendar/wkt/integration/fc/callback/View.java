@@ -19,20 +19,35 @@
 
 package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.callback;
 
-import org.joda.time.DateMidnight;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.ViewType;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+public record View(
+    ViewType type,
+    LocalDate start,
+    LocalDate end,
+    LocalDate visibleStart,
+    LocalDate visibleEnd) {
 
-@AllArgsConstructor
-@Getter
-public class View {
-	private ViewType type;
-	private DateMidnight start;
-	private DateMidnight end;
-	private DateMidnight visibleStart;
-	private DateMidnight visibleEnd;
+    View(
+        final ViewType type,
+        final String startIsoDateTime,
+        final String endIsoDateTime,
+        final String visibleStartIsoDateTime,
+        final String visibleEndIsoDateTime) {
+
+        this(type,
+            parseIsoDateTime(startIsoDateTime),
+            parseIsoDateTime(startIsoDateTime),
+            parseIsoDateTime(startIsoDateTime),
+            parseIsoDateTime(startIsoDateTime));
+    }
+
+    private static LocalDate parseIsoDateTime(final String isoDateTime) {
+        return DateTimeFormatter.ISO_DATE_TIME.parse(isoDateTime, OffsetDateTime::from).toLocalDate();
+    }
 
 }

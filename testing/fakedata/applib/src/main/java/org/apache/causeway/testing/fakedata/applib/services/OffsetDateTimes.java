@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
+import java.time.OffsetDateTime;
+import java.time.Period;
 import java.time.ZoneId;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-
 /**
- * Returns a random {@link LocalDate}, optionally based on the current time but constrained by a {@link Period}.
+ * Returns a random {@link OffsetDateTime}, optionally based on the current time but constrained by a {@link Period}.
  *
  * <p>
  *     The current time ('now') is obtained from the {@link org.apache.causeway.applib.services.clock.ClockService}.
@@ -32,45 +31,45 @@ import org.joda.time.Period;
  *
  * @since 2.0 {@index}
  */
-public class JodaLocalDates extends AbstractRandomValueGenerator{
+public class OffsetDateTimes extends AbstractRandomValueGenerator {
 
-    public JodaLocalDates(final FakeDataService fakeDataService) {
+    public OffsetDateTimes(final FakeDataService fakeDataService) {
         super(fakeDataService);
     }
 
     /**
-     * Returns a random date either before or after 'now', within the specified {@link java.time.Period}.
+     * Returns a random date either before or after 'now', within the specified {@link Period}.
      */
-    public LocalDate around(final Period period) {
+    public OffsetDateTime around(final Period period) {
         return fake.booleans().coinFlip() ? before(period) : after(period);
     }
 
     /**
-     * Returns a random date some time before 'now', within the specified {@link java.time.Period}.
+     * Returns a random date some time before 'now', within the specified {@link Period}.
      */
-    public org.joda.time.LocalDate before(final Period period) {
-        var periodWithin = fake.jodaPeriods().within(period);
+    public OffsetDateTime before(final Period period) {
+        var periodWithin = fake.periods().within(period);
         return now().minus(periodWithin);
     }
 
     /**
-     * Returns a random date some time after 'now', within the specified {@link java.time.Period}.
+     * Returns a random date/time some time after 'now', within the specified {@link Period}.
      */
-    public org.joda.time.LocalDate after(final Period period) {
-        var periodWithin = fake.jodaPeriods().within(period);
+    public OffsetDateTime after(final Period period) {
+        var periodWithin = fake.periods().within(period);
         return now().plus(periodWithin);
     }
 
     /**
-     * Returns a random date 5 years around 'now'.
+     * Returns a random date/time 5 years around 'now'.
      */
-    public LocalDate any() {
-        var periodUpTo5Years = fake.jodaPeriods().yearsUpTo(5);
-        return around(periodUpTo5Years);
+    public OffsetDateTime any() {
+        final Period upTo5Years = fake.periods().yearsUpTo(5);
+        return around(upTo5Years);
     }
 
-    private LocalDate now() {
-        return fake.clockService.getClock().nowAsJodaLocalDate(ZoneId.systemDefault());
+    private OffsetDateTime now() {
+        return fake.clockService.getClock().nowAsOffsetDateTime(ZoneId.systemDefault());
     }
 
 }

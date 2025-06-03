@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.test.components.scalars.jodatime;
+package org.apache.causeway.viewer.wicket.ui.test.components.scalars.temporals;
 
 import java.util.Locale;
 
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,31 +27,31 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
-import org.apache.causeway.valuetypes.jodatime.integration.valuesemantics.JodaLocalDateValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSqlDateValueSemantics;
 import org.apache.causeway.viewer.wicket.ui.test.components.scalars.ConverterTester;
 
 import lombok.Getter;
 import lombok.Setter;
 
-class JodaLocalDateConverterTest {
+class JavaSqlDateConverterTest {
 
-    final org.joda.time.LocalDate valid = new LocalDate(2013, 05, 11);
-    ConverterTester<LocalDate> converterTester;
+    final java.sql.Date valid = java.sql.Date.valueOf("2013-03-13");
+    ConverterTester<java.sql.Date> converterTester;
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<org.joda.time.LocalDate>(org.joda.time.LocalDate.class,
-                new JodaLocalDateValueSemantics(),
+        converterTester = new ConverterTester<java.sql.Date>(java.sql.Date.class,
+                new JavaSqlDateValueSemantics(),
                 new LocalDateValueSemantics());
         converterTester.setScenario(
                 Locale.ENGLISH,
                 converterTester.converterForProperty(
-                        CustomerWithJodaLocalDate.class, "value", ViewOrEditMode.EDITING));
+                        CustomerWithJavaSqlDate.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test
     void happy_case() {
-        converterTester.assertRoundtrip(valid, "2013-05-11");
+        converterTester.assertRoundtrip(valid, "2013-03-13");
     }
 
     @Test
@@ -68,9 +67,9 @@ class JodaLocalDateConverterTest {
     // -- SCENARIOS
 
     @DomainObject
-    static class CustomerWithJodaLocalDate {
+    static class CustomerWithJavaSqlDate {
         @Property @Getter @Setter
-        private org.joda.time.LocalDate value;
+        private java.sql.Date value;
     }
 
 }

@@ -46,7 +46,6 @@
 		<dependency>
 			<groupId>org.asciidoctor</groupId>
 			<artifactId>asciidoctorj-api</artifactId>
-			<version>${asciidoctorj.version}</version>
 		</dependency>
 
 	</dependencies>

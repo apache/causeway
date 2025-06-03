@@ -43,10 +43,6 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.POJONode;
 
-import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
@@ -333,80 +329,73 @@ public class JsonRepresentation {
     // getDate, asDate
     // ///////////////////////////////////////////////////////////////////////
 
-    public static final DateTimeFormatter yyyyMMdd = ISODateTimeFormat.date().withZoneUTC();
-
-    public java.util.Date getDate(final String path) {
-        return getDate(path, getNode(path));
-    }
-
-    public java.util.Date asDate() {
-        return getDate(null, asJsonNode());
-    }
-
-    private java.util.Date getDate(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a date");
-        if (!node.isTextual()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a date"));
-        }
-        final String textValue = node.textValue();
-        return new java.util.Date(yyyyMMdd.parseMillis(textValue));
-    }
+//TODO[causeway-viewer-restfulobjects-applib-CAUSEWAY-3892] we have proper temporal types since Java 8
+//    public java.util.Date getDate(final String path) {
+//        return getDate(path, getNode(path));
+//    }
+//
+//    public java.util.Date asDate() {
+//        return getDate(null, asJsonNode());
+//    }
+//
+//    private java.util.Date getDate(final String path, final JsonNode node) {
+//        if (representsNull(node)) {
+//            return null;
+//        }
+//        checkValue(path, node, "a date");
+//        if (!node.isTextual()) {
+//            throw new IllegalArgumentException(formatExMsg(path, "is not a date"));
+//        }
+//        return JsonTemporalLegacy.fromJsonAsDateOnly(node);
+//    }
 
     // ///////////////////////////////////////////////////////////////////////
     // getDateTime, asDateTime
     // ///////////////////////////////////////////////////////////////////////
 
-    public static final DateTimeFormatter yyyyMMddTHHmmssZ = ISODateTimeFormat.dateTimeNoMillis().withZoneUTC();
-
-    public java.util.Date getDateTime(final String path) {
-        return getDateTime(path, getNode(path));
-    }
-
-    public java.util.Date asDateTime() {
-        return getDateTime(null, asJsonNode());
-    }
-
-    private java.util.Date getDateTime(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a date-time");
-        if (!node.isTextual()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a date-time"));
-        }
-        final String textValue = node.textValue();
-        return new java.util.Date(yyyyMMddTHHmmssZ.parseMillis(textValue));
-    }
+//TODO[causeway-viewer-restfulobjects-applib-CAUSEWAY-3892] we have proper temporal types since Java 8
+//    public java.util.Date getDateTime(final String path) {
+//        return getDateTime(path, getNode(path));
+//    }
+//
+//    public java.util.Date asDateTime() {
+//        return getDateTime(null, asJsonNode());
+//    }
+//
+//    private java.util.Date getDateTime(final String path, final JsonNode node) {
+//        if (representsNull(node)) {
+//            return null;
+//        }
+//        checkValue(path, node, "a date-time");
+//        if (!node.isTextual()) {
+//            throw new IllegalArgumentException(formatExMsg(path, "is not a date-time"));
+//        }
+//        return JsonTemporalLegacy.fromJsonAsDateTime(node);
+//    }
 
     // ///////////////////////////////////////////////////////////////////////
     // getTime, asTime
     // ///////////////////////////////////////////////////////////////////////
 
-    public static final DateTimeFormatter _HHmmss = ISODateTimeFormat.timeNoMillis().withZoneUTC();
-
-    public java.util.Date getTime(final String path) {
-        return getTime(path, getNode(path));
-    }
-
-    public java.util.Date asTime() {
-        return getTime(null, asJsonNode());
-    }
-
-    private java.util.Date getTime(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
-        checkValue(path, node, "a time");
-        if (!node.isTextual()) {
-            throw new IllegalArgumentException(formatExMsg(path, "is not a time"));
-        }
-        final String textValue = node.textValue();
-        final LocalTime localTime = _HHmmss.parseLocalTime(textValue + "Z");
-        return new java.util.Date(localTime.getMillisOfDay());
-    }
+//TODO[causeway-viewer-restfulobjects-applib-CAUSEWAY-3892] we have proper temporal types since Java 8
+//    public java.util.Date getTime(final String path) {
+//        return getTime(path, getNode(path));
+//    }
+//
+//    public java.util.Date asTime() {
+//        return getTime(null, asJsonNode());
+//    }
+//
+//    private java.util.Date getTime(final String path, final JsonNode node) {
+//        if (representsNull(node)) {
+//            return null;
+//        }
+//        checkValue(path, node, "a time");
+//        if (!node.isTextual()) {
+//            throw new IllegalArgumentException(formatExMsg(path, "is not a time"));
+//        }
+//        return JsonTemporalLegacy.fromJsonAsTimeOnly(node);
+//    }
 
     // ///////////////////////////////////////////////////////////////////////
     // isBoolean, getBoolean, asBoolean
@@ -1586,27 +1575,9 @@ public class JsonRepresentation {
 
     public Stream<Map.Entry<String, JsonRepresentation>> streamMapEntries() {
         ensureIsAMap();
-        return _NullSafe.stream(jsonNode.fields())
+        return _NullSafe.stream(jsonNode.properties())
                 .map(MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
     }
-
-    // [ahuber] replaced by streamMapEntries
-    //	public Iterable<Map.Entry<String, JsonRepresentation>> mapIterable() {
-    //		ensureIsAMap();
-    //		return new Iterable<Map.Entry<String, JsonRepresentation>>() {
-    //
-    //			@Override
-    //			public Iterator<Entry<String, JsonRepresentation>> iterator() {
-    //				return mapIterator();
-    //			}
-    //		};
-    //	}
-
-    //[ahuber] replaced by streamMapEntries
-    //	public Iterator<Map.Entry<String, JsonRepresentation>> mapIterator() {
-    //		ensureIsAMap();
-    //		return Iterators.transform(jsonNode.fields(), MAP_ENTRY_JSON_NODE_TO_JSON_REPRESENTATION);
-    //	}
 
     private void ensureIsAMap() {
         if (!jsonNode.isObject()) {

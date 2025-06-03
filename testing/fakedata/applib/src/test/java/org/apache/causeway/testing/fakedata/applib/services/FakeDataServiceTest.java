@@ -23,6 +23,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -78,10 +79,10 @@ class FakeDataServiceTest {
             final Blob blob = causewayBlobs.any();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).isNotNull();
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType()).isNotNull();
+            assertThat(blob.name()).isNotNull();
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType()).isNotNull();
         }
 
         @Test
@@ -90,10 +91,10 @@ class FakeDataServiceTest {
             final Blob blob = causewayBlobs.anyJpg();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).endsWith(".jpg");
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType().toString()).isEqualTo("image/jpeg");
+            assertThat(blob.name()).endsWith(".jpg");
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType().toString()).isEqualTo("image/jpeg");
         }
 
         @Test
@@ -102,10 +103,10 @@ class FakeDataServiceTest {
             final Blob blob = causewayBlobs.anyPdf();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).endsWith(".pdf");
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType().toString()).isEqualTo("application/pdf");
+            assertThat(blob.name()).endsWith(".pdf");
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType().toString()).isEqualTo("application/pdf");
         }
 
     }
@@ -127,10 +128,10 @@ class FakeDataServiceTest {
             final Clob clob = causewayClobs.any();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).isNotNull();
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType()).isNotNull();
+            assertThat(clob.name()).isNotNull();
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType()).isNotNull();
         }
 
         @Test
@@ -139,10 +140,10 @@ class FakeDataServiceTest {
             final Clob clob = causewayClobs.anyRtf();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).endsWith(".rtf");
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType().toString()).isEqualTo("application/rtf");
+            assertThat(clob.name()).endsWith(".rtf");
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType().toString()).isEqualTo("application/rtf");
         }
 
         @Test
@@ -151,10 +152,10 @@ class FakeDataServiceTest {
             final Clob clob = causewayClobs.anyXml();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).endsWith(".xml");
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType().toString()).isEqualTo("text/xml");
+            assertThat(clob.name()).endsWith(".xml");
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType().toString()).isEqualTo("text/xml");
         }
 
     }
@@ -193,19 +194,25 @@ class FakeDataServiceTest {
     @Test
     public void passwords_any() throws Exception {
         final Password pwd = fakeDataService.causewayPasswords().any();
-        assertThat(pwd.getPassword()).isNotNull();
-        assertThat(pwd.getPassword().length()).isEqualTo(12);
+        assertThat(pwd.password()).isNotNull();
+        assertThat(pwd.password().length()).isEqualTo(12);
     }
 
     @Test
-    public void jodaDateTimes_any() throws Exception {
-        final OffsetDateTime any = fakeDataService.javaTimeDateTimes().any();
+    public void offsetDateTimes_any() throws Exception {
+        final OffsetDateTime any = fakeDataService.offsetDateTimes().any();
         assertThat(any).isNotNull();
     }
 
     @Test
-    public void jodaLocalDates_any() throws Exception {
-        final LocalDate any = fakeDataService.javaTimeLocalDates().any();
+    public void zonedDateTimes_any() throws Exception {
+        final ZonedDateTime any = fakeDataService.zonedDateTimes().any();
+        assertThat(any).isNotNull();
+    }
+
+    @Test
+    public void localDates_any() throws Exception {
+        final LocalDate any = fakeDataService.localDates().any();
         assertThat(any).isNotNull();
     }
 

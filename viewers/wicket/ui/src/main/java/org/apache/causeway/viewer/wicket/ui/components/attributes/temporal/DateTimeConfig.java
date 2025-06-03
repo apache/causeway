@@ -27,12 +27,6 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import org.apache.wicket.util.lang.Args;
-import org.apache.wicket.util.string.Strings;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
 import de.agilecoders.wicket.jquery.AbstractConfig;
@@ -224,44 +218,44 @@ public class DateTimeConfig extends AbstractConfig {
     	return this;
     }
 
-    /**
-     * The earliest date that may be selected; all earlier dates will be disabled.
-     *
-     * @param value the earliest start date
-     * @return this instance for chaining
-     */
-    public DateTimeConfig withStartDate(final DateTime value) {
-        String format = getFormat();
-        String startDate;
-        if (Strings.isEmpty(format)) {
-            startDate = value.toString();
-        } else {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
-            startDate = dateTimeFormatter.print(value);
-        }
-        put(StartDate, startDate);
-        return this;
-    }
-
-    /**
-     * The latest date that may be selected; all later dates will be disabled.
-     *
-     * @param value the latest end date
-     * @return this instance for chaining
-     */
-    public DateTimeConfig withEndDate(final DateTime value) {
-        Args.notNull(value, "value");
-        String format = getFormat();
-        String endDate;
-        if (Strings.isEmpty(format)) {
-            endDate = value.toString();
-        } else {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
-            endDate = dateTimeFormatter.print(value);
-        }
-        put(EndDate, endDate);
-        return this;
-    }
+//    /**
+//     * The earliest date that may be selected; all earlier dates will be disabled.
+//     *
+//     * @param value the earliest start date
+//     * @return this instance for chaining
+//     */
+//    public DateTimeConfig withStartDate(final DateTime value) {
+//        String format = getFormat();
+//        String startDate;
+//        if (Strings.isEmpty(format)) {
+//            startDate = value.toString();
+//        } else {
+//            DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
+//            startDate = dateTimeFormatter.print(value);
+//        }
+//        put(StartDate, startDate);
+//        return this;
+//    }
+//
+//    /**
+//     * The latest date that may be selected; all later dates will be disabled.
+//     *
+//     * @param value the latest end date
+//     * @return this instance for chaining
+//     */
+//    public DateTimeConfig withEndDate(final DateTime value) {
+//        Args.notNull(value, "value");
+//        String format = getFormat();
+//        String endDate;
+//        if (Strings.isEmpty(format)) {
+//            endDate = value.toString();
+//        } else {
+//            DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(format);
+//            endDate = dateTimeFormatter.print(value);
+//        }
+//        put(EndDate, endDate);
+//        return this;
+//    }
 
     /**
      * The default view to display when the picker is shown.

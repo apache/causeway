@@ -135,21 +135,6 @@ public class Calculator {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalDate jodaLocalPlusDays(final org.joda.time.LocalDate date, final int numDays) {
-        return date.plusDays(numDays);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.DateTime jodaPlusDaysAndHoursAndMinutes(final org.joda.time.DateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
-        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
-    public org.joda.time.LocalTime jodaLocalPlusHoursAndMinutes(final org.joda.time.LocalTime time, final int numHours, final int numMinutes) {
-        return time.plusHours(numHours).plusMinutes(numMinutes);
-    }
-
-    @Action(semantics = SemanticsOf.SAFE)
     public boolean and(final boolean x, final boolean y) {
         return x & y;
     }

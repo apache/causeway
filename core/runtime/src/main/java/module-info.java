@@ -21,10 +21,11 @@ module org.apache.causeway.core.runtime {
     exports org.apache.causeway.core.runtime.flushmgmt;
     exports org.apache.causeway.core.runtime.events;
 
+    requires static lombok;
+
     requires jakarta.annotation;
     requires java.desktop;
     requires jakarta.inject;
-    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
@@ -32,7 +33,6 @@ module org.apache.causeway.core.runtime {
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.core.transaction;
     requires org.apache.causeway.security.api;
-    requires org.apache.causeway.valuetypes.jodatime.integration;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

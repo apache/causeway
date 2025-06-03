@@ -36,7 +36,6 @@ import org.apache.causeway.extensions.fullcalendar.applib.spi.CalendarableDerefe
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.Event;
 import org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.EventProvider;
-import org.apache.causeway.valuetypes.jodatime.applib.value.JodaTimeConverters;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 
 public abstract class EventProviderAbstract implements EventProvider {
@@ -62,8 +61,8 @@ public abstract class EventProviderAbstract implements EventProvider {
     public Collection<Event> getEvents(final ZonedDateTime start, final ZonedDateTime end) {
 
         var result = eventById.values().stream()
-        .filter(event->!start.isAfter(JodaTimeConverters.fromJoda(event.getStart())))
-        .filter(event->!end.isBefore(JodaTimeConverters.fromJoda(event.getEnd())))
+        .filter(event->!start.isAfter(event.getStart()))
+        .filter(event->!end.isBefore(event.getEnd()))
         .collect(Collectors.toList());
         return result;
 
@@ -112,8 +111,8 @@ public abstract class EventProviderAbstract implements EventProvider {
             var end = start;
 
             final Event event = new Event();
-            event.setStart(JodaTimeConverters.toJoda(start));
-            event.setEnd(JodaTimeConverters.toJoda(end));
+            event.setStart(start);
+            event.setEnd(end);
             event.setAllDay(true);
 
             final Object dereferencedObject = dereference(commonContext, domainObjectPojo);

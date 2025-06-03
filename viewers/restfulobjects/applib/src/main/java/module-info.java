@@ -30,14 +30,15 @@ module org.apache.causeway.viewer.restfulobjects.applib {
     exports org.apache.causeway.viewer.restfulobjects.applib.user;
     exports org.apache.causeway.viewer.restfulobjects.applib.dtos;
 
+    requires static lombok;
+
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires jakarta.ws.rs;
-    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
-    requires org.joda.time;
     requires spring.context;
     requires spring.core;
+    requires com.fasterxml.jackson.datatype.jsr310;
 }

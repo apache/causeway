@@ -139,7 +139,6 @@ module org.apache.causeway.applib {
     requires static lombok;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
-    requires transitive org.joda.time;
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;

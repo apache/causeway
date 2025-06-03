@@ -26,6 +26,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
+import org.apache.causeway.commons.io.JsonUtils;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -93,7 +95,7 @@ public class CalendarConfig implements Serializable {
     // -- SERIALIZE
 
     public String toJson() {
-        return _Json.toJson(this);
+        return JsonUtils.toStringUtf8(this);
     }
 
 }

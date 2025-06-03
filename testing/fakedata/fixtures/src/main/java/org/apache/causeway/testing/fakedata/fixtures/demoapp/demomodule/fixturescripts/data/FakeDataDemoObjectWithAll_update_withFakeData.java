@@ -22,13 +22,12 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.UUID;
 
 import jakarta.inject.Inject;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.value.Blob;
@@ -93,10 +92,10 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
     private java.sql.Date someJavaSqlDate;
 
     @Getter(onMethod = @__( @Programmatic )) @Setter
-    private LocalDate someJodaLocalDate;
+    private LocalDate someLocalDate;
 
     @Getter(onMethod = @__( @Programmatic )) @Setter
-    private DateTime someJodaDateTime;
+    private ZonedDateTime someZonedDateTime;
 
     @Getter(onMethod = @__( @Programmatic )) @Setter
     private Timestamp someJavaSqlTimestamp;
@@ -143,8 +142,9 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         this.defaultParam("someJavaUtilDate", executionContext, fakeDataService.javaUtilDates().any());
         this.defaultParam("someJavaSqlDate", executionContext, fakeDataService.javaSqlDates().any());
-        this.defaultParam("someJodaLocalDate", executionContext, fakeDataService.javaTimeLocalDates().any());
-        this.defaultParam("someJodaDateTime", executionContext, fakeDataService.javaTimeDateTimes().any());
+        this.defaultParam("someLocalDate", executionContext, fakeDataService.localDates().any());
+        this.defaultParam("someOffsetDateTime", executionContext, fakeDataService.offsetDateTimes().any());
+        this.defaultParam("someZonedDateTime", executionContext, fakeDataService.zonedDateTimes().any());
         this.defaultParam("someJavaSqlTimestamp", executionContext, fakeDataService.javaSqlTimestamps().any());
 
         this.defaultParam("someBigDecimal", executionContext, fakeDataService.bigDecimals().any(14,4));
@@ -152,8 +152,6 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         this.defaultParam("someUrl", executionContext, fakeDataService.urls().any());
         this.defaultParam("someUuid", executionContext, fakeDataService.uuids().any());
-        //TODO[2249] deprecated
-        //this.defaultParam("someMoney", executionContext, fakeDataService.causewayMoneys().any());
         this.defaultParam("someEnumOf3", executionContext, fakeDataService.enums().anyOf(EnumOf3.class));
 
         // updates
@@ -191,8 +189,8 @@ public class FakeDataDemoObjectWithAll_update_withFakeData extends FixtureScript
 
         wrap(fakeDataDemoObject).updateSomeJavaUtilDate(getSomeJavaUtilDate());
         wrap(fakeDataDemoObject).updateSomeJavaSqlDate(getSomeJavaSqlDate());
-        wrap(fakeDataDemoObject).updateSomeJodaLocalDate(getSomeJodaLocalDate());
-        wrap(fakeDataDemoObject).updateSomeJodaDateTime(getSomeJodaDateTime());
+        wrap(fakeDataDemoObject).updateSomeLocalDate(getSomeLocalDate());
+        wrap(fakeDataDemoObject).updateSomeZonedDateTime(getSomeZonedDateTime());
         wrap(fakeDataDemoObject).updateSomeJavaSqlTimestamp(getSomeJavaSqlTimestamp());
 
         wrap(fakeDataDemoObject).updateSomeBigDecimal(getSomeBigDecimal());

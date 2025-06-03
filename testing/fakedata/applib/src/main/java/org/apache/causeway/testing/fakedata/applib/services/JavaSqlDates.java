@@ -41,28 +41,28 @@ public class JavaSqlDates extends AbstractRandomValueGenerator {
      * Returns a random date either before or after 'now', within the specified {@link Period}.
      */
     public Date around(final Period period) {
-        return asSqlDate(fake.javaTimeDateTimes().around(period));
+        return asSqlDate(fake.offsetDateTimes().around(period));
     }
 
     /**
      * Returns a random date some time before 'now', within the specified {@link Period}.
      */
     public Date before(final Period period) {
-        return asSqlDate(fake.javaTimeDateTimes().before(period));
+        return asSqlDate(fake.offsetDateTimes().before(period));
     }
 
     /**
      * Returns a random date some time after 'now', within the specified {@link Period}.
      */
     public java.sql.Date after(final Period period) {
-        return asSqlDate(fake.javaTimeDateTimes().after(period));
+        return asSqlDate(fake.offsetDateTimes().after(period));
     }
 
     /**
      * Returns a random date 5 years around 'now'.
      */
     public java.sql.Date any() {
-        return asSqlDate(fake.javaTimeDateTimes().any());
+        return asSqlDate(fake.offsetDateTimes().any());
     }
 
     private static Date asSqlDate(final OffsetDateTime dateTime) {

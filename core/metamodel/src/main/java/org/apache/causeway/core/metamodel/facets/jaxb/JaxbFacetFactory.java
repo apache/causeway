@@ -210,10 +210,6 @@ implements MetaModelRefiner {
             associationValidators.add(new PropertyValidatorForDateTypes(LocalDate.class));
             associationValidators.add(new PropertyValidatorForDateTypes(LocalDateTime.class));
             associationValidators.add(new PropertyValidatorForDateTypes(LocalTime.class));
-            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.DateTime.class));
-            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDate.class));
-            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalDateTime.class));
-            associationValidators.add(new PropertyValidatorForDateTypes(org.joda.time.LocalTime.class));
         }
         return associationValidators;
     }

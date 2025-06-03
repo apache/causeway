@@ -110,6 +110,8 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.util;
     exports org.apache.causeway.viewer.wicket.ui.validation;
 
+    requires static lombok;
+
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires com.github.openjson;
@@ -119,14 +121,12 @@ module org.apache.causeway.viewer.wicket.ui {
     requires java.sql;
     requires jakarta.validation;
     requires jakarta.servlet;
-    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.core.interaction;
     requires org.apache.causeway.core.metamodel;
     requires org.apache.causeway.security.api;
-    requires org.apache.causeway.valuetypes.jodatime.integration;
     requires org.apache.causeway.viewer.commons.applib;
     requires org.apache.causeway.viewer.commons.model;
     requires org.apache.causeway.viewer.commons.prism;
@@ -140,7 +140,6 @@ module org.apache.causeway.viewer.wicket.ui {
     requires org.apache.wicket.request;
     requires org.apache.wicket.util;
     requires org.danekja.jdk.serializable.functional;
-    requires org.joda.time;
     requires spring.beans;
     requires spring.context;
     requires spring.core;

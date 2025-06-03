@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.testing.fakedata.applib.services;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 /**
- * Returns a random {@link LocalDate}, optionally based on the current time but constrained by a {@link Period}.
+ * Returns a random {@link OffsetDateTime}, optionally based on the current time but constrained by a {@link Period}.
  *
  * <p>
  *     The current time ('now') is obtained from the {@link org.apache.causeway.applib.services.clock.ClockService}.
@@ -31,45 +32,45 @@ import java.time.ZoneId;
  *
  * @since 2.0 {@index}
  */
-public class JavaTimeLocalDates extends AbstractRandomValueGenerator {
+public class ZonedDateTimes extends AbstractRandomValueGenerator {
 
-    public JavaTimeLocalDates(final FakeDataService fakeDataService) {
+    public ZonedDateTimes(final FakeDataService fakeDataService) {
         super(fakeDataService);
     }
 
     /**
      * Returns a random date either before or after 'now', within the specified {@link Period}.
      */
-    public LocalDate around(final Period period) {
+    public ZonedDateTime around(final Period period) {
         return fake.booleans().coinFlip() ? before(period) : after(period);
     }
 
     /**
      * Returns a random date some time before 'now', within the specified {@link Period}.
      */
-    public LocalDate before(final Period period) {
-        var periodWithin = fake.javaTimePeriods().within(period);
+    public ZonedDateTime before(final Period period) {
+        var periodWithin = fake.periods().within(period);
         return now().minus(periodWithin);
     }
 
     /**
-     * Returns a random date some time after 'now', within the specified {@link Period}.
+     * Returns a random date/time some time after 'now', within the specified {@link Period}.
      */
-    public LocalDate after(final Period period) {
-        var periodWithin = fake.javaTimePeriods().within(period);
+    public ZonedDateTime after(final Period period) {
+        var periodWithin = fake.periods().within(period);
         return now().plus(periodWithin);
     }
 
     /**
-     * Returns a random date 5 years around 'now'.
+     * Returns a random date/time 5 years around 'now'.
      */
-    public LocalDate any() {
-        var periodUpTo5Years = fake.javaTimePeriods().yearsUpTo(5);
-        return around(periodUpTo5Years);
+    public ZonedDateTime any() {
+        final Period upTo5Years = fake.periods().yearsUpTo(5);
+        return around(upTo5Years);
     }
 
-    private LocalDate now() {
-        return fake.clockService.getClock().nowAsLocalDate(ZoneId.systemDefault());
+    private ZonedDateTime now() {
+        return ZonedDateTime.ofInstant(fake.clockService.getClock().nowAsInstant(), ZoneId.systemDefault());
     }
 
 }

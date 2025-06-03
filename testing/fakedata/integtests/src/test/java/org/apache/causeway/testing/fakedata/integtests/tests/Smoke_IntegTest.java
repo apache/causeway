@@ -21,15 +21,17 @@ package org.apache.causeway.testing.fakedata.integtests.tests;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -104,8 +106,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isNull();
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isNull();
@@ -179,8 +181,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isNotNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isNotNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isNotNull();
 
             Assertions.assertThat(fakeDataDemoObject.getSomeUrl()).isNotNull();
             Assertions.assertThat(fakeDataDemoObject.getSomeUuid()).isNotNull();
@@ -567,7 +569,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
             Assertions.assertThat(fakeDataDemoObject.getSomeBlob()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeBlob().getMimeType().toString()).isEqualTo("application/pdf");
+            Assertions.assertThat(fakeDataDemoObject.getSomeBlob().mimeType().toString()).isEqualTo("application/pdf");
         }
 
         @Test
@@ -596,7 +598,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
             Assertions.assertThat(fakeDataDemoObject.getSomeClob()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeClob().getMimeType().toString()).isEqualTo("text/xml");
+            Assertions.assertThat(fakeDataDemoObject.getSomeClob().mimeType().toString()).isEqualTo("text/xml");
         }
 
         @Test
@@ -607,7 +609,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaUtilDate()).isNull();
 
-            final Date theDate = new DateTime(2015, 4, 8, 16, 22, 30).toDate();
+            var instant = LocalDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30)).toInstant(ZoneOffset.UTC);
+            var theDate = new java.util.Date(instant.toEpochMilli());
 
             //
             // when
@@ -636,7 +639,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlDate()).isNull();
 
-            final java.sql.Date theDate = new java.sql.Date(new DateTime(2015, 4, 8, 16, 22, 30).withTimeAtStartOfDay().getMillis());
+            var instant = LocalDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30)).toInstant(ZoneOffset.UTC);
+            final java.sql.Date theDate = new java.sql.Date(instant.toEpochMilli());
 
             //
             // when
@@ -665,7 +669,8 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             Assertions.assertThat(fakeDataDemoObject.getSomeJavaSqlTimestamp()).isNull();
 
-            final Timestamp theTimestamp = new Timestamp(new DateTime(2015, 4, 8, 16, 22, 30).getMillis());
+            var instant = LocalDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30)).toInstant(ZoneOffset.UTC);
+            final Timestamp theTimestamp = new Timestamp(instant.toEpochMilli());
 
             //
             // when
@@ -687,20 +692,20 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
         }
 
         @Test
-        public void when_jodaDateTime() throws Exception {
+        public void when_zonedDateTime() throws Exception {
 
             //
             // given
             //
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isNull();
 
-            final DateTime theDate = new DateTime(2015, 4, 8, 16, 22, 30);
+            var theDate = ZonedDateTime.of(LocalDate.of(2015, 4, 8), LocalTime.of(16, 22, 30), ZoneOffset.UTC);
 
             //
             // when
             //
             updateScript.setFakeDataDemoObject(fakeDataDemoObject);
-            updateScript.setSomeJodaDateTime(theDate);
+            updateScript.setSomeZonedDateTime(theDate);
 
             fixtureScripts.runFixtureScript( updateScript,  null);
 
@@ -711,25 +716,25 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaDateTime()).isEqualTo(theDate);
+            Assertions.assertThat(fakeDataDemoObject.getSomeZonedDateTime()).isEqualTo(theDate);
 
         }
 
         @Test
-        public void when_jodaLocalDate() throws Exception {
+        public void when_localDate() throws Exception {
 
             //
             // given
             //
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isNull();
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isNull();
 
-            final LocalDate theDate = new DateTime(2015, 4, 8, 16, 22, 30).toLocalDate();
+            var theDate = LocalDate.of(2015, 4, 8);
 
             //
             // when
             //
             updateScript.setFakeDataDemoObject(fakeDataDemoObject);
-            updateScript.setSomeJodaLocalDate(theDate);
+            updateScript.setSomeLocalDate(theDate);
 
             fixtureScripts.runFixtureScript( updateScript,  null);
 
@@ -740,7 +745,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             //
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
-            Assertions.assertThat(fakeDataDemoObject.getSomeJodaLocalDate()).isEqualTo(theDate);
+            Assertions.assertThat(fakeDataDemoObject.getSomeLocalDate()).isEqualTo(theDate);
 
         }
 

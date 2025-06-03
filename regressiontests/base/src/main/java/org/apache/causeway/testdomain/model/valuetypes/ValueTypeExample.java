@@ -682,60 +682,6 @@ public abstract class ValueTypeExample<T> {
         public ZonedDateTime sampleAction(@Parameter final @Nullable ZonedDateTime value) { return value; }
     }
 
-    // -- EXAMPLES - TEMPORAL - JODA TIME
-
-    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaDateTime")
-    @DomainObject(
-            nature = Nature.BEAN) @Scope("prototype")
-    public static class ValueTypeExampleJodaDateTime
-    extends ValueTypeExample<org.joda.time.DateTime> {
-        @Property @Getter @Setter
-        private org.joda.time.DateTime value = org.joda.time.DateTime.now();
-        @Getter
-        private org.joda.time.DateTime updateValue = org.joda.time.DateTime.now().plusDays(2).plusSeconds(15);
-        @Action @Override
-        public org.joda.time.DateTime sampleAction(@Parameter final org.joda.time.@Nullable DateTime value) { return value; }
-    }
-
-    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDateTime")
-    @DomainObject(
-            nature = Nature.BEAN) @Scope("prototype")
-    public static class ValueTypeExampleJodaLocalDateTime
-    extends ValueTypeExample<org.joda.time.LocalDateTime> {
-        @Property @Getter @Setter
-        private org.joda.time.LocalDateTime value = org.joda.time.LocalDateTime.now();
-        @Getter
-        private org.joda.time.LocalDateTime updateValue = org.joda.time.LocalDateTime.now().plusDays(2).plusSeconds(15);
-        @Action @Override
-        public org.joda.time.LocalDateTime sampleAction(@Parameter final org.joda.time.@Nullable LocalDateTime value) { return value; }
-    }
-
-    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalDate")
-    @DomainObject(
-            nature = Nature.BEAN) @Scope("prototype")
-    public static class ValueTypeExampleJodaLocalDate
-    extends ValueTypeExample<org.joda.time.LocalDate> {
-        @Property @Getter @Setter
-        private org.joda.time.LocalDate value = org.joda.time.LocalDate.now();
-        @Getter
-        private org.joda.time.LocalDate updateValue = org.joda.time.LocalDate.now().plusDays(2);
-        @Action @Override
-        public org.joda.time.LocalDate sampleAction(@Parameter final org.joda.time.@Nullable LocalDate value) { return value; }
-    }
-
-    @Named("causeway.testdomain.valuetypes.ValueTypeExampleJodaLocalTime")
-    @DomainObject(
-            nature = Nature.BEAN) @Scope("prototype")
-    public static class ValueTypeExampleJodaLocalTime
-    extends ValueTypeExample<org.joda.time.LocalTime> {
-        @Property @Getter @Setter
-        private org.joda.time.LocalTime value = org.joda.time.LocalTime.now();
-        @Getter
-        private org.joda.time.LocalTime updateValue = org.joda.time.LocalTime.now().plusSeconds(15);
-        @Action @Override
-        public org.joda.time.LocalTime sampleAction(@Parameter final org.joda.time.@Nullable LocalTime value) { return value; }
-    }
-
     // -- EXAMPLES - META MODEL
 
     @Named("causeway.testdomain.valuetypes.ValueTypeExampleApplicationFeatureId")
