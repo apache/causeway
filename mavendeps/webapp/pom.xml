@@ -49,10 +49,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.validation</groupId>
-					<artifactId>validation-api</artifactId>
-				</exclusion>
-				<exclusion>
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-jcl</artifactId>
 				</exclusion>
@@ -86,7 +82,7 @@
 			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 
-<!-- broken on current Spring Boot 4 Snapshot-->
+<!-- opinionated, whether to add or not-->
 <!--		<dependency>-->
 <!--			<groupId>org.apache.causeway.viewer</groupId>-->
 <!--			<artifactId>causeway-viewer-graphql-viewer</artifactId>-->

@@ -136,6 +136,11 @@
             <groupId>org.springframework.graphql</groupId>
             <artifactId>spring-graphql-test</artifactId>
         </dependency>
+        <!-- temporary to bring in SNAPSHOT variant -->
+        <dependency>
+            <groupId>org.springframework.graphql</groupId>
+            <artifactId>spring-graphql</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.github.gavlyukovskiy</groupId>

@@ -35,6 +35,27 @@
 	<name>Apache Causeway Viewer - GraphQL</name>
 
 	<packaging>pom</packaging>
+	
+	<dependencyManagement>
+	   <dependencies>
+           <dependency>
+                <groupId>org.springframework.graphql</groupId>
+                <artifactId>spring-graphql-test</artifactId>
+                <version>2.0.0-SNAPSHOT</version>  <!--version tag can be removed once upstream correctly manages it-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.graphql</groupId>
+                        <artifactId>spring-graphql</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.graphql</groupId>
+                <artifactId>spring-graphql</artifactId>
+                <version>2.0.0-SNAPSHOT</version>  <!--version tag can be removed once upstream correctly manages it-->
+            </dependency>
+	   </dependencies>
+	</dependencyManagement>
 
 	<modules>
 		<module>applib</module>
