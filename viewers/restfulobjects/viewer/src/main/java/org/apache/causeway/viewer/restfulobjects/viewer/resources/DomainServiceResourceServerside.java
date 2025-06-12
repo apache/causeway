@@ -19,8 +19,6 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
-import java.util.stream.Stream;
-
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -37,7 +35,6 @@ import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.io.UrlUtils;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
@@ -50,6 +47,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainO
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
+import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,13 +75,12 @@ implements DomainServiceResource {
         var resourceContext = createResourceContext(
                 RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Stream<ManagedObject> serviceAdapters = resourceContext.streamServiceAdapters();
-
-        final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(
+        var renderer = new DomainServicesListReprRenderer(
                 resourceContext, null, JsonRepresentation.newMap());
-        renderer.usingLinkToBuilder(new DomainServiceLinkTo())
-        .includesSelf()
-        .with(serviceAdapters);
+        renderer
+            .usingLinkToBuilder(new DomainServiceLinkTo())
+            .includesSelf()
+            .with(resourceContext.streamServiceAdapters());
 
         return _EndpointLogging.response(log, "GET /services/",
                 Responses.ofOk(renderer, Caching.ONE_DAY).build());
@@ -116,9 +113,7 @@ implements DomainServiceResource {
                         "Posting to the services resource is not allowed."));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain service
-    // //////////////////////////////////////////////////////////
+    // DOMAIN SERVICE
 
     @Override
     @GET
@@ -130,15 +125,17 @@ implements DomainServiceResource {
     public Response service(
             @PathParam("serviceId") final String serviceId) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS,
+                RepresentationService.Intent.ALREADY_PERSISTENT, ResourceLink.SERVICE));
 
-        var serviceAdapter = _DomainResourceHelper.getServiceAdapter(resourceContext, serviceId);
+        var serviceAdapter = resourceContext.lookupServiceAdapterElseFail(serviceId);
 
         var renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
-        renderer.usingLinkToBuilder(new DomainServiceLinkTo())
-        .with(serviceAdapter)
-        .includesSelf();
+        renderer
+            .usingLinkToBuilder(new DomainServiceLinkTo())
+            .with(serviceAdapter)
+            .includesSelf();
 
         return _EndpointLogging.response(log, "GET /services/{}", serviceId,
                 Responses.ofOk(renderer, Caching.ONE_DAY).build());
@@ -180,9 +177,7 @@ implements DomainServiceResource {
                         "Posting to a service resource is not allowed."));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain service action
-    // //////////////////////////////////////////////////////////
+    // DOMAIN SERVICE ACTION
 
     @Override
     @GET
@@ -195,8 +190,9 @@ implements DomainServiceResource {
             @PathParam("serviceId") final String serviceId,
             @PathParam("actionId") final String actionId) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS,
+                RepresentationService.Intent.ALREADY_PERSISTENT, ResourceLink.SERVICE));
 
         var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
@@ -243,9 +239,7 @@ implements DomainServiceResource {
                         "Posting to an action prompt resource is not allowed."));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain service action invoke
-    // //////////////////////////////////////////////////////////
+    // DOMAIN SERVICE ACTION INVOKE
 
     @Override
     @GET
@@ -264,10 +258,11 @@ implements DomainServiceResource {
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
         var resourceContext = createResourceContext(
-                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES,
+                    RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.SERVICE),
                 RequestParams.ofQueryString(urlUnencodedQueryString));
 
-        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.queryStringAsJsonRepr();
 
         var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
@@ -289,10 +284,11 @@ implements DomainServiceResource {
             final InputStream body) {
 
         var resourceContext = createResourceContext(
-                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES,
+                    RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.SERVICE),
                 body);
 
-        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.queryStringAsJsonRepr();
 
         var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 
@@ -314,10 +310,11 @@ implements DomainServiceResource {
             final InputStream body) {
 
         var resourceContext = createResourceContext(
-                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES,
+                    RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.SERVICE),
                 body);
 
-        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.queryStringAsJsonRepr();
 
         var domainResourceHelper = _DomainResourceHelper.ofServiceResource(resourceContext, serviceId);
 

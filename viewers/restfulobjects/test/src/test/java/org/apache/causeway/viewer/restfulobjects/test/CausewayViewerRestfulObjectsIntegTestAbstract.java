@@ -34,13 +34,9 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 import org.jspecify.annotations.Nullable;
 import org.springframework.test.context.ActiveProfiles;
@@ -48,16 +44,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
-import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
 import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
-
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.SneakyThrows;
@@ -79,10 +69,11 @@ import lombok.SneakyThrows;
  */
 @SpringBootTest(
         classes = {
-                CausewayViewerRestfulObjectsIntegTestAbstract.TestApp.class
+                CausewayViewerRestfulObjectsIntegTestManifest.class
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
@@ -90,38 +81,15 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
 
     private final Class<?> resourceBaseClazz;
 
-    protected CausewayViewerRestfulObjectsIntegTestAbstract(
-            final Class<?> resourceBaseClazz
-    ) {
+    protected CausewayViewerRestfulObjectsIntegTestAbstract(final Class<?> resourceBaseClazz) {
         this.resourceBaseClazz = resourceBaseClazz;
-    }
-
-    /**
-     * Compared to the production app manifest <code>domainapp.webapp.AppManifest</code>,
-     * here we in effect disable security checks, and we exclude any web/UI modules.
-     */
-    @SpringBootConfiguration
-    @EnableAutoConfiguration
-    @Import({
-            CausewayModuleCoreRuntimeServices.class,
-            CausewayModuleSecurityBypass.class,
-            CausewayModuleTestingFixturesApplib.class,
-            CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
-    })
-    @PropertySources({
-            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),
-            @PropertySource(CausewayPresets.SilenceMetaModel),
-            @PropertySource(CausewayPresets.SilenceProgrammingModel),
-    })
-    public static class TestApp {
     }
 
     @Inject protected CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject protected SpecificationLoader specificationLoader;
     @Inject protected TransactionService transactionService;
 
-    @LocalServerPort
-    protected int port;
+    @LocalServerPort protected int port;
 
     @BeforeEach
     void init(final TestInfo testInfo) {
@@ -152,8 +120,7 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
 
     public enum BookmarkOptions {
         SCRUB,
-        PRESERVE,
-        ;
+        PRESERVE
     }
 
     protected Options jsonOptions() {

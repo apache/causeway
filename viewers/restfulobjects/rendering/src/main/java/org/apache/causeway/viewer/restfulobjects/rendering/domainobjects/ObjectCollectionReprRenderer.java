@@ -84,9 +84,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         return representation;
     }
 
-    // ///////////////////////////////////////////////////
-    // value
-    // ///////////////////////////////////////////////////
+    // VALUE
 
     private void addValue(final LinkFollowSpecs linkFollower) {
         var valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
@@ -123,36 +121,28 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
         representation.mapPut("value", list);
     }
 
-    // ///////////////////////////////////////////////////
-    // details link
-    // ///////////////////////////////////////////////////
+    // DETAILS LINK
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        var where = resourceContext.getWhere();
-        var jsonRepresentation = JsonRepresentation.newMap();
         var objectCollectionReprRenderer =
-                new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, jsonRepresentation)
-                .with(ManagedCollection.of(objectAdapter, objectMember, where))
+            new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap())
+                .with(ManagedCollection.of(objectAdapter, objectMember, resourceContext.where()))
                 .asFollowed();
         detailsLink.mapPutJsonRepresentation("value", objectCollectionReprRenderer.render());
     }
 
-    // ///////////////////////////////////////////////////
-    // mutators
-    // ///////////////////////////////////////////////////
+    // MUTATORS
 
     @Override
     protected void addMutatorLinksIfEnabled() {
         // no-op
     }
 
-    // ///////////////////////////////////////////////////
-    // extensions and links
-    // ///////////////////////////////////////////////////
+    // EXTENSIONS AND LINKS
 
     @Override
     protected void addLinksToFormalDomainModel() {

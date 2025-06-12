@@ -130,7 +130,7 @@ public class JsonParserHelper {
             throw new IllegalArgumentException(reason);
         }
 
-        var objectAdapter = resourceContext.getObjectAdapterForOidFromHref(oidFromHref)
+        var objectAdapter = resourceContext.objectAdapterForOidFromHref(oidFromHref)
                 .orElseThrow(()->{
                     var reason = "'href' does not reference a known entity";
                     argRepr.mapPutString("invalidReason", reason);

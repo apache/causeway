@@ -91,7 +91,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     // -- HELPER
 
     private boolean canAccept(final IResourceContext resourceContext) {
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
 

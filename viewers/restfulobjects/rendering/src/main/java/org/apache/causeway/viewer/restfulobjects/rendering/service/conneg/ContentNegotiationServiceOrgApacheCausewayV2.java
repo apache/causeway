@@ -325,13 +325,13 @@ extends ContentNegotiationServiceAbstract {
     }
 
     boolean canAccept(final IResourceContext resourceContext) {
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
 
     protected EnumSet<SuppressionType> suppress(
             final IResourceContext resourceContext) {
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
         return SuppressionType.ParseUtil.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
     }
 
@@ -343,7 +343,7 @@ extends ContentNegotiationServiceAbstract {
 
         appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
-        var where = resourceContext.getWhere();
+        var where = resourceContext.where();
 
         owner.objSpec()
         .streamCollections(MixedIn.INCLUDED)
@@ -352,7 +352,7 @@ extends ContentNegotiationServiceAbstract {
             var collectionRepresentation = JsonRepresentation.newArray();
             rootRepresentation.mapPutJsonRepresentation(collection.getId(), collectionRepresentation);
 
-            var interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
+            var interactionInitiatedBy = resourceContext.interactionInitiatedBy();
             var visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
             if (!visibilityConsent.isAllowed()) {
                 return;
@@ -371,8 +371,8 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        var interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
-        var where = resourceContext.getWhere();
+        var interactionInitiatedBy = resourceContext.interactionInitiatedBy();
+        var where = resourceContext.where();
         final Stream<OneToOneAssociation> properties = objectAdapter.objSpec()
                 .streamProperties(MixedIn.INCLUDED);
 
@@ -427,7 +427,7 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation representation,
             final EnumSet<SuppressionType> suppression) {
 
-        managedCollection.streamElements(resourceContext.getInteractionInitiatedBy())
+        managedCollection.streamElements(resourceContext.interactionInitiatedBy())
         .forEach(element->
             appendElementTo(resourceContext, element, representation, suppression));
     }

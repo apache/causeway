@@ -32,7 +32,6 @@ import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Providers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -52,6 +51,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.UrlDecoderUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
@@ -80,11 +80,11 @@ implements HasMetaModelContext {
             final RepresentationType representationType,
             final Where where,
             final RepresentationService.Intent intent) {
-
-        return createResourceContext(new ResourceDescriptor(representationType, where, intent));
+        return createResourceContext(new ResourceDescriptor(representationType, where, intent, ResourceLink.NONE));
     }
 
-    protected ResourceContext createResourceContext(final ResourceDescriptor resourceDescriptor) {
+    protected ResourceContext createResourceContext(
+            final ResourceDescriptor resourceDescriptor) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
         return createResourceContext(resourceDescriptor, RequestParams.ofQueryString(queryStringIfAny));
     }
@@ -92,7 +92,6 @@ implements HasMetaModelContext {
     protected ResourceContext createResourceContext(
             final ResourceDescriptor resourceDescriptor,
             final InputStream arguments) {
-
         var urlDecodedQueryString = RequestParams.ofRequestBody(arguments);
         return createResourceContext(resourceDescriptor, urlDecodedQueryString);
     }
@@ -107,7 +106,7 @@ implements HasMetaModelContext {
 
         // eg. http://localhost:8080/ctx/restful/
         final String restfulAbsoluteBase = getConfiguration().getViewer().getRestfulobjects().getBaseUri()
-                                    .orElseGet(()->uriInfo.getBaseUri().toString());
+            .orElseGet(()->uriInfo.getBaseUri().toString());
 
         // eg. /ctx/restful/
         var restfulRelativeBase = uriInfo.getBaseUri().getRawPath();

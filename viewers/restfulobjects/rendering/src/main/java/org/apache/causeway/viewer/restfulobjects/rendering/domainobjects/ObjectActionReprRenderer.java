@@ -68,24 +68,20 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         return representation;
     }
 
-    // ///////////////////////////////////////////////////
-    // details link
-    // ///////////////////////////////////////////////////
+    // DETAILS LINK
 
     /**
      * Mandatory hook method to support x-ro-follow-links
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        var where = resourceContext.getWhere();
+        var where = resourceContext.where();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
         renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
-    // ///////////////////////////////////////////////////
-    // mutators
-    // ///////////////////////////////////////////////////
+    // MUTATORS
 
     @Override
     protected void addMutatorLinksIfEnabled() {
@@ -121,9 +117,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         return NullNode.getInstance();
     }
 
-    // ///////////////////////////////////////////////////
-    // parameter details
-    // ///////////////////////////////////////////////////
+    // PARAMETER DETAILS
 
     private ObjectActionReprRenderer addParameterDetails() {
         final Map<String,Object> parameters = _Maps.newLinkedHashMap();
@@ -186,9 +180,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         return DomainObjectReprRenderer.valueOrRef(resourceContext, paramMeta, getJsonValueEncoder(), defaultAdapter);
     }
 
-    // ///////////////////////////////////////////////////
-    // extensions and links
-    // ///////////////////////////////////////////////////
+    // EXTENSIONS AND LINKS
 
     @Override
     protected void addLinksToFormalDomainModel() {

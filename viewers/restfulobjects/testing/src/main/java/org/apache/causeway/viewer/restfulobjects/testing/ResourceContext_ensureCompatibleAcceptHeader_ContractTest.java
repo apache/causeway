@@ -49,6 +49,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStat
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
@@ -182,7 +183,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     private ResourceContext instantiateResourceContext(
             final RepresentationType representationType) {
 
-        var resourceDescriptor = new ResourceDescriptor(representationType, null, null);
+        var resourceDescriptor = new ResourceDescriptor(representationType, null, null, ResourceLink.NONE);
 
         return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, null,
                 mockHttpServletRequest, null, null,

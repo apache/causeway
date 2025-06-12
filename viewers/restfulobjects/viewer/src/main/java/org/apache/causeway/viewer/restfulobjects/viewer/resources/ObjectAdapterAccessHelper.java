@@ -45,7 +45,7 @@ public class ObjectAdapterAccessHelper {
             final ManagedObject managedObject) {
         return new ObjectAdapterAccessHelper(
                 managedObject,
-                resourceContext.getWhere());
+                resourceContext.where());
     }
 
     private final ManagedObject managedObject;

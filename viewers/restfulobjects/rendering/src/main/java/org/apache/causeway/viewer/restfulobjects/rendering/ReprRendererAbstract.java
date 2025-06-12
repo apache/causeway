@@ -71,7 +71,7 @@ implements ReprRenderer<T> {
 
     private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
             final IResourceContext resourceContext) {
-        return resourceContext.getInteractionInitiatedBy();
+        return resourceContext.interactionInitiatedBy();
     }
 
     protected InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -86,7 +86,7 @@ implements ReprRenderer<T> {
         if (linkFollower != null) {
             return linkFollower;
         }
-        return LinkFollowSpecs.create(resourceContext.getFollowLinks());
+        return LinkFollowSpecs.create(resourceContext.followLinks());
     }
 
     @Override

@@ -32,17 +32,13 @@ import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
-import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 
 class ResourceContext_getArg_Test {
 
@@ -96,34 +92,16 @@ class ResourceContext_getArg_Test {
     @Test
     void whenArgExists() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
-
-        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
-                RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
-                mockHttpServletRequest, null, null,
-                metaModelContext, null, null) {
-            @Override
-            void init(final RepresentationType representationType) {
-                //
-            }
-        };
-        final Integer arg = resourceContext.getArg(RequestParameter.PAGE);
+        resourceContext = ResourceContext.forTesting(queryString, mockHttpServletRequest);
+        final Integer arg = ResourceContext.arg(resourceContext.queryStringAsJsonRepr(), RequestParameter.PAGE);
         assertThat(arg, equalTo(123));
     }
 
     @Test
     void whenArgDoesNotExist() throws Exception {
         final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
-
-        resourceContext = new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
-                RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
-                mockHttpServletRequest, null, null,
-                metaModelContext, null, null) {
-            @Override
-            void init(final RepresentationType representationType) {
-                //
-            }
-        };
-        final Integer arg = resourceContext.getArg(RequestParameter.PAGE);
+        resourceContext = ResourceContext.forTesting(queryString, mockHttpServletRequest);
+        final Integer arg = ResourceContext.arg(resourceContext.queryStringAsJsonRepr(), RequestParameter.PAGE);
         assertThat(arg, equalTo(RequestParameter.PAGE.getDefault()));
     }
 

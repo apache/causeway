@@ -25,7 +25,6 @@ import java.util.Base64;
 
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
-import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
@@ -36,18 +35,17 @@ import com.google.gson.GsonBuilder;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.transaction.annotation.Propagation;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
@@ -58,7 +56,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.DataSource;
-import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.core.metamodel.valuesemantics.BlobValueSemantics;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
@@ -66,23 +63,16 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-@DisabledIfRunningWithSurefire //XXX surefire run broken since around 2024-09-20
-@Order(value = Integer.MAX_VALUE)   // last
-@DirtiesContext
-@Import({Staff_lowlevel_v1_IntegTest.BlobValueSemanticsV1LegacyEncoding.class})
-public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
+@Import({
+    Staff_lowlevel_v1_IntegTest.BlobValueSemanticsV1LegacyEncoding.class
+})
+class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
-    private GsonBuilder gsonBuilder;
-
-    @BeforeEach
-    void setup() {
-        gsonBuilder = new GsonBuilder();
-    }
-
-    @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
-    public void createStaffMemberWithPhoto2() {
+    @DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+    @SneakyThrows
+    void createStaffMemberWithPhoto2() {
 
         // given
         final var staffName = "Fred Smith";
@@ -113,7 +103,7 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         final var requestBuilder = restfulClient.request("services/university.dept.Staff/actions/createStaffMemberWithPhoto2/invoke");
 
         final var body = new Body(staffName, asAbsoluteHref(departmentBookmark), photoEncoded);
-        final var bodyJson = gsonBuilder.create().toJson(body);
+        final var bodyJson = new GsonBuilder().create().toJson(body);
 
         // then
         Approvals.verify(bodyJson, jsonOptions());
@@ -122,11 +112,9 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
         var response = requestBuilder.post(Entity.entity(bodyJson, "application/json"));
 
         // then
+        assertResponseOK(response);
         var entity = response.readEntity(String.class);
-        assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-
-        // and also json response
+        assertNotNull(entity);
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -160,6 +148,10 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
     @Getter
     static class Body {
 
+        private Name name;
+        private Department department;
+        private Blob photo;
+
         /**
          * @param nameValue
          * @param departmentHrefValue
@@ -170,10 +162,6 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
             name = new Name(nameValue);
             department = new Department(new Department.Value(departmentHrefValue));
         }
-
-        private Name name;
-        private Department department;
-        private Blob photo;
 
         record Name(String value) {
         }
@@ -189,13 +177,11 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
     @Component
     @Named("causeway.metamodel.value.BlobValueSemanticsV1LegacyEncoding")   // must have different name to original
-    @Priority(PriorityPrecedence.EARLY)                                     // and earlier precedence to be picked up
-    public static class BlobValueSemanticsV1LegacyEncoding
-            extends BlobValueSemantics
-            implements
-            Renderer<Blob> {
+    static class BlobValueSemanticsV1LegacyEncoding
+        extends BlobValueSemantics
+        implements Renderer<Blob> {
 
-        public BlobValueSemanticsV1LegacyEncoding(){
+        public BlobValueSemanticsV1LegacyEncoding() {
         }
 
         @Override

@@ -59,19 +59,19 @@ public interface IResourceContext extends HasMetaModelContext {
      * Returns the {@link HttpHeaders#getAcceptableMediaTypes() acceptable media types}
      * as obtained from {@link HttpHeaders}.
      */
-    List<MediaType> getAcceptableMediaTypes();
+    List<MediaType> acceptableMediaTypes();
 
     /**
      * Whether this interaction was initiated directly by a
      * {@link InteractionInitiatedBy#USER user} (or indirectly by the
      * {@link InteractionInitiatedBy#FRAMEWORK framework}.
      */
-    InteractionInitiatedBy getInteractionInitiatedBy();
+    InteractionInitiatedBy interactionInitiatedBy();
 
-    Where getWhere();
+    Where where();
 
-    ObjectAdapterLinkTo getObjectAdapterLinkTo();
-    List<List<String>> getFollowLinks();
+    ObjectAdapterLinkTo objectAdapterLinkTo();
+    List<List<String>> followLinks();
     boolean isValidateOnly();
 
     default Restfulobjects config() {
@@ -91,11 +91,11 @@ public interface IResourceContext extends HasMetaModelContext {
     /**
      * Applies only when rendering a domain object.
      */
-    RepresentationService.Intent getIntent();
+    RepresentationService.Intent intent();
 
     // -- UTILITY
 
-    default Optional<ManagedObject> getObjectAdapterForOidFromHref(final String oidFromHref) {
+    default Optional<ManagedObject> objectAdapterForOidFromHref(final String oidFromHref) {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidFromHref);
         return Bookmark.parse(oidStrUnencoded)
         .flatMap(getMetaModelContext().getObjectManager()::loadObject);

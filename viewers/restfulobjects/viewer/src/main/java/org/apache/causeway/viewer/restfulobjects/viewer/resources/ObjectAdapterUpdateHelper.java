@@ -87,12 +87,12 @@ public class ObjectAdapterUpdateHelper {
         final JsonRepresentation propertyRepr = propertiesMap.getRepresentation(id);
         final Consent visibility = property.isVisible(
                 objectAdapter,
-                resourceContext.getInteractionInitiatedBy(),
-                resourceContext.getWhere());
+                resourceContext.interactionInitiatedBy(),
+                resourceContext.where());
         final Consent usability = property.isUsable(
                 objectAdapter,
-                resourceContext.getInteractionInitiatedBy(),
-                resourceContext.getWhere()
+                resourceContext.interactionInitiatedBy(),
+                resourceContext.where()
                 );
 
         final boolean invisible = visibility.isVetoed();
@@ -157,7 +157,7 @@ public class ObjectAdapterUpdateHelper {
                 try {
                     property.set(
                             objectAdapter, valueAdapter,
-                            resourceContext.getInteractionInitiatedBy());
+                            resourceContext.interactionInitiatedBy());
                 } catch (final IllegalArgumentException ex) {
                     propertyRepr.mapPutString("invalidReason", ex.getMessage());
                     allOk = false;

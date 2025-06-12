@@ -28,6 +28,7 @@ import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.transaction.annotation.Propagation;
 
@@ -42,10 +43,10 @@ import lombok.SneakyThrows;
 
 class Staff_hilevel_IntegTest extends Abstract_IntegTest {
 
-    @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
-    public void createStaffMemberWithPhoto() {
+    @SneakyThrows
+    void createStaffMemberWithPhoto() {
 
         // given
         final var staffName = "Fred Smith";
@@ -80,11 +81,10 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
-        // and also json response
+        // and also JSON response
+        assertResponseOK(response);
         var entity = response.readEntity(String.class);
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        assertNotNull(entity);
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -94,10 +94,10 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-    @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
-    public void createStaffMemberWithPhoto_using_map() {
+    @SneakyThrows
+    void createStaffMemberWithPhoto_using_map() {
 
         // given
         final var staffName = "Fred Smith";
@@ -128,10 +128,9 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
+        assertResponseOK(response);
         var entity = response.readEntity(String.class);
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        assertNotNull(entity);
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -141,10 +140,10 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-    @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
-    public void createStaffMemberWithPhoto2() {
+    @SneakyThrows
+    void createStaffMemberWithPhoto2() {
 
         // given
         final var staffName = "Fred Smith";
@@ -183,10 +182,9 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
+        assertResponseOK(response);
         var entity = response.readEntity(String.class);
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        assertNotNull(entity);
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -196,10 +194,10 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
-    @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
-    public void createStaffMemberWithPhoto2_using_map() {
+    @SneakyThrows
+    void createStaffMemberWithPhoto2_using_map() {
 
         // given
         final var staffName = "Fred Smith";
@@ -243,10 +241,9 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         // and also json response
+        assertResponseOK(response);
         var entity = response.readEntity(String.class);
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        assertNotNull(entity);
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -267,7 +264,7 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
     }
 
     private String asRelativeHref(final Bookmark bookmark) {
-        return String.format("objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier());
+        return String.format("objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier());
     }
 
 }

@@ -34,11 +34,11 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
-public class Department_IntegTest extends Abstract_IntegTest {
+class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    public void exists() {
+    void exists() {
 
         // given
         Bookmark bookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -46,7 +46,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(classics).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
+        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier()));
 
         // when
         var response = request.get();
@@ -62,7 +62,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    public void collection_with_staff_members() {
+    void collection_with_staff_members() {
 
         // given
         Bookmark bookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -70,7 +70,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(classics).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
+        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.logicalTypeName(), bookmark.identifier()));
 
         // when
         var response = request.get();
@@ -86,7 +86,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    public void collection_with_no_staff_members() {
+    void collection_with_no_staff_members() {
 
         // given
         Bookmark bookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -94,7 +94,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(classics).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.getLogicalTypeName(), bookmark.getIdentifier()));
+        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.logicalTypeName(), bookmark.identifier()));
 
         // when
         var response = request.get();
@@ -110,7 +110,7 @@ public class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    public void does_not_exist() {
+    void does_not_exist() {
 
         // given
         Invocation.Builder request = restfulClient.request("/objects/university.dept.Department/9999999");

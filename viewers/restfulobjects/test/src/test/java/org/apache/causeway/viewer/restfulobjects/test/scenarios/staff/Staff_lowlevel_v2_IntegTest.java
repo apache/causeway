@@ -30,10 +30,10 @@ import com.google.gson.GsonBuilder;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.transaction.annotation.Propagation;
 
@@ -45,18 +45,11 @@ import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTe
 import lombok.Getter;
 import lombok.SneakyThrows;
 
-public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
+class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
 
-    private GsonBuilder gsonBuilder;
-
-    @BeforeEach
-    void setup() {
-        gsonBuilder = new GsonBuilder();
-    }
-
-    @SneakyThrows
     @Test
     @UseReporter(DiffReporter.class)
+    @SneakyThrows
     public void createStaffMemberWithPhoto2() {
 
         // given
@@ -88,7 +81,7 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
         final var requestBuilder = restfulClient.request("services/university.dept.Staff/actions/createStaffMemberWithPhoto2/invoke");
 
         final var body = new Body(staffName, asAbsoluteHref(departmentBookmark), photoEncoded);
-        final var bodyJson = gsonBuilder.create().toJson(body);
+        final var bodyJson = new GsonBuilder().create().toJson(body);
 
         // then
         Approvals.verify(bodyJson, jsonOptions());
@@ -97,11 +90,9 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
         var response = requestBuilder.post(Entity.entity(bodyJson, "application/json"));
 
         // then
+        assertResponseOK(response);
         var entity = response.readEntity(String.class);
-        assertThat(response.getStatusInfo().getFamily()).isEqualTo(Response.Status.Family.SUCCESSFUL);
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-
-        // and also json response
+        assertNotNull(entity);
 
         // and also object is created in database
         final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
@@ -128,6 +119,10 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
     @Getter
     static class Body {
 
+        private Name name;
+        private Department department;
+        private Blob photo;
+
         /**
          * @param nameValue
          * @param departmentHrefValue
@@ -138,10 +133,6 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
             department = new Department(new Department.Value(departmentHrefValue));
             photo = new Blob(new Blob.Value(blob.name(), blob.mimeType().toString(), Base64.getEncoder().encodeToString(blob.bytes())));
         }
-
-        private Name name;
-        private Department department;
-        private Blob photo;
 
         record Name(String value) {
         }

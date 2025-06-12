@@ -86,7 +86,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     protected MediaType mediaTypeFrom(
             final IResourceContext renderContext,
             final RepresentationType representationType) {
-        final List<MediaType> acceptableMediaTypes = renderContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = renderContext.acceptableMediaTypes();
         MediaType mediaType =
                 representationType.matchesXmlProfileWithParameter(acceptableMediaTypes, X_RO_DOMAIN_TYPE);
 
@@ -124,7 +124,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
             final Object domainObject,
             final RepresentationType representationType) {
 
-        final List<MediaType> acceptableMediaTypes = renderContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = renderContext.acceptableMediaTypes();
 
         final MediaType mediaType = mediaTypeFrom(renderContext, representationType);
         if (mediaType == null) {

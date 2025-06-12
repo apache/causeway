@@ -62,6 +62,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeActio
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
+import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.viewer.util.UrlParserUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -311,8 +312,9 @@ implements DomainTypeResource {
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
 
-        var resourceContext = createResourceContext(
-                ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.GENERIC, Where.ANYWHERE,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.NONE));
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype",
                 roEx->_EndpointLogging.error(log, "GET /domain-types/{}/type-actions/isSubtypeOf/invoke", domainType, roEx));
@@ -352,8 +354,9 @@ implements DomainTypeResource {
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
 
-        var resourceContext = createResourceContext(
-                ResourceDescriptor.generic(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE));
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+            RepresentationType.GENERIC, Where.ANYWHERE,
+            RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.NONE));
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype",
                 roEx->_EndpointLogging.error(log, "GET /domain-types/{}/type-actions/isSupertypeOf/invoke", domainType, roEx));

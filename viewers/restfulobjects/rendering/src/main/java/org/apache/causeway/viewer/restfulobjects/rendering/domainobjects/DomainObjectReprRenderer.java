@@ -309,7 +309,7 @@ extends ReprRendererAbstract<ManagedObject> {
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.getWhere());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -323,7 +323,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(getResourceContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
-            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.getWhere())).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.where())).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
                 renderer.asArguments();
@@ -344,7 +344,7 @@ extends ReprRendererAbstract<ManagedObject> {
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.getWhere());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -362,7 +362,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            var where = resourceContext.getWhere();
+            var where = resourceContext.where();
 
             renderer.with(ManagedCollection.of(objectAdapter, collection, where)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
@@ -380,7 +380,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         actions
         .filter(action->{
-            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.getWhere());
+            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
             return visibility.isAllowed();
         })
         .forEach(action->{
@@ -389,7 +389,7 @@ extends ReprRendererAbstract<ManagedObject> {
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(),
                             JsonRepresentation.newMap());
 
-            var where = resourceContext.getWhere();
+            var where = resourceContext.where();
 
             renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
             members.mapPutJsonRepresentation(action.getId(), renderer.render());

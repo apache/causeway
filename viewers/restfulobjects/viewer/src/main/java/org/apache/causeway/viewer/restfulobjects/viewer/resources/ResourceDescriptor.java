@@ -28,15 +28,18 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 public record ResourceDescriptor(
         RepresentationType representationType,
         Where where,
-        RepresentationService.Intent intent) {
+        RepresentationService.Intent intent,
+        ResourceLink resourceLink) {
 
-    public static ResourceDescriptor generic(final Where where, final RepresentationService.Intent intent) {
-        return new ResourceDescriptor(RepresentationType.GENERIC, where, intent);
+    public enum ResourceLink {
+        NONE,
+        OBJECT,
+        SERVICE
     }
 
     public static ResourceDescriptor empty() {
         // in support of testing
-        return new ResourceDescriptor(null, null, null);
+        return new ResourceDescriptor(null, null, null, ResourceLink.NONE);
     }
 
 }

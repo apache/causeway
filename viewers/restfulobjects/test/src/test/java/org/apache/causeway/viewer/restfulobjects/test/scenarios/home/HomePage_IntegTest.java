@@ -19,22 +19,19 @@
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.home;
 
 import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.Response;
-
-import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
-public class HomePage_IntegTest extends Abstract_IntegTest {
+class HomePage_IntegTest extends Abstract_IntegTest {
 
     @Test
     @UseReporter(DiffReporter.class)
-    public void homePage() {
+    void homePage() {
 
         // given
         Invocation.Builder request = restfulClient.request("/");
@@ -43,13 +40,10 @@ public class HomePage_IntegTest extends Abstract_IntegTest {
         var response = request.get();
 
         // then
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        assertResponseOK(response);
 
         var entity = response.readEntity(String.class);
 
         Approvals.verify(entity, jsonOptions());
-
     }
 }

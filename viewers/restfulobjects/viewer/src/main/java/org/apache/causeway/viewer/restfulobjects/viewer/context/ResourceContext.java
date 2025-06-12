@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,55 +34,55 @@ import jakarta.ws.rs.core.SecurityContext;
 import jakarta.ws.rs.ext.Providers;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.primitives._Ints;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
+import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService.Intent;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
-import lombok.Setter;
+import org.jspecify.annotations.Nullable;
 
-public class ResourceContext
+public record ResourceContext(
+    MetaModelContext metaModelContext,
+    ResourceDescriptor resourceDescriptor,
+    HttpHeaders httpHeaders,
+    Request request,
+    HttpServletRequest httpServletRequest,
+    HttpServletResponse httpServletResponse,
+    SecurityContext securityContext,
+    String applicationAbsoluteBase,
+    String restfulAbsoluteBase,
+
+    List<List<String>> followLinks,
+    boolean isValidateOnly,
+
+    InteractionInitiatedBy interactionInitiatedBy,
+
+    JsonRepresentation queryStringAsJsonRepr,
+    ObjectAdapterLinkTo objectAdapterLinkTo,
+    Set<Bookmark> rendered
+)
 implements IResourceContext {
 
-    @Getter(onMethod_={@Override})
-    private MetaModelContext metaModelContext;
-
-    @Getter private final HttpHeaders httpHeaders;
-    @Getter private final Request request;
-    @Getter private final HttpServletRequest httpServletRequest;
-    @Getter private final HttpServletResponse httpServletResponse;
-    @Getter private final SecurityContext securityContext;
-    private final String applicationAbsoluteBase;
-    private final String restfulAbsoluteBase;
-
-    @Getter private List<List<String>> followLinks;
-    @Getter private boolean validateOnly;
-
-    private final Where where;
-    private final RepresentationService.Intent intent;
-    @Getter private final InteractionInitiatedBy interactionInitiatedBy;
-    private final @NonNull RequestParams urlUnencodedQueryString;
-    private final JsonRepresentation readQueryStringAsMap;
-
-    // -- constructor and init
+    // -- NON CANONICAL CONSTRUCTORS
 
     public ResourceContext(
             final ResourceDescriptor resourceDescriptor,
@@ -98,60 +99,62 @@ implements IResourceContext {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Map<String, String[]> requestParams) {
 
-        this.metaModelContext = metaModelContext;
-
-        this.httpHeaders = httpHeaders;
-        //not used ... this.providers = providers;
-        this.request = request;
-        this.where = resourceDescriptor.where();
-        this.intent = resourceDescriptor.intent();
-        this.urlUnencodedQueryString = Optional.ofNullable(urlUnencodedQueryString)
-                .orElseGet(RequestParams::ofEmptyQueryString);
-        this.httpServletRequest = httpServletRequest;
-        this.httpServletResponse = httpServletResponse;
-        this.securityContext = securityContext;
-        this.interactionInitiatedBy = interactionInitiatedBy;
-
-        this.applicationAbsoluteBase = _Strings.suffix(applicationAbsoluteBase, "/");
-        this.restfulAbsoluteBase = _Strings.suffix(restfulAbsoluteBase, "/");
-
-        this.readQueryStringAsMap = requestArgsAsMap(requestParams);
-
-        init(resourceDescriptor.representationType());
+        this(resourceDescriptor, httpHeaders, providers, request, applicationAbsoluteBase, restfulAbsoluteBase,
+            httpServletRequest, httpServletResponse, securityContext, metaModelContext, interactionInitiatedBy,
+            requestArgsAsMap(requestParams, urlUnencodedQueryString));
     }
 
-    void init(final RepresentationType representationType) {
+    private ResourceContext(
+            final ResourceDescriptor resourceDescriptor,
+            final HttpHeaders httpHeaders,
+            final Providers providers,
+            final Request request,
+            final String applicationAbsoluteBase,
+            final String restfulAbsoluteBase,
+            final HttpServletRequest httpServletRequest,
+            final HttpServletResponse httpServletResponse,
+            final SecurityContext securityContext,
+            final MetaModelContext metaModelContext,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final JsonRepresentation requestArgsAsMap) {
 
-        // previously we checked for compatible accept headers here.
-        // now, though, this is a responsibility of the various ContentNegotiationService implementations
+        this(metaModelContext, resourceDescriptor, httpHeaders, request, httpServletRequest, httpServletResponse, securityContext,
+            _Strings.suffix(applicationAbsoluteBase, "/"),
+            _Strings.suffix(restfulAbsoluteBase, "/"),
+            Collections.unmodifiableList(arg(requestArgsAsMap, RequestParameter.FOLLOW_LINKS)),
+            arg(requestArgsAsMap, RequestParameter.VALIDATE_ONLY),
+            interactionInitiatedBy,
+            requestArgsAsMap,
+            switch(resourceDescriptor.resourceLink()) {
+                case NONE -> null;
+                case OBJECT -> new DomainObjectLinkTo();
+                case SERVICE -> new DomainServiceLinkTo();
+            },
+            new HashSet<>());
+
         ensureDomainModelQueryParamSupported();
+    }
 
-        this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
-        this.validateOnly = getArg(RequestParameter.VALIDATE_ONLY);
+    @Override public Where where() {
+        return resourceDescriptor().where();
+    }
+
+    /**
+     * Only applies to rendering of objects
+     */
+    @Override public Intent intent() {
+        return resourceDescriptor().intent();
     }
 
     private void ensureDomainModelQueryParamSupported() {
-        final DomainModel domainModel = getArg(RequestParameter.DOMAIN_MODEL);
+        final DomainModel domainModel = arg(queryStringAsJsonRepr(), RequestParameter.DOMAIN_MODEL);
         if(domainModel != DomainModel.FORMAL) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,
                     "x-ro-domain-model of '%s' is not supported", domainModel);
         }
     }
 
-    /**
-     * Note that this can return non-null for all HTTP methods; will be either the
-     * query string (GET, DELETE) or read out of the input stream (PUT, POST).
-     */
-    public RequestParams getUrlUnencodedQueryString() {
-        return urlUnencodedQueryString;
-    }
-
-    public JsonRepresentation getQueryStringAsJsonRepr() {
-        return readQueryStringAsMap;
-    }
-
-    protected JsonRepresentation requestArgsAsMap(final Map<String, String[]> params) {
-
+    private static JsonRepresentation requestArgsAsMap(final Map<String, String[]> params, RequestParams urlUnencodedQueryString) {
         if(simpleQueryArgs(params)) {
             // try to process regular params and build up JSON repr
             final JsonRepresentation map = JsonRepresentation.newMap();
@@ -170,7 +173,9 @@ implements IResourceContext {
             }
             return map;
         } else {
-            return getUrlUnencodedQueryString().asMap();
+            return Optional.ofNullable(urlUnencodedQueryString)
+                .orElseGet(RequestParams::ofEmptyQueryString)
+                .asMap();
         }
     }
 
@@ -196,30 +201,13 @@ implements IResourceContext {
         return true;
     }
 
-    public <Q> Q getArg(final RequestParameter<Q> requestParameter) {
-        final JsonRepresentation queryStringJsonRepr = getQueryStringAsJsonRepr();
-        return requestParameter.valueOf(queryStringJsonRepr);
-    }
-
-    @Override
-    public Where getWhere() {
-        return where;
-    }
-
-    /**
-     * Only applies to rendering of objects
-     */
-    @Override
-    public RepresentationService.Intent getIntent() {
-        return intent;
+    static <Q> Q arg(final JsonRepresentation queryStringAsJsonRepr, final RequestParameter<Q> requestParameter) {
+        return requestParameter.valueOf(queryStringAsJsonRepr);
     }
 
     public SerializationStrategy getSerializationStrategy() {
-        return SerializationStrategy.determineFrom(getAcceptableMediaTypes());
+        return SerializationStrategy.determineFrom(acceptableMediaTypes());
     }
-
-    // -- canEagerlyRender
-    private Set<Bookmark> rendered = _Sets.newHashSet();
 
     @Override
     public boolean canEagerlyRender(final ManagedObject objectAdapter) {
@@ -242,12 +230,35 @@ implements IResourceContext {
     }
 
     @Override
-    public List<MediaType> getAcceptableMediaTypes() {
+    public List<MediaType> acceptableMediaTypes() {
         return httpHeaders.getAcceptableMediaTypes();
     }
 
-    @Getter(onMethod = @__(@Override))
-    @Setter //(onMethod = @__(@Override))
-    private ObjectAdapterLinkTo objectAdapterLinkTo;
+    // -- UTIL
+
+    public ManagedObject lookupServiceAdapterElseFail(
+            final @Nullable String serviceIdOrAlias) {
+
+        final ManagedObject serviceAdapter = getSpecificationLoader()
+                .lookupLogicalType(serviceIdOrAlias)
+                .map(LogicalType::logicalName)
+                .map(this::lookupServiceAdapterById)
+                .orElse(null);
+
+        if(serviceAdapter==null) {
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
+                    "Could not locate service '%s'", serviceIdOrAlias);
+        }
+        return serviceAdapter;
+    }
+
+    // -- JUNIT
+
+    static ResourceContext forTesting(String queryString, HttpServletRequest servletRequest) {
+        return new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
+            RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
+            servletRequest, null, null,
+            MetaModelContext.instanceElseFail(), null, (Map<String, String[]>)null);
+    }
 
 }

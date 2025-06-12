@@ -115,7 +115,7 @@ implements ContentNegotiationService {
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
 
-        if(resourceContext.getIntent() == RepresentationService.Intent.JUST_CREATED) {
+        if(resourceContext.intent() == RepresentationService.Intent.JUST_CREATED) {
             responseBuilder.status(Response.Status.CREATED);
         }
 
@@ -132,7 +132,7 @@ implements ContentNegotiationService {
         var renderer =
                 new ObjectPropertyReprRenderer(resourceContext)
                 .with(objectAndProperty)
-                .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
+                .usingLinkTo(resourceContext.objectAdapterLinkTo());
 
         var repMode = objectAndProperty.getRepresentationMode();
         if(repMode.isExplicit()) {
@@ -164,7 +164,7 @@ implements ContentNegotiationService {
         final ObjectCollectionReprRenderer renderer =
                 new ObjectCollectionReprRenderer(resourceContext, null, null, representation);
         renderer.with(objectAndCollection)
-        .usingLinkTo(resourceContext.getObjectAdapterLinkTo());
+        .usingLinkTo(resourceContext.objectAdapterLinkTo());
 
         if(objectAndCollection.getRepresentationMode().isExplicit()) {
             renderer.withMemberMode(objectAndCollection.getRepresentationMode());
@@ -183,7 +183,7 @@ implements ContentNegotiationService {
         var renderer =
                 new ObjectActionReprRenderer(resourceContext)
                 .with(objectAndAction)
-                .usingLinkTo(resourceContext.getObjectAdapterLinkTo())
+                .usingLinkTo(resourceContext.objectAdapterLinkTo())
                 .asStandalone();
 
         return responseBuilder(Responses.ofOk(renderer, Caching.NONE));
@@ -194,7 +194,7 @@ implements ContentNegotiationService {
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        final List<MediaType> acceptableMediaTypes = resourceContext.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = resourceContext.acceptableMediaTypes();
 
         var returnTypeCompileTimeSpecification = objectAndActionInvocation.getReturnTypeSpecification();
 
@@ -329,14 +329,13 @@ implements ContentNegotiationService {
             final ObjectAndActionInvocation objectAndActionInvocation,
             final JsonRepresentation representation,
             final JsonRepresentation rootRepresentation) {
-        final ActionResultReprRenderer renderer =
+        var renderer =
                 new ActionResultReprRenderer(resourceContext, null, objectAndActionInvocation.getSelfLink(), representation);
-        renderer.with(objectAndActionInvocation)
-        .using(resourceContext.getObjectAdapterLinkTo());
+        renderer
+            .with(objectAndActionInvocation)
+            .using(resourceContext.objectAdapterLinkTo());
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
-
-        return responseBuilder;
+        return Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
     }
 
     private static enum AcceptChecking {
@@ -370,7 +369,7 @@ implements ContentNegotiationService {
         if (producedProfile == null) {
             return;
         }
-        if(!isAccepted(producedProfile, resourceContext.getAcceptableMediaTypes())) {
+        if(!isAccepted(producedProfile, resourceContext.acceptableMediaTypes())) {
             throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
         }
     }

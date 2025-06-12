@@ -107,7 +107,7 @@ implements VersionResource {
     }
 
     private void fakeRuntimeExceptionIfXFail(final ResourceContext resourceContext) {
-        final HttpHeaders httpHeaders = resourceContext.getHttpHeaders();
+        final HttpHeaders httpHeaders = resourceContext.httpHeaders();
         final List<String> requestHeader = httpHeaders.getRequestHeader("X-Fail");
         if (requestHeader != null && !requestHeader.isEmpty()) {
             throw _EndpointLogging.error(log, "GET /version",

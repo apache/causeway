@@ -19,17 +19,23 @@
 package org.apache.causeway.viewer.restfulobjects.test.scenarios;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
+import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.test.CausewayViewerRestfulObjectsIntegTestAbstract;
 import org.apache.causeway.viewer.restfulobjects.test.domain.UniversityModule;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
@@ -41,6 +47,8 @@ import org.apache.causeway.viewer.restfulobjects.test.domain.dom.StaffMemberRepo
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,
 })
+@TestPropertySource(properties = "logging.level.org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault=DEBUG")
+@DirtiesContext
 public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsIntegTestAbstract {
 
     @Inject protected DepartmentRepository departmentRepository;
@@ -50,7 +58,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
 
     protected RestfulClient restfulClient;
 
-    protected Abstract_IntegTest(Class<?> resourceBaseClazz) {
+    protected Abstract_IntegTest(final Class<?> resourceBaseClazz) {
         super(resourceBaseClazz);
     }
 
@@ -102,6 +110,11 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
             deptHeadRepository.removeAll();
             departmentRepository.removeAll();
         });
+    }
+
+    protected void assertResponseOK(@Nullable final Response response) {
+        assertNotNull(response);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
     }
 
 }

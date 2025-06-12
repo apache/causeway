@@ -67,6 +67,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -82,9 +83,7 @@ implements DomainObjectResource {
         log.debug("<init>");
     }
 
-    // //////////////////////////////////////////////////////////
-    // persist
-    // //////////////////////////////////////////////////////////
+    // PERSIST
 
     @Override
     @POST
@@ -98,8 +97,9 @@ implements DomainObjectResource {
             @PathParam("domainType") final String domainType,
             final InputStream object) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.JUST_CREATED);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS,
+                RepresentationService.Intent.JUST_CREATED, ResourceLink.OBJECT));
 
         final JsonRepresentation objectRepr = RequestParams.ofRequestBody(object).asMap();
         if (!objectRepr.isMap()) {
@@ -149,9 +149,7 @@ implements DomainObjectResource {
                 domainResourceHelper.objectRepresentation());
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain object
-    // //////////////////////////////////////////////////////////
+    // DOMAIN OBJECT
 
     @Override
     @GET
@@ -165,8 +163,9 @@ implements DomainObjectResource {
             @PathParam("domainType") final String domainType,
             @PathParam("instanceId") final String instanceId) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS,
+                RepresentationService.Intent.ALREADY_PERSISTENT, ResourceLink.OBJECT));
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}", domainType, instanceId, roEx));
@@ -189,8 +188,9 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             final InputStream object) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS,
+                RepresentationService.Intent.ALREADY_PERSISTENT, ResourceLink.OBJECT));
 
         final JsonRepresentation argRepr = RequestParams.ofRequestBody(object).asMap();
         if (!argRepr.isMap()) {
@@ -249,9 +249,7 @@ implements DomainObjectResource {
                         HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed."));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain object layout
-    // //////////////////////////////////////////////////////////
+    // DOMAIN OBJECT LAYOUT
 
     @Override
     @GET
@@ -389,9 +387,7 @@ implements DomainObjectResource {
         });
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain object property
-    // //////////////////////////////////////////////////////////
+    // DOMAIN OBJECT PROPERTY
 
     @Override
     @GET
@@ -406,8 +402,9 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("propertyId") final String propertyId) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT));
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
@@ -432,23 +429,25 @@ implements DomainObjectResource {
             @PathParam("propertyId") final String propertyId,
             final InputStream body) {
 
-        var resourceContext = createResourceContext(
-                ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.GENERIC, Where.OBJECT_FORMS,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT));
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
-        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
-        .checkVisibility()
-        .checkUsability(AccessIntent.MUTATE)
-        .modifyProperty(property->{
-            var proposedNewValue = new JsonParserHelper(resourceContext, property.getElementType())
-                    .parseAsMapWithSingleValue(RequestParams.ofRequestBody(body));
+        PropertyInteraction
+            .start(objectAdapter, propertyId, resourceContext.where())
+            .checkVisibility()
+            .checkUsability(AccessIntent.MUTATE)
+            .modifyProperty(property->{
+                var proposedNewValue = new JsonParserHelper(resourceContext, property.getElementType())
+                        .parseAsMapWithSingleValue(RequestParams.ofRequestBody(body));
 
-            return proposedNewValue;
-        })
-        .validateElseThrow(veto->
-            _EndpointLogging.error(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, InteractionFailureHandler.onFailure(veto)));
+                return proposedNewValue;
+            })
+            .validateElseThrow(veto->
+                _EndpointLogging.error(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, InteractionFailureHandler.onFailure(veto)));
 
         return _EndpointLogging.response(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId,
                 _DomainResourceHelper
@@ -469,13 +468,14 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("propertyId") final String propertyId) {
 
-        var resourceContext = createResourceContext(
-                ResourceDescriptor.generic(Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE));
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.GENERIC, Where.OBJECT_FORMS,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT));
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "DELETE /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
-        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.getWhere())
+        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.where())
         .checkVisibility()
         .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->null)
@@ -503,9 +503,7 @@ implements DomainObjectResource {
                         "Posting to a property resource is not allowed."));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain object collection
-    // //////////////////////////////////////////////////////////
+    // DOMAIN OBJECT COLLECTION
 
     @Override
     @GET
@@ -520,8 +518,9 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("collectionId") final String collectionId) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT));
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/collections/{}", domainType, instanceId, collectionId, roEx));
@@ -532,72 +531,7 @@ implements DomainObjectResource {
                 domainResourceHelper.collectionDetails(collectionId, ManagedMember.RepresentationMode.READ));
     }
 
-    //XXX[CAUSEWAY-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
-//    @Override
-//    @PUT
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response addToSet(
-//            @PathParam("domainType") final String domainType,
-//            @PathParam("instanceId") final String instanceId,
-//            @PathParam("collectionId") final String collectionId,
-//            final InputStream body) {
-//
-//        throw _EndpointLogging.error(log, "POST /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
-//                RestfulObjectsApplicationException
-//                .createWithMessage(
-//                        HttpStatusCode.METHOD_NOT_ALLOWED,
-//                        "The framework no longer supports mutable collections."));
-//    }
-//
-//    @Override
-//    @POST
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response addToList(
-//            @PathParam("domainType") final String domainType,
-//            @PathParam("instanceId") final String instanceId,
-//            @PathParam("collectionId") final String collectionId,
-//            final InputStream body) {
-//
-//        throw _EndpointLogging.error(log, "POST /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
-//                RestfulObjectsApplicationException
-//                .createWithMessage(
-//                        HttpStatusCode.METHOD_NOT_ALLOWED,
-//                        "The framework no longer supports mutable collections."));
-//    }
-//
-//    @Override
-//    @DELETE
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response removeFromCollection(
-//            @PathParam("domainType") final String domainType,
-//            @PathParam("instanceId") final String instanceId,
-//            @PathParam("collectionId") final String collectionId) {
-//
-//        throw _EndpointLogging.error(log, "DELETE /objects/{}/{}/collections/{}", domainType, instanceId, collectionId,
-//                RestfulObjectsApplicationException
-//                .createWithMessage(
-//                        HttpStatusCode.METHOD_NOT_ALLOWED,
-//                        "The framework no longer supports mutable collections."));
-//    }
-
-    // //////////////////////////////////////////////////////////
-    // domain object action
-    // //////////////////////////////////////////////////////////
+    // DOMAIN OBJECT ACTION
 
     @Override
     @GET
@@ -612,8 +546,9 @@ implements DomainObjectResource {
             @PathParam("instanceId") final String instanceId,
             @PathParam("actionId") final String actionId) {
 
-        var resourceContext = createResourceContext(
-                RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.NOT_APPLICABLE);
+        var resourceContext = createResourceContext(new ResourceDescriptor(
+                RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS,
+                RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT));
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/actions/{}", domainType, instanceId, actionId, roEx));
@@ -668,9 +603,7 @@ implements DomainObjectResource {
                         "Putting to an action prompt resource is not allowed."));
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain object action invoke
-    // //////////////////////////////////////////////////////////
+    // DOMAIN OBJECT ACTION INVOKE
 
     @Override
     @GET
@@ -691,10 +624,11 @@ implements DomainObjectResource {
                     ? xCausewayUrlEncodedQueryString
                     : httpServletRequest.getQueryString());
         var resourceContext = createResourceContext(
-                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES,
+                    RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT),
                 RequestParams.ofQueryString(urlUnencodedQueryString));
 
-        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.queryStringAsJsonRepr();
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId, roEx));
@@ -719,10 +653,11 @@ implements DomainObjectResource {
             final InputStream body) {
 
         var resourceContext = createResourceContext(
-                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES,
+                    RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT),
                 body);
 
-        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.queryStringAsJsonRepr();
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId, roEx));
@@ -747,10 +682,11 @@ implements DomainObjectResource {
             final InputStream body) {
 
         var resourceContext = createResourceContext(
-                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE),
+                new ResourceDescriptor(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES,
+                    RepresentationService.Intent.NOT_APPLICABLE, ResourceLink.OBJECT),
                 body);
 
-        final JsonRepresentation arguments = resourceContext.getQueryStringAsJsonRepr();
+        final JsonRepresentation arguments = resourceContext.queryStringAsJsonRepr();
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "POST /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId, roEx));

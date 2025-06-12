@@ -22,14 +22,11 @@ import java.util.concurrent.atomic.LongAdder;
 
 import jakarta.ws.rs.core.Response;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.id.LogicalType;
-import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.Railway;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.Result;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
@@ -38,60 +35,56 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
-import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import org.jspecify.annotations.NonNull;
 
-class _DomainResourceHelper {
+record _DomainResourceHelper(
+    ResourceContext resourceContext,
+    RepresentationService representationService,
+    TransactionService transactionService,
+    ManagedObject objectAdapter) {
 
-    private final IResourceContext resourceContext;
-    private final RepresentationService representationService;
-    private final TransactionService transactionService;
+    // -- FACTORIES
 
     public static _DomainResourceHelper ofObjectResource(
-            final IResourceContext resourceContext,
+            final ResourceContext resourceContext,
             final ManagedObject objectAdapter) {
-        return new _DomainResourceHelper(resourceContext, objectAdapter, new DomainObjectLinkTo());
+        _Assert.assertTrue(resourceContext.objectAdapterLinkTo() instanceof DomainObjectLinkTo);
+        return new _DomainResourceHelper(resourceContext, objectAdapter);
     }
 
     public static _DomainResourceHelper ofServiceResource(
-            final IResourceContext resourceContext,
+            final ResourceContext resourceContext,
             final String serviceIdOrAlias) {
+        _Assert.assertTrue(resourceContext.objectAdapterLinkTo() instanceof DomainServiceLinkTo);
         return new _DomainResourceHelper(resourceContext,
-                getServiceAdapter(resourceContext, serviceIdOrAlias), new DomainServiceLinkTo());
+            resourceContext.lookupServiceAdapterElseFail(serviceIdOrAlias));
     }
+
+    // -- NON CANONICAL CONSTRUCTOR
 
     private _DomainResourceHelper(
-            final IResourceContext resourceContext,
-            final ManagedObject objectAdapter,
-            final ObjectAdapterLinkTo adapterLinkTo) {
+            final ResourceContext resourceContext,
+            final ManagedObject objectAdapter) {
 
-        ((ResourceContext)resourceContext).setObjectAdapterLinkTo(adapterLinkTo);
+        this(
+            resourceContext,
+            resourceContext.lookupServiceElseFail(RepresentationService.class),
+            resourceContext.lookupServiceElseFail(TransactionService.class),
+            objectAdapter);
 
-        this.resourceContext = resourceContext;
-        this.objectAdapter = objectAdapter;
-
-        adapterLinkTo.usingUrlBase(this.resourceContext)
-        .with(this.objectAdapter);
-
-        representationService = lookupService(RepresentationService.class);
-        transactionService = lookupService(TransactionService.class);
+        resourceContext.objectAdapterLinkTo()
+            .usingUrlBase(this.resourceContext)
+            .with(this.objectAdapter);
     }
 
-    private final ManagedObject objectAdapter;
-
-    // //////////////////////////////////////
-    // Helpers (resource delegate here)
-    // //////////////////////////////////////
+    // resource delegate here ...
 
     /**
      * Simply delegates to the {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to
@@ -198,6 +191,8 @@ class _DomainResourceHelper {
                 arguments, ActionResultReprRenderer.SelfLink.EXCLUDED);
     }
 
+    // -- HELPER
+
     private Response invokeAction(
             final @NonNull String actionId,
             final @NonNull AccessIntent intent,
@@ -205,7 +200,7 @@ class _DomainResourceHelper {
             final @NonNull JsonRepresentation arguments,
             final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
 
-        var where = resourceContext.getWhere();
+        var where = resourceContext.where();
 
         // lombok issue, needs explicit cast here
         var actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
@@ -300,36 +295,6 @@ class _DomainResourceHelper {
         // response
         transactionService.flushTransaction();
         return representationService.actionResult(resourceContext, objectAndActionInvocation);
-    }
-
-    // -- DEPENDENCIES (FROM CONTEXT)
-
-    //TODO pretty low level stuff; maybe move the logic to metamodel module
-    static ManagedObject getServiceAdapter(
-            final IResourceContext resourceContext,
-            final @Nullable String serviceIdOrAlias) {
-
-        var mmc = resourceContext.getMetaModelContext();
-
-        final ManagedObject serviceAdapter = mmc.getSpecificationLoader()
-                .lookupLogicalType(serviceIdOrAlias)
-                .map(LogicalType::logicalName)
-                .map(mmc::lookupServiceAdapterById)
-                .orElse(null);
-
-        if(serviceAdapter==null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
-                    "Could not locate service '%s'", serviceIdOrAlias);
-        }
-        return serviceAdapter;
-    }
-
-    private <T> T lookupService(final Class<T> serviceType) {
-        return getServiceRegistry().lookupServiceElseFail(serviceType);
-    }
-
-    private ServiceRegistry getServiceRegistry() {
-        return resourceContext.getMetaModelContext().getServiceRegistry();
     }
 
 }
