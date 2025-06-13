@@ -55,7 +55,6 @@ import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -321,10 +320,6 @@ implements
 
     protected InteractionProvider getInteractionContext() {
         return getServiceRegistry().lookupServiceElseFail(InteractionProvider.class);
-    }
-
-    protected CommandDtoFactory getCommandDtoFactory() {
-        return getServiceRegistry().lookupServiceElseFail(CommandDtoFactory.class);
     }
 
     @Override

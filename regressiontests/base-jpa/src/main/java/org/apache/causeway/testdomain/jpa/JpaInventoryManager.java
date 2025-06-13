@@ -46,6 +46,12 @@ public class JpaInventoryManager {
         product.setPrice(newPrice);
         return product;
     }
+    
+    // -- WRAPPER MEMORY LEAK TESTING
+    
+    @Action
+    public void foo() {
+    }
 
     // -- COUNT PRODUCTS
 
