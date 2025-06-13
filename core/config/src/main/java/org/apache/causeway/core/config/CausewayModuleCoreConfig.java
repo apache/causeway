@@ -76,7 +76,6 @@ public class CausewayModuleCoreConfig {
         @Value("#{systemProperties['spring.mail.properties.mail.smtp.timeout']}") Integer smtpTimeout,
         @Value("#{systemProperties['spring.mail.properties.mail.smtp.connectiontimeout']}") Integer smtpConnectionTimeout) {
 
-
         var emailConfiguration = conf.getCore().getRuntimeServices().getEmail();
 
         String senderUsername = _Strings.emptyToNull(senderEmailUsername);
@@ -87,10 +86,10 @@ public class CausewayModuleCoreConfig {
         int socketTimeout = smtpTimeout!=null ? smtpTimeout : 2000;
         int socketConnectionTimeout = smtpConnectionTimeout!=null ? smtpConnectionTimeout : 2000;
         boolean isThrowExceptionOnFail = emailConfiguration.isThrowExceptionOnFail();
-        String senderAddress = emailConfiguration.getSender().getAddress();
-        String overrideTo = emailConfiguration.getOverride().getTo();
-        String overrideCc = emailConfiguration.getOverride().getCc();
-        String overrideBcc = emailConfiguration.getOverride().getBcc();
+        String senderAddress = _Strings.emptyToNull(emailConfiguration.getSender().getAddress());
+        String overrideTo = _Strings.emptyToNull(emailConfiguration.getOverride().getTo());
+        String overrideCc = _Strings.emptyToNull(emailConfiguration.getOverride().getCc());
+        String overrideBcc = _Strings.emptyToNull(emailConfiguration.getOverride().getBcc());
 
         return new EmailConfiguration(senderUsername, senderPassword, senderHostName, senderPort,
             isSenderTlsEnabled, socketTimeout, socketConnectionTimeout,
