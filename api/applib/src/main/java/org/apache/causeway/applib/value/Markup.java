@@ -55,11 +55,6 @@ public record Markup(String html) implements Serializable {
         this.html = html!=null ? html : "";
     }
 
-    /**
-     * use {@link #html()} instead
-     */
-    @Deprecated public String asHtml() { return html; }
-
     @Override
     public String toString() {
         return String.format("Markup[length=%d,content=%s]",

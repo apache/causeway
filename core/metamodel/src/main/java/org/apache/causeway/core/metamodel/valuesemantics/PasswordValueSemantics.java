@@ -58,7 +58,7 @@ implements
 
     @Override
     public ValueDecomposition decompose(final Password value) {
-        return decomposeAsNullable(value, Password::getPassword, ()->null);
+        return decomposeAsNullable(value, Password::password, ()->null);
     }
 
     @Override

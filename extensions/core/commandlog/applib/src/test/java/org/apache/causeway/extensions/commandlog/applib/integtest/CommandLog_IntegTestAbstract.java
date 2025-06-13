@@ -243,7 +243,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         assertThat(cleBookmarkIfAny).isPresent();
         Bookmark cleBookmark = cleBookmarkIfAny.get();
-        String identifier = cleBookmark.getIdentifier();
+        String identifier = cleBookmark.identifier();
         if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
             assertThat(identifier).startsWith("u_");
             UUID.fromString(identifier.substring("u_".length())); // should not fail, ie check the format is as we expect

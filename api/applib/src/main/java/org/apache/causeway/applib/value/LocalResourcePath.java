@@ -49,7 +49,7 @@ import org.apache.causeway.commons.internal.resources._Resources;
 @Value
 @XmlJavaTypeAdapter(LocalResourcePath.JaxbToStringAdapter.class)   // for JAXB view model support
 public record LocalResourcePath(
-    @NonNull String path, 
+    @NonNull String path,
     @NonNull OpenUrlStrategy openUrlStrategy) implements Serializable {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".value.LocalResourcePath";
@@ -72,11 +72,6 @@ public record LocalResourcePath(
                 ? openUrlStrategy
                 : OpenUrlStrategy.NEW_WINDOW; // default
     }
-    
-    /**
-     * use {@link #openUrlStrategy()} instead
-     */
-    @Deprecated public OpenUrlStrategy getOpenUrlStrategy() { return openUrlStrategy; }
 
     public String getValue() {
         return path;

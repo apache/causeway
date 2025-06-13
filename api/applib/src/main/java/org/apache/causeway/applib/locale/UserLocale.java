@@ -51,19 +51,6 @@ public record UserLocale(
                 .build();
     }
 
-    /**
-     * use {@link #languageLocale()} instead
-     */
-    @Deprecated public Locale getLanguageLocale() { return languageLocale; }
-    /**
-     * use {@link #numberFormatLocale()} instead
-     */
-    @Deprecated public Locale getNumberFormatLocale() { return numberFormatLocale; }
-    /**
-     * use {@link #timeFormatLocale()} instead
-     */
-    @Deprecated public Locale getTimeFormatLocale() { return timeFormatLocale; }
-    
     // -- UTILITY
 
     public UserLocaleBuilder asBuilder() {

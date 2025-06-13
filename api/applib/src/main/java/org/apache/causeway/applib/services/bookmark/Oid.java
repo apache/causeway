@@ -32,21 +32,11 @@ public interface Oid extends Serializable {
      * (aka. object-type)
      */
     String logicalTypeName();
-    
-    /**
-     * use {@link #logicalTypeName()} instead
-     */
-    @Deprecated default String getLogicalTypeName() { return logicalTypeName(); }
 
     /**
      * Stringified version of the ID of the domain object instance this Oid is representing.
      */
     String identifier();
-    
-    /**
-     * use {@link #identifier()} instead
-     */
-    @Deprecated default String getIdentifier() { return identifier(); }
 
     /**
      * The canonical form of the {@link Bookmark}, that is

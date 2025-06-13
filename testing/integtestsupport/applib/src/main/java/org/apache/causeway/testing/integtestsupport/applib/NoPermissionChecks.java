@@ -45,14 +45,14 @@ public class NoPermissionChecks implements BeforeEachCallback {
     @Override
     public void beforeEach(final ExtensionContext extensionContext) {
         _Helper.getInteractionFactory(extensionContext)
-                .ifPresent(interactionService ->
-                        interactionService.currentInteractionContext().ifPresent(
-                                currentInteractionContext -> {
-                                    var sudoUser = currentInteractionContext.getUser().withRoleAdded(SudoService.ACCESS_ALL_ROLE.getName());
-                                    interactionService.openInteraction(currentInteractionContext.withUser(sudoUser));
-                                }
-                        )
-                );
+            .ifPresent(interactionService ->
+                interactionService.currentInteractionContext().ifPresent(
+                    currentInteractionContext -> {
+                        var sudoUser = currentInteractionContext.getUser().withRoleAdded(SudoService.ACCESS_ALL_ROLE.name());
+                        interactionService.openInteraction(currentInteractionContext.withUser(sudoUser));
+                    }
+                )
+            );
     }
 
 }

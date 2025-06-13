@@ -46,11 +46,6 @@ public record Password(String password) implements Serializable {
         return new Password(password);
     }
 
-    /**
-     * @deprecated use {@link #password()} instead
-     */
-    @Deprecated public String getPassword() { return password(); }
-
     public boolean checkPassword(final String password) {
         return Objects.equals(this.password, password);
     }

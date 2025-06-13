@@ -71,11 +71,11 @@ public record UserMemento(
     @Property
     @PropertyLayout(fieldSetId = "identity", sequence = "1", describedAs = "user's login name")
     @NonNull String name,
-    
+
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "1")
     @Nullable String realName,
-    
+
     @Property(optionality = Optionality.OPTIONAL)
     @PropertyLayout(fieldSetId = "details", sequence = "2")
     @Nullable URL avatarUrl,
@@ -99,7 +99,7 @@ public record UserMemento(
     @Property
     @PropertyLayout(fieldSetId = "security", sequence = "1")
     @NonNull AuthenticationSource authenticationSource,
-    
+
     @Property
     @PropertyLayout(fieldSetId = "security", sequence = "3", named = "impersonating")
     boolean isImpersonating,
@@ -110,10 +110,10 @@ public record UserMemento(
      * The interpretation of this token is implementation-specific.
      */
     @Property(optionality = Optionality.OPTIONAL)
-    @PropertyLayout(fieldSetId = "security", sequence = "2", 
+    @PropertyLayout(fieldSetId = "security", sequence = "2",
         describedAs = "tenancy (or tenancies) this user has access to")
     @Nullable String multiTenancyToken,
-    
+
     /**
      * A unique code given to this user during authentication.
      * <p>
@@ -124,14 +124,14 @@ public record UserMemento(
     @Property
     @PropertyLayout(hidden = Where.EVERYWHERE)
     @NonNull String authenticationCode,
-    
+
     /**
      * The roles associated with this user.
      */
     @Collection
     @CollectionLayout(sequence = "1", describedAs = "roles associated with this user")
     @NonNull Can<RoleMemento> roles
-    
+
     ) implements Serializable {
 
     public enum AuthenticationSource {
@@ -144,7 +144,7 @@ public record UserMemento(
         EXTERNAL;
         public boolean isExternal() { return this == EXTERNAL; }
     }
-    
+
     public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<UserMemento> {}
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".UserMemento";
 
@@ -306,7 +306,7 @@ public record UserMemento(
                         : main)
                 .build();
     }
-    
+
     public static UserMementoBuilder builder(final String name) {
         if (_Strings.isEmpty(name)) {
             throw new IllegalArgumentException("Name not specified");
@@ -319,7 +319,7 @@ public record UserMemento(
     }
 
     // -- WITHERS
-    
+
     @Programmatic public UserMemento withRealName(String realName) {
         return asBuilder().realName(realName).build();
     }
@@ -347,9 +347,9 @@ public record UserMemento(
     @Programmatic public UserMemento withTimeFormatLocale(Locale timeFormatLocale) {
         return asBuilder().timeFormatLocale(timeFormatLocale).build();
     }
-    
+
     // -- OBJECT CONTRACT
-    
+
     @Override
     public final boolean equals(Object obj) {
         return (obj instanceof UserMemento other)
@@ -361,39 +361,16 @@ public record UserMemento(
                 && Objects.equals(roles, other.roles)
             : false;
     }
-    
+
     @Override
     public final int hashCode() {
         return Objects.hash(isImpersonating, name, authenticationSource, multiTenancyToken, authenticationCode, roles);
     }
-    
+
     // -- HELPER
-    
+
     private void readObject(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
     }
-    
-    // -- DEPRECATIONS
-    
-    /** @deprecated use {@link #name()} instead */
-    @Programmatic @Deprecated public String getName() { return name(); }
-    /** @deprecated use {@link #authenticationCode()} instead */
-    @Programmatic @Deprecated public String getAuthenticationCode() { return authenticationCode(); }
-    /** @deprecated use {@link #authenticationSource()} instead */
-    @Programmatic @Deprecated public AuthenticationSource getAuthenticationSource() { return authenticationSource(); }
-    /** @deprecated use {@link #avatarUrl()} instead */
-    @Programmatic @Deprecated public URL getAvatarUrl() { return avatarUrl(); }
-    /** @deprecated use {@link #realName()} instead */
-    @Programmatic @Deprecated public String getRealName() { return realName(); }
-    /** @deprecated use {@link #languageLocale()} instead */
-    @Programmatic @Deprecated public Locale getLanguageLocale() { return languageLocale(); }
-    /** @deprecated use {@link #numberFormatLocale()} instead */
-    @Programmatic @Deprecated public Locale getnumberFormatLocale() { return numberFormatLocale(); }
-    /** @deprecated use {@link #timeFormatLocale()} instead */
-    @Programmatic @Deprecated public Locale getTimeFormatLocale() { return timeFormatLocale(); }
-    /** @deprecated use {@link #multiTenancyToken()} instead */
-    @Programmatic @Deprecated public String getMultiTenancyToken() { return multiTenancyToken(); }
-    /** @deprecated use {@link #roles()} instead */
-    @Programmatic @Deprecated public List<RoleMemento> getRoles() { return roles().toList(); }
 
 }

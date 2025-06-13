@@ -62,7 +62,7 @@ public class PdfJsViewerPanelComponentFactory extends ComponentFactoryAbstract {
             return false;
         }
         final Blob blob = (Blob) objectPojo;
-        return CommonMimeType.PDF.matches(blob.getMimeType());
+        return CommonMimeType.PDF.matches(blob.mimeType());
     }
 
     @Override

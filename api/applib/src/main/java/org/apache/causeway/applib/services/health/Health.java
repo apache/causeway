@@ -33,22 +33,9 @@ public record Health(String message, Throwable cause) {
         return new Health(message, null);
     }
 
-    public boolean isOk() { 
-        return message == null 
-            && cause == null; 
+    public boolean isOk() {
+        return message == null
+            && cause == null;
     }
-    
-    /**
-     * use {@link #message()} instead
-     */
-    @Deprecated public String getMessage() { return message(); }
-    /**
-     * use {@link #cause()} instead
-     */
-    @Deprecated public Throwable getCause() { return cause(); }
-    /**
-     * use {@link #isOk()} instead
-     */
-    @Deprecated public boolean getResult() { return isOk(); }
-    
+
 }

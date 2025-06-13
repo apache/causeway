@@ -62,11 +62,11 @@ public record LogicalType(
          * @see ObjectSpecification
          * @see SpecificationLoader
          */
-        @org.springframework.lang.NonNull String logicalName,
+        @NonNull String logicalName,
         /**
          * Type (that is, the {@link Class} this identifier represents).
          */
-        @org.springframework.lang.NonNull Class<?> correspondingClass)
+        @NonNull Class<?> correspondingClass)
 implements
     Comparable<LogicalType>,
     Serializable {
@@ -200,42 +200,6 @@ implements
                     correspondingClass.getName());
         }
         return logicalName;
-    }
-
-    // -- DEPRECATIONS
-
-    /**
-     * @deprecated use {@link #correspondingClass()}
-     */
-    @Deprecated public Class<?> getCorrespondingClass() { return correspondingClass(); }
-
-    /**
-     * @deprecated use {@link #logicalName()}
-     */
-    @Deprecated public String getLogicalTypeName() { return logicalName(); }
-
-    /**
-     * @deprecated use {@link #className()}
-     */
-    @Deprecated public String getClassName() { return className(); }
-
-    /**
-     * @deprecated use {@link #logicalSimpleName()}
-     */
-    @Deprecated public String getLogicalTypeSimpleName() { return logicalSimpleName(); }
-
-    /**
-     * @deprecated use {@link #namespace()}
-     */
-    @Deprecated public String getNamespace() { return namespace(); }
-
-    /**
-     * @deprecated use {@link #logicalNameFormatted(String, String)}
-     */
-    @Deprecated public String getLogicalTypeNameFormatted(
-            final @NonNull String root,
-            final @NonNull String delimiter) {
-        return logicalNameFormatted(root, delimiter);
     }
 
 }

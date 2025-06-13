@@ -112,7 +112,7 @@ public class DomainMemberDefault implements DomainMember {
 
     @Override
     public String getNamespace() {
-        return spec.logicalType().getNamespace();
+        return spec.logicalType().namespace();
     }
 
     @XmlElement @Override

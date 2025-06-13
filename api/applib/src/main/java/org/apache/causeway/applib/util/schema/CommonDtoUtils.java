@@ -400,9 +400,9 @@ public final class CommonDtoUtils {
             final Blob blob = (Blob) pojo;
             if(blob != null) {
                 final BlobDto blobDto = new BlobDto();
-                blobDto.setName(blob.getName());
-                blobDto.setBytes(blob.getBytes());
-                blobDto.setMimeType(blob.getMimeType().toString());
+                blobDto.setName(blob.name());
+                blobDto.setBytes(blob.bytes());
+                blobDto.setMimeType(blob.mimeType().toString());
                 valueDto.setBlob(blobDto);
             }
             return valueDto;
@@ -411,9 +411,9 @@ public final class CommonDtoUtils {
             final Clob clob = (Clob) pojo;
             if(clob != null) {
                 final ClobDto clobDto = new ClobDto();
-                clobDto.setName(clob.getName());
-                clobDto.setChars(clob.getChars().toString());
-                clobDto.setMimeType(clob.getMimeType().toString());
+                clobDto.setName(clob.name());
+                clobDto.setChars(clob.chars().toString());
+                clobDto.setMimeType(clob.mimeType().toString());
                 valueDto.setClob(clobDto);
             }
             return valueDto;

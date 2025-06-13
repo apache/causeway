@@ -50,16 +50,4 @@ public record InteractionLayer(
         InteractionContext interactionContext
         ) {
 
-    /**
-     * @deprecated use {@link #interaction()} instead
-     */
-    @Deprecated
-    public Interaction getInteraction() { return interaction; }
-
-    /**
-     * @deprecated use {@link #interactionContext()} instead
-     */
-    @Deprecated
-    public InteractionContext getInteractionContext() { return interactionContext; }
-
 }

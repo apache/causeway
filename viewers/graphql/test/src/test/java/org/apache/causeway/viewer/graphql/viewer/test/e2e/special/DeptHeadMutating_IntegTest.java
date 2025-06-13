@@ -52,7 +52,7 @@ public class DeptHeadMutating_IntegTest extends Abstract_IntegTest {
                         }
                 ).valueAsNonNullElseFail();
 
-        var response = submit(_Maps.unmodifiable("$departmentId", bookmark.getIdentifier()));
+        var response = submit(_Maps.unmodifiable("$departmentId", bookmark.identifier()));
 
         // then payload
         Approvals.verify(response, jsonOptions());

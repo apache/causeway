@@ -162,12 +162,6 @@ public record Blob(
         this.bytes = bytes;
     }
 
-    /**
-     * @deprecated use {@link #bytes()} instead
-     */
-    @Deprecated
-    public byte[] getBytes() { return bytes(); }
-
     // -- UTILITIES
 
     /**
@@ -215,7 +209,7 @@ public record Blob(
      * @see DataSource
      */
     public DataSource asDataSource() {
-        return DataSource.ofBytes(_NullSafe.toNonNull(getBytes()));
+        return DataSource.ofBytes(_NullSafe.toNonNull(bytes()));
     }
 
     /**
@@ -235,7 +229,7 @@ public record Blob(
         var zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
             .orElseGet(this::name);
         var zipBuilder = ZipUtils.zipEntryBuilder();
-        zipBuilder.add(zipEntryName, getBytes());
+        zipBuilder.add(zipEntryName, bytes());
         return Blob.of(name()+".zip", CommonMimeType.ZIP, zipBuilder.toBytes());
     }
 
@@ -344,7 +338,7 @@ public record Blob(
      */
     public Optional<BufferedImage> asImage() {
 
-        var bytes = getBytes();
+        var bytes = bytes();
         if(bytes == null) {
             return Optional.empty();
         }

@@ -33,7 +33,6 @@ import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 
 import lombok.Builder;
@@ -68,7 +67,7 @@ public record RoleMemento(
             ev.setTitle(roleMemento.name());
         }
     }
-    
+
     public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<RoleMemento> {}
 
     /**
@@ -88,30 +87,19 @@ public record RoleMemento(
         this.name = name;
         this.description = description == null ? "" : description;
     }
-    
+
     // -- OBJECT CONTRACT
-    
+
     @Override
     public final boolean equals(Object obj) {
         return (obj instanceof RoleMemento other)
             ? name.equals(other.name)
             : false;
     }
-    
+
     @Override
     public final int hashCode() {
         return Objects.hashCode(name);
     }
-    
-    // -- DEPRECATIONS
-    
-    /**
-     * @deprecated use {@link #name()} instead
-     */
-    @Programmatic @Deprecated public String getName() { return name(); }
-    /**
-     * @deprecated use {@link #description()} instead
-     */
-    @Programmatic @Deprecated public String getDescription() { return description(); }
 
 }

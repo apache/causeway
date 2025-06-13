@@ -83,24 +83,13 @@ implements Serializable {
     }
 
     public void accept(
-        final @NonNull Consumer<ValueWithTypeDto> fundamentalConsumer,
-        final @NonNull Consumer<TypedTupleDto> compositeConsumer) {
-            if(fundamental!=null) {
-                fundamentalConsumer.accept(fundamental);
-            } else {
-                compositeConsumer.accept(composite);
-            }
+            final @NonNull Consumer<ValueWithTypeDto> fundamentalConsumer,
+            final @NonNull Consumer<TypedTupleDto> compositeConsumer) {
+        if(fundamental!=null) {
+            fundamentalConsumer.accept(fundamental);
+        } else {
+            compositeConsumer.accept(composite);
         }
-
-    // -- DEPRECATIONS
-
-    /** @deprecated use {@link #fundamental()} instead */
-    @Deprecated public @Nullable ValueWithTypeDto leftIfAny() { return fundamental(); }
-    /** @deprecated use {@link #composite()} instead */
-    @Deprecated public @Nullable TypedTupleDto rightIfAny() { return composite(); }
-    /** @deprecated use {@link #fundamentalAsOptional()} instead */
-    @Deprecated public Optional<ValueWithTypeDto> left() { return fundamentalAsOptional(); }
-    /** @deprecated use {@link #compositeAsOptional()} instead */
-    @Deprecated public Optional<TypedTupleDto> right() { return compositeAsOptional(); }
+    }
 
 }

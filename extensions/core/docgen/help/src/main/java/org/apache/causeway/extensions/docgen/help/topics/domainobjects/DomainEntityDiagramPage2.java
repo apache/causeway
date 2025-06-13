@@ -51,7 +51,7 @@ public class DomainEntityDiagramPage2 extends EntityDiagramPageAbstract {
     @Override
     protected boolean accept(final BeanSort beanSort, final LogicalType logicalType) {
         if(!beanSort.isEntity()) return false;
-        var ns = "" + logicalType.getNamespace();
+        var ns = "" + logicalType.namespace();
         return !ns.equals("causeway")
                 && !ns.startsWith("causeway.");
     }

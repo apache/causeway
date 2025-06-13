@@ -71,32 +71,13 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Clob value) {
-        return renderTitle(value, Clob::getName);
+        return renderTitle(value, Clob::name);
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Clob value) {
-        return renderHtml(value, Clob::getName);
+        return renderHtml(value, Clob::name);
     }
-
-    // -- ENCODER DECODER
-
-//    private String toEncodedString(final Clob clob) {
-//        return clob.getName() + ":" + clob.getMimeType().getBaseType() + ":" + clob.getChars();
-//    }
-//
-//    private Clob fromEncodedString(final String data) {
-//        final int colonIdx = data.indexOf(':');
-//        final String name  = data.substring(0, colonIdx);
-//        final int colon2Idx  = data.indexOf(":", colonIdx+1);
-//        final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
-//        final CharSequence chars = data.substring(colon2Idx+1);
-//        try {
-//            return new Clob(name, new MimeType(mimeTypeBase), chars);
-//        } catch (MimeTypeParseException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     // -- EXAMPLES
 

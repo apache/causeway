@@ -35,25 +35,4 @@ public interface HasLogicalType {
      * @see LogicalType#className()
      */
     default String className() { return logicalType().className(); }
-
-    // -- DEPRECATIONS
-
-    /**
-     * @deprecated use #logicalType()
-     */
-    @Deprecated
-    default LogicalType getLogicalType() { return logicalType(); }
-
-    /**
-     * @deprecated use #logicalName()
-     */
-    @Deprecated
-    default String getLogicalTypeName() { return logicalTypeName(); }
-
-    /**
-     * @deprecated use #className()
-     */
-    @Deprecated
-    default String getClassName() { return className(); }
-
 }

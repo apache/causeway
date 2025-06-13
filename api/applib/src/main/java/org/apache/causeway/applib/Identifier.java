@@ -299,11 +299,4 @@ implements
         return names.map(Identifier::naturalName);
     }
 
-    // -- DEPRECATIONS
-
-    @Deprecated public String getMemberLogicalName() { return memberLogicalName; }
-    @Deprecated public int getParameterIndex() { return parameterIndex; }
-    @Deprecated public Can<String> getMemberParameterClassNames() { return memberParameterClassNames; }
-    @Deprecated public Type getType() { return type; }
-
 }

@@ -52,7 +52,7 @@ public class Person_2_IntegTest extends Abstract_IntegTest {
                         }
                 ).valueAsNonNullElseFail();
 
-        var response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.getIdentifier()));
+        var response = submit(_Maps.unmodifiable("$staffMemberId", bookmark.identifier()));
 
         // then payload
         Approvals.verify(response, jsonOptions());
