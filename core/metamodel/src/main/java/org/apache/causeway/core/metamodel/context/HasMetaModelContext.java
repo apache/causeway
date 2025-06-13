@@ -50,6 +50,7 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -152,6 +153,10 @@ public interface HasMetaModelContext {
 
     default InteractionService getInteractionService() {
         return getMetaModelContext().getInteractionService();
+    }
+    
+    default CommandDtoFactory getCommandDtoFactory() {
+        return getMetaModelContext().getCommandDtoFactory();
     }
 
     default Optional<UserLocale> currentUserLocale() {

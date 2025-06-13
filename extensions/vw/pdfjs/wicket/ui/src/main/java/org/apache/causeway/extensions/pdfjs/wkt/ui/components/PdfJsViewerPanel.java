@@ -36,9 +36,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.handler.resource.ResourceRequestHandler;
 import org.apache.wicket.request.http.flow.AbortWithHttpErrorCodeException;
 import org.apache.wicket.request.resource.ByteArrayResource;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.extensions.pdfjs.applib.config.PdfJsConfig;
 import org.apache.causeway.extensions.pdfjs.applib.config.Scale;
@@ -48,8 +50,6 @@ import org.apache.causeway.extensions.pdfjs.wkt.integration.components.PdfJsPane
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-
-import org.jspecify.annotations.NonNull;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
@@ -177,7 +177,8 @@ implements IRequestListener {
     @Override
     protected MarkupContainer createRegularFrame() {
         var blob = getBlob();
-        if (blob == null) {
+        if (blob == null
+                || _NullSafe.isEmpty(blob.bytes())) { 
             return createShallowRegularFrame();
         }
 
@@ -185,13 +186,16 @@ implements IRequestListener {
 
         var regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
+        var documentUrl = urlFor(
+                new ListenerRequestHandler(
+                        new PageAndComponentProvider(getPage(), this)))
+                // adds a hash to the URL, such that browser caching works as desired 
+                + "&md5=" + blob.md5Hex();
         var pdfJsConfig =
-            attributeModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
+                attributeModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
-                .withDocumentUrl(urlFor(
-                        new ListenerRequestHandler(
-                                new PageAndComponentProvider(getPage(), this))));
+                .withDocumentUrl(documentUrl);
 
         var pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
@@ -283,7 +287,7 @@ implements IRequestListener {
     }
 
     // -- HELPER
-
+    
     private Blob getBlob() {
         return (Blob) MmUnwrapUtils.single(attributeModel().getObject());
     }

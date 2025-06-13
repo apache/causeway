@@ -66,6 +66,7 @@ module org.apache.causeway.commons {
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
+    requires transitive java.management;
     requires transitive org.jdom2;
     requires transitive org.jspecify;
     requires transitive org.jsoup;
