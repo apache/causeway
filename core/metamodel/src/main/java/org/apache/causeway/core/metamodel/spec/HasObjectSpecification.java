@@ -30,8 +30,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
  */
 public interface HasObjectSpecification {
 
-    @Deprecated default ObjectSpecification getSpecification() { return objSpec(); }
-
     ObjectSpecification objSpec();
 
     // -- SHORTCUTS

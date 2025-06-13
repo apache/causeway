@@ -20,9 +20,6 @@
 
 package org.apache.causeway.applib.services.bookmark;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-
-import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -44,7 +41,6 @@ import org.jspecify.annotations.NonNull;
  *
  * @since 2.0 {@index}
  */
-@SuppressWarnings("javadoc")
 public interface IdStringifier<T> {
 
     public final static char SEPARATOR = '_';
@@ -100,82 +96,6 @@ public interface IdStringifier<T> {
         @Override
         default T destring(final @NonNull Class<?> targetEntityClass, final @NonNull String stringified) {
             return destring(stringified);
-        }
-
-    }
-
-    /**
-     * Provided for backward compatibility with some v1 Ids that used a prefix to determine their actual type.
-     * <p>
-     * (In v2 we provide this so in the constructor, so there's no need to encode the type in the stringified form
-     * of the value).
-     *
-     * @param <T>
-     *
-     * @deprecated not used within the framework; eventually remove
-     */
-    @Deprecated
-    abstract class AbstractWithPrefix<T> implements IdStringifier<T> {
-
-        /**
-         * eg <code>Integer.class</code>, or JDO-specific <code>DatastoreId</code>,
-         * or a custom class for application-defined PKs.
-         */
-        @Getter private final Class<T> correspondingClass;
-
-        private final String prefix;
-
-        public AbstractWithPrefix(
-                final @NonNull Class<T> correspondingClass,
-                final @NonNull String typeCode) {
-            _Assert.assertFalse(correspondingClass.isPrimitive(),
-                    ()->String.format("not allowed to be initialzed with a primitive class (%s), "
-                            + "use the boxed variant instead",
-                            correspondingClass));
-            this.correspondingClass = correspondingClass;
-            this.prefix = typeCode + SEPARATOR;
-        }
-
-        @Override
-        public final String enstring(final @NonNull T value) {
-            return prefix + doEnstring(value);
-        }
-
-        /**
-         * Overridable hook
-         */
-        protected String doEnstring(final T value) {
-            return value.toString();
-        }
-
-        @Override
-        public final T destring(
-                final @NonNull Class<?> targetEntityClass,
-                final @NonNull String stringified) {
-            var suffix = removePrefix(stringified);
-            return doDestring(suffix, targetEntityClass);
-        }
-
-        /**
-         * Mandatory hook
-         */
-        protected abstract T doDestring(
-                final @NonNull String idStr,
-                final @NonNull Class<?> targetEntityClass);
-
-        private String removePrefix(final String str) {
-            if (str.startsWith(prefix)) {
-                return str.substring(prefix.length());
-            }
-            throw new IllegalArgumentException(
-                    String.format("expected id to start with '%s', but got '%s'", prefix, str));
-        }
-
-        /**
-         * Not API
-         */
-        public boolean recognizes(final String stringified) {
-            return stringified.startsWith(prefix);
         }
 
     }

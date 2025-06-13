@@ -109,7 +109,7 @@ extends ValueSemanticsProviderAbstractTestCase<BigDecimal> {
 
     @Test
     void titleOfWhenUseGroupingSeparator() {
-        causewayConfiguration.getValueTypes().getBigDecimal().setUseGroupingSeparator(true);
+        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setUseGroupingSeparator(true);
 
         assertEquals("34,132.199", value.titlePresentation(null, bigDecimal));
     }

@@ -63,7 +63,6 @@ import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
@@ -1847,50 +1846,14 @@ public class CausewayConfiguration {
         public static class RuntimeServices {
 
             private final Email email = new Email();
+            /**
+             * Mail specific configuration in addition to Spring's <code>spring.mail.*</code>.
+             * See also spring.mail.port, spring.mail.properties.mail.smtp.connectiontimeout,
+             * spring.mail.properties.mail.smtp.timeout, spring.mail.host, spring.mail.username,
+             * spring.mail.password, spring.mail.javamail.properties.mail.smtp.starttls.enable
+             */
             @Data
             public static class Email {
-
-                @Deprecated
-                private int port = 587;
-
-                /**
-                 * The port to use for sending email.
-                 *
-                 * @deprecated  - ignored, instead use <code>spring.mail.port</code>
-                 */
-                @Deprecated
-                @DeprecatedConfigurationProperty(replacement = "spring.mail.port")
-                public int getPort() {
-                    return port;
-                }
-
-                @Deprecated
-                private int socketConnectionTimeout = 2000;
-
-                /**
-                 * The maximum number of millseconds to wait to obtain a socket connection before timing out.
-                 *
-                 * @deprecated  - ignored, instead use <code>spring.mail.properties.mail.smtp.connectiontimeout</code>
-                 */
-                @Deprecated
-                @DeprecatedConfigurationProperty(replacement = "spring.mail.properties.mail.smtp.connectiontimeout")
-                public int getSocketConnectionTimeout() {
-                    return socketConnectionTimeout;
-                }
-
-                @Deprecated
-                private int socketTimeout = 2000;
-
-                /**
-                 * The maximum number of milliseconds to wait to obtain a socket before timing out.
-                 *
-                 * @deprecated  - ignored, instead use <code>spring.mail.properties.mail.smtp.timeout</code>
-                 */
-                @Deprecated
-                @DeprecatedConfigurationProperty(replacement = "spring.mail.properties.mail.smtp.timeout")
-                public int getSocketTimeout() {
-                    return socketTimeout;
-                }
 
                 /**
                  * If an email fails to send, whether to propagate the exception (meaning that potentially the end-user
@@ -1927,63 +1890,6 @@ public class CausewayConfiguration {
                 @Data
                 public static class Sender {
 
-                    @Deprecated
-                    private String hostname;
-
-                    /**
-                     * Specifies the host running the SMTP service.
-                     *
-                     * <p>
-                     *     If not specified, then the value used depends upon the email implementation.  The default
-                     *     implementation will use the <code>mail.smtp.host</code> system property.
-                     * </p>
-                     *
-                     * @deprecated - now ignored, instead use <code>spring.mail.host</code>
-                     */
-                    @Deprecated
-                    @DeprecatedConfigurationProperty(replacement = "spring.mail.host")
-                    public String getHostname() {
-                        return hostname;
-                    }
-
-                    @Deprecated
-                    private String username;
-
-                    /**
-                     * Specifies the username to use to connect to the SMTP service.
-                     *
-                     * <p>
-                     *     If not specified, then the sender's {@link #getAddress() email address} will be used instead.
-                     * </p>
-                     *
-                     * @deprecated - now ignored, instead use <code>spring.mail.username</code>
-                     */
-                    @Deprecated
-                    @DeprecatedConfigurationProperty(replacement = "spring.mail.username")
-                    public String getUsername() {
-                        return username;
-                    }
-
-                    @Deprecated
-                    private String password;
-
-                    /**
-                     * Specifies the password (corresponding to the {@link #getUsername() username} to connect to the
-                     * SMTP service.
-                     *
-                     * <p>
-                     *     This configuration property is mandatory (for the default implementation of the
-                     *     {@link org.apache.causeway.applib.services.email.EmailService}, at least).
-                     * </p>
-                     *
-                     * @deprecated - now ignored, instead use <code>spring.mail.password</code>
-                     */
-                    @Deprecated
-                    @DeprecatedConfigurationProperty(replacement = "spring.mail.password")
-                    public String getPassword() {
-                        return password;
-                    }
-
                     /**
                      * Specifies the email address of the user sending the email.
                      *
@@ -2001,25 +1907,6 @@ public class CausewayConfiguration {
                     private String address;
                 }
 
-                @Deprecated
-                private final Tls tls = new Tls();
-                @Deprecated
-                @Data
-                public static class Tls {
-                    @Deprecated
-                    private boolean enabled = true;
-
-                    /**
-                     * Whether TLS encryption should be started (that is, <code>STARTTLS</code>).
-                     *
-                     * @deprecated  - now ignored, instead use <code>spring.mail.javamail.properties.mail.smtp.starttls.enable</code>
-                     */
-                    @Deprecated
-                    @DeprecatedConfigurationProperty(replacement = "spring.mail.javamail.properties.mail.smtp.starttls.enable")
-                    public boolean isEnabled() {
-                        return enabled;
-                    }
-                }
             }
 
             private final ApplicationFeatures applicationFeatures = new ApplicationFeatures();
@@ -2032,27 +1919,6 @@ public class CausewayConfiguration {
                  * {@link ApplicationFeaturesInitConfiguration#EAGERLY eagerly}, or lazily.
                  */
                 ApplicationFeaturesInitConfiguration init = ApplicationFeaturesInitConfiguration.NOT_SPECIFIED;
-            }
-
-            private final RepositoryService repositoryService = new RepositoryService();
-            @Data
-            public static class RepositoryService {
-                private boolean disableAutoFlush = false;
-
-                /**
-                 * Normally any queries are automatically preceded by flushing pending executions.
-                 *
-                 * <p>
-                 * This key allows this behaviour to be disabled.
-                 * </p>
-                 *
-                 * @deprecated - use instead <code>causeway.persistence.commons.repository-service.disable-auto-flush</code>
-                 */
-                @Deprecated
-                @DeprecatedConfigurationProperty(replacement = "causeway.persistence.commons.repository-service.disable-auto-flush")
-                public boolean isDisableAutoFlush() {
-                    return disableAutoFlush;
-                }
             }
 
             private final ExceptionRecognizer exceptionRecognizer = new ExceptionRecognizer();
@@ -3584,23 +3450,6 @@ public class CausewayConfiguration {
              */
             private boolean useScaleForMinFractionalFacet = true;
 
-            /**
-             * The minimum scale to use for all {@link java.math.BigDecimal}s.
-             *
-             * <p>
-             * Is only used if the minimum scale has not been specified explicitly by some other means, typically
-             * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
-             *
-             * @deprecated - use {@link Display#getMinScale()} instead
-             */
-            @Deprecated(since = "2.2.0")
-            private Integer minScale = null;
-
-            @DeprecatedConfigurationProperty(replacement = "causeway.value-types.big-decimal.display.min-scale", reason = "Moved")
-            public Integer getMinScale() {
-                return minScale;
-            }
-
             private final Editing editing = new Editing();
             @Data
             public static class Editing {
@@ -3661,40 +3510,6 @@ public class CausewayConfiguration {
                 private boolean useGroupingSeparator = true;
             }
 
-            /**
-             * A common use of {@link java.math.BigDecimal} is as a money value.  In some locales (eg English), the
-             * &quot;,&quot; (comma) is the grouping (thousands) separator wihle the &quot;.&quot; (period) acts as a
-             * decimal point, but in others (eg France, Italy) it is the other way around.
-             *
-             * <p>
-             *     Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
-             *     in an English locale, is not rejected but instead is evaluated as the value 12399L.  That's almost
-             *     certainly not what the end-user would have expected, and results in a money value 100x too large.
-             * </p>
-             *
-             * <p>
-             *     The purpose of this configuration property is to remove the confusion by simply disallowing the
-             *     thousands separator from being part of the input string.
-             * </p>
-             *
-             * <p>
-             *     For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
-             *     behaviour can be reinstated by setting this config property back to <code>true</code>.
-             * </p>
-             *
-             * <p>
-             *     The same configuration property is also used for rendering the value.
-             * </p>
-             *
-             * @deprecated - use {@link Editing#isUseGroupingSeparator()} instead.
-             */
-            @Deprecated(since = "2.2.0")
-            private boolean useGroupingSeparator = false;
-
-            @DeprecatedConfigurationProperty(replacement = "causeway.value-types.big-decimal.editing.use-grouping-separator")
-            public boolean isUseGroupingSeparator() {
-                return useGroupingSeparator;
-            }
         }
 
         private final Kroki kroki = new Kroki();

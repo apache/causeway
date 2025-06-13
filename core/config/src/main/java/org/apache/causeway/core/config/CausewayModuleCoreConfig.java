@@ -18,10 +18,13 @@
  */
 package org.apache.causeway.core.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.converters.PatternsConverter;
@@ -61,5 +64,37 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 public class CausewayModuleCoreConfig {
 
     public static final String NAMESPACE = "causeway.config";
+
+    @Bean
+    public EmailConfiguration emailConfiguration(
+        CausewayConfiguration conf,
+        @Value("#{systemProperties['spring.mail.username']}") String senderEmailUsername,
+        @Value("#{systemProperties['spring.mail.password']}") String senderEmailPassword,
+        @Value("#{systemProperties['spring.mail.host']}") String senderEmailHostName,
+        @Value("#{systemProperties['spring.mail.port']}") Integer senderEmailPort,
+        @Value("#{systemProperties['spring.mail.javamail.properties.mail.smtp.starttls.enable']}") Boolean senderEmailTlsEnabled,
+        @Value("#{systemProperties['spring.mail.properties.mail.smtp.timeout']}") Integer smtpTimeout,
+        @Value("#{systemProperties['spring.mail.properties.mail.smtp.connectiontimeout']}") Integer smtpConnectionTimeout) {
+
+
+        var emailConfiguration = conf.getCore().getRuntimeServices().getEmail();
+
+        String senderUsername = _Strings.emptyToNull(senderEmailUsername);
+        String senderPassword = _Strings.emptyToNull(senderEmailPassword);
+        String senderHostName = _Strings.emptyToNull(senderEmailHostName);
+        int senderPort = senderEmailPort!=null ? senderEmailPort : 587;
+        boolean isSenderTlsEnabled = senderEmailTlsEnabled!=null ? senderEmailTlsEnabled : true;
+        int socketTimeout = smtpTimeout!=null ? smtpTimeout : 2000;
+        int socketConnectionTimeout = smtpConnectionTimeout!=null ? smtpConnectionTimeout : 2000;
+        boolean isThrowExceptionOnFail = emailConfiguration.isThrowExceptionOnFail();
+        String senderAddress = emailConfiguration.getSender().getAddress();
+        String overrideTo = emailConfiguration.getOverride().getTo();
+        String overrideCc = emailConfiguration.getOverride().getCc();
+        String overrideBcc = emailConfiguration.getOverride().getBcc();
+
+        return new EmailConfiguration(senderUsername, senderPassword, senderHostName, senderPort,
+            isSenderTlsEnabled, socketTimeout, socketConnectionTimeout,
+            isThrowExceptionOnFail, senderAddress, overrideTo, overrideCc, overrideBcc);
+    }
 
 }

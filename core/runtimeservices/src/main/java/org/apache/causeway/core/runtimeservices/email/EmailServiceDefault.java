@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 
 import jakarta.activation.DataSource;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -33,13 +32,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.email.EmailService;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.EmailConfiguration;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -60,97 +63,26 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EmailServiceDefault implements EmailService {
 
-    private static final long serialVersionUID = 1L;
-    public static class EmailServiceException extends RuntimeException {
-        static final long serialVersionUID = 1L;
-        public EmailServiceException(final Exception cause) {
-            super(cause);
-        }
+    @Getter private final EmailConfiguration configuration;
+    private final Provider<JavaMailSender> emailSenderProvider;
+
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final boolean isConfigured;
+
+    @Inject
+    public EmailServiceDefault(
+        EmailConfiguration configuration,
+        Provider<JavaMailSender> emailSenderProvider) {
+
+        this.configuration = configuration;
+        this.emailSenderProvider = emailSenderProvider;
+
+        this.isConfigured = StringUtils.hasLength(configuration.senderAddress())
+            && StringUtils.hasLength(configuration.senderPassword());
+        if (!isConfigured()) log.warn("NOT configured");
     }
 
-    @Inject private CausewayConfiguration configuration;
-
-    @Inject private Provider<JavaMailSender> emailSenderProvider;
-
-    // -- INIT
-
-    private boolean initialized;
-
-    /**
-     * Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)
-     */
-    @Override
-    @PostConstruct
-    public void init() {
-
-        if (initialized) {
-            return;
-        }
-
-        initialized = true;
-
-        if (!isConfigured()) {
-            log.warn("NOT configured");
-        } else {
-            log.debug("configured");
-        }
-    }
-
-    protected String getSenderEmailUsername() {
-        return configuration.getCore().getRuntimeServices().getEmail().getSender().getUsername();
-    }
-
-    protected String getSenderEmailAddress() {
-        return configuration.getCore().getRuntimeServices().getEmail().getSender().getAddress();
-    }
-
-    protected String getSenderEmailPassword() {
-        return configuration.getCore().getRuntimeServices().getEmail().getSender().getPassword();
-    }
-
-    protected String getSenderEmailHostName() {
-        return configuration.getCore().getRuntimeServices().getEmail().getSender().getHostname();
-    }
-
-    protected Integer getSenderEmailPort() {
-        return configuration.getCore().getRuntimeServices().getEmail().getPort();
-    }
-
-    protected Boolean getSenderEmailTlsEnabled() {
-        return configuration.getCore().getRuntimeServices().getEmail().getTls().isEnabled();
-    }
-
-    protected boolean isThrowExceptionOnFail() {
-        return configuration.getCore().getRuntimeServices().getEmail().isThrowExceptionOnFail();
-    }
-
-    protected int getSocketTimeout() {
-        return configuration.getCore().getRuntimeServices().getEmail().getSocketTimeout();
-    }
-
-    protected int getSocketConnectionTimeout() {
-        return configuration.getCore().getRuntimeServices().getEmail().getSocketConnectionTimeout();
-    }
-
-    protected String getEmailOverrideTo() {
-        return configuration.getCore().getRuntimeServices().getEmail().getOverride().getTo();
-    }
-
-    protected String getEmailOverrideCc() {
-        return configuration.getCore().getRuntimeServices().getEmail().getOverride().getCc();
-    }
-
-    protected String getEmailOverrideBcc() {
-        return configuration.getCore().getRuntimeServices().getEmail().getOverride().getBcc();
-    }
-
-    @Override
-    public boolean isConfigured() {
-        final String senderEmailAddress = getSenderEmailAddress();
-        final String senderEmailPassword = getSenderEmailPassword();
-        return !_Strings.isNullOrEmpty(senderEmailAddress) && !_Strings.isNullOrEmpty(senderEmailPassword);
-    }
-
+    @SneakyThrows
     @Override
     public boolean send(
             final List<String> toList,
@@ -161,13 +93,12 @@ public class EmailServiceDefault implements EmailService {
             final DataSource... attachments) {
 
         try {
-
             var javaMailSender = emailSenderProvider.get();
 
             var email = javaMailSender.createMimeMessage();
             var emailHelper = new MimeMessageHelper(email, true);
 
-            emailHelper.setFrom(getSenderEmailAddress());
+            emailHelper.setFrom(configuration.senderAddress());
 
             emailHelper.setSubject(subject);
             boolean html = true;
@@ -179,9 +110,9 @@ public class EmailServiceDefault implements EmailService {
                 }
             }
 
-            final String overrideToList = getEmailOverrideTo();
-            final String overrideCc = getEmailOverrideCc();
-            final String overrideBcc = getEmailOverrideBcc();
+            final String overrideToList = configuration.overrideTo();
+            final String overrideCc = configuration.overrideCc();
+            final String overrideBcc = configuration.overrideBcc();
 
             final String[] toListElseOverride = originalUnlessOverridden(toList, overrideToList);
             if (notEmpty(toListElseOverride)) {
@@ -200,10 +131,7 @@ public class EmailServiceDefault implements EmailService {
 
         } catch (MessagingException e) {
             log.error("An error occurred while trying to send an email", e);
-            final Boolean throwExceptionOnFail = isThrowExceptionOnFail();
-            if (throwExceptionOnFail) {
-                throw new EmailServiceException(e);
-            }
+            if (configuration.isThrowExceptionOnFail()) throw e;
             return false;
         }
 

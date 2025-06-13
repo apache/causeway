@@ -88,49 +88,4 @@ class _JpaEntityStateUtil {
                 : EntityState.TRANSIENT_OR_REMOVED;
     }
 
-    @Deprecated
-    EntityState getEntityStateLegacy(
-            final EntityManager entityManager,
-            final PersistenceUnitUtil persistenceUnitUtil,
-            final Class<?> entityClass,
-            final PrimaryKeyType<?> primaryKeyType,
-            final Object pojo) {
-        if (entityManager.contains(pojo)) {
-            var primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.ATTACHED_NO_OID;
-            }
-            return EntityState.ATTACHED;
-        }
-
-        try {
-            var primaryKey = persistenceUnitUtil.getIdentifier(pojo);
-            if (primaryKey == null) {
-                return EntityState.TRANSIENT_OR_REMOVED;
-            } else {
-                // detect shallow primary key
-                //TODO this is a hack - see whether we can actually ask the EntityManager to give us an accurate answer
-                return primaryKeyType.isValid(primaryKey)
-                    ? EntityState.DETACHED
-                    : EntityState.TRANSIENT_OR_REMOVED;
-            }
-        } catch (PersistenceException ex) {
-            /* horrible hack, but encountered NPEs if using a composite key (eg CommandLogEntry)
-                (this was without any weaving) */
-            Throwable cause = ex.getCause();
-            if (cause instanceof DescriptorException) {
-                DescriptorException descriptorException = (DescriptorException) cause;
-                Throwable internalException = descriptorException.getInternalException();
-                if (internalException instanceof NullPointerException) {
-                    return EntityState.TRANSIENT_OR_REMOVED;
-                }
-            }
-            if (cause instanceof NullPointerException) {
-                // horrible hack, encountered if using composite key (eg ExecutionLogEntry) with dynamic weaving
-                return EntityState.TRANSIENT_OR_REMOVED;
-            }
-            throw ex;
-        }
-    }
-
 }

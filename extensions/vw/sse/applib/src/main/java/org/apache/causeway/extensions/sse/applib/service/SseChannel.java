@@ -35,9 +35,6 @@ public interface SseChannel {
     UUID uuid();
     Class<?> sourceType();
 
-    @Deprecated default UUID getId() { return uuid(); }
-    @Deprecated default Class<?> getSourceType() { return sourceType(); }
-
     void listenWhile(Predicate<SseSource> listener);
 
     void fire(SseSource source);

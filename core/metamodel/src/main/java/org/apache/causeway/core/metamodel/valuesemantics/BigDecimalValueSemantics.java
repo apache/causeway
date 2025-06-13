@@ -137,7 +137,7 @@ implements
     }
 
     private boolean isUseGroupingSeparatorFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return bigDecimalConfig.getEditing().isUseGroupingSeparator() || bigDecimalConfig.isUseGroupingSeparator();
+        return bigDecimalConfig.getEditing().isUseGroupingSeparator() || bigDecimalConfig.getDisplay().isUseGroupingSeparator();
     }
 
     @Override
@@ -185,7 +185,7 @@ implements
 
     private static Optional<Integer> minScaleFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
         return Optional.ofNullable(bigDecimalConfig.getDisplay().getMinScale())
-                       .or(() -> Optional.ofNullable(bigDecimalConfig.getMinScale()));
+                       .or(() -> Optional.ofNullable(bigDecimalConfig.getDisplay().getMinScale()));
     }
 
     @Override

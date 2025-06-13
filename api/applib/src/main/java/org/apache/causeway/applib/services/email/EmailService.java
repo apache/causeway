@@ -18,14 +18,11 @@
  */
 package org.apache.causeway.applib.services.email;
 
-import java.io.Serializable;
 import java.util.List;
 
 import jakarta.activation.DataSource;
-import jakarta.annotation.PostConstruct;
 
 /**
- *
  * The `EmailService` provides the ability to send HTML emails, with
  * attachments, to one or more recipients.
  *
@@ -36,10 +33,7 @@ import jakarta.annotation.PostConstruct;
  *
  * @since 1.x {@index}
  */
-public interface EmailService extends Serializable {
-
-    @PostConstruct
-    public void init() ;
+public interface EmailService {
 
     /**
      * The main API to send the email (and optional attachments).

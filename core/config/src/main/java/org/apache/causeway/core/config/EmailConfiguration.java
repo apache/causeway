@@ -16,13 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2;
+package org.apache.causeway.core.config;
 
-import lombok.Builder;
-
-@Builder
-public record Oauth2Creds(
-        String tenantId,
-        String clientId,
-        String clientSecret) {
+public record EmailConfiguration(
+    String senderUsername,
+    String senderPassword,
+    String senderHostName,
+    int senderPort,
+    boolean isSenderTlsEnabled,
+    int socketTimeout,
+    int socketConnectionTimeout,
+    boolean isThrowExceptionOnFail,
+    String senderAddress,
+    String overrideTo,
+    String overrideCc,
+    String overrideBcc) {
 }

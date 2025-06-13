@@ -254,52 +254,6 @@ public final class _Exceptions {
         throw unexpectedCodeReach();
     }
 
-    /**
-     * Used to hide from the compiler the fact, that this call always throws.
-     *
-     * <pre>{
-     *    throw notImplemented();
-     *    return 0; // won't compile: unreachable code
-     *}</pre>
-     *
-     * hence ...
-     *
-     * <pre>{
-     *    throwNotImplemented();
-     *    return 0;
-     *}</pre>
-     *
-     */
-    @Deprecated
-    public static void throwNotImplemented() {
-        dumpStackTrace();
-        throw notImplemented();
-    }
-
-    // -- SELECTIVE ERROR SUPPRESSION
-
-    //	/**
-    //	 * Allows to selectively ignore unchecked exceptions. Most likely used framework internally
-    //	 * for workarounds, not properly dealing with the root cause. This way at least we know, where
-    //	 * we placed such workarounds.
-    //	 *
-    //	 * @param runnable that might throw an unchecked exception
-    //	 * @param suppress predicate that decides whether to suppress an exception
-    //	 */
-    //	public static void catchSilently(
-    //			Runnable runnable,
-    //			Predicate<RuntimeException> suppress) {
-    //
-    //		try {
-    //			runnable.run();
-    //		} catch (RuntimeException cause) {
-    //			if(suppress.test(cause)) {
-    //				return;
-    //			}
-    //			throw cause;
-    //		}
-    //	}
-
     // -- SELECTIVE THROW
 
     public static <E extends Exception> void throwWhenTrue(final E cause, final Predicate<E> test) throws E {

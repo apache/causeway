@@ -69,50 +69,42 @@ final class _Util {
 
             @Override
             public Type getBaseType() {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public Set<Type> getTypeClosure() {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public <X extends Annotation> X getAnnotation(final Class<X> annotationType) {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public Set<Annotation> getAnnotations() {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public boolean isAnnotationPresent(final Class<? extends Annotation> annotationType) {
-                _Exceptions.throwNotImplemented();
-                return false;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public Set<AnnotatedConstructor<T>> getConstructors() {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public Set<AnnotatedMethod<? super T>> getMethods() {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
 
             @Override
             public Set<AnnotatedField<? super T>> getFields() {
-                _Exceptions.throwNotImplemented();
-                return null;
+                throw _Exceptions.notImplemented();
             }
         };
     }

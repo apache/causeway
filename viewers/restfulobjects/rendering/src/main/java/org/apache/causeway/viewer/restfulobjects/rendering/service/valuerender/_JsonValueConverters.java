@@ -51,12 +51,6 @@ final class _JsonValueConverters {
         BIGINTEGER(BigInteger.class, "big-integer(18)", "javamathbiginteger"),
         @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         BIGDECIMAL(BigDecimal.class, "big-decimal", "javamathbigdecimal"),
-//        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
-//        JODALOCALDATE(LocalDate.class, "date", "jodalocaldate"),
-//        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
-//        JODALOCALDATETIME(LocalDateTime.class, "date-time", "jodalocaldatetime"),
-//        @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
-//        JODADATETIME(DateTime.class, "date-time", "jodadatetime"),
         @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}
         JAVAUTILDATE(java.util.Date.class, "date-time", "javautildate"),
         @Deprecated //should be covered 100% per {@link ValueSemanticsProvider}

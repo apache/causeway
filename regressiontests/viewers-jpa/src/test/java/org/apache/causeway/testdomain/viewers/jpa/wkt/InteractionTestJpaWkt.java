@@ -208,7 +208,7 @@ class InteractionTestJpaWkt extends RegressionTestWithJpaFixtures {
 
         //System.err.printf("pageParameters %s%n", pageParameters);
 
-        assertEquals(ManagedObject.Specialization.ENTITY, bookAdapter.getSpecialization());
+        assertEquals(ManagedObject.Specialization.ENTITY, bookAdapter.specialization());
         assertTrue(bookAdapter.isBookmarkMemoized(), "bookAdapter should be bookmarked");
 
         // open Dune page

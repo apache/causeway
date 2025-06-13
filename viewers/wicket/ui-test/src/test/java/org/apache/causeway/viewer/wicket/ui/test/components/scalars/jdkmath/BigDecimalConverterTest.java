@@ -91,7 +91,8 @@ class BigDecimalConverterTest {
 
     @Test
     void scale2_english_withThousandSeparators_not_allowed() {
-        assertThat(converterTester.getConfigurationForBigDecimalValueType().isUseGroupingSeparator()).isFalse();
+        converterTester.getConfigurationForBigDecimalValueType().getDisplay().setUseGroupingSeparator(false);
+        assertThat(converterTester.getConfigurationForBigDecimalValueType().getDisplay().isUseGroupingSeparator()).isFalse();
 
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
         converterTester.assertConversionFailure("789,123.45", "Invalid value '789,123.45'; do not use the ',' grouping separator");
@@ -99,8 +100,8 @@ class BigDecimalConverterTest {
 
     @Test
     void scale2_english_withThousandSeparators_allowed() {
-        converterTester.getConfigurationForBigDecimalValueType().setUseGroupingSeparator(true);
-        assertThat(converterTester.getConfigurationForBigDecimalValueType().isUseGroupingSeparator()).isTrue();
+        converterTester.getConfigurationForBigDecimalValueType().getDisplay().setUseGroupingSeparator(true);
+        assertThat(converterTester.getConfigurationForBigDecimalValueType().getDisplay().isUseGroupingSeparator()).isTrue();
 
         converterTester.setScenario(Locale.ENGLISH, newConverter(CustomerScale2.class));
         converterTester.assertRoundtrip(bd_789123_45_scale2, "789123.45");

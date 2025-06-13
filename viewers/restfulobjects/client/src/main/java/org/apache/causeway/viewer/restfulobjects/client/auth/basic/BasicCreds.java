@@ -24,7 +24,4 @@ import lombok.Builder;
 public record BasicCreds(
         String username,
         String password) {
-
-    @Deprecated public String getUsername() { return username(); }
-    @Deprecated public String getPassword() { return password(); }
 }

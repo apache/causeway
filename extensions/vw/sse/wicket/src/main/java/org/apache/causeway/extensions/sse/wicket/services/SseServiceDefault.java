@@ -114,7 +114,7 @@ public class SseServiceDefault implements SseService {
         var eventStreamLifecycle = eventStreamPool.acquireLifecycleForType(sourceType);
         var eventStream = eventStreamLifecycle.getEventStream();
 
-        log.debug("submitting task type='{}' -> stream='{}'", sourceType, eventStream.getId());
+        log.debug("submitting task type='{}' -> stream='{}'", sourceType, eventStream.uuid());
 
         try {
 
@@ -174,7 +174,7 @@ public class SseServiceDefault implements SseService {
             synchronized ($LOCK) {
                 remaining = --runningTasksCounter;
                 if(remaining<1) {
-                    eventStreamPool.eventStreamsByType.remove(eventStream.getSourceType());
+                    eventStreamPool.eventStreamsByType.remove(eventStream.sourceType());
                 }
             }
 

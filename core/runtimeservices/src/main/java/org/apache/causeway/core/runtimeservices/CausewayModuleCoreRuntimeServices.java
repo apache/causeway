@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices;
 
-import jakarta.inject.Singleton;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -136,7 +134,7 @@ public class CausewayModuleCoreRuntimeServices {
 
     public static final String NAMESPACE = "causeway.runtimeservices";
 
-    @Bean @Singleton // also used by _Spring utility
+    @Bean // also used by _Spring utility
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();
     }

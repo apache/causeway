@@ -22,8 +22,6 @@ package org.apache.causeway.extensions.executionoutbox.restclient.api.deleteMany
 
 public record DeleteManyMessage(StringValue interactionsDtoXml) {
 
-    @Deprecated public StringValue getInteractionsDtoXml() { return interactionsDtoXml(); }
-
     public DeleteManyMessage(final String interactionsDtoXml) {
         this(new StringValue(interactionsDtoXml));
     }

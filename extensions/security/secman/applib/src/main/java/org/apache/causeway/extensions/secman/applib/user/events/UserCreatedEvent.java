@@ -44,11 +44,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
  */
 public record UserCreatedEvent(@NonNull ApplicationUser user) {
 
-    /**
-     * @deprecated use {@link #user()} instead
-     */
-    @Deprecated public ApplicationUser getUser() { return user(); }
-
     // -- SHORTCUTS
 
     public AccountType getAccountType() {

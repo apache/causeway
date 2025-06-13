@@ -23,8 +23,6 @@ public record DeleteMessage(
         StringValue interactionId,
         IntValue sequence) {
 
-    @Deprecated public StringValue getInteractionId() { return interactionId(); }
-    @Deprecated public IntValue getSequence() { return sequence(); }
 
     public DeleteMessage(final String interactionId, final int sequence) {
         this(new StringValue(interactionId), new IntValue(sequence));

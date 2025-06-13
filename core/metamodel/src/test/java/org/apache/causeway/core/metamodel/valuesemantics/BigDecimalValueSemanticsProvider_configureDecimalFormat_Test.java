@@ -58,7 +58,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         context = new ValueSemanticsProvider.Context(mockIdentifier, null);
 
         causewayConfiguration = CausewayConfiguration.builder().build();
-        causewayConfiguration.getValueTypes().getBigDecimal().setMinScale(null);
+        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setMinScale(null);
 
         // expecting
         Mockito.lenient().when(mockSpecificationLoader.loadFeature(mockIdentifier)).thenReturn(Optional.of(mockObjectFeature));
@@ -101,7 +101,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.empty());
 
-        causewayConfiguration.getValueTypes().getBigDecimal().setMinScale(fallbackScale);
+        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setMinScale(fallbackScale);
 
         // when
         DecimalFormat format = new DecimalFormat();
@@ -124,7 +124,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.empty());
 
-        causewayConfiguration.getValueTypes().getBigDecimal().setMinScale(null);
+        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setMinScale(null);
 
         // when
         DecimalFormat format = new DecimalFormat();

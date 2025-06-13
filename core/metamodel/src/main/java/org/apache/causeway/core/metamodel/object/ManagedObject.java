@@ -352,8 +352,6 @@ permits
      */
     Specialization specialization();
 
-    @Deprecated default Specialization getSpecialization() { return specialization(); }
-
     @Override default Specialization.BookmarkPolicy getBookmarkPolicy() {
         return specialization().getBookmarkPolicy();
     }
