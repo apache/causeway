@@ -22,32 +22,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.causeway.applib.util.ObjectContracts.ObjectContract;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@SuppressWarnings("deprecation")
 class ObjectContractsTest_equals {
 
     static class Invoice4 {
-        private static final String KEY_PROPERTIES = "number";
+        private static final ObjectContract<Invoice4> objContract = ObjectContracts.parse(Invoice4.class, "number");
 
-        private String number;
-        public String getNumber() {
-            return number;
-        }
-        public void setNumber(final String number) {
-            this.number = number;
-        }
+        @Getter @Setter private String number;
         @Override
         public int hashCode() {
-            return ObjectContracts.hashCode(this, KEY_PROPERTIES);
+            return objContract.hashCode(this);
         }
         @Override
         public boolean equals(final Object obj) {
-            return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
+            return objContract.equals(this, obj);
         }
 
     }
@@ -71,31 +67,35 @@ class ObjectContractsTest_equals {
 
     @Test
     public void happyCase() throws Exception {
-        assertTrue(ObjectContracts.equals(p, q, "number"));
+        assertEquals(p, q);
     }
 
     @Test
     public void nullsAreEqual() throws Exception {
-        assertTrue(ObjectContracts.equals(null, null, "number"));
+        var objContract = ObjectContracts.parse(Invoice4.class, "number");
+        assertTrue(objContract.equals(null, null));
     }
 
     @Test
     public void notEqualDifferentValues() throws Exception {
-        assertFalse(ObjectContracts.equals(p, r, "number"));
+        assertNotEquals(p, r);
+        assertNotEquals(r, p);
     }
 
     @Test
     public void notEqualDifferentTypes() throws Exception {
-        assertFalse(ObjectContracts.equals(p, x, "number"));
+        assertNotEquals(p, x);
+        assertNotEquals(x, p);
     }
 
     @Test
     public void notEqualNull() throws Exception {
-        assertFalse(ObjectContracts.equals(p, null, "number"));
+        assertNotEquals(p, null);
+        assertNotEquals(null, p);
     }
 
     @RequiredArgsConstructor(staticName = "of")
-    public static class ComplexNumber implements Comparable<ComplexNumber> {
+    static class ComplexNumber implements Comparable<ComplexNumber> {
 
         @Getter private final int real;
         @Getter private final int imaginary;

@@ -22,7 +22,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 
+import org.apache.causeway.applib.util.ObjectContracts.ObjectContract;
 import org.apache.causeway.core.internaltestsupport.contract.ValueTypeContractTestAbstract;
+
+import lombok.Getter;
+import lombok.Setter;
 
 class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstract<InvoiceItem3> {
 
@@ -59,29 +63,23 @@ class ObjectContractsTest_equals_and_hashCode extends ValueTypeContractTestAbstr
     }
 }
 
-@SuppressWarnings("deprecation")
 class Invoice3 {
-    private static final String KEY_PROPERTIES = "number";
+    private static final ObjectContract<Invoice3> objContract = ObjectContracts.parse(Invoice3.class, "number");
 
+    @Getter @Setter
     private String number;
-    public String getNumber() {
-        return number;
-    }
-    public void setNumber(final String number) {
-        this.number = number;
-    }
+
     @Override
     public int hashCode() {
-        return ObjectContracts.hashCode(this, KEY_PROPERTIES);
+        return objContract.hashCode(this);
     }
     @Override
     public boolean equals(final Object obj) {
-        return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
+        return objContract.equals(this, obj);
     }
 
 }
 
-@SuppressWarnings("deprecation")
 class InvoiceItem3 {
 
     static InvoiceItem3 newInvoiceItem(final Invoice3 invoice, final String productCode, final Integer quantity) {
@@ -92,37 +90,19 @@ class InvoiceItem3 {
         return invoiceItem;
     }
 
-    private Invoice3 invoice;
-    public Invoice3 getInvoice() {
-        return invoice;
-    }
-    public void setInvoice(final Invoice3 invoice) {
-        this.invoice = invoice;
-    }
-
-    private String productCode;
-    public String getProductCode() {
-        return productCode;
-    }
-    public void setProductCode(final String productCode) {
-        this.productCode = productCode;
-    }
-
-    private Integer quantity;
-    public Integer getQuantity() {
-        return quantity;
-    }
-    public void setQuantity(final Integer quantity) {
-        this.quantity = quantity;
-    }
+    @Getter @Setter private Invoice3 invoice;
+    @Getter @Setter private String productCode;
+    @Getter @Setter private Integer quantity;
 
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity";
+    private static final ObjectContract<InvoiceItem3> objContract = ObjectContracts.parse(InvoiceItem3.class, KEY_PROPERTIES);
+
     @Override
     public int hashCode() {
-        return ObjectContracts.hashCode(this, KEY_PROPERTIES);
+        return objContract.hashCode(this);
     }
     @Override
     public boolean equals(final Object obj) {
-        return ObjectContracts.equals(this, obj, KEY_PROPERTIES);
+        return objContract.equals(this, obj);
     }
 }

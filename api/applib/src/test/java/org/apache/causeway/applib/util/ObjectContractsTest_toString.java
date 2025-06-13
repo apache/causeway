@@ -61,9 +61,9 @@ public class ObjectContractsTest_toString {
 
 }
 
-@SuppressWarnings("deprecation")
 class Invoice2 implements Comparable<Invoice2>, Numbered {
     private static final String KEY_PROPERTIES = "number";
+    private static final ObjectContract<Invoice2> objContract = ObjectContracts.parse(Invoice2.class, KEY_PROPERTIES);
 
     private String number;
     @Override
@@ -75,15 +75,14 @@ class Invoice2 implements Comparable<Invoice2>, Numbered {
     }
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, KEY_PROPERTIES);
+        return objContract.toString(this);
     }
     @Override
     public int compareTo(final Invoice2 o) {
-        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
+        return objContract.compare(this, o);
     }
 }
 
-@SuppressWarnings("deprecation")
 class InvoiceItem2 implements Comparable<InvoiceItem2> {
 
     static InvoiceItem2 newInvoiceItem(final Invoice2 invoice, final String productCode, final Integer quantity, final Boolean rush) {
@@ -128,19 +127,16 @@ class InvoiceItem2 implements Comparable<InvoiceItem2> {
     }
 
     private static final String KEY_PROPERTIES = "invoice desc, productCode, quantity, rush desc";
-
-    private static final ObjectContract<InvoiceItem2> contract =
+    private static final ObjectContract<InvoiceItem2> objContract =
             ObjectContracts.parse(InvoiceItem2.class, KEY_PROPERTIES)
             .withValueToStringFunction(ToStringEvaluator.combineToFunction(new NumberedEvaluator()));
 
     @Override
     public String toString() {
-        return contract.toString(this);
-        //legacy of ...
-        //return new ObjectContracts().with(new NumberedEvaluator()).toStringOf(this, KEY_PROPERTIES);
+        return objContract.toString(this);
     }
     @Override
     public int compareTo(final InvoiceItem2 o) {
-        return ObjectContracts.compare(this, o, KEY_PROPERTIES);
+        return objContract.compare(this, o);
     }
 }
