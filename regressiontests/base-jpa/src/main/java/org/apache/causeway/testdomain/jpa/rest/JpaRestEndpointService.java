@@ -60,7 +60,7 @@ public class JpaRestEndpointService {
     private final Environment environment;
     private final RestEasyConfiguration restEasyConfiguration;
     private final WebAppContextPath webAppContextPath;
-    private final JpaTestFixtures jdoTestFixtures;
+    private final JpaTestFixtures jpaTestFixtures;
     private final InteractionService interactionService;
 
     public int getPort() {
@@ -70,7 +70,7 @@ public class JpaRestEndpointService {
         return port;
     }
 
-    private static final String INVENTORY_RESOURCE = "services/testdomain.jdo.InventoryResourceAlias";
+    private static final String INVENTORY_RESOURCE = "services/testdomain.jpa.InventoryResource";
 
     // -- NEW CLIENT
 
@@ -147,7 +147,7 @@ public class JpaRestEndpointService {
         var request = newInvocationBuilder(client,
                 INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
         var args = client.arguments()
-                .addActionParameter("nrOfBooks", 2)
+                .addActionParameter("nrOfBooks", 3)
                 .build();
 
         var response = request.post(args);
@@ -212,11 +212,11 @@ public class JpaRestEndpointService {
     public Try<Can<JpaBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
 
         var objectId = interactionService.callAnonymous(
-                ()->jdoTestFixtures.getInventoryJaxbVmAsBookmark().identifier());
+                ()->jpaTestFixtures.getInventoryJaxbVmAsBookmark().identifier());
 
         // using domain object alias ...
         var request = newInvocationBuilder(client,
-                "objects/testdomain.jdo.JdoInventoryJaxbVmAlias/"
+                "objects/testdomain.jpa.JpaInventoryJaxbVmAlias/"
                         + objectId + "/actions/listBooks/invoke");
 
         var args = client.arguments()

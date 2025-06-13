@@ -33,8 +33,10 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.ParameterLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testdomain.util.dto.BookDto;
@@ -48,6 +50,7 @@ import lombok.RequiredArgsConstructor;
 public class JpaInventoryResource {
 
     final RepositoryService repository;
+    final JpaTestFixtures testFixtures;
 
     @Action
     public List<JpaProduct> listProducts() {
@@ -68,20 +71,12 @@ public class JpaInventoryResource {
 
     @Action
     public List<JpaBook> multipleBooks(
-
-            @ParameterLayout(named = "") final
-            int nrOfBooks
-
-            ) {
-
-        var books = _Lists.<JpaBook>newArrayList();
-
-        // for this test we do not care if we generate duplicates
-        for(int i=0; i<nrOfBooks; ++i) {
-            var book = JpaBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
-            books.add(repository.persist(book));
-        }
-        return books;
+            @ParameterLayout(named = "")
+            final int nrOfBooks) {
+        _Assert.assertEquals(3, nrOfBooks);
+        testFixtures.clearRepository();
+        testFixtures.add3Books();
+        return listBooks();
     }
 
     @Action //TODO improve the REST client such that the param can be of type Book
@@ -120,20 +115,29 @@ public class JpaInventoryResource {
 
     @Action
     public List<BookDto> multipleBooksAsDto(
-
             @ParameterLayout(named = "") final
-            int nrOfBooks
-
-            ) {
+            int nrOfBooks) {
 
         var books = _Lists.<BookDto>newArrayList();
 
         // for this test we do not care if we generate duplicates
         for(int i=0; i<nrOfBooks; ++i) {
-            var book = JpaBook.of("MultipleBooksTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
+            var book = JpaBook.of("MultipleBooksAsDtoTest", "An awesome Book["+i+"]", 12, "Author", "ISBN", "Publisher");
             books.add(BookDto.from(book));
         }
         return books;
+    }
+
+    @Action
+    public JpaInventoryJaxbVm inventoryAsJaxbVm(){
+        testFixtures.clearRepository();
+        testFixtures.add3Books();
+        return testFixtures.createViewmodelWithCurrentBooks();
+    }
+
+    @Action // echos given CalendarEvent (composite value type test)
+    public CalendarEvent echoCalendarEvent(final CalendarEvent calendarEvent) {
+        return calendarEvent;
     }
 
 }

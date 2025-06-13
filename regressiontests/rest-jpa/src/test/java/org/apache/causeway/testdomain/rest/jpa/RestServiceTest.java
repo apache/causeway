@@ -23,8 +23,10 @@ import jakarta.xml.bind.JAXBException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -53,7 +55,8 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
     Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
 })
-@Disabled //TODO[causeway-regressiontests-CAUSEWAY-3866] not fully migrated from JDO to JPA yet
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@Disabled //TODO[causeway-regressiontests-CAUSEWAY-3866] not fully migrated from JDO to JPA yet
 class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @LocalServerPort int port; // just for reference (not used)
@@ -68,7 +71,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         this.restfulClient = restService.newClient(useRequestDebugLogging);
     }
 
-    @Test
+    @Test @Order(1)
     void httpSessionInfo() {
         var digest = restService.getHttpSessionInfo(restfulClient)
                 .ifFailureFail();
@@ -81,7 +84,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals("no http-session", httpSessionInfo);
     }
 
-    @Test
+    @Test @Order(2)
     void bookOfTheWeek_viaRestEndpoint() {
         var digest = restService.getRecommendedBookOfTheWeek(restfulClient)
                 .ifFailureFail();
@@ -92,7 +95,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals("Book of the week", bookOfTheWeek.getName());
     }
 
-    @Test
+    @Test @Order(3)
     void addNewBook_viaRestEndpoint() throws JAXBException {
         var newBook = JpaBook.of("REST Book", "A sample REST book for testing.", 77.,
                 "REST Author", "REST ISBN", "REST Publisher");
@@ -106,7 +109,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals("REST Book", storedBook.getName());
     }
 
-    @Test
+    @Test @Order(4)
     void multipleBooks_viaRestEndpoint() throws JAXBException {
         var digest = restService.getMultipleBooks(restfulClient)
                 .ifFailureFail();
@@ -119,7 +122,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals(3, multipleBooks.size());
     }
 
-    @Test
+    @Test @Order(5)
     void bookOfTheWeek_asDto_viaRestEndpoint() {
         var digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
                 .ifFailureFail();
@@ -130,7 +133,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals("Book of the week", bookOfTheWeek.getName());
     }
 
-    @Test
+    @Test @Order(6)
     void multipleBooks_asDto_viaRestEndpoint() throws JAXBException {
         var digest = restService.getMultipleBooksAsDto(restfulClient)
                 .ifFailureFail();
@@ -144,7 +147,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         }
     }
 
-    @Test
+    @Test @Order(7)
     void inventoryAsJaxbVm_viaRestEndpoint() {
         var digest = restService.getInventoryAsJaxbVm(restfulClient)
                 .ifFailureFail();
@@ -155,7 +158,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals("Bookstore", inventoryAsJaxbVm.getName());
     }
 
-    @Test
+    @Test @Order(8)
     void listBooks_fromInventoryAsJaxbVm_viaRestEndpoint() {
         var digest = restService.getBooksFromInventoryAsJaxbVm(restfulClient)
                 .ifFailure(Assertions::fail);
@@ -170,7 +173,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         assertEquals(3, multipleBooks.size());
     }
 
-    @Test
+    @Test @Order(9)
     void calendarEvent_echo_viaRestEndpoint() {
         var calSemantics = new CalendarEventSemantics();
         var calSample = calSemantics.getExamples().getElseFail(0);

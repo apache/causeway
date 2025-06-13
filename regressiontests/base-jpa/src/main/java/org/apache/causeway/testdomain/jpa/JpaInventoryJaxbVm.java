@@ -63,7 +63,7 @@ import lombok.Setter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Named("testdomain.jpa.JpaInventoryJaxbVm")
 @DomainObject(
-        nature=Nature.VIEW_MODEL)
+        nature=Nature.VIEW_MODEL, aliased = "testdomain.jpa.JpaInventoryJaxbVmAlias")
 public class JpaInventoryJaxbVm
 implements InventoryJaxbVm<JpaBook> {
 

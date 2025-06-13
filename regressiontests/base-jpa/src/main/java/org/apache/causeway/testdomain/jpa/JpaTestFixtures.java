@@ -67,20 +67,21 @@ public class JpaTestFixtures extends EntityTestFixtures {
         SortedSet<JpaProduct> products = new TreeSet<>();
 
         BookDto.samples()
-        .map(JpaBook::fromDto)
-        .forEach(products::add);
+            .map(JpaBook::fromDto)
+            .forEach(products::add);
 
         var inventory = new JpaInventory("Sample Inventory", products);
         repository.persistAndFlush(inventory);
     }
 
     @Override
-    public Object addBook(BookDto bookDto) {
+    public Object addBook(final BookDto bookDto) {
         return repository.persistAndFlush(JpaBook.fromDto(bookDto));
     }
 
     @Override
-    public void addInventory(Set<?> books) {
+    public void addInventory(final Set<?> books) {
+        @SuppressWarnings("unchecked")
         var inventory = new JpaInventory("Sample Inventory", (Set<JpaProduct>) books);
         repository.persistAndFlush(inventory);
     }
