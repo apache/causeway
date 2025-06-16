@@ -198,7 +198,7 @@ identified
         </surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
         module-path for testing, that is, put everything on the class-path -->
-        <swagger-core.version>2.2.32</swagger-core.version>
+        <swagger-core.version>2.2.33</swagger-core.version>
 
         <wicket.version>10.5.0</wicket.version>
         <wicket-bootstrap.version>7.0.10</wicket-bootstrap.version> <!--
