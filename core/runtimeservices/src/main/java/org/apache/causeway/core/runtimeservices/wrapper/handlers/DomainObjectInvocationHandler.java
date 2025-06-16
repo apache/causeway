@@ -57,7 +57,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
@@ -78,7 +77,7 @@ import lombok.extern.log4j.Log4j2;
  * @param <T> type of delegate
  */
 @Log4j2
-public class DomainObjectInvocationHandler<T>
+public final class DomainObjectInvocationHandler<T>
 implements WrapperInvocationHandler {
 
     @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
@@ -140,8 +139,7 @@ implements WrapperInvocationHandler {
                     nsme);
         }
 
-        entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
-
+        this.entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
         this.mixeeAdapter = mixeeAdapter;
     }
 
@@ -160,7 +158,7 @@ implements WrapperInvocationHandler {
             return context().invoke(method, args);
         }
 
-        final ManagedObject targetAdapter = getObjectManager().adapt(context().delegate());
+        final ManagedObject targetAdapter = mmc.getObjectManager().adapt(context().delegate());
 
         if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -371,7 +369,7 @@ implements WrapperInvocationHandler {
             checkUsability(targetAdapter, property);
         });
 
-        var argumentAdapter = getObjectManager().adapt(singleArg);
+        var argumentAdapter = property.getObjectManager().adapt(singleArg);
 
         runValidationTask(()->{
             var interactionResult = property.isAssociationValid(
@@ -459,7 +457,7 @@ implements WrapperInvocationHandler {
             final ObjectAction objectAction) {
 
         var head = objectAction.interactionHead(targetAdapter);
-        var objectManager = getObjectManager();
+        var objectManager = objectAction.getObjectManager();
 
         // adapt argument pojos to managed objects
         var argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
@@ -629,12 +627,6 @@ implements WrapperInvocationHandler {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));
         }
-    }
-
-    // -- DEPENDENCIES
-
-    private ObjectManager getObjectManager() {
-        return mmc.getObjectManager();
     }
 
 }

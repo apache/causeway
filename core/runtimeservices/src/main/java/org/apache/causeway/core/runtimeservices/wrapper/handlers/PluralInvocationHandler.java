@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
@@ -36,16 +37,49 @@ import lombok.experimental.Accessors;
  * @param <T> Domain Object type
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
-abstract class PluralInvocationHandlerAbstract<T, P>
+final class PluralInvocationHandler<T, P>
 implements WrapperInvocationHandler {
 
+    // -- FACTORIES
+    
+   static <T, C extends Collection<?>> PluralInvocationHandler<T, C> forCollection(
+           final C collectionToBeProxied,
+           final DomainObjectInvocationHandler<T> handler,
+           final OneToManyAssociation otma) {
+       
+       _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToBeProxied.getClass()),
+               ()->String.format("Cannot use %s for type %s, these are not compatible.",
+                       PluralInvocationHandler.class.getName() + ".forCollection(..)",
+                       collectionToBeProxied.getClass()));
+       
+       return new PluralInvocationHandler<>(collectionToBeProxied, handler, otma,
+                CollectionSemantics
+                    .valueOfElseFail(collectionToBeProxied.getClass()));
+    }
+    
+   static <T, M extends Map<?,?>> PluralInvocationHandler<T, M> forMap(
+           final M mapToBeProxied,
+           final DomainObjectInvocationHandler<T> handler,
+           final OneToManyAssociation otma) {
+
+       _Assert.assertTrue(Map.class.isAssignableFrom(mapToBeProxied.getClass()),
+               ()->String.format("Cannot use %s for type %s, these are not compatible.",
+                       PluralInvocationHandler.class.getName() + ".forMap(..)",
+                       mapToBeProxied.getClass()));
+       
+       return new PluralInvocationHandler<>(mapToBeProxied, handler, otma,
+               CollectionSemantics.MAP);
+   }
+   
+    // -- CONSTRUCTION
+    
     @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
     private final WrapperInvocationHandler.Context context;
     
     private final OneToManyAssociation oneToManyAssociation;
     private final CollectionSemantics collectionSemantics;
-
-    protected PluralInvocationHandlerAbstract(
+    
+    protected PluralInvocationHandler(
             final P collectionOrMapToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma,

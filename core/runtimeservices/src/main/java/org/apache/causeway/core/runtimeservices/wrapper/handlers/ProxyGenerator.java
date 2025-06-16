@@ -78,12 +78,12 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
     
-        var collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
-                        collectionToBeProxied, handler, otma);
+        var collectionInvocationHandler = PluralInvocationHandler
+            .forCollection(collectionToBeProxied, handler, otma);
     
         var proxyBase = CollectionSemantics
-                .valueOfElseFail(collectionToBeProxied.getClass())
-                .getContainerType();
+            .valueOfElseFail(collectionToBeProxied.getClass())
+            .getContainerType();
     
         return instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
     }
@@ -97,8 +97,8 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
     
-        var mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
-                collectionToBeProxied, handler, otma);
+        var mapInvocationHandler = PluralInvocationHandler
+            .forMap(collectionToBeProxied, handler, otma);
     
         var proxyBase = Map.class;
     
