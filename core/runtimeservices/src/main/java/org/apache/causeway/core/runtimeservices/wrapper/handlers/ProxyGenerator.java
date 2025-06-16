@@ -75,11 +75,11 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      */
     public <T, E> Collection<E> collectionProxy(
             final Collection<E> collectionToBeProxied,
-            final DomainObjectInvocationHandler<T> handler,
+            final SyncControl syncControl,
             final OneToManyAssociation otma) {
     
         var collectionInvocationHandler = PluralInvocationHandler
-            .forCollection(collectionToBeProxied, handler, otma);
+            .forCollection(collectionToBeProxied, syncControl, otma);
     
         var proxyBase = CollectionSemantics
             .valueOfElseFail(collectionToBeProxied.getClass())
@@ -93,16 +93,14 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      * handler.
      */
     public <T, P, Q> Map<P, Q> mapProxy(
-            final Map<P, Q> collectionToBeProxied,
-            final DomainObjectInvocationHandler<T> handler,
+            final Map<P, Q> mapToBeProxied,
+            final SyncControl syncControl,
             final OneToManyAssociation otma) {
-    
-        var mapInvocationHandler = PluralInvocationHandler
-            .forMap(collectionToBeProxied, handler, otma);
     
         var proxyBase = Map.class;
     
-        return instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
+        return instantiateProxy(_Casts.uncheckedCast(proxyBase), PluralInvocationHandler
+            .forMap(mapToBeProxied, syncControl, otma));
     }
     
     // -- HELPER

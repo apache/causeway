@@ -89,22 +89,22 @@ implements WrapperInvocationHandler {
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
      */
-    protected Method titleMethod;
+    protected final Method titleMethod;
 
     /**
      * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
      */
-    protected Method __causeway_saveMethod;
+    protected final Method __causeway_saveMethod;
 
     /**
      * The <tt>__causeway_wrapped()</tt> method from {@link WrappingObject#__causeway_wrapped()}.
      */
-    protected Method __causeway_wrappedMethod;
+    protected final Method __causeway_wrappedMethod;
 
     /**
      * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
      */
-    protected Method __causeway_executionModes;
+    protected final Method __causeway_executionModes;
 
     private final EntityFacet entityFacet;
     private final ManagedObject mixeeAdapter;
@@ -123,15 +123,18 @@ implements WrapperInvocationHandler {
                 syncControl);
         this.proxyGenerator = proxyGenerator;
 
+        var _titleMethod = (Method)null;
         try {
-            titleMethod = context().delegate().getClass().getMethod("title", _Constants.emptyClasses);
+            _titleMethod = context().delegate().getClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
+        this.titleMethod = _titleMethod;
+        
         try {
-            __causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
-            __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
-            __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
+            this.__causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
+            this.__causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
+            this.__causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
@@ -435,7 +438,7 @@ implements WrapperInvocationHandler {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyGenerator.collectionProxy(collectionToLookup, this, otma);
+        return proxyGenerator.collectionProxy(collectionToLookup, context().syncControl(), otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
@@ -448,7 +451,7 @@ implements WrapperInvocationHandler {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyGenerator.mapProxy(mapToLookup, this, otma);
+        return proxyGenerator.mapProxy(mapToLookup, context().syncControl(), otma);
     }
 
     private Object handleActionMethod(

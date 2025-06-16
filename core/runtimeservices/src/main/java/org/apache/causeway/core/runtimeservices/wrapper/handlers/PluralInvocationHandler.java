@@ -22,29 +22,30 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 /**
- * Base class in support of non-scalar types to be proxied up.
+ * InvocationHandler in support of non-scalar types to be proxied up.
  *
  * @param <T> Domain Object type
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
-final class PluralInvocationHandler<T, P>
-implements WrapperInvocationHandler {
+record PluralInvocationHandler<T, P>(
+        WrapperInvocationHandler.Context context,
+        OneToManyAssociation oneToManyAssociation,
+        CollectionSemantics collectionSemantics
+        ) implements WrapperInvocationHandler {
 
     // -- FACTORIES
     
    static <T, C extends Collection<?>> PluralInvocationHandler<T, C> forCollection(
            final C collectionToBeProxied,
-           final DomainObjectInvocationHandler<T> handler,
+           final SyncControl syncControl,
            final OneToManyAssociation otma) {
        
        _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToBeProxied.getClass()),
@@ -52,14 +53,14 @@ implements WrapperInvocationHandler {
                        PluralInvocationHandler.class.getName() + ".forCollection(..)",
                        collectionToBeProxied.getClass()));
        
-       return new PluralInvocationHandler<>(collectionToBeProxied, handler, otma,
+       return new PluralInvocationHandler<>(collectionToBeProxied, syncControl, otma,
                 CollectionSemantics
                     .valueOfElseFail(collectionToBeProxied.getClass()));
     }
     
    static <T, M extends Map<?,?>> PluralInvocationHandler<T, M> forMap(
            final M mapToBeProxied,
-           final DomainObjectInvocationHandler<T> handler,
+           final SyncControl syncControl,
            final OneToManyAssociation otma) {
 
        _Assert.assertTrue(Map.class.isAssignableFrom(mapToBeProxied.getClass()),
@@ -67,37 +68,21 @@ implements WrapperInvocationHandler {
                        PluralInvocationHandler.class.getName() + ".forMap(..)",
                        mapToBeProxied.getClass()));
        
-       return new PluralInvocationHandler<>(mapToBeProxied, handler, otma,
+       return new PluralInvocationHandler<>(mapToBeProxied, syncControl, otma,
                CollectionSemantics.MAP);
    }
    
-    // -- CONSTRUCTION
+    // -- NON CANONICAL CONSTRUCTOR
     
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
-    private final WrapperInvocationHandler.Context context;
-    
-    private final OneToManyAssociation oneToManyAssociation;
-    private final CollectionSemantics collectionSemantics;
-    
-    protected PluralInvocationHandler(
+    private PluralInvocationHandler(
             final P collectionOrMapToBeProxied,
-            final DomainObjectInvocationHandler<T> handler,
+            final SyncControl syncControl,
             final OneToManyAssociation otma,
             final CollectionSemantics collectionSemantics) {
-
-        this.context = WrapperInvocationHandler.Context.of(otma.getMetaModelContext(), 
-                collectionOrMapToBeProxied, handler.context().syncControl());
-
-        this.oneToManyAssociation = otma;
-        this.collectionSemantics = collectionSemantics;
-    }
-
-    public OneToManyAssociation getCollection() {
-        return oneToManyAssociation;
-    }
-
-    public T getDomainObject() {
-        return (T) context().delegate();
+        
+        this(WrapperInvocationHandler.Context.of(otma.getMetaModelContext(), 
+                        collectionOrMapToBeProxied, syncControl), 
+                otma, collectionSemantics);
     }
 
     @Override
@@ -112,8 +97,8 @@ implements WrapperInvocationHandler {
             var event =
                     new CollectionMethodEvent(
                             context().delegate(),
-                            getCollection().getFeatureIdentifier(),
-                            getDomainObject(),
+                            oneToManyAssociation().getFeatureIdentifier(),
+                            context().delegate(),
                             method.getName(),
                             args,
                             returnValueObj);
