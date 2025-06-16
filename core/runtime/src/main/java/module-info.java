@@ -20,6 +20,7 @@ module org.apache.causeway.core.runtime {
     exports org.apache.causeway.core.runtime;
     exports org.apache.causeway.core.runtime.flushmgmt;
     exports org.apache.causeway.core.runtime.events;
+    exports org.apache.causeway.core.runtime.wrap;
 
     requires static lombok;
 

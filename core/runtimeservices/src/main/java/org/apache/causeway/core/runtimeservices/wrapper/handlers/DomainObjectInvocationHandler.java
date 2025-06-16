@@ -66,9 +66,13 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
+
 import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.Accessors;
 
 /**
  *
@@ -76,10 +80,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DomainObjectInvocationHandler<T>
-extends DelegatingInvocationHandlerAbstract<T> {
+implements WrapperInvocationHandler {
 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
+    private final WrapperInvocationHandler.Context context;
+    
     private final ProxyGenerator proxyGenerator;
-    private final MetaModelContext mmContext;
+    private final MetaModelContext mmc;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
@@ -110,16 +117,16 @@ extends DelegatingInvocationHandlerAbstract<T> {
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyGenerator proxyGenerator) {
-        super(
-                targetAdapter.objSpec().getMetaModelContext(),
+        
+        this.mmc = targetAdapter.objSpec().getMetaModelContext();
+        this.context = WrapperInvocationHandler.Context.of(
+                mmc,
                 domainObject,
                 syncControl);
-
-        this.mmContext = targetAdapter.objSpec().getMetaModelContext();
         this.proxyGenerator = proxyGenerator;
 
         try {
-            titleMethod = getDelegate().getClass().getMethod("title", _Constants.emptyClasses);
+            titleMethod = context().delegate().getClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -149,15 +156,12 @@ extends DelegatingInvocationHandlerAbstract<T> {
     @Override
     public Object invoke(final Object proxyObjectUnused, final Method method, final Object[] args) throws Throwable {
 
-        if (isObjectMethod(method)) {
-            return delegate(method, args);
+        if (context().isObjectMethod(method)
+                || isEnhancedEntityMethod(method)) {
+            return context().invoke(method, args);
         }
 
-        if(isEnhancedEntityMethod(method)) {
-            return delegate(method, args);
-        }
-
-        final ManagedObject targetAdapter = getObjectManager().adapt(getDelegate());
+        final ManagedObject targetAdapter = getObjectManager().adapt(context().delegate());
 
         if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -177,11 +181,11 @@ extends DelegatingInvocationHandlerAbstract<T> {
         }
 
         if (method.equals(__causeway_wrappedMethod)) {
-            return getDelegate();
+            return context().delegate();
         }
 
         if (method.equals(__causeway_executionModes)) {
-            return getSyncControl().getExecutionModes();
+            return context().syncControl().getExecutionModes();
         }
 
         var objectMember = targetSpec.getMemberElseFail(resolvedMethod);
@@ -193,7 +197,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
-            return method.invoke(getDelegate(), args);
+            return method.invoke(context().delegate(), args);
         }
 
         if (objectMember.isOneToOneAssociation()) {
@@ -301,13 +305,11 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
     private Object handleTitleMethod(final ManagedObject targetAdapter) {
 
-        resolveIfRequired(targetAdapter);
-
         var targetNoSpec = targetAdapter.objSpec();
         var titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
         var titleEvent = titleContext.createInteractionEvent();
-        notifyListeners(titleEvent);
+        context().notifyListeners(titleEvent);
         return titleEvent.getTitle();
     }
 
@@ -342,8 +344,6 @@ extends DelegatingInvocationHandlerAbstract<T> {
             checkVisibility(targetAdapter, property);
         });
 
-        resolveIfRequired(targetAdapter);
-
         return runExecutionTask(()->{
 
             var interactionInitiatedBy = getInteractionInitiatedBy();
@@ -352,8 +352,8 @@ extends DelegatingInvocationHandlerAbstract<T> {
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
             var propertyAccessEvent = new PropertyAccessEvent(
-                    getDelegate(), property.getFeatureIdentifier(), currentReferencedObj);
-            notifyListeners(propertyAccessEvent);
+                    context().delegate(), property.getFeatureIdentifier(), currentReferencedObj);
+            context().notifyListeners(propertyAccessEvent);
             return currentReferencedObj;
 
         });
@@ -373,8 +373,6 @@ extends DelegatingInvocationHandlerAbstract<T> {
         });
 
         var argumentAdapter = getObjectManager().adapt(singleArg);
-
-        resolveIfRequired(targetAdapter);
 
         runValidationTask(()->{
             var interactionResult = property.isAssociationValid(
@@ -402,8 +400,6 @@ extends DelegatingInvocationHandlerAbstract<T> {
             checkVisibility(targetAdapter, collection);
         });
 
-        resolveIfRequired(targetAdapter);
-
         return runExecutionTask(()->{
 
             var interactionInitiatedBy = getInteractionInitiatedBy();
@@ -411,17 +407,17 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            var collectionAccessEvent = new CollectionAccessEvent(getDelegate(), collection.getFeatureIdentifier());
+            var collectionAccessEvent = new CollectionAccessEvent(context().delegate(), collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
                 var collectionViewObject = lookupWrappingObject(
                         (Collection<?>) currentReferencedObj, collection);
-                notifyListeners(collectionAccessEvent);
+                context().notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
                 var mapViewObject = lookupWrappingObject((Map<?, ?>) currentReferencedObj,
                         collection);
-                notifyListeners(collectionAccessEvent);
+                context().notifyListeners(collectionAccessEvent);
                 return mapViewObject;
             }
 
@@ -544,7 +540,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
         var interactionEvent = interactionResult.getInteractionEvent();
-        notifyListeners(interactionEvent);
+        context().notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
             throw toException(interactionEvent);
         }
@@ -577,11 +573,11 @@ extends DelegatingInvocationHandlerAbstract<T> {
     // -- HELPER
 
     private boolean shouldEnforceRules() {
-        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        return !context().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
     }
 
     private boolean shouldExecute() {
-        return !getSyncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
+        return !context().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
     }
 
     private void runValidationTask(final Runnable task) {
@@ -608,7 +604,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
     @SneakyThrows
     private Object handleException(final Exception ex) {
-        var exceptionHandler = getSyncControl().getExceptionHandler()
+        var exceptionHandler = context().syncControl().getExceptionHandler()
                 .orElse(null);
 
         if(exceptionHandler==null) {
@@ -639,7 +635,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
     // -- DEPENDENCIES
 
     private ObjectManager getObjectManager() {
-        return mmContext.getObjectManager();
+        return mmc.getObjectManager();
     }
 
 }
