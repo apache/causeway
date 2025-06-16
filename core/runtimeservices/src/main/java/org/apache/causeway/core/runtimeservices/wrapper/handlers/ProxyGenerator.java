@@ -75,15 +75,15 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      */
     public <T, E> Collection<E> collectionProxy(
             final Collection<E> collectionToBeProxied,
-            final DomainObjectInvocationHandler<T> handler,
+            final SyncControl syncControl,
             final OneToManyAssociation otma) {
     
-        var collectionInvocationHandler = new CollectionInvocationHandler<T, Collection<E>>(
-                        collectionToBeProxied, handler, otma);
+        var collectionInvocationHandler = PluralInvocationHandler
+            .forCollection(collectionToBeProxied, syncControl, otma);
     
         var proxyBase = CollectionSemantics
-                .valueOfElseFail(collectionToBeProxied.getClass())
-                .getContainerType();
+            .valueOfElseFail(collectionToBeProxied.getClass())
+            .getContainerType();
     
         return instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
     }
@@ -93,16 +93,14 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      * handler.
      */
     public <T, P, Q> Map<P, Q> mapProxy(
-            final Map<P, Q> collectionToBeProxied,
-            final DomainObjectInvocationHandler<T> handler,
+            final Map<P, Q> mapToBeProxied,
+            final SyncControl syncControl,
             final OneToManyAssociation otma) {
-    
-        var mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(
-                collectionToBeProxied, handler, otma);
     
         var proxyBase = Map.class;
     
-        return instantiateProxy(_Casts.uncheckedCast(proxyBase), mapInvocationHandler);
+        return instantiateProxy(_Casts.uncheckedCast(proxyBase), PluralInvocationHandler
+            .forMap(mapToBeProxied, syncControl, otma));
     }
     
     // -- HELPER

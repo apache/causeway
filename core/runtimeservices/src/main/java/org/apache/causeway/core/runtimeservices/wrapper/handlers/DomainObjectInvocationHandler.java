@@ -57,7 +57,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
@@ -79,34 +78,34 @@ import lombok.experimental.Accessors;
  * @param <T> type of delegate
  */
 @Slf4j
-public class DomainObjectInvocationHandler<T>
+public final class DomainObjectInvocationHandler<T>
 implements WrapperInvocationHandler {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
     private final WrapperInvocationHandler.Context context;
-    
+
     private final ProxyGenerator proxyGenerator;
     private final MetaModelContext mmc;
 
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
      */
-    protected Method titleMethod;
+    protected final Method titleMethod;
 
     /**
      * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
      */
-    protected Method __causeway_saveMethod;
+    protected final Method __causeway_saveMethod;
 
     /**
      * The <tt>__causeway_wrapped()</tt> method from {@link WrappingObject#__causeway_wrapped()}.
      */
-    protected Method __causeway_wrappedMethod;
+    protected final Method __causeway_wrappedMethod;
 
     /**
      * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
      */
-    protected Method __causeway_executionModes;
+    protected final Method __causeway_executionModes;
 
     private final EntityFacet entityFacet;
     private final ManagedObject mixeeAdapter;
@@ -117,7 +116,7 @@ implements WrapperInvocationHandler {
             final ManagedObject targetAdapter,
             final SyncControl syncControl,
             final ProxyGenerator proxyGenerator) {
-        
+
         this.mmc = targetAdapter.objSpec().getMetaModelContext();
         this.context = WrapperInvocationHandler.Context.of(
                 mmc,
@@ -125,15 +124,18 @@ implements WrapperInvocationHandler {
                 syncControl);
         this.proxyGenerator = proxyGenerator;
 
+        var _titleMethod = (Method)null;
         try {
-            titleMethod = context().delegate().getClass().getMethod("title", _Constants.emptyClasses);
+            _titleMethod = context().delegate().getClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
+        this.titleMethod = _titleMethod;
+
         try {
-            __causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
-            __causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
-            __causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
+            this.__causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
+            this.__causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
+            this.__causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
 
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
@@ -141,8 +143,7 @@ implements WrapperInvocationHandler {
                     nsme);
         }
 
-        entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
-
+        this.entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
         this.mixeeAdapter = mixeeAdapter;
     }
 
@@ -161,7 +162,7 @@ implements WrapperInvocationHandler {
             return context().invoke(method, args);
         }
 
-        final ManagedObject targetAdapter = getObjectManager().adapt(context().delegate());
+        final ManagedObject targetAdapter = mmc.getObjectManager().adapt(context().delegate());
 
         if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -372,7 +373,7 @@ implements WrapperInvocationHandler {
             checkUsability(targetAdapter, property);
         });
 
-        var argumentAdapter = getObjectManager().adapt(singleArg);
+        var argumentAdapter = property.getObjectManager().adapt(singleArg);
 
         runValidationTask(()->{
             var interactionResult = property.isAssociationValid(
@@ -438,7 +439,7 @@ implements WrapperInvocationHandler {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyGenerator.collectionProxy(collectionToLookup, this, otma);
+        return proxyGenerator.collectionProxy(collectionToLookup, context().syncControl(), otma);
     }
 
     private Map<?, ?> lookupWrappingObject(
@@ -451,7 +452,7 @@ implements WrapperInvocationHandler {
             throw new IllegalStateException("Unable to create proxy for collection; "
                     + "proxyContextHandler not provided");
         }
-        return proxyGenerator.mapProxy(mapToLookup, this, otma);
+        return proxyGenerator.mapProxy(mapToLookup, context().syncControl(), otma);
     }
 
     private Object handleActionMethod(
@@ -460,7 +461,7 @@ implements WrapperInvocationHandler {
             final ObjectAction objectAction) {
 
         var head = objectAction.interactionHead(targetAdapter);
-        var objectManager = getObjectManager();
+        var objectManager = objectAction.getObjectManager();
 
         // adapt argument pojos to managed objects
         var argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
@@ -630,12 +631,6 @@ implements WrapperInvocationHandler {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));
         }
-    }
-
-    // -- DEPENDENCIES
-
-    private ObjectManager getObjectManager() {
-        return mmc.getObjectManager();
     }
 
 }
