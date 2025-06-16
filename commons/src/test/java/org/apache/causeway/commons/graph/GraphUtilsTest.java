@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.commons.graph;
 
-import java.text.NumberFormat;
 import java.util.Comparator;
-
 import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
