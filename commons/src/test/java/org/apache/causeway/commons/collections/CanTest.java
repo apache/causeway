@@ -20,6 +20,7 @@ package org.apache.causeway.commons.collections;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -423,7 +424,7 @@ class CanTest {
         // simulates a zip-function with nullable result
         @Nullable static String format(final Customer customer, final int ordinal) {
             return StringUtils.hasLength(customer.name)
-                    ? String.format("%d->%s", ordinal, customer.name)
+                    ? String.format(Locale.US, "%d->%s", ordinal, customer.name)
                     : null;
         }
     }
