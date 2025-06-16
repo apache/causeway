@@ -92,7 +92,7 @@ identified
         <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
         <guava.version>33.4.8-jre</guava.version>
 
-        <hibernate-validator.version>9.0.0.Final</hibernate-validator.version> <!--
+        <hibernate-validator.version>9.0.1.Final</hibernate-validator.version> <!--
         Spring Boot 4 preview, remove later -->
         <htmlparser.version>2.1</htmlparser.version>
 
