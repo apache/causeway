@@ -34,6 +34,7 @@ import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
 public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) {
 
@@ -106,9 +107,9 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
     
     // -- HELPER
 
-    <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
-        final T classToBeProxied = handler.getDelegate();
-        final Class<T> base = _Casts.uncheckedCast(classToBeProxied.getClass());
+    <T> T instantiateProxy(final WrapperInvocationHandler handler) {
+        var pojoToBeProxied = handler.context().delegate();
+        Class<T> base = _Casts.uncheckedCast(pojoToBeProxied.getClass());
         return instantiateProxy(base, handler);
     }
 
@@ -118,7 +119,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      *      where {@code handler.getDelegate().getClass()} is not visible
      *      (eg. nested private type)
      */
-    <T> T instantiateProxy(final Class<T> base, final DelegatingInvocationHandler<? extends T> handler) {
+    <T> T instantiateProxy(final Class<T> base, final WrapperInvocationHandler handler) {
         if (base.isInterface()) {
             return _Casts.uncheckedCast(
                     Proxy.newProxyInstance(

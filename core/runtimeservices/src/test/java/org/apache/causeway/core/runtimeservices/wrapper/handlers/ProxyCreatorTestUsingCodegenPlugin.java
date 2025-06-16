@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
+import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -55,19 +56,17 @@ class ProxyCreatorTestUsingCodegenPlugin {
         }
     }
 
-    private static class DelegatingInvocationHandlerForTest implements DelegatingInvocationHandler<Employee> {
+    private static class WrapperInvocationHandlerForTest implements WrapperInvocationHandler {
         private final Employee delegate = new Employee();
         private final Set<String> invoked = new HashSet<>();
+        private final WrapperInvocationHandler.Context context = new WrapperInvocationHandler.Context(
+                delegate, null, null, null, null, null);
+                
 
         @Override
         public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
             invoked.add(method.getName());
             return "hi";
-        }
-
-        @Override
-        public Employee getDelegate() {
-            return delegate;
         }
 
         @Getter @Setter 
@@ -76,13 +75,18 @@ class ProxyCreatorTestUsingCodegenPlugin {
         public boolean wasInvoked(final String methodName) {
             return invoked.contains(methodName);
         }
+
+        @Override
+        public WrapperInvocationHandler.Context context() {
+            return context;
+        }
         
     }
 
     @Test
     void proxyShouldDelegateCalls() {
 
-        final DelegatingInvocationHandlerForTest handler = new DelegatingInvocationHandlerForTest();
+        final WrapperInvocationHandlerForTest handler = new WrapperInvocationHandlerForTest();
         final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler);
 
         assertNotNull(proxyOfEmployee);

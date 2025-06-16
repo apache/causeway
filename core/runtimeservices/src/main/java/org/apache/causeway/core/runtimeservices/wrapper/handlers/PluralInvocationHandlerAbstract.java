@@ -19,11 +19,16 @@
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Base class in support of non-scalar types to be proxied up.
@@ -32,10 +37,12 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
 abstract class PluralInvocationHandlerAbstract<T, P>
-extends DelegatingInvocationHandlerAbstract<P> {
+implements WrapperInvocationHandler {
 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
+    private final WrapperInvocationHandler.Context context;
+    
     private final OneToManyAssociation oneToManyAssociation;
-    private final T domainObject;
     private final CollectionSemantics collectionSemantics;
 
     protected PluralInvocationHandlerAbstract(
@@ -44,12 +51,10 @@ extends DelegatingInvocationHandlerAbstract<P> {
             final OneToManyAssociation otma,
             final CollectionSemantics collectionSemantics) {
 
-        super(otma.getMetaModelContext(),
-                collectionOrMapToBeProxied,
-                handler.getSyncControl());
+        this.context = WrapperInvocationHandler.Context.of(otma.getMetaModelContext(), 
+                collectionOrMapToBeProxied, handler.context().syncControl());
 
         this.oneToManyAssociation = otma;
-        this.domainObject = handler.getDelegate();
         this.collectionSemantics = collectionSemantics;
     }
 
@@ -58,30 +63,27 @@ extends DelegatingInvocationHandlerAbstract<P> {
     }
 
     public T getDomainObject() {
-        return domainObject;
+        return (T) context().delegate();
     }
 
     @Override
     public Object invoke(final Object collectionObject, final Method method, final Object[] args) throws Throwable {
 
-        // delegate
-        final Object returnValueObj = delegate(method, args);
+        final Object returnValueObj = context().invoke(method, args);
 
         var policy = collectionSemantics.getInvocationHandlingPolicy();
 
         if (policy.intercepts(method)) {
 
-            resolveIfRequired(domainObject);
-
             var event =
                     new CollectionMethodEvent(
-                            getDelegate(),
+                            context().delegate(),
                             getCollection().getFeatureIdentifier(),
                             getDomainObject(),
                             method.getName(),
                             args,
                             returnValueObj);
-            notifyListeners(event);
+            context().notifyListeners(event);
             return returnValueObj;
         }
 
