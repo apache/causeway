@@ -19,6 +19,7 @@
 package org.apache.causeway.commons.graph;
 
 import java.util.Comparator;
+import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
@@ -133,7 +134,7 @@ class GraphUtilsTest {
         var graph = gBuilder.build();
         var textForm = graph.toString(
                 NodeFormatter.of(Customer::name),
-                edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
+                edgeAttr->String.format(Locale.US, "(weight=%.1f)", (double)edgeAttr));
         //debug
         //System.err.println(textForm);
 
@@ -161,7 +162,7 @@ class GraphUtilsTest {
                 .sorted(Comparator.comparing(Customer::name)); // test sorting
         var textForm = graph.toString(
                 NodeFormatter.of(Customer::name),
-                edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
+                edgeAttr->String.format(Locale.US, "(weight=%.1f)", (double)edgeAttr));
         //debug
         //System.err.println(textForm);
 
@@ -241,7 +242,7 @@ class GraphUtilsTest {
 
         var textForm = graph.toString(
                 NodeFormatter.of(Customer::name),
-                edgeAttr->String.format("(weight=%.1f)", (double)edgeAttr));
+                edgeAttr->String.format(Locale.US, "(weight=%.1f)", (double)edgeAttr));
         //debug
         //System.err.println(textForm);
 
