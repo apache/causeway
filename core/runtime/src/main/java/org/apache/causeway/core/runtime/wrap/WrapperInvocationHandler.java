@@ -19,12 +19,12 @@
 package org.apache.causeway.core.runtime.wrap;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal._Constants;
@@ -39,7 +39,8 @@ public interface WrapperInvocationHandler extends InvocationHandler {
     default Method toStringMethod() { return context().toStringMethod(); }
     
     public record Context(
-            Object delegate,
+            /** underlying class that is to be proxied */
+            Class<?> pojoClass,
             WrapperFactory wrapperFactory,
             SyncControl syncControl,
 
@@ -48,7 +49,7 @@ public interface WrapperInvocationHandler extends InvocationHandler {
             Method toStringMethod) {
         
         public static Context of(
-                final @NonNull MetaModelContext metaModelContext,
+                final @NonNull MetaModelContext mmc,
                 final @NonNull Object pojo,
                 final SyncControl syncControl) {
 
@@ -59,7 +60,7 @@ public interface WrapperInvocationHandler extends InvocationHandler {
                 var toStringMethod = pojoClass.getMethod("toString", _Constants.emptyClasses);
                 
                 return new WrapperInvocationHandler
-                        .Context(pojo, metaModelContext.getWrapperFactory(), 
+                        .Context(pojoClass, mmc.getWrapperFactory(), 
                                 syncControl, equalsMethod, hashCodeMethod, toStringMethod);
                 
             } catch (final NoSuchMethodException e) {
@@ -69,9 +70,8 @@ public interface WrapperInvocationHandler extends InvocationHandler {
             }
         }
         
-        public Object invoke(final Method method, final Object[] args)
-                throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-            return method.invoke(delegate(), args);
+        public WrappingObject.Origin origin(WrappingObject wrappingObject) {
+            return WrappingObject.getOrigin(wrappingObject);
         }
         
         public boolean isObjectMethod(final Method method) {

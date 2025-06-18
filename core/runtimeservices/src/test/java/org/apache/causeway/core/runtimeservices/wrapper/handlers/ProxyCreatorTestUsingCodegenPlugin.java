@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
@@ -60,7 +61,7 @@ class ProxyCreatorTestUsingCodegenPlugin {
         private final Employee delegate = new Employee();
         private final Set<String> invoked = new HashSet<>();
         private final WrapperInvocationHandler.Context context = new WrapperInvocationHandler.Context(
-                delegate, null, null, null, null, null);
+                Employee.class, null, null, null, null, null);
                 
 
         @Override
@@ -87,7 +88,7 @@ class ProxyCreatorTestUsingCodegenPlugin {
     void proxyShouldDelegateCalls() {
 
         final WrapperInvocationHandlerForTest handler = new WrapperInvocationHandlerForTest();
-        final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler);
+        final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler, new WrappingObject.Origin(handler.delegate));
 
         assertNotNull(proxyOfEmployee);
 

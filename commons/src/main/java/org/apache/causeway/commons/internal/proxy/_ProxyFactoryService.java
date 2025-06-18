@@ -38,7 +38,7 @@ public interface _ProxyFactoryService {
 
     <T> _ProxyFactory<T> factory(
             Class<T> toProxyClass, 
-            Class<?> additionalClass,
+            @Nullable Class<?> additionalClass,
             @Nullable List<AdditionalField> additionalFields);
 
     /**

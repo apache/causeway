@@ -27,9 +27,7 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.proxy._ProxyFactory;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -50,7 +48,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             syncControl,
             this);
 
-        return instantiateProxy(invocationHandler);
+        return instantiateProxy(invocationHandler, new WrappingObject.Origin(domainObject));
     }
 
     public <T> T mixinProxy(
@@ -66,7 +64,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
                 syncControl,
                 this);
     
-        return instantiateProxy(invocationHandler);
+        return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin));
     }
     
     /**
@@ -85,7 +83,8 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             .valueOfElseFail(collectionToBeProxied.getClass())
             .getContainerType();
     
-        return instantiateProxy(_Casts.uncheckedCast(proxyBase), collectionInvocationHandler);
+        return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase), 
+                collectionInvocationHandler);
     }
     
     /**
@@ -99,16 +98,14 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
     
         var proxyBase = Map.class;
     
-        return instantiateProxy(_Casts.uncheckedCast(proxyBase), PluralInvocationHandler
-            .forMap(mapToBeProxied, syncControl, otma));
+        return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase), 
+                PluralInvocationHandler.forMap(mapToBeProxied, syncControl, otma));
     }
     
     // -- HELPER
 
-    <T> T instantiateProxy(final WrapperInvocationHandler handler) {
-        var pojoToBeProxied = handler.context().delegate();
-        Class<T> base = _Casts.uncheckedCast(pojoToBeProxied.getClass());
-        return instantiateProxy(base, handler);
+    <T> T instantiateProxy(final WrapperInvocationHandler handler, WrappingObject.Origin origin) {
+        return _Casts.uncheckedCast(instantiateProxy(handler.context().pojoClass(), handler, origin));
     }
 
     /**
@@ -117,18 +114,19 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      *      where {@code handler.getDelegate().getClass()} is not visible
      *      (eg. nested private type)
      */
-    <T> T instantiateProxy(final Class<T> base, final WrapperInvocationHandler handler) {
-        if (base.isInterface()) {
-            return _Casts.uncheckedCast(
-                    Proxy.newProxyInstance(
-                            _Context.getDefaultClassLoader(),
-                            _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
-                            handler));
-        } else {
-            _ProxyFactory<T> proxyFactory = proxyFactoryService
-                    .factory(base, WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
-            return proxyFactory.createInstance(handler, false);
-        }
+    private <T> T instantiateProxy(final Class<T> base, final WrapperInvocationHandler handler, WrappingObject.Origin origin) {
+        T proxy = proxyFactoryService
+                .factory(base, WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS)
+                .createInstance(handler, false);
+        return WrappingObject.withOrigin(proxy, origin);
+    }
+    
+    private <T, P> P instantiatePluralProxy(final Class<T> base, final PluralInvocationHandler<T, P> pluralInvocationHandler) {
+        var proxyWithoutFields = Proxy.newProxyInstance(
+                _Context.getDefaultClassLoader(),
+                new Class<?>[] {base},
+                pluralInvocationHandler); 
+        return _Casts.uncheckedCast(proxyWithoutFields);
     }
     
 }

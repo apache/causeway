@@ -300,14 +300,14 @@ implements WrapperFactory, HasMetaModelContext {
                 return method.invoke(domainObject, args);
             }
 
-            if (shouldCheckRules(asyncControl)) {
+            if (asyncControl.isCheckRules()) {
                 var doih = new DomainObjectInvocationHandler<>(
                         domainObject,
                         null, // mixeeAdapter ignored
                         targetAdapter,
                         control().withNoExecute(),
                         null);
-                doih.invoke(null, method, args);
+                doih.invoke(domainObject, method, args);
             }
 
             var memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
@@ -317,12 +317,6 @@ implements WrapperFactory, HasMetaModelContext {
 
             return submitAsync(memberAndTarget, args, asyncControl);
         }, false);
-    }
-
-    private boolean shouldCheckRules(final AsyncControl<?> asyncControl) {
-        var executionModes = asyncControl.getExecutionModes();
-        var skipRules = executionModes.contains(ExecutionMode.SKIP_RULE_VALIDATION);
-        return !skipRules;
     }
 
     @Override
@@ -348,19 +342,18 @@ implements WrapperFactory, HasMetaModelContext {
             var resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
-            final boolean inheritedFromObject = isInheritedFromJavaLangObject(method);
-            if (inheritedFromObject) {
+            if (isInheritedFromJavaLangObject(method)) {
                 return method.invoke(mixin, args);
             }
 
-            if (shouldCheckRules(asyncControl)) {
+            if (asyncControl.isCheckRules()) {
                 var doih = new DomainObjectInvocationHandler<>(
                         mixin,
                         mixeeAdapter,
                         mixinAdapter,
                         control().withNoExecute(),
                         null);
-                doih.invoke(null, method, args);
+                doih.invoke(mixin, method, args);
             }
 
             var actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
