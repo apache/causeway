@@ -61,7 +61,7 @@ class ProxyCreatorTestUsingCodegenPlugin {
         private final Employee delegate = new Employee();
         private final Set<String> invoked = new HashSet<>();
         private final WrapperInvocationHandler.ClassMetaData classMetaData = new WrapperInvocationHandler.ClassMetaData(
-                Employee.class, null, null, null);
+                Employee.class, null, null, null, null);
                 
         @Getter @Setter 
         private boolean resolveObjectChangedEnabled = false;

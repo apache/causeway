@@ -23,10 +23,12 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.base._Lazy;
 
 public interface WrapperInvocationHandler extends InvocationHandler {
     
@@ -45,19 +47,40 @@ public interface WrapperInvocationHandler extends InvocationHandler {
 
             Method equalsMethod,
             Method hashCodeMethod,
-            Method toStringMethod) {
+            Method toStringMethod,
+            
+            /**
+             * The <tt>title()</tt> method; may be <tt>null</tt>.
+             */
+            @Nullable Method titleMethod) {
+        
+        /**
+         * The <tt>__causeway_origin()</tt> method from {@link WrappingObject#__causeway_origin()}.
+         */
+        static final _Lazy<Method> __causeway_originMethod = _Lazy.threadSafe(()-> 
+                WrappingObject.class.getMethod(WrappingObject.ORIGIN_GETTER_NAME, _Constants.emptyClasses));
+        
+        /**
+         * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
+         */
+        static final _Lazy<Method> __causeway_saveMethod = _Lazy.threadSafe(()->
+                WrappingObject.class.getMethod(WrappingObject.SAVE_METHOD_NAME, _Constants.emptyClasses));
         
         public static ClassMetaData of(
-                final @NonNull Object pojo) {
-
-            var pojoClass = pojo.getClass();
+                final @NonNull Class<?> pojoClass) {
             try {
                 var equalsMethod = pojoClass.getMethod("equals", _Constants.classesOfObject);
                 var hashCodeMethod = pojoClass.getMethod("hashCode", _Constants.emptyClasses);
                 var toStringMethod = pojoClass.getMethod("toString", _Constants.emptyClasses);
                 
+                var titleMethod = (Method)null;
+                try {
+                    titleMethod = pojoClass.getMethod("title", _Constants.emptyClasses);
+                } catch (final NoSuchMethodException e) {
+                    // ignore
+                }
                 return new WrapperInvocationHandler
-                        .ClassMetaData(pojoClass, equalsMethod, hashCodeMethod, toStringMethod);
+                        .ClassMetaData(pojoClass, equalsMethod, hashCodeMethod, toStringMethod, titleMethod);
                 
             } catch (final NoSuchMethodException e) {
                 // ///CLOVER:OFF
@@ -71,20 +94,29 @@ public interface WrapperInvocationHandler extends InvocationHandler {
                     || hashCodeMethod().equals(method) 
                     || equalsMethod().equals(method);
         }
-        
+
+        public boolean isTitleMethod(Method method) {
+            return method.equals(titleMethod);
+        }
+        public boolean isOriginMethod(Method method) {
+            return method.equals(__causeway_originMethod.get());
+        }
+        public boolean isSaveMethod(Method method) {
+            return method.equals(__causeway_saveMethod.get());
+        }
     }
     
     public record WrapperInvocation(
-        WrappingObject.Origin origin,
-        Method method,
-        Object[] args) {
+        WrappingObject.@NonNull Origin origin,
+        @NonNull Method method,
+        @NonNull Object[] args) {
 
         static WrapperInvocation of(Object target, Method method, Object[] args) {
             Objects.requireNonNull(target);
             var origin = target instanceof WrappingObject wrappingObject 
                     ? WrappingObject.getOrigin(wrappingObject)
                     : WrappingObject.Origin.fallback(target);
-            return new WrapperInvocation(origin, method, args);
+            return new WrapperInvocation(origin, method, args!=null ? args : _Constants.emptyObjects);
         }
         
         public boolean shouldEnforceRules() {
