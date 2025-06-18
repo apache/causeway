@@ -53,8 +53,6 @@ import org.apache.causeway.security.keycloak.handler.LogoutHandlerForKeycloak;
 import org.apache.causeway.security.keycloak.services.KeycloakOauth2UserService;
 import org.apache.causeway.security.spring.CausewayModuleSecuritySpring;
 
-import lombok.val;
-
 /**
  * Configuration Bean to support Causeway Security using Keycloak.
  *
@@ -84,12 +82,12 @@ public class CausewayModuleSecurityKeycloak {
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers) throws Exception {
 
-        val successUrl = causewayConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
-        val realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
-        val loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
+        var successUrl = causewayConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
+        var realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
+        var loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
                 + "/" + realm;
 
-        val httpSecurityLogoutConfigurer =
+        var httpSecurityLogoutConfigurer =
             http
                 .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -128,11 +126,11 @@ public class CausewayModuleSecurityKeycloak {
     @Bean
     KeycloakOauth2UserService keycloakOidcUserService(final OAuth2ClientProperties oauth2ClientProperties, final CausewayConfiguration causewayConfiguration) {
 
-        val jwtDecoder = createNimbusJwtDecoder(
+        var jwtDecoder = createNimbusJwtDecoder(
                 oauth2ClientProperties.getProvider().get("keycloak").getJwkSetUri(),
                 JwsAlgorithms.RS256);
 
-        val authoritiesMapper = new SimpleAuthorityMapper();
+        var authoritiesMapper = new SimpleAuthorityMapper();
         authoritiesMapper.setConvertToUpperCase(true);
 
         return new KeycloakOauth2UserService(jwtDecoder, authoritiesMapper, causewayConfiguration);

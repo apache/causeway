@@ -20,8 +20,6 @@ package org.apache.causeway.persistence.commons.integration.deadlock;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 
@@ -30,6 +28,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 
 import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,7 +47,8 @@ public class DeadlockRecognizerDefault implements DeadlockRecognizer {
 
     @Override
     public boolean isDeadlock(final Throwable ex) {
-        val whetherDeadlock = ex instanceof DeadlockLoserDataAccessException || isMessage(ex, SQL_SERVER_DEADLOCK_MESSAGE);
+        var whetherDeadlock = ex instanceof PessimisticLockingFailureException
+            || isMessage(ex, SQL_SERVER_DEADLOCK_MESSAGE);
         if (whetherDeadlock) {
             log.warn("Detected deadlock");
             log.debug("Detected deadlock details:", ex);

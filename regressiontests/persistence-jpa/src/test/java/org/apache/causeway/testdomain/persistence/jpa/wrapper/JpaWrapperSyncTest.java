@@ -37,8 +37,6 @@ import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-import lombok.val;
-
 @SpringBootTest(
         classes = {
                 Configuration_usingJpa.class
@@ -69,15 +67,15 @@ class JpaWrapperSyncTest extends CausewayIntegrationTestAbstract {
     @Test
     void testWrapper_waitingOnDomainEvent() {
 
-        val inventoryManager = factoryService.viewModel(JpaInventoryManager.class);
-        val sumOfPrices = repository.allInstances(JpaProduct.class)
+        var inventoryManager = factoryService.viewModel(JpaInventoryManager.class);
+        var sumOfPrices = repository.allInstances(JpaProduct.class)
                 .stream()
                 .mapToDouble(JpaProduct::getPrice)
                 .sum();
 
         assertEquals(167d, sumOfPrices, 1E-6);
 
-        val products = wrapper.wrap(inventoryManager).getAllProducts();
+        var products = wrapper.wrap(inventoryManager).getAllProducts();
 
         assertEquals(3, products.size());
         assertEquals(JpaBook.class, products.get(0).getClass());
