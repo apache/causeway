@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
@@ -37,16 +37,15 @@ import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
  */
 record PluralInvocationHandler<T, P>(
         P collectionOrMapToBeProxied,
-        WrapperInvocationHandler.Context context,
+        WrapperInvocationHandler.ClassMetaData classMetaData,
         OneToManyAssociation oneToManyAssociation,
         CollectionSemantics collectionSemantics
-        ) implements WrapperInvocationHandler {
+        ) implements InvocationHandler {
 
     // -- FACTORIES
     
    static <T, C extends Collection<?>> PluralInvocationHandler<T, C> forCollection(
            final C collectionToBeProxied,
-           final SyncControl syncControl,
            final OneToManyAssociation otma) {
        
        _Assert.assertTrue(Collection.class.isAssignableFrom(collectionToBeProxied.getClass()),
@@ -54,14 +53,13 @@ record PluralInvocationHandler<T, P>(
                        PluralInvocationHandler.class.getName() + ".forCollection(..)",
                        collectionToBeProxied.getClass()));
        
-       return new PluralInvocationHandler<>(collectionToBeProxied, syncControl, otma,
+       return new PluralInvocationHandler<>(collectionToBeProxied, otma,
                 CollectionSemantics
                     .valueOfElseFail(collectionToBeProxied.getClass()));
     }
     
    static <T, M extends Map<?,?>> PluralInvocationHandler<T, M> forMap(
            final M mapToBeProxied,
-           final SyncControl syncControl,
            final OneToManyAssociation otma) {
 
        _Assert.assertTrue(Map.class.isAssignableFrom(mapToBeProxied.getClass()),
@@ -69,7 +67,7 @@ record PluralInvocationHandler<T, P>(
                        PluralInvocationHandler.class.getName() + ".forMap(..)",
                        mapToBeProxied.getClass()));
        
-       return new PluralInvocationHandler<>(mapToBeProxied, syncControl, otma,
+       return new PluralInvocationHandler<>(mapToBeProxied, otma,
                CollectionSemantics.MAP);
    }
    
@@ -77,13 +75,11 @@ record PluralInvocationHandler<T, P>(
     
     private PluralInvocationHandler(
             final P collectionOrMapToBeProxied,
-            final SyncControl syncControl,
             final OneToManyAssociation otma,
             final CollectionSemantics collectionSemantics) {
         
         this(collectionOrMapToBeProxied, 
-                WrapperInvocationHandler.Context.of(otma.getMetaModelContext(), 
-                        collectionOrMapToBeProxied, syncControl), 
+                WrapperInvocationHandler.ClassMetaData.of(collectionOrMapToBeProxied), 
                 otma, collectionSemantics);
     }
 
@@ -103,7 +99,7 @@ record PluralInvocationHandler<T, P>(
                             method.getName(),
                             args,
                             returnValueObj);
-            context().notifyListeners(event);
+            oneToManyAssociation().getWrapperFactory().notifyListeners(event);
             return returnValueObj;
         }
 

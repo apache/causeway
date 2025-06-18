@@ -20,38 +20,35 @@ package org.apache.causeway.core.runtime.wrap;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
-import org.apache.causeway.applib.services.wrapper.control.SyncControl;
-import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
+import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 public interface WrapperInvocationHandler extends InvocationHandler {
     
-    Context context();
+    ClassMetaData classMetaData();
     
-    default Method equalsMethod() { return context().equalsMethod(); }
-    default Method hashCodeMethod() { return context().hashCodeMethod(); }
-    default Method toStringMethod() { return context().toStringMethod(); }
+    Object invoke(WrapperInvocation wrapperInvocation) throws Throwable;
     
-    public record Context(
+    @Override
+    default Object invoke(Object target, Method method, Object[] args) throws Throwable {
+        return invoke(WrapperInvocation.of(target, method, args));
+    }
+    
+    public record ClassMetaData(
             /** underlying class that is to be proxied */
             Class<?> pojoClass,
-            WrapperFactory wrapperFactory,
-            SyncControl syncControl,
 
             Method equalsMethod,
             Method hashCodeMethod,
             Method toStringMethod) {
         
-        public static Context of(
-                final @NonNull MetaModelContext mmc,
-                final @NonNull Object pojo,
-                final SyncControl syncControl) {
+        public static ClassMetaData of(
+                final @NonNull Object pojo) {
 
             var pojoClass = pojo.getClass();
             try {
@@ -60,8 +57,7 @@ public interface WrapperInvocationHandler extends InvocationHandler {
                 var toStringMethod = pojoClass.getMethod("toString", _Constants.emptyClasses);
                 
                 return new WrapperInvocationHandler
-                        .Context(pojoClass, mmc.getWrapperFactory(), 
-                                syncControl, equalsMethod, hashCodeMethod, toStringMethod);
+                        .ClassMetaData(pojoClass, equalsMethod, hashCodeMethod, toStringMethod);
                 
             } catch (final NoSuchMethodException e) {
                 // ///CLOVER:OFF
@@ -70,21 +66,34 @@ public interface WrapperInvocationHandler extends InvocationHandler {
             }
         }
         
-        public WrappingObject.Origin origin(WrappingObject wrappingObject) {
-            return WrappingObject.getOrigin(wrappingObject);
-        }
-        
         public boolean isObjectMethod(final Method method) {
             return toStringMethod().equals(method) 
                     || hashCodeMethod().equals(method) 
                     || equalsMethod().equals(method);
         }
         
-        public InteractionEvent notifyListeners(final InteractionEvent interactionEvent) {
-            wrapperFactory().notifyListeners(interactionEvent);
-            return interactionEvent;
+    }
+    
+    public record WrapperInvocation(
+        WrappingObject.Origin origin,
+        Method method,
+        Object[] args) {
+
+        static WrapperInvocation of(Object target, Method method, Object[] args) {
+            Objects.requireNonNull(target);
+            var origin = target instanceof WrappingObject wrappingObject 
+                    ? WrappingObject.getOrigin(wrappingObject)
+                    : WrappingObject.Origin.fallback(target);
+            return new WrapperInvocation(origin, method, args);
         }
         
+        public boolean shouldEnforceRules() {
+            return !origin().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        }
+
+        public boolean shouldExecute() {
+            return !origin().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
+        }
     }
     
 }

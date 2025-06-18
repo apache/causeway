@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
-import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
@@ -60,16 +60,9 @@ class ProxyCreatorTestUsingCodegenPlugin {
     private static class WrapperInvocationHandlerForTest implements WrapperInvocationHandler {
         private final Employee delegate = new Employee();
         private final Set<String> invoked = new HashSet<>();
-        private final WrapperInvocationHandler.Context context = new WrapperInvocationHandler.Context(
-                Employee.class, null, null, null, null, null);
+        private final WrapperInvocationHandler.ClassMetaData classMetaData = new WrapperInvocationHandler.ClassMetaData(
+                Employee.class, null, null, null);
                 
-
-        @Override
-        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-            invoked.add(method.getName());
-            return "hi";
-        }
-
         @Getter @Setter 
         private boolean resolveObjectChangedEnabled = false;
 
@@ -78,8 +71,14 @@ class ProxyCreatorTestUsingCodegenPlugin {
         }
 
         @Override
-        public WrapperInvocationHandler.Context context() {
-            return context;
+        public WrapperInvocationHandler.ClassMetaData classMetaData() {
+            return classMetaData;
+        }
+
+        @Override
+        public Object invoke(WrapperInvocation wrapperInvocation) throws Throwable {
+            invoked.add(wrapperInvocation.method().getName());
+            return "hi";
         }
         
     }
@@ -88,7 +87,7 @@ class ProxyCreatorTestUsingCodegenPlugin {
     void proxyShouldDelegateCalls() {
 
         final WrapperInvocationHandlerForTest handler = new WrapperInvocationHandlerForTest();
-        final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler, new WrappingObject.Origin(handler.delegate));
+        final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler, new WrappingObject.Origin(handler.delegate, SyncControl.control()));
 
         assertNotNull(proxyOfEmployee);
 

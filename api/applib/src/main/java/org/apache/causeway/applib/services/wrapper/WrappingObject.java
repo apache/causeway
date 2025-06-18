@@ -49,9 +49,12 @@ public interface WrappingObject {
     final static List<AdditionalField> ADDITIONAL_FIELDS = List.of(
             new AdditionalField(ORIGIN_FIELD_NAME, WrappingObject.Origin.class, Modifier.PROTECTED));
     
-    record Origin(Object pojo) {
-        public static Origin empty() {
-            return new Origin(null);
+    record Origin(Object pojo, SyncControl syncControl, boolean isFallback) {
+        public static Origin fallback(Object target) {
+            return new Origin(target, SyncControl.control().withNoExecute(), true);
+        }
+        public Origin(Object pojo, SyncControl syncControl) {
+            this(pojo, syncControl, false);
         }
     }
 
