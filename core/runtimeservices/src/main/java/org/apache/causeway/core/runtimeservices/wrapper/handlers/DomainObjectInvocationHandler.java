@@ -38,7 +38,7 @@ import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
 import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
-import org.apache.causeway.commons.internal._Constants;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -85,56 +85,18 @@ implements WrapperInvocationHandler {
     private final ProxyGenerator proxyGenerator;
     private final MetaModelContext mmc;
 
-    /**
-     * The <tt>title()</tt> method; may be <tt>null</tt>.
-     */
-    protected final Method titleMethod;
-
-    /**
-     * The <tt>__causeway_origin()</tt> method from {@link WrappingObject#__causeway_origin()}.
-     */
-    protected final Method __causeway_originMethod;
-
-    /**
-     * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
-     */
-    protected final Method __causeway_saveMethod;
-
-    /**
-     * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
-     */
-    protected final Method __causeway_executionModes;
-
     private final EntityFacet entityFacet;
     private final ManagedObject mixeeAdapter;
 
-    public DomainObjectInvocationHandler(
-            final T domainObject,
+    DomainObjectInvocationHandler(
+            final Class<T> domainObjectClass,
             final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final ManagedObject targetAdapter,
             final ProxyGenerator proxyGenerator) {
 
         this.mmc = targetAdapter.objSpec().getMetaModelContext();
-        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(domainObject);
+        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(domainObjectClass);
         this.proxyGenerator = proxyGenerator;
-
-        var _titleMethod = (Method)null;
-        try {
-            _titleMethod = classMetaData().pojoClass().getMethod("title", _Constants.emptyClasses);
-        } catch (final NoSuchMethodException e) {
-            // ignore
-        }
-        this.titleMethod = _titleMethod;
-
-        try {
-            this.__causeway_originMethod = WrappingObject.class.getMethod(WrappingObject.ORIGIN_GETTER_NAME, _Constants.emptyClasses);
-            this.__causeway_saveMethod = WrappingObject.class.getMethod(WrappingObject.SAVE_METHOD_NAME, _Constants.emptyClasses);
-            this.__causeway_executionModes = WrappingObject.class.getMethod(WrappingObject.EXECUTION_MODES_METHOD_NAME, _Constants.emptyClasses);
-        } catch (final NoSuchMethodException nsme) {
-            throw new IllegalStateException(
-                    "Could not locate reserved declared methods in the WrappingObject interfaces",
-                    nsme);
-        }
 
         this.entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
         this.mixeeAdapter = mixeeAdapter;
@@ -145,12 +107,10 @@ implements WrapperInvocationHandler {
 
         final Object target = wrapperInvocation.origin().pojo();
         final Method method = wrapperInvocation.method();
-        final Object[] args = wrapperInvocation.args();
-        var syncControl = wrapperInvocation.origin().syncControl();
 
         if (classMetaData().isObjectMethod(method)
                 || isEnhancedEntityMethod(method)) {
-            return method.invoke(target, args);
+            return method.invoke(target, wrapperInvocation.args());
         }
 
         final ManagedObject targetAdapter = mmc.getObjectManager().adapt(target);
@@ -159,7 +119,7 @@ implements WrapperInvocationHandler {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
         }
 
-        if (method.equals(titleMethod)) {
+        if (classMetaData.isTitleMethod(method) ) {
             return handleTitleMethod(wrapperInvocation, targetAdapter);
         }
 
@@ -168,18 +128,12 @@ implements WrapperInvocationHandler {
                 .orElseThrow();
 
         if(!wrapperInvocation.origin().isFallback()) {
-
-            if (method.equals(__causeway_originMethod)) {
+            if (classMetaData.isOriginMethod(method)) {
                 return wrapperInvocation.origin();
             }
-
             // save method, through the proxy
-            if (method.equals(__causeway_saveMethod)) {
+            if (classMetaData.isSaveMethod(method)) {
                 return handleSaveMethod(wrapperInvocation, targetAdapter, targetSpec);
-            }
-
-            if (method.equals(__causeway_executionModes)) {
-                return syncControl.getExecutionModes();
             }
         }
 
@@ -192,7 +146,7 @@ implements WrapperInvocationHandler {
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
-            return method.invoke(target, args);
+            return method.invoke(target, wrapperInvocation.args());
         }
 
         if (objectMember.isOneToOneAssociation()) {
@@ -204,11 +158,11 @@ implements WrapperInvocationHandler {
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
 
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnProperty(wrapperInvocation, targetAdapter, args, otoa);
+                return handleGetterMethodOnProperty(wrapperInvocation, targetAdapter, otoa);
             }
 
             if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION) {
-                return handleSetterMethodOnProperty(wrapperInvocation, targetAdapter, args, otoa);
+                return handleSetterMethodOnProperty(wrapperInvocation, targetAdapter, otoa);
             }
         }
         if (objectMember.isOneToManyAssociation()) {
@@ -219,7 +173,7 @@ implements WrapperInvocationHandler {
 
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, args, otma, memberId);
+                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, otma, memberId);
             }
         }
 
@@ -243,13 +197,15 @@ implements WrapperInvocationHandler {
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(wrapperInvocation, mixeeAdapter, args, (ObjectAction)mixinMember);
+                        return handleActionMethod(wrapperInvocation, mixeeAdapter, (ObjectAction)mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
-                        return handleGetterMethodOnProperty(wrapperInvocation, mixeeAdapter, new Object[0], (OneToOneAssociation)mixinMember);
+                        _Assert.assertEquals(0, wrapperInvocation.args().length);
+                        return handleGetterMethodOnProperty(wrapperInvocation, mixeeAdapter, (OneToOneAssociation)mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
-                        return handleGetterMethodOnCollection(wrapperInvocation, mixeeAdapter, new Object[0], (OneToManyAssociation)mixinMember, memberId);
+                        _Assert.assertEquals(0, wrapperInvocation.args().length);
+                        return handleGetterMethodOnCollection(wrapperInvocation, mixeeAdapter, (OneToManyAssociation)mixinMember, memberId);
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
@@ -258,7 +214,7 @@ implements WrapperInvocationHandler {
             }
 
             // this is just a regular non-mixin action.
-            return handleActionMethod(wrapperInvocation, targetAdapter, args, objectAction);
+            return handleActionMethod(wrapperInvocation, targetAdapter, objectAction);
         }
 
         throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
@@ -286,7 +242,7 @@ implements WrapperInvocationHandler {
         // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
     }
 
-    public InteractionInitiatedBy getInteractionInitiatedBy(final WrapperInvocation wrapperInvocation) {
+    private InteractionInitiatedBy getInteractionInitiatedBy(final WrapperInvocation wrapperInvocation) {
         return wrapperInvocation.shouldEnforceRules()
                 ? InteractionInitiatedBy.USER
                 : InteractionInitiatedBy.FRAMEWORK;
@@ -335,10 +291,9 @@ implements WrapperInvocationHandler {
     private Object handleGetterMethodOnProperty(
             final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final OneToOneAssociation property) {
 
-        zeroArgsElseThrow(args, "get");
+        zeroArgsElseThrow(wrapperInvocation.args(), "get");
 
         runValidationTask(wrapperInvocation, ()->{
             checkVisibility(wrapperInvocation, targetAdapter, property);
@@ -364,10 +319,9 @@ implements WrapperInvocationHandler {
     private Object handleSetterMethodOnProperty(
             final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final OneToOneAssociation property) {
 
-        var singleArg = singleArgUnderlyingElseNull(args, "setter");
+        var singleArg = singleArgUnderlyingElseNull(wrapperInvocation.args(), "setter");
 
         runValidationTask(wrapperInvocation, ()->{
             checkVisibility(wrapperInvocation, targetAdapter, property);
@@ -393,11 +347,10 @@ implements WrapperInvocationHandler {
     private Object handleGetterMethodOnCollection(
             final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final OneToManyAssociation collection,
             final String memberId) {
 
-        zeroArgsElseThrow(args, "get");
+        zeroArgsElseThrow(wrapperInvocation.args(), "get");
 
         runValidationTask(wrapperInvocation, ()->{
             checkVisibility(wrapperInvocation, targetAdapter, collection);
@@ -455,7 +408,6 @@ implements WrapperInvocationHandler {
     private Object handleActionMethod(
             final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter,
-            final Object[] args,
             final ObjectAction objectAction) {
 
         var head = objectAction.interactionHead(targetAdapter);
@@ -464,7 +416,7 @@ implements WrapperInvocationHandler {
         // adapt argument pojos to managed objects
         var argAdapters = objectAction.getParameterTypes().map(IndexedFunction.zeroBased((paramIndex, paramSpec)->{
             // guard against index out of bounds
-            var argPojo = _Arrays.get(args, paramIndex).orElse(null);
+            var argPojo = _Arrays.get(wrapperInvocation.args(), paramIndex).orElse(null);
             return argPojo!=null
                     ? objectManager.adapt(argPojo)
                     : ManagedObject.empty(paramSpec);

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Map;
@@ -42,12 +41,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
         final ManagedObject adapter,
         final SyncControl syncControl) {
 
-        var invocationHandler = new DomainObjectInvocationHandler<T>(
-            domainObject,
-            null, // mixeeAdapter ignored
-            adapter,
-            this);
-
+        var invocationHandler = handlerForRegular(domainObject, adapter);
         return instantiateProxy(invocationHandler, new WrappingObject.Origin(domainObject, syncControl));
     }
 
@@ -57,12 +51,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             final ManagedObject mixinAdapter,
             final SyncControl syncControl) {
     
-        var invocationHandler = new DomainObjectInvocationHandler<T>(
-                mixin,
-                mixeeAdapter,
-                mixinAdapter,
-                this);
-    
+        var invocationHandler = handlerForMixin(mixin, mixeeAdapter, mixinAdapter);
         return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin, syncControl));
     }
     
@@ -126,20 +115,20 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
         return _Casts.uncheckedCast(proxyWithoutFields);
     }
 
-    public <T> InvocationHandler handlerForRegular(@NonNull T domainObject, ManagedObject targetAdapter) {
+    public <T> WrapperInvocationHandler handlerForRegular(@NonNull T domainObject, ManagedObject targetAdapter) {
         return new DomainObjectInvocationHandler<>(
-                domainObject,
+                domainObject.getClass(),
                 null, // mixeeAdapter ignored
                 targetAdapter,
-                null);
+                this);
     }
 
-    public <T> InvocationHandler handlerForMixin(T mixin, ManagedObject mixeeAdapter, ManagedObject mixinAdapter) {
+    public <T> WrapperInvocationHandler handlerForMixin(T mixin, ManagedObject mixeeAdapter, ManagedObject mixinAdapter) {
         return new DomainObjectInvocationHandler<>(
-                mixin,
+                mixin.getClass(),
                 mixeeAdapter,
                 mixinAdapter,
-                null);
+                this);
     }
     
 }

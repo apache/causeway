@@ -197,8 +197,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         if (isWrapper(domainObject)) {
             var wrapperObject = (WrappingObject) domainObject;
-            var executionMode = wrapperObject.__causeway_executionModes();
-            if(equivalent(executionMode, syncControl.getExecutionModes())) {
+            var origin = wrapperObject.__causeway_origin();
+            if(equivalent(origin.syncControl().getExecutionModes(), syncControl.getExecutionModes())) {
                 return domainObject;
             }
             var underlyingDomainObject = wrapperObject.__causeway_origin().pojo();
@@ -233,12 +233,12 @@ implements WrapperFactory, HasMetaModelContext {
 
         if (isWrapper(mixee)) {
             var wrapperObject = (WrappingObject) mixee;
-            var executionMode = wrapperObject.__causeway_executionModes();
-            var underlyingMixee = wrapperObject.__causeway_origin().pojo();
+            var origin = wrapperObject.__causeway_origin();
+            var underlyingMixee = origin.pojo();
 
             getServiceInjector().injectServicesInto(underlyingMixee);
 
-            if(equivalent(executionMode, syncControl.getExecutionModes())) {
+            if(equivalent(origin.syncControl().getExecutionModes(), syncControl.getExecutionModes())) {
                 return mixin;
             }
             return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));

@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.contains;
 import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
@@ -45,9 +44,7 @@ class WrapperFactoryDefaultTest {
 
     @RequiredArgsConstructor
     private static class WrappingDomainObject extends DomainObject implements WrappingObject {
-
         private final DomainObject wrappedObject;
-        private final ImmutableEnumSet<ExecutionMode> modes;
 
         @Override
         public void __causeway_save() {
@@ -56,11 +53,6 @@ class WrapperFactoryDefaultTest {
         @Override
         public WrappingObject.Origin __causeway_origin() {
             return new WrappingObject.Origin(wrappedObject, SyncControl.control());
-        }
-
-        @Override
-        public ImmutableEnumSet<ExecutionMode> __causeway_executionModes() {
-            return modes;
         }
     }
 
@@ -110,7 +102,7 @@ class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_sameMode_returnsUnchanged() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappingDomainObject(wrappedObject, ImmutableEnumSet.noneOf(ExecutionMode.class));
+        final DomainObject domainObject = new WrappingDomainObject(wrappedObject);
 
         // when
         final DomainObject wrappingObject = wrapperFactory.wrap(domainObject);
@@ -124,7 +116,7 @@ class WrapperFactoryDefaultTest {
     public void wrap_ofWrapped_differentMode_delegates_to_createProxy() throws Exception {
         // given
         final DomainObject wrappedObject = new DomainObject();
-        final DomainObject domainObject = new WrappingDomainObject(wrappedObject, ImmutableEnumSet.noneOf(ExecutionMode.class));
+        final DomainObject domainObject = new WrappingDomainObject(wrappedObject);
 
         // when
         final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, SyncControl.control().withSkipRules());

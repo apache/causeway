@@ -21,9 +21,7 @@ package org.apache.causeway.applib.services.wrapper;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.AdditionalField;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 
@@ -45,7 +43,7 @@ public interface WrappingObject {
     final static String ORIGIN_GETTER_NAME = "__causeway_origin";
     final static String ORIGIN_FIELD_NAME = "__causeway_origin_field";
     final static String SAVE_METHOD_NAME = "__causeway_save";
-    final static String EXECUTION_MODES_METHOD_NAME = "__causeway_executionModes";
+    
     final static List<AdditionalField> ADDITIONAL_FIELDS = List.of(
             new AdditionalField(ORIGIN_FIELD_NAME, WrappingObject.Origin.class, Modifier.PROTECTED));
     
@@ -86,14 +84,5 @@ public interface WrappingObject {
      * Programmatic equivalent of invoking save for a transient object .
      */
     void __causeway_save();
-
-    /**
-     * The {@link ExecutionMode}(s) inferred from the
-     * {@link SyncControl} with which this wrapper was
-     * {@link WrapperFactory#wrap(Object, SyncControl) created}.
-     */
-    ImmutableEnumSet<ExecutionMode> __causeway_executionModes();
-
-
 
 }

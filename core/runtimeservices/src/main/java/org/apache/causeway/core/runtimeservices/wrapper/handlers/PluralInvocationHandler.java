@@ -79,7 +79,7 @@ record PluralInvocationHandler<T, P>(
             final CollectionSemantics collectionSemantics) {
         
         this(collectionOrMapToBeProxied, 
-                WrapperInvocationHandler.ClassMetaData.of(collectionOrMapToBeProxied), 
+                WrapperInvocationHandler.ClassMetaData.of(collectionOrMapToBeProxied.getClass()), 
                 otma, collectionSemantics);
     }
 
