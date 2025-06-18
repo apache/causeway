@@ -202,7 +202,7 @@ implements WrapperFactory, HasMetaModelContext {
             if(equivalent(executionMode, syncControl.getExecutionModes())) {
                 return domainObject;
             }
-            var underlyingDomainObject = wrapperObject.__causeway_wrapped();
+            var underlyingDomainObject = wrapperObject.__causeway_origin().pojo();
             return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
         }
         return createProxy(domainObject, syncControl);
@@ -235,7 +235,7 @@ implements WrapperFactory, HasMetaModelContext {
         if (isWrapper(mixee)) {
             var wrapperObject = (WrappingObject) mixee;
             var executionMode = wrapperObject.__causeway_executionModes();
-            var underlyingMixee = wrapperObject.__causeway_wrapped();
+            var underlyingMixee = wrapperObject.__causeway_origin().pojo();
 
             getServiceInjector().injectServicesInto(underlyingMixee);
 
@@ -270,7 +270,7 @@ implements WrapperFactory, HasMetaModelContext {
     public <T> T unwrap(final T possibleWrappedDomainObject) {
         if(isWrapper(possibleWrappedDomainObject)) {
             var wrappingObject = (WrappingObject) possibleWrappedDomainObject;
-            return _Casts.uncheckedCast(wrappingObject.__causeway_wrapped());
+            return _Casts.uncheckedCast(wrappingObject.__causeway_origin().pojo());
         }
         return possibleWrappedDomainObject;
     }
@@ -289,7 +289,7 @@ implements WrapperFactory, HasMetaModelContext {
         }
 
         var proxyFactory = proxyFactoryService
-                .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class);
+                .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 
@@ -340,7 +340,8 @@ implements WrapperFactory, HasMetaModelContext {
                 .getConstructorElseFail(mixinClass, mixee.getClass());
 
         var proxyFactory = proxyFactoryService
-                .factory(mixinClass, new Class[]{WrappingObject.class}, mixinConstructor.getParameterTypes());
+                .factory(mixinClass, new Class[]{WrappingObject.class}, WrappingObject.ADDITIONAL_FIELDS,
+                        mixinConstructor.getParameterTypes());
 
         return proxyFactory.createInstance((proxy, method, args) -> {
 

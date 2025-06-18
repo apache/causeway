@@ -125,7 +125,8 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
                             _Arrays.combine(base, (Class<?>[]) new Class[]{WrappingObject.class}),
                             handler));
         } else {
-            final _ProxyFactory<T> proxyFactory = proxyFactoryService.factory(base, WrappingObject.class);
+            _ProxyFactory<T> proxyFactory = proxyFactoryService
+                    .factory(base, WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
             return proxyFactory.createInstance(handler, false);
         }
     }

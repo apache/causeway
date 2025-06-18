@@ -93,14 +93,14 @@ implements WrapperInvocationHandler {
     protected final Method titleMethod;
 
     /**
+     * The <tt>__causeway_origin()</tt> method from {@link WrappingObject#__causeway_origin()}.
+     */
+    protected final Method __causeway_originMethod;
+    
+    /**
      * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
      */
     protected final Method __causeway_saveMethod;
-
-    /**
-     * The <tt>__causeway_wrapped()</tt> method from {@link WrappingObject#__causeway_wrapped()}.
-     */
-    protected final Method __causeway_wrappedMethod;
 
     /**
      * The <tt>__causeway_executionModes()</tt> method from {@link WrappingObject#__causeway_executionModes()}.
@@ -133,10 +133,9 @@ implements WrapperInvocationHandler {
         this.titleMethod = _titleMethod;
 
         try {
-            this.__causeway_saveMethod = WrappingObject.class.getMethod("__causeway_save", _Constants.emptyClasses);
-            this.__causeway_wrappedMethod = WrappingObject.class.getMethod("__causeway_wrapped", _Constants.emptyClasses);
-            this.__causeway_executionModes = WrappingObject.class.getMethod("__causeway_executionModes", _Constants.emptyClasses);
-
+            this.__causeway_originMethod = WrappingObject.class.getMethod(WrappingObject.ORIGIN_GETTER_NAME, _Constants.emptyClasses);
+            this.__causeway_saveMethod = WrappingObject.class.getMethod(WrappingObject.SAVE_METHOD_NAME, _Constants.emptyClasses);
+            this.__causeway_executionModes = WrappingObject.class.getMethod(WrappingObject.EXECUTION_MODES_METHOD_NAME, _Constants.emptyClasses);
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
                     "Could not locate reserved declared methods in the WrappingObject interfaces",
@@ -176,13 +175,13 @@ implements WrapperInvocationHandler {
         var resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
                 .orElseThrow();
 
+        if (method.equals(__causeway_originMethod)) {
+            return new WrappingObject.Origin(context().delegate());
+        }
+        
         // save method, through the proxy
         if (method.equals(__causeway_saveMethod)) {
             return handleSaveMethod(targetAdapter, targetSpec);
-        }
-
-        if (method.equals(__causeway_wrappedMethod)) {
-            return context().delegate();
         }
 
         if (method.equals(__causeway_executionModes)) {
@@ -502,9 +501,8 @@ implements WrapperInvocationHandler {
     }
 
     private Object underlying(final Object arg) {
-        if (arg instanceof WrappingObject) {
-            var argViewObject = (WrappingObject) arg;
-            return argViewObject.__causeway_wrapped();
+        if (arg instanceof WrappingObject wrappingObject) {
+            return wrappingObject.__causeway_origin().pojo();
         } else {
             return arg;
         }

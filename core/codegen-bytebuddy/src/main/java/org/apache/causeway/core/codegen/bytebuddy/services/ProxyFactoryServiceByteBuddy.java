@@ -20,9 +20,11 @@ package org.apache.causeway.core.codegen.bytebuddy.services;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.function.Function;
 
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.stereotype.Service;
 
@@ -48,17 +50,20 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
     public <T> _ProxyFactory<T> factory(
             final Class<T> base,
             final Class<?>[] interfaces,
+            @Nullable List<AdditionalField> additionalFields,
             final Class<?>[] constructorArgTypes) {
 
         var objenesis = new ObjenesisStd();
 
-        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->
-        nextProxyDef(base, interfaces)
-        .intercept(InvocationHandlerAdapter.of(handler))
-        .make()
-        .load(_Context.getDefaultClassLoader(),
-                strategyAdvisor.getSuitableStrategy(base))
-        .getLoaded();
+        final Function<InvocationHandler, Class<? extends T>> proxyClassFactory = handler->{
+            var def = proxyDef(base, interfaces, additionalFields);
+            return def
+                    .intercept(InvocationHandlerAdapter.of(handler))
+                    .make()
+                    .load(_Context.getDefaultClassLoader(),
+                            strategyAdvisor.getSuitableStrategy(base))
+                    .getLoaded();
+        };
 
         return new _ProxyFactory<T>() {
 
@@ -119,14 +124,44 @@ public class ProxyFactoryServiceByteBuddy extends _ProxyFactoryServiceAbstract {
 
     // -- HELPER
 
-    private static <T> ImplementationDefinition<T> nextProxyDef(
+    /**
+     * @implNote could not find a simple way to use the ByteBuddy builder
+     *      to add zero, one or multiple additional fields via {@code defineField},
+     *      so we do those 3 cases conditionally all picking up on a shared 
+     *      {@code prolog}
+     */
+    private static <T> ImplementationDefinition<T> proxyDef(
             final Class<T> base,
-            final Class<?>[] interfaces) {
-        return new ByteBuddy()
+            final Class<?>[] interfaces,
+            @Nullable List<AdditionalField> additionalFields) {
+        
+        var prolog = new ByteBuddy()
                 .with(new NamingStrategy.SuffixingRandom("bb"))
                 .subclass(base)
-                .implement(interfaces)
+                .implement(interfaces);
+        
+        int additionalFieldCount = _NullSafe.size(additionalFields);
+        if(additionalFieldCount==0) {
+            return prolog
                 .method(ElementMatchers.any());
+        }
+        if(additionalFieldCount==1) {
+            var additionalField = additionalFields.get(0);
+            return prolog
+                .defineField(additionalField.name(), additionalField.type(), additionalField.modifiers())
+                .method(ElementMatchers.any());
+        }
+
+        // when more than one additional field ...
+        var fieldIterator = additionalFields.iterator();
+        var firstAdditionalField = fieldIterator.next();
+        var def = prolog
+            .defineField(firstAdditionalField.name(), firstAdditionalField.type(), firstAdditionalField.modifiers());
+        while(fieldIterator.hasNext()) {
+            var additionalField = fieldIterator.next();
+            def = def.defineField(additionalField.name(), additionalField.type(), additionalField.modifiers());
+        }
+        return def.method(ElementMatchers.any());
     }
 
     private static void ensureSameSize(final Class<?>[] a, final Object[] b) {
