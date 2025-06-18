@@ -55,7 +55,7 @@ class WrapperFactoryDefaultTest {
 
         @Override
         public WrappingObject.Origin __causeway_origin() {
-            return new WrappingObject.Origin(wrappedObject);
+            return new WrappingObject.Origin(wrappedObject, SyncControl.control());
         }
 
         @Override

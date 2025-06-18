@@ -102,7 +102,6 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
-import org.apache.causeway.core.runtimeservices.wrapper.handlers.DomainObjectInvocationHandler;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.ProxyGenerator;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
@@ -301,12 +300,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = new DomainObjectInvocationHandler<>(
-                        domainObject,
-                        null, // mixeeAdapter ignored
-                        targetAdapter,
-                        control().withNoExecute(),
-                        null);
+                var doih = proxyGenerator.handlerForRegular(domainObject, targetAdapter);
                 doih.invoke(domainObject, method, args);
             }
 
@@ -347,12 +341,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = new DomainObjectInvocationHandler<>(
-                        mixin,
-                        mixeeAdapter,
-                        mixinAdapter,
-                        control().withNoExecute(),
-                        null);
+                var doih = proxyGenerator.handlerForMixin(mixin, mixeeAdapter, mixinAdapter);
                 doih.invoke(mixin, method, args);
             }
 

@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Map;
@@ -45,10 +46,9 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             domainObject,
             null, // mixeeAdapter ignored
             adapter,
-            syncControl,
             this);
 
-        return instantiateProxy(invocationHandler, new WrappingObject.Origin(domainObject));
+        return instantiateProxy(invocationHandler, new WrappingObject.Origin(domainObject, syncControl));
     }
 
     public <T> T mixinProxy(
@@ -61,10 +61,9 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
                 mixin,
                 mixeeAdapter,
                 mixinAdapter,
-                syncControl,
                 this);
     
-        return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin));
+        return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin, syncControl));
     }
     
     /**
@@ -73,11 +72,10 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      */
     public <T, E> Collection<E> collectionProxy(
             final Collection<E> collectionToBeProxied,
-            final SyncControl syncControl,
             final OneToManyAssociation otma) {
     
         var collectionInvocationHandler = PluralInvocationHandler
-            .forCollection(collectionToBeProxied, syncControl, otma);
+            .forCollection(collectionToBeProxied, otma);
     
         var proxyBase = CollectionSemantics
             .valueOfElseFail(collectionToBeProxied.getClass())
@@ -93,19 +91,18 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
      */
     public <T, P, Q> Map<P, Q> mapProxy(
             final Map<P, Q> mapToBeProxied,
-            final SyncControl syncControl,
             final OneToManyAssociation otma) {
     
         var proxyBase = Map.class;
     
         return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase), 
-                PluralInvocationHandler.forMap(mapToBeProxied, syncControl, otma));
+                PluralInvocationHandler.forMap(mapToBeProxied, otma));
     }
     
     // -- HELPER
 
     <T> T instantiateProxy(final WrapperInvocationHandler handler, WrappingObject.Origin origin) {
-        return _Casts.uncheckedCast(instantiateProxy(handler.context().pojoClass(), handler, origin));
+        return _Casts.uncheckedCast(instantiateProxy(handler.classMetaData().pojoClass(), handler, origin));
     }
 
     /**
@@ -127,6 +124,22 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
                 new Class<?>[] {base},
                 pluralInvocationHandler); 
         return _Casts.uncheckedCast(proxyWithoutFields);
+    }
+
+    public <T> InvocationHandler handlerForRegular(@NonNull T domainObject, ManagedObject targetAdapter) {
+        return new DomainObjectInvocationHandler<>(
+                domainObject,
+                null, // mixeeAdapter ignored
+                targetAdapter,
+                null);
+    }
+
+    public <T> InvocationHandler handlerForMixin(T mixin, ManagedObject mixeeAdapter, ManagedObject mixinAdapter) {
+        return new DomainObjectInvocationHandler<>(
+                mixin,
+                mixeeAdapter,
+                mixinAdapter,
+                null);
     }
     
 }
