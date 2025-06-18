@@ -54,8 +54,8 @@ class WrapperFactoryDefaultTest {
         }
 
         @Override
-        public Object __causeway_wrapped() {
-            return wrappedObject;
+        public WrappingObject.Origin __causeway_origin() {
+            return new WrappingObject.Origin(wrappedObject);
         }
 
         @Override

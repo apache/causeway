@@ -48,30 +48,4 @@ public interface _ProxyFactory<T> {
      */
     public T createInstance(InvocationHandler handler, Object[] constructorArgs);
 
-    // -- BUILDER (uses plugin)
-
-    public static class ProxyFactoryBuilder<T> {
-        private final Class<T> base;
-        private Class<?>[] interfaces;
-        private Class<?>[] constructorArgTypes;
-        private ProxyFactoryBuilder(Class<T> base) {
-            this.base = base;
-        }
-        public ProxyFactoryBuilder<T> interfaces(Class<?>[] interfaces) {
-            this.interfaces = interfaces;
-            return this;
-        }
-        public ProxyFactoryBuilder<T> constructorArgTypes(Class<?>[] constructorArgTypes) {
-            this.constructorArgTypes = constructorArgTypes;
-            return this;
-        }
-        public _ProxyFactory<T> build(_ProxyFactoryService proxyFactoryService) {
-            return proxyFactoryService.factory(base, interfaces, constructorArgTypes);
-        }
-    }
-
-    public static <T> ProxyFactoryBuilder<T> builder(Class<T> base) {
-        return new ProxyFactoryBuilder<T>(base);
-    }
-
 }

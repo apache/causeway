@@ -18,10 +18,14 @@
  */
 package org.apache.causeway.commons.internal.proxy;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 import org.jspecify.annotations.Nullable;
 
 /**
- * Replaces the former ProxyFactoryPlugin
+ * Internal service, that generates {@link _ProxyFactory}(s). 
+ * 
  * @since 2.0
  */
 public interface _ProxyFactoryService {
@@ -29,9 +33,13 @@ public interface _ProxyFactoryService {
     <T> _ProxyFactory<T> factory(
             Class<T> base,
             @Nullable Class<?>[] interfaces,
+            @Nullable List<AdditionalField> additionalFields,
             @Nullable Class<?>[] constructorArgTypes);
 
-    <T> _ProxyFactory<T> factory(Class<T> toProxyClass, Class<?> additionalClass);
+    <T> _ProxyFactory<T> factory(
+            Class<T> toProxyClass, 
+            Class<?> additionalClass,
+            @Nullable List<AdditionalField> additionalFields);
 
     /**
      * Marker interface for entities/services that have been enhanced with
@@ -39,5 +47,14 @@ public interface _ProxyFactoryService {
      */
     interface ProxyEnhanced {
 
+    }
+    
+    /**
+     * Defines a field, that can be added to a proxy class.
+     */
+    record AdditionalField(
+            String name, 
+            Type type, 
+            int modifiers) {
     }
 }

@@ -19,16 +19,19 @@
 package org.apache.causeway.commons.internal.proxy;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Arrays;
 
-import org.jspecify.annotations.NonNull;
-
 /**
- * Replaces the former ProxyFactoryPlugin
+ * Partly implements {@link _ProxyFactoryService} and adds caching.
+ * 
  * @since 2.0
  */
 public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryService {
@@ -38,10 +41,13 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
             Collections.synchronizedMap(new WeakHashMap<>());
 
     @Override
-    public <T> _ProxyFactory<T> factory(final Class<T> classToBeProxied, final Class<?> additionalClass) {
+    public final <T> _ProxyFactory<T> factory(
+            final Class<T> classToBeProxied, 
+            final Class<?> additionalClass,
+            final @Nullable List<AdditionalField> additionalFields) {
         _ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(classToBeProxied));
         if(proxyFactory == null) {
-            proxyFactory = createFactory(classToBeProxied, additionalClass);
+            proxyFactory = createFactory(classToBeProxied, additionalClass, additionalFields);
             proxyFactoryByClass.put(classToBeProxied, proxyFactory);
         }
         return proxyFactory;
@@ -49,17 +55,14 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
 
     private <T> _ProxyFactory<T> createFactory(
             final Class<T> classToBeProxied,
-            final Class<?> additionalClass) {
+            final Class<?> additionalClass, 
+            final @Nullable List<AdditionalField> additionalFields) {
 
         final Class<?>[] interfaces = _Arrays.combine(
                 classToBeProxied.getInterfaces(),
                 ProxyEnhanced.class, additionalClass);
-
-        final _ProxyFactory<T> proxyFactory = _ProxyFactory.builder(classToBeProxied)
-                .interfaces(interfaces)
-                .build(this);
-
-        return proxyFactory;
+        
+        return factory(classToBeProxied, interfaces, additionalFields, null);
     }
 
 }

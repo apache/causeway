@@ -18,54 +18,64 @@
  */
 package org.apache.causeway.applib.services.wrapper;
 
+import java.lang.reflect.Modifier;
+import java.util.List;
+
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
+import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.AdditionalField;
+import org.apache.causeway.commons.internal.reflection._Reflect;
+
+import lombok.SneakyThrows;
 
 /**
  * Implemented by all objects that have been viewed as per
  * {@link WrapperFactory#wrap(Object)}.
+ * 
+ * @implNote domain classes may not have methods with <tt>__causeway_</tt> prefix
+ * 
+ * @apiNote requires the mechanism that creates proxies implementing {@link WrappingObject}
+ *      to additionally create the {@code __causeway_origin_field}. 
  *
- * @since 1.x {@index}
+ * @since 1.x, revised for 3.4 {@index}
  */
 public interface WrappingObject {
+    
+    final static String ORIGIN_GETTER_NAME = "__causeway_origin";
+    final static String ORIGIN_FIELD_NAME = "__causeway_origin_field";
+    final static String SAVE_METHOD_NAME = "__causeway_save";
+    final static String EXECUTION_MODES_METHOD_NAME = "__causeway_executionModes";
+    final static List<AdditionalField> ADDITIONAL_FIELDS = List.of(
+            new AdditionalField(ORIGIN_FIELD_NAME, WrappingObject.Origin.class, Modifier.PROTECTED));
+    
+    record Origin(Object pojo) {
+        
+    }
 
+    /**
+     * Getter for the underlying {@link Origin}.
+     */
+    Origin __causeway_origin();
+
+    /**
+     * Setter for the underlying {@link Origin}.
+     */
+    @SneakyThrows
+    public static void setOrigin(WrappingObject proxyObject, Origin origin)  {
+        var field = proxyObject.getClass().getDeclaredField(ORIGIN_FIELD_NAME);
+        _Reflect.setFieldOn(field, proxyObject, origin);
+    }
+    
     /**
      * Programmatic equivalent of invoking save for a transient object .
-     *
-     * <p>
-     * NOTE: domain classes may not have a method with this name.  The <tt>__causeway_</tt> prefix is
-     * intended to reduce the risk of a collision.
-     * </p>
      */
     void __causeway_save();
-
-    /**
-     * Provide access to the underlying, wrapped object.
-     *
-     * <p>
-     * Used to unwrap objects used as arguments to actions (otherwise, end up
-     * creating a <tt>ObjectSpecification</tt> for the Javassist-enhanced class, not
-     * the original class).
-     *
-     * <p>
-     * NOTE: domain classes may not have a method with this name.  The <tt>__causeway_</tt> prefix is
-     * intended to reduce the risk of a collision.
-     * </p>
-     *
-     * <p>
-     * <b>NOTE: there is a string-literal reference to this name
-     * <tt>DomainObjectInvocationHandler</tt>, so it should not be changed.</b>.
-     */
-    Object __causeway_wrapped();
 
     /**
      * The {@link ExecutionMode}(s) inferred from the
      * {@link SyncControl} with which this wrapper was
      * {@link WrapperFactory#wrap(Object, SyncControl) created}.
-     *
-     * @implNote domain classes may not have a method with this name.  The <tt>__causeway_</tt> prefix is
-     * intended to reduce the risk of a collision.
      */
     ImmutableEnumSet<ExecutionMode> __causeway_executionModes();
 
