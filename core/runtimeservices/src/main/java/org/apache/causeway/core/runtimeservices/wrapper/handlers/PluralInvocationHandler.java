@@ -36,6 +36,7 @@ import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
  * @param <P> non-scalar type (eg. {@link Collection} or {@link Map}) to be proxied
  */
 record PluralInvocationHandler<T, P>(
+        P collectionOrMapToBeProxied,
         WrapperInvocationHandler.Context context,
         OneToManyAssociation oneToManyAssociation,
         CollectionSemantics collectionSemantics
@@ -80,7 +81,8 @@ record PluralInvocationHandler<T, P>(
             final OneToManyAssociation otma,
             final CollectionSemantics collectionSemantics) {
         
-        this(WrapperInvocationHandler.Context.of(otma.getMetaModelContext(), 
+        this(collectionOrMapToBeProxied, 
+                WrapperInvocationHandler.Context.of(otma.getMetaModelContext(), 
                         collectionOrMapToBeProxied, syncControl), 
                 otma, collectionSemantics);
     }
@@ -88,17 +90,16 @@ record PluralInvocationHandler<T, P>(
     @Override
     public Object invoke(final Object collectionObject, final Method method, final Object[] args) throws Throwable {
 
-        final Object returnValueObj = context().invoke(method, args);
-
         var policy = collectionSemantics.getInvocationHandlingPolicy();
-
         if (policy.intercepts(method)) {
 
+            final Object returnValueObj = method.invoke(collectionOrMapToBeProxied, args);
+            
             var event =
                     new CollectionMethodEvent(
-                            context().delegate(),
+                            collectionOrMapToBeProxied,
                             oneToManyAssociation().getFeatureIdentifier(),
-                            context().delegate(),
+                            collectionOrMapToBeProxied,
                             method.getName(),
                             args,
                             returnValueObj);
@@ -111,7 +112,7 @@ record PluralInvocationHandler<T, P>(
                     String.format("Method '%s' may not be called directly.", method.getName()));
         }
 
-        return returnValueObj;
+        return method.invoke(collectionOrMapToBeProxied, args);
     }
 
 }

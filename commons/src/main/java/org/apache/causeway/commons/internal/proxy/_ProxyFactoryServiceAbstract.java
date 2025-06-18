@@ -43,7 +43,7 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
     @Override
     public final <T> _ProxyFactory<T> factory(
             final Class<T> classToBeProxied, 
-            final Class<?> additionalClass,
+            final @Nullable Class<?> additionalClass,
             final @Nullable List<AdditionalField> additionalFields) {
         _ProxyFactory<T> proxyFactory = _Casts.uncheckedCast(proxyFactoryByClass.get(classToBeProxied));
         if(proxyFactory == null) {
@@ -55,12 +55,12 @@ public abstract class _ProxyFactoryServiceAbstract implements _ProxyFactoryServi
 
     private <T> _ProxyFactory<T> createFactory(
             final Class<T> classToBeProxied,
-            final Class<?> additionalClass, 
+            final @Nullable Class<?> additionalClass, 
             final @Nullable List<AdditionalField> additionalFields) {
 
-        final Class<?>[] interfaces = _Arrays.combine(
-                classToBeProxied.getInterfaces(),
-                ProxyEnhanced.class, additionalClass);
+        final Class<?>[] interfaces = additionalClass!=null
+                ? _Arrays.combine(classToBeProxied.getInterfaces(), ProxyEnhanced.class, additionalClass)
+                : _Arrays.combine(classToBeProxied.getInterfaces(), ProxyEnhanced.class);
         
         return factory(classToBeProxied, interfaces, additionalFields, null);
     }

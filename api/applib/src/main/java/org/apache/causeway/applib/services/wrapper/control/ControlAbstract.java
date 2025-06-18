@@ -51,6 +51,7 @@ public class ControlAbstract<T extends ControlAbstract<T>> {
     @Getter(AccessLevel.PACKAGE) @Setter
     private Bookmark bookmark;
 
+    @Getter
     private boolean checkRules = true;
     public T withCheckRules() {
         checkRules = true;

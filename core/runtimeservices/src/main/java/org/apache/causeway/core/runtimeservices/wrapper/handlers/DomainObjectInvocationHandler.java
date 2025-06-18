@@ -21,6 +21,7 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -126,7 +127,7 @@ implements WrapperInvocationHandler {
 
         var _titleMethod = (Method)null;
         try {
-            _titleMethod = context().delegate().getClass().getMethod("title", _Constants.emptyClasses);
+            _titleMethod = context().pojoClass().getMethod("title", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ignore
         }
@@ -147,21 +148,25 @@ implements WrapperInvocationHandler {
     }
 
     /**
-     *
-     * @param proxyObjectUnused - not used.
+     * @param target - either the pojo directly or the proxy instance that is the target of invocation
      * @param method - the method invoked on the proxy
      * @param args - the args to the method invoked on the proxy
      * @throws Throwable
      */
     @Override
-    public Object invoke(final Object proxyObjectUnused, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(final Object target, final Method method, final Object[] args) throws Throwable {
 
+        Objects.requireNonNull(target);
+        final var delegate = target instanceof WrappingObject wrappingObject 
+                ? context().origin(wrappingObject).pojo()
+                : target; // fallback to argument directly passed in
+        
         if (context().isObjectMethod(method)
                 || isEnhancedEntityMethod(method)) {
-            return context().invoke(method, args);
+            return method.invoke(delegate, args);
         }
 
-        final ManagedObject targetAdapter = mmc.getObjectManager().adapt(context().delegate());
+        final ManagedObject targetAdapter = mmc.getObjectManager().adapt(delegate);
 
         if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -175,17 +180,20 @@ implements WrapperInvocationHandler {
         var resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
                 .orElseThrow();
 
-        if (method.equals(__causeway_originMethod)) {
-            return new WrappingObject.Origin(context().delegate());
-        }
+        if(target instanceof WrappingObject) {
         
-        // save method, through the proxy
-        if (method.equals(__causeway_saveMethod)) {
-            return handleSaveMethod(targetAdapter, targetSpec);
-        }
-
-        if (method.equals(__causeway_executionModes)) {
-            return context().syncControl().getExecutionModes();
+            if (method.equals(__causeway_originMethod)) {
+                return delegate;
+            }
+            
+            // save method, through the proxy
+            if (method.equals(__causeway_saveMethod)) {
+                return handleSaveMethod(targetAdapter, targetSpec);
+            }
+    
+            if (method.equals(__causeway_executionModes)) {
+                return context().syncControl().getExecutionModes();
+            }
         }
 
         var objectMember = targetSpec.getMemberElseFail(resolvedMethod);
@@ -197,7 +205,7 @@ implements WrapperInvocationHandler {
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
-            return method.invoke(context().delegate(), args);
+            return method.invoke(delegate, args);
         }
 
         if (objectMember.isOneToOneAssociation()) {
@@ -351,9 +359,10 @@ implements WrapperInvocationHandler {
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            var propertyAccessEvent = new PropertyAccessEvent(
-                    context().delegate(), property.getFeatureIdentifier(), currentReferencedObj);
-            context().notifyListeners(propertyAccessEvent);
+            context().notifyListeners(new PropertyAccessEvent(
+                    targetAdapter.getPojo(), 
+                    property.getFeatureIdentifier(), 
+                    currentReferencedObj));
             return currentReferencedObj;
 
         });
@@ -407,7 +416,7 @@ implements WrapperInvocationHandler {
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            var collectionAccessEvent = new CollectionAccessEvent(context().delegate(), collection.getFeatureIdentifier());
+            var collectionAccessEvent = new CollectionAccessEvent(currentReferencedObj, collection.getFeatureIdentifier());
 
             if (currentReferencedObj instanceof Collection) {
                 var collectionViewObject = lookupWrappingObject(

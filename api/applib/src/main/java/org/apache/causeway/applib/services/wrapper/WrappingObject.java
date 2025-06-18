@@ -50,7 +50,9 @@ public interface WrappingObject {
             new AdditionalField(ORIGIN_FIELD_NAME, WrappingObject.Origin.class, Modifier.PROTECTED));
     
     record Origin(Object pojo) {
-        
+        public static Origin empty() {
+            return new Origin(null);
+        }
     }
 
     /**
@@ -59,12 +61,22 @@ public interface WrappingObject {
     Origin __causeway_origin();
 
     /**
-     * Setter for the underlying {@link Origin}.
+     * Getter for the underlying {@link Origin}.
      */
     @SneakyThrows
-    public static void setOrigin(WrappingObject proxyObject, Origin origin)  {
+    static Origin getOrigin(WrappingObject proxyObject)  {
+        var field = proxyObject.getClass().getDeclaredField(ORIGIN_FIELD_NAME);
+        return (Origin) _Reflect.getFieldOn(field, proxyObject);
+    }
+    
+    /**
+     * Wither for the underlying {@link Origin}.
+     */
+    @SneakyThrows
+    static <T> T withOrigin(T proxyObject, Origin origin) {
         var field = proxyObject.getClass().getDeclaredField(ORIGIN_FIELD_NAME);
         _Reflect.setFieldOn(field, proxyObject, origin);
+        return proxyObject;
     }
     
     /**
@@ -78,5 +90,7 @@ public interface WrappingObject {
      * {@link WrapperFactory#wrap(Object, SyncControl) created}.
      */
     ImmutableEnumSet<ExecutionMode> __causeway_executionModes();
+
+
 
 }
