@@ -251,13 +251,13 @@ implements WrapperFactory, HasMetaModelContext {
 
     protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
         var objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
-        return proxyGenerator.objectProxy(domainObject, objAdapter, syncControl);
+        return proxyGenerator.objectProxy(domainObject, objAdapter.objSpec(), syncControl);
     }
 
     protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
         var mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         var mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
-        return proxyGenerator.mixinProxy(mixin, mixeeAdapter, mixinAdapter, syncControl);
+        return proxyGenerator.mixinProxy(mixin, mixeeAdapter, mixinAdapter.objSpec(), syncControl);
     }
 
     @Override
@@ -300,7 +300,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForRegular(domainObject, targetAdapter);
+                var doih = proxyGenerator.handlerForRegular(targetAdapter.objSpec());
                 doih.invoke(domainObject, method, args);
             }
 
@@ -341,7 +341,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForMixin(mixin, mixeeAdapter, mixinAdapter);
+                var doih = proxyGenerator.handlerForMixin(mixeeAdapter, mixinAdapter.objSpec());
                 doih.invoke(mixin, method, args);
             }
 

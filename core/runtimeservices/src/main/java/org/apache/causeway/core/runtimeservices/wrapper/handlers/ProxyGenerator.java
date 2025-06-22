@@ -31,6 +31,7 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
@@ -38,20 +39,20 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
 
     public <T> T objectProxy(
         final T domainObject,
-        final ManagedObject adapter,
+        final ObjectSpecification domainObjectSpec,
         final SyncControl syncControl) {
 
-        var invocationHandler = handlerForRegular(domainObject, adapter);
+        var invocationHandler = handlerForRegular(domainObjectSpec);
         return instantiateProxy(invocationHandler, new WrappingObject.Origin(domainObject, syncControl));
     }
 
     public <T> T mixinProxy(
             final T mixin,
             final ManagedObject mixeeAdapter,
-            final ManagedObject mixinAdapter,
+            final ObjectSpecification mixinSpec,
             final SyncControl syncControl) {
     
-        var invocationHandler = handlerForMixin(mixin, mixeeAdapter, mixinAdapter);
+        var invocationHandler = handlerForMixin(mixeeAdapter, mixinSpec);
         return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin, syncControl));
     }
     
@@ -115,19 +116,17 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
         return _Casts.uncheckedCast(proxyWithoutFields);
     }
 
-    public <T> WrapperInvocationHandler handlerForRegular(@NonNull T domainObject, ManagedObject targetAdapter) {
-        return new DomainObjectInvocationHandler<>(
-                domainObject.getClass(),
+    public WrapperInvocationHandler handlerForRegular(ObjectSpecification targetSpec) {
+        return new DomainObjectInvocationHandler(
                 null, // mixeeAdapter ignored
-                targetAdapter,
+                targetSpec,
                 this);
     }
 
-    public <T> WrapperInvocationHandler handlerForMixin(T mixin, ManagedObject mixeeAdapter, ManagedObject mixinAdapter) {
-        return new DomainObjectInvocationHandler<>(
-                mixin.getClass(),
+    public WrapperInvocationHandler handlerForMixin(ManagedObject mixeeAdapter, ObjectSpecification mixinSpec) {
+        return new DomainObjectInvocationHandler(
                 mixeeAdapter,
-                mixinAdapter,
+                mixinSpec,
                 this);
     }
     

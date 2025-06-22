@@ -46,10 +46,8 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
@@ -62,58 +60,47 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-
-import lombok.extern.slf4j.Slf4j;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
-/**
- *
- * @param <T> type of delegate
- */
 @Slf4j
-final class DomainObjectInvocationHandler<T>
+final class DomainObjectInvocationHandler
 implements WrapperInvocationHandler {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
     private final WrapperInvocationHandler.ClassMetaData classMetaData;
-
+    
     private final ProxyGenerator proxyGenerator;
-    private final MetaModelContext mmc;
-
-    private final EntityFacet entityFacet;
     private final ManagedObject mixeeAdapter;
+    private final ObjectSpecification targetSpec;
 
     DomainObjectInvocationHandler(
-            final Class<T> domainObjectClass,
             final ManagedObject mixeeAdapter, // ignored if not handling a mixin
-            final ManagedObject targetAdapter,
+            final ObjectSpecification targetSpec,
             final ProxyGenerator proxyGenerator) {
 
-        this.mmc = targetAdapter.objSpec().getMetaModelContext();
-        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(domainObjectClass);
+        this.targetSpec = targetSpec;
+        this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
         this.proxyGenerator = proxyGenerator;
-
-        this.entityFacet = targetAdapter.objSpec().entityFacet().orElse(null);
         this.mixeeAdapter = mixeeAdapter;
     }
 
     @Override
     public Object invoke(WrapperInvocation wrapperInvocation) throws Throwable {
-
+    
         final Object target = wrapperInvocation.origin().pojo();
         final Method method = wrapperInvocation.method();
-
+        
         if (classMetaData().isObjectMethod(method)
                 || isEnhancedEntityMethod(method)) {
             return method.invoke(target, wrapperInvocation.args());
         }
 
-        final ManagedObject targetAdapter = mmc.getObjectManager().adapt(target);
+        final ManagedObject targetAdapter = targetSpec.getObjectManager().adapt(target);
 
         if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -184,8 +171,8 @@ implements WrapperInvocationHandler {
             }
 
             var objectAction = (ObjectAction) objectMember;
-
-            if(Facets.mixinIsPresent(targetSpec)) {
+            
+            if(targetSpec.isMixin()) {
                 if (mixeeAdapter == null) {
                     throw _Exceptions.illegalState(
                             "Missing the required mixeeAdapter for action '%s'",
@@ -249,26 +236,26 @@ implements WrapperInvocationHandler {
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
-        return entityFacet!=null
-                ? entityFacet.isProxyEnhancement(method)
-                : false;
+        return targetSpec.entityFacet()
+            .map(entityFacet->entityFacet.isProxyEnhancement(method))
+            .orElse(false);
     }
 
     private Object handleTitleMethod(
-            final WrapperInvocation wrapperInvocation,
+            final WrapperInvocation wrapperInvocation, 
             final ManagedObject targetAdapter) {
 
         var targetNoSpec = targetAdapter.objSpec();
         var titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
         var titleEvent = titleContext.createInteractionEvent();
-        mmc.getWrapperFactory().notifyListeners(titleEvent);
+        targetSpec.getWrapperFactory().notifyListeners(titleEvent);
         return titleEvent.getTitle();
     }
 
     private Object handleSaveMethod(
-            final WrapperInvocation wrapperInvocation,
-            final ManagedObject targetAdapter,
+            final WrapperInvocation wrapperInvocation, 
+            final ManagedObject targetAdapter, 
             final ObjectSpecification targetNoSpec) {
 
         runValidationTask(wrapperInvocation, ()->{
@@ -306,9 +293,9 @@ implements WrapperInvocationHandler {
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            mmc.getWrapperFactory().notifyListeners(new PropertyAccessEvent(
-                    targetAdapter.getPojo(),
-                    property.getFeatureIdentifier(),
+            targetSpec.getWrapperFactory().notifyListeners(new PropertyAccessEvent(
+                    targetAdapter.getPojo(), 
+                    property.getFeatureIdentifier(), 
                     currentReferencedObj));
             return currentReferencedObj;
 
@@ -367,15 +354,15 @@ implements WrapperInvocationHandler {
 
             if (currentReferencedObj instanceof Collection) {
                 var collectionViewObject = wrapCollection(
-                        (Collection<?>) currentReferencedObj,
+                        (Collection<?>) currentReferencedObj, 
                         collection);
-                mmc.getWrapperFactory().notifyListeners(collectionAccessEvent);
+                targetSpec.getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                var mapViewObject = wrapMap(
+                var mapViewObject = wrapMap( 
                         (Map<?, ?>) currentReferencedObj,
                         collection);
-                mmc.getWrapperFactory().notifyListeners(collectionAccessEvent);
+                targetSpec.getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return mapViewObject;
             }
 
@@ -493,8 +480,8 @@ implements WrapperInvocationHandler {
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
         var interactionEvent = interactionResult.getInteractionEvent();
-
-        mmc.getWrapperFactory().notifyListeners(interactionEvent);
+        
+        targetSpec.getWrapperFactory().notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
             throw toException(interactionEvent);
         }
