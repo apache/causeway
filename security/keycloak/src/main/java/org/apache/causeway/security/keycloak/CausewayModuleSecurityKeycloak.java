@@ -42,7 +42,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.util.Assert;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -87,40 +87,62 @@ public class CausewayModuleSecurityKeycloak {
         var loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
                 + "/" + realm;
 
-        var httpSecurityLogoutConfigurer =
-            http
-                .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                .and()
-
-                .authorizeHttpRequests()
-                    .anyRequest().authenticated()
-                .and()
-
+        return http
+                .sessionManagement(t->t.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .authorizeHttpRequests(t->t.anyRequest().authenticated())
                 // responsibility to propagate logout to Keycloak is performed by
                 // LogoutHandlerForKeycloak (called by Causeway' LogoutMenu, not by Spring)
                 // this is to ensure that Causeway can invalidate the http session eagerly and not preserve it in
                 // the SecurityContextPersistenceFilter (which uses http session to do its work)
-                .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
-
-        logoutHandlers.forEach(httpSecurityLogoutConfigurer::addLogoutHandler);
-
-        httpSecurityLogoutConfigurer
-                .and()
-
-                // This is the point where OAuth2 login of Spring 5 gets enabled
-                .oauth2Login()
+                .logout(t->{
+                    var x = t.logoutRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/logout"));
+                    logoutHandlers.forEach(x::addLogoutHandler);   
+                })
+                // This is the point where OAuth2 login of Spring gets enabled
+                .oauth2Login(t->t
                     .defaultSuccessUrl(successUrl, true)
 //                        .successHandler(new AuthSuccessHandler(loginSuccessHandlers))
                     .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
-                    .userInfoEndpoint()
-                        .oidcUserService(keycloakOidcUserService)
-                .and()
+                    .userInfoEndpoint(c->c.oidcUserService(keycloakOidcUserService))
+                    .loginPage(loginPage))
+                .build();
 
-                .loginPage(loginPage);
-
-        return http.build();
+        
+// Spring 6 Legacy        
+//        var httpSecurityLogoutConfigurer =
+//            http
+//                .sessionManagement()
+//                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                .and()
+//
+//                .authorizeHttpRequests()
+//                    .anyRequest().authenticated()
+//                .and()
+//
+//                // responsibility to propagate logout to Keycloak is performed by
+//                // LogoutHandlerForKeycloak (called by Causeway' LogoutMenu, not by Spring)
+//                // this is to ensure that Causeway can invalidate the http session eagerly and not preserve it in
+//                // the SecurityContextPersistenceFilter (which uses http session to do its work)
+//                .logout()
+//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+//
+//        logoutHandlers.forEach(httpSecurityLogoutConfigurer::addLogoutHandler);
+//
+//        httpSecurityLogoutConfigurer
+//                .and()
+//
+//                // This is the point where OAuth2 login of Spring 5 gets enabled
+//                .oauth2Login()
+//                    .defaultSuccessUrl(successUrl, true)
+////                        .successHandler(new AuthSuccessHandler(loginSuccessHandlers))
+//                    .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+//                    .userInfoEndpoint()
+//                        .oidcUserService(keycloakOidcUserService)
+//                .and()
+//
+//                .loginPage(loginPage);
+//
+//        return http.build();
     }
 
     @Bean
