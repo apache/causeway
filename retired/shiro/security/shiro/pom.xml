@@ -17,91 +17,90 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <parent>
-        <groupId>org.apache.causeway.core</groupId>
-        <artifactId>causeway-core</artifactId>
-    	<version>3.4.0-SNAPSHOT</version>
-        <relativePath>../../../../core/pom.xml</relativePath>
-    </parent>
-
-    <groupId>org.apache.causeway.security</groupId>
-    <artifactId>causeway-security-shiro</artifactId>
-
-    <name>Apache Causeway Security - Shiro</name>
-	<description>
+<project schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.apache.causeway.core</groupId>
+    <artifactId>causeway-core</artifactId>
+    <version>3.4.0-SNAPSHOT</version>
+    <relativePath>../../../../core/pom.xml</relativePath>
+  </parent>
+  <groupId>org.apache.causeway.security</groupId>
+  <artifactId>causeway-security-shiro</artifactId>
+  <name>Apache Causeway Security - Shiro</name>
+  <description>
         Authentication and Authorization using Apache Shiro.
     </description>
-
-    <properties>
-    	<!-- apache shiro is not migrated to JPMS yet, so no point in converting ours to JPMS -->
-        <jar-plugin.automaticModuleName>org.apache.causeway.security.shiro</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/security/shiro</git-plugin.propertiesDir>
-    </properties>
-
-    <dependencies>
-
-      	<dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-runtime</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-runtimeservices</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-webapp</artifactId>
-            <!-- don't make these transitive, so that we can make headless use
+  <properties>
+    <!-- apache shiro is not migrated to JPMS yet, so no point in converting ours to JPMS -->
+    <jar-plugin.automaticModuleName>org.apache.causeway.security.shiro</jar-plugin.automaticModuleName>
+    <git-plugin.propertiesDir>org/apache/causeway/security/shiro</git-plugin.propertiesDir>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.causeway.core</groupId>
+      <artifactId>causeway-core-runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.causeway.core</groupId>
+      <artifactId>causeway-core-runtimeservices</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.causeway.core</groupId>
+      <artifactId>causeway-core-webapp</artifactId>
+      <!-- don't make these transitive, so that we can make headless use
                  of the causeway-security-shiro module (without bringing in spring-boot-web) -->
-            <exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>
 						spring-boot-starter-thymeleaf
 					</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-web</artifactId>
-				</exclusion>
-			</exclusions>
-        </dependency>
-
-        <!-- SHIRO -->
-
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-core</artifactId>
-            <classifier>jakarta</classifier>
-            <version>2.0.2</version>
-            <exclusions>
-            	<exclusion>
-            		<groupId>org.slf4j</groupId>
-            		<artifactId>slf4j-api</artifactId>
-            	</exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-web</artifactId>
-            <classifier>jakarta</classifier>
-            <version>2.0.2</version>
-        </dependency>
-
-        <!-- TESTING -->
-
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
-
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-web</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- SHIRO -->
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-core</artifactId>
+      <classifier>jakarta</classifier>
+      <version>2.0.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.shiro</groupId>
+      <artifactId>shiro-web</artifactId>
+      <classifier>jakarta</classifier>
+      <version>2.0.2</version>
+    </dependency>
+    <!-- TESTING -->
+    <dependency>
+      <groupId>org.apache.causeway.core</groupId>
+      <artifactId>causeway-core-internaltestsupport</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-core</artifactId>
+        <version>2.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-web</artifactId>
+        <version>2.0.4</version>
+      </dependency>
     </dependencies>
-
+  </dependencyManagement>
 </project>
