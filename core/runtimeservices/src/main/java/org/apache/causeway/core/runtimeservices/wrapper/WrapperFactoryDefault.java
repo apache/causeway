@@ -98,6 +98,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler.WrapperInvocation;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
@@ -321,8 +322,8 @@ implements WrapperFactory, HasMetaModelContext {
 
         T mixin = factoryService.mixin(mixinClass, mixee);
 
-        var mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        var mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        var managedMixee = adaptAndGuardAgainstWrappingNotSupported(mixee);
+        var managedMixin = adaptAndGuardAgainstWrappingNotSupported(mixin);
 
         var mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
                 .getConstructorElseFail(mixinClass, mixee.getClass());
@@ -341,11 +342,12 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForMixin(mixeeAdapter, mixinAdapter.objSpec());
-                doih.invoke(mixin, method, args);
+                var doih = proxyGenerator.handlerForMixin(managedMixin.objSpec());
+                var origin = WrappingObject.Origin.fallbackMixin(mixin, managedMixee);
+                doih.invoke(new WrapperInvocation(origin, method, args));
             }
 
-            var actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, mixinAdapter);
+            var actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, managedMixin);
             if (! actionAndTarget.isMemberFound()) {
                 return method.invoke(mixin, args);
             }
