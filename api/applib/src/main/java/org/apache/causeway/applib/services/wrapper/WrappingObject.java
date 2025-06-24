@@ -21,6 +21,8 @@ package org.apache.causeway.applib.services.wrapper;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.AdditionalField;
 import org.apache.causeway.commons.internal.reflection._Reflect;
@@ -47,12 +49,32 @@ public interface WrappingObject {
     final static List<AdditionalField> ADDITIONAL_FIELDS = List.of(
             new AdditionalField(ORIGIN_FIELD_NAME, WrappingObject.Origin.class, Modifier.PROTECTED));
     
-    record Origin(Object pojo, SyncControl syncControl, boolean isFallback) {
+    //TODO perhaps move to a module that sees ManagedObject
+    record Origin(
+            Object pojo,
+            /**
+             * The mixee adapted as a ManagedObject, used only if pojo is a mixin.
+             */
+            @Nullable Object managedMixee, 
+            SyncControl syncControl, 
+            boolean isFallback) {
+        /**
+         * fallback, used for non-proxied target, with no execute (no verify no rule checking).
+         */
         public static Origin fallback(Object target) {
-            return new Origin(target, SyncControl.control().withNoExecute(), true);
+            return new Origin(target, null, SyncControl.control().withNoExecute(), true);
+        }
+        /**
+         * fallback, used for non-proxied target as mixin, with no execute (no verify no rule checking)
+         */
+        public static Origin fallbackMixin(Object target, Object managedMixee) {
+            return new Origin(target, managedMixee, SyncControl.control().withNoExecute(), true);
         }
         public Origin(Object pojo, SyncControl syncControl) {
-            this(pojo, syncControl, false);
+            this(pojo, null, syncControl, false);
+        }
+        public Origin(Object pojo, Object managedMixee, SyncControl syncControl) {
+            this(pojo, managedMixee, syncControl, false);
         }
     }
 

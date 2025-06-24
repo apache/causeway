@@ -48,12 +48,12 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
 
     public <T> T mixinProxy(
             final T mixin,
-            final ManagedObject mixeeAdapter,
+            final ManagedObject managedMixee,
             final ObjectSpecification mixinSpec,
             final SyncControl syncControl) {
     
-        var invocationHandler = handlerForMixin(mixeeAdapter, mixinSpec);
-        return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin, syncControl));
+        var invocationHandler = handlerForMixin(mixinSpec);
+        return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin, managedMixee, syncControl));
     }
     
     /**
@@ -118,14 +118,12 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
 
     public WrapperInvocationHandler handlerForRegular(ObjectSpecification targetSpec) {
         return new DomainObjectInvocationHandler(
-                null, // mixeeAdapter ignored
                 targetSpec,
                 this);
     }
 
-    public WrapperInvocationHandler handlerForMixin(ManagedObject mixeeAdapter, ObjectSpecification mixinSpec) {
+    public WrapperInvocationHandler handlerForMixin(ObjectSpecification mixinSpec) {
         return new DomainObjectInvocationHandler(
-                mixeeAdapter,
                 mixinSpec,
                 this);
     }

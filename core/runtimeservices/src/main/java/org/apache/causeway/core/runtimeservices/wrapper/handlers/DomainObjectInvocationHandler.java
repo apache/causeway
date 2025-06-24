@@ -75,18 +75,14 @@ implements WrapperInvocationHandler {
     private final WrapperInvocationHandler.ClassMetaData classMetaData;
     
     private final ProxyGenerator proxyGenerator;
-    private final ManagedObject mixeeAdapter;
     private final ObjectSpecification targetSpec;
 
     DomainObjectInvocationHandler(
-            final ManagedObject mixeeAdapter, // ignored if not handling a mixin
             final ObjectSpecification targetSpec,
             final ProxyGenerator proxyGenerator) {
-
         this.targetSpec = targetSpec;
         this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
         this.proxyGenerator = proxyGenerator;
-        this.mixeeAdapter = mixeeAdapter;
     }
 
     @Override
@@ -94,6 +90,7 @@ implements WrapperInvocationHandler {
     
         final Object target = wrapperInvocation.origin().pojo();
         final Method method = wrapperInvocation.method();
+        final ManagedObject managedMixee = (ManagedObject) wrapperInvocation.origin().managedMixee();
         
         if (classMetaData().isObjectMethod(method)
                 || isEnhancedEntityMethod(method)) {
@@ -110,8 +107,7 @@ implements WrapperInvocationHandler {
             return handleTitleMethod(wrapperInvocation, targetAdapter);
         }
 
-        final ObjectSpecification targetSpec = targetAdapter.objSpec();
-        var resolvedMethod = _GenericResolver.resolveMethod(method, targetSpec.getCorrespondingClass())
+        var resolvedMethod = _GenericResolver.resolveMethod(method, targetAdapter.objSpec().getCorrespondingClass())
                 .orElseThrow();
 
         if(!wrapperInvocation.origin().isFallback()) {
@@ -120,16 +116,14 @@ implements WrapperInvocationHandler {
             }
             // save method, through the proxy
             if (classMetaData.isSaveMethod(method)) {
-                return handleSaveMethod(wrapperInvocation, targetAdapter, targetSpec);
+                return handleSaveMethod(wrapperInvocation, targetAdapter, targetAdapter.objSpec());
             }
         }
 
-        var objectMember = targetSpec.getMemberElseFail(resolvedMethod);
-        var memberId = objectMember.getId();
-
+        var objectMember = targetAdapter.objSpec().getMemberElseFail(resolvedMethod);
         var intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
-            throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberId));
+            throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", objectMember.getId()));
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
@@ -139,7 +133,7 @@ implements WrapperInvocationHandler {
         if (objectMember.isOneToOneAssociation()) {
 
             if (intent == Intent.CHECK_IF_VALID || intent == Intent.MODIFY_PROPERTY_SUPPORTING) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", memberId));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", objectMember.getId()));
             }
 
             final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
@@ -155,48 +149,48 @@ implements WrapperInvocationHandler {
         if (objectMember.isOneToManyAssociation()) {
 
             if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", memberId));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", objectMember.getId()));
             }
 
             final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, otma, memberId);
+                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, otma, objectMember.getId());
             }
         }
 
         if (objectMember instanceof ObjectAction) {
 
             if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", memberId));
+                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", objectMember.getId()));
             }
 
             var objectAction = (ObjectAction) objectMember;
             
-            if(targetSpec.isMixin()) {
-                if (mixeeAdapter == null) {
+            if(targetAdapter.objSpec().isMixin()) {
+                if (managedMixee == null) {
                     throw _Exceptions.illegalState(
-                            "Missing the required mixeeAdapter for action '%s'",
+                            "Missing the required managedMixee for action '%s'",
                             objectAction.getId());
                 }
-                MmAssertionUtils.assertIsBookmarkSupported(mixeeAdapter);
+                MmAssertionUtils.assertIsBookmarkSupported(managedMixee);
 
-                final ObjectMember mixinMember = determineMixinMember(mixeeAdapter, objectAction);
+                final ObjectMember mixinMember = determineMixinMember(managedMixee, objectAction);
 
                 if (mixinMember != null) {
                     if(mixinMember instanceof ObjectAction) {
-                        return handleActionMethod(wrapperInvocation, mixeeAdapter, (ObjectAction)mixinMember);
+                        return handleActionMethod(wrapperInvocation, managedMixee, (ObjectAction)mixinMember);
                     }
                     if(mixinMember instanceof OneToOneAssociation) {
                         _Assert.assertEquals(0, wrapperInvocation.args().length);
-                        return handleGetterMethodOnProperty(wrapperInvocation, mixeeAdapter, (OneToOneAssociation)mixinMember);
+                        return handleGetterMethodOnProperty(wrapperInvocation, managedMixee, (OneToOneAssociation)mixinMember);
                     }
                     if(mixinMember instanceof OneToManyAssociation) {
                         _Assert.assertEquals(0, wrapperInvocation.args().length);
-                        return handleGetterMethodOnCollection(wrapperInvocation, mixeeAdapter, (OneToManyAssociation)mixinMember, memberId);
+                        return handleGetterMethodOnCollection(wrapperInvocation, managedMixee, (OneToManyAssociation)mixinMember, objectMember.getId());
                     }
                 } else {
                     throw _Exceptions.illegalState(String.format(
-                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetSpec));
+                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetAdapter.objSpec()));
                 }
             }
 
