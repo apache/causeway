@@ -37,7 +37,8 @@ class AsyncControl_Test {
         var control = AsyncControl.returningVoid();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).isEmpty();
+        Assertions.assertThat(control.syncControl().isSkipExecute()).isEqualTo(false);
+        Assertions.assertThat(control.syncControl().isSkipRules()).isEqualTo(false);
     }
 
     @Test
@@ -46,10 +47,11 @@ class AsyncControl_Test {
         var control = AsyncControl.returningVoid();
 
         // when
-        control.withCheckRules();
+        control = control.withCheckRules();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).isEmpty();
+        Assertions.assertThat(control.syncControl().isSkipExecute()).isEqualTo(false);
+        Assertions.assertThat(control.syncControl().isSkipRules()).isEqualTo(false);
     }
 
     @Test
@@ -59,10 +61,11 @@ class AsyncControl_Test {
         var control = AsyncControl.returningVoid();
 
         // when
-        control.withSkipRules();
+        control = control.withSkipRules();
 
         // then
-        Assertions.assertThat(control.getExecutionModes()).contains(ExecutionMode.SKIP_RULE_VALIDATION);
+        Assertions.assertThat(control.syncControl().isSkipExecute()).isEqualTo(false);
+        Assertions.assertThat(control.syncControl().isSkipRules()).isEqualTo(true);
     }
 
     @Test
@@ -72,10 +75,10 @@ class AsyncControl_Test {
         var control = AsyncControl.returningVoid();
 
         // when
-        control.withUser(UserMemento.ofName("fred"));
+        control = control.withUser(UserMemento.ofName("fred"));
 
         // then
-        Assertions.assertThat(control.getUser().name()).isEqualTo("fred");
+        Assertions.assertThat(control.user().name()).isEqualTo("fred");
     }
 
     @Test
@@ -85,32 +88,29 @@ class AsyncControl_Test {
         var control = AsyncControl.returningVoid();
 
         // when
-        control.withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"));
+        control = control.withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"));
 
         // then
-        Assertions.assertThat(control.getUser().streamRoleNames().collect(Collectors.toList()))
+        Assertions.assertThat(control.user().streamRoleNames().collect(Collectors.toList()))
         .containsExactlyInAnyOrder("role-1", "role-2");
     }
 
     @Test
     public void chaining() throws Exception {
 
-        var executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(command -> {
-        }));
-        ExceptionHandler exceptionHandler = ex -> null;
+        var executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(command -> {}));
+        var exceptionHandler = (ExceptionHandler) ex -> null;
 
         var control = AsyncControl.returning(String.class)
                 .withSkipRules()
                 .withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"))
                 .with(executorService)
-                .with(exceptionHandler);
+                .setExceptionHandler(exceptionHandler);
 
-        Assertions.assertThat(control.getExecutionModes())
-                .containsExactlyInAnyOrder(ExecutionMode.SKIP_RULE_VALIDATION);
-        Assertions.assertThat(control.getExecutorService())
-                .isSameAs(executorService);
-        Assertions.assertThat(control.getExceptionHandler().orElse(null))
-                .isSameAs(exceptionHandler);
+        Assertions.assertThat(control.syncControl().isSkipExecute()).isEqualTo(false);
+        Assertions.assertThat(control.syncControl().isSkipRules()).isEqualTo(true);
+        Assertions.assertThat(control.executorService()).isSameAs(executorService);
+        Assertions.assertThat(control.syncControl().exceptionHandler()).isSameAs(exceptionHandler);
     }
 
 }

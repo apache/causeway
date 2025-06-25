@@ -20,9 +20,8 @@ package org.apache.causeway.applib.services.wrapper.control;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.apache.causeway.commons.internal.base._NullSafe;
 
 class SyncControl_Test {
 
@@ -33,7 +32,8 @@ class SyncControl_Test {
         var control = SyncControl.control();
 
         // then
-        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
+        assertFalse(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
@@ -42,10 +42,11 @@ class SyncControl_Test {
         var control = SyncControl.control();
 
         // when
-        control.withCheckRules();
+        control = control.withCheckRules();
 
         // then
-        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
+        assertFalse(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
@@ -55,10 +56,11 @@ class SyncControl_Test {
         var control = SyncControl.control();
 
         // when
-        control.withSkipRules();
+        control = control.withSkipRules();
 
         // then
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION));
+        assertFalse(control.isSkipExecute());
+        assertTrue(control.isSkipRules());
     }
 
     @Test
@@ -68,10 +70,11 @@ class SyncControl_Test {
         var control = SyncControl.control();
 
         // when
-        control.withExecute();
+        control = control.withExecute();
 
         // then
-        assertTrue(_NullSafe.isEmpty(control.getExecutionModes()));
+        assertFalse(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
@@ -81,10 +84,11 @@ class SyncControl_Test {
         var control = SyncControl.control();
 
         // when
-        control.withNoExecute();
+        control = control.withNoExecute();
 
         // then
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION));
+        assertTrue(control.isSkipExecute());
+        assertFalse(control.isSkipRules());
     }
 
     @Test
@@ -95,11 +99,10 @@ class SyncControl_Test {
         var control = SyncControl.control()
                 .withNoExecute()
                 .withSkipRules()
-                .with(exceptionHandler);
+                .setExceptionHandler(exceptionHandler);
 
-        assertTrue(control.getExecutionModes().size()==2);
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION));
-        assertTrue(control.getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION));
+        assertTrue(control.isSkipExecute());
+        assertTrue(control.isSkipRules());
     }
 
 }

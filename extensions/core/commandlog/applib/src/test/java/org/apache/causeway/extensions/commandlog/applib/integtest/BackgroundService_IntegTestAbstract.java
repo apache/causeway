@@ -107,8 +107,8 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             var control = AsyncControl.returning(Counter.class);
             wrapperFactory.asyncWrap(counter, control).bumpUsingDeclaredAction();
 
-            // wait til done
-            control.getFuture().get();
+            // wait till done
+            control.future().get();
         }).ifFailureFail();
 
         // then
@@ -127,7 +127,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control).act();
 
             // wait til done
-            control.getFuture().get();
+            control.future().get();
         }).ifFailureFail();
 
         // then

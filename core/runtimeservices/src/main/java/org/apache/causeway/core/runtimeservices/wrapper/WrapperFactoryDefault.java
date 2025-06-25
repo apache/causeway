@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
-import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
+import org.apache.causeway.applib.services.wrapper.control.AsyncLogger;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
@@ -80,7 +79,6 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.causeway.applib.services.xactn.TransactionService;
-import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -109,7 +107,6 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import static org.apache.causeway.applib.services.wrapper.control.SyncControl.control;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -200,21 +197,13 @@ implements WrapperFactory, HasMetaModelContext {
         if (isWrapper(domainObject)) {
             var wrapperObject = (WrappingObject) domainObject;
             var origin = wrapperObject.__causeway_origin();
-            if(equivalent(origin.syncControl().getExecutionModes(), syncControl.getExecutionModes())) {
+            if(origin.syncControl().isEquivalent(syncControl)) {
                 return domainObject;
             }
             var underlyingDomainObject = wrapperObject.__causeway_origin().pojo();
             return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
         }
         return createProxy(domainObject, syncControl);
-    }
-
-    private static boolean equivalent(final ImmutableEnumSet<ExecutionMode> first, final ImmutableEnumSet<ExecutionMode> second) {
-        return equivalent(first.toEnumSet(), second.toEnumSet());
-    }
-
-    private static boolean equivalent(final EnumSet<ExecutionMode> first, final EnumSet<ExecutionMode> second) {
-        return first.containsAll(second) && second.containsAll(first);
     }
 
     @Override
@@ -240,7 +229,7 @@ implements WrapperFactory, HasMetaModelContext {
 
             getServiceInjector().injectServicesInto(underlyingMixee);
 
-            if(equivalent(origin.syncControl().getExecutionModes(), syncControl.getExecutionModes())) {
+            if(origin.syncControl().isEquivalent(syncControl)) {
                 return mixin;
             }
             return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
@@ -279,7 +268,7 @@ implements WrapperFactory, HasMetaModelContext {
     // -- ASYNC WRAPPING
 
     @Override
-    public <T,R> T asyncWrap(
+    public <T, R> T asyncWrap(
             final @NonNull T domainObject,
             final AsyncControl<R> asyncControl) {
 
@@ -289,7 +278,7 @@ implements WrapperFactory, HasMetaModelContext {
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
 
-        final InvocationHandler handler = (proxy, method, args) -> {
+        var handler = (InvocationHandler) (proxy, method, args) -> {
             var resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
@@ -297,17 +286,19 @@ implements WrapperFactory, HasMetaModelContext {
                 return method.invoke(domainObject, args);
             }
 
-            if (asyncControl.isCheckRules()) {
+            if (!asyncControl.syncControl().isSkipRules()) {
                 var doih = proxyGenerator.handler(targetAdapter.objSpec());
-                doih.invoke(domainObject, method, args);
+                var origin = WrappingObject.Origin.fallback(domainObject);
+                doih.invoke(new WrapperInvocation(origin, method, args));
             }
 
-            var memberAndTarget = memberAndTargetForRegular(resolvedMethod, targetAdapter);
-            if( ! memberAndTarget.isMemberFound()) {
+            var memberAndTarget = MemberAndTarget.forRegular(resolvedMethod, targetAdapter);
+            if(!memberAndTarget.isMemberFound()) {
                 return method.invoke(domainObject, args);
             }
 
-            return submitAsync(memberAndTarget, args, asyncControl);
+            submitAsync(memberAndTarget, args, asyncControl);
+            return null;
         };
 
         @SuppressWarnings("unchecked")
@@ -332,7 +323,7 @@ implements WrapperFactory, HasMetaModelContext {
         var mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
                 .getConstructorElseFail(mixinClass, mixee.getClass());
 
-        final InvocationHandler handler = (proxy, method, args) -> {
+        var handler = (InvocationHandler) (proxy, method, args) -> {
             var resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
@@ -340,18 +331,19 @@ implements WrapperFactory, HasMetaModelContext {
                 return method.invoke(mixin, args);
             }
 
-            if (asyncControl.isCheckRules()) {
+            if (!asyncControl.syncControl().isSkipRules()) {
                 var doih = proxyGenerator.handler(managedMixin.objSpec());
                 var origin = WrappingObject.Origin.fallbackMixin(mixin, managedMixee);
                 doih.invoke(new WrapperInvocation(origin, method, args));
             }
 
-            var actionAndTarget = memberAndTargetForMixin(resolvedMethod, mixee, managedMixin);
-            if (! actionAndTarget.isMemberFound()) {
+            var actionAndTarget = MemberAndTarget.forMixin(resolvedMethod, mixee, managedMixin);
+            if (!actionAndTarget.isMemberFound()) {
                 return method.invoke(mixin, args);
             }
 
-            return submitAsync(actionAndTarget, args, asyncControl);
+            submitAsync(actionAndTarget, args, asyncControl);
+            return null;
         };
 
         var proxyClass = proxyFactoryService
@@ -367,7 +359,7 @@ implements WrapperFactory, HasMetaModelContext {
         return method.getDeclaringClass().equals(Object.class);
     }
 
-    private <R> Object submitAsync(
+    private <R> void submitAsync(
             final MemberAndTarget memberAndTarget,
             final Object[] args,
             final AsyncControl<R> asyncControl) {
@@ -379,96 +371,46 @@ implements WrapperFactory, HasMetaModelContext {
         var parentCommand = getInteractionService().currentInteractionElseFail().getCommand();
         var parentInteractionId = parentCommand.getInteractionId();
 
-        var targetAdapter = memberAndTarget.getTarget();
-        var method = memberAndTarget.getMethod();
+        var targetAdapter = memberAndTarget.target();
+        var method = memberAndTarget.method();
 
         var head = InteractionHead.regular(targetAdapter);
 
         var childInteractionId = interactionIdGenerator.interactionId();
         CommandDto childCommandDto;
-        switch (memberAndTarget.getType()) {
+        switch (memberAndTarget.type()) {
             case ACTION:
-                var action = memberAndTarget.getAction();
+                var action = memberAndTarget.action();
                 var argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, action, argAdapters);
                 break;
             case PROPERTY:
-                var property = memberAndTarget.getProperty();
+                var property = memberAndTarget.property();
                 var propertyValueAdapter = ManagedObject.adaptProperty(property, args[0]);
                 childCommandDto = commandDtoFactory
                         .asCommandDto(childInteractionId, head, property, propertyValueAdapter);
                 break;
             default:
                 // shouldn't happen, already catered for this case previously
-                return null;
+                return;
         }
         var oidDto = childCommandDto.getTargets().getOid().get(0);
 
-        asyncControl.setMethod(method);
-        asyncControl.setBookmark(Bookmark.forOidDto(oidDto));
+        var rootExceptionHandler = asyncControl.syncControl().exceptionHandler();
+        asyncControl.setExceptionHandler(new AsyncLogger(rootExceptionHandler, method, Bookmark.forOidDto(oidDto)));
 
-        var executorService = Optional.ofNullable(asyncControl.getExecutorService())
+        var executorService = Optional.ofNullable(asyncControl.executorService())
                 .orElse(commonExecutorService);
         var asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
             asyncInteractionContext,
             Propagation.REQUIRES_NEW,
             childCommandDto,
-            asyncControl.getReturnType(),
+            asyncControl.returnType(),
             parentInteractionId)); // this command becomes the parent of child command
 
         var future = executorService.submit(asyncTask);
-        asyncControl.setFuture(future);
-
-        return null;
-    }
-
-    private MemberAndTarget memberAndTargetForRegular(
-            final ResolvedMethod method,
-            final ManagedObject targetAdapter) {
-
-        var objectMember = targetAdapter.objSpec().getMember(method).orElse(null);
-        if(objectMember == null) {
-            return MemberAndTarget.notFound();
-        }
-
-        if (objectMember instanceof OneToOneAssociation) {
-            return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method.method());
-        }
-        if (objectMember instanceof ObjectAction) {
-            return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method.method());
-        }
-
-        throw new UnsupportedOperationException(
-                "Only properties and actions can be executed in the background "
-                        + "(method " + method.name() + " represents a " + objectMember.getFeatureType().name() + "')");
-    }
-
-    private <T> MemberAndTarget memberAndTargetForMixin(
-            final ResolvedMethod method,
-            final T mixee,
-            final ManagedObject mixinAdapter) {
-
-        var mixinMember = mixinAdapter.objSpec().getMember(method).orElse(null);
-        if (mixinMember == null) {
-            return MemberAndTarget.notFound();
-        }
-
-        // find corresponding action of the mixee (this is the 'real' target, the target usable for invocation).
-        var mixeeClass = mixee.getClass();
-
-        // don't care about anything other than actions
-        // (contributed properties and collections are read-only).
-        final ObjectAction targetAction = getSpecificationLoader().specForType(mixeeClass)
-        .flatMap(mixeeSpec->mixeeSpec.streamAnyActions(MixedIn.ONLY)
-                .filter(act -> ((MixedInMember)act).hasMixinAction((ObjectAction) mixinMember))
-                .findFirst()
-        )
-        .orElseThrow(()->new UnsupportedOperationException(String.format(
-                "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
-                mixinMember.getId(), mixeeClass.getName())));
-
-        return MemberAndTarget.foundAction(targetAction, getObjectManager().adapt(mixee), method.method());
+        asyncControl.futureRef().set(future);
     }
 
     private static <R> InteractionContext interactionContextFrom(
@@ -476,15 +418,25 @@ implements WrapperFactory, HasMetaModelContext {
             final InteractionContext interactionContext) {
 
         return InteractionContext.builder()
-            .clock(Optional.ofNullable(asyncControl.getClock()).orElseGet(interactionContext::getClock))
-            .locale(Optional.ofNullable(asyncControl.getLocale()).map(UserLocale::valueOf).orElse(null)) // if not set in asyncControl use defaults (set override to null)
-            .timeZone(Optional.ofNullable(asyncControl.getTimeZone()).orElseGet(interactionContext::getTimeZone))
-            .user(Optional.ofNullable(asyncControl.getUser()).orElseGet(interactionContext::getUser))
+            .clock(Optional.ofNullable(asyncControl.clock()).orElseGet(interactionContext::getClock))
+            .locale(Optional.ofNullable(asyncControl.locale()).map(UserLocale::valueOf).orElse(null)) // if not set in asyncControl use defaults (set override to null)
+            .timeZone(Optional.ofNullable(asyncControl.timeZone()).orElseGet(interactionContext::getTimeZone))
+            .user(Optional.ofNullable(asyncControl.user()).orElseGet(interactionContext::getUser))
             .build();
     }
 
-    @Data
-    static class MemberAndTarget {
+    record MemberAndTarget(
+            Type type,
+            /**
+             * Populated if and only if {@link #type} is {@link Type#ACTION}.
+             */
+            ObjectAction action,
+            /**
+             * Populated if and only if {@link #type} is {@link Type#PROPERTY}.
+             */
+            OneToOneAssociation property,
+            ManagedObject target,
+            Method method) {
         static MemberAndTarget notFound() {
             return new MemberAndTarget(Type.NONE, null, null, null, null);
         }
@@ -493,6 +445,53 @@ implements WrapperFactory, HasMetaModelContext {
         }
         static MemberAndTarget foundProperty(final OneToOneAssociation property, final ManagedObject target, final Method method) {
             return new MemberAndTarget(Type.PROPERTY, null, property, target, method);
+        }
+        static MemberAndTarget forRegular(
+                final ResolvedMethod method,
+                final ManagedObject targetAdapter) {
+
+            var objectMember = targetAdapter.objSpec().getMember(method).orElse(null);
+            if(objectMember == null) {
+                return MemberAndTarget.notFound();
+            }
+            if (objectMember instanceof OneToOneAssociation) {
+                return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method.method());
+            }
+            if (objectMember instanceof ObjectAction) {
+                return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method.method());
+            }
+
+            throw new UnsupportedOperationException(
+                    "Only properties and actions can be executed in the background "
+                            + "(method " + method.name() + " represents a " + objectMember.getFeatureType().name() + "')");
+        }
+        static <T> MemberAndTarget forMixin(
+                final ResolvedMethod method,
+                final T mixee,
+                final ManagedObject mixinAdapter) {
+
+            var mixinMember = mixinAdapter.objSpec().getMember(method).orElse(null);
+            if (mixinMember == null) {
+                return MemberAndTarget.notFound();
+            }
+
+            var mmc = mixinAdapter.getMetaModelContext();
+
+            // find corresponding action of the mixee (this is the 'real' target, the target usable for invocation).
+            var mixeeClass = mixee.getClass();
+
+            // don't care about anything other than actions
+            // (contributed properties and collections are read-only).
+            final ObjectAction targetAction = mmc.getSpecificationLoader().specForType(mixeeClass)
+            .flatMap(mixeeSpec->mixeeSpec.streamAnyActions(MixedIn.ONLY)
+                    .filter(act -> ((MixedInMember)act).hasMixinAction((ObjectAction) mixinMember))
+                    .findFirst()
+            )
+            .orElseThrow(()->new UnsupportedOperationException(String.format(
+                    "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
+                    mixinMember.getId(), mixeeClass.getName())));
+
+            return MemberAndTarget.foundAction(targetAction, mmc.getObjectManager().adapt(mixee), method.method());
         }
 
         public boolean isMemberFound() {
@@ -504,17 +503,6 @@ implements WrapperFactory, HasMetaModelContext {
             PROPERTY,
             NONE
         }
-        private final Type type;
-        /**
-         * Populated if and only if {@link #type} is {@link Type#ACTION}.
-         */
-        private final ObjectAction action;
-        /**
-         * Populated if and only if {@link #type} is {@link Type#PROPERTY}.
-         */
-        private final OneToOneAssociation property;
-        private final ManagedObject target;
-        private final Method method;
     }
 
     // -- LISTENERS
