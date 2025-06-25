@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtime.wrap;
 
-import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -28,18 +27,19 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.commons.internal.proxy.CachableInvocationHandler;
 
-public interface WrapperInvocationHandler extends InvocationHandler {
-    
+public interface WrapperInvocationHandler extends CachableInvocationHandler {
+
     ClassMetaData classMetaData();
-    
+
     Object invoke(WrapperInvocation wrapperInvocation) throws Throwable;
-    
+
     @Override
     default Object invoke(Object target, Method method, Object[] args) throws Throwable {
         return invoke(WrapperInvocation.of(target, method, args));
     }
-    
+
     public record ClassMetaData(
             /** underlying class that is to be proxied */
             Class<?> pojoClass,
@@ -47,31 +47,31 @@ public interface WrapperInvocationHandler extends InvocationHandler {
             Method equalsMethod,
             Method hashCodeMethod,
             Method toStringMethod,
-            
+
             /**
              * The <tt>title()</tt> method; may be <tt>null</tt>.
              */
             @Nullable Method titleMethod) {
-        
+
         /**
          * The <tt>__causeway_origin()</tt> method from {@link WrappingObject#__causeway_origin()}.
          */
-        static final _Lazy<Method> __causeway_originMethod = _Lazy.threadSafe(()-> 
+        static final _Lazy<Method> __causeway_originMethod = _Lazy.threadSafe(()->
                 WrappingObject.class.getMethod(WrappingObject.ORIGIN_GETTER_NAME, _Constants.emptyClasses));
-        
+
         /**
          * The <tt>__causeway_save()</tt> method from {@link WrappingObject#__causeway_save()}.
          */
         static final _Lazy<Method> __causeway_saveMethod = _Lazy.threadSafe(()->
                 WrappingObject.class.getMethod(WrappingObject.SAVE_METHOD_NAME, _Constants.emptyClasses));
-        
+
         public static ClassMetaData of(
                 final @NonNull Class<?> pojoClass) {
             try {
                 var equalsMethod = pojoClass.getMethod("equals", _Constants.classesOfObject);
                 var hashCodeMethod = pojoClass.getMethod("hashCode", _Constants.emptyClasses);
                 var toStringMethod = pojoClass.getMethod("toString", _Constants.emptyClasses);
-                
+
                 var titleMethod = (Method)null;
                 try {
                     titleMethod = pojoClass.getMethod("title", _Constants.emptyClasses);
@@ -80,17 +80,17 @@ public interface WrapperInvocationHandler extends InvocationHandler {
                 }
                 return new WrapperInvocationHandler
                         .ClassMetaData(pojoClass, equalsMethod, hashCodeMethod, toStringMethod, titleMethod);
-                
+
             } catch (final NoSuchMethodException e) {
                 // ///CLOVER:OFF
                 throw new RuntimeException("An Object method could not be found: " + e.getMessage());
                 // ///CLOVER:ON
             }
         }
-        
+
         public boolean isObjectMethod(final Method method) {
-            return toStringMethod().equals(method) 
-                    || hashCodeMethod().equals(method) 
+            return toStringMethod().equals(method)
+                    || hashCodeMethod().equals(method)
                     || equalsMethod().equals(method);
         }
 
@@ -104,7 +104,7 @@ public interface WrapperInvocationHandler extends InvocationHandler {
             return method.equals(__causeway_saveMethod.get());
         }
     }
-    
+
     public record WrapperInvocation(
         WrappingObject.@NonNull Origin origin,
         @NonNull Method method,
@@ -112,12 +112,12 @@ public interface WrapperInvocationHandler extends InvocationHandler {
 
         static WrapperInvocation of(Object target, Method method, Object[] args) {
             Objects.requireNonNull(target);
-            var origin = target instanceof WrappingObject wrappingObject 
+            var origin = target instanceof WrappingObject wrappingObject
                     ? WrappingObject.getOrigin(wrappingObject)
                     : WrappingObject.Origin.fallback(target);
             return new WrapperInvocation(origin, method, args!=null ? args : _Constants.emptyObjects);
         }
-        
+
         public boolean shouldEnforceRules() {
             return !origin().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
         }
@@ -126,5 +126,5 @@ public interface WrapperInvocationHandler extends InvocationHandler {
             return !origin().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
         }
     }
-    
+
 }

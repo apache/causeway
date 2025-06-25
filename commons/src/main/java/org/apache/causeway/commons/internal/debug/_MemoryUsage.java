@@ -18,11 +18,10 @@
  */
 package org.apache.causeway.commons.internal.debug;
 
-import lombok.SneakyThrows;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryPoolMXBean;
-import java.util.concurrent.Callable;
+
+import org.apache.causeway.commons.functional.ThrowingRunnable;
 
 /**
  * <h1>- internal use only -</h1>
@@ -35,36 +34,25 @@ import java.util.concurrent.Callable;
  * @since 3.4.0
  */
 public record _MemoryUsage(long usedInKibiBytes) {
-    
+
     // -- UTILITIES
-    
+
     static int indent = 0;
 
-    @SneakyThrows
-    public static <T> T measureMetaspace(final String desc, final Callable<T> runnable) {
+    public static _MemoryUsage measureMetaspace(final ThrowingRunnable runnable) {
         var before = metaspace();
-        try {
-            indent++;
-            return runnable.call();
-        } finally {
-            var after = metaspace();
-            System.out.printf("%s%s : %s%n", spaces(indent), after.minus(before), desc);
-            indent--;
-        }
-    }
-    
-    public static void measureMetaspace(String desc, final Runnable runnable) {
-        var before = metaspace();
+        var after = (_MemoryUsage) null;
         try {
             runnable.run();
+        } catch (Throwable e) {
         } finally {
-            var after = metaspace();
-            System.out.printf("%s : %s%n", after.minus(before), desc);
+            after = metaspace();
         }
+        return after.minus(before);
     }
-    
+
     // -- FACTORY
-    
+
     private static _MemoryUsage metaspace() {
         for (MemoryPoolMXBean pool : ManagementFactory.getMemoryPoolMXBeans()) {
             if (pool.getName().contains("Metaspace")) {
@@ -73,7 +61,7 @@ public record _MemoryUsage(long usedInKibiBytes) {
         }
         throw new RuntimeException("Metaspace Usage not found");
     }
-    
+
     // -- NON CANONICAL CONSTRUCTOR
 
     private _MemoryUsage(java.lang.management.MemoryUsage usage) {
@@ -86,10 +74,6 @@ public record _MemoryUsage(long usedInKibiBytes) {
     }
 
     // -- HELPER
-
-    private static String spaces(int indent) {
-        return " ".repeat(indent * 2);
-    }
 
     private _MemoryUsage minus(_MemoryUsage before) {
         return new _MemoryUsage(this.usedInKibiBytes - before.usedInKibiBytes);

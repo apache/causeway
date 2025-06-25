@@ -21,8 +21,10 @@ package org.apache.causeway.testdomain.persistence.jpa.wrapper;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -37,6 +39,8 @@ import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaProduct;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
+
+import lombok.RequiredArgsConstructor;
 
 @SpringBootTest(
         classes = {
@@ -65,30 +69,42 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
         this.lock.release();
     }
 
-    @Test
-    void testWrapper_waitingOnDomainEvent() throws InterruptedException {
-        _MemoryUsage.measureMetaspace("exercise", ()->{
-// with caching
-//            exercise(1, 0);         // 2,221 KB
-//            exercise(1, 2000);      // 3,839 KB. // some leakage from collections
-//            exercise(20, 0);        // 2,112 KB
-//            exercise(20, 2000);     // 3,875 KB
-//            exercise(2000, 0);      // 3,263 KB. // ? increased some, is it significant; a lot less than without caching
-//            exercise(2000, 200);    // 4,294 KB.
-//            exercise(20000, 0);     // 3,243 KB  // no noticeable leakage compared to 2000; MUCH less than without caching
-
-// without caching
-//            exercise(1, 0);        //   2,244 KB
-//            exercise(1, 2000);     //.  3,669 KB // some leakage from collections
-//            exercise(20, 0);       //   2,440 KB
-//            exercise(20, 2000);    //.  4,286 KB
-            exercise(2000, 0);     //  14,580 KB // significant leakage from 20
-//            exercise(2000, 200);   //  20,423 KB
-//            exercise(20000, 0);    //.115,729 KB
-        });
+    //with caching
+    //  exercise(1, 0);         // 2,221 KB
+    //  exercise(1, 2000);      // 3,839 KB. // some leakage from collections
+    //  exercise(20, 0);        // 2,112 KB
+    //  exercise(20, 2000);     // 3,875 KB
+    //  exercise(2000, 0);      // 3,263 KB  // ? increased some, is it significant; a lot less than without caching
+    //  exercise(2000, 200);    // 4,294 KB
+    //  exercise(20000, 0);     // 3,243 KB  // no noticeable leakage compared to 2000; MUCH less than without caching
+    //without caching
+    //  exercise(1, 0);        //   2,244 KB
+    //  exercise(1, 2000);     //   3,669 KB // some leakage from collections
+    //  exercise(20, 0);       //   2,440 KB
+    //  exercise(20, 2000);    //   4,286 KB
+    //  exercise(2000, 0);     //  14,580 KB // significant leakage from 20
+    //  exercise(2000, 200);   //  20,423 KB
+    //  exercise(20000, 0);    //.115,729 KB
+    @RequiredArgsConstructor
+    enum Scenario {
+        TWO_K_TIMES_ONE(2000, 0, 4000),
+        TWO_K_TIMES_TEN(2000, 10, 4000),;
+        final int instances;
+        final int loops;
+        final int thresholdKibi;
     }
 
-    private void exercise(int instances, int loops) {
+    @ParameterizedTest
+    @EnumSource(Scenario.class)
+    void testWrapper_waitingOnDomainEventScenario(final Scenario scenario) throws InterruptedException {
+        var usage = _MemoryUsage.measureMetaspace(()->
+            exercise(scenario.instances, scenario.loops));
+        Assertions.assertTrue(usage.usedInKibiBytes() < scenario.thresholdKibi,
+            ()->"%s exceeds expected %dKB threshold".formatted(usage, scenario.thresholdKibi));
+        System.out.printf("scenario %s usage %s%n", scenario.name(), usage);
+    }
+
+    private void exercise(final int instances, final int loops) {
         for (int i = 0; i < instances; i++) {
             var jpaInventoryManager = wrapper.wrap(factoryService.viewModel(JpaInventoryManager.class));
             jpaInventoryManager.foo();

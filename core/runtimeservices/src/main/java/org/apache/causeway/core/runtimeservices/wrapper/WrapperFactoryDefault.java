@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,7 +84,7 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
@@ -128,7 +129,7 @@ implements WrapperFactory, HasMetaModelContext {
 
     @Inject private FactoryService factoryService;
     @Inject @Getter(onMethod_= {@Override}) MetaModelContext metaModelContext; // HasMetaModelContext
-    @Inject protected _ProxyFactoryService proxyFactoryService; // protected: in support of JUnit tests
+    @Inject protected ProxyFactoryService proxyFactoryService; // protected: in support of JUnit tests
     @Inject @Lazy private CommandDtoFactory commandDtoFactory;
 
     @Inject private Provider<InteractionService> interactionServiceProvider;
@@ -288,11 +289,7 @@ implements WrapperFactory, HasMetaModelContext {
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
 
-        var proxyFactory = proxyFactoryService
-                .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
-
-        return proxyFactory.createInstance((proxy, method, args) -> {
-
+        final InvocationHandler handler = (proxy, method, args) -> {
             var resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
@@ -311,7 +308,14 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             return submitAsync(memberAndTarget, args, asyncControl);
-        }, false);
+        };
+
+        @SuppressWarnings("unchecked")
+        var proxyClass = proxyFactoryService
+                .proxyClass(handler,
+                        (Class<T>)domainObject.getClass(), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
+        var proxyFactory = proxyFactoryService.factory(proxyClass);
+        return proxyFactory.createInstance(false);
     }
 
     @Override
@@ -328,12 +332,7 @@ implements WrapperFactory, HasMetaModelContext {
         var mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
                 .getConstructorElseFail(mixinClass, mixee.getClass());
 
-        var proxyFactory = proxyFactoryService
-                .factory(mixinClass, new Class[]{WrappingObject.class}, WrappingObject.ADDITIONAL_FIELDS,
-                        mixinConstructor.getParameterTypes());
-
-        return proxyFactory.createInstance((proxy, method, args) -> {
-
+        final InvocationHandler handler = (proxy, method, args) -> {
             var resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
@@ -353,7 +352,15 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             return submitAsync(actionAndTarget, args, asyncControl);
-        }, new Object[]{ mixee });
+        };
+
+        var proxyClass = proxyFactoryService
+            .proxyClass(handler, mixinClass, new Class[]{WrappingObject.class}, WrappingObject.ADDITIONAL_FIELDS);
+
+        var proxyFactory = proxyFactoryService
+            .factory(proxyClass, mixinConstructor.getParameterTypes());
+
+        return proxyFactory.createInstance(new Object[]{ mixee });
     }
 
     private boolean isInheritedFromJavaLangObject(final Method method) {

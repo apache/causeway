@@ -71,9 +71,11 @@ import lombok.extern.log4j.Log4j2;
 final class DomainObjectInvocationHandler
 implements WrapperInvocationHandler {
 
-    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true) 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
     private final WrapperInvocationHandler.ClassMetaData classMetaData;
-    
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
+    private final String key;
+
     private final ProxyGenerator proxyGenerator;
     private final ObjectSpecification targetSpec;
 
@@ -83,15 +85,16 @@ implements WrapperInvocationHandler {
         this.targetSpec = targetSpec;
         this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
         this.proxyGenerator = proxyGenerator;
+        this.key = targetSpec.getCorrespondingClass().getName();
     }
 
     @Override
     public Object invoke(WrapperInvocation wrapperInvocation) throws Throwable {
-    
+
         final Object target = wrapperInvocation.origin().pojo();
         final Method method = wrapperInvocation.method();
-        final ManagedObject managedMixee = (ManagedObject) wrapperInvocation.origin().managedMixee();
-        
+        final ManagedObject managedMixee = wrapperInvocation.origin().managedMixee();
+
         if (classMetaData().isObjectMethod(method)
                 || isEnhancedEntityMethod(method)) {
             return method.invoke(target, wrapperInvocation.args());
@@ -165,7 +168,7 @@ implements WrapperInvocationHandler {
             }
 
             var objectAction = (ObjectAction) objectMember;
-            
+
             if(targetAdapter.objSpec().isMixin()) {
                 if (managedMixee == null) {
                     throw _Exceptions.illegalState(
@@ -236,7 +239,7 @@ implements WrapperInvocationHandler {
     }
 
     private Object handleTitleMethod(
-            final WrapperInvocation wrapperInvocation, 
+            final WrapperInvocation wrapperInvocation,
             final ManagedObject targetAdapter) {
 
         var targetNoSpec = targetAdapter.objSpec();
@@ -248,8 +251,8 @@ implements WrapperInvocationHandler {
     }
 
     private Object handleSaveMethod(
-            final WrapperInvocation wrapperInvocation, 
-            final ManagedObject targetAdapter, 
+            final WrapperInvocation wrapperInvocation,
+            final ManagedObject targetAdapter,
             final ObjectSpecification targetNoSpec) {
 
         runValidationTask(wrapperInvocation, ()->{
@@ -288,8 +291,8 @@ implements WrapperInvocationHandler {
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
             targetSpec.getWrapperFactory().notifyListeners(new PropertyAccessEvent(
-                    targetAdapter.getPojo(), 
-                    property.getFeatureIdentifier(), 
+                    targetAdapter.getPojo(),
+                    property.getFeatureIdentifier(),
                     currentReferencedObj));
             return currentReferencedObj;
 
@@ -348,12 +351,12 @@ implements WrapperInvocationHandler {
 
             if (currentReferencedObj instanceof Collection) {
                 var collectionViewObject = wrapCollection(
-                        (Collection<?>) currentReferencedObj, 
+                        (Collection<?>) currentReferencedObj,
                         collection);
                 targetSpec.getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
-                var mapViewObject = wrapMap( 
+                var mapViewObject = wrapMap(
                         (Map<?, ?>) currentReferencedObj,
                         collection);
                 targetSpec.getWrapperFactory().notifyListeners(collectionAccessEvent);
@@ -474,7 +477,7 @@ implements WrapperInvocationHandler {
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
         var interactionEvent = interactionResult.getInteractionEvent();
-        
+
         targetSpec.getWrapperFactory().notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
             throw toException(interactionEvent);

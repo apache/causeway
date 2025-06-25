@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.AdditionalField;
+import org.apache.causeway.commons.internal.proxy.ProxyFactoryService.AdditionalField;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 

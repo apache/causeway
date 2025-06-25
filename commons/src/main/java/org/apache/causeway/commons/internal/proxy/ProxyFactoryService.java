@@ -18,28 +18,46 @@
  */
 package org.apache.causeway.commons.internal.proxy;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Type;
 import java.util.List;
 
 import org.jspecify.annotations.Nullable;
 
-/**
- * Internal service, that generates {@link _ProxyFactory}(s). 
- * 
- * @since 2.0
- */
-public interface _ProxyFactoryService {
+import org.apache.causeway.commons.internal.collections._Arrays;
 
-    <T> _ProxyFactory<T> factory(
+/**
+ * Internal service, that generates {@link ProxyFactory}(s).
+ *
+ * @since 3.4
+ */
+public interface ProxyFactoryService {
+
+    <T> Class<? extends T> proxyClass(
+            InvocationHandler handler,
             Class<T> base,
-            @Nullable Class<?>[] interfaces,
-            @Nullable List<AdditionalField> additionalFields,
+            Class<?>[] interfaces,
+            @Nullable List<AdditionalField> additionalFields);
+
+    default <T> Class<? extends T> proxyClass(
+            InvocationHandler handler,
+            Class<T> classToBeProxied,
+            @Nullable Class<?> additionalClass,
+            @Nullable List<AdditionalField> additionalFields) {
+        final Class<?>[] interfaces = additionalClass!=null
+                ? _Arrays.combine(classToBeProxied.getInterfaces(), ProxyEnhanced.class, additionalClass)
+                : _Arrays.combine(classToBeProxied.getInterfaces(), ProxyEnhanced.class);
+        return proxyClass(handler, classToBeProxied, interfaces, additionalFields);
+    }
+
+    <T> ProxyFactory<T> factory(
+            Class<T> proxyClass,
             @Nullable Class<?>[] constructorArgTypes);
 
-    <T> _ProxyFactory<T> factory(
-            Class<T> toProxyClass, 
-            @Nullable Class<?> additionalClass,
-            @Nullable List<AdditionalField> additionalFields);
+    default <T> ProxyFactory<T> factory(
+            Class<T> proxyClass) {
+        return factory(proxyClass, null);
+    }
 
     /**
      * Marker interface for entities/services that have been enhanced with
@@ -48,13 +66,15 @@ public interface _ProxyFactoryService {
     interface ProxyEnhanced {
 
     }
-    
+
     /**
      * Defines a field, that can be added to a proxy class.
      */
     record AdditionalField(
-            String name, 
-            Type type, 
+            String name,
+            Type type,
             int modifiers) {
     }
+
+
 }

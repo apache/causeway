@@ -27,7 +27,7 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -35,25 +35,25 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
-public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) {
+public record ProxyGenerator(@NonNull ProxyFactoryService proxyFactoryService) {
 
+    @SuppressWarnings("unchecked")
     public <T> T objectProxy(
-        final T domainObject,
-        final ObjectSpecification domainObjectSpec,
-        final SyncControl syncControl) {
-
-        return instantiateProxy(handler(domainObjectSpec), new WrappingObject.Origin(domainObject, syncControl));
+            final T domainObject,
+            final ObjectSpecification domainObjectSpec,
+            final SyncControl syncControl) {
+        return (T) instantiateProxy(domainObjectSpec, new WrappingObject.Origin(domainObject, syncControl));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T mixinProxy(
             final T mixin,
             final ManagedObject managedMixee,
             final ObjectSpecification mixinSpec,
             final SyncControl syncControl) {
-    
-        return instantiateProxy(handler(mixinSpec), new WrappingObject.Origin(mixin, managedMixee, syncControl));
+        return (T) instantiateProxy(mixinSpec, new WrappingObject.Origin(mixin, managedMixee, syncControl));
     }
-    
+
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
@@ -61,18 +61,18 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
     public <T, E> Collection<E> collectionProxy(
             final Collection<E> collectionToBeProxied,
             final OneToManyAssociation otma) {
-    
+
         var collectionInvocationHandler = PluralInvocationHandler
             .forCollection(collectionToBeProxied, otma);
-    
+
         var proxyBase = CollectionSemantics
             .valueOfElseFail(collectionToBeProxied.getClass())
             .getContainerType();
-    
-        return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase), 
+
+        return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase),
                 collectionInvocationHandler);
     }
-    
+
     /**
      * Whether to execute or not will be picked up from the supplied parent
      * handler.
@@ -80,37 +80,33 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
     public <T, P, Q> Map<P, Q> mapProxy(
             final Map<P, Q> mapToBeProxied,
             final OneToManyAssociation otma) {
-    
+
         var proxyBase = Map.class;
-    
-        return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase), 
+
+        return instantiatePluralProxy(_Casts.uncheckedCast(proxyBase),
                 PluralInvocationHandler.forMap(mapToBeProxied, otma));
     }
-    
+
     // -- HELPER
 
-    <T> T instantiateProxy(final WrapperInvocationHandler handler, WrappingObject.Origin origin) {
-        return _Casts.uncheckedCast(instantiateProxy(handler.classMetaData().pojoClass(), handler, origin));
-    }
-
     /**
-     * Creates a proxy, using given {@code base} type as the proxy's base.
-     * @implNote introduced to circumvent access issues on cases,
-     *      where {@code handler.getDelegate().getClass()} is not visible
-     *      (eg. nested private type)
+     * Creates a proxy, using given {@code targetSpec} type as the proxy's base.
      */
-    private <T> T instantiateProxy(final Class<T> base, final WrapperInvocationHandler handler, WrappingObject.Origin origin) {
-        T proxy = proxyFactoryService
-                .factory(base, WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS)
-                .createInstance(handler, false);
+    private Object instantiateProxy(final ObjectSpecification targetSpec, WrappingObject.Origin origin) {
+        var proxyClass = proxyFactoryService
+            .proxyClass(handler(targetSpec),
+                    targetSpec.getCorrespondingClass(), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
+        var proxy = proxyFactoryService
+                .factory(proxyClass)
+                .createInstance(false);
         return WrappingObject.withOrigin(proxy, origin);
     }
-    
+
     private <T, P> P instantiatePluralProxy(final Class<T> base, final PluralInvocationHandler<T, P> pluralInvocationHandler) {
         var proxyWithoutFields = Proxy.newProxyInstance(
                 _Context.getDefaultClassLoader(),
                 new Class<?>[] {base},
-                pluralInvocationHandler); 
+                pluralInvocationHandler);
         return _Casts.uncheckedCast(proxyWithoutFields);
     }
 
@@ -119,5 +115,5 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
                 targetSpec,
                 this);
     }
-    
+
 }

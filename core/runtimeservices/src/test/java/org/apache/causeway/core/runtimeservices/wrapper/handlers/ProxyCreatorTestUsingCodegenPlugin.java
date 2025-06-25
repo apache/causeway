@@ -18,35 +18,25 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
-import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
+import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
 
-import lombok.Getter;
-import lombok.Setter;
+class ProxyCreatorTestUsingCodegenPlugin extends RuntimeServicesTestAbstract {
 
-class ProxyCreatorTestUsingCodegenPlugin {
+    private ProxyGenerator proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy());
 
-    private ProxyGenerator proxyGenerator;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy());
-    }
-
+    @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Employee {
         private String name;
         public String getName() {
@@ -57,48 +47,22 @@ class ProxyCreatorTestUsingCodegenPlugin {
         }
     }
 
-    private static class WrapperInvocationHandlerForTest implements WrapperInvocationHandler {
-        private final Employee delegate = new Employee();
-        private final Set<String> invoked = new HashSet<>();
-        private final WrapperInvocationHandler.ClassMetaData classMetaData = new WrapperInvocationHandler.ClassMetaData(
-                Employee.class, null, null, null, null);
-                
-        @Getter @Setter 
-        private boolean resolveObjectChangedEnabled = false;
-
-        public boolean wasInvoked(final String methodName) {
-            return invoked.contains(methodName);
-        }
-
-        @Override
-        public WrapperInvocationHandler.ClassMetaData classMetaData() {
-            return classMetaData;
-        }
-
-        @Override
-        public Object invoke(WrapperInvocation wrapperInvocation) throws Throwable {
-            invoked.add(wrapperInvocation.method().getName());
-            return "hi";
-        }
-        
-    }
-
     @Test
     void proxyShouldDelegateCalls() {
 
-        final WrapperInvocationHandlerForTest handler = new WrapperInvocationHandlerForTest();
-        final Employee proxyOfEmployee = proxyGenerator.instantiateProxy(handler, new WrappingObject.Origin(handler.delegate, SyncControl.control()));
+        final Employee employee = new Employee();
+        var employeeSpec = getMetaModelContext().getSpecificationLoader().loadSpecification(Employee.class);
 
-        assertNotNull(proxyOfEmployee);
+        var proxy = proxyGenerator.objectProxy(employee, employeeSpec, SyncControl.control());
 
-        assertNotEquals(Employee.class.getName(), proxyOfEmployee.getClass().getName());
+        assertNotNull(proxy);
+        assertTrue(proxy instanceof WrappingObject);
+        assertNotEquals(Employee.class.getName(), proxy.getClass().getName());
+        assertNull(proxy.getName());
 
-        assertFalse(handler.wasInvoked("getName"));
-
-        assertEquals("hi", proxyOfEmployee.getName());
-
-        assertTrue(handler.wasInvoked("getName"));
-
+        // requires interaction infrastructure ... (however, tested with regression tests separately)
+        //proxy.setName("hi");
+        //assertEquals("hi", proxy.getName());
     }
 
 }
