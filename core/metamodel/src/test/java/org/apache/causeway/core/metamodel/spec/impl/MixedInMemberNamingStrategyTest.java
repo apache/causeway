@@ -28,33 +28,45 @@ import lombok.RequiredArgsConstructor;
 
 class MixedInMemberNamingStrategyTest {
 
+    static class Customer_placeOrder {}
+    static class abc_ {}
+    static class lock {}
+    static class ApplicationUser_default_lock {}
+    static class Customer {
+        class placeOrder {}
+    }
+    
+    
     @RequiredArgsConstructor
     enum Scenario {
-        SINGLE_UNDERSCORE("Customer_placeOrder", "placeOrder", "Place Order"),
-        SINGLE_DOLLAR("Customer$placeOrder", "placeOrder", "Place Order"),
+        SINGLE_UNDERSCORE(Customer_placeOrder.class, "placeOrder", "Place Order"),
+        SINGLE_DOLLAR(Customer.placeOrder.class, "placeOrder", "Place Order"),
         //EXACTLY_UNDERSCORE("_", "_", "_"), //TODO this should throw instead
-        ENDS_WITH_UNDERSCORE("abc_", "abc_", "Abc"),
-        HAS_NO_UNDERSCORE("lock", "lock", "Lock"),
-        CONTAINS_MORE_THAN_ONE_UNDERSCORE("ApplicationUser_default_lock", "lock", "Lock")
+        ENDS_WITH_UNDERSCORE(abc_.class, "abc_", "Abc"),
+        HAS_NO_UNDERSCORE(lock.class, "lock", "Lock"),
+        CONTAINS_MORE_THAN_ONE_UNDERSCORE(ApplicationUser_default_lock.class, "lock", "Lock")
         ;
 
-        final String mixinClassSimpleName;
+        final Class<?> mixinClass;
         final String expectedMemberId;
         final String expectedFriendlyName;
 
         void verify() {
+            
+            System.err.printf("%s%n", mixinClass.getCanonicalName());
+            
             assertThat(
-                    _MixedInMemberNamingStrategy.mixinMemberId(mixinClassSimpleName),
+                    _MixedInMemberNamingStrategy.mixinMemberId(mixinClass),
                     is(expectedMemberId));
 
             assertThat(
-                    _MixedInMemberNamingStrategy.mixinFriendlyName(mixinClassSimpleName),
+                    _MixedInMemberNamingStrategy.mixinFriendlyName(mixinClass),
                     is(expectedFriendlyName));
         }
 
         @Override
         public String toString() {
-            return String.format("%s->%s (%s)", mixinClassSimpleName, expectedMemberId, name());
+            return String.format("%s->%s (%s)", mixinClass, expectedMemberId, name());
         }
 
     }

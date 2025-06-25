@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.util.function.BiConsumer;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -49,6 +50,9 @@ implements HasMetaModelContext {
                 .programmingModelFactory((mmc, refiners)->{
                     var progModel = new ProgrammingModelAbstract(mmc) {
                         @Override protected void assertNotInitialized(){}
+                        @Override public MixinNamingStrategy mixinNamingStrategy() {
+                            throw _Exceptions.notImplemented();
+                        }
                     };
                     factory.accept(mmc, progModel);
                     progModel.init(new ProgrammingModelInitFilterDefault());

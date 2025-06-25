@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel.FacetProcessingOrder;
@@ -48,7 +49,11 @@ class JdoVersionAnnotationFacetFactoryTest_validate {
         .builder()
         .programmingModelFactory((mmc, refiners)->{
 
-            var programmingModel = new ProgrammingModelAbstract(mmc) {};
+            var programmingModel = new ProgrammingModelAbstract(mmc) {
+                @Override public MixinNamingStrategy mixinNamingStrategy() {
+                    throw _Exceptions.notImplemented();
+                }
+            };
 
             var facetFactory = new JdoVersionAnnotationFacetFactory(
                     metaModelContext,

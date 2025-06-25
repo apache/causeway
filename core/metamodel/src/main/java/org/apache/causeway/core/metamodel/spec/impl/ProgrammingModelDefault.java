@@ -99,6 +99,9 @@ import org.apache.causeway.core.metamodel.postprocessors.properties.DisabledFrom
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.causeway.core.metamodel.services.title.TitlesAndTranslationsValidator;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 final class ProgrammingModelDefault
 extends ProgrammingModelAbstract {
 
@@ -117,8 +120,13 @@ extends ProgrammingModelAbstract {
         for (var metaModelRefiner : refiners) {
             metaModelRefiner.refineProgrammingModel(this);
         }
+        
+        this.mixinNamingStrategy = new _MixedInMemberNamingStrategy();    
     }
-
+    
+    @Getter(onMethod_={@Override}) @Accessors(fluent=true)
+    private final MixinNamingStrategy mixinNamingStrategy;
+    
     // -- HELPER
 
     private void addFacetFactories() {

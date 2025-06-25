@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -50,7 +51,11 @@ class ViewModelSemanticCheckingFacetFactoryTest {
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)
-                .programmingModelFactory((mmc, refiners)->new ProgrammingModelAbstract(mmc) {})
+                .programmingModelFactory((mmc, refiners)->new ProgrammingModelAbstract(mmc) {
+                    @Override public MixinNamingStrategy mixinNamingStrategy() {
+                        throw _Exceptions.notImplemented();
+                    }
+                })
                 .build();
 
         facetFactory = new ViewModelSemanticCheckingFacetFactory(metaModelContext);

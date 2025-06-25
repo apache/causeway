@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -95,7 +96,7 @@ public record DomainEventHelper(
                 uncheckedCast(existingEvent.getClass()), existingEvent, objectAction, facetHolder,
                 head, argumentAdapters, resultPojo);
     }
-
+    
     private @Nullable <S> ActionDomainEvent<S> postEventForAction(
             final AbstractDomainEvent.Phase phase,
             final Class<? extends ActionDomainEvent<S>> eventType,
@@ -123,9 +124,9 @@ public record DomainEventHelper(
 
                 // copy over if mixee is present
                 if (event != null) {
-                    head.getMixee()
-                    .ifPresent(mixedInAdapter->
-                        event.setMixee(mixedInAdapter.getPojo()));
+                    mixee(head)
+                        .ifPresent(mixedInAdapter->
+                            event.setMixee(mixedInAdapter.getPojo()));
                 }
 
                 if(objectAction != null) {  // should always be the case...
@@ -255,9 +256,9 @@ public record DomainEventHelper(
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
 
                 // copy over if have
-                head.getMixee()
-                .ifPresent(mixeeAdapter->
-                    event.setMixee(mixeeAdapter.getPojo()));
+                mixee(head)
+                    .ifPresent(mixeeAdapter->
+                        event.setMixee(mixeeAdapter.getPojo()));
 
             }
 
@@ -345,9 +346,9 @@ public record DomainEventHelper(
             event = newCollectionDomainEvent(eventType, phase, identifier, source);
 
             // copy over if have
-            head.getMixee()
-            .ifPresent(mixeeAdapter->
-                event.setMixee(mixeeAdapter.getPojo()));
+            mixee(head)
+                .ifPresent(mixeeAdapter->
+                    event.setMixee(mixeeAdapter.getPojo()));
 
             event.setEventPhase(phase);
 
@@ -417,6 +418,15 @@ public record DomainEventHelper(
             throw _Exceptions.unrecoverable(e,
                     "failed to invoke constructor %s", constructor);
         }
+    }
+    
+    /**
+     * @return optionally the owner (mixee), based on whether the head corresponds to a mixin
+     */
+    private static Optional<ManagedObject> mixee(InteractionHead head) {
+        return head.isMixin()
+                ? Optional.of(head.owner())
+                : Optional.empty();
     }
 
 }

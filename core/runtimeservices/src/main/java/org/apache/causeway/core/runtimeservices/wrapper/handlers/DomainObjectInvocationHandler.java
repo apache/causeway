@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -423,7 +423,7 @@ implements WrapperInvocationHandler {
 
     private void checkValidity(
             final WrapperInvocation wrapperInvocation,
-            final ActionInteractionHead head,
+            final InteractionHead head,
             final ObjectAction objectAction,
             final Can<ManagedObject> argAdapters) {
 

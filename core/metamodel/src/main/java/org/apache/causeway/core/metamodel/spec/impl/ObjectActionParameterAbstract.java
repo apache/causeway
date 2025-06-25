@@ -231,7 +231,7 @@ implements
         }
 
         var visibleChoices = choicesFacet.getChoices(paramSpec,
-                pendingArgs.getHead(),
+                pendingArgs.actionInteractionHead(),
                 pendingArgs.getParamValues(),
                 interactionInitiatedBy);
         checkChoicesOrAutoCompleteType(specLoaderInternal(), visibleChoices, paramSpec);

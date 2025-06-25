@@ -29,29 +29,13 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public record ActionInteractionHead(
-    @NonNull InteractionHeadRecord interactionHeadRecord,
-    @NonNull ObjectAction objectAction,
-    @NonNull MultiselectChoices multiselectChoices)
-implements InteractionHead, HasMetaModel<ObjectAction> {
+    @NonNull InteractionHead interactionHead,
+    @NonNull ObjectAction objectAction)
+implements HasMetaModel<ObjectAction> {
 
-    public static ActionInteractionHead of(
-            final @NonNull ObjectAction objectAction,
-            final @NonNull ManagedObject owner,
-            final @NonNull ManagedObject target) {
-        return new ActionInteractionHead(new InteractionHeadRecord(owner, target), objectAction, Can::empty);
-    }
-
-    public static ActionInteractionHead of(
-            final @NonNull ObjectAction objectAction,
-            final @NonNull ManagedObject owner,
-            final @NonNull ManagedObject target,
-            final @NonNull MultiselectChoices multiselectChoices) {
-        return new ActionInteractionHead(new InteractionHeadRecord(owner, target), objectAction, multiselectChoices);
-    }
-    
     @Override public ObjectAction getMetaModel() { return objectAction(); }
-    @Override public ManagedObject owner() { return interactionHeadRecord.owner(); }
-    @Override public ManagedObject target() { return interactionHeadRecord.target(); }
+    public ManagedObject owner() { return interactionHead.owner(); }
+    public ManagedObject target() { return interactionHead.target(); }
 
     /**
      * See step 1 'Fill in defaults' in

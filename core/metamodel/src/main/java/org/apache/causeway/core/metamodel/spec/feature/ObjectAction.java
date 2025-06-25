@@ -177,7 +177,10 @@ public interface ObjectAction extends ObjectMember {
 
     // -- INTERACTION HEAD
 
-    ActionInteractionHead interactionHead(@NonNull ManagedObject actionOwner);
+    InteractionHead interactionHead(@NonNull ManagedObject actionOwner);
+    default ActionInteractionHead actionInteractionHead(@NonNull ManagedObject actionOwner) {
+        return new ActionInteractionHead(interactionHead(actionOwner), this);
+    }
 
     // -- Parameters (declarative)
 
@@ -407,13 +410,11 @@ public interface ObjectAction extends ObjectMember {
                 final @NonNull ObjectAction action,
                 final @NonNull InteractionHead head) {
 
-            var mixeeAdapter = head.getMixee().orElse(null);
-
-            if(mixeeAdapter != null) {
+            if(head.isMixin()) {
                 var mixinSpec = action.getDeclaringType();
-                var ownerSpec = mixeeAdapter.objSpec();
-                return ownerSpec.lookupMixedInMember(mixinSpec)
-                        .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter))
+                var mixeeSpec = head.owner().objSpec();
+                return mixeeSpec.lookupMixedInMember(mixinSpec)
+                        .map(mixedInMember->mixedInMember.getFriendlyName(head.owner()))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);
             }
             return action.getFriendlyName(head::owner);

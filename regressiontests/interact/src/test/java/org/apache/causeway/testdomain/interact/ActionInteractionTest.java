@@ -35,7 +35,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.presets.CausewayPresets;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -132,7 +131,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         // test feature-identifier to command matching ...
         var act = tester.getActionMetaModelElseFail();
         InteractionHead head = tester.getActionMetaModelElseFail().interactionHead(tester.getActionOwnerElseFail());
-        assertTrue(IdentifierUtil.isCommandForMember(command, head, act));
+        assertTrue(head.isCommandForMember(command, act));
     }
 
     @Test
@@ -179,7 +178,7 @@ class ActionInteractionTest extends InteractionTestAbstract {
         // test feature-identifier to command matching ...
         var act = tester.getActionMetaModelElseFail();
         InteractionHead head = tester.getActionMetaModelElseFail().interactionHead(tester.getActionOwnerElseFail());
-        assertTrue(IdentifierUtil.isCommandForMember(command, head, act));
+        assertTrue(head.isCommandForMember(command, act));
     }
 
     @Test

@@ -26,6 +26,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.Identifier.Type;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.applib.value.semantics.Converter;
@@ -35,9 +36,10 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.Cardinality;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -45,6 +47,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 import org.apache.causeway.schema.cmd.v2.PropertyDto;
@@ -54,6 +57,8 @@ import org.apache.causeway.schema.common.v2.ValueDto;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
+
+import lombok.SneakyThrows;
 
 public abstract class SchemaValueMarshallerAbstract
 implements SchemaValueMarshaller, HasMetaModelContext {
@@ -183,21 +188,21 @@ implements SchemaValueMarshaller, HasMetaModelContext {
 
     @Override
     public final Identifier actionIdentifier(final @NonNull ActionDto actionDto) {
-        return IdentifierUtil.memberIdentifierFor(getSpecificationLoader(),
+        return memberIdentifierFor(getSpecificationLoader(),
                 Type.ACTION,
                 actionDto.getLogicalMemberIdentifier());
     }
 
     @Override
     public final Identifier actionIdentifier(final @NonNull ActionInvocationDto actionInvocationDto) {
-        return IdentifierUtil.memberIdentifierFor(getSpecificationLoader(),
+        return memberIdentifierFor(getSpecificationLoader(),
                 Type.ACTION,
                 actionInvocationDto.getLogicalMemberIdentifier());
     }
 
     @Override
     public final Identifier propertyIdentifier(final @NonNull PropertyDto propertyDto) {
-        return IdentifierUtil.memberIdentifierFor(getSpecificationLoader(),
+        return memberIdentifierFor(getSpecificationLoader(),
                 Type.PROPERTY,
                 propertyDto.getLogicalMemberIdentifier());
     }
@@ -232,6 +237,41 @@ implements SchemaValueMarshaller, HasMetaModelContext {
     }
 
     // -- HELPER
+    
+    /**
+     * Recovers an {@link Identifier} for given {@code logicalMemberIdentifier}.
+     */
+    @SneakyThrows
+    private static Identifier memberIdentifierFor(
+            final @NonNull SpecificationLoader specLoader,
+            final Identifier.@NonNull Type identifierType,
+            final @NonNull String logicalMemberIdentifier) {
+
+        var stringCutter = TextUtils.cutter(logicalMemberIdentifier);
+        var logicalTypeName = stringCutter
+                .keepBefore("#")
+                .getValue();
+        var memberId = stringCutter
+                .keepAfter("#")
+                .getValue();
+        var typeSpec = specLoader.specForLogicalTypeNameElseFail(logicalTypeName);
+        var logicalType = LogicalType.eager(typeSpec.getCorrespondingClass(), logicalTypeName);
+
+        if(identifierType.isAction()) {
+            return Identifier.actionIdentifier(logicalType, memberId);
+        }
+
+        if(identifierType.isProperty()) {
+            return Identifier.propertyIdentifier(logicalType, memberId);
+        }
+
+        if(identifierType.isCollection()) {
+            return Identifier.collectionIdentifier(logicalType, memberId);
+        }
+
+        throw _Exceptions.illegalArgument("unsupported identifier type %s (logicalMemberIdentifier=%s)",
+                identifierType, logicalMemberIdentifier);
+    }
 
     private <T> Context<T> newContext(
             final Class<T> valueCls,

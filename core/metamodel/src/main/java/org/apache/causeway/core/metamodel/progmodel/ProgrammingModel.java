@@ -111,7 +111,17 @@ extends HasMetaModelContext {
 
     }
 
+    interface MixinNamingStrategy {
+        String memberId(Class<?> mixinClass);
+        String memberFriendlyName(Class<?> mixinClass);
+    }
+    
     // -- INTERFACE
+    
+    /**
+     * Naming strategy for mixed-in members. 
+     */
+    MixinNamingStrategy mixinNamingStrategy();
 
     <T extends FacetFactory> void addFactory(
             FacetProcessingOrder order,

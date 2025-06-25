@@ -59,7 +59,7 @@ public record MmDebugUtils() {
         var param = parameterNegotiationModel.getParamModels().getElseFail(parameterIndex);
         return ParamUpdateData.builder()
                 .index(parameterIndex)
-                .action(parameterNegotiationModel.getHead().getMetaModel().getId())
+                .action(parameterNegotiationModel.act().getId())
                 .name(param.getFriendlyName())
                 .allParams(parameterNegotiationModel.getParamModels())
                 .build();

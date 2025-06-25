@@ -228,11 +228,10 @@ class _DomainResourceHelper {
 
             // parse parameters ...
 
-            var action = pendingArgs.getHead().getMetaModel();
             var vetoCount = new LongAdder();
 
             var paramsOrVetos = ObjectActionArgHelper
-                    .parseArguments(resourceContext, action, arguments);
+                    .parseArguments(resourceContext, pendingArgs.act(), arguments);
 
             pendingArgs.getParamModels().zip(paramsOrVetos, (managedParam, paramOrVeto)->{
 

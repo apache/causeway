@@ -53,7 +53,6 @@ import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanti
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.interactions.use.ActionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
@@ -209,9 +208,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     }
 
     @Override
-    public ActionInteractionHead interactionHead(
-            final @NonNull ManagedObject actionOwner) {
-        return ActionInteractionHead.of(this, actionOwner, actionOwner);
+    public InteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
+        return InteractionHead.regular(actionOwner);
     }
 
     // -- Parameters
@@ -502,7 +500,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
 
                 var visibleChoices = paramFacet.getChoices(
                         paramSpec,
-                        interactionHead(target),
+                        actionInteractionHead(target),
                         emptyPendingArgs,
                         interactionInitiatedBy);
                 ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(

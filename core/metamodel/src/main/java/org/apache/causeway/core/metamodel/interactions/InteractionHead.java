@@ -18,14 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import java.util.Objects;
-import java.util.Optional;
-
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * Model that holds the objects involved with the interaction.
@@ -34,64 +37,90 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
  * is represented.
  * @since 2.0
  */
-public interface InteractionHead {
-    /**
-     * The owning object of an interaction.
-     */
-    ManagedObject owner();
-
-    /**
-     * Typically equal to {@code owner}, except for mixins,
-     * where {@code target} is the mixin instance.
-     */
-    ManagedObject target();
-
+public record InteractionHead(
+        /**
+         * The owning (domain) object of an interaction.
+         */
+        ManagedObject owner,
+        /**
+         * Typically equal to {@code owner}, except for mixins,
+         * where {@code target} is the mixin instance.
+         */
+        ManagedObject target) {
+    
+    // -- FACTORIES
+    
     /** Regular case, when owner equals target. (no mixin) */
     public static InteractionHead regular(final ManagedObject owner) {
-        return new InteractionHeadRecord(owner, owner);
+        return new InteractionHead(owner, owner);
     }
 
     /** Mixin case, when target is a mixin for the owner. */
     public static InteractionHead mixin(final @NonNull ManagedObject owner, final @NonNull ManagedObject target) {
-        return new InteractionHeadRecord(owner, target);
+        return new InteractionHead(owner, target);
     }
-
-    /**
-     * as used by the domain event subsystem
-     * @return optionally the owner (mixee), based on whether the target is a mixin
-     */
-    default Optional<ManagedObject> getMixee() {
-        return Objects.equals(owner(), target())
-                ? Optional.empty()
-                : Optional.of(owner());
-    }
-
-    // -- HELPER
-
-    /**
-     * Immutable implementation of {@link InteractionHead} with consistency checks.
-     */
-    record InteractionHeadRecord(
-        ManagedObject owner,
-        ManagedObject target) implements InteractionHead {
-
-        // canonical constructor with consistency checks
-        public InteractionHeadRecord(
-            final ManagedObject owner,
-            final ManagedObject target) {
-            if(ManagedObjects.isSpecified(owner)
-                && owner.objSpec().getBeanSort().isMixin()) {
-                throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
-            }
-            if(ManagedObjects.isSpecified(target)
-                && target.objSpec().getBeanSort().isMixin()
-                && target.getPojo()==null) {
-                throw _Exceptions.unrecoverable("target not spec. %s", target);
-            }
-            this.owner = owner;
-            this.target = target;
+    
+    // canonical constructor with consistency checks
+    public InteractionHead(
+        final ManagedObject owner,
+        final ManagedObject target) {
+        if(ManagedObjects.isSpecified(owner)
+            && owner.objSpec().getBeanSort().isMixin()) {
+            throw _Exceptions.unrecoverable("unexpected: owner is a mixin %s", owner);
         }
-
+        if(ManagedObjects.isSpecified(target)
+            && target.objSpec().getBeanSort().isMixin()
+            && target.getPojo()==null) {
+            throw _Exceptions.unrecoverable("target not spec. %s", target);
+        }
+        this.owner = owner;
+        this.target = target;
     }
 
+    /**
+     * Whether given command corresponds to given objectMember
+     * by virtue of matching logical member identifiers.
+     */
+    public boolean isCommandForMember(
+            final @Nullable Command command,
+            final @Nullable ObjectMember objectMember) {
+        return command!=null
+                && objectMember!=null
+                && logicalMemberIdentifierFor(objectMember)
+                    .equals(command.getLogicalMemberIdentifier());
+    }
+    
+    public String logicalMemberIdentifierFor(final ObjectMember objectMember) {
+        if (!objectMember.isMixedIn()
+                && objectMember instanceof ObjectAction objectAction
+                && objectAction.isDeclaredOnMixin()) {
+            // corner case when the objectMember is an ObjectActionDefault but corresponds to a mixin main  
+            return logicalMemberIdentifierFor(owner().objSpec(), 
+                objectMember.getProgrammingModel()
+                    .mixinNamingStrategy()
+                    .memberId(objectAction.getFeatureIdentifier().logicalType().correspondingClass()));
+        }            
+        if(objectMember instanceof ObjectAction act) {
+            return logicalMemberIdentifierFor(act.getDeclaringType(), act.getFeatureIdentifier().memberLogicalName());
+        }
+        if(objectMember instanceof OneToOneAssociation prop) {
+            return logicalMemberIdentifierFor(prop.getDeclaringType(), prop.getFeatureIdentifier().memberLogicalName());
+        }
+        throw new IllegalArgumentException(objectMember.getClass() + " is not supported");    
+    }
+    
+    /**
+     * Whether this head corresponds to a mixin.
+     */
+    public boolean isMixin() {
+        return target.objSpec().isMixin();
+    }
+    
+    // -- HELPER
+    
+    private String logicalMemberIdentifierFor(final ObjectSpecification onType, final String memberId) {
+        return onType.logicalTypeName() + "#" + memberId;
+    }
+
+    
 }
