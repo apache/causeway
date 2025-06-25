@@ -25,7 +25,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -54,7 +54,6 @@ import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -64,6 +63,7 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
@@ -76,7 +76,6 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -363,7 +362,7 @@ implements MemberExecutorService {
             final @NonNull ObjectMember objectMember,
             final @NonNull FacetHolder facetHolder) {
 
-        if(IdentifierUtil.isCommandForMember(command, interactionHead, objectMember)
+        if(interactionHead.isCommandForMember(command, objectMember)
                 && isPublishingEnabled(facetHolder)) {
             command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
         }

@@ -35,7 +35,6 @@ import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.IdentifierUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -117,7 +116,7 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
             final ActionDto actionDto,
             final Can<ManagedObject> argAdapters) {
 
-        actionDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(head, objectAction));
+        actionDto.setLogicalMemberIdentifier(head.logicalMemberIdentifierFor(objectAction));
 
         var actionParameters = objectAction.getParameters();
         for (int paramNum = 0; paramNum < actionParameters.size(); paramNum++) {
@@ -150,12 +149,12 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
 
     @Override
     public void addPropertyValue(
-            final InteractionHead interactionHead,
+            final InteractionHead head,
             final OneToOneAssociation property,
             final PropertyDto propertyDto,
             final ManagedObject valueAdapter) {
 
-        propertyDto.setLogicalMemberIdentifier(IdentifierUtil.logicalMemberIdentifierFor(interactionHead, property));
+        propertyDto.setLogicalMemberIdentifier(head.logicalMemberIdentifierFor(property));
 
         valueMarshaller.recordPropertyValue(propertyDto, property, valueAdapter);
     }

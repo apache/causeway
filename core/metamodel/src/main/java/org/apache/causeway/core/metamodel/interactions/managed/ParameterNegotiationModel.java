@@ -41,11 +41,13 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +60,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @since 2.0.0
  */
-public class ParameterNegotiationModel {
+public final class ParameterNegotiationModel {
 
     public static ParameterNegotiationModel of(
             final @NonNull ManagedAction managedAction,
@@ -95,38 +97,46 @@ public class ParameterNegotiationModel {
     }
 
     // -- ACTION SPECIFIC
+    
+    public ObjectAction act() {
+        return managedAction.getAction();
+    }
 
     public int getParamCount() {
         return paramModels.size();
     }
 
-    @NonNull public Can<ManagedObject> getParamValues() {
+    public Can<ManagedObject> getParamValues() {
         return paramModels.stream()
                 .map(ParameterModel::getValue)
                 .map(Bindable::getValue)
                 // guard against framework bugs
                 .peek(managedObj->Objects.requireNonNull(managedObj, ()->
                         String.format("Internal Error: Parameter value adapter must not be null in %s",
-                                managedAction.getAction().getFeatureIdentifier())))
+                                act().getFeatureIdentifier())))
                 .collect(Can.toCan());
     }
 
-    @NonNull public ActionInteractionHead getHead() {
+    InteractionHead interactionHead() {
         return managedAction.interactionHead();
     }
-
-    @NonNull public ManagedObject getActionTarget() {
-        return getHead().target();
+    
+    public ActionInteractionHead actionInteractionHead() {
+        return managedAction.actionInteractionHead();
     }
 
-    @NonNull public Observable<String> getObservableActionValidation() {
+    public ManagedObject getActionTarget() {
+        return interactionHead().target();
+    }
+
+    public Observable<String> getObservableActionValidation() {
         return observableActionValidation;
     }
 
     /**
      * Whether validation feedback is activated. Activates once user attempts to 'submit' an action.
      */
-    @NonNull public Observable<Boolean> getObservableValidationFeedbackActive() {
+    public Observable<Boolean> getObservableValidationFeedbackActive() {
         return validationFeedbackActive;
     }
 
@@ -141,27 +151,27 @@ public class ParameterNegotiationModel {
 
     // -- PARAMETER SPECIFIC
 
-    @NonNull public Can<? extends ManagedParameter> getParamModels() {
+    public Can<? extends ManagedParameter> getParamModels() {
         return paramModels;
     }
 
-    @NonNull public ObjectActionParameter getParamMetamodel(final int paramNr) {
+    public ObjectActionParameter getParamMetamodel(final int paramNr) {
         return paramModels.getElseFail(paramNr).getMetaModel();
     }
 
-    @NonNull public Bindable<ManagedObject> getBindableParamValue(final int paramNr) {
+    public Bindable<ManagedObject> getBindableParamValue(final int paramNr) {
         return paramModels.getElseFail(paramNr).bindableParamValue();
     }
 
-    @NonNull public BooleanBindable getBindableParamValueDirtyFlag(final int paramNr) {
+    public BooleanBindable getBindableParamValueDirtyFlag(final int paramNr) {
         return paramModels.getElseFail(paramNr).bindableParamValueDirtyFlag();
     }
 
-    @NonNull public Observable<Can<ManagedObject>> getObservableParamChoices(final int paramNr) {
+    public Observable<Can<ManagedObject>> getObservableParamChoices(final int paramNr) {
         return paramModels.getElseFail(paramNr).observableParamChoices();
     }
 
-    @NonNull public Observable<String> getObservableParamValidation(final int paramNr) {
+    public Observable<String> getObservableParamValidation(final int paramNr) {
         return paramModels.getElseFail(paramNr).observableParamValidation();
     }
 
@@ -170,32 +180,33 @@ public class ParameterNegotiationModel {
      * (Ignoring the {@link ParameterModel#isValidationFeedbackActive()} flag.)
      * @apiNote introduced for [CAUSEWAY-3753] - not sure why required.
      */
-    @NonNull public String validateImmediately(final int paramIndex) {
-        return getHead().getMetaModel().getParameterByIndex(paramIndex)
+    public String validateImmediately(final int paramIndex) {
+        var actionInteractionHead = actionInteractionHead();
+        return actionInteractionHead.getMetaModel().getParameterByIndex(paramIndex)
                 .isValid(
-                        getHead(),
+                        actionInteractionHead.interactionHead(),
                         getParamValues(),
                         InteractionInitiatedBy.USER)
                 .getReasonAsString()
                 .orElse(null);
     }
 
-    @NonNull public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
+    public Bindable<String> getBindableParamSearchArgument(final int paramNr) {
         return paramModels.getElseFail(paramNr).bindableParamSearchArgument();
     }
 
-    @NonNull public Observable<Consent> getObservableVisibilityConsent(final int paramNr) {
+    public Observable<Consent> getObservableVisibilityConsent(final int paramNr) {
         return paramModels.getElseFail(paramNr).observableVisibilityConsent();
     }
 
-    @NonNull public Observable<Consent> getObservableUsabilityConsent(final int paramNr) {
+    public Observable<Consent> getObservableUsabilityConsent(final int paramNr) {
         return paramModels.getElseFail(paramNr).observableUsabilityConsent();
     }
 
-    @NonNull public Consent getVisibilityConsent(final int paramNr) {
+    public Consent getVisibilityConsent(final int paramNr) {
         return getObservableVisibilityConsent(paramNr).getValue();
     }
-    @NonNull public Consent getUsabilityConsent(final int paramNr) {
+    public Consent getUsabilityConsent(final int paramNr) {
         return getObservableUsabilityConsent(paramNr).getValue();
     }
 
@@ -209,19 +220,16 @@ public class ParameterNegotiationModel {
 
     /** validates all, the action and each individual parameter */
     public Consent validateParameterSet() {
-        var head = this.getHead();
-        return head.getMetaModel().isArgumentSetValid(head, this.getParamValues(), InteractionInitiatedBy.USER);
+        return act().isArgumentSetValid(interactionHead(), this.getParamValues(), InteractionInitiatedBy.USER);
     }
 
     public Consent validateParameterSetForAction() {
-        var head = this.getHead();
-        return head.getMetaModel().isArgumentSetValidForAction(head, this.getParamValues(), InteractionInitiatedBy.USER);
+        return act().isArgumentSetValidForAction(interactionHead(), this.getParamValues(), InteractionInitiatedBy.USER);
     }
 
     public Can<Consent> validateParameterSetForParameters() {
-        var head = this.getHead();
-        return head.getMetaModel()
-                .isArgumentSetValidForParameters(head, this.getParamValues(), InteractionInitiatedBy.USER)
+        return act()
+                .isArgumentSetValidForParameters(interactionHead(), this.getParamValues(), InteractionInitiatedBy.USER)
                 .stream()
                 .map(InteractionResult::createConsent)
                 .collect(Can.toCan());
@@ -357,7 +365,7 @@ public class ParameterNegotiationModel {
             final int paramIndex,
             final @NonNull ParameterNegotiationModel negotiationModel,
             final @NonNull ManagedObject initialValue) {
-            this(paramIndex, negotiationModel.getHead().getMetaModel().getParameterByIndex(paramIndex), negotiationModel,
+            this(paramIndex, negotiationModel.act().getParameterByIndex(paramIndex), negotiationModel,
                 // bindableParamValue
                 _Bindables.forValue(initialValue),
                 // bindableParamValueDirtyFlag
@@ -431,12 +439,12 @@ public class ParameterNegotiationModel {
 
             this.observableVisibilityConsent = _Observables.lazy(()->
                 metaModel().isVisible(
-                        negotiationModel().getHead(),
+                        negotiationModel().interactionHead(),
                         negotiationModel().getParamValues(),
                         InteractionInitiatedBy.USER));
             this.observableUsabilityConsent = _Observables.lazy(()->
                 metaModel().isUsable(
-                        negotiationModel().getHead(),
+                        negotiationModel().interactionHead(),
                         negotiationModel().getParamValues(),
                         InteractionInitiatedBy.USER));
 
@@ -532,11 +540,9 @@ public class ParameterNegotiationModel {
         public Optional<InteractionVeto> checkUsability(@NonNull final Can<ManagedObject> params) {
 
             try {
-                var head = negotiationModel().getHead();
-
                 var usabilityConsent =
                     getMetaModel()
-                    .isUsable(head, params, InteractionInitiatedBy.USER);
+                    .isUsable(negotiationModel().interactionHead(), params, InteractionInitiatedBy.USER);
 
                 return usabilityConsent.isVetoed()
                     ? Optional.of(InteractionVeto.readonly(usabilityConsent))

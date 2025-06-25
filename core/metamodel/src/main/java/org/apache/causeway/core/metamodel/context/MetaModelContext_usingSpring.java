@@ -48,6 +48,7 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
@@ -78,6 +79,10 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     private final CausewayConfiguration configuration =
     getSingletonElseFail(CausewayConfiguration.class);
 
+    @Getter(lazy=true)
+    private final ProgrammingModel programmingModel =
+    getSingletonElseFail(ProgrammingModel.class);
+    
     @Getter(lazy=true)
     private final ServiceInjector serviceInjector =
     getSingletonElseFail(ServiceInjector.class);

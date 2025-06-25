@@ -29,29 +29,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public record ActionInteractionHead(
-    @NonNull InteractionHeadRecord interactionHeadRecord,
-    @NonNull ObjectAction objectAction,
-    @NonNull MultiselectChoices multiselectChoices)
-implements InteractionHead, HasMetaModel<ObjectAction> {
-
-    public static ActionInteractionHead of(
-            final @NonNull ObjectAction objectAction,
-            final @NonNull ManagedObject owner,
-            final @NonNull ManagedObject target) {
-        return new ActionInteractionHead(new InteractionHeadRecord(owner, target), objectAction, Can::empty);
-    }
-
-    public static ActionInteractionHead of(
-            final @NonNull ObjectAction objectAction,
-            final @NonNull ManagedObject owner,
-            final @NonNull ManagedObject target,
-            final @NonNull MultiselectChoices multiselectChoices) {
-        return new ActionInteractionHead(new InteractionHeadRecord(owner, target), objectAction, multiselectChoices);
-    }
+    @NonNull InteractionHead interactionHead,
+    @NonNull ObjectAction objectAction)
+implements HasMetaModel<ObjectAction> {
 
     @Override public ObjectAction getMetaModel() { return objectAction(); }
-    @Override public ManagedObject owner() { return interactionHeadRecord.owner(); }
-    @Override public ManagedObject target() { return interactionHeadRecord.target(); }
+    public ManagedObject owner() { return interactionHead.owner(); }
+    public ManagedObject target() { return interactionHead.target(); }
 
     /**
      * See step 1 'Fill in defaults' in
@@ -64,13 +48,13 @@ implements InteractionHead, HasMetaModel<ObjectAction> {
         // init with empty values
         var pendingParamModel = ParameterNegotiationModel.of(managedAction, emptyParameterValues());
 
-        // fill in the parameter defaults with a single sweep through all default providing methods in order,
+        // fill in the parameter defaults with a single sweep through all default providing methods in order, 
         // updating the pendingParamModel at each iteration
         for(var param : getMetaModel().getParameters()) {
             pendingParamModel = pendingParamModel
                 .withParamValue(param.getParameterIndex(), param.getDefault(pendingParamModel));
         }
-
+        
         return pendingParamModel;
     }
 

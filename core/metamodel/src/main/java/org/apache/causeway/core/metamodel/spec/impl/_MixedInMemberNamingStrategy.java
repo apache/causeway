@@ -20,45 +20,54 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Objects;
 
-import org.apache.causeway.commons.internal.base._Strings;
-
 import org.jspecify.annotations.NonNull;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-class _MixedInMemberNamingStrategy {
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+
+final class _MixedInMemberNamingStrategy implements ProgrammingModel.MixinNamingStrategy {
+    
+    @Override
+    public String memberId(Class<?> mixinClass) {
+        return mixinMemberId(mixinClass);
+    }
+
+    @Override
+    public String memberFriendlyName(Class<?> mixinClass) {
+        return mixinFriendlyName(mixinClass);
+    }
 
     /**
      * @param mixinActionAsRegular - first pass MM introspection produces regular ObjectAction instances
      *              for mixin main methods
      */
-    String mixinFriendlyName(final @NonNull ObjectActionDefault mixinActionAsRegular) {
-        return mixinFriendlyName(mixinClassSimpleName(mixinActionAsRegular));
+    static String mixinFriendlyName(final @NonNull ObjectActionDefault mixinActionAsRegular) {
+        return mixinFriendlyName(mixinClass(mixinActionAsRegular));
     }
 
-    String mixinFriendlyName(final @NonNull String mixinClassSimpleName) {
-        return _Strings.asCamelCase.andThen(_Strings.asNaturalName).apply(lastWord(mixinClassSimpleName));
+    static String mixinFriendlyName(final @NonNull Class<?> mixinClass) {
+        return _Strings.asCamelCase.andThen(_Strings.asNaturalName).apply(lastWord(mixinClass.getSimpleName()));
     }
 
     /**
      * @param mixinActionAsRegular - first pass MM introspection produces regular ObjectAction instances
      *              for mixin main methods
      */
-    String mixinMemberId(final @NonNull ObjectActionDefault mixinActionAsRegular) {
-        return mixinMemberId(mixinClassSimpleName(mixinActionAsRegular));
+    static String mixinMemberId(final @NonNull ObjectActionDefault mixinActionAsRegular) {
+        return mixinMemberId(mixinClass(mixinActionAsRegular));
     }
 
-    String mixinMemberId(final @NonNull String mixinClassSimpleName) {
-        return _Strings.decapitalize(lastWord(mixinClassSimpleName));
+    static String mixinMemberId(final @NonNull Class<?> mixinClass) {
+        return _Strings.decapitalize(lastWord(mixinClass.getSimpleName()));
     }
 
     // -- HELPER
 
-    private String mixinClassSimpleName(final ObjectActionDefault mixinActionAsRegular) {
-        return mixinActionAsRegular.getFeatureIdentifier().logicalType().correspondingClass().getSimpleName();
+    private static Class<?> mixinClass(final ObjectActionDefault mixinActionAsRegular) {
+        return mixinActionAsRegular.getFeatureIdentifier().logicalType().correspondingClass();
     }
 
-    private String lastWord(final String mixinClassSimpleName) {
+    private static String lastWord(final String mixinClassSimpleName) {
         final String deriveFromUnderscore = lastToken(mixinClassSimpleName, "_");
         if(!Objects.equals(mixinClassSimpleName, deriveFromUnderscore)) {
             return deriveFromUnderscore;
@@ -70,14 +79,14 @@ class _MixedInMemberNamingStrategy {
         return mixinClassSimpleName;
     }
 
-    private String lastToken(final String singularName, final String separator) {
+    private static String lastToken(final String singularName, final String separator) {
         final int indexOfSeparator = singularName.lastIndexOf(separator);
         return occursNotAtEnd(singularName, indexOfSeparator)
                 ? singularName.substring(indexOfSeparator + 1)
                 : singularName;
     }
 
-    private boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
+    private static boolean occursNotAtEnd(final String singularName, final int indexOfUnderscore) {
         return indexOfUnderscore != -1
                 && indexOfUnderscore != singularName.length() - 1;
     }

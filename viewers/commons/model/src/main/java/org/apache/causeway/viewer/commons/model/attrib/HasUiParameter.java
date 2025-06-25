@@ -149,7 +149,7 @@ public interface HasUiParameter extends UiParameter {
 
     @Override
     default ActionInteractionHead getPendingParamHead() {
-        return getMetaModel().getAction().interactionHead(getUiParameter().getOwner());
+        return getMetaModel().getAction().actionInteractionHead(getUiParameter().getOwner());
     }
 
 }

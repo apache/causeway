@@ -50,6 +50,7 @@ import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -73,6 +74,10 @@ public interface HasMetaModelContext {
 
     default CausewayConfiguration getConfiguration() {
         return getMetaModelContext().getConfiguration();
+    }
+    
+    default ProgrammingModel getProgrammingModel() {
+        return getMetaModelContext().getProgrammingModel();
     }
 
     default ServiceInjector getServiceInjector() {

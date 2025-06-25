@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -104,8 +105,12 @@ public final class ManagedAction extends ManagedMember {
     }
 
     //CAUSEWAY-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
-    ActionInteractionHead interactionHead() {
+    InteractionHead interactionHead() {
         return action.interactionHead(getOwner());
+    }
+    //CAUSEWAY-2897 ... don't memoize the head, as owner might dynamically re-attach (when entity)
+    ActionInteractionHead actionInteractionHead() {
+        return action.actionInteractionHead(getOwner());
     }
 
     /**
@@ -113,7 +118,7 @@ public final class ManagedAction extends ManagedMember {
      * parameters if any are initialized with their defaults (taking into account any supporting methods)
      */
     public ParameterNegotiationModel startParameterNegotiation() {
-        return interactionHead().defaults(this);
+        return actionInteractionHead().defaults(this);
     }
 
     @Override

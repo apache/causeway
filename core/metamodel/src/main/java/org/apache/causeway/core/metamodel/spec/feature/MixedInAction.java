@@ -19,4 +19,5 @@
 package org.apache.causeway.core.metamodel.spec.feature;
 
 public interface MixedInAction extends ObjectAction, MixedInMember {
+    
 }

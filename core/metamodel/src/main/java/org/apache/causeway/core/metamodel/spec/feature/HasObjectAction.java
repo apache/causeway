@@ -34,7 +34,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -149,7 +148,7 @@ public interface HasObjectAction extends ObjectAction {
         final InteractionInitiatedBy interactionInitiatedBy) {
         return getObjectAction().isArgumentSetValidForAction(head, proposedArguments, interactionInitiatedBy);
     }
-    @Override default ActionInteractionHead interactionHead(@NonNull final ManagedObject actionOwner) {
+    @Override default InteractionHead interactionHead(@NonNull final ManagedObject actionOwner) {
         return getObjectAction().interactionHead(actionOwner);
     }
     @Override default int getParameterCount() {

@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Interface indicating an a contributed association or action.
+ * Interface indicating a contributed association or action.
  */
 public interface MixedInMember extends ObjectMember {
 

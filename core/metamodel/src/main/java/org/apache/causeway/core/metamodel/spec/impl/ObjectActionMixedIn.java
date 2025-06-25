@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -34,14 +36,12 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -134,8 +134,8 @@ implements MixedInAction {
     }
 
     @Override
-    public ActionInteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
-        return ActionInteractionHead.of(this, actionOwner, mixinAdapterFor(actionOwner));
+    public InteractionHead interactionHead(final @NonNull ManagedObject actionOwner) {
+        return InteractionHead.mixin(actionOwner, mixinAdapterFor(actionOwner));
     }
 
     @Override
