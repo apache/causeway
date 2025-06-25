@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
@@ -74,7 +74,7 @@ public abstract class ClassSubstitutorAbstract implements ClassSubstitutor {
         if(superclass != null && superclass.isEnum()) {
             return superclass;
         }
-        if (ClassUtil.directlyImplements(cls, _ProxyFactoryService.ProxyEnhanced.class)) {
+        if (ClassUtil.directlyImplements(cls, ProxyFactoryService.ProxyEnhanced.class)) {
             // REVIEW: arguably this should now go back to the ClassSubstitorRegistry
             return getReplacement(cls.getSuperclass());
         }

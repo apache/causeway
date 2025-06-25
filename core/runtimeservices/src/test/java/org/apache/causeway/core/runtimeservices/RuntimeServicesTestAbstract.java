@@ -63,7 +63,8 @@ implements HasMetaModelContext {
     @BeforeEach
     final void setUp() throws Exception {
         var mmcBuilder = MetaModelContext_forTesting.builder()
-                .memberExecutor(Mockito.mock(MemberExecutorService.class));
+                .memberExecutor(Mockito.mock(MemberExecutorService.class))
+                ;
 
         // install runtime services into MMC (extend as needed)
 

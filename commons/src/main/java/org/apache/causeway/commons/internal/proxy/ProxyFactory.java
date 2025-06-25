@@ -18,34 +18,28 @@
  */
 package org.apache.causeway.commons.internal.proxy;
 
-import java.lang.reflect.InvocationHandler;
-
 /**
  * Generates dynamic classes and corresponding instances by rebasing a given 'base' class.
  *
  * @since 2.0
  * @param <T> type of proxy objects this factory creates
  */
-public interface _ProxyFactory<T> {
-
-    // -- INTERFACE
+public interface ProxyFactory<T> {
 
     /**
-     * @param handler
      * @param initialize whether to call a constructor on object instantiation
      * @return new proxy instance of type T
      * @throws IllegalArgumentException when using initialize=true and the number of
      * constructorArgTypes specified while building this factory is greater than 0.
      */
-    public T createInstance(InvocationHandler handler, boolean initialize);
+    public T createInstance(boolean initialize);
 
     /**
-     * @param handler
      * @param constructorArgs passed to the constructor with matching signature on object instantiation
      * @return new proxy instance of type T (always uses a constructor)
      * @throws IllegalArgumentException if constructorArgs is null or empty or does not
      * conform to the number of constructorArgTypes specified while building this factory.
      */
-    public T createInstance(InvocationHandler handler, Object[] constructorArgs);
+    public T createInstance(Object[] constructorArgs);
 
 }

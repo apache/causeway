@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +59,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
@@ -84,7 +84,7 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
+import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
@@ -99,6 +99,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler.WrapperInvocation;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
@@ -128,7 +129,7 @@ implements WrapperFactory, HasMetaModelContext {
 
     @Inject private FactoryService factoryService;
     @Inject @Getter(onMethod_= {@Override}) MetaModelContext metaModelContext; // HasMetaModelContext
-    @Inject protected _ProxyFactoryService proxyFactoryService; // protected: in support of JUnit tests
+    @Inject protected ProxyFactoryService proxyFactoryService; // protected: in support of JUnit tests
     @Inject @Lazy private CommandDtoFactory commandDtoFactory;
 
     @Inject private Provider<InteractionService> interactionServiceProvider;
@@ -233,8 +234,8 @@ implements WrapperFactory, HasMetaModelContext {
         // no need to inject services into the mixin, factoryService does it for us.
 
         if (isWrapper(mixee)) {
-            var wrapperObject = (WrappingObject) mixee;
-            var origin = wrapperObject.__causeway_origin();
+            var wrappingObject = (WrappingObject) mixee;
+            var origin = wrappingObject.__causeway_origin();
             var underlyingMixee = origin.pojo();
 
             getServiceInjector().injectServicesInto(underlyingMixee);
@@ -288,11 +289,7 @@ implements WrapperFactory, HasMetaModelContext {
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
         }
 
-        var proxyFactory = proxyFactoryService
-                .<T>factory(_Casts.uncheckedCast(domainObject.getClass()), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
-
-        return proxyFactory.createInstance((proxy, method, args) -> {
-
+        final InvocationHandler handler = (proxy, method, args) -> {
             var resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
@@ -301,7 +298,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForRegular(targetAdapter.objSpec());
+                var doih = proxyGenerator.handler(targetAdapter.objSpec());
                 doih.invoke(domainObject, method, args);
             }
 
@@ -311,7 +308,14 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             return submitAsync(memberAndTarget, args, asyncControl);
-        }, false);
+        };
+
+        @SuppressWarnings("unchecked")
+        var proxyClass = proxyFactoryService
+                .proxyClass(handler,
+                        (Class<T>)domainObject.getClass(), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
+        var proxyFactory = proxyFactoryService.factory(proxyClass);
+        return proxyFactory.createInstance(false);
     }
 
     @Override
@@ -328,12 +332,7 @@ implements WrapperFactory, HasMetaModelContext {
         var mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
                 .getConstructorElseFail(mixinClass, mixee.getClass());
 
-        var proxyFactory = proxyFactoryService
-                .factory(mixinClass, new Class[]{WrappingObject.class}, WrappingObject.ADDITIONAL_FIELDS,
-                        mixinConstructor.getParameterTypes());
-
-        return proxyFactory.createInstance((proxy, method, args) -> {
-
+        final InvocationHandler handler = (proxy, method, args) -> {
             var resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
                     .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
 
@@ -342,7 +341,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForMixin(managedMixin.objSpec());
+                var doih = proxyGenerator.handler(managedMixin.objSpec());
                 var origin = WrappingObject.Origin.fallbackMixin(mixin, managedMixee);
                 doih.invoke(new WrapperInvocation(origin, method, args));
             }
@@ -353,7 +352,15 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             return submitAsync(actionAndTarget, args, asyncControl);
-        }, new Object[]{ mixee });
+        };
+
+        var proxyClass = proxyFactoryService
+            .proxyClass(handler, mixinClass, new Class[]{WrappingObject.class}, WrappingObject.ADDITIONAL_FIELDS);
+
+        var proxyFactory = proxyFactoryService
+            .factory(proxyClass, mixinConstructor.getParameterTypes());
+
+        return proxyFactory.createInstance(new Object[]{ mixee });
     }
 
     private boolean isInheritedFromJavaLangObject(final Method method) {
