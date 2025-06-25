@@ -534,16 +534,8 @@ implements WrapperInvocationHandler {
 
     @SneakyThrows
     private Object handleException(WrapperInvocation wrapperInvocation, final Exception ex) {
-        var exceptionHandler = wrapperInvocation.origin().syncControl().getExceptionHandler()
-                .orElse(null);
-
-        if(exceptionHandler==null) {
-            log.warn("No ExceptionHandler was setup to handle this Exception", ex);
-        }
-
-        return exceptionHandler!=null
-                ? exceptionHandler.handle(ex)
-                : null;
+        var exceptionHandler = wrapperInvocation.origin().syncControl().exceptionHandler();
+        return exceptionHandler.handle(ex);
     }
 
     private Object singleArgUnderlyingElseNull(final Object[] args, final String name) {

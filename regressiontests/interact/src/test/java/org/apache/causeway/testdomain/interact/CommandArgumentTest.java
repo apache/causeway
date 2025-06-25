@@ -128,7 +128,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
         wrapperFactory.asyncWrap(commandArgDemo, control)
         .list(Arrays.asList(1L, 2L, 3L));
 
-        var stringified = control.getFuture().get(3L, TimeUnit.DAYS).getResultAsString();
+        var stringified = control.future().get(3L, TimeUnit.DAYS).getResultAsString();
 
         assertEquals("[1, 2, 3]", stringified);
     }

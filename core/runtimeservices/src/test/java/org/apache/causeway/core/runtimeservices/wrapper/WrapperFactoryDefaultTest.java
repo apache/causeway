@@ -26,9 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 
-import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
@@ -124,7 +122,7 @@ class WrapperFactoryDefaultTest {
         // then
         assertThat(wrappingObject, is(not(domainObject)));
         assertThat(createProxyCalledWithDomainObject, is(wrappedObject));
-        assertThat(createProxyCalledWithSyncControl.getExecutionModes(), contains(ExecutionMode.SKIP_RULE_VALIDATION));
+        assertThat(createProxyCalledWithSyncControl.isSkipRules(), is(true));
     }
 
 }

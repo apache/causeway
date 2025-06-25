@@ -24,7 +24,6 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.proxy.CachableInvocationHandler;
@@ -119,11 +118,11 @@ public interface WrapperInvocationHandler extends CachableInvocationHandler {
         }
 
         public boolean shouldEnforceRules() {
-            return !origin().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_RULE_VALIDATION);
+            return !origin().syncControl().isSkipRules();
         }
 
         public boolean shouldExecute() {
-            return !origin().syncControl().getExecutionModes().contains(ExecutionMode.SKIP_EXECUTION);
+            return !origin().syncControl().isSkipExecute();
         }
     }
 
