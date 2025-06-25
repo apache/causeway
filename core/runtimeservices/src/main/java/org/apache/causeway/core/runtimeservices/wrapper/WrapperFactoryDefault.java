@@ -58,7 +58,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
@@ -99,6 +98,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler.WrapperInvocation;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
@@ -233,8 +233,8 @@ implements WrapperFactory, HasMetaModelContext {
         // no need to inject services into the mixin, factoryService does it for us.
 
         if (isWrapper(mixee)) {
-            var wrapperObject = (WrappingObject) mixee;
-            var origin = wrapperObject.__causeway_origin();
+            var wrappingObject = (WrappingObject) mixee;
+            var origin = wrappingObject.__causeway_origin();
             var underlyingMixee = origin.pojo();
 
             getServiceInjector().injectServicesInto(underlyingMixee);
@@ -301,7 +301,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForRegular(targetAdapter.objSpec());
+                var doih = proxyGenerator.handler(targetAdapter.objSpec());
                 doih.invoke(domainObject, method, args);
             }
 
@@ -342,7 +342,7 @@ implements WrapperFactory, HasMetaModelContext {
             }
 
             if (asyncControl.isCheckRules()) {
-                var doih = proxyGenerator.handlerForMixin(managedMixin.objSpec());
+                var doih = proxyGenerator.handler(managedMixin.objSpec());
                 var origin = WrappingObject.Origin.fallbackMixin(mixin, managedMixee);
                 doih.invoke(new WrapperInvocation(origin, method, args));
             }

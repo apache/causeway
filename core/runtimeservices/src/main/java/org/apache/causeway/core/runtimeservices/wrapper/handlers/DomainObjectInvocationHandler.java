@@ -29,7 +29,6 @@ import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.events.CollectionAccessEvent;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.applib.services.wrapper.events.PropertyAccessEvent;
@@ -61,6 +60,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
 import lombok.Getter;
 import lombok.SneakyThrows;

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.context._Context;
@@ -34,6 +33,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
 public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) {
 
@@ -42,8 +42,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
         final ObjectSpecification domainObjectSpec,
         final SyncControl syncControl) {
 
-        var invocationHandler = handlerForRegular(domainObjectSpec);
-        return instantiateProxy(invocationHandler, new WrappingObject.Origin(domainObject, syncControl));
+        return instantiateProxy(handler(domainObjectSpec), new WrappingObject.Origin(domainObject, syncControl));
     }
 
     public <T> T mixinProxy(
@@ -52,8 +51,7 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
             final ObjectSpecification mixinSpec,
             final SyncControl syncControl) {
     
-        var invocationHandler = handlerForMixin(mixinSpec);
-        return instantiateProxy(invocationHandler, new WrappingObject.Origin(mixin, managedMixee, syncControl));
+        return instantiateProxy(handler(mixinSpec), new WrappingObject.Origin(mixin, managedMixee, syncControl));
     }
     
     /**
@@ -116,15 +114,9 @@ public record ProxyGenerator(@NonNull _ProxyFactoryService proxyFactoryService) 
         return _Casts.uncheckedCast(proxyWithoutFields);
     }
 
-    public WrapperInvocationHandler handlerForRegular(ObjectSpecification targetSpec) {
+    public WrapperInvocationHandler handler(ObjectSpecification targetSpec) {
         return new DomainObjectInvocationHandler(
                 targetSpec,
-                this);
-    }
-
-    public WrapperInvocationHandler handlerForMixin(ObjectSpecification mixinSpec) {
-        return new DomainObjectInvocationHandler(
-                mixinSpec,
                 this);
     }
     

@@ -25,7 +25,6 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Lazy;

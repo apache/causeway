@@ -16,47 +16,48 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.wrapper;
+package org.apache.causeway.core.runtime.wrap;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService.AdditionalField;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.SneakyThrows;
 
 /**
  * Implemented by all objects that have been viewed as per
  * {@link WrapperFactory#wrap(Object)}.
- * 
+ *
  * @implNote domain classes may not have methods with <tt>__causeway_</tt> prefix
- * 
+ *
  * @apiNote requires the mechanism that creates proxies implementing {@link WrappingObject}
- *      to additionally create the {@code __causeway_origin_field}. 
+ *      to additionally create the {@code __causeway_origin_field}.
  *
  * @since 1.x, revised for 3.4 {@index}
  */
 public interface WrappingObject {
-    
+
     final static String ORIGIN_GETTER_NAME = "__causeway_origin";
     final static String ORIGIN_FIELD_NAME = "__causeway_origin_field";
     final static String SAVE_METHOD_NAME = "__causeway_save";
-    
+
     final static List<AdditionalField> ADDITIONAL_FIELDS = List.of(
             new AdditionalField(ORIGIN_FIELD_NAME, WrappingObject.Origin.class, Modifier.PROTECTED));
-    
-    //TODO perhaps move to a module that sees ManagedObject
+
     record Origin(
             Object pojo,
             /**
              * The mixee adapted as a ManagedObject, used only if pojo is a mixin.
              */
-            @Nullable Object managedMixee, 
-            SyncControl syncControl, 
+            @Nullable ManagedObject managedMixee,
+            SyncControl syncControl,
             boolean isFallback) {
         /**
          * fallback, used for non-proxied target, with no execute (no verify no rule checking).
@@ -67,13 +68,13 @@ public interface WrappingObject {
         /**
          * fallback, used for non-proxied target as mixin, with no execute (no verify no rule checking)
          */
-        public static Origin fallbackMixin(Object target, Object managedMixee) {
+        public static Origin fallbackMixin(Object target, ManagedObject managedMixee) {
             return new Origin(target, managedMixee, SyncControl.control().withNoExecute(), true);
         }
         public Origin(Object pojo, SyncControl syncControl) {
             this(pojo, null, syncControl, false);
         }
-        public Origin(Object pojo, Object managedMixee, SyncControl syncControl) {
+        public Origin(Object pojo, ManagedObject managedMixee, SyncControl syncControl) {
             this(pojo, managedMixee, syncControl, false);
         }
     }
@@ -91,7 +92,7 @@ public interface WrappingObject {
         var field = proxyObject.getClass().getDeclaredField(ORIGIN_FIELD_NAME);
         return (Origin) _Reflect.getFieldOn(field, proxyObject);
     }
-    
+
     /**
      * Wither for the underlying {@link Origin}.
      */
@@ -101,7 +102,7 @@ public interface WrappingObject {
         _Reflect.setFieldOn(field, proxyObject, origin);
         return proxyObject;
     }
-    
+
     /**
      * Programmatic equivalent of invoking save for a transient object .
      */

@@ -28,12 +28,12 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.ExecutionMode;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.proxy._ProxyFactoryService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
 import lombok.RequiredArgsConstructor;
 

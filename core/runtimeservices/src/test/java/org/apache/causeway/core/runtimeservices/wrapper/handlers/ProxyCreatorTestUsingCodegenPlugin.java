@@ -30,10 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.services.wrapper.WrappingObject;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
 import lombok.Getter;
 import lombok.Setter;
