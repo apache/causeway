@@ -108,12 +108,9 @@ public record AsyncControl (
      * How to handle exceptions if they occur, using the provided {@link ExceptionHandler}.
      *
      * <p>The default behaviour is to rethrow the exception.
-     *
-     * <p>Changes are made in place, returning the same instance.
      */
-    public AsyncControl setExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
-        syncControl.setExceptionHandler(exceptionHandler);
-        return this;
+    public AsyncControl withExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
+        return new AsyncControl(syncControl.withExceptionHandler(exceptionHandler), executorService, clock, locale, timeZone, user);
     }
 
     /**

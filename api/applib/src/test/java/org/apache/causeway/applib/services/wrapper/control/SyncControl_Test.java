@@ -99,7 +99,7 @@ class SyncControl_Test {
         var control = SyncControl.defaults()
                 .withNoExecute()
                 .withSkipRules()
-                .setExceptionHandler(exceptionHandler);
+                .withExceptionHandler(exceptionHandler);
 
         assertTrue(control.isSkipExecute());
         assertTrue(control.isSkipRules());

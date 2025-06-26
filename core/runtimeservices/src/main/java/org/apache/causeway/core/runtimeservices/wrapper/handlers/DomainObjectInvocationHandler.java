@@ -28,6 +28,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
+import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
 import org.apache.causeway.applib.services.wrapper.HiddenException;
 import org.apache.causeway.applib.services.wrapper.InvalidException;
@@ -265,17 +266,15 @@ implements WrapperInvocationHandler {
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
-        handleCommandListeners(wrapperInvocation, ()->null); //FIXME
-
         var spec = targetAdapter.objSpec();
         if(spec.isEntity()) {
             return runExecutionTask(wrapperInvocation, ()->{
-                MmEntityUtils.persistInCurrentTransaction(targetAdapter);
-                return null;
-            });
+                    MmEntityUtils.persistInCurrentTransaction(targetAdapter);
+                    return null;
+                },
+                ()->new ExceptionLogger("persist", targetAdapter));
         }
         return null;
-
     }
 
     private Object handleGetterMethodOnProperty(
@@ -289,8 +288,6 @@ implements WrapperInvocationHandler {
             checkVisibility(wrapperInvocation, targetAdapter, property);
         });
 
-        handleCommandListeners(wrapperInvocation, ()->null); //FIXME
-
         return runExecutionTask(wrapperInvocation, ()->{
 
             var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
@@ -303,9 +300,7 @@ implements WrapperInvocationHandler {
                     property.getFeatureIdentifier(),
                     currentReferencedObj));
             return currentReferencedObj;
-
-        });
-
+        }, ()->new ExceptionLogger("getter " + property.getId(), targetAdapter));
     }
 
     private Object handleSetterMethodOnProperty(
@@ -335,8 +330,7 @@ implements WrapperInvocationHandler {
         return runExecutionTask(wrapperInvocation, ()->{
             property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy(wrapperInvocation));
             return null;
-        });
-
+        }, ()->new ExceptionLogger("setter " + property.getId(), targetAdapter));
     }
 
     private Object handleGetterMethodOnCollection(
@@ -350,8 +344,6 @@ implements WrapperInvocationHandler {
         runValidationTask(wrapperInvocation, ()->{
             checkVisibility(wrapperInvocation, targetAdapter, collection);
         });
-
-        handleCommandListeners(wrapperInvocation, ()->null); //FIXME
 
         return runExecutionTask(wrapperInvocation, ()->{
 
@@ -378,8 +370,7 @@ implements WrapperInvocationHandler {
 
             var msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
             throw new IllegalArgumentException(msg);
-        });
-
+        }, ()->new ExceptionLogger("getter " + collection.getId(), targetAdapter));
     }
 
     private Collection<?> wrapCollection(
@@ -435,7 +426,7 @@ implements WrapperInvocationHandler {
                     head, argAdapters,
                     interactionInitiatedBy);
             return MmUnwrapUtils.single(returnedAdapter);
-        });
+        }, ()->new ExceptionLogger("action " + objectAction.getId(), targetAdapter));
     }
 
     private void checkValidity(
@@ -559,19 +550,30 @@ implements WrapperInvocationHandler {
 
     private <X> X runExecutionTask(
             final WrapperInvocation wrapperInvocation,
-            final Supplier<X> task) {
+            final Supplier<X> task,
+            final Supplier<ExceptionLogger> exceptionLoggerSupplier) {
         if(wrapperInvocation.syncControl().isSkipExecute()) return null;
         try {
             return task.get();
         } catch(Exception ex) {
-            return _Casts.uncheckedCast(handleException(wrapperInvocation, ex));
+            return _Casts.uncheckedCast(handleException(wrapperInvocation, ex, exceptionLoggerSupplier.get()));
         }
     }
 
     @SneakyThrows
-    private Object handleException(WrapperInvocation wrapperInvocation, final Exception ex) {
+    private Object handleException(
+            final WrapperInvocation wrapperInvocation,
+            final Exception ex) {
         var exceptionHandler = wrapperInvocation.origin().syncControl().exceptionHandler();
         return exceptionHandler.handle(ex);
+    }
+
+    private Object handleException(
+            final WrapperInvocation wrapperInvocation,
+            final Exception ex,
+            final ExceptionLogger exceptionLogger) {
+        log.error(exceptionLogger.msg(ex), ex);
+        return handleException(wrapperInvocation, ex);
     }
 
     private Object singleArgUnderlyingElseNull(final Object[] args, final String name) {
@@ -587,6 +589,22 @@ implements WrapperInvocationHandler {
         if (!_NullSafe.isEmpty(args)) {
             throw new IllegalArgumentException(String.format(
                     "Invoking '%s' should have no arguments", name));
+        }
+    }
+
+    record ExceptionLogger(String what, ManagedObject mo)  {
+        String msg(Exception ex) {
+            LogicalType logicalType = mo.objSpec().logicalType();
+            String id = mo.isBookmarkMemoized()
+                    ? mo.getBookmarkElseFail().identifier()
+                    : "<bookmark not memoized>";
+            var buf = new StringBuilder("Failed to execute ").append(" ").append(what).append(" ");
+            buf.append(" on '")
+                    .append(logicalType.logicalName())
+                    .append(":")
+                    .append(id)
+                    .append("'");
+            return buf.toString();
         }
     }
 

@@ -105,7 +105,7 @@ class AsyncControl_Test {
                 .withSkipRules()
                 .withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"))
                 .with(executorService)
-                .setExceptionHandler(exceptionHandler);
+                .withExceptionHandler(exceptionHandler);
 
         Assertions.assertThat(control.syncControl().isSkipExecute()).isEqualTo(false);
         Assertions.assertThat(control.syncControl().isSkipRules()).isEqualTo(true);
