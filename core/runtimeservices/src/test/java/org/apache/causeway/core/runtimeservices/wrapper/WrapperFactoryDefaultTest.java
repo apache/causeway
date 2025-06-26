@@ -50,7 +50,7 @@ class WrapperFactoryDefaultTest {
 
         @Override
         public WrappingObject.Origin __causeway_origin() {
-            return new WrappingObject.Origin(wrappedObject, SyncControl.control());
+            return new WrappingObject.Origin(wrappedObject, SyncControl.defaults());
         }
     }
 
@@ -117,7 +117,7 @@ class WrapperFactoryDefaultTest {
         final DomainObject domainObject = new WrappingDomainObject(wrappedObject);
 
         // when
-        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, SyncControl.control().withSkipRules());
+        final DomainObject wrappingObject = wrapperFactory.wrap(domainObject, SyncControl.defaults().withSkipRules());
 
         // then
         assertThat(wrappingObject, is(not(domainObject)));

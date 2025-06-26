@@ -31,12 +31,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
@@ -52,8 +54,6 @@ import org.apache.causeway.testdomain.jdo.entities.JdoBook;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract;
 import org.apache.causeway.testdomain.publishing.PublishingTestFactoryAbstract.CommitListener;
 import org.apache.causeway.testdomain.util.dto.BookDto;
-
-import static org.apache.causeway.applib.services.wrapper.control.AsyncControl.returningVoid;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -278,7 +278,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                var syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                var syncControl = SyncControl.defaults().withSkipRules(); // don't enforce rules
                 context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
 
             });
@@ -291,7 +291,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                var syncControl = SyncControl.control().withSkipRules(); // don't enforce rules
+                var syncControl = SyncControl.defaults().withSkipRules(); // don't enforce rules
                 context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
 
             });
@@ -318,7 +318,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                var syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                var syncControl = SyncControl.defaults().withCheckRules(); // enforce rules
 
                 //assertThrows(DisabledException.class, ()->{
                     wrapper.wrap(book, syncControl).setName("Book #2"); // should fail with DisabledException
@@ -334,7 +334,7 @@ extends PublishingTestFactoryAbstract {
                 context.runGiven();
 
                 // when - running synchronous
-                var syncControl = SyncControl.control().withCheckRules(); // enforce rules
+                var syncControl = SyncControl.defaults().withCheckRules(); // enforce rules
 
                 //assertThrows(DisabledException.class, ()->{
                     wrapper.wrap(book, syncControl).doubleThePrice(); // should fail with DisabledException
@@ -358,20 +358,19 @@ extends PublishingTestFactoryAbstract {
         context.bind(commitListener);
 
         // given
-        var asyncControl = returningVoid().withSkipRules(); // don't enforce rules
+        var asyncControl = AsyncControl.defaults().withSkipRules(); // don't enforce rules
 
-        withBookDo(book->{
-
+        var future = withBookCall(book->{
             context.runGiven();
 
             // when - running asynchronous
-            wrapper.asyncWrap(book, asyncControl)
-            .setName("Book #2");
-
+            return wrapper.asyncWrap(book, asyncControl)
+                    .thenAcceptAsync(bk->bk.setName("Book #2"));
         });
 
-        asyncControl.getFuture().get(10, TimeUnit.SECONDS);
-
+        future
+            .orTimeout(10, TimeUnit.SECONDS)
+            .join(); // wait till done
     }
 
     @Override
@@ -385,11 +384,12 @@ extends PublishingTestFactoryAbstract {
             context.runGiven();
 
             // when - running synchronous
-            var asyncControl = returningVoid().withCheckRules(); // enforce rules
+            var asyncControl = AsyncControl.defaults().withCheckRules(); // enforce rules
 
             //assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
-                wrapper.asyncWrap(book, asyncControl).setName("Book #2");
+                wrapper.asyncWrap(book, asyncControl)
+                    .thenAcceptAsync(bk->bk.setName("Book #2"));
 
             //});
 
@@ -397,12 +397,18 @@ extends PublishingTestFactoryAbstract {
 
     }
 
-    // -- TEST SETUP
+    // -- HELPER
 
     @SneakyThrows
     private void withBookDo(final CheckedConsumer<JdoBook> transactionalBookConsumer) {
         var book = repository.allInstances(JdoBook.class).listIterator().next();
         transactionalBookConsumer.accept(book);
+    }
+
+    @SneakyThrows
+    private <T> T withBookCall(final ThrowingFunction<JdoBook, T> transactionalBookFunction) {
+        var book = repository.allInstances(JdoBook.class).listIterator().next();
+        return transactionalBookFunction.apply(book);
     }
 
 }

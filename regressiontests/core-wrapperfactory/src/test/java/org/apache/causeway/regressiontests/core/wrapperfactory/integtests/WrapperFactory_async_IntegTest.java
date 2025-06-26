@@ -33,7 +33,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -83,14 +82,13 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         runWithNewTransaction(() -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            var asyncControl = AsyncControl.returning(Counter.class)
+            var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
-            wrapperFactory.asyncWrap(counter, asyncControl).increment();
-
-            // let's wait max 5 sec to allow executor to complete before continuing
-            asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
-            assertTrue(asyncControl.getFuture().isDone()); // verify execution finished
+            wrapperFactory.asyncWrap(counter, asyncControl)
+                .thenApplyAsync(Counter::increment)
+                .orTimeout(5_000, TimeUnit.MILLISECONDS)
+                .join(); // let's wait max 5 sec to allow executor to complete before continuing
         });
 
         // then
@@ -104,15 +102,17 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
 
-            var asyncControl = AsyncControl.returning(Counter.class)
+            var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
             // when
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl).act();
+            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl)
+                .thenApplyAsync(Counter_bumpUsingMixin::act)
+                // let's wait max 5 sec to allow executor to complete before continuing
+                .orTimeout(5_000, TimeUnit.MILLISECONDS)
+                .join(); // wait till done
 
-            // let's wait max 5 sec to allow executor to complete before continuing
-            asyncControl.waitForResult(5_000, TimeUnit.MILLISECONDS);
-            assertTrue(asyncControl.getFuture().isDone()); // verify execution finished
+            assertThat(counter.getNum()).isEqualTo(2L); // verify execution succeeded
         });
 
         // then

@@ -29,7 +29,7 @@ class SyncControl_Test {
     public void defaults() throws Exception {
 
         // given
-        var control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // then
         assertFalse(control.isSkipExecute());
@@ -39,7 +39,7 @@ class SyncControl_Test {
     @Test
     public void check_rules() throws Exception {
         // given
-        var control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
         control = control.withCheckRules();
@@ -53,7 +53,7 @@ class SyncControl_Test {
     public void skip_rules() throws Exception {
 
         // given
-        var control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
         control = control.withSkipRules();
@@ -67,7 +67,7 @@ class SyncControl_Test {
     public void execute() throws Exception {
 
         // given
-        var control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
         control = control.withExecute();
@@ -81,7 +81,7 @@ class SyncControl_Test {
     public void no_execute() throws Exception {
 
         // given
-        var control = SyncControl.control();
+        var control = SyncControl.defaults();
 
         // when
         control = control.withNoExecute();
@@ -96,7 +96,7 @@ class SyncControl_Test {
 
         ExceptionHandler exceptionHandler = ex -> null;
 
-        var control = SyncControl.control()
+        var control = SyncControl.defaults()
                 .withNoExecute()
                 .withSkipRules()
                 .setExceptionHandler(exceptionHandler);

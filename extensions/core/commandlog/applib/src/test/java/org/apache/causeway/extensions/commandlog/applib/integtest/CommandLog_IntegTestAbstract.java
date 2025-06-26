@@ -84,7 +84,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         assertThat(mostRecentCompleted).isEmpty();
     }
 
-    protected abstract Counter newCounter(String name);
+    protected abstract <T extends Counter>  T newCounter(String name);
 
     @Test
     void invoke_mixin() {
@@ -243,7 +243,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // then
         assertThat(cleBookmarkIfAny).isPresent();
         Bookmark cleBookmark = cleBookmarkIfAny.get();
-        String identifier = cleBookmark.getIdentifier();
+        String identifier = cleBookmark.identifier();
         if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
             assertThat(identifier).startsWith("u_");
             UUID.fromString(identifier.substring("u_".length())); // should not fail, ie check the format is as we expect
@@ -351,6 +351,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
         // given
         commandTarget1User1 = commandTarget1User1ById.get();
         commandTarget1User2 = commandTarget1User2ById.get();
+        @SuppressWarnings("unused")
         var commandTarget1User1Yesterday = commandTarget1User1YesterdayById.get();
         commandTarget2User1 = commandTarget2User1ById.get();
 
@@ -468,7 +469,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
     @Inject ClockService clockService;
     @Inject InteractionService interactionService;
     @Inject InteractionLayerTracker interactionLayerTracker;
-    @Inject CounterRepository counterRepository;
+    @Inject CounterRepository<? extends Counter> counterRepository;
     @Inject WrapperFactory wrapperFactory;
     @Inject BookmarkService bookmarkService;
     @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;

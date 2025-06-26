@@ -18,15 +18,13 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
@@ -46,21 +44,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.command.CommandExecutorService;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
-import org.apache.causeway.applib.services.wrapper.control.AsyncLogger;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
@@ -80,40 +68,24 @@ import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEven
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
-import org.apache.causeway.commons.internal.reflection._GenericResolver;
-import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MixinConstructor;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler.WrapperInvocation;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.ProxyGenerator;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
-
-import static org.apache.causeway.applib.services.wrapper.control.SyncControl.control;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Default implementation of {@link WrapperFactory}.
- *
- * @since 2.0 {@index}
  */
 @Service
 @Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)
@@ -131,10 +103,6 @@ implements WrapperFactory, HasMetaModelContext {
 
     @Inject private Provider<InteractionService> interactionServiceProvider;
     @Inject private Provider<TransactionService> transactionServiceProvider;
-    @Inject private Provider<CommandExecutorService> commandExecutorServiceProvider;
-    @Inject private Provider<InteractionProvider> interactionProviderProvider;
-    @Inject private Provider<BookmarkService> bookmarkServiceProvider;
-    @Inject private Provider<RepositoryService> repositoryServiceProvider;
     @Inject private InteractionIdGenerator interactionIdGenerator;
 
     private final List<InteractionListener> listeners = new ArrayList<>();
@@ -149,7 +117,7 @@ implements WrapperFactory, HasMetaModelContext {
 
         this.commonExecutorService = newCommonExecutorService();
 
-        this.proxyGenerator = new ProxyGenerator(proxyFactoryService);
+        this.proxyGenerator = new ProxyGenerator(proxyFactoryService, interactionIdGenerator);
 
         putDispatcher(ObjectTitleEvent.class, InteractionListener::objectTitleRead);
         putDispatcher(PropertyVisibilityEvent.class, InteractionListener::propertyVisible);
@@ -180,7 +148,7 @@ implements WrapperFactory, HasMetaModelContext {
     @Override
     public <T> T wrap(
             final @NonNull T domainObject) {
-        return wrap(domainObject, control());
+        return wrap(domainObject, SyncControl.defaults());
     }
 
     @Override
@@ -210,7 +178,7 @@ implements WrapperFactory, HasMetaModelContext {
     public <T> T wrapMixin(
             final @NonNull Class<T> mixinClass,
             final @NonNull Object mixee) {
-        return wrapMixin(mixinClass, mixee, control());
+        return wrapMixin(mixinClass, mixee, SyncControl.defaults());
     }
 
     @Override
@@ -267,242 +235,33 @@ implements WrapperFactory, HasMetaModelContext {
 
     // -- ASYNC WRAPPING
 
-    @Override
-    public <T, R> T asyncWrap(
-            final @NonNull T domainObject,
-            final AsyncControl<R> asyncControl) {
-
-        var targetAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
-        if(targetAdapter.objSpec().isMixin()) {
-            throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
-                    + "use WrapperFactory.asyncWrapMixin(...) instead");
-        }
-
-        var handler = (InvocationHandler) (proxy, method, args) -> {
-            var resolvedMethod = _GenericResolver.resolveMethod(method, domainObject.getClass())
-                    .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
-
-            if (isInheritedFromJavaLangObject(method)) {
-                return method.invoke(domainObject, args);
-            }
-
-            if (!asyncControl.syncControl().isSkipRules()) {
-                var doih = proxyGenerator.handler(targetAdapter.objSpec());
-                var origin = WrappingObject.Origin.fallback(domainObject);
-                doih.invoke(new WrapperInvocation(origin, method, args));
-            }
-
-            var memberAndTarget = MemberAndTarget.forRegular(resolvedMethod, targetAdapter);
-            if(!memberAndTarget.isMemberFound()) {
-                return method.invoke(domainObject, args);
-            }
-
-            submitAsync(memberAndTarget, args, asyncControl);
-            return null;
-        };
-
-        @SuppressWarnings("unchecked")
-        var proxyClass = proxyFactoryService
-                .proxyClass(handler,
-                        (Class<T>)domainObject.getClass(), WrappingObject.class, WrappingObject.ADDITIONAL_FIELDS);
-        var proxyFactory = proxyFactoryService.factory(proxyClass);
-        return proxyFactory.createInstance(false);
+    AsyncExecutorService asyncExecutorService(AsyncControl asyncControl) {
+        return new AsyncExecutorService(
+                interactionServiceProvider.get(),
+                transactionServiceProvider.get(),
+                asyncControl.override(InteractionContext.builder().build()),
+                Optional.of(Propagation.REQUIRES_NEW),
+                Optional.ofNullable(asyncControl.executorService())
+                    .orElse(commonExecutorService));
     }
 
     @Override
-    public <T, R> T asyncWrapMixin(
+    public <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl) {
+        var proxy = wrap(domainObject, asyncControl.syncControl());
+        return new AsyncProxyInternal<>(
+                CompletableFuture.completedFuture(proxy),
+                asyncExecutorService(asyncControl));
+    }
+
+    @Override
+    public <T> AsyncProxy<T> asyncWrapMixin(
             final @NonNull Class<T> mixinClass,
             final @NonNull Object mixee,
-            final @NonNull AsyncControl<R> asyncControl) {
-
-        T mixin = factoryService.mixin(mixinClass, mixee);
-
-        var managedMixee = adaptAndGuardAgainstWrappingNotSupported(mixee);
-        var managedMixin = adaptAndGuardAgainstWrappingNotSupported(mixin);
-
-        var mixinConstructor = MixinConstructor.PUBLIC_SINGLE_ARG_RECEIVING_MIXEE
-                .getConstructorElseFail(mixinClass, mixee.getClass());
-
-        var handler = (InvocationHandler) (proxy, method, args) -> {
-            var resolvedMethod = _GenericResolver.resolveMethod(method, mixinClass)
-                    .orElseThrow(); // fail early on attempt to invoke method that is not part of the meta-model
-
-            if (isInheritedFromJavaLangObject(method)) {
-                return method.invoke(mixin, args);
-            }
-
-            if (!asyncControl.syncControl().isSkipRules()) {
-                var doih = proxyGenerator.handler(managedMixin.objSpec());
-                var origin = WrappingObject.Origin.fallbackMixin(mixin, managedMixee);
-                doih.invoke(new WrapperInvocation(origin, method, args));
-            }
-
-            var actionAndTarget = MemberAndTarget.forMixin(resolvedMethod, mixee, managedMixin);
-            if (!actionAndTarget.isMemberFound()) {
-                return method.invoke(mixin, args);
-            }
-
-            submitAsync(actionAndTarget, args, asyncControl);
-            return null;
-        };
-
-        var proxyClass = proxyFactoryService
-            .proxyClass(handler, mixinClass, new Class[]{WrappingObject.class}, WrappingObject.ADDITIONAL_FIELDS);
-
-        var proxyFactory = proxyFactoryService
-            .factory(proxyClass, mixinConstructor.getParameterTypes());
-
-        return proxyFactory.createInstance(new Object[]{ mixee });
-    }
-
-    private boolean isInheritedFromJavaLangObject(final Method method) {
-        return method.getDeclaringClass().equals(Object.class);
-    }
-
-    private <R> void submitAsync(
-            final MemberAndTarget memberAndTarget,
-            final Object[] args,
-            final AsyncControl<R> asyncControl) {
-
-        var interactionLayer = currentInteractionLayer();
-        var interactionContext = interactionLayer.interactionContext();
-        var asyncInteractionContext = interactionContextFrom(asyncControl, interactionContext);
-
-        var parentCommand = getInteractionService().currentInteractionElseFail().getCommand();
-        var parentInteractionId = parentCommand.getInteractionId();
-
-        var targetAdapter = memberAndTarget.target();
-        var method = memberAndTarget.method();
-
-        var head = InteractionHead.regular(targetAdapter);
-
-        var childInteractionId = interactionIdGenerator.interactionId();
-        CommandDto childCommandDto;
-        switch (memberAndTarget.type()) {
-            case ACTION:
-                var action = memberAndTarget.action();
-                var argAdapters = ManagedObject.adaptParameters(action.getParameters(), _Lists.ofArray(args));
-                childCommandDto = commandDtoFactory
-                        .asCommandDto(childInteractionId, head, action, argAdapters);
-                break;
-            case PROPERTY:
-                var property = memberAndTarget.property();
-                var propertyValueAdapter = ManagedObject.adaptProperty(property, args[0]);
-                childCommandDto = commandDtoFactory
-                        .asCommandDto(childInteractionId, head, property, propertyValueAdapter);
-                break;
-            default:
-                // shouldn't happen, already catered for this case previously
-                return;
-        }
-        var oidDto = childCommandDto.getTargets().getOid().get(0);
-
-        var rootExceptionHandler = asyncControl.syncControl().exceptionHandler();
-        asyncControl.setExceptionHandler(new AsyncLogger(rootExceptionHandler, method, Bookmark.forOidDto(oidDto)));
-
-        var executorService = Optional.ofNullable(asyncControl.executorService())
-                .orElse(commonExecutorService);
-        var asyncTask = getServiceInjector().injectServicesInto(new AsyncTask<R>(
-            asyncInteractionContext,
-            Propagation.REQUIRES_NEW,
-            childCommandDto,
-            asyncControl.returnType(),
-            parentInteractionId)); // this command becomes the parent of child command
-
-        var future = executorService.submit(asyncTask);
-        asyncControl.futureRef().set(future);
-    }
-
-    private static <R> InteractionContext interactionContextFrom(
-            final AsyncControl<R> asyncControl,
-            final InteractionContext interactionContext) {
-
-        return InteractionContext.builder()
-            .clock(Optional.ofNullable(asyncControl.clock()).orElseGet(interactionContext::getClock))
-            .locale(Optional.ofNullable(asyncControl.locale()).map(UserLocale::valueOf).orElse(null)) // if not set in asyncControl use defaults (set override to null)
-            .timeZone(Optional.ofNullable(asyncControl.timeZone()).orElseGet(interactionContext::getTimeZone))
-            .user(Optional.ofNullable(asyncControl.user()).orElseGet(interactionContext::getUser))
-            .build();
-    }
-
-    record MemberAndTarget(
-            Type type,
-            /**
-             * Populated if and only if {@link #type} is {@link Type#ACTION}.
-             */
-            ObjectAction action,
-            /**
-             * Populated if and only if {@link #type} is {@link Type#PROPERTY}.
-             */
-            OneToOneAssociation property,
-            ManagedObject target,
-            Method method) {
-        static MemberAndTarget notFound() {
-            return new MemberAndTarget(Type.NONE, null, null, null, null);
-        }
-        static MemberAndTarget foundAction(final ObjectAction action, final ManagedObject target, final Method method) {
-            return new MemberAndTarget(Type.ACTION, action, null, target, method);
-        }
-        static MemberAndTarget foundProperty(final OneToOneAssociation property, final ManagedObject target, final Method method) {
-            return new MemberAndTarget(Type.PROPERTY, null, property, target, method);
-        }
-        static MemberAndTarget forRegular(
-                final ResolvedMethod method,
-                final ManagedObject targetAdapter) {
-
-            var objectMember = targetAdapter.objSpec().getMember(method).orElse(null);
-            if(objectMember == null) {
-                return MemberAndTarget.notFound();
-            }
-            if (objectMember instanceof OneToOneAssociation) {
-                return MemberAndTarget.foundProperty((OneToOneAssociation) objectMember, targetAdapter, method.method());
-            }
-            if (objectMember instanceof ObjectAction) {
-                return MemberAndTarget.foundAction((ObjectAction) objectMember, targetAdapter, method.method());
-            }
-
-            throw new UnsupportedOperationException(
-                    "Only properties and actions can be executed in the background "
-                            + "(method " + method.name() + " represents a " + objectMember.getFeatureType().name() + "')");
-        }
-        static <T> MemberAndTarget forMixin(
-                final ResolvedMethod method,
-                final T mixee,
-                final ManagedObject mixinAdapter) {
-
-            var mixinMember = mixinAdapter.objSpec().getMember(method).orElse(null);
-            if (mixinMember == null) {
-                return MemberAndTarget.notFound();
-            }
-
-            var mmc = mixinAdapter.getMetaModelContext();
-
-            // find corresponding action of the mixee (this is the 'real' target, the target usable for invocation).
-            var mixeeClass = mixee.getClass();
-
-            // don't care about anything other than actions
-            // (contributed properties and collections are read-only).
-            final ObjectAction targetAction = mmc.getSpecificationLoader().specForType(mixeeClass)
-            .flatMap(mixeeSpec->mixeeSpec.streamAnyActions(MixedIn.ONLY)
-                    .filter(act -> ((MixedInMember)act).hasMixinAction((ObjectAction) mixinMember))
-                    .findFirst()
-            )
-            .orElseThrow(()->new UnsupportedOperationException(String.format(
-                    "Could not locate objectAction delegating to mixinAction id='%s' on mixee class '%s'",
-                    mixinMember.getId(), mixeeClass.getName())));
-
-            return MemberAndTarget.foundAction(targetAction, mmc.getObjectManager().adapt(mixee), method.method());
-        }
-
-        public boolean isMemberFound() {
-            return type != Type.NONE;
-        }
-
-        enum Type {
-            ACTION,
-            PROPERTY,
-            NONE
-        }
+            final @NonNull AsyncControl asyncControl) {
+        var proxy = wrapMixin(mixinClass, mixee, asyncControl.syncControl());
+        return new AsyncProxyInternal<>(
+                CompletableFuture.completedFuture(proxy),
+                asyncExecutorService(asyncControl));
     }
 
     // -- LISTENERS
@@ -563,102 +322,6 @@ implements WrapperFactory, HasMetaModelContext {
         };
 
         dispatchersByEventClass.put(type, dispatcher);
-    }
-
-    private InteractionLayer currentInteractionLayer() {
-        return getInteractionService().currentInteractionLayerElseFail();
-    }
-
-    @RequiredArgsConstructor
-    private static class AsyncTask<R> implements AsyncCallable<R> {
-
-        private static final long serialVersionUID = 1L;
-
-        @Getter private final InteractionContext interactionContext;
-        @Getter private final Propagation propagation;
-        @Getter private final CommandDto commandDto;
-        @Getter private final Class<R> returnType;
-        @Getter private final UUID parentInteractionId;
-
-        /**
-         * Note this is a <code>transient</code> field, in order that
-         * {@link org.apache.causeway.applib.services.wrapper.callable.AsyncCallable} can be declared as
-         * {@link java.io.Serializable}.
-         *
-         * <p>
-         *  Because this field needs to be populated, the {@link java.util.concurrent.ExecutorService} that ultimately
-         *  executes the task will need to be a custom implementation because it must reinitialize this field first,
-         *  using the {@link ServiceInjector} service.  Alternatively, it could call
-         *  {@link WrapperFactory#execute(AsyncCallable)} directly, which achieves the same thing.
-         * </p>
-         */
-        @Inject transient WrapperFactory wrapperFactory;
-
-        /**
-         * If the {@link java.util.concurrent.ExecutorService} used to execute this task (as defined by
-         * {@link AsyncControl#with(ExecutorService)} is not custom, then it can simply invoke this method, but it is
-         * important that it has not serialized/deserialized the object since important transient state would be lost.
-         *
-         * <p>
-         *  On the other hand, a custom implementation of {@link ExecutorService} is free to serialize this object, and
-         *  deserialize it later.  When deserializing it can either reinitialize the necessary state using the
-         *  {@link ServiceInjector} service, then call this method, or it can instead call
-         *  {@link WrapperFactory#execute(AsyncCallable)} directly, which achieves the same thing.
-         * </p>
-         */
-        @Override
-        public R call() {
-            if (wrapperFactory == null) {
-                throw new IllegalStateException(
-                        "The transient wrapperFactory is null; suggests that this async task been serialized and " +
-                        "then deserialized, but is now being executed by an ExecutorService that has not re-injected necessary services.");
-            }
-            return wrapperFactory.execute(this);
-        }
-    }
-
-    @Override
-    public <R> R execute(final AsyncCallable<R> asyncCallable) {
-        getServiceInjector().injectServicesInto(this);
-        final R result = interactionServiceProvider.get()
-                .call(asyncCallable.getInteractionContext(),
-                        () -> updateDomainObjectHonoringTransactionalPropagation(asyncCallable));
-        return result;
-    }
-
-    private <R> R updateDomainObjectHonoringTransactionalPropagation(final AsyncCallable<R> asyncCallable) {
-        return transactionServiceProvider.get()
-                .callTransactional(asyncCallable.getPropagation(),
-                        () -> updateDomainObject(asyncCallable))
-                .ifFailureFail()
-                .getValue().orElse(null);
-    }
-
-    private <R> R updateDomainObject(final AsyncCallable<R> asyncCallable) {
-
-        // obtain the Command that is implicitly created (initially mainly empty) whenever an Interaction is started.
-        var childCommand = interactionProviderProvider.get().currentInteractionElseFail().getCommand();
-
-        // we will "take over" this Command, updating it with the parentInteractionId of the command for the action
-        // that called WrapperFactory#asyncMixin in the first place.
-        childCommand.updater().setParentInteractionId(asyncCallable.getParentInteractionId());
-
-        var tryBookmark = commandExecutorServiceProvider.get().executeCommand(asyncCallable.getCommandDto());
-
-        return tryBookmark.fold(
-                throwable -> null,                  // failure
-                bookmarkIfAny -> bookmarkIfAny.map( // success
-                    bookmark -> {
-                        var spec = getSpecificationLoader().specForBookmark(bookmark).orElse(null);
-                        if(spec==null) {
-                            return null;
-                        }
-                        R domainObject = bookmarkServiceProvider.get().lookup(bookmark, asyncCallable.getReturnType()).orElse(null);
-                        if(spec.isEntity()) {
-                            domainObject = repositoryServiceProvider.get().detach(domainObject);
-                        }
-                        return domainObject;
-                    }).orElse(null));
     }
 
     private final static int MIN_POOL_SIZE = 2; // at least 2

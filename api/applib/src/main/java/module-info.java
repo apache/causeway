@@ -109,7 +109,6 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.userreg.events;
     exports org.apache.causeway.applib.services.userreg;
     exports org.apache.causeway.applib.services.userui;
-    exports org.apache.causeway.applib.services.wrapper.callable;
     exports org.apache.causeway.applib.services.wrapper.control;
     exports org.apache.causeway.applib.services.wrapper.events;
     exports org.apache.causeway.applib.services.wrapper.listeners;

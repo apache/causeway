@@ -34,7 +34,7 @@ class AsyncControl_Test {
     public void defaults() throws Exception {
 
         // given
-        var control = AsyncControl.returningVoid();
+        var control = AsyncControl.defaults();
 
         // then
         Assertions.assertThat(control.syncControl().isSkipExecute()).isEqualTo(false);
@@ -44,7 +44,7 @@ class AsyncControl_Test {
     @Test
     public void check_rules() throws Exception {
         // given
-        var control = AsyncControl.returningVoid();
+        var control = AsyncControl.defaults();
 
         // when
         control = control.withCheckRules();
@@ -58,7 +58,7 @@ class AsyncControl_Test {
     public void skip_rules() throws Exception {
 
         // given
-        var control = AsyncControl.returningVoid();
+        var control = AsyncControl.defaults();
 
         // when
         control = control.withSkipRules();
@@ -72,7 +72,7 @@ class AsyncControl_Test {
     public void user() throws Exception {
 
         // given
-        var control = AsyncControl.returningVoid();
+        var control = AsyncControl.defaults();
 
         // when
         control = control.withUser(UserMemento.ofName("fred"));
@@ -85,7 +85,7 @@ class AsyncControl_Test {
     public void roles() throws Exception {
 
         // given
-        var control = AsyncControl.returningVoid();
+        var control = AsyncControl.defaults();
 
         // when
         control = control.withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"));
@@ -101,7 +101,7 @@ class AsyncControl_Test {
         var executorService = new ExecutorServiceAdapter(new TaskExecutorAdapter(command -> {}));
         var exceptionHandler = (ExceptionHandler) ex -> null;
 
-        var control = AsyncControl.returning(String.class)
+        var control = AsyncControl.defaults()
                 .withSkipRules()
                 .withUser(UserMemento.ofNameAndRoleNames("fred", "role-1", "role-2"))
                 .with(executorService)

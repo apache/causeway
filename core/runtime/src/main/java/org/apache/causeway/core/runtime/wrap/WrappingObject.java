@@ -63,13 +63,13 @@ public interface WrappingObject {
          * fallback, used for non-proxied target, with no execute (no verify no rule checking).
          */
         public static Origin fallback(Object target) {
-            return new Origin(target, null, SyncControl.control().withNoExecute(), true);
+            return new Origin(target, null, SyncControl.defaults().withNoExecute(), true);
         }
         /**
          * fallback, used for non-proxied target as mixin, with no execute (no verify no rule checking)
          */
         public static Origin fallbackMixin(Object target, ManagedObject managedMixee) {
-            return new Origin(target, managedMixee, SyncControl.control().withNoExecute(), true);
+            return new Origin(target, managedMixee, SyncControl.defaults().withNoExecute(), true);
         }
         public Origin(Object pojo, SyncControl syncControl) {
             this(pojo, null, syncControl, false);

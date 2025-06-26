@@ -19,15 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import jakarta.inject.Inject;
 
@@ -36,9 +28,11 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.jaxb.JavaSqlJaxbAdapters;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.common.v2.PeriodDto;
 
@@ -46,21 +40,19 @@ import org.apache.causeway.schema.common.v2.PeriodDto;
  * Allows the execution of action invocations or property edits to be deferred so that they can be executed later in
  * another thread of execution.
  *
- * <p>
- *     Typically this other thread of execution would be scheduled from quartz or similar.  The
- *     {@link org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob} provides a ready-made
- *     implementation to do this for quartz.
- * </p>
+ * <p>Typically this other thread of execution would be scheduled from quartz or similar.  The
+ * {@link org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob} provides a ready-made
+ * implementation to do this for quartz.
  *
  * @see WrapperFactory
  * @see org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler
- * @since 2.0 {@index}
+ * @since 2.0 revised for 3.4 {@index}
  */
 @Service
 public class BackgroundService {
 
     @Inject WrapperFactory wrapperFactory;
-    @Inject PersistCommandExecutorService persistCommandExecutorService;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
     /**
      * Wraps the domain object in a proxy whereby any actions invoked through the proxy will instead be persisted as a
@@ -68,10 +60,11 @@ public class BackgroundService {
      *
      * @see #executeMixin(Class, Object) - to invoke actions that are implemented as mixins
      */
-    public <T> T execute(final T object) {
-        return wrapperFactory.asyncWrap(object, AsyncControl.returningVoid().withCheckRules()
-                .with(persistCommandExecutorService)
-        );
+    public <T> AsyncProxy<T> execute(final T object) {
+        return wrapperFactory.asyncWrap(object, AsyncControl.defaults()
+                .withNoExecute()
+                .withCheckRules()
+                .listen(new CommandPersistor(commandLogEntryRepository)));
     }
     /**
      * Wraps the domain object in a proxy whereby any actions invoked through the proxy will instead be persisted as a
@@ -79,10 +72,11 @@ public class BackgroundService {
      *
      * @see #executeMixin(Class, Object) - to invoke actions that are implemented as mixins
      */
-    public <T> T executeSkipRules(final T object) {
-        return wrapperFactory.asyncWrap(object, AsyncControl.returningVoid().withSkipRules()
-                .with(persistCommandExecutorService)
-        );
+    public <T> AsyncProxy<T> executeSkipRules(final T object) {
+        return wrapperFactory.asyncWrap(object, AsyncControl.defaults()
+                .withNoExecute()
+                .withSkipRules()
+                .listen(new CommandPersistor(commandLogEntryRepository)));
     }
 
     /**
@@ -91,10 +85,11 @@ public class BackgroundService {
      *
      * @see #execute(Object) - to invoke actions that are implemented directly within the object
      */
-    public <T> T executeMixin(final Class<T> mixinClass, final Object mixedIn) {
-        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.returningVoid().withCheckRules()
-                .with(persistCommandExecutorService)
-        );
+    public <T> AsyncProxy<T> executeMixin(final Class<T> mixinClass, final Object mixedIn) {
+        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.defaults()
+                .withNoExecute()
+                .withCheckRules()
+                .listen(new CommandPersistor(commandLogEntryRepository)));
     }
 
     /**
@@ -103,39 +98,28 @@ public class BackgroundService {
      *
      * @see #execute(Object) - to invoke actions that are implemented directly within the object
      */
-    public <T> T executeMixinSkipRules(final Class<T> mixinClass, final Object mixedIn) {
-        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.returningVoid().withSkipRules()
-                .with(persistCommandExecutorService)
-        );
+    public <T> AsyncProxy<T> executeMixinSkipRules(final Class<T> mixinClass, final Object mixedIn) {
+        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.defaults()
+                .withNoExecute()
+                .withSkipRules()
+                .listen(new CommandPersistor(commandLogEntryRepository)));
     }
 
-    /**
-     * @since 2.0 {@index}
-     */
-    @Service
-    public static class PersistCommandExecutorService implements ExecutorService {
-
-        @Inject CommandLogEntryRepository commandLogEntryRepository;
-
-        private final static JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter gregorianCalendarAdapter  = new JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter();;
+    record CommandPersistor(CommandLogEntryRepository commandLogEntryRepository) implements SyncControl.CommandListener {
 
         @Override
-        public <T> Future<T> submit(final Callable<T> task) {
-            var callable = (AsyncCallable<T>) task;
-            var commandDto = callable.getCommandDto();
+        public void onCommand(
+                final InteractionContext interactionContext,
+                final CommandDto commandDto,
+                final UUID parentInteractionId) {
 
             // we'll mutate the commandDto in line with the callable, then
             // create the CommandLogEntry from that commandDto
-            var childInteractionId = UUID.randomUUID();
-            commandDto.setInteractionId(childInteractionId.toString());
+            commandDto.setInteractionId(UUID.randomUUID().toString());
 
             // copy details from requested interaction context into the commandDto
-            var interactionContext = callable.getInteractionContext();
-            var timestamp = interactionContext.getClock().nowAsJavaSqlTimestamp();
-            commandDto.setTimestamp(gregorianCalendarAdapter.marshal(timestamp));
-
-            var username = interactionContext.getUser().name();
-            commandDto.setUsername(username);
+            commandDto.setTimestamp(GREGORIAN_CALENDAR_ADAPTER.marshal(interactionContext.getClock().nowAsJavaSqlTimestamp()));
+            commandDto.setUsername(interactionContext.getUser().name());
 
             var periodDto = new PeriodDto();
             periodDto.setStartedAt(null);
@@ -144,109 +128,26 @@ public class BackgroundService {
 
             var childCommand = newCommand(commandDto);
 
-            commandLogEntryRepository.createEntryAndPersist(childCommand, callable.getParentInteractionId(), ExecuteIn.BACKGROUND);
-
-            // a more sophisticated implementation could perhaps return a Future that supports these methods by
-            // querying the CommandLogEntryRepository
-            return new Future<T>() {
-                @Override
-                public boolean cancel(final boolean mayInterruptIfRunning) {
-                    throw new IllegalStateException("Not implemented");
-                }
-                @Override
-                public boolean isCancelled() {
-                    throw new IllegalStateException("Not implemented");
-                }
-
-                @Override
-                public boolean isDone() {
-                    throw new IllegalStateException("Not implemented");
-                }
-
-                @Override
-                public T get() {
-                    throw new IllegalStateException("Not implemented");
-                }
-
-                @Override
-                public T get(final long timeout, final TimeUnit unit) {
-                    throw new IllegalStateException("Not implemented");
-                }
-            };
+            commandLogEntryRepository.createEntryAndPersist(childCommand, parentInteractionId, ExecuteIn.BACKGROUND);
         }
+
+        // -- HELPER
+
+        private final static JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter GREGORIAN_CALENDAR_ADAPTER
+            = new JavaSqlJaxbAdapters.TimestampToXMLGregorianCalendarAdapter();
 
         private static Command newCommand(final CommandDto commandDto) {
             return new Command(UUID.fromString(commandDto.getInteractionId())) {
                 @Override public String getUsername() {return commandDto.getUsername();}
-                @Override public Timestamp getTimestamp() {return gregorianCalendarAdapter.unmarshal(commandDto.getTimestamp());}
+                @Override public Timestamp getTimestamp() {return GREGORIAN_CALENDAR_ADAPTER.unmarshal(commandDto.getTimestamp());}
                 @Override public CommandDto getCommandDto() {return commandDto;}
                 @Override public String getLogicalMemberIdentifier() {return commandDto.getMember().getLogicalMemberIdentifier();}
                 @Override public Bookmark getTarget() {return Bookmark.forOidDto(commandDto.getTargets().getOid().get(0));}
-                @Override public Timestamp getStartedAt() {return gregorianCalendarAdapter.unmarshal(commandDto.getTimings().getStartedAt());}
-                @Override public Timestamp getCompletedAt() {return gregorianCalendarAdapter.unmarshal(commandDto.getTimings().getCompletedAt());}
+                @Override public Timestamp getStartedAt() {return GREGORIAN_CALENDAR_ADAPTER.unmarshal(commandDto.getTimings().getStartedAt());}
+                @Override public Timestamp getCompletedAt() {return GREGORIAN_CALENDAR_ADAPTER.unmarshal(commandDto.getTimings().getCompletedAt());}
                 @Override public Bookmark getResult() {return null;}
                 @Override public Throwable getException() {return null;}
             };
-        }
-
-        @Override
-        public <T> Future<T> submit(final Runnable task, final T result) {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public Future<?> submit(final Runnable task) {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public void execute(final Runnable command) {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks) {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public <T> List<Future<T>> invokeAll(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public <T> T invokeAny(final Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public <T> T invokeAny(final Collection<? extends Callable<T>> tasks, final long timeout, final TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public void shutdown() {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public List<Runnable> shutdownNow() {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public boolean awaitTermination(final long timeout, final TimeUnit unit) throws InterruptedException {
-            throw new IllegalStateException("Not implemented");
-        }
-
-        @Override
-        public boolean isShutdown() {
-            return false;
-        }
-
-        @Override
-        public boolean isTerminated() {
-            return false;
         }
 
     }

@@ -34,7 +34,7 @@ import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
 
 class ProxyCreatorTestUsingCodegenPlugin extends RuntimeServicesTestAbstract {
 
-    private ProxyGenerator proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy());
+    private ProxyGenerator proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy(), new CommandRecordFactory(null));
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Employee {
@@ -53,7 +53,7 @@ class ProxyCreatorTestUsingCodegenPlugin extends RuntimeServicesTestAbstract {
         final Employee employee = new Employee();
         var employeeSpec = getMetaModelContext().getSpecificationLoader().loadSpecification(Employee.class);
 
-        var proxy = proxyGenerator.objectProxy(employee, employeeSpec, SyncControl.control());
+        var proxy = proxyGenerator.objectProxy(employee, employeeSpec, SyncControl.defaults());
 
         assertNotNull(proxy);
         assertTrue(proxy instanceof WrappingObject);

@@ -24,6 +24,7 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.proxy.CachableInvocationHandler;
@@ -117,12 +118,8 @@ public interface WrapperInvocationHandler extends CachableInvocationHandler {
             return new WrapperInvocation(origin, method, args!=null ? args : _Constants.emptyObjects);
         }
 
-        public boolean shouldEnforceRules() {
-            return !origin().syncControl().isSkipRules();
-        }
-
-        public boolean shouldExecute() {
-            return !origin().syncControl().isSkipExecute();
+        public SyncControl syncControl() {
+            return origin().syncControl();
         }
     }
 

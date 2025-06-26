@@ -18,9 +18,14 @@
  */
 package org.apache.causeway.applib.services.wrapper.control;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.jspecify.annotations.Nullable;
+
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.NonNull;
 
@@ -31,50 +36,51 @@ import lombok.NonNull;
  */
 public record SyncControl(
         /**
+         * Skip checking business rules (hide/disable/validate) before
+         * executing the underlying property or action
+         */
+        boolean isSkipRules,
+        boolean isSkipExecute,
+        /**
+         * Get notified on action invocation or property change.
+         */
+        Can<CommandListener> commandListeners,
+        /**
          * How to handle exceptions if they occur, using the provided
          * {@link ExceptionHandler}.
          *
          * <p>The default behaviour is to rethrow the exception.
          */
-        AtomicReference<ExceptionHandler> exceptionHandlerRef,
-        boolean isSkipExecute,
-        /**
-         * Skip checking business rules (hide/disable/validate) before
-         * executing the underlying property or action
-         */
-        boolean isSkipRules) {
+        AtomicReference<ExceptionHandler> exceptionHandlerRef) {
 
-    public static SyncControl control() {
-        return new SyncControl(null, false, false);
+    @FunctionalInterface
+    public interface CommandListener {
+        public void onCommand(
+                InteractionContext interactionContext,
+                CommandDto commandDto,
+                UUID parentInteractionId);
+    }
+
+    public static SyncControl defaults() {
+        return new SyncControl(false, false, null, null);
     }
 
     public SyncControl(
-            @Nullable AtomicReference<ExceptionHandler> exceptionHandlerRef,
+            boolean isSkipRules,
             boolean isSkipExecute,
-            boolean isSkipRules) {
+            @Nullable Can<CommandListener> commandListeners,
+            @Nullable AtomicReference<ExceptionHandler> exceptionHandlerRef) {
+        this.isSkipRules = isSkipRules;
+        this.isSkipExecute = isSkipExecute;
+        this.commandListeners = commandListeners!=null
+                ? commandListeners
+                : Can.empty();
         this.exceptionHandlerRef = exceptionHandlerRef!=null
                 ? exceptionHandlerRef
                 : new AtomicReference<>();
-        this.isSkipExecute = isSkipExecute;
-        this.isSkipRules = isSkipRules;
         if(this.exceptionHandlerRef.get()==null) {
             this.exceptionHandlerRef.set(exception -> { throw exception; });
         }
-    }
-
-    /**
-     * Explicitly set the action to be executed.
-     */
-    public SyncControl withExecute() {
-        return new SyncControl(exceptionHandlerRef, false, isSkipRules);
-    }
-
-    /**
-     * Explicitly set the action to <i>not</i >be executed, in other words a
-     * &quot;dry run&quot;.
-     */
-    public SyncControl withNoExecute() {
-        return new SyncControl(exceptionHandlerRef, true, isSkipRules);
     }
 
     /**
@@ -82,11 +88,27 @@ public record SyncControl(
      * executing the underlying property or action
      */
     public SyncControl withSkipRules() {
-        return new SyncControl(exceptionHandlerRef, isSkipExecute, true);
+        return new SyncControl(true, isSkipExecute, commandListeners, exceptionHandlerRef);
+    }
+    public SyncControl withCheckRules() {
+        return new SyncControl(false, isSkipExecute, commandListeners, exceptionHandlerRef);
     }
 
-    public SyncControl withCheckRules() {
-        return new SyncControl(exceptionHandlerRef, isSkipExecute, false);
+    /**
+     * Explicitly set the action to be executed.
+     */
+    public SyncControl withExecute() {
+        return new SyncControl(isSkipRules, false, commandListeners, exceptionHandlerRef);
+    }
+    /**
+     * Explicitly set the action to <i>not</i> be executed, in other words a 'dry run'.
+     */
+    public SyncControl withNoExecute() {
+        return new SyncControl(isSkipRules, true, commandListeners, exceptionHandlerRef);
+    }
+
+    public SyncControl listen(@NonNull CommandListener commandListener) {
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners.add(commandListener), exceptionHandlerRef);
     }
 
     /**

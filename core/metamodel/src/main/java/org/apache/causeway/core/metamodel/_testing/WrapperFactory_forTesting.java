@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel._testing;
 import java.util.List;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.callable.AsyncCallable;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
@@ -61,12 +60,12 @@ class WrapperFactory_forTesting implements WrapperFactory {
     }
 
     @Override
-    public <T, R> T asyncWrap(T domainObject, AsyncControl<R> asyncControl) {
+    public <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl) {
         return null;
     }
 
     @Override
-    public <T, R> T asyncWrapMixin(Class<T> mixinClass, Object mixedIn, AsyncControl<R> asyncControl) {
+    public <T> AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl asyncControl) {
         return null;
     }
 
@@ -87,11 +86,6 @@ class WrapperFactory_forTesting implements WrapperFactory {
 
     @Override
     public void notifyListeners(InteractionEvent ev) {
-    }
-
-    @Override
-    public <R> R execute(AsyncCallable<R> asyncCallable) {
-        return null;
     }
 
 }

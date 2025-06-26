@@ -19,6 +19,7 @@
 package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import jakarta.inject.Inject;
 
@@ -62,7 +63,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     Bookmark bookmark;
 
-    protected abstract Counter newCounter(String name);
+    protected abstract <T extends Counter> T newCounter(String name);
 
     private static boolean prototypingOrig;
 
@@ -84,7 +85,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             counterRepository.removeAll();
 
             counterRepository.persist(newCounter("fred"));
-            List<Counter> counters = counterRepository.find();
+            List<? extends Counter> counters = counterRepository.find();
             assertThat(counters).hasSize(1);
 
             bookmark = bookmarkService.bookmarkForElseFail(counters.get(0));
@@ -104,11 +105,12 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            var control = AsyncControl.returning(Counter.class);
-            wrapperFactory.asyncWrap(counter, control).bumpUsingDeclaredAction();
+            var control = AsyncControl.defaults();
+            wrapperFactory.asyncWrap(counter, control)
+                .thenApplyAsync(Counter::bumpUsingDeclaredAction)
+                .orTimeout(5, TimeUnit.SECONDS)
+                .join(); // wait till done
 
-            // wait till done
-            control.future().get();
         }).ifFailureFail();
 
         // then
@@ -123,13 +125,12 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             assertThat(counter.getNum()).isEqualTo(1L);
 
             // when
-            var control = AsyncControl.returning(Counter.class);
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control).act();
+            var control = AsyncControl.defaults();
+            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control)
+                .thenApplyAsync(Counter_bumpUsingMixin::act)
+                .join(); // wait till done
 
-            // wait til done
-            control.future().get();
         }).ifFailureFail();
-
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
@@ -151,9 +152,11 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             assertThat(counter.getNum()).isNull();
 
             // when
-            backgroundService.execute(counter).bumpUsingDeclaredAction();
+            backgroundService.execute(counter)
+                .thenAcceptAsync(Counter::bumpUsingDeclaredAction)
+                .orTimeout(1, TimeUnit.SECONDS)
+                .join(); // wait for completion
 
-            Thread.sleep(1_000);// horrid, but let's just wait 1 sec before testing
         }).ifFailureFail();
 
         // then no change to the counter
@@ -219,12 +222,11 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     @Inject InteractionService interactionService;
     @Inject BackgroundService backgroundService;
-    @Inject BackgroundService.PersistCommandExecutorService persistCommandExecutorService;
     @Inject WrapperFactory wrapperFactory;
     @Inject CommandLogEntryRepository commandLogEntryRepository;
     @Inject TransactionService transactionService;
     @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
     @Inject BookmarkService bookmarkService;
-    @Inject CounterRepository counterRepository;
+    @Inject CounterRepository<? extends Counter> counterRepository;
 
 }
