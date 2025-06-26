@@ -20,23 +20,18 @@ package org.apache.causeway.applib.services.wrapper.control;
 
 import java.time.ZoneId;
 import java.util.Locale;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.clock.VirtualClock;
+import org.apache.causeway.applib.locale.UserLocale;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.commons.internal.assertions._Assert;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -54,13 +49,10 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @since 2.0 {@index}
  */
-
 @Slf4j
-public record AsyncControl<R>(
-        Class<R> returnType,
+public record AsyncControl (
         SyncControl syncControl,
         @Nullable ExecutorService executorService,
-
         /**
          * Defaults to the system clock, if not overridden
          */
@@ -79,67 +71,37 @@ public record AsyncControl<R>(
          *
          * <p>If not specified, then the user of the current foreground session is used.
          */
-        @Nullable UserMemento user,
-        /**
-         * Contains the result of the invocation.
-         *
-         * <p> If an entity is returned, then the object is automatically detached
-         * because the persistence session within which it was obtained will have
-         * been closed already.
-         */
-        AtomicReference<Future<R>> futureRef) {
+        @Nullable UserMemento user
+        ) {
 
-    /**
-     * Factory method to instantiate a control instance for a void action
-     * or a property edit (where there is no need or intention to provide a
-     * return value through the `Future`).
-     */
-    public static AsyncControl<Void> returningVoid() {
-        return new AsyncControl<>(Void.class);
-    }
-
-    /**
-     * Factory method to instantiate for a control instance for an action
-     * returning a value of `<R>` (where this value will be returned through
-     * the `Future`).
-     */
-    public static <X> AsyncControl<X> returning(final Class<X> cls) {
-        return new AsyncControl<X>(cls);
-    }
-
-    // non canonical constructor
-    private AsyncControl(final Class<R> returnType) {
-        this(returnType,
-            SyncControl.control(),
-            /*executorService*/null, /*clock*/null, /*locale*/null, /*timeZone*/null, /*user*/null,
-            new AtomicReference<>());
+    public static AsyncControl defaults() {
+        return new AsyncControl(SyncControl.defaults(),
+                /*executorService*/null,
+                /*clock*/null, /*locale*/null, /*timeZone*/null, /*user*/null);
     }
 
     /**
      * Explicitly set the action to be executed.
      */
-    public AsyncControl<R> withExecute() {
-        return new AsyncControl<>(returnType, syncControl.withExecute(), executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withExecute() {
+        return new AsyncControl(syncControl.withExecute(), executorService, clock, locale, timeZone, user);
     }
-
     /**
-     * Explicitly set the action to <i>not</i >be executed, in other words a
-     * &quot;dry run&quot;.
+     * Explicitly set the action to <i>not</i >be executed, in other words a 'dry run'.
      */
-    public AsyncControl<R> withNoExecute() {
-        return new AsyncControl<>(returnType, syncControl.withExecute(), executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withNoExecute() {
+        return new AsyncControl(syncControl.withNoExecute(), executorService, clock, locale, timeZone, user);
     }
 
     /**
      * Skip checking business rules (hide/disable/validate) before
      * executing the underlying property or action
      */
-    public AsyncControl<R> withSkipRules() {
-        return new AsyncControl<>(returnType, syncControl.withSkipRules(), executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withSkipRules() {
+        return new AsyncControl(syncControl.withSkipRules(), executorService, clock, locale, timeZone, user);
     }
-
-    public AsyncControl<R> withCheckRules() {
-        return new AsyncControl<>(returnType, syncControl.withCheckRules(), executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withCheckRules() {
+        return new AsyncControl(syncControl.withCheckRules(), executorService, clock, locale, timeZone, user);
     }
 
     /**
@@ -149,7 +111,7 @@ public record AsyncControl<R>(
      *
      * <p>Changes are made in place, returning the same instance.
      */
-    public AsyncControl<R> setExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
+    public AsyncControl setExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
         syncControl.setExceptionHandler(exceptionHandler);
         return this;
     }
@@ -163,29 +125,33 @@ public record AsyncControl<R>(
      *
      * @param executorService - null-able
      */
-    public AsyncControl<R> with(final ExecutorService executorService) {
-        return new AsyncControl<>(returnType, syncControl, executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl with(final ExecutorService executorService) {
+        return new AsyncControl(syncControl, executorService, clock, locale, timeZone, user);
+    }
+
+    public AsyncControl listen(final SyncControl.@NonNull CommandListener commandListener) {
+        return new AsyncControl(syncControl.listen(commandListener), executorService, clock, locale, timeZone, user);
     }
 
     /**
      * Defaults to the system clock, if not overridden
      */
-    public AsyncControl<R> withClock(final @NonNull VirtualClock clock) {
-        return new AsyncControl<>(returnType, syncControl, executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withClock(final @NonNull VirtualClock clock) {
+        return new AsyncControl(syncControl, executorService, clock, locale, timeZone, user);
     }
 
     /**
      * Defaults to the system locale, if not overridden
      */
-    public AsyncControl<R> withLocale(final @NonNull Locale locale) {
-        return new AsyncControl<>(returnType, syncControl, executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withLocale(final @NonNull Locale locale) {
+        return new AsyncControl(syncControl, executorService, clock, locale, timeZone, user);
     }
 
     /**
      * Defaults to the system time zone, if not overridden
      */
-    public AsyncControl<R> withTimeZone(final @NonNull ZoneId timeZone) {
-        return new AsyncControl<>(returnType, syncControl, executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withTimeZone(final @NonNull ZoneId timeZone) {
+        return new AsyncControl(syncControl, executorService, clock, locale, timeZone, user);
     }
 
     /**
@@ -194,58 +160,18 @@ public record AsyncControl<R>(
      *
      * <p>If not specified, then the user of the current foreground session is used.
      */
-    public AsyncControl<R> withUser(final @NonNull UserMemento user) {
-        return new AsyncControl<>(returnType, syncControl, executorService, clock, locale, timeZone, user, futureRef);
+    public AsyncControl withUser(final @NonNull UserMemento user) {
+        return new AsyncControl(syncControl, executorService, clock, locale, timeZone, user);
     }
 
-    public Future<R> future() {
-        return futureRef.get();
+    public InteractionContext override(
+            final InteractionContext interactionContext) {
+        return InteractionContext.builder()
+            .clock(Optional.ofNullable(clock()).orElseGet(interactionContext::getClock))
+            .locale(Optional.ofNullable(locale()).map(UserLocale::valueOf).orElse(null)) // if not set in asyncControl use defaults (set override to null)
+            .timeZone(Optional.ofNullable(timeZone()).orElseGet(interactionContext::getTimeZone))
+            .user(Optional.ofNullable(user()).orElseGet(interactionContext::getUser))
+            .build();
     }
-
-    /**
-     * Waits on the callers thread, for a maximum amount of time,
-     * for the result of the invocation to become available.
-     * @param timeout the maximum time to wait
-     * @param unit the time unit of the {@code timeout} argument
-     * @return the invocation result
-     * @throws CancellationException if the computation was cancelled
-     * @throws ExecutionException if the computation threw an exception
-     * @throws InterruptedException if the current thread was interrupted while waiting
-     * @throws TimeoutException if the wait timed out
-     */
-    @SuppressWarnings("javadoc")
-    @SneakyThrows
-    public R waitForResult(final long timeout, final TimeUnit unit) {
-        _Assert.assertNotNull(future(),
-                ()->"detected call to waitForResult(..) before future was set");
-        return future().get(timeout, unit);
-    }
-
-    // -- DEPRECATIONS
-
-    @Deprecated public Class<R> getReturnType() { return returnType(); }
-    @Deprecated public ExecutorService getExecutorService() { return executorService(); }
-
-    /**
-     * Defaults to the system clock, if not overridden
-     */
-    @Deprecated public VirtualClock getClock() { return clock(); }
-    /**
-     * Defaults to the system locale, if not overridden
-     */
-    @Deprecated public Locale getLocale() { return locale(); }
-    /**
-     * Defaults to the system time zone, if not overridden
-     */
-    @Deprecated public ZoneId getTimeZone() { return timeZone(); }
-    /**
-     * Specifies the user for the session used to execute the command
-     * asynchronously, in the background.
-     *
-     * <p>If not specified, then the user of the current foreground session is used.
-     */
-    @Deprecated public UserMemento getUser() { return user(); }
-
-    @Deprecated public Future<R> getFuture() { return future(); }
 
 }

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.extensions.commandlog.applib;
 
-import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -36,6 +34,7 @@ import org.apache.causeway.extensions.commandlog.applib.dom.mixins.CommandLogEnt
 import org.apache.causeway.extensions.commandlog.applib.fakescheduler.FakeScheduler;
 import org.apache.causeway.extensions.commandlog.applib.job.BackgroundCommandsJobControl;
 import org.apache.causeway.extensions.commandlog.applib.job.RunBackgroundCommandsJob;
+import org.apache.causeway.extensions.commandlog.applib.spi.RunBackgroundCommandsJobListener;
 import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscriberForCommandLog;
 
 @Configuration
@@ -62,7 +61,6 @@ import org.apache.causeway.extensions.commandlog.applib.subscriber.CommandSubscr
         BackgroundCommandsJobControl.class,
 
         BackgroundService.class,
-        BackgroundService.PersistCommandExecutorService.class,
 
         FakeScheduler.class,
 })

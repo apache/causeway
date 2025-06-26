@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.interact;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -105,7 +104,7 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         var pendingArgs = actionInteraction.startParameterNegotiation().get();
 
-        pendingArgs.setParamValue(0, objectManager.adapt(Arrays.asList(1L, 2L, 3L)));
+        pendingArgs.setParamValue(0, objectManager.adapt(List.of(1L, 2L, 3L)));
 
         var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
         assertTrue(resultOrVeto.isSuccess());
@@ -123,12 +122,13 @@ class CommandArgumentTest extends InteractionTestAbstract {
 
         var commandArgDemo = new CommandArgDemo();
 
-        var control = AsyncControl.returning(CommandResult.class);
+        var control = AsyncControl.defaults();
 
-        wrapperFactory.asyncWrap(commandArgDemo, control)
-        .list(Arrays.asList(1L, 2L, 3L));
-
-        var stringified = control.future().get(3L, TimeUnit.DAYS).getResultAsString();
+        var stringified = wrapperFactory.asyncWrap(commandArgDemo, control)
+            .thenApplyAsync(commandResult->commandResult.list(List.of(1L, 2L, 3L)))
+            .orTimeout(3L, TimeUnit.DAYS)
+            .join() // wait till done
+            .getResultAsString();
 
         assertEquals("[1, 2, 3]", stringified);
     }

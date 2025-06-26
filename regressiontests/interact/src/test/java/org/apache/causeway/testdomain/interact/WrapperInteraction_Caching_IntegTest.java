@@ -19,7 +19,6 @@
 package org.apache.causeway.testdomain.interact;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -118,22 +117,19 @@ extends InteractionTestAbstract {
     void async_wrapped() throws ExecutionException, InterruptedException, TimeoutException {
 
         // when
-        AsyncControl<Integer> asyncControlForCalculator1 = AsyncControl.returning(Integer.class);
-        StatefulCalculator asyncCalculator1 = wrapperFactory.asyncWrap(calculator1, asyncControlForCalculator1);
+        var asyncControlForCalculator1 = AsyncControl.defaults();
+        var asyncCalculator1 = wrapperFactory.asyncWrap(calculator1, asyncControlForCalculator1)
+                .thenApplyAsync(calc->calc.inc(12));
 
-        AsyncControl<Integer> asyncControlForCalculator2 = AsyncControl.returning(Integer.class);
-        StatefulCalculator asyncCalculator2 = wrapperFactory.asyncWrap(calculator2, asyncControlForCalculator2);
-
-        asyncCalculator1.inc(12);
-        asyncCalculator2.inc(24);
+        var asyncControlForCalculator2 = AsyncControl.defaults();
+        var asyncCalculator2 = wrapperFactory.asyncWrap(calculator2, asyncControlForCalculator2)
+                .thenApplyAsync(calc->calc.inc(24));
 
         // then
-        Future<Integer> future = asyncControlForCalculator1.getFuture();
-        Integer i = future.get(10, TimeUnit.SECONDS);
-        Assertions.assertThat(i.intValue()).isEqualTo(12);
+        Assertions.assertThat(asyncCalculator1.orTimeout(10, TimeUnit.SECONDS).join().intValue()).isEqualTo(12);
         Assertions.assertThat(calculator1.getTotal()).isEqualTo(12);
 
-        Assertions.assertThat(asyncControlForCalculator2.getFuture().get(10, TimeUnit.SECONDS).intValue()).isEqualTo(24);
+        Assertions.assertThat(asyncCalculator2.orTimeout(10, TimeUnit.SECONDS).join().intValue()).isEqualTo(24);
         Assertions.assertThat(calculator2.getTotal()).isEqualTo(24);
     }
 

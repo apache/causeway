@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
 import org.apache.causeway.applib.services.wrapper.DisabledException;
@@ -45,6 +47,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -76,16 +79,19 @@ implements WrapperInvocationHandler {
     @Getter(onMethod_ = {@Override}) @Accessors(fluent=true)
     private final String key;
 
-    private final ProxyGenerator proxyGenerator;
     private final ObjectSpecification targetSpec;
+    private final ProxyGenerator proxyGenerator;
+    private final CommandRecordFactory commandRecordFactory;
 
     DomainObjectInvocationHandler(
             final ObjectSpecification targetSpec,
-            final ProxyGenerator proxyGenerator) {
+            final ProxyGenerator proxyGenerator,
+            final CommandRecordFactory commandRecordFactory) {
         this.targetSpec = targetSpec;
         this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
         this.proxyGenerator = proxyGenerator;
         this.key = targetSpec.getCorrespondingClass().getName();
+        this.commandRecordFactory = commandRecordFactory;
     }
 
     @Override
@@ -100,7 +106,7 @@ implements WrapperInvocationHandler {
             return method.invoke(target, wrapperInvocation.args());
         }
 
-        final ManagedObject targetAdapter = targetSpec.getObjectManager().adapt(target);
+        final ManagedObject targetAdapter = mmc().getObjectManager().adapt(target);
 
         if(!targetAdapter.specialization().isMixin()) {
             MmAssertionUtils.assertIsBookmarkSupported(targetAdapter);
@@ -161,13 +167,11 @@ implements WrapperInvocationHandler {
             }
         }
 
-        if (objectMember instanceof ObjectAction) {
+        if (objectMember instanceof ObjectAction objectAction) {
 
             if (intent == Intent.CHECK_IF_VALID) {
                 throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", objectMember.getId()));
             }
-
-            var objectAction = (ObjectAction) objectMember;
 
             if(targetAdapter.objSpec().isMixin()) {
                 if (managedMixee == null) {
@@ -227,9 +231,9 @@ implements WrapperInvocationHandler {
     }
 
     private InteractionInitiatedBy getInteractionInitiatedBy(final WrapperInvocation wrapperInvocation) {
-        return wrapperInvocation.shouldEnforceRules()
-                ? InteractionInitiatedBy.USER
-                : InteractionInitiatedBy.FRAMEWORK;
+        return wrapperInvocation.syncControl().isSkipRules()
+                ? InteractionInitiatedBy.FRAMEWORK
+                : InteractionInitiatedBy.USER;
     }
 
     private boolean isEnhancedEntityMethod(final Method method) {
@@ -246,7 +250,7 @@ implements WrapperInvocationHandler {
         var titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
         var titleEvent = titleContext.createInteractionEvent();
-        targetSpec.getWrapperFactory().notifyListeners(titleEvent);
+        mmc().getWrapperFactory().notifyListeners(titleEvent);
         return titleEvent.getTitle();
     }
 
@@ -260,6 +264,8 @@ implements WrapperInvocationHandler {
                     targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy(wrapperInvocation));
             notifyListenersAndVetoIfRequired(interactionResult);
         });
+
+        handleCommandListeners(wrapperInvocation, ()->null); //FIXME
 
         var spec = targetAdapter.objSpec();
         if(spec.isEntity()) {
@@ -283,6 +289,8 @@ implements WrapperInvocationHandler {
             checkVisibility(wrapperInvocation, targetAdapter, property);
         });
 
+        handleCommandListeners(wrapperInvocation, ()->null); //FIXME
+
         return runExecutionTask(wrapperInvocation, ()->{
 
             var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
@@ -290,7 +298,7 @@ implements WrapperInvocationHandler {
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
-            targetSpec.getWrapperFactory().notifyListeners(new PropertyAccessEvent(
+            mmc().getWrapperFactory().notifyListeners(new PropertyAccessEvent(
                     targetAdapter.getPojo(),
                     property.getFeatureIdentifier(),
                     currentReferencedObj));
@@ -321,6 +329,9 @@ implements WrapperInvocationHandler {
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 
+        handleCommandListeners(wrapperInvocation, ()->commandRecordFactory
+                .forProperty(InteractionHead.regular(targetAdapter), property, argumentAdapter));
+
         return runExecutionTask(wrapperInvocation, ()->{
             property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy(wrapperInvocation));
             return null;
@@ -340,6 +351,8 @@ implements WrapperInvocationHandler {
             checkVisibility(wrapperInvocation, targetAdapter, collection);
         });
 
+        handleCommandListeners(wrapperInvocation, ()->null); //FIXME
+
         return runExecutionTask(wrapperInvocation, ()->{
 
             var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
@@ -353,13 +366,13 @@ implements WrapperInvocationHandler {
                 var collectionViewObject = wrapCollection(
                         (Collection<?>) currentReferencedObj,
                         collection);
-                targetSpec.getWrapperFactory().notifyListeners(collectionAccessEvent);
+                mmc().getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return collectionViewObject;
             } else if (currentReferencedObj instanceof Map) {
                 var mapViewObject = wrapMap(
                         (Map<?, ?>) currentReferencedObj,
                         collection);
-                targetSpec.getWrapperFactory().notifyListeners(collectionAccessEvent);
+                mmc().getWrapperFactory().notifyListeners(collectionAccessEvent);
                 return mapViewObject;
             }
 
@@ -412,6 +425,9 @@ implements WrapperInvocationHandler {
             checkValidity(wrapperInvocation, head, objectAction, argAdapters);
         });
 
+        handleCommandListeners(wrapperInvocation, ()->commandRecordFactory
+                .forAction(head, objectAction, argAdapters));
+
         return runExecutionTask(wrapperInvocation, ()->{
             var interactionInitiatedBy = getInteractionInitiatedBy(wrapperInvocation);
 
@@ -419,9 +435,7 @@ implements WrapperInvocationHandler {
                     head, argAdapters,
                     interactionInitiatedBy);
             return MmUnwrapUtils.single(returnedAdapter);
-
         });
-
     }
 
     private void checkValidity(
@@ -478,7 +492,7 @@ implements WrapperInvocationHandler {
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
         var interactionEvent = interactionResult.getInteractionEvent();
 
-        targetSpec.getWrapperFactory().notifyListeners(interactionEvent);
+        mmc().getWrapperFactory().notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
             throw toException(interactionEvent);
         }
@@ -510,10 +524,12 @@ implements WrapperInvocationHandler {
 
     // -- HELPER
 
+    private MetaModelContext mmc() {
+        return targetSpec.getMetaModelContext();
+    }
+
     private void runValidationTask(final WrapperInvocation wrapperInvocation, final Runnable task) {
-        if(!wrapperInvocation.shouldEnforceRules()) {
-            return;
-        }
+        if(wrapperInvocation.syncControl().isSkipRules()) return;
         try {
             task.run();
         } catch(Exception ex) {
@@ -521,10 +537,30 @@ implements WrapperInvocationHandler {
         }
     }
 
-    private <X> X runExecutionTask(final WrapperInvocation wrapperInvocation, final Supplier<X> task) {
-        if(!wrapperInvocation.shouldExecute()) {
-            return null;
+    /**
+     * regardless of to be executed or not,
+     * we inform any listeners of the execution intent (e.g. BackgroundExecutionService)
+     */
+    private void handleCommandListeners(
+            final WrapperInvocation wrapperInvocation,
+            final @Nullable Supplier<CommandRecord> commandRecordSupplier) {
+        if(commandRecordSupplier!=null
+                && wrapperInvocation.syncControl().commandListeners().isNotEmpty()) {
+            var commandRecord = commandRecordSupplier.get();
+            if(commandRecord==null) return;
+            wrapperInvocation.syncControl().commandListeners()
+                .forEach(listener->listener
+                        .onCommand(
+                                commandRecord.interactionContext(),
+                                commandRecord.commandDto(),
+                                commandRecord.parentInteractionId()));
         }
+    }
+
+    private <X> X runExecutionTask(
+            final WrapperInvocation wrapperInvocation,
+            final Supplier<X> task) {
+        if(wrapperInvocation.syncControl().isSkipExecute()) return null;
         try {
             return task.get();
         } catch(Exception ex) {

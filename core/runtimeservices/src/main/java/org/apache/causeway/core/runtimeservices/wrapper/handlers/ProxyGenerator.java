@@ -34,8 +34,15 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
+import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 
-public record ProxyGenerator(@NonNull ProxyFactoryService proxyFactoryService) {
+public record ProxyGenerator(
+        @NonNull ProxyFactoryService proxyFactoryService,
+        @NonNull CommandRecordFactory commandRecordFactory) {
+
+    public ProxyGenerator(ProxyFactoryService proxyFactoryService, InteractionIdGenerator interactionIdGenerator) {
+        this(proxyFactoryService, new CommandRecordFactory(interactionIdGenerator));
+    }
 
     @SuppressWarnings("unchecked")
     public <T> T objectProxy(
@@ -113,7 +120,7 @@ public record ProxyGenerator(@NonNull ProxyFactoryService proxyFactoryService) {
     public WrapperInvocationHandler handler(ObjectSpecification targetSpec) {
         return new DomainObjectInvocationHandler(
                 targetSpec,
-                this);
+                this, commandRecordFactory);
     }
 
 }
