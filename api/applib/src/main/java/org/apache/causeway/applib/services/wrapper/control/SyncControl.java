@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.services.wrapper.control;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.jspecify.annotations.Nullable;
 
@@ -51,7 +50,7 @@ public record SyncControl(
          *
          * <p>The default behaviour is to rethrow the exception.
          */
-        AtomicReference<ExceptionHandler> exceptionHandlerRef) {
+        ExceptionHandler exceptionHandler) {
 
     @FunctionalInterface
     public interface CommandListener {
@@ -69,18 +68,15 @@ public record SyncControl(
             boolean isSkipRules,
             boolean isSkipExecute,
             @Nullable Can<CommandListener> commandListeners,
-            @Nullable AtomicReference<ExceptionHandler> exceptionHandlerRef) {
+            @Nullable ExceptionHandler exceptionHandler) {
         this.isSkipRules = isSkipRules;
         this.isSkipExecute = isSkipExecute;
         this.commandListeners = commandListeners!=null
                 ? commandListeners
                 : Can.empty();
-        this.exceptionHandlerRef = exceptionHandlerRef!=null
-                ? exceptionHandlerRef
-                : new AtomicReference<>();
-        if(this.exceptionHandlerRef.get()==null) {
-            this.exceptionHandlerRef.set(exception -> { throw exception; });
-        }
+        this.exceptionHandler = exceptionHandler!=null
+                ? exceptionHandler
+                : exception -> { throw exception; };
     }
 
     /**
@@ -88,43 +84,36 @@ public record SyncControl(
      * executing the underlying property or action
      */
     public SyncControl withSkipRules() {
-        return new SyncControl(true, isSkipExecute, commandListeners, exceptionHandlerRef);
+        return new SyncControl(true, isSkipExecute, commandListeners, exceptionHandler);
     }
     public SyncControl withCheckRules() {
-        return new SyncControl(false, isSkipExecute, commandListeners, exceptionHandlerRef);
+        return new SyncControl(false, isSkipExecute, commandListeners, exceptionHandler);
     }
 
     /**
      * Explicitly set the action to be executed.
      */
     public SyncControl withExecute() {
-        return new SyncControl(isSkipRules, false, commandListeners, exceptionHandlerRef);
+        return new SyncControl(isSkipRules, false, commandListeners, exceptionHandler);
     }
     /**
      * Explicitly set the action to <i>not</i> be executed, in other words a 'dry run'.
      */
     public SyncControl withNoExecute() {
-        return new SyncControl(isSkipRules, true, commandListeners, exceptionHandlerRef);
+        return new SyncControl(isSkipRules, true, commandListeners, exceptionHandler);
     }
 
     public SyncControl listen(@NonNull CommandListener commandListener) {
-        return new SyncControl(isSkipRules, isSkipExecute, commandListeners.add(commandListener), exceptionHandlerRef);
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners.add(commandListener), exceptionHandler);
     }
 
     /**
      * How to handle exceptions if they occur, using the provided {@link ExceptionHandler}.
      *
      * <p>The default behaviour is to rethrow the exception.
-     *
-     * <p>Changes are made in place, returning the same instance.
      */
-    public SyncControl setExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
-        exceptionHandlerRef.set(exceptionHandler);
-        return this;
-    }
-
-    public ExceptionHandler exceptionHandler() {
-        return exceptionHandlerRef.get();
+    public SyncControl withExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners, exceptionHandler);
     }
 
     /**

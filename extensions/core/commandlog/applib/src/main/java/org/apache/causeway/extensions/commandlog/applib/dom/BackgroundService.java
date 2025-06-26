@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.dom;
 
 import java.sql.Timestamp;
 import java.util.UUID;
+import java.util.concurrent.ForkJoinPool;
 
 import jakarta.inject.Inject;
 
@@ -61,10 +62,7 @@ public class BackgroundService {
      * @see #executeMixin(Class, Object) - to invoke actions that are implemented as mixins
      */
     public <T> AsyncProxy<T> execute(final T object) {
-        return wrapperFactory.asyncWrap(object, AsyncControl.defaults()
-                .withNoExecute()
-                .withCheckRules()
-                .listen(new CommandPersistor(commandLogEntryRepository)));
+        return wrapperFactory.asyncWrap(object, asyncControl().withCheckRules());
     }
     /**
      * Wraps the domain object in a proxy whereby any actions invoked through the proxy will instead be persisted as a
@@ -73,10 +71,7 @@ public class BackgroundService {
      * @see #executeMixin(Class, Object) - to invoke actions that are implemented as mixins
      */
     public <T> AsyncProxy<T> executeSkipRules(final T object) {
-        return wrapperFactory.asyncWrap(object, AsyncControl.defaults()
-                .withNoExecute()
-                .withSkipRules()
-                .listen(new CommandPersistor(commandLogEntryRepository)));
+        return wrapperFactory.asyncWrap(object, asyncControl().withSkipRules());
     }
 
     /**
@@ -86,10 +81,7 @@ public class BackgroundService {
      * @see #execute(Object) - to invoke actions that are implemented directly within the object
      */
     public <T> AsyncProxy<T> executeMixin(final Class<T> mixinClass, final Object mixedIn) {
-        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.defaults()
-                .withNoExecute()
-                .withCheckRules()
-                .listen(new CommandPersistor(commandLogEntryRepository)));
+        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, asyncControl().withCheckRules());
     }
 
     /**
@@ -99,10 +91,16 @@ public class BackgroundService {
      * @see #execute(Object) - to invoke actions that are implemented directly within the object
      */
     public <T> AsyncProxy<T> executeMixinSkipRules(final Class<T> mixinClass, final Object mixedIn) {
-        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, AsyncControl.defaults()
-                .withNoExecute()
-                .withSkipRules()
-                .listen(new CommandPersistor(commandLogEntryRepository)));
+        return wrapperFactory.asyncWrapMixin(mixinClass, mixedIn, asyncControl().withSkipRules());
+    }
+
+    // -- HELPER
+
+    AsyncControl asyncControl() {
+        return AsyncControl.defaults()
+            .with(ForkJoinPool.commonPool())
+            .withNoExecute()
+            .listen(new CommandPersistor(commandLogEntryRepository));
     }
 
     record CommandPersistor(CommandLogEntryRepository commandLogEntryRepository) implements SyncControl.CommandListener {

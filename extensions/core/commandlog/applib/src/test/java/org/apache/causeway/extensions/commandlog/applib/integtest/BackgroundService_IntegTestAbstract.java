@@ -20,16 +20,16 @@ package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mockito;
 import org.quartz.JobExecutionContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,14 +56,25 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 import lombok.SneakyThrows;
 
-@ExtendWith(MockitoExtension.class)
 public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-    @Mock JobExecutionContext mockQuartzJobExecutionContext;
+    @Inject InteractionService interactionService;
+    @Inject BackgroundService backgroundService;
+    @Inject WrapperFactory wrapperFactory;
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
+    @Inject TransactionService transactionService;
+    @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
+    @Inject BookmarkService bookmarkService;
+    @Inject CounterRepository<? extends Counter> counterRepository;
+
+    JobExecutionContext mockQuartzJobExecutionContext = Mockito.mock(JobExecutionContext.class);
 
     Bookmark bookmark;
 
     protected abstract <T extends Counter> T newCounter(String name);
+
+    /// don't allow these tests to run concurrent
+    private final static ReentrantLock LOCK = new ReentrantLock();
 
     private static boolean prototypingOrig;
 
@@ -80,6 +91,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     @BeforeEach
     void setup_counter() {
+        LOCK.lock();
 
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             counterRepository.removeAll();
@@ -96,6 +108,11 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
         assertThat(counter.getNum()).isNull();
+    }
+
+    @AfterEach
+    void releaseLock() {
+        LOCK.unlock();
     }
 
     @Test
@@ -219,14 +236,5 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             assertThat(commandLogEntryRepository.findAll()).isEmpty();
         }).ifFailureFail();
     }
-
-    @Inject InteractionService interactionService;
-    @Inject BackgroundService backgroundService;
-    @Inject WrapperFactory wrapperFactory;
-    @Inject CommandLogEntryRepository commandLogEntryRepository;
-    @Inject TransactionService transactionService;
-    @Inject RunBackgroundCommandsJob runBackgroundCommandsJob;
-    @Inject BookmarkService bookmarkService;
-    @Inject CounterRepository<? extends Counter> counterRepository;
 
 }
