@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
+import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
 //TODO this is just a proof of concept; chaining makes non sense once future is no longer a proxy
 record AsyncProxyInternal<T>(CompletableFuture<T> future, AsyncExecutorService executor) implements AsyncProxy<T> {
@@ -39,8 +40,12 @@ record AsyncProxyInternal<T>(CompletableFuture<T> future, AsyncExecutorService e
         return map(in->in.orTimeout(timeout, unit));
     }
 
+    @SuppressWarnings("unchecked")
     @Override public T join() {
-        return future.join();
+        var t = future.join();
+        return t instanceof WrappingObject wrappingObject
+            ? (T) WrappingObject.getOrigin(wrappingObject).pojo()
+            : t;
     }
 
     // -- HELPER
