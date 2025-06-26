@@ -102,8 +102,10 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
-            // when
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl)
+            // when ...
+            // return the counter entity, which might not yet have been persisted,
+            // such that we can immediately check whether the action was executed
+            counter = wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl)
                 .thenApplyAsync(Counter_bumpUsingMixin::act)
                 // let's wait max 5 sec to allow executor to complete before continuing
                 .orTimeout(5_000, TimeUnit.MILLISECONDS)

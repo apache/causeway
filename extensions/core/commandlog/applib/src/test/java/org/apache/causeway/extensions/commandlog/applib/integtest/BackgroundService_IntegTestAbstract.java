@@ -20,12 +20,10 @@ package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,9 +71,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     protected abstract <T extends Counter> T newCounter(String name);
 
-    /// don't allow these tests to run concurrent
-    private final static ReentrantLock LOCK = new ReentrantLock();
-
     private static boolean prototypingOrig;
 
     @BeforeAll
@@ -91,8 +86,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     @BeforeEach
     void setup_counter() {
-        LOCK.lock();
-
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             counterRepository.removeAll();
 
@@ -108,11 +101,6 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
         assertThat(counter.getNum()).isNull();
-    }
-
-    @AfterEach
-    void releaseLock() {
-        LOCK.unlock();
     }
 
     @Test
@@ -140,12 +128,16 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
-
-            // when
             var control = AsyncControl.defaults();
-            wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control)
+
+            // when ...
+            // return the counter entity, which might not yet have been persisted,
+            // such that we can immediately check whether the action was executed
+            counter = wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control)
                 .thenApplyAsync(Counter_bumpUsingMixin::act)
                 .join(); // wait till done
+
+            assertThat(counter.getNum()).isEqualTo(2L);
 
         }).ifFailureFail();
         // then
