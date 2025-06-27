@@ -52,12 +52,26 @@ public record SyncControl(
          */
         ExceptionHandler exceptionHandler) {
 
+    //TODO can this be further simplified, or is there already an API we can reuse?
     @FunctionalInterface
     public interface CommandListener {
         public void onCommand(
+                /**
+                 * The unique {@link Command#getInteractionId() interactionId} of the parent {@link Command}, which is to say the
+                 * {@link Command} that was active in the original interaction where
+                 * {@link org.apache.causeway.applib.services.wrapper.WrapperFactory#asyncWrap(Object, AsyncControl)} (or its brethren)
+                 * was called.
+                 *
+                 * <p>This can be useful for custom systems to link parent and child commands together.
+                 */
+                UUID parentInteractionId,
                 InteractionContext interactionContext,
-                CommandDto commandDto,
-                UUID parentInteractionId);
+                /**
+                 * Details of the actual child command (action or property edit) to be performed.
+                 *
+                 * <p>Ultimately this can be handed onto the {@link org.apache.causeway.applib.services.command.CommandExecutorService}.
+                 */
+                CommandDto commandDto);
     }
 
     public static SyncControl defaults() {

@@ -18,77 +18,76 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 
 class InteractionResultTest {
 
-    private InteractionResult result;
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        result = new InteractionResult(null);
-    }
-
-    @AfterEach
-    public void tearDown() throws Exception {
-        result = null;
-    }
+    private InteractionResult.Builder builder = InteractionResult.builder(Mockito.mock(InteractionEvent.class));
 
     @Test
-    public void shouldHaveNullReasonWhenJustInstantiated() {
+    void shouldHaveNullReasonWhenJustInstantiated() {
+        var result = builder.build();
         assertEquals(null, extractReason(result));
     }
 
     @Test
-    public void shouldBeEmptyWhenJustInstantiated() {
+    void shouldBeEmptyWhenJustInstantiated() {
+        var result = builder.build();
         assertFalse(result.isVetoing());
-        assertTrue(result.isNotVetoing());
+        assertTrue(result.isAllowing());
     }
 
     @Test
-    public void shouldHaveNonNullReasonWhenAdvisedWithNonNull() {
-        result.advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+    void shouldHaveNonNullReasonWhenAdvisedWithNonNull() {
+        advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        var result = builder.build();
         assertEquals("foo", extractReason(result));
     }
 
     @Test
-    public void shouldConcatenateAdviseWhenAdvisedWithNonNull() {
-        result.advise(vetoReason("foo"), InteractionAdvisor.forTesting());
-        result.advise(vetoReason("bar"), InteractionAdvisor.forTesting());
+    void shouldConcatenateAdviseWhenAdvisedWithNonNull() {
+        advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        advise(vetoReason("bar"), InteractionAdvisor.forTesting());
+        var result = builder.build();
         assertEquals("foo; bar", extractReason(result));
     }
 
     @Test
-    public void shouldNotBeEmptyWhenAdvisedWithNonNull() {
-        result.advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+    void shouldNotBeEmptyWhenAdvisedWithNonNull() {
+        advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        var result = builder.build();
         assertTrue(result.isVetoing());
-        assertFalse(result.isNotVetoing());
+        assertFalse(result.isAllowing());
     }
 
     @Test
-    public void shouldBeEmptyWhenAdvisedWithNull() {
-        result.advise(null, InteractionAdvisor.forTesting());
-        assertTrue(result.isNotVetoing());
-        assertFalse(result.isVetoing());
-        assertEquals(null, extractReason(result));
+    void shouldThrowWhenAdvisedWithNull() {
+        assertThrowsExactly(NullPointerException.class, ()->advise(null, InteractionAdvisor.forTesting()));
+        assertThrowsExactly(NullPointerException.class, ()->advise(vetoReason("foo"), null));
     }
 
     // -- HELPER
+
+    private void advise(VetoReason vetoReason, InteractionAdvisor forTesting) {
+        builder.addAdvise(vetoReason, forTesting);
+    }
+
 
     static Consent.VetoReason vetoReason(final String reasonString) {
         return Consent.VetoReason.explicit(reasonString);
     }
 
     static String extractReason(final InteractionResult result) {
-        return result.getReason().map(VetoReason::string).orElse(null);
+        return result.vetoReason().map(VetoReason::string).orElse(null);
     }
 
 }

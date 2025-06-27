@@ -65,6 +65,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
+import org.apache.causeway.core.runtimeservices.wrapper.internal.CommandRecord;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -82,12 +83,12 @@ implements WrapperInvocationHandler {
 
     private final ObjectSpecification targetSpec;
     private final ProxyGenerator proxyGenerator;
-    private final CommandRecordFactory commandRecordFactory;
+    private final CommandRecord.Factory commandRecordFactory;
 
     DomainObjectInvocationHandler(
             final ObjectSpecification targetSpec,
             final ProxyGenerator proxyGenerator,
-            final CommandRecordFactory commandRecordFactory) {
+            final CommandRecord.Factory commandRecordFactory) {
         this.targetSpec = targetSpec;
         this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
         this.proxyGenerator = proxyGenerator;
@@ -100,7 +101,6 @@ implements WrapperInvocationHandler {
 
         final Object target = wrapperInvocation.origin().pojo();
         final Method method = wrapperInvocation.method();
-        final ManagedObject managedMixee = wrapperInvocation.origin().managedMixee();
 
         if (classMetaData().isObjectMethod(method)
                 || isEnhancedEntityMethod(method)) {
@@ -133,52 +133,48 @@ implements WrapperInvocationHandler {
         var objectMember = targetAdapter.objSpec().getMemberElseFail(resolvedMethod);
         var intent = ImperativeFacet.getIntent(objectMember, resolvedMethod);
         if(intent == Intent.CHECK_IF_HIDDEN || intent == Intent.CHECK_IF_DISABLED) {
-            throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", objectMember.getId()));
+            throw _Exceptions.unsupportedOperation("Cannot invoke supporting method '%s'", objectMember.getId());
         }
 
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
             return method.invoke(target, wrapperInvocation.args());
         }
 
-        if (objectMember.isOneToOneAssociation()) {
+        if (objectMember instanceof OneToOneAssociation prop) {
 
             if (intent == Intent.CHECK_IF_VALID || intent == Intent.MODIFY_PROPERTY_SUPPORTING) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method for '%s'; use only property accessor/mutator", objectMember.getId()));
+                throw _Exceptions.unsupportedOperation("Cannot invoke supporting method for '%s'; use only property accessor/mutator", objectMember.getId());
             }
 
-            final OneToOneAssociation otoa = (OneToOneAssociation) objectMember;
-
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnProperty(wrapperInvocation, targetAdapter, otoa);
+                return handleGetterMethodOnProperty(wrapperInvocation, targetAdapter, prop);
             }
 
             if (intent == Intent.MODIFY_PROPERTY || intent == Intent.INITIALIZATION) {
-                return handleSetterMethodOnProperty(wrapperInvocation, targetAdapter, otoa);
+                return handleSetterMethodOnProperty(wrapperInvocation, targetAdapter, prop);
             }
         }
-        if (objectMember.isOneToManyAssociation()) {
+        if (objectMember instanceof OneToManyAssociation coll) {
 
             if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only collection accessor/mutator", objectMember.getId()));
+                throw _Exceptions.unsupportedOperation("Cannot invoke supporting method '%s'; use only collection accessor/mutator", objectMember.getId());
             }
 
-            final OneToManyAssociation otma = (OneToManyAssociation) objectMember;
             if (intent == Intent.ACCESSOR) {
-                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, otma, objectMember.getId());
+                return handleGetterMethodOnCollection(wrapperInvocation, targetAdapter, coll, objectMember.getId());
             }
         }
 
         if (objectMember instanceof ObjectAction objectAction) {
 
             if (intent == Intent.CHECK_IF_VALID) {
-                throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'; use only the 'invoke' method", objectMember.getId()));
+                throw _Exceptions.unsupportedOperation("Cannot invoke supporting method '%s'; use only the 'invoke' method", objectMember.getId());
             }
 
             if(targetAdapter.objSpec().isMixin()) {
+                final ManagedObject managedMixee = wrapperInvocation.origin().managedMixee();
                 if (managedMixee == null) {
-                    throw _Exceptions.illegalState(
-                            "Missing the required managedMixee for action '%s'",
-                            objectAction.getId());
+                    throw _Exceptions.illegalState("Missing the required managedMixee for action '%s'", objectAction.getId());
                 }
                 MmAssertionUtils.assertIsBookmarkSupported(managedMixee);
 
@@ -197,8 +193,7 @@ implements WrapperInvocationHandler {
                         return handleGetterMethodOnCollection(wrapperInvocation, managedMixee, (OneToManyAssociation)mixinMember, objectMember.getId());
                     }
                 } else {
-                    throw _Exceptions.illegalState(String.format(
-                            "Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetAdapter.objSpec()));
+                    throw _Exceptions.illegalState("Could not locate mixin member for action '%s' on spec '%s'", objectAction.getId(), targetAdapter.objSpec());
                 }
             }
 
@@ -206,16 +201,15 @@ implements WrapperInvocationHandler {
             return handleActionMethod(wrapperInvocation, targetAdapter, objectAction);
         }
 
-        throw new UnsupportedOperationException(String.format("Unknown member type '%s'", objectMember));
+        throw _Exceptions.unsupportedOperation("Unknown member type '%s'", objectMember);
     }
 
     private static ObjectMember determineMixinMember(
             final ManagedObject domainObjectAdapter,
             final ObjectAction objectAction) {
 
-        if(domainObjectAdapter == null) {
-            return null;
-        }
+        if(domainObjectAdapter == null) return null;
+
         var specification = domainObjectAdapter.objSpec();
         var objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
         var objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
@@ -368,8 +362,7 @@ implements WrapperInvocationHandler {
                 return mapViewObject;
             }
 
-            var msg = String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
-            throw new IllegalArgumentException(msg);
+            throw _Exceptions.illegalArgument("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName());
         }, ()->new ExceptionLogger("getter " + collection.getId(), targetAdapter));
     }
 
@@ -481,7 +474,7 @@ implements WrapperInvocationHandler {
     // -- NOTIFY LISTENERS
 
     private void notifyListenersAndVetoIfRequired(final InteractionResult interactionResult) {
-        var interactionEvent = interactionResult.getInteractionEvent();
+        var interactionEvent = interactionResult.interactionEvent();
 
         mmc().getWrapperFactory().notifyListeners(interactionEvent);
         if (interactionEvent.isVeto()) {
@@ -542,9 +535,9 @@ implements WrapperInvocationHandler {
             wrapperInvocation.syncControl().commandListeners()
                 .forEach(listener->listener
                         .onCommand(
+                                commandRecord.parentInteractionId(),
                                 commandRecord.interactionContext(),
-                                commandRecord.commandDto(),
-                                commandRecord.parentInteractionId()));
+                                commandRecord.commandDto()));
         }
     }
 
@@ -578,8 +571,7 @@ implements WrapperInvocationHandler {
 
     private Object singleArgUnderlyingElseNull(final Object[] args, final String name) {
         if (args.length != 1) {
-            throw new IllegalArgumentException(String.format(
-                    "Invoking '%s' should only have a single argument", name));
+            throw _Exceptions.illegalArgument("Invoking '%s' should only have a single argument", name);
         }
         var argumentObj = underlying(args[0]);
         return argumentObj;
@@ -587,8 +579,7 @@ implements WrapperInvocationHandler {
 
     private void zeroArgsElseThrow(final Object[] args, final String name) {
         if (!_NullSafe.isEmpty(args)) {
-            throw new IllegalArgumentException(String.format(
-                    "Invoking '%s' should have no arguments", name));
+            throw _Exceptions.illegalArgument("Invoking '%s' should have no arguments", name);
         }
     }
 
@@ -598,13 +589,7 @@ implements WrapperInvocationHandler {
             String id = mo.isBookmarkMemoized()
                     ? mo.getBookmarkElseFail().identifier()
                     : "<bookmark not memoized>";
-            var buf = new StringBuilder("Failed to execute ").append(" ").append(what).append(" ");
-            buf.append(" on '")
-                    .append(logicalType.logicalName())
-                    .append(":")
-                    .append(id)
-                    .append("'");
-            return buf.toString();
+            return "Failed to execute %s on '%s:%s'".formatted(what, logicalType.logicalName(), id);
         }
     }
 

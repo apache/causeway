@@ -31,10 +31,11 @@ import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.core.codegen.bytebuddy.services.ProxyFactoryServiceByteBuddy;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
+import org.apache.causeway.core.runtimeservices.wrapper.internal.CommandRecord;
 
 class ProxyCreatorTestUsingCodegenPlugin extends RuntimeServicesTestAbstract {
 
-    private ProxyGenerator proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy(), new CommandRecordFactory(null));
+    private ProxyGenerator proxyGenerator = new ProxyGenerator(new ProxyFactoryServiceByteBuddy(), new CommandRecord.Factory(null));
 
     @DomainObject(nature = Nature.VIEW_MODEL)
     public static class Employee {

@@ -26,17 +26,18 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
-public interface ManagedParameter
+public sealed interface ManagedParameter
 extends
     ManagedValue,
-    ManagedFeature {
-    
+    ManagedFeature
+permits ParameterNegotiationModel.ParameterModel {
+
     ObjectActionParameter metaModel();
     @Override default ObjectActionParameter getMetaModel() { return metaModel(); }
-    
+
     int paramIndex();
     ParameterNegotiationModel negotiationModel();
-    
+
     /**
      * @return non-empty if not usable/editable (meaning if read-only)
      */

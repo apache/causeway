@@ -28,7 +28,8 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 
-public interface ManagedFeature {
+sealed public interface ManagedFeature
+permits ManagedMember, ManagedParameter {
 
     Identifier getIdentifier();
 

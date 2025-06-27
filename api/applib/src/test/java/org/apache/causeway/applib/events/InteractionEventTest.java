@@ -42,7 +42,7 @@ class InteractionEventTest {
     private static class CustomerOrder {}
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         source = new Object();
         identifier = Identifier.actionIdentifier(
                 LogicalType.fqcn(CustomerOrder.class),
@@ -51,7 +51,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void getIdentifier() {
+    void getIdentifier() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -59,7 +59,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void getSource() {
+    void getSource() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -67,7 +67,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void getClassName() {
+    void getClassName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -75,7 +75,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void getClassNaturalName() {
+    void getClassNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -83,7 +83,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void getMember() {
+    void getMember() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -91,7 +91,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void getMemberNaturalName() {
+    void getMemberNaturalName() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -99,7 +99,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void shouldInitiallyNotVeto() {
+    void shouldInitiallyNotVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -107,7 +107,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void afterAdvisedShouldVeto() {
+    void afterAdvisedShouldVeto() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -116,7 +116,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void afterAdvisedShouldReturnReason() {
+    void afterAdvisedShouldReturnReason() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };
@@ -125,7 +125,7 @@ class InteractionEventTest {
     }
 
     @Test
-    public void afterAdvisedShouldReturnAdvisorClass() {
+    void afterAdvisedShouldReturnAdvisorClass() {
         interactionEvent = new InteractionEvent(source, identifier) {
 
         };

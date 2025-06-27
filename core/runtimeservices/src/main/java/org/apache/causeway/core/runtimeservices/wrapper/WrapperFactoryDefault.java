@@ -81,8 +81,10 @@ import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcher;
 import org.apache.causeway.core.runtimeservices.wrapper.dispatchers.InteractionEventDispatcherTypeSafe;
 import org.apache.causeway.core.runtimeservices.wrapper.handlers.ProxyGenerator;
+import org.apache.causeway.core.runtimeservices.wrapper.internal.CommandRecord;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Default implementation of {@link WrapperFactory}.
@@ -112,12 +114,15 @@ implements WrapperFactory, HasMetaModelContext {
     private ExecutorService commonExecutorService;
     private ProxyGenerator proxyGenerator;
 
+    @Getter(lazy = true) @Accessors(fluent=true)
+    private final AsyncExecutionFinisher executionFinisher = new AsyncExecutionFinisher(this, getRepositoryService());
+
     @PostConstruct
     public void init() {
 
         this.commonExecutorService = newCommonExecutorService();
 
-        this.proxyGenerator = new ProxyGenerator(proxyFactoryService, interactionIdGenerator);
+        this.proxyGenerator = new ProxyGenerator(proxyFactoryService, new CommandRecord.Factory(interactionIdGenerator));
 
         putDispatcher(ObjectTitleEvent.class, InteractionListener::objectTitleRead);
         putDispatcher(PropertyVisibilityEvent.class, InteractionListener::propertyVisible);
@@ -127,9 +132,6 @@ implements WrapperFactory, HasMetaModelContext {
         putDispatcher(CollectionVisibilityEvent.class, InteractionListener::collectionVisible);
         putDispatcher(CollectionUsabilityEvent.class, InteractionListener::collectionUsable);
         putDispatcher(CollectionAccessEvent.class, InteractionListener::collectionAccessed);
-//XXX[CAUSEWAY-3084] - removal of collection modification events
-//        putDispatcher(CollectionAddToEvent.class, InteractionListener::collectionAddedTo);
-//        putDispatcher(CollectionRemoveFromEvent.class, InteractionListener::collectionRemovedFrom);
         putDispatcher(ActionVisibilityEvent.class, InteractionListener::actionVisible);
         putDispatcher(ActionUsabilityEvent.class, InteractionListener::actionUsable);
         putDispatcher(ActionArgumentEvent.class, InteractionListener::actionArgument);
@@ -225,18 +227,16 @@ implements WrapperFactory, HasMetaModelContext {
     }
 
     @Override
-    public <T> T unwrap(final T possibleWrappedDomainObject) {
-        if(isWrapper(possibleWrappedDomainObject)) {
-            var wrappingObject = (WrappingObject) possibleWrappedDomainObject;
-            return _Casts.uncheckedCast(wrappingObject.__causeway_origin().pojo());
-        }
-        return possibleWrappedDomainObject;
+    public <T> T unwrap(final T t) {
+        return t instanceof WrappingObject wrappingObject
+                ? _Casts.uncheckedCast(wrappingObject.__causeway_origin().pojo())
+                : t;
     }
 
     // -- ASYNC WRAPPING
 
-    AsyncExecutorService asyncExecutorService(AsyncControl asyncControl) {
-        return new AsyncExecutorService(
+    AsyncExecutor asyncExecutor(AsyncControl asyncControl) {
+        return new AsyncExecutor(
                 interactionServiceProvider.get(),
                 transactionServiceProvider.get(),
                 asyncControl.override(InteractionContext.builder().build()),
@@ -245,12 +245,17 @@ implements WrapperFactory, HasMetaModelContext {
                     .orElse(commonExecutorService));
     }
 
+    AsyncExecutionFinisher finisher() {
+        return null;
+    }
+
     @Override
     public <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl) {
         var proxy = wrap(domainObject, asyncControl.syncControl());
         return new AsyncProxyInternal<>(
                 CompletableFuture.completedFuture(proxy),
-                asyncExecutorService(asyncControl));
+                asyncExecutor(asyncControl),
+                executionFinisher());
     }
 
     @Override
@@ -261,7 +266,8 @@ implements WrapperFactory, HasMetaModelContext {
         var proxy = wrapMixin(mixinClass, mixee, asyncControl.syncControl());
         return new AsyncProxyInternal<>(
                 CompletableFuture.completedFuture(proxy),
-                asyncExecutorService(asyncControl));
+                asyncExecutor(asyncControl),
+                executionFinisher());
     }
 
     // -- LISTENERS

@@ -170,5 +170,6 @@ open module org.apache.causeway.core.metamodel {
     requires spring.context;
     requires spring.core;
     requires spring.boot.autoconfigure;
+    requires org.jspecify;
 
 }

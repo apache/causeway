@@ -16,16 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.wrapper.handlers;
+package org.apache.causeway.core.runtimeservices.wrapper;
 
-import java.util.UUID;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.schema.cmd.v2.CommandDto;
+record AsyncExecutionFinisher(
+        WrapperFactory wrapperFactory,
+        RepositoryService repositoryService
+        ) {
 
-record CommandRecord(
-        InteractionContext interactionContext,
-        CommandDto commandDto,
-        UUID parentInteractionId) {
+    public <T> T finish(T t) {
+        var pojo = wrapperFactory.unwrap(t);
+        return repositoryService.detach(pojo);
+    }
 
 }
