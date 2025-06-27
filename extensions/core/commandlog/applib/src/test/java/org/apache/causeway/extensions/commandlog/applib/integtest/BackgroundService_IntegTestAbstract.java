@@ -131,8 +131,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             var control = AsyncControl.defaults();
 
             // when ...
-            // return the counter entity, which might not yet have been persisted,
-            // such that we can immediately check whether the action was executed
+            // returns the detached counter entity, so we can immediately check whether the action was executed
             counter = wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control)
                 .thenApplyAsync(Counter_bumpUsingMixin::act)
                 .join(); // wait till done
