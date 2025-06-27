@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.object;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.repository.EntityState;
@@ -29,11 +30,11 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing.EntityPropertyChangePublishingPolicyFacet;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecordId;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -62,16 +63,22 @@ public final class MmEntityUtils {
 
     public void persistInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        var spec = managedObject.objSpec();
-        var entityFacet = spec.entityFacetElseFail();
+        var entityFacet = managedObject.objSpec().entityFacetElseFail();
         entityFacet.persist(managedObject.getPojo());
     }
 
     public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        var spec = managedObject.objSpec();
-        var entityFacet = spec.entityFacetElseFail();
+        var entityFacet = managedObject.objSpec().entityFacetElseFail();
         entityFacet.delete(managedObject.getPojo());
+    }
+
+    public <T> T detachedPojo(ObjectManager objectManager, @Nullable T pojo) {
+        if(pojo == null) return null;
+        var managedObject = objectManager.adapt(pojo);
+        return isAttachedEntity(managedObject)
+                ? managedObject.objSpec().entityFacetElseFail().detach(pojo)
+                : pojo;
     }
 
     public void requiresEntity(final ManagedObject managedObject) {

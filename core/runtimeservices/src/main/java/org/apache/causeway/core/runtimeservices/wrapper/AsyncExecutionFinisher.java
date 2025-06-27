@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -29,13 +31,13 @@ record AsyncExecutionFinisher(
         ObjectManager objectManager
         ) {
 
-    public <T> T finish(T t) {
+    public <T> T finish(@Nullable T t) {
+        if(t==null) return t;
         var pojo = wrapperFactory.unwrap(t);
-
         var domainObject = objectManager.adapt(pojo);
         if(MmEntityUtils.isAttachedEntity(domainObject)) {
             repositoryService.persistAndFlush(pojo);
-            return repositoryService.detach(pojo);
+            pojo = repositoryService.detach(pojo);
         }
         return pojo;
     }

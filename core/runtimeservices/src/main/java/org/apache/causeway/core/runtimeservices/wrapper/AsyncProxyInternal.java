@@ -18,39 +18,48 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Function;
+
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 
-//TODO this is just a proof of concept; chaining makes non sense once future is no longer a proxy
-record AsyncProxyInternal<T>(
-        CompletableFuture<T> future,
-        AsyncExecutor executor,
-        AsyncExecutionFinisher finisher) implements AsyncProxy<T> {
+import lombok.SneakyThrows;
 
-    @Override public AsyncProxy<Void> thenAcceptAsync(Consumer<? super T> action) {
-        return map(in->in.thenAcceptAsync(action, executor));
+//TODO this is just a proof of concept; chaining makes non sense once future no longer holds a proxy
+record AsyncProxyInternal<T>(
+        Future<T> future,
+        AsyncExecutor executor) implements AsyncProxy<T> {
+
+    @Override public AsyncProxy<Void> thenAcceptAsync(ThrowingConsumer<? super T> action) {
+        return thenApplyAsync(adapt(action));
     }
 
-    @Override public <U> AsyncProxy<U> thenApplyAsync(Function<? super T, ? extends U> fn) {
-        return map(in->in.thenApplyAsync(fn, executor));
+    @Override public <U> AsyncProxy<U> thenApplyAsync(ThrowingFunction<? super T, ? extends U> fn) {
+        return map(()->fn.apply(future.get()));
     }
 
     @Override public AsyncProxy<T> orTimeout(long timeout, TimeUnit unit) {
-        return map(in->in.orTimeout(timeout, unit));
+        return map(()->future.get(timeout, unit));
     }
 
+    @SneakyThrows
     @Override public T join() {
-        var t = future.join();
-        return finisher.finish(t);
+        return future.get();
     }
 
     // -- HELPER
 
-    private <U> AsyncProxy<U> map(Function<CompletableFuture<T>, CompletableFuture<U>> fn) {
-        return new AsyncProxyInternal<>(fn.apply(future), executor, finisher);
+    /// converts ThrowingConsumer<T> to ThrowingFunction<T, Void>
+    private ThrowingFunction<? super T, Void> adapt(ThrowingConsumer<? super T> action) {
+        return t->{action.accept(t); return (Void)null; };
     }
+
+    private <U> AsyncProxy<U> map(Callable<U> callable) {
+        return new AsyncProxyInternal<>(executor.submit(callable), executor);
+    }
+
 }

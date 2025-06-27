@@ -74,6 +74,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -159,20 +160,11 @@ implements WrapperFactory, HasMetaModelContext {
             final @NonNull T domainObject,
             final @NonNull SyncControl syncControl) {
 
-        var spec = getSpecificationLoader().specForTypeElseFail(domainObject.getClass());
-        if(spec.isMixin()) {
-            throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
-                    + "use WrapperFactory.wrapMixin(...) instead");
-        }
-
         if (isWrapper(domainObject)) {
             var wrapperObject = (WrappingObject) domainObject;
             var origin = wrapperObject.__causeway_origin();
-            if(origin.syncControl().isEquivalent(syncControl)) {
-                return domainObject;
-            }
-            var underlyingDomainObject = wrapperObject.__causeway_origin().pojo();
-            return _Casts.uncheckedCast(createProxy(underlyingDomainObject, syncControl));
+            if(origin.syncControl().isEquivalent(syncControl)) return domainObject;
+            return _Casts.uncheckedCast(createProxy(origin.pojo(), syncControl));
         }
         return createProxy(domainObject, syncControl);
     }
@@ -191,34 +183,29 @@ implements WrapperFactory, HasMetaModelContext {
             final @NonNull SyncControl syncControl) {
 
         T mixin = factoryService.mixin(mixinClass, mixee);
-        // no need to inject services into the mixin, factoryService does it for us.
 
         if (isWrapper(mixee)) {
             var wrappingObject = (WrappingObject) mixee;
             var origin = wrappingObject.__causeway_origin();
-            var underlyingMixee = origin.pojo();
-
-            getServiceInjector().injectServicesInto(underlyingMixee);
-
-            if(origin.syncControl().isEquivalent(syncControl)) {
-                return mixin;
-            }
-            return _Casts.uncheckedCast(createMixinProxy(underlyingMixee, mixin, syncControl));
+            if(origin.syncControl().isEquivalent(syncControl)) return mixin;
+            return _Casts.uncheckedCast(createMixinProxy(origin.pojo(), mixin, syncControl));
         }
-
-        getServiceInjector().injectServicesInto(mixee);
 
         return createMixinProxy(mixee, mixin, syncControl);
     }
 
     protected <T> T createProxy(final T domainObject, final SyncControl syncControl) {
         var objAdapter = adaptAndGuardAgainstWrappingNotSupported(domainObject);
+        guardAgainstMixin(objAdapter);
+        MmEntityUtils.requiresAttached(objAdapter);
         return proxyGenerator.objectProxy(domainObject, objAdapter.objSpec(), syncControl);
     }
 
     protected <T> T createMixinProxy(final Object mixee, final T mixin, final SyncControl syncControl) {
         var mixeeAdapter = adaptAndGuardAgainstWrappingNotSupported(mixee);
         var mixinAdapter = adaptAndGuardAgainstWrappingNotSupported(mixin);
+        guardAgainstMixin(mixeeAdapter);
+        MmEntityUtils.requiresAttached(mixeeAdapter);
         return proxyGenerator.mixinProxy(mixin, mixeeAdapter, mixinAdapter.objSpec(), syncControl);
     }
 
@@ -242,21 +229,18 @@ implements WrapperFactory, HasMetaModelContext {
                 transactionServiceProvider.get(),
                 asyncControl.override(InteractionContext.builder().build()),
                 Optional.of(Propagation.REQUIRES_NEW),
+                executionFinisher(),
                 Optional.ofNullable(asyncControl.executorService())
                     .orElse(commonExecutorService));
     }
 
-    AsyncExecutionFinisher finisher() {
-        return null;
-    }
-
     @Override
     public <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl) {
-        var proxy = wrap(domainObject, asyncControl.syncControl());
+        var pojo = unwrap(domainObject);
+        var proxy = wrap(pojo, asyncControl.syncControl());
         return new AsyncProxyInternal<>(
                 CompletableFuture.completedFuture(proxy),
-                asyncExecutor(asyncControl),
-                executionFinisher());
+                asyncExecutor(asyncControl));
     }
 
     @Override
@@ -267,8 +251,7 @@ implements WrapperFactory, HasMetaModelContext {
         var proxy = wrapMixin(mixinClass, mixee, asyncControl.syncControl());
         return new AsyncProxyInternal<>(
                 CompletableFuture.completedFuture(proxy),
-                asyncExecutor(asyncControl),
-                executionFinisher());
+                asyncExecutor(asyncControl));
     }
 
     // -- LISTENERS
@@ -313,6 +296,14 @@ implements WrapperFactory, HasMetaModelContext {
 
         return adapter;
     }
+
+    private void guardAgainstMixin(ManagedObject mo) {
+        if(mo.objSpec().isMixin()) {
+            throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
+                    + "use WrapperFactory.wrapMixin(...) instead");
+        }
+    }
+
 
     // -- HELPER - SETUP
 

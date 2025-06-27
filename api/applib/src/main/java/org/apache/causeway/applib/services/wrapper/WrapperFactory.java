@@ -21,8 +21,9 @@ package org.apache.causeway.applib.services.wrapper;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-import java.util.function.Function;
+
+import org.springframework.util.function.ThrowingConsumer;
+import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
 import org.apache.causeway.applib.services.factory.FactoryService;
@@ -78,8 +79,8 @@ public interface WrapperFactory {
      * @see CompletableFuture
      */
     interface AsyncProxy<T> {
-        AsyncProxy<Void> thenAcceptAsync(Consumer<? super T> action);
-        <U> AsyncProxy<U> thenApplyAsync(Function<? super T, ? extends U> fn);
+        AsyncProxy<Void> thenAcceptAsync(ThrowingConsumer<? super T> action);
+        <U> AsyncProxy<U> thenApplyAsync(ThrowingFunction<? super T, ? extends U> fn);
         AsyncProxy<T> orTimeout(long timeout, TimeUnit unit);
         T join();
     }
