@@ -115,7 +115,8 @@ implements WrapperFactory, HasMetaModelContext {
     private ProxyGenerator proxyGenerator;
 
     @Getter(lazy = true) @Accessors(fluent=true)
-    private final AsyncExecutionFinisher executionFinisher = new AsyncExecutionFinisher(this, getRepositoryService());
+    private final AsyncExecutionFinisher executionFinisher =
+        new AsyncExecutionFinisher(this, getRepositoryService(), getObjectManager());
 
     @PostConstruct
     public void init() {

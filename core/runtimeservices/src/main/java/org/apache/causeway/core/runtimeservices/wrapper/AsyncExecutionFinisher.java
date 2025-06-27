@@ -20,15 +20,24 @@ package org.apache.causeway.core.runtimeservices.wrapper;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.core.metamodel.object.MmEntityUtils;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 record AsyncExecutionFinisher(
         WrapperFactory wrapperFactory,
-        RepositoryService repositoryService
+        RepositoryService repositoryService,
+        ObjectManager objectManager
         ) {
 
     public <T> T finish(T t) {
         var pojo = wrapperFactory.unwrap(t);
-        return repositoryService.detach(pojo);
+
+        var domainObject = objectManager.adapt(pojo);
+        if(MmEntityUtils.isAttachedEntity(domainObject)) {
+            repositoryService.persistAndFlush(pojo);
+            return repositoryService.detach(pojo);
+        }
+        return pojo;
     }
 
 }
