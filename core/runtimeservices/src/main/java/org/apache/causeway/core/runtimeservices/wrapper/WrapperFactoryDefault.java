@@ -116,7 +116,7 @@ implements WrapperFactory, HasMetaModelContext {
 
     @Getter(lazy = true) @Accessors(fluent=true)
     private final AsyncExecutionFinisher executionFinisher =
-        new AsyncExecutionFinisher(this, getRepositoryService(), getTransactionService(), getObjectManager());
+        new AsyncExecutionFinisher(this, getRepositoryService(), getObjectManager());
 
     @PostConstruct
     public void init() {

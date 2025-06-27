@@ -20,14 +20,12 @@ package org.apache.causeway.core.runtimeservices.wrapper;
 
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 record AsyncExecutionFinisher(
         WrapperFactory wrapperFactory,
         RepositoryService repositoryService,
-        TransactionService transactionService,
         ObjectManager objectManager
         ) {
 
