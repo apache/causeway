@@ -107,9 +107,9 @@ public class BackgroundService {
 
         @Override
         public void onCommand(
+                final UUID parentInteractionId,
                 final InteractionContext interactionContext,
-                final CommandDto commandDto,
-                final UUID parentInteractionId) {
+                final CommandDto commandDto) {
 
             // we'll mutate the commandDto in line with the callable, then
             // create the CommandLogEntry from that commandDto

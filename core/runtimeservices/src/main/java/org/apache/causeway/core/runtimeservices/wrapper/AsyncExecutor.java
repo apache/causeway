@@ -36,7 +36,10 @@ import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-record AsyncExecutorService(
+/**
+ * Implements {@link ExecutorService} providing an interaction and optional transaction scope for each invocation.
+ */
+record AsyncExecutor(
         InteractionService interactionService,
         TransactionService transactionService,
         InteractionContext interactionContext,

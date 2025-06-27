@@ -69,15 +69,6 @@ public class InteractionAdapter implements InteractionListener {
     public void collectionAccessed(final CollectionAccessEvent ev) {
     }
 
-//XXX[CAUSEWAY-3084] - removal of collection modification events
-//    @Override
-//    public void collectionAddedTo(final CollectionAddToEvent ev) {
-//    }
-//
-//    @Override
-//    public void collectionRemovedFrom(final CollectionRemoveFromEvent ev) {
-//    }
-
     @Override
     public void collectionMethodInvoked(final CollectionMethodEvent interactionEvent) {
     }

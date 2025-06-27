@@ -65,6 +65,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.runtime.wrap.WrapperInvocationHandler;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
+import org.apache.causeway.core.runtimeservices.wrapper.internal.CommandRecord;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -82,12 +83,12 @@ implements WrapperInvocationHandler {
 
     private final ObjectSpecification targetSpec;
     private final ProxyGenerator proxyGenerator;
-    private final CommandRecordFactory commandRecordFactory;
+    private final CommandRecord.Factory commandRecordFactory;
 
     DomainObjectInvocationHandler(
             final ObjectSpecification targetSpec,
             final ProxyGenerator proxyGenerator,
-            final CommandRecordFactory commandRecordFactory) {
+            final CommandRecord.Factory commandRecordFactory) {
         this.targetSpec = targetSpec;
         this.classMetaData = WrapperInvocationHandler.ClassMetaData.of(targetSpec.getCorrespondingClass());
         this.proxyGenerator = proxyGenerator;
@@ -534,9 +535,9 @@ implements WrapperInvocationHandler {
             wrapperInvocation.syncControl().commandListeners()
                 .forEach(listener->listener
                         .onCommand(
+                                commandRecord.parentInteractionId(),
                                 commandRecord.interactionContext(),
-                                commandRecord.commandDto(),
-                                commandRecord.parentInteractionId()));
+                                commandRecord.commandDto()));
         }
     }
 
