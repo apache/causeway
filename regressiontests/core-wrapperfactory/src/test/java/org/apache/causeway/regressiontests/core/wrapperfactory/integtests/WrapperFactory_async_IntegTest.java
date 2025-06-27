@@ -23,11 +23,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -37,6 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.testdomain.wrapperfactory.Counter;
@@ -52,7 +53,6 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
 
     Bookmark bookmark;
 
-    @BeforeEach
     void setup_counter() {
 
         runWithNewTransaction(() -> {
@@ -70,10 +70,16 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         assertThat(counter.getNum()).isNull();
     }
 
+
     @SneakyThrows
     @ParameterizedTest(name = "executorService[{index}]: {0}")
     @MethodSource("executorServices")
     void async_using_default_executor_service(final String displayName, final ExecutorService executorService) {
+
+        setup_counter();
+
+        final AtomicReference<AsyncProxy<Counter>> asyncProxyUnderTest1 = new AtomicReference<>();
+        final AtomicReference<AsyncProxy<Counter_bumpUsingMixin>> asyncProxyUnderTest2 = new AtomicReference<>();
 
         // when - executing regular action
         runWithNewTransaction(() -> {
@@ -82,11 +88,17 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
-            wrapperFactory.asyncWrap(counter, asyncControl)
+            // store the async proxy for later use below
+            asyncProxyUnderTest1.set(wrapperFactory.asyncWrap(counter, asyncControl));
+        });
+
+        // execute async and wait till done
+        {
+            asyncProxyUnderTest1.get()
                 .thenApplyAsync(Counter::increment)
                 .orTimeout(5_000, TimeUnit.MILLISECONDS)
                 .join(); // let's wait max 5 sec to allow executor to complete before continuing
-        });
+        }
 
         // then
         runWithNewTransaction(() -> {
@@ -102,16 +114,20 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
             var asyncControl = AsyncControl.defaults()
                     .with(executorService);
 
-            // when ...
-            // returns the detached counter entity, so we can immediately check whether the action was executed
-            counter = wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl)
-                .thenApplyAsync(Counter_bumpUsingMixin::act)
-                // let's wait max 5 sec to allow executor to complete before continuing
-                .orTimeout(5_000, TimeUnit.MILLISECONDS)
-                .join(); // wait till done
-
-            assertThat(counter.getNum()).isEqualTo(2L); // verify execution succeeded
+            // store the async proxy for later use below
+            asyncProxyUnderTest2.set(wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, asyncControl));
         });
+
+        // execute async and wait till done
+        {
+            // returns the detached counter entity, so we can immediately check whether the action was executed
+            var counter = asyncProxyUnderTest2.get()
+                    .thenApplyAsync(Counter_bumpUsingMixin::act)
+                    // let's wait max 5 sec to allow executor to complete before continuing
+                    .orTimeout(5, TimeUnit.SECONDS)
+                    .join(); // wait till done
+            assertThat(counter.getNum()).isEqualTo(2L);
+        }
 
         // then
         runWithNewTransaction(() -> {

@@ -20,6 +20,7 @@ package org.apache.causeway.extensions.commandlog.applib.integtest;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import jakarta.inject.Inject;
 
@@ -38,6 +39,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
@@ -106,39 +108,49 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     @Test
     void async_using_default_executor_service() {
 
+        final AtomicReference<AsyncProxy<Counter>> asyncProxyUnderTest1 = new AtomicReference<>();
+        final AtomicReference<AsyncProxy<Counter_bumpUsingMixin>> asyncProxyUnderTest2 = new AtomicReference<>();
+
         // when
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
             var control = AsyncControl.defaults();
-            wrapperFactory.asyncWrap(counter, control)
+
+            asyncProxyUnderTest1.set(wrapperFactory.asyncWrap(counter, control));
+
+        }).ifFailureFail();
+
+        // execute async and wait till done
+        {
+            asyncProxyUnderTest1.get()
                 .thenApplyAsync(Counter::bumpUsingDeclaredAction)
                 .orTimeout(5, TimeUnit.SECONDS)
                 .join(); // wait till done
-
-        }).ifFailureFail();
+        }
 
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
-        }).ifFailureFail();
-
-        // when
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
-            assertThat(counter.getNum()).isEqualTo(1L);
             var control = AsyncControl.defaults();
 
-            // when ...
-            // returns the detached counter entity, so we can immediately check whether the action was executed
-            counter = wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control)
-                .thenApplyAsync(Counter_bumpUsingMixin::act)
-                .join(); // wait till done
-
-            assertThat(counter.getNum()).isEqualTo(2L);
+            // store the async proxy for later use below
+            asyncProxyUnderTest2.set(wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control));
 
         }).ifFailureFail();
+
+        // execute async and wait till done
+        {
+            // returns the detached counter entity, so we can immediately check whether the action was executed
+            var counter = asyncProxyUnderTest2.get()
+                    .thenApplyAsync(Counter_bumpUsingMixin::act)
+                    // let's wait max 5 sec to allow executor to complete before continuing
+                    .orTimeout(5, TimeUnit.SECONDS)
+                    .join(); // wait till done
+            assertThat(counter.getNum()).isEqualTo(2L);
+        }
+
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
@@ -151,6 +163,8 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     @Test
     void using_background_service() {
 
+        final AtomicReference<AsyncProxy<Counter>> asyncProxyUnderTest = new AtomicReference<>();
+
         // given
         removeAllCommandLogEntriesAndCounters();
 
@@ -160,12 +174,18 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
             assertThat(counter.getNum()).isNull();
 
             // when
-            backgroundService.execute(counter)
-                .thenAcceptAsync(Counter::bumpUsingDeclaredAction)
-                .orTimeout(1, TimeUnit.SECONDS)
-                .join(); // wait for completion
+            asyncProxyUnderTest.set(backgroundService.execute(counter));
 
         }).ifFailureFail();
+
+        // execute async and wait till done
+        {
+            asyncProxyUnderTest.get()
+                .thenAcceptAsync(Counter::bumpUsingDeclaredAction)
+                // let's wait max 5 sec to allow executor to complete before continuing
+                .orTimeout(5, TimeUnit.SECONDS)
+                .join(); // wait till done
+        }
 
         // then no change to the counter
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {

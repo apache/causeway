@@ -48,6 +48,7 @@ record AsyncExecutor(
          * but does NOT throw any exceptions if a transaction exists.
          */
         Optional<Propagation> propagation,
+        AsyncExecutionFinisher finisher,
         ExecutorService delegate) implements ExecutorService {
 
     @Override
@@ -119,19 +120,28 @@ record AsyncExecutor(
 
     private void run(ThrowingRunnable runnable) {
         if(propagation.isEmpty())
-            interactionService.run(interactionContext, runnable);
+            interactionService.run(interactionContext, ()->finish(runnable));
         else
             interactionService.run(interactionContext, ()->transactionService
-                .runTransactional(propagation().get(), runnable)
+                .runTransactional(propagation().get(), ()->finish(runnable))
                 .ifFailureFail());
     }
 
     private <T> T call(Callable<T> callable) {
         return propagation.isEmpty()
-            ? interactionService.call(interactionContext, callable)
+            ? interactionService.call(interactionContext, ()->finish(callable))
             : interactionService.call(interactionContext, ()->transactionService
-                .callTransactional(propagation().get(), callable)
+                .callTransactional(propagation().get(), ()->finish(callable))
                 .valueAsNullableElseFail());
+    }
+
+    private <T> T finish(Callable<T> callable) throws Exception {
+        return finisher.finish(callable.call());
+    }
+
+    private void finish(ThrowingRunnable runnable) throws Exception {
+        runnable.run();
+        finisher.finish(null);
     }
 
 }
