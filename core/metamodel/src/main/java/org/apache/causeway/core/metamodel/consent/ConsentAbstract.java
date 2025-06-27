@@ -53,7 +53,7 @@ public abstract class ConsentAbstract implements Serializable, Consent {
     private static VetoReason determineReason(final InteractionResult interactionResult) {
         return interactionResult == null
             ? null
-            : interactionResult.getReason().orElse(null);
+            : interactionResult.vetoReason().orElse(null);
     }
 
     /**

@@ -24,6 +24,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
@@ -49,7 +50,7 @@ public final class InteractionUtils {
 
     public InteractionResult isVisibleResult(final FacetHolder facetHolder, final VisibilityContext context) {
 
-        var iaResult = new InteractionResult(context.createInteractionEvent());
+        var builder = InteractionResult.builder(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we may do no vetoing here (instead, it moves into the usability check).
         var ifHiddenPolicy = context.renderPolicy().ifHiddenPolicy();
@@ -58,12 +59,9 @@ public final class InteractionUtils {
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
                 .filter(advisor->compatible(advisor, context))
                 .forEach(advisor->{
-                    var hidingReasonString = advisor.hides(context);
-                    var hidingReason = Optional.ofNullable(hidingReasonString)
-                            .map(Consent.VetoReason::explicit)
-                            .orElse(null);
-
-                    iaResult.advise(hidingReason, advisor);
+                    _Strings.nonEmpty(advisor.hides(context))
+                        .map(Consent.VetoReason::explicit)
+                        .ifPresent(hidingReason->builder.addAdvise(hidingReason, advisor));
                 });
                 break;
             case SHOW_AS_DISABLED:
@@ -72,12 +70,12 @@ public final class InteractionUtils {
                 break;
         }
 
-        return iaResult;
+        return builder.build();
     }
 
     public InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
 
-        var isResult = new InteractionResult(context.createInteractionEvent());
+        var builder = InteractionResult.builder(context.createInteractionEvent());
 
         // depending on the ifHiddenPolicy, we additionally may disable using a hidden advisor
         var ifHiddenPolicy = context.renderPolicy().ifHiddenPolicy();
@@ -88,53 +86,49 @@ public final class InteractionUtils {
             case SHOW_AS_DISABLED_WITH_DIAGNOSTICS:
                 var visibilityContext = context.asVisibilityContext();
                 facetHolder.streamFacets(HidingInteractionAdvisor.class)
-                        .filter(advisor->compatible(advisor, context))
-                        .forEach(advisor->{
-                            String hidingReasonString = advisor.hides(visibilityContext);
-                            Consent.VetoReason hidingReason = Optional.ofNullable(hidingReasonString)
-                                    .map(Consent.VetoReason::explicit)
-                                    .orElse(null);
-                            if(hidingReason != null
-                                    && ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
-                                hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
-                            }
-                            isResult.advise(hidingReason, advisor);
-                        });
+                    .filter(advisor->compatible(advisor, context))
+                    .forEach(advisor->{
+                        _Strings.nonEmpty(advisor.hides(visibilityContext))
+                            .map(Consent.VetoReason::explicit)
+                            .ifPresent(hidingReason->{
+                                if(ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
+                                    hidingReason = VetoUtil.withAdvisorAsDiagnostic(hidingReason, advisor);
+                                }
+                                builder.addAdvise(hidingReason, advisor);
+                            });
+                    });
                 break;
         }
 
         var ifDisabledPolicy = context.renderPolicy().ifDisabledPolicy();
         facetHolder.streamFacets(DisablingInteractionAdvisor.class)
-        .filter(advisor->compatible(advisor, context))
-        .forEach(advisor->{
-            Consent.VetoReason disablingReason = advisor.disables(context).orElse(null);
-            if(disablingReason != null
-                    && ifDisabledPolicy.isShowAsDisabledWithDiagnostics()) {
-                disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
-            }
-            isResult.advise(disablingReason, advisor);
-        });
+            .filter(advisor->compatible(advisor, context))
+            .forEach(advisor->{
+                advisor.disables(context)
+                    .ifPresent(disablingReason->{
+                        if(ifDisabledPolicy.isShowAsDisabledWithDiagnostics()) {
+                            disablingReason = VetoUtil.withAdvisorAsDiagnostic(disablingReason, advisor);
+                        }
+                        builder.addAdvise(disablingReason, advisor);
+                    });
+            });
 
-        return isResult;
+        return builder.build();
     }
 
     public InteractionResult isValidResult(final FacetHolder facetHolder, final ValidityContext context) {
 
-        var iaResult = new InteractionResult(context.createInteractionEvent());
+        var builder = InteractionResult.builder(context.createInteractionEvent());
 
         facetHolder.streamFacets(ValidatingInteractionAdvisor.class)
         .filter(advisor->compatible(advisor, context))
         .forEach(advisor->{
-            var invalidatingReasonString =
-                    guardAgainstEmptyReasonString(advisor.invalidates(context), context.identifier());
-
-            var invalidatingReason = Optional.ofNullable(invalidatingReasonString)
-                    .map(Consent.VetoReason::explicit)
-                    .orElse(null);
-            iaResult.advise(invalidatingReason, advisor);
+            guardAgainstEmptyReasonString(advisor.invalidates(context), context.identifier())
+                .map(Consent.VetoReason::explicit)
+                .ifPresent(invalidatingReason->builder.addAdvise(invalidatingReason, advisor));
         });
 
-        return iaResult;
+        return builder.build();
     }
 
     public InteractionResultSet isValidResultSet(
@@ -158,7 +152,7 @@ public final class InteractionUtils {
      * we should generate a message,
      * explaining what was going wrong and hinting developers at a possible resolution
      */
-    private String guardAgainstEmptyReasonString(
+    private Optional<String> guardAgainstEmptyReasonString(
             final @Nullable String reason, final @NonNull Identifier identifier) {
         if("".equals(reason)) {
             var msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
@@ -166,9 +160,9 @@ public final class InteractionUtils {
                 .addVariable("memberName", identifier.memberLogicalName())
                 .buildMessage();
             log.error(msg);
-            return msg;
+            return Optional.of(msg);
         }
-        return reason;
+        return Optional.ofNullable(reason);
     }
 
     private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {

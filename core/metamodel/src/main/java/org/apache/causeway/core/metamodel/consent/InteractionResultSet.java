@@ -39,9 +39,8 @@ public class InteractionResultSet {
     }
 
     /**
-     * Empty only if all the {@link #add(InteractionResult) contained}
-     * {@link InteractionResult}s are also
-     * {@link InteractionResult#isNotVetoing() empty}.
+     * Allowing only if all the {@link #add(InteractionResult) contained}
+     * {@link InteractionResult}s are also {@link InteractionResult#isAllowing()}.
      */
     public boolean isAllowed() {
         return !isVetoed();
@@ -54,9 +53,7 @@ public class InteractionResultSet {
      */
     public boolean isVetoed() {
         for (final InteractionResult result : results) {
-            if (result.isVetoing()) {
-                return true;
-            }
+            if (result.isVetoing()) return true;
         }
         return false;
     }
@@ -84,9 +81,7 @@ public class InteractionResultSet {
      */
     public InteractionResult getInteractionResult() {
         for (final InteractionResult result : results) {
-            if (!result.isNotVetoing()) {
-                return result;
-            }
+            if (!result.isAllowing()) return result;
         }
         return firstResult != null ? firstResult : null;
     }

@@ -109,7 +109,7 @@ public final class MmVisibilityUtils {
                 Where.OBJECT_FORMS);
 
         return InteractionUtils.isVisibleResult(spec, visibilityContext)
-                .isNotVetoing();
+                .isAllowing();
     }
 
     private static VisibilityContext createVisibleInteractionContext(

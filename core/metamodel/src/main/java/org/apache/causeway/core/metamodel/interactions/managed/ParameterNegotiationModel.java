@@ -97,7 +97,7 @@ public final class ParameterNegotiationModel {
     }
 
     // -- ACTION SPECIFIC
-    
+
     public ObjectAction act() {
         return managedAction.getAction();
     }
@@ -120,7 +120,7 @@ public final class ParameterNegotiationModel {
     InteractionHead interactionHead() {
         return managedAction.interactionHead();
     }
-    
+
     public ActionInteractionHead actionInteractionHead() {
         return managedAction.actionInteractionHead();
     }
@@ -344,8 +344,7 @@ public final class ParameterNegotiationModel {
 
     // -- INTERNAL HOLDER OF PARAMETER BINDABLES
 
-    @Log4j2
-    private record ParameterModel(
+    @Log4j2 record ParameterModel(
             int paramIndex,
             @NonNull ObjectActionParameter metaModel,
             @NonNull ParameterNegotiationModel negotiationModel,

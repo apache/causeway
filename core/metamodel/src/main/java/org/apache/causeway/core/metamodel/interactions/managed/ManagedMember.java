@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -30,15 +32,15 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RequiredArgsConstructor
-public abstract class ManagedMember
-implements ManagedFeature {
+public sealed abstract class ManagedMember
+implements ManagedFeature
+permits ManagedAction, ManagedCollection, ManagedProperty {
 
     /**
      * Some representations may vary according to whether the member is to be represented for read
