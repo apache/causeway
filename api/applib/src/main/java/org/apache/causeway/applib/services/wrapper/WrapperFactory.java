@@ -20,17 +20,19 @@ package org.apache.causeway.applib.services.wrapper;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.applib.exceptions.recoverable.InteractionException;
 import org.apache.causeway.applib.services.factory.FactoryService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.causeway.commons.functional.TryFuture;
 
 /**
  * Provides the ability to 'wrap' a domain object such that it can
@@ -75,18 +77,30 @@ import org.apache.causeway.applib.services.wrapper.listeners.InteractionListener
 public interface WrapperFactory {
 
     /**
+     * The result of an async proxy instantiation,
+     * that allows to submit an async invocation on the wrapped domain object.
+     *
+     * <p>The framework takes care, that an async invocation is scoped within both an interaction-context and a transaction.
+     * Further more, {@link TryFuture}'s success values are unwrapped and detached.
+     *
+     * <p>Terminology:
+     * <ul>
+     *   <li>interaction-context: who/how/when {@link InteractionContext}</li>
+     *   <li>unwrapped: plain object, not proxied {@link WrapperFactory#unwrap}</li>
+     *   <li>detached: object not attached to a persistence session (applicable to entities only)
+     *      {@link RepositoryService#detach(Object)}</li>
+     * </ul>
+     *
      * @since 3.4 {@index}
-     * @see CompletableFuture
+     * @see TryFuture
      */
     interface AsyncProxy<T> {
-        AsyncProxy<Void> thenAcceptAsync(ThrowingConsumer<? super T> action);
-        <U> AsyncProxy<U> thenApplyAsync(ThrowingFunction<? super T, ? extends U> fn);
-        AsyncProxy<T> orTimeout(long timeout, TimeUnit unit);
-        T join();
+        TryFuture<Void> acceptAsync(ThrowingConsumer<? super T> action);
+        <U> TryFuture<U> applyAsync(ThrowingFunction<? super T, ? extends U> fn);
     }
 
     /**
-     * Provides the &quot;wrapper&quot; of a domain object against which to invoke the action.
+     * Provides the'wrapper' of a domain object against which to invoke the action.
      *
      * <p>The provided {@link SyncControl} determines whether business rules are checked first, and conversely
      * whether the action is executed.  There are therefore three typical cases:
@@ -100,47 +114,48 @@ public interface WrapperFactory {
      *
      * <p>Otherwise, will do all the validations (raise exceptions as required
      * etc.), but doesn't modify the model.
+     *
+     * <p>Any exceptions will be propagated, not swallowed.
      */
-    <T> T wrap(T domainObject,
-               SyncControl syncControl);
+    <T> T wrap(T domainObject, SyncControl syncControl);
 
     /**
-     * A convenience overload for {@link #wrap(Object, SyncControl)},
-     * returning a wrapper to invoke the action synchronously, enforcing business rules.
-     * Any exceptions will be propagated, not swallowed.
+     * A convenience overload for {@link #wrap(Object, SyncControl)} with {@code SyncControl.defaults()}.
+     * @see #wrap(Object, SyncControl)
      */
-    <T> T wrap(T domainObject);
+    default <T> T wrap(T domainObject) {
+        return wrap(domainObject, SyncControl.defaults());
+    }
 
     /**
      * Provides the wrapper for a {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
      *
-     * <p>
-     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
-     *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
-     * </p>
+     * <p>The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     * whether the action is executed.
+     *
+     * <p>Any exceptions will be propagated, not swallowed.
+     * @see #wrap(Object, SyncControl)
      */
-    <T> T wrapMixin(Class<T> mixinClass, Object mixee,
-                    SyncControl syncControl);
+    <T> T wrapMixin(Class<T> mixinClass, Object mixee, SyncControl syncControl);
+
+    /**
+     * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)} with {@code SyncControl.defaults()}.
+     * @see #wrapMixin(Class, Object, SyncControl)
+     */
+    default <T> T wrapMixin(Class<T> mixinClass, Object mixee) {
+        return wrapMixin(mixinClass, mixee, SyncControl.defaults());
+    }
 
     /**
      * Provides the wrapper for a {@link Mixin typesafe} {@link FactoryService#mixin(Class, Object) mixin}, against which to invoke the action.
      *
-     * <p>
-     *     The provided {@link SyncControl} determines whether business rules are checked first, and conversely
+     * <p>The provided {@link SyncControl} determines whether business rules are checked first, and conversely
      *     whether the action is executed.  See {@link #wrap(Object, SyncControl)} for more details on this.
-     * </p>
      */
     default <T extends Mixin<MIXEE>, MIXEE> T wrapMixinT(Class<T> mixinClass, MIXEE mixee,
                     SyncControl syncControl) {
         return wrapMixin(mixinClass, mixee, syncControl);
     }
-
-    /**
-     * A convenience overload for {@link #wrapMixin(Class, Object, SyncControl)},
-     * returning a wrapper to invoke the action synchronously, enforcing business rules.
-     * Any exceptions will be propagated, not swallowed.
-     */
-    <T> T wrapMixin(Class<T> mixinClass, Object mixee);
 
     /**
      * A convenience overload for {@link #wrapMixinT(Class, Object, SyncControl)},
@@ -154,8 +169,7 @@ public interface WrapperFactory {
     /**
      * Obtains the underlying domain object, if wrapped.
      *
-     * <p>
-     * If the object {@link #isWrapper(Object) is not wrapped}, then
+     * <p>If the object {@link #isWrapper(Object) is not wrapped}, then
      * should just return the object back unchanged.
      */
     <T> T unwrap(T possibleWrappedDomainObject);
@@ -163,47 +177,54 @@ public interface WrapperFactory {
     /**
      * Whether the supplied object is a wrapper around a domain object.
      *
-     * @param <T>
      * @param possibleWrappedDomainObject
      *            - object that might or might not be a wrapper.
      */
     <T> boolean isWrapper(T possibleWrappedDomainObject);
 
-    //
     // -- ASYNC WRAPPING
-    //
 
     /**
      * Returns a {@link CompletableFuture} holding a proxy object for the provided {@code domainObject},
      * through which one can execute the action asynchronously (in another thread).
      *
      * @param <T> - the type of the domain object
-     * @param domainObject
-     * @param asyncControl
      *
      * @since 3.4
      */
     <T> AsyncProxy<T> asyncWrap(T domainObject, AsyncControl asyncControl);
 
     /**
-     * Returns a {@link CompletableFuture} holding a proxy object for the provided {@code mixinClass},
-     * through which one can execute the action asynchronously (in another thread).
-     *
-     * @param <T> - the type of the mixin
-     * @param mixinClass
-     * @param mixee
-     * @param asyncControl
+     * A convenience overload for {@link #asyncWrap(Object, AsyncControl)} with {@code AsyncControl.defaults()}.
+     * @see #asyncWrap(Object, AsyncControl)
      *
      * @since 3.4
      */
-    <T> AsyncProxy<T> asyncWrapMixin(
-                   Class<T> mixinClass,
-                   Object mixee,
-                   AsyncControl asyncControl);
+    default <T> AsyncProxy<T> asyncWrap(T domainObject) {
+        return asyncWrap(domainObject, AsyncControl.defaults());
+    }
 
-    //
+    /**
+     * Returns a {@link AsyncProxy} holding a proxy object for the provided {@code mixinClass},
+     * through which one can execute the action asynchronously (in another thread).
+     *
+     * @param <T> - the type of the mixin
+     *
+     * @since 3.4
+     */
+    <T> AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee, AsyncControl asyncControl);
+
+    /**
+     * A convenience overload for {@link #asyncWrapMixin(Class, Object, AsyncControl)} with {@code AsyncControl.defaults()}.
+     * @see #asyncWrapMixin(Class, Object, AsyncControl)
+     *
+     * @since 3.4
+     */
+    default <T> AsyncProxy<T> asyncWrapMixin(Class<T> mixinClass, Object mixee) {
+        return asyncWrapMixin(mixinClass, mixee, AsyncControl.defaults());
+    }
+
     // -- INTERACTION EVENT HANDLING
-    //
 
     /**
      * All {@link InteractionListener}s that have been registered using
@@ -239,4 +260,6 @@ public interface WrapperFactory {
                     InteractionListener listener);
 
     void notifyListeners(InteractionEvent ev);
+
+
 }

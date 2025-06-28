@@ -125,9 +125,9 @@ class CommandArgumentTest extends InteractionTestAbstract {
         var control = AsyncControl.defaults();
 
         var stringified = wrapperFactory.asyncWrap(commandArgDemo, control)
-            .thenApplyAsync(commandResult->commandResult.list(List.of(1L, 2L, 3L)))
-            .orTimeout(3L, TimeUnit.DAYS)
-            .join() // wait till done
+            .applyAsync(commandResult->commandResult.list(List.of(1L, 2L, 3L)))
+            .tryGet(3L, TimeUnit.DAYS) // wait till done
+            .valueAsNonNullElseFail()
             .getResultAsString();
 
         assertEquals("[1, 2, 3]", stringified);

@@ -98,9 +98,9 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         // execute async and wait till done
         {
             asyncProxyUnderTest1.get()
-                .thenApplyAsync(Counter::increment)
-                .orTimeout(5_000, TimeUnit.MILLISECONDS)
-                .join(); // let's wait max 5 sec to allow executor to complete before continuing
+                .applyAsync(Counter::increment)
+                // let's wait max 5 sec to allow executor to complete before continuing
+                .tryGet(5, TimeUnit.SECONDS);
         }
 
         // then
@@ -125,10 +125,10 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         {
             // returns the detached counter entity, so we can immediately check whether the action was executed
             var counter = asyncProxyUnderTest2.get()
-                    .thenApplyAsync(Counter_bumpUsingMixin::act)
+                    .applyAsync(Counter_bumpUsingMixin::act)
                     // let's wait max 5 sec to allow executor to complete before continuing
-                    .orTimeout(5, TimeUnit.SECONDS)
-                    .join(); // wait till done
+                    .tryGet(5, TimeUnit.SECONDS)
+                    .valueAsNonNullElseFail();
             assertThat(counter.getNum()).isEqualTo(2L);
         }
 

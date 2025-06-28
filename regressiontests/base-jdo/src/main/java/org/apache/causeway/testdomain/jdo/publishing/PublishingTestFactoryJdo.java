@@ -365,12 +365,11 @@ extends PublishingTestFactoryAbstract {
 
             // when - running asynchronous
             return wrapper.asyncWrap(book, asyncControl)
-                    .thenAcceptAsync(bk->bk.setName("Book #2"));
+                    .acceptAsync(bk->bk.setName("Book #2"));
         });
 
         future
-            .orTimeout(10, TimeUnit.SECONDS)
-            .join(); // wait till done
+            .tryGet(10, TimeUnit.SECONDS); // wait till done
     }
 
     @Override
@@ -383,13 +382,13 @@ extends PublishingTestFactoryAbstract {
 
             context.runGiven();
 
-            // when - running synchronous
+            // when - running asynchronous
             var asyncControl = AsyncControl.defaults().withCheckRules(); // enforce rules
 
             //assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
                 wrapper.asyncWrap(book, asyncControl)
-                    .thenAcceptAsync(bk->bk.setName("Book #2"));
+                    .acceptAsync(bk->bk.setName("Book #2"));
 
             //});
 

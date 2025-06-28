@@ -360,12 +360,11 @@ extends PublishingTestFactoryAbstract {
 
             // when - running asynchronous
             return wrapper.asyncWrap(book, asyncControl)
-                    .thenAcceptAsync(bk->bk.setName("Book #2"));
+                    .acceptAsync(bk->bk.setName("Book #2"));
         });
 
         future
-            .orTimeout(10, TimeUnit.SECONDS)
-            .join(); // wait till done
+            .tryGet(10, TimeUnit.SECONDS); // wait till done
 
     }
 
@@ -375,16 +374,13 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        // when
+        // when enforce rules
         withBookDo(book->{
-
-            // when - running synchronous
-            var asyncControl = AsyncControl.defaults().withCheckRules(); // enforce rules
 
             //assertThrows(DisabledException.class, ()->{
                 // should fail with DisabledException (synchronous) within the calling Thread
-            wrapper.asyncWrap(book, asyncControl)
-                .thenAcceptAsync(bk->bk.setName("Book #2"));
+            wrapper.asyncWrap(book)
+                .acceptAsync(bk->bk.setName("Book #2"));
 
             //});
 
