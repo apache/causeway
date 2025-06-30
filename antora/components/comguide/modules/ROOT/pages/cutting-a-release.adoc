@@ -77,8 +77,8 @@ mvnd -Dapache-release clean
 mvnd -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
 popd
 
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
-for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
+for a in `/usr/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
+for a in `/usr/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
 
 cat /tmp/rat-qn.txt
 cat /tmp/rat-al.txt
