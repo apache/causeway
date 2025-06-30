@@ -69,7 +69,6 @@ extends InteractionTestAbstract {
     @Action
     @RequiredArgsConstructor
     public static class StatefulCalculator_add {
-        @SuppressWarnings("unused")
         private final StatefulCalculator mixee;
         public Integer act(final int amount) {
             return mixee.inc(amount);
@@ -119,17 +118,17 @@ extends InteractionTestAbstract {
         // when
         var asyncControlForCalculator1 = AsyncControl.defaults();
         var asyncCalculator1 = wrapperFactory.asyncWrap(calculator1, asyncControlForCalculator1)
-                .thenApplyAsync(calc->calc.inc(12));
+                .applyAsync(calc->calc.inc(12));
 
         var asyncControlForCalculator2 = AsyncControl.defaults();
         var asyncCalculator2 = wrapperFactory.asyncWrap(calculator2, asyncControlForCalculator2)
-                .thenApplyAsync(calc->calc.inc(24));
+                .applyAsync(calc->calc.inc(24));
 
         // then
-        Assertions.assertThat(asyncCalculator1.orTimeout(10, TimeUnit.SECONDS).join().intValue()).isEqualTo(12);
+        Assertions.assertThat(asyncCalculator1.tryGet(10, TimeUnit.SECONDS).valueAsNonNullElseFail().intValue()).isEqualTo(12);
         Assertions.assertThat(calculator1.getTotal()).isEqualTo(12);
 
-        Assertions.assertThat(asyncCalculator2.orTimeout(10, TimeUnit.SECONDS).join().intValue()).isEqualTo(24);
+        Assertions.assertThat(asyncCalculator2.tryGet(10, TimeUnit.SECONDS).valueAsNonNullElseFail().intValue()).isEqualTo(24);
         Assertions.assertThat(calculator2.getTotal()).isEqualTo(24);
     }
 

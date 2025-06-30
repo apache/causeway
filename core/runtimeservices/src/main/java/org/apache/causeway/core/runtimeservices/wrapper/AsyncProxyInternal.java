@@ -18,37 +18,28 @@
  */
 package org.apache.causeway.core.runtimeservices.wrapper;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.util.function.ThrowingConsumer;
 import org.springframework.util.function.ThrowingFunction;
 
 import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
+import org.apache.causeway.commons.functional.TryFuture;
 
-import lombok.SneakyThrows;
-
-//TODO this is just a proof of concept; chaining makes non sense once future no longer holds a proxy
 record AsyncProxyInternal<T>(
         Future<T> future,
         AsyncExecutor executor) implements AsyncProxy<T> {
 
-    @Override public AsyncProxy<Void> thenAcceptAsync(ThrowingConsumer<? super T> action) {
-        return thenApplyAsync(adapt(action));
+    @Override
+    public TryFuture<Void> acceptAsync(
+            ThrowingConsumer<? super T> action) {
+        return applyAsync(adapt(action));
     }
 
-    @Override public <U> AsyncProxy<U> thenApplyAsync(ThrowingFunction<? super T, ? extends U> fn) {
-        return map(()->fn.apply(future.get()));
-    }
-
-    @Override public AsyncProxy<T> orTimeout(long timeout, TimeUnit unit) {
-        return map(()->future.get(timeout, unit));
-    }
-
-    @SneakyThrows
-    @Override public T join() {
-        return future.get();
+    @Override
+    public <U> TryFuture<U> applyAsync(
+            ThrowingFunction<? super T, ? extends U> fn) {
+        return new TryFuture<>(()->fn.apply(future.get()), executor);
     }
 
     // -- HELPER
@@ -56,10 +47,6 @@ record AsyncProxyInternal<T>(
     /// converts ThrowingConsumer<T> to ThrowingFunction<T, Void>
     private ThrowingFunction<? super T, Void> adapt(ThrowingConsumer<? super T> action) {
         return t->{action.accept(t); return (Void)null; };
-    }
-
-    private <U> AsyncProxy<U> map(Callable<U> callable) {
-        return new AsyncProxyInternal<>(executor.submit(callable), executor);
     }
 
 }

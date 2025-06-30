@@ -40,7 +40,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
-import org.apache.causeway.applib.services.wrapper.control.AsyncControl;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.extensions.commandlog.applib.dom.BackgroundService;
@@ -115,28 +114,24 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
 
-            var control = AsyncControl.defaults();
-
-            asyncProxyUnderTest1.set(wrapperFactory.asyncWrap(counter, control));
+            asyncProxyUnderTest1.set(wrapperFactory.asyncWrap(counter));
 
         }).ifFailureFail();
 
         // execute async and wait till done
         {
             asyncProxyUnderTest1.get()
-                .thenApplyAsync(Counter::bumpUsingDeclaredAction)
-                .orTimeout(5, TimeUnit.SECONDS)
-                .join(); // wait till done
+                .applyAsync(Counter::bumpUsingDeclaredAction)
+                .tryGet(5, TimeUnit.SECONDS); // wait till done
         }
 
         // then
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
             assertThat(counter.getNum()).isEqualTo(1L);
-            var control = AsyncControl.defaults();
 
             // store the async proxy for later use below
-            asyncProxyUnderTest2.set(wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter, control));
+            asyncProxyUnderTest2.set(wrapperFactory.asyncWrapMixin(Counter_bumpUsingMixin.class, counter));
 
         }).ifFailureFail();
 
@@ -144,10 +139,10 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         {
             // returns the detached counter entity, so we can immediately check whether the action was executed
             var counter = asyncProxyUnderTest2.get()
-                    .thenApplyAsync(Counter_bumpUsingMixin::act)
+                    .applyAsync(Counter_bumpUsingMixin::act)
                     // let's wait max 5 sec to allow executor to complete before continuing
-                    .orTimeout(5, TimeUnit.SECONDS)
-                    .join(); // wait till done
+                    .tryGet(5, TimeUnit.SECONDS)
+                    .valueAsNonNullElseFail();
             assertThat(counter.getNum()).isEqualTo(2L);
         }
 
@@ -181,10 +176,9 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
         // execute async and wait till done
         {
             asyncProxyUnderTest.get()
-                .thenAcceptAsync(Counter::bumpUsingDeclaredAction)
+                .acceptAsync(Counter::bumpUsingDeclaredAction)
                 // let's wait max 5 sec to allow executor to complete before continuing
-                .orTimeout(5, TimeUnit.SECONDS)
-                .join(); // wait till done
+                .tryGet(5, TimeUnit.SECONDS); // wait till done
         }
 
         // then no change to the counter

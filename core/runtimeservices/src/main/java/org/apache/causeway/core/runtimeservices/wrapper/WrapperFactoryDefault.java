@@ -151,12 +151,6 @@ implements WrapperFactory, HasMetaModelContext {
 
     @Override
     public <T> T wrap(
-            final @NonNull T domainObject) {
-        return wrap(domainObject, SyncControl.defaults());
-    }
-
-    @Override
-    public <T> T wrap(
             final @NonNull T domainObject,
             final @NonNull SyncControl syncControl) {
 
@@ -167,13 +161,6 @@ implements WrapperFactory, HasMetaModelContext {
             return _Casts.uncheckedCast(createProxy(origin.pojo(), syncControl));
         }
         return createProxy(domainObject, syncControl);
-    }
-
-    @Override
-    public <T> T wrapMixin(
-            final @NonNull Class<T> mixinClass,
-            final @NonNull Object mixee) {
-        return wrapMixin(mixinClass, mixee, SyncControl.defaults());
     }
 
     @Override
