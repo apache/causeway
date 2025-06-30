@@ -126,6 +126,7 @@ identified
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
         <ognl.version>3.4.7</ognl.version>
+        <osgi.version>8.0.0</osgi.version>
 
         <pdfbox.version>3.0.5</pdfbox.version>
         <picocontainer.version>2.15.2</picocontainer.version>
@@ -1414,6 +1415,24 @@ identified
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>org.eclipse.persistence.moxy</artifactId>
                 <version>${eclipselink.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.eclipse.angus</groupId>
+                        <artifactId>angus-activation</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-tree</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm-analysis</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.persistence</groupId>
