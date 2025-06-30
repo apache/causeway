@@ -1,4 +1,4 @@
 apt update && apt install -y curl zip unzip
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk install maven 3.9.9
+sdk install maven 3.9.10
