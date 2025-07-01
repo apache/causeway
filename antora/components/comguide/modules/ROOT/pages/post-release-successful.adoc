@@ -362,7 +362,7 @@ popd
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+./preview.sh
 ----
 
 * if any files have changed, then commit:
@@ -448,7 +448,7 @@ git commit -m "$CAUSEWAYJIRA: updates site.yml in readiness for website generati
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh -AS
+./preview.sh -AS
 ----
 +
 This will write to `antora/target/site`; we'll use the results in the xref:#publish-website[next section].

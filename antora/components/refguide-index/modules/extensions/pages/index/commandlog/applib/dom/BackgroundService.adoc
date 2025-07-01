@@ -11,10 +11,11 @@ Typically this other thread of execution would be scheduled from quartz or simil
 .BackgroundService.java
 ----
 class BackgroundService {
-  T execute(T object)     // <.>
-  T executeSkipRules(T object)     // <.>
-  T executeMixin(Class<T> mixinClass, Object mixedIn)     // <.>
-  T executeMixinSkipRules(Class<T> mixinClass, Object mixedIn)     // <.>
+  AsyncProxy<T> execute(T object)     // <.>
+  AsyncProxy<T> executeSkipRules(T object)     // <.>
+  AsyncProxy<T> executeMixin(Class<T> mixinClass, Object mixedIn)     // <.>
+  AsyncProxy<T> executeMixinSkipRules(Class<T> mixinClass, Object mixedIn)     // <.>
+  AsyncControl asyncControl()
 }
 ----
 

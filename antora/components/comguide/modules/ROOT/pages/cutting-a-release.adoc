@@ -77,8 +77,8 @@ mvnd -Dapache-release clean
 mvnd -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
 popd
 
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
-for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
+for a in `/usr/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
+for a in `/usr/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
 
 cat /tmp/rat-qn.txt
 cat /tmp/rat-al.txt
@@ -160,7 +160,7 @@ The next step is to generate the website, ensuring that the config, examples, pr
 +
 [source,bash,subs="attributes+"]
 ----
-sh preview.sh
+./preview.sh
 ----
 +
 NOTE: this now runs `mvnd clean install -pl core/config` automatically.
@@ -207,8 +207,8 @@ Commit any changes from the preceding steps:
 
 [source,bash,subs="attributes+"]
 ----
-git add ..
-git commit -m "$CAUSEWAYJIRA: updates to pom.xml etc for release"
+git add .
+git commit -m "$CAUSEWAYJIRA: updates to docs, license etc for release"
 ----
 
 
@@ -786,7 +786,7 @@ popd
 ----
 cd ../causeway
 
-sh preview.sh -AB
+./preview.sh -AB
 ----
 
 * Copy the generated Antora site to `causeway-site` repo's `contents` directory:
@@ -805,7 +805,7 @@ cd ../causeway-site
 git add .
 git commit -m "$CAUSEWAYJIRA : staging changes to website"
 
-sh preview.sh
+./preview.sh
 ----
 
 * If happy, then push the changes:

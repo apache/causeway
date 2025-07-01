@@ -3,4 +3,35 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
-No specific migration notes have been recorded to date.
+== Changes to the Wrapper Factory API
+
+Control classes `SynControl` and `AsyncControl` have been slightly modified, 
+those are immutable now but do support 'withers' to setup the desired control.
+
+Factories `SynControl.control()` and `AsyncControl.control()` were 
+renamed to `#defaults()`.
+
+`WrapperFactory.asyncWrap` and other `async*` sibling methods no longer return a `Future<T>` 
+but an `AsyncProxy<T>` which allows interaction with the proxied domain
+in a more type safe manner.
+
+[source,java]
+.Example usage
+----
+// transaction scoped call to retrieve an attached counter entity
+var counter = bookmarkService
+    .lookup(bookmark, Counter.class).orElseThrow();
+
+// returns a Future<Counter>
+var proxy = wrapperFactory.asyncWrap(counter)
+    .applyAsync(Counter::bumpUsingDeclaredAction);
+          
+// then later ...
+
+// returns the detached counter entity
+var counter2 = proxy
+    .tryGet(5, TimeUnit.SECONDS) // blocking
+    .valueAsNonNullElseFail(); 
+
+assertThat(counter2.getNum()).isEqualTo(2L);
+----
