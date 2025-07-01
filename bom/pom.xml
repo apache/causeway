@@ -72,7 +72,7 @@ identified
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2025-07-01T07:50:52Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2025-07-01T07:53:06Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -1545,37 +1545,6 @@ identified
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-
-
-            <!-- org.apache.causeway.incubator.viewer -->
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-applib</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-model</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-viewer</artifactId>
                 <version>3.4.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
