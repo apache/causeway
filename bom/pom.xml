@@ -72,7 +72,7 @@ identified
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2025-07-01T06:56:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2025-07-01T07:40:46Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -1030,7 +1030,7 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
-                <artifactId>causeway-extensions-executionoutrepublisher-applib</artifactId>
+                <artifactId>causeway-extensions-executionrepublisher-applib</artifactId>
                 <version>3.4.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
