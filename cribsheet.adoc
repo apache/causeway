@@ -10,7 +10,7 @@
 ----
 sdk use java 11
 sh build-tooling.sh -- -T1C
-sh preview.sh
+./preview.sh
 ----
 
 * build all, ``git pull``ing first, excluding incubator
