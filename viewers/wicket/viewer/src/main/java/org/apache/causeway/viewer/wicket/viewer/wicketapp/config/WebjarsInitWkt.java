@@ -18,16 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp.config;
 
+import java.util.Optional;
+
 import org.apache.wicket.protocol.http.WebApplication;
 
 import org.springframework.boot.web.server.MimeMappings;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.AbstractServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
 import de.agilecoders.wicket.webjars.WicketWebjars;
@@ -51,12 +51,13 @@ public class WebjarsInitWkt implements WicketApplicationInitializer {
     implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
         @Override
         public void customize(final ConfigurableServletWebServerFactory factory) {
-            var mappings = _Casts.castTo(AbstractServletWebServerFactory.class, factory)
-                .map(AbstractServletWebServerFactory::getMimeMappings)
+
+            var mimeMappings = Optional.ofNullable(factory.getSettings())
+                .map(x->x.getMimeMappings())
                 .orElseGet(()->new MimeMappings(MimeMappings.DEFAULT));
-            mappings.remove("mjs");
-            mappings.add("mjs", "application/javascript;charset=utf-8");
-            factory.setMimeMappings(mappings);
+            mimeMappings.remove("mjs");
+            mimeMappings.add("mjs", "application/javascript;charset=utf-8");
+            factory.setMimeMappings(mimeMappings);
         }
     }
 

@@ -71,7 +71,8 @@
         <module>../viewers/commons</module>
         <module>../viewers/restfulobjects</module>
         <module>../viewers/wicket</module>
-<!-- <module>../viewers/graphql</module> broken on current Spring Boot 4 Snapshot -->
+        <!-- TODO CAUSEWAY-3892
+        <module>../viewers/graphql</module> broken on current Spring Boot 4 Snapshot -->
 
         <module>../persistence/commons</module>
         <module>../persistence/jdbc</module>

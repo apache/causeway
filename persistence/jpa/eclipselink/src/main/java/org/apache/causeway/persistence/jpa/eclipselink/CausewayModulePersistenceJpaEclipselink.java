@@ -26,8 +26,8 @@ import javax.sql.DataSource;
 import jakarta.inject.Inject;
 
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.jpa.autoconfigure.JpaBaseConfiguration;
+import org.springframework.boot.jpa.autoconfigure.JpaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -95,11 +95,6 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                 return jpaDialect;
             }
         };
-    }
-
-    @Override
-    protected Map<String, Object> getVendorProperties() {
-        return elSettings.asMap();
     }
 
     @Override

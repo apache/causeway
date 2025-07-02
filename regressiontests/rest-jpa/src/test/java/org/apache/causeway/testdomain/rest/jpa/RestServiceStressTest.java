@@ -31,8 +31,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug.swt._Swt;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;

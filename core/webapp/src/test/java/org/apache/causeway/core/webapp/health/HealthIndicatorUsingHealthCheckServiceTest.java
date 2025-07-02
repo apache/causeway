@@ -18,8 +18,7 @@
  */
 package org.apache.causeway.core.webapp.health;
 
-import org.apache.causeway.applib.services.health.HealthCheckService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,12 +27,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import org.springframework.boot.actuate.health.Health;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
+import org.springframework.boot.health.contributor.Health;
+
+import org.apache.causeway.applib.services.health.HealthCheckService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 
 @ExtendWith(MockitoExtension.class)
 class HealthIndicatorUsingHealthCheckServiceTest {

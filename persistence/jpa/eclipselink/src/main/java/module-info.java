@@ -47,5 +47,6 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     requires spring.orm;
     requires spring.tx;
     requires org.eclipse.persistence.jpa;
+    requires spring.boot.jpa;
 
 }

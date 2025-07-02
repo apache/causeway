@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-	license agreements. See the NOTICE file distributed with this work for additional 
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more
+contributor 
+	license agreements. See the NOTICE file distributed with this work for
+additional 
 	information regarding copyright ownership. The ASF licenses this file to 
 	you under the Apache License, Version 2.0 (the "License"); you may not use 
 	this file except in compliance with the License. You may obtain a copy of 
@@ -10,99 +12,104 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.core</groupId>
-		<artifactId>causeway-core</artifactId>
-		<version>${revision}</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway.core</groupId>
+        <artifactId>causeway-core</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<artifactId>causeway-core-webapp</artifactId>
-	<name>Apache Causeway Core - WebApp</name>
-	<description>
+    <artifactId>causeway-core-webapp</artifactId>
+    <name>Apache Causeway Core - WebApp</name>
+    <description>
         Bundles all the web specific classes a srequired by viewers.
         Introduced to keep the 'runtime' package concise.
     </description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.core.webapp</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/core/webapp</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>org.apache.causeway.core.webapp</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>org/apache/causeway/core/webapp</git-plugin.propertiesDir>
+    </properties>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/java</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
 
-	<dependencies>
+    <dependencies>
 
         <dependency>
             <groupId>org.apache.causeway.commons</groupId>
             <artifactId>causeway-commons</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-runtime</artifactId>
-		</dependency>
-		
-		<dependency>
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtime</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-transaction</artifactId>
         </dependency>
 
-		<dependency>
+        <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-core-interaction</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-actuator</artifactId>
-		</dependency>
-		
-		<dependency>
-		    <groupId>jakarta.servlet</groupId>
-		    <artifactId>jakarta.servlet-api</artifactId>
-		    <scope>compile</scope> <!-- compile: makes it transitive -->
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-health</artifactId>
+        </dependency>
 
-		<!-- TESTING -->
 
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-internaltestsupport</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>compile</scope> <!-- compile: makes it transitive -->
+        </dependency>
 
-	</dependencies>
+        <!-- TESTING -->
+
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-internaltestsupport</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
 
 </project>

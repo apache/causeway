@@ -40,4 +40,5 @@ module org.apache.causeway.security.keycloak {
     requires spring.security.web;
     requires spring.web;
     requires org.apache.causeway.commons;
+    requires spring.boot.security.oauth2.client;
 }

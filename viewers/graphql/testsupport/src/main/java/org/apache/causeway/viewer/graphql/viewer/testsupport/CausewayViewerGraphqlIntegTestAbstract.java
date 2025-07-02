@@ -37,6 +37,7 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.approvaltests.integrations.junit5.JupiterApprovals;
@@ -52,7 +53,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.graphql.tester.AutoConfigureHttpGraphQlTester;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;

@@ -45,4 +45,5 @@ module org.apache.causeway.core.webapp {
     requires spring.context;
     requires spring.core;
     requires spring.web;
+    requires spring.boot.health;
 }

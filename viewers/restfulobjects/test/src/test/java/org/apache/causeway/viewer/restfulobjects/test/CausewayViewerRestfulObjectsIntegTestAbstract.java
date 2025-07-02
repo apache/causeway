@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
@@ -35,10 +36,9 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
-import org.jspecify.annotations.Nullable;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -48,6 +48,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
+
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.SneakyThrows;
@@ -69,7 +70,7 @@ import lombok.SneakyThrows;
  */
 @SpringBootTest(
         classes = {
-                CausewayViewerRestfulObjectsIntegTestManifest.class
+                CausewayViewerRestfulObjectsIntegTestManifest.class,
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )

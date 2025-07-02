@@ -33,8 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
+
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;

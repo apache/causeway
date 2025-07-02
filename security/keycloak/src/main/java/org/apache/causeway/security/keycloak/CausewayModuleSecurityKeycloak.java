@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.security.oauth2.client.autoconfigure.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -96,7 +96,7 @@ public class CausewayModuleSecurityKeycloak {
                 // the SecurityContextPersistenceFilter (which uses http session to do its work)
                 .logout(t->{
                     var x = t.logoutRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/logout"));
-                    logoutHandlers.forEach(x::addLogoutHandler);   
+                    logoutHandlers.forEach(x::addLogoutHandler);
                 })
                 // This is the point where OAuth2 login of Spring gets enabled
                 .oauth2Login(t->t
@@ -107,8 +107,8 @@ public class CausewayModuleSecurityKeycloak {
                     .loginPage(loginPage))
                 .build();
 
-        
-// Spring 6 Legacy        
+
+// Spring 6 Legacy
 //        var httpSecurityLogoutConfigurer =
 //            http
 //                .sessionManagement()

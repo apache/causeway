@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.viewer.graphql.viewer;
 
-import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
-
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.graphql.GraphQlAutoConfiguration;
-import org.springframework.boot.autoconfigure.graphql.GraphQlCorsProperties;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
-import org.springframework.boot.autoconfigure.graphql.servlet.GraphQlWebMvcAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.graphql.autoconfigure.GraphQlAutoConfiguration;
+import org.springframework.boot.graphql.autoconfigure.GraphQlCorsProperties;
+import org.springframework.boot.graphql.autoconfigure.GraphQlProperties;
+import org.springframework.boot.graphql.autoconfigure.servlet.GraphQlWebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +31,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.graphql.execution.BatchLoaderRegistry;
 import org.springframework.graphql.execution.DefaultBatchLoaderRegistry;
 
+import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.viewer.graphql.model.CausewayModuleViewerGraphqlModel;
 import org.apache.causeway.viewer.graphql.viewer.controller.ResourceController;
 
