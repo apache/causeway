@@ -18,12 +18,17 @@
  */
 package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 
+import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.ext.Provider;
 
 import org.jboss.resteasy.core.AsynchronousDispatcher;
 import org.jboss.resteasy.core.ResourceMethodRegistry;
@@ -36,20 +41,27 @@ import org.jboss.resteasy.spi.Dispatcher;
 import org.jboss.resteasy.spi.Registry;
 import org.jboss.resteasy.spi.ResteasyDeployment;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
-import org.jboss.resteasy.springboot.JAXRSResourcesAndProvidersScannerPostProcessor;
-import org.jboss.resteasy.springboot.ResteasyApplicationBuilder;
-import org.jboss.resteasy.springboot.ResteasyEmbeddedServletInitializer;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.PriorityOrdered;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * RESTEASY013015: could not find the type for bean named jpaSharedEM_entityManagerFactory
@@ -61,6 +73,7 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
  * {@link CausewayModuleViewerRestfulObjectsJaxrsResteasy}.
  */
 @Configuration
+@Slf4j
 class SpringBeanProcessorRegressionWorkaround {
 
     @Bean @Primary
@@ -90,6 +103,90 @@ class SpringBeanProcessorRegressionWorkaround {
 
         return springBeanProcessor;
     }
+
+    /**
+     * Scanner bean factory post processor that is responsible for scanning classpath
+     * (configured packages for JAX RS resources and providers).
+     *
+     * It's meant to run as on of the first bean factory post processors so others, especially
+     * <code>org.jboss.resteasy.plugins.spring.SpringBeanProcessor</code> can find the bean definitions produced by this class.
+     *
+     * This class is not active unless <code>resteasy.jaxrs.scan-packages</code> property is set.
+     *
+     */
+    public static class JAXRSResourcesAndProvidersScannerPostProcessor implements BeanFactoryPostProcessor, PriorityOrdered {
+
+        private static final String JAXRS_SCAN_PACKAGES_PROPERTY = "resteasy.jaxrs.scan-packages";
+
+        @Override
+        public int getOrder() {
+            return 0;
+        }
+
+        @Override
+        public void postProcessBeanFactory(final ConfigurableListableBeanFactory beanFactory) throws BeansException {
+            ConfigurableEnvironment configurableEnvironment = beanFactory.getBean(ConfigurableEnvironment.class);
+            String jaxrsScanPackages = configurableEnvironment.getProperty(JAXRS_SCAN_PACKAGES_PROPERTY);
+
+
+            Set<Class<?>> provicerClasses = findJaxrsResourcesOrProviderClasses(jaxrsScanPackages, Provider.class);
+            for (Class<?> providerClazz : provicerClasses) {
+                registerScannedBean(beanFactory, providerClazz);
+            }
+
+            Set<Class<?>> resourceClasses = findJaxrsResourcesOrProviderClasses(jaxrsScanPackages, Path.class);
+            for (Class<?> resourceClazz : resourceClasses) {
+                registerScannedBean(beanFactory, resourceClazz);
+            }
+
+        }
+
+        /*
+         * Creates singleton bean definition for found classes that represent either JAX RS resource or provider
+         */
+        private void registerScannedBean(final ConfigurableListableBeanFactory beanFactory, final Class<?> clazz) {
+            BeanDefinitionRegistry registry = (BeanDefinitionRegistry) beanFactory;
+
+            GenericBeanDefinition bean = new GenericBeanDefinition();
+            bean.setBeanClass(clazz);
+            bean.setAutowireCandidate(true);
+            bean.setScope("singleton");
+
+            registry.registerBeanDefinition(clazz.getName(), bean);
+        }
+
+        /*
+         * Scan the classpath under the specified packages looking for JAX-RS resources and providers
+         */
+        private static Set<Class<?>> findJaxrsResourcesOrProviderClasses(final String packagesToBeScanned, final Class<? extends Annotation>  annotationType) {
+            log.info("Scanning classpath to find JAX-RS classes annotated with {}", annotationType);
+
+            ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+            scanner.addIncludeFilter(new AnnotationTypeFilter(annotationType));
+
+            Set<BeanDefinition> candidates = new HashSet<BeanDefinition>();
+            Set<BeanDefinition> candidatesSubSet;
+
+            for (String packageToScan : packagesToBeScanned.split(",")) {
+                candidatesSubSet = scanner.findCandidateComponents(packageToScan.trim());
+                candidates.addAll(candidatesSubSet);
+            }
+
+            Set<Class<?>> classes = new HashSet<>();
+            ClassLoader classLoader = JAXRSResourcesAndProvidersScannerPostProcessor.class.getClassLoader();
+            Class<?> type;
+            for (BeanDefinition candidate : candidates) {
+                try {
+                    type = ClassUtils.forName(candidate.getBeanClassName(), classLoader);
+                    classes.add(type);
+                } catch (ClassNotFoundException e) {
+                    log.error("JAX-RS Resource/Provider could not be loaded", e);
+                }
+            }
+            return classes;
+        }
+    }
+
 
     @Bean
     @ConditionalOnProperty(name="resteasy.jaxrs.scan-packages")
@@ -154,14 +251,9 @@ class SpringBeanProcessorRegressionWorkaround {
         return servletContextListener;
     }
 
-    @Bean(name = ResteasyApplicationBuilder.BEAN_NAME)
-    public ResteasyApplicationBuilder resteasyApplicationBuilder() {
-        return new ResteasyApplicationBuilder();
-    }
-
-    @Bean
-    public static ResteasyEmbeddedServletInitializer resteasyEmbeddedServletInitializer() {
-        return new ResteasyEmbeddedServletInitializer();
-    }
+//    @Bean
+//    public static ResteasyEmbeddedServletInitializer resteasyEmbeddedServletInitializer() {
+//        return new ResteasyEmbeddedServletInitializer();
+//    }
 
 }
