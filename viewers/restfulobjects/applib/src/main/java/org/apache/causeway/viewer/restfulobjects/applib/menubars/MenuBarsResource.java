@@ -24,7 +24,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
@@ -42,8 +42,8 @@ public interface MenuBarsResource {
      */
     @GET
     @Produces({
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
     })
     public Response menuBars();
 

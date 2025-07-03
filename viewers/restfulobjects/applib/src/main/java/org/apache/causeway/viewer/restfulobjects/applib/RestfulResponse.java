@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.Map;
 
 import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -35,6 +34,8 @@ import jakarta.ws.rs.core.Response.StatusType;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;

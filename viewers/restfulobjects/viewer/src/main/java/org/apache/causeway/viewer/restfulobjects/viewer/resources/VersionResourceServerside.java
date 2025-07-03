@@ -21,11 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.util.List;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
@@ -33,7 +29,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.version.VersionResource;
@@ -64,8 +59,8 @@ implements VersionResource {
     }
 
     @Override
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
+//    @GET
+//    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_VERSION })
     public Response version() {
 
         var resourceContext = createResourceContext(
@@ -107,8 +102,8 @@ implements VersionResource {
     }
 
     private void fakeRuntimeExceptionIfXFail(final ResourceContext resourceContext) {
-        final HttpHeaders httpHeaders = resourceContext.httpHeaders();
-        final List<String> requestHeader = httpHeaders.getRequestHeader("X-Fail");
+        var httpHeaders = resourceContext.httpHeaders();
+        final List<String> requestHeader = httpHeaders.getValuesAsList("X-Fail");
         if (requestHeader != null && !requestHeader.isEmpty()) {
             throw _EndpointLogging.error(log, "GET /version",
                     RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_FAILURE));

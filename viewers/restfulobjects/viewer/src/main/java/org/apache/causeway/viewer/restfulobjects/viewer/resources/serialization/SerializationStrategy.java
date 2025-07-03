@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization
 
 import java.util.Collection;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -64,10 +64,10 @@ public enum SerializationStrategy {
     public static SerializationStrategy determineFrom(final Collection<MediaType> acceptableMediaTypes) {
 
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+            if(acceptableMediaType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
                 return SerializationStrategy.JSON;
             }
-            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
+            if(acceptableMediaType.isCompatibleWith(MediaType.APPLICATION_XML)) {
                 return SerializationStrategy.XML;
             }
         }

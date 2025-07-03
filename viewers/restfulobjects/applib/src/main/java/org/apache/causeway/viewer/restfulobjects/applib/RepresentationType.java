@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.util.Enums;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.errors.ErrorRepresentati
 import org.apache.causeway.viewer.restfulobjects.applib.health.HealthRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.user.UserRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 import org.apache.causeway.viewer.restfulobjects.applib.version.VersionRepresentation;
 
@@ -155,8 +154,8 @@ public enum RepresentationType {
             final String xmlMediaTypeStr,
             final Class<? extends JsonRepresentation> representationClass) {
 
-        this(	jsonMediaTypeStr != null ? MediaTypes.parse(jsonMediaTypeStr) : null,
-                xmlMediaTypeStr != null ? MediaTypes.parse(xmlMediaTypeStr) : null,
+        this(	jsonMediaTypeStr != null ? MediaType.parseMediaType(jsonMediaTypeStr) : null,
+                xmlMediaTypeStr != null ? MediaType.parseMediaType(xmlMediaTypeStr) : null,
                         representationClass
                 );
     }

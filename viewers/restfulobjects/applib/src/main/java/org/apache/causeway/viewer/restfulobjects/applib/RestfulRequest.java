@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
@@ -129,10 +129,6 @@ public final class RestfulRequest {
             return parser;
         }
 
-//        void setHeader(final ClientRequestConfigurer clientRequestConfigurer, final X t) {
-//            clientRequestConfigurer.header(getName(), parser.asString(t));
-//        }
-
         @Override
         public String toString() {
             return getName();
@@ -141,16 +137,6 @@ public final class RestfulRequest {
 
     @Getter private final Map<RequestParameter<?>, Object> args = new LinkedHashMap<>();
 
-//    public <T> RestfulRequest withHeader(final Header<T> header, final T t) {
-//        header.setHeader(clientRequestConfigurer, t);
-//        return this;
-//    }
-//
-//    @SuppressWarnings("unchecked")
-//    public <T> RestfulRequest withHeader(final Header<List<T>> header, final T... ts) {
-//        header.setHeader(clientRequestConfigurer, Arrays.asList(ts));
-//        return this;
-//    }
 
     public <Q> RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final String argStrFormat, final Object... args) {
         final String argStr = String.format(argStrFormat, args);

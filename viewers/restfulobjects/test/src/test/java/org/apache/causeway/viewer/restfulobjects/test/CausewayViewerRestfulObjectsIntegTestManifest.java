@@ -28,7 +28,7 @@ import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
+import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 /**
  * Compared to the production app manifest <code>domainapp.webapp.AppManifest</code>,
@@ -40,7 +40,8 @@ import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleVie
         CausewayModuleCoreRuntimeServices.class,
         CausewayModuleSecurityBypass.class,
         CausewayModuleTestingFixturesApplib.class,
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
+        CausewayModuleViewerRestfulObjectsViewer.class
+        //CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
 })
 @PropertySources({
         @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),

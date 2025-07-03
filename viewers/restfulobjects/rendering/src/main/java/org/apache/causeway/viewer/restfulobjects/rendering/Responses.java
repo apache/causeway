@@ -23,13 +23,14 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
 public final class Responses {
@@ -77,7 +78,7 @@ public final class Responses {
         final Response.ResponseBuilder response =
                 of(RestfulResponse.HttpStatusCode.OK)
                 .header("Date", dateFormat.format(now))
-                .type(mediaType)
+                .type(MediaTypes.toJakarta(mediaType))
                 .cacheControl(caching.getCacheControl())
                 .entity(JsonWriterUtil.jsonFor(entityRepresentation, inferPrettyPrinting(renderer)));
 
@@ -93,13 +94,13 @@ public final class Responses {
     }
 
     protected static Response.ResponseBuilder of(final RestfulResponse.HttpStatusCode httpStatusCode) {
-        return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
+        return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaTypes.toJakarta(MediaType.APPLICATION_JSON));
     }
 
     public static Response.ResponseBuilder mediaType(
             final Response.ResponseBuilder responseBuilder,
             final MediaType mediaType) {
-        responseBuilder.type(mediaType);
+        responseBuilder.type(MediaTypes.toJakarta(mediaType));
         return responseBuilder;
     }
 

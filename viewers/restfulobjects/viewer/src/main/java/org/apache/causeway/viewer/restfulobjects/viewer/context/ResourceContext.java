@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +28,18 @@ import java.util.Set;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Request;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.ext.Providers;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -57,17 +60,12 @@ import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 public record ResourceContext(
     MetaModelContext metaModelContext,
     ResourceDescriptor resourceDescriptor,
     HttpHeaders httpHeaders,
-    Request request,
     HttpServletRequest httpServletRequest,
     HttpServletResponse httpServletResponse,
-    SecurityContext securityContext,
     String applicationAbsoluteBase,
     String restfulAbsoluteBase,
 
@@ -85,40 +83,37 @@ implements IResourceContext {
     // -- NON CANONICAL CONSTRUCTORS
 
     public ResourceContext(
+            final MetaModelContext metaModelContext,
             final ResourceDescriptor resourceDescriptor,
-            final HttpHeaders httpHeaders,
-            final Providers providers,
-            final Request request,
             final String applicationAbsoluteBase,
             final String restfulAbsoluteBase,
             final RequestParams urlUnencodedQueryString,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
-            final SecurityContext securityContext,
-            final MetaModelContext metaModelContext,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Map<String, String[]> requestParams) {
 
-        this(resourceDescriptor, httpHeaders, providers, request, applicationAbsoluteBase, restfulAbsoluteBase,
-            httpServletRequest, httpServletResponse, securityContext, metaModelContext, interactionInitiatedBy,
+        this(
+            metaModelContext,
+            resourceDescriptor,
+            applicationAbsoluteBase, restfulAbsoluteBase,
+            httpServletRequest, httpServletResponse, interactionInitiatedBy,
             requestArgsAsMap(requestParams, urlUnencodedQueryString));
     }
 
     private ResourceContext(
+            final MetaModelContext metaModelContext,
             final ResourceDescriptor resourceDescriptor,
-            final HttpHeaders httpHeaders,
-            final Providers providers,
-            final Request request,
             final String applicationAbsoluteBase,
             final String restfulAbsoluteBase,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
-            final SecurityContext securityContext,
-            final MetaModelContext metaModelContext,
             final InteractionInitiatedBy interactionInitiatedBy,
             final JsonRepresentation requestArgsAsMap) {
 
-        this(metaModelContext, resourceDescriptor, httpHeaders, request, httpServletRequest, httpServletResponse, securityContext,
+        this(metaModelContext, resourceDescriptor,
+            httpHeadersFromServletRequest(httpServletRequest),
+            httpServletRequest, httpServletResponse,
             _Strings.suffix(applicationAbsoluteBase, "/"),
             _Strings.suffix(restfulAbsoluteBase, "/"),
             Collections.unmodifiableList(arg(requestArgsAsMap, RequestParameter.FOLLOW_LINKS)),
@@ -231,7 +226,7 @@ implements IResourceContext {
 
     @Override
     public List<MediaType> acceptableMediaTypes() {
-        return httpHeaders.getAcceptableMediaTypes();
+        return httpHeaders.getAccept();
     }
 
     // -- UTIL
@@ -254,11 +249,36 @@ implements IResourceContext {
 
     // -- JUNIT
 
-    static ResourceContext forTesting(String queryString, HttpServletRequest servletRequest) {
-        return new ResourceContext(ResourceDescriptor.empty(), null, null, null, null, null,
+    public static ResourceContext forTesting(String queryString, HttpServletRequest servletRequest) {
+        return new ResourceContext(MetaModelContext.instanceNullable(),
+            ResourceDescriptor.empty(), null, null,
             RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
-            servletRequest, null, null,
-            MetaModelContext.instanceElseFail(), null, (Map<String, String[]>)null);
+            servletRequest, null,
+            null, (Map<String, String[]>)null);
     }
+
+    public static ResourceContext forTesting(
+            ResourceDescriptor resourceDescriptor,
+            HttpServletRequest httpServletRequest,
+            HttpHeaders httpHeaders) {
+        throw _Exceptions.notImplemented();
+    }
+
+    // -- HELPER
+
+    static HttpHeaders httpHeadersFromServletRequest(HttpServletRequest request) {
+        var headers = new HttpHeaders();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            Enumeration<String> values = request.getHeaders(name);
+            while (values.hasMoreElements()) {
+                headers.add(name, values.nextElement());
+            }
+        }
+        return headers;
+    }
+
+
 
 }

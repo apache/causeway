@@ -19,16 +19,10 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
+
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
@@ -37,7 +31,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
@@ -64,12 +57,12 @@ implements DomainServiceResource {
     }
 
     @Override
-    @GET
-    @Path("/")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_LIST,
-        RestfulMediaType.APPLICATION_JSON_ERROR })
+//    @GET
+//    @Path("/")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_LIST,
+//        RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response services() {
 
         var resourceContext = createResourceContext(
@@ -116,12 +109,12 @@ implements DomainServiceResource {
     // DOMAIN SERVICE
 
     @Override
-    @GET
-    @Path("/{serviceId}")
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
+//    @GET
+//    @Path("/{serviceId}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
     public Response service(
             @PathParam("serviceId") final String serviceId) {
 
@@ -141,8 +134,8 @@ implements DomainServiceResource {
                 Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
-    @DELETE
-    @Path("/{serviceId}")
+//    @DELETE
+//    @Path("/{serviceId}")
     @Override
     public Response deleteServiceNotAllowed(
             @PathParam("serviceId") final String serviceId) {
@@ -153,8 +146,8 @@ implements DomainServiceResource {
                         "Deleting a service resource is not allowed."));
     }
 
-    @PUT
-    @Path("/{serviceId}")
+//    @PUT
+//    @Path("/{serviceId}")
     @Override
     public Response putServiceNotAllowed(
             @PathParam("serviceId") final String serviceId) {
@@ -165,8 +158,8 @@ implements DomainServiceResource {
                         "Putting to a service resource is not allowed."));
     }
 
-    @POST
-    @Path("/{serviceId}")
+//    @POST
+//    @Path("/{serviceId}")
     @Override
     public Response postServiceNotAllowed(
             @PathParam("serviceId") final String serviceId) {
@@ -180,12 +173,12 @@ implements DomainServiceResource {
     // DOMAIN SERVICE ACTION
 
     @Override
-    @GET
-    @Path("/{serviceId}/actions/{actionId}")
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
-    })
+//    @GET
+//    @Path("/{serviceId}/actions/{actionId}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
     public Response actionPrompt(
             @PathParam("serviceId") final String serviceId,
             @PathParam("actionId") final String actionId) {
@@ -200,8 +193,8 @@ implements DomainServiceResource {
                 domainResourceHelper.actionPrompt(actionId));
     }
 
-    @DELETE
-    @Path("/{serviceId}/actions/{actionId}")
+//    @DELETE
+//    @Path("/{serviceId}/actions/{actionId}")
     @Override
     public Response deleteActionPromptNotAllowed(
             @PathParam("serviceId") final String serviceId,
@@ -213,8 +206,8 @@ implements DomainServiceResource {
                         "Deleting action prompt resource is not allowed."));
     }
 
-    @PUT
-    @Path("/{serviceId}/actions/{actionId}")
+//    @PUT
+//    @Path("/{serviceId}/actions/{actionId}")
     @Override
     public Response putActionPromptNotAllowed(
             @PathParam("serviceId") final String serviceId,
@@ -226,8 +219,8 @@ implements DomainServiceResource {
                         "Putting to an action prompt resource is not allowed."));
     }
 
-    @POST
-    @Path("/{serviceId}/actions/{actionId}")
+//    @POST
+//    @Path("/{serviceId}/actions/{actionId}")
     @Override
     public Response postActionPromptNotAllowed(
             @PathParam("serviceId") final String serviceId,
@@ -242,12 +235,12 @@ implements DomainServiceResource {
     // DOMAIN SERVICE ACTION INVOKE
 
     @Override
-    @GET
-    @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
+//    @GET
+//    @Path("/{serviceId}/actions/{actionId}/invoke")
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
     public Response invokeActionQueryOnly(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
@@ -271,13 +264,13 @@ implements DomainServiceResource {
     }
 
     @Override
-    @PUT
-    @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
+//    @PUT
+//    @Path("/{serviceId}/actions/{actionId}/invoke")
+//    //@Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
     public Response invokeActionIdempotent(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
@@ -297,13 +290,13 @@ implements DomainServiceResource {
     }
 
     @Override
-    @POST
-    @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
+//    @POST
+//    @Path("/{serviceId}/actions/{actionId}/invoke")
+//    //@Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+//    })
     public Response invokeAction(
             @PathParam("serviceId") final String serviceId,
             @PathParam("actionId") final String actionId,
@@ -322,8 +315,8 @@ implements DomainServiceResource {
                 domainResourceHelper.invokeAction(actionId, arguments));
     }
 
-    @DELETE
-    @Path("/{serviceId}/actions/{actionId}/invoke")
+//    @DELETE
+//    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Override
     public Response deleteInvokeActionNotAllowed(
             @PathParam("serviceId") final String serviceId,

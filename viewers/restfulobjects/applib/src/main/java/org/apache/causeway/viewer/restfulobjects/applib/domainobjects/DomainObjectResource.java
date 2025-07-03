@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.InputStream;
 
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -29,7 +28,9 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
@@ -37,37 +38,35 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 /**
  * @since 1.x {@index}
  */
-@Path("/objects")
+@RequestMapping("${roPrefix}/objects")
 public interface DomainObjectResource {
 
     @POST
     @Path("/{domainType}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response persist(@PathParam("domainType") String domainType, final InputStream object);
 
-    // //////////////////////////////////////////////////////////
-    // domain object
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT
 
     @GET
     @Path("/{domainType}/{instanceId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
 
     @PUT
     @Path("/{domainType}/{instanceId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream arguments);
 
@@ -79,15 +78,17 @@ public interface DomainObjectResource {
     @Path("/{domainType}/{instanceId}")
     public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object image
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT IMAGE
 
     @GET
     @Path("/{domainType}/{instanceId}/image")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        "image/png"
+      "image/png",
+      "image/gif",
+      "image/jpeg",
+      "image/jpg",
+      "image/svg+xml"
     })
     public Response image(
             @PathParam("domainType")
@@ -95,16 +96,14 @@ public interface DomainObjectResource {
             @PathParam("instanceId")
             final String instanceId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object layout
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT LAYOUT
 
     @GET
     @Path("/{domainType}/{instanceId}/object-layout")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS
     })
     public Response layout(
             @PathParam("domainType")
@@ -112,34 +111,32 @@ public interface DomainObjectResource {
             @PathParam("instanceId")
             final String instanceId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object property
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT PROPERTY
 
     @GET
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
     @PUT
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream arguments);
 
     @DELETE
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
@@ -147,57 +144,25 @@ public interface DomainObjectResource {
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     public Response postPropertyNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object collection
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT COLLECTION
 
     @GET
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
 
-//XXX[CAUSEWAY-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
-//    @PUT
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
-//
-//    @POST
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
-//
-//    @DELETE
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
-
-    // //////////////////////////////////////////////////////////
-    // domain object action
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT ACTION
 
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
@@ -213,34 +178,32 @@ public interface DomainObjectResource {
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
     public Response postActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object action invoke
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT ACTION INVOKE
 
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-causeway-querystring") final String xCausewayQueryString);
 
     @PUT
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response invokeActionIdempotent(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
     @POST
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
+    //@Consumes({ MediaType.WILDCARD })
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
     public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 

@@ -40,5 +40,6 @@ module org.apache.causeway.viewer.restfulobjects.applib {
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;
+    requires spring.web;
     requires com.fasterxml.jackson.datatype.jsr310;
 }

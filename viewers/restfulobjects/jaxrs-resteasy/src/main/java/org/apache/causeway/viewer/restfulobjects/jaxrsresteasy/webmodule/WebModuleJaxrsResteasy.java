@@ -24,9 +24,6 @@ import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.ServletException;
 
-import org.jboss.resteasy.core.providerfactory.ResteasyProviderFactoryImpl;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -89,7 +86,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
 
         // forces RuntimeDelegate.getInstance() to be provided by RestEasy
         // (and not by eg. the JEE container if any)
-        ResteasyProviderFactory.setInstance(new ResteasyProviderFactoryImpl());
+        //ResteasyProviderFactory.setInstance(new ResteasyProviderFactoryImpl());
 
         super.prepare(ctx);
 

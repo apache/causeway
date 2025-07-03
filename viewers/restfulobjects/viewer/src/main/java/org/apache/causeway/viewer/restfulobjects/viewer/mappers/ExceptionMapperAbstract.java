@@ -23,7 +23,7 @@ import java.util.Optional;
 
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.ResponseBuilder;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -36,6 +36,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.rendering.ExceptionWithBody;
 import org.apache.causeway.viewer.restfulobjects.rendering.ExceptionWithHttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.viewer.mappers.entity.ExceptionDetail;
@@ -85,7 +86,7 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         final SerializationStrategy serializationStrategy = SerializationStrategy.JSON;
 
         // hmm; the mediaType doesn't seem to be specified in the RO spec
-        builder.type(serializationStrategy.type(RepresentationType.GENERIC));
+        builder.type(MediaTypes.toJakarta(serializationStrategy.type(RepresentationType.GENERIC)));
         builder.entity(body.toString());
 
         return builder.build();
@@ -146,19 +147,21 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
             final ExceptionPojo exceptionPojo) {
         final ResponseBuilder builder = Response.status(httpStatusCode.getJaxrsStatusType());
 
-        final List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
-        final SerializationStrategy serializationStrategy =
-                acceptableMediaTypes.contains(MediaType.APPLICATION_XML_TYPE) ||
-                acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
+        var acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes()
+            .stream()
+            .map(MediaTypes::fromJakarta)
+            .toList();
+        var serializationStrategy = acceptableMediaTypes.contains(MediaType.APPLICATION_XML)
+            || acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
                 ? SerializationStrategy.XML
-                        : SerializationStrategy.JSON;
+                : SerializationStrategy.JSON;
 
         final String message = exceptionPojo.getMessage();
         if (message != null) {
             builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }
 
-        builder.type(serializationStrategy.type(RepresentationType.ERROR));
+        builder.type(MediaTypes.toJakarta(serializationStrategy.type(RepresentationType.ERROR)));
         builder.entity(serializationStrategy.entity(exceptionPojo));
 
         return builder.build();

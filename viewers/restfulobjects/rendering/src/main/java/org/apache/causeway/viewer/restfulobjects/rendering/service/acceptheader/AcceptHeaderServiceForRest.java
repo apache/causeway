@@ -20,14 +20,12 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import jakarta.inject.Named;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerResponseFilter;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.ext.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,6 +37,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -80,11 +79,12 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
     public static class RequestFilter implements ContainerRequestFilter  {
         @Override
         public void filter(final ContainerRequestContext requestContext) throws IOException {
-            final List<MediaType> acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
+            var acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
 
             final List<MediaType> mediaTypes = stream(acceptableMediaTypes)
                     .filter(_NullSafe::isPresent)
-                    .collect(Collectors.toList());
+                    .map(MediaTypes::fromJakarta)
+                    .toList();
 
             setMediaTypes(mediaTypes);
         }

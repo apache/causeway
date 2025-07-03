@@ -18,25 +18,49 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.mappers;
 
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
+//import jakarta.inject.Singleton;
+//import jakarta.ws.rs.core.Response;
+//import jakarta.ws.rs.ext.Provider;
 
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+//import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+//import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 
-@Component
-@Provider
-@Singleton
-@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
-public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {
+import lombok.extern.slf4j.Slf4j;
+//import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 
-    @Override
-    public Response toResponse(final ObjectNotFoundException ex) {
-        return buildResponse(ex, RestfulResponse.HttpStatusCode.NOT_FOUND);
+//@Component
+//@Provider
+//@Singleton
+//@jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT)
+@RestControllerAdvice
+@Slf4j
+public class ExceptionMapperForObjectNotFound
+//extends ExceptionMapperAbstract<ObjectNotFoundException>
+{
+
+    //TODO[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3892] convert
+//    @Override
+//    public Response toResponse(final ObjectNotFoundException ex) {
+//        return buildResponse(ex, RestfulResponse.HttpStatusCode.NOT_FOUND);
+//    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String objectNotFoundHandler(ObjectNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String fallback(Exception ex) {
+        log.error("not covered by any @ExceptionHandler", ex);
+        return "[fallback] " + ex.getMessage();
     }
 
 }

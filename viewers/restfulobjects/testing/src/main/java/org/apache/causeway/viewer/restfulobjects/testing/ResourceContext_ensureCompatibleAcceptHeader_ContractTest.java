@@ -23,8 +23,6 @@ import java.util.List;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +31,8 @@ import org.mockito.Mockito;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.WebApplicationContext;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
@@ -117,7 +117,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Test
     public void acceptGenericAndProduceGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.GENERIC;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(MediaType.APPLICATION_JSON_TYPE));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(MediaType.APPLICATION_JSON));
 
         instantiateResourceContext(representationType);
     }
@@ -125,7 +125,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Test
     public void acceptGenericAndProduceSpecific() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(MediaType.APPLICATION_JSON_TYPE));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(MediaType.APPLICATION_JSON));
 
         instantiateResourceContext(representationType);
     }
@@ -133,7 +133,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Test
     public void nonMatching() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_ATOM_XML_TYPE));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_ATOM_XML));
 
         try {
             instantiateResourceContext(representationType);
@@ -157,7 +157,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Test
     public void nonMatchingProfile_ignoreGeneric() throws Exception {
         final RepresentationType representationType = RepresentationType.HOME_PAGE;
-        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(RepresentationType.USER.getJsonMediaType(), MediaType.APPLICATION_JSON_TYPE));
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(RepresentationType.USER.getJsonMediaType(), MediaType.APPLICATION_JSON));
 
         try {
             instantiateResourceContext(representationType);
@@ -176,7 +176,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
     private void givenHttpHeadersGetAcceptableMediaTypesReturns(final List<MediaType> mediaTypes) {
         Mockito
-        .when(mockHttpHeaders.getAcceptableMediaTypes())
+        .when(mockHttpHeaders.getAccept())
         .thenReturn(mediaTypes);
     }
 
@@ -185,9 +185,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
 
         var resourceDescriptor = new ResourceDescriptor(representationType, null, null, ResourceLink.NONE);
 
-        return new ResourceContext(resourceDescriptor, mockHttpHeaders, null, null, null, null, null,
-                mockHttpServletRequest, null, null,
-                metaModelContext, null, null);
+        return ResourceContext.forTesting(resourceDescriptor, mockHttpServletRequest, mockHttpHeaders);
     }
 
     /*sonar-ignore-off*/

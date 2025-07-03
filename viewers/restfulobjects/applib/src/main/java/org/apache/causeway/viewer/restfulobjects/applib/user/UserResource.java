@@ -24,7 +24,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 public interface UserResource {
 
     @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
+    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user();
 
     @DELETE
@@ -53,7 +53,7 @@ public interface UserResource {
      */
     @GET
     @Path("/logout")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response logout();
 
 }

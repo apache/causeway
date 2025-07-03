@@ -24,14 +24,11 @@ import java.util.function.UnaryOperator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.Request;
-import jakarta.ws.rs.core.SecurityContext;
-import jakarta.ws.rs.core.UriInfo;
-import jakarta.ws.rs.ext.Providers;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.request.ServletWebRequest;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -54,7 +51,6 @@ import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class ResourceAbstract
 implements HasMetaModelContext {
@@ -63,13 +59,10 @@ implements HasMetaModelContext {
     @Autowired protected MetaModelContext metaModelContext;
     @Autowired protected WebAppContextPath webAppContextPath;
 
-    @Context HttpHeaders httpHeaders;
-    @Context UriInfo uriInfo;
-    @Context Request request;
-    @Context HttpServletRequest httpServletRequest;
-    @Context HttpServletResponse httpServletResponse;
-    @Context SecurityContext securityContext;
-    @Context Providers providers;
+    @Autowired ServletWebRequest servletWebRequest;
+
+    @Deprecated @Autowired HttpServletRequest httpServletRequest;
+    @Deprecated @Autowired HttpServletResponse httpServletResponse;
 
     protected ResourceAbstract() {
     }
@@ -104,12 +97,15 @@ implements HasMetaModelContext {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
+        var reqUrl = servletWebRequest.getRequest().getRequestURL().toString();
+
         // eg. http://localhost:8080/ctx/restful/
         final String restfulAbsoluteBase = getConfiguration().getViewer().getRestfulobjects().getBaseUri()
-            .orElseGet(()->uriInfo.getBaseUri().toString());
+            //.orElseGet(()->uriInfo.getBaseUri().toString()) //FIXME[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3892]
+            .orElseGet(()->"TODO");
 
         // eg. /ctx/restful/
-        var restfulRelativeBase = uriInfo.getBaseUri().getRawPath();
+        var restfulRelativeBase = "TODO"; //uriInfo.getBaseUri().getRawPath();
 
         // eg. http://localhost:8080/
         var serverAbsoluteBase =
@@ -172,16 +168,14 @@ implements HasMetaModelContext {
             final Map<String, String[]> requestParams) {
 
         return new ResourceContext(
-                resourceDescriptor,
-                httpHeaders, providers, request,
-                applicationAbsoluteBase,
-                restfulAbsoluteBase,
-                urlUnencodedQueryString,
-                httpServletRequest, httpServletResponse,
-                securityContext,
-                metaModelContext,
-                InteractionInitiatedBy.USER,
-                requestParams);
+            metaModelContext,
+            resourceDescriptor,
+            applicationAbsoluteBase,
+            restfulAbsoluteBase,
+            urlUnencodedQueryString,
+            httpServletRequest, httpServletResponse,
+            InteractionInitiatedBy.USER,
+            requestParams);
     }
 
 }

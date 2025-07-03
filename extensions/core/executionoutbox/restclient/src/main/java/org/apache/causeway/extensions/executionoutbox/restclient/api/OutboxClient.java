@@ -25,7 +25,7 @@ import java.util.List;
 
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.Try;
@@ -119,7 +119,7 @@ public class OutboxClient {
     public List<InteractionDto> pending() {
 
         Invocation.Builder invocationBuilder = client.request(outboxClientConfig.getPendingUri())
-                .accept(RestfulClientMediaType.RO_XML.mediaTypeFor(InteractionsDto.class));
+                .accept(RestfulClientMediaType.RO_XML.mediaTypeFor(InteractionsDto.class).getType());
         var response = invocationBuilder.get();
 
         final Try<InteractionsDto> digest = client.digest(response, InteractionsDto.class);
@@ -171,7 +171,7 @@ public class OutboxClient {
         var invocationBuilder = client.request(path);
 
         var invocation = invocationBuilder.buildPut(
-                Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_TYPE));
+                Entity.entity(JsonUtils.toStringUtf8(dto), MediaType.APPLICATION_JSON_VALUE));
 
         var response = invocation.invoke();
 

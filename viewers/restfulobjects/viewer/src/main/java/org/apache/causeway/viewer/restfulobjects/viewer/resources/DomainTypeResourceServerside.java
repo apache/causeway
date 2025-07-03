@@ -20,12 +20,9 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.UnaryOperator;
 
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.jspecify.annotations.NonNull;
@@ -41,9 +38,9 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
@@ -85,11 +82,11 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
+//    @GET
+//    @Path("/")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public Response domainTypes() {
 
         var resourceContext = createResourceContext(
@@ -107,11 +104,11 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
+//    @GET
+//    @Path("/{domainType}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(
             @PathParam("domainType") final String domainType) {
 
@@ -132,12 +129,12 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/layout")
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS
-    })
+//    @GET
+//    @Path("/{domainType}/layout")
+//    @Produces({
+//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
+//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_BS
+//    })
     public Response layout(
             @PathParam("domainType") final String domainType) {
 
@@ -151,7 +148,7 @@ implements DomainTypeResource {
                 .map(grid ->
                         Response.status(Response.Status.OK)
                                 .entity(serializationStrategy.entity(grid))
-                                .type(serializationStrategy.type(RepresentationType.LAYOUT)))
+                                .type(MediaTypes.toJakarta(serializationStrategy.type(RepresentationType.LAYOUT))))
                 .orElse(Responses.ofNotFound());
 
         return _EndpointLogging.response(log, "GET({}) /domain-types/{}/layout", serializationStrategy.name(), domainType,
@@ -159,11 +156,11 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/properties/{propertyId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
+//    @GET
+//    @Path("/{domainType}/properties/{propertyId}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
     public Response typeProperty(
             @PathParam("domainType") final String domainType,
             @PathParam("propertyId") final String propertyId) {
@@ -196,11 +193,11 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/collections/{collectionId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
+//    @GET
+//    @Path("/{domainType}/collections/{collectionId}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     public Response typeCollection(
             @PathParam("domainType") final String domainType,
             @PathParam("collectionId") final String collectionId) {
@@ -233,11 +230,11 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/actions/{actionId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
+//    @GET
+//    @Path("/{domainType}/actions/{actionId}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     public Response typeAction(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId) {
@@ -263,11 +260,11 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/actions/{actionId}/params/{paramId}")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
+//    @GET
+//    @Path("/{domainType}/actions/{actionId}/params/{paramId}")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public Response typeActionParam(
             @PathParam("domainType") final String domainType,
             @PathParam("actionId") final String actionId,
@@ -295,17 +292,15 @@ implements DomainTypeResource {
                 Responses.ofOk(renderer, Caching.ONE_DAY).build());
     }
 
-    // //////////////////////////////////////////////////////////
-    // domain type actions
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN TYPE ACTIONS
 
     @Override
-    @GET
-    @Path("/{domainType}/type-actions/isSubtypeOf/invoke")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
-        RestfulMediaType.APPLICATION_JSON_ERROR })
+//    @GET
+//    @Path("/{domainType}/type-actions/isSubtypeOf/invoke")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
+//        RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSubtypeOf(
             @PathParam("domainType") final String domainType,
             @QueryParam("supertype") final String superTypeStr, // simple style
@@ -342,12 +337,12 @@ implements DomainTypeResource {
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/type-actions/isSupertypeOf/invoke")
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
-        RestfulMediaType.APPLICATION_JSON_ERROR })
+//    @GET
+//    @Path("/{domainType}/type-actions/isSupertypeOf/invoke")
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
+//        RestfulMediaType.APPLICATION_JSON_ERROR })
     public Response domainTypeIsSupertypeOf(
             @PathParam("domainType") final String domainType,
             @QueryParam("subtype") final String subTypeStr, // simple style

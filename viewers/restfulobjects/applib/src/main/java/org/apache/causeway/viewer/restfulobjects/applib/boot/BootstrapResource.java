@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.applib.boot;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 /**
  * @since 1.x {@index}
@@ -30,7 +30,7 @@ import jakarta.ws.rs.core.MediaType;
 public interface BootstrapResource {
 
     @GET
-    @Produces({ MediaType.TEXT_HTML })
+    @Produces({ MediaType.TEXT_HTML_VALUE })
     public String bootstrap();
 
 }

@@ -22,7 +22,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
@@ -52,7 +52,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     }
 
     @Override
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
+    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
 
         var resourceContext = createResourceContext(
@@ -85,7 +85,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
      * Not part of the Restful Objects spec.
      */
     @Override
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response logout() {
 
         var resourceContext = createResourceContext(

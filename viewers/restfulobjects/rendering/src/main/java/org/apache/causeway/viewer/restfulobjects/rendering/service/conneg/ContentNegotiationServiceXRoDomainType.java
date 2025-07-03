@@ -22,7 +22,7 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
@@ -142,7 +143,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
             ensureJaxbAnnotated(mappedDomainObject.getClass());
         }
 
-        return Response.ok(mappedDomainObject, mediaType);
+        return Response.ok(mappedDomainObject, MediaTypes.toJakarta(mediaType));
     }
 
     /**

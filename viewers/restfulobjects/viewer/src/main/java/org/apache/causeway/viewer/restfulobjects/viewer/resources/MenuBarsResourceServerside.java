@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 
 import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.springframework.stereotype.Component;
@@ -37,6 +37,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.menubars.MenuBarsResource;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
@@ -52,8 +53,8 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
 
     @Override
     @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
+        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_LAYOUT_MENUBARS,
+        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_LAYOUT_MENUBARS
     })
     public Response menuBars() {
 
@@ -69,7 +70,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
 
         builder = Response.status(Response.Status.OK)
                 .entity(serializationStrategy.entity(menuBars))
-                .type(serializationStrategy.type(RepresentationType.MENUBARS));
+                .type(MediaTypes.toJakarta(serializationStrategy.type(RepresentationType.MENUBARS)));
 
         return builder.build();
     }

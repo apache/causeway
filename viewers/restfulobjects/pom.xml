@@ -40,7 +40,7 @@
         <module>viewer</module>
         <module>test</module>
         <module>testing</module>
-        <module>jaxrs-resteasy</module>
+<!--        <module>jaxrs-resteasy</module>-->
     </modules>
 
 </project>

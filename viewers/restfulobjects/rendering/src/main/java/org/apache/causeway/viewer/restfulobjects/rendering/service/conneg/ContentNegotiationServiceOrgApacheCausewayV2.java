@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import com.fasterxml.jackson.databind.node.POJONode;

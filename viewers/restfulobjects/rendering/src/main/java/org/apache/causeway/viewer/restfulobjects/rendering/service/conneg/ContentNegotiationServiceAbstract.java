@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.apache.causeway.commons.internal.base._Strings;

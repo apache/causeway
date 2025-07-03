@@ -109,7 +109,7 @@ public class CommandFetcher {
 
         var client = newClient(secondaryConfig, useRequestDebugLogging);
         var request = client.request(URL_SUFFIX)
-                .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(CommandDto.class, EnumSet.of(SuppressionType.RO)));
+                .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(CommandDto.class, EnumSet.of(SuppressionType.RO)).getType());
 
         var args = client.arguments()
                 .addActionParameter("interactionId", interactionId!=null ? interactionId.toString() : null)

@@ -18,18 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.homepage.HomePageResource;
@@ -40,7 +35,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+@RestController
 @Slf4j
 public class HomePageResourceServerside
 extends ResourceAbstract
@@ -52,9 +47,9 @@ implements HomePageResource {
     }
 
     @Override
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+//    @Produces({
+//        MediaType.APPLICATION_JSON,
+//        RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response homePage() {
 
         var resourceContext = createResourceContext(
@@ -95,9 +90,9 @@ implements HomePageResource {
     }
 
     @Override
-    @GET
-    @Path("/notAuthenticated")
-    @Produces({ MediaType.APPLICATION_JSON })
+//    @GET
+//    @Path("/notAuthenticated")
+//    @Produces({ MediaType.APPLICATION_JSON })
     public Response notAuthenticated() {
         throw _EndpointLogging.error(log, "GET /notAuthenticated",
                 RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED));
