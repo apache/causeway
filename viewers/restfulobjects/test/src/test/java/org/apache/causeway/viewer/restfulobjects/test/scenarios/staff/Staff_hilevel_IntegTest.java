@@ -220,6 +220,9 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         final Blob photo = readFileAsBlob("StaffMember-photo-Bar.pdf");
         final var requestBuilder = restfulClient.request("services/university.dept.Staff/actions/createStaffMemberWithPhoto2/invoke");
 
+        //TODO[causeway-viewer-restfulobjects-test-CAUSEWAY-3897] why does presence of this line fix the surefire test?
+        System.err.printf("asAbsoluteHref%s%n", asAbsoluteHref(departmentBookmark));
+
         /*
          *  String name,
          *  Department.SecondaryKey departmentSecondaryKey,
