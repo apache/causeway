@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 

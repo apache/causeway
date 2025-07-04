@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization
 
 import java.util.Collection;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -32,6 +32,10 @@ public enum SerializationStrategy {
             return jaxbAnnotatedObject;
         }
 
+        @Override public MediaType type(RepresentationType representationType) {
+            return representationType.getXmlMediaType();
+        }
+
     },
 
     JSON {
@@ -39,6 +43,10 @@ public enum SerializationStrategy {
             return JsonUtils.toStringUtf8(
                     jaxbAnnotatedObject,
                     JsonUtils::jaxbAnnotationSupport);
+        }
+
+        @Override public MediaType type(RepresentationType representationType) {
+            return representationType.getJsonMediaType();
         }
 
     },
@@ -51,23 +59,24 @@ public enum SerializationStrategy {
                     JsonUtils::indentedOutput);
         }
 
+        @Override public MediaType type(RepresentationType representationType) {
+            return representationType.getJsonMediaType();
+        }
+
     },
 
     ;
 
-    public abstract Object entity(final Object jaxbAnnotatedObject);
-
-    public MediaType type(final RepresentationType representationType) {
-        return representationType.getXmlMediaType();
-    }
+    public abstract Object entity(Object jaxbAnnotatedObject);
+    public abstract MediaType type(RepresentationType representationType);
 
     public static SerializationStrategy determineFrom(final Collection<MediaType> acceptableMediaTypes) {
 
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+            if(acceptableMediaType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
                 return SerializationStrategy.JSON;
             }
-            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
+            if(acceptableMediaType.isCompatibleWith(MediaType.APPLICATION_XML)) {
                 return SerializationStrategy.XML;
             }
         }

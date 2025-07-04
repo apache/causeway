@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.jspecify.annotations.Nullable;
 
@@ -72,7 +72,7 @@ public enum RestfulClientMediaType {
             final EnumSet<SuppressionType> suppressionTypes) {
         var headerMap = _Maps.<String, String>newHashMap();
 
-        headerMap.put("profile", "urn:" + urn);
+        headerMap.put("profile", "\"urn:" + urn + "\"");
 
         toSuppressionLiteral(suppressionTypes)
         .ifPresent(suppress->headerMap.put("suppress", suppress));

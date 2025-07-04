@@ -60,7 +60,7 @@ public class TokenCache {
                 .param("client_secret", creds.clientSecret())
                 .param("grant_type", "client_credentials");
 
-        var invocation = invocationBuilder.buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        var invocation = invocationBuilder.buildPost(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED));
         var response = invocation.invoke();
 
         var entity = response.readEntity(String.class);

@@ -20,7 +20,7 @@ package org.apache.causeway.applib.services.acceptheader;
 
 import java.util.List;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 /**
  * This service simply exposes the HTTP `Accept` header to the domain.

@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
+import java.util.Collections;
+import java.util.List;
+
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -86,6 +89,10 @@ class ResourceContext_getArg_Test {
         Mockito
         .when(mockHttpServletRequest.getQueryString())
         .thenReturn("");
+
+        Mockito
+        .when(mockHttpServletRequest.getHeaderNames())
+        .thenReturn(Collections.enumeration(List.of()));
 
     }
 

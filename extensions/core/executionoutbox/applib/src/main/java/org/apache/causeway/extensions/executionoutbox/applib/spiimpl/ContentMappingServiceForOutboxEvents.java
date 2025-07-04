@@ -23,7 +23,7 @@ package org.apache.causeway.extensions.executionoutbox.applib.spiimpl;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.springframework.stereotype.Service;
 

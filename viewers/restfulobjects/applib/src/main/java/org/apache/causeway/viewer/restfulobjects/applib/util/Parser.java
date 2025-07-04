@@ -27,8 +27,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.ext.RuntimeDelegate;
+
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._NullSafe;

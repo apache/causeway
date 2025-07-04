@@ -65,9 +65,9 @@
 	    </dependency>
 	    <!-- provides MediaType for content negotiation -->
 	    <dependency>
-		    <groupId>jakarta.ws.rs</groupId>
-		    <artifactId>jakarta.ws.rs-api</artifactId>
-		</dependency>
+	        <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
 
         <!-- TEST -->
 

@@ -44,17 +44,19 @@ import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
+import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 @SpringBootTest(
         classes = {
                 JpaRestEndpointService.class,
                 CalendarEventSemantics.class // register semantics for testing
                 },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"causeway.viewer.restfulobjects.path-prefix=/restful"}
+)
 @Import({
     Configuration_usingJpa.class,
-    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
+    CausewayModuleViewerRestfulObjectsViewer.class
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@Disabled //TODO[causeway-regressiontests-CAUSEWAY-3866] not fully migrated from JDO to JPA yet

@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import org.springframework.http.HttpStatus;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
@@ -31,7 +33,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
@@ -93,7 +94,7 @@ public class ObjectActionArgHelper {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
-                    .createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
+                    .createWithBody(HttpStatus.BAD_REQUEST, arguments, reason);
             }
         });
 
@@ -109,7 +110,7 @@ public class ObjectActionArgHelper {
                 var reason = String.format("No argument found for (mandatory) parameter '%s'", paramId);
                 arguments.mapPutString("x-ro-invalidReason", reason);
                 throw RestfulObjectsApplicationException
-                    .createWithBody(RestfulResponse.HttpStatusCode.BAD_REQUEST, arguments, reason);
+                    .createWithBody(HttpStatus.BAD_REQUEST, arguments, reason);
             }
             argList.add(argRepr);
         }

@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
-import jakarta.ws.rs.core.CacheControl;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.http.CacheControl;
 
 public enum Caching {
 
@@ -28,13 +30,10 @@ public enum Caching {
 
     private final CacheControl cacheControl;
 
-    Caching(final int maxAge) {
-        this.cacheControl = new CacheControl();
-        if (maxAge > 0) {
-            cacheControl.setMaxAge(maxAge);
-        } else {
-            cacheControl.setNoCache(true);
-        }
+    Caching(final int maxAgeSeconds) {
+        this.cacheControl = maxAgeSeconds > 0
+            ? CacheControl.maxAge(maxAgeSeconds, TimeUnit.SECONDS)
+            : CacheControl.noCache();
     }
 
     public CacheControl getCacheControl() {

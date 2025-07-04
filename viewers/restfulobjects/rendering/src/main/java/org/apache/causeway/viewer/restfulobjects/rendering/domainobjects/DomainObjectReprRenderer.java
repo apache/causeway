@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
@@ -153,7 +154,7 @@ extends ReprRendererAbstract<ManagedObject> {
                         objectAdapter.objSpec())
                 .build()
                 .getString("href");
-        addMediaTypeParams(X_RO_DOMAIN_TYPE, domainTypeHref);
+        addMediaTypeParams(X_RO_DOMAIN_TYPE, _Strings.asDoubleQuoted.apply(domainTypeHref));
         return this;
     }
 

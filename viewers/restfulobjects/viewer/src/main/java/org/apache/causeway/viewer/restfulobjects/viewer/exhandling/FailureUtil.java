@@ -16,23 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.mappers;
+package org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
 
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 final class FailureUtil {
 
-    public static HttpStatusCode getFailureStatusCodeIfAny(final Throwable ex) {
+    public static HttpStatus getFailureStatusCodeIfAny(final Throwable ex) {
 
         return MethodFinder
             .publicOnly(ex.getClass(), Can.ofSingleton("getErrorCode"))
@@ -44,7 +44,7 @@ final class FailureUtil {
             .map(Optional::stream)
             .filter(Integer.class::isInstance)
             .map(Integer.class::cast)
-            .map(RestfulResponse.HttpStatusCode::statusFor)
+            .map(HttpStatus::valueOf)
             .orElse(null);
     }
 

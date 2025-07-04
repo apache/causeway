@@ -27,9 +27,11 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.ws.rs.core.Response;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
@@ -46,21 +48,17 @@ import lombok.extern.slf4j.Slf4j;
  * Configures the Restful Objects viewer to emit custom representations (rather than the
  * standard representations defined in the RO spec).
  *
- * <p>
- *     The default implementations ultimately generate representations according
- *     to the <a href="http://restfulobjects.org">Restful Objects spec</a> v1.0.
- *     It does this through a level of abstraction by delegating to
- *     implementations of the
- *     {@link org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService}
- *     SPI.  This provides a mechanism for altering representations according
- *     to the HTTP `Accept` header.
- * </p>
+ * <p>The default implementations ultimately generate representations according
+ * to the <a href="http://restfulobjects.org">Restful Objects spec</a> v1.0.
+ * It does this through a level of abstraction by delegating to
+ * implementations of the
+ * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService}
+ * SPI. This provides a mechanism for altering representations according
+ * to the HTTP `Accept` header.
  *
- * <p>
- * This interface is EXPERIMENTAL and may change in the future.
- * </p>
+ * <p>This interface is EXPERIMENTAL and may change in the future.
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
 @Service
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".RepresentationService")
@@ -76,7 +74,7 @@ public class RepresentationService {
     }
 
     /**
-     * As returned by {@link IResourceContext#getIntent()}, applies only to the representation of
+     * As returned by {@link IResourceContext#intent()}, applies only to the representation of
      * domain objects.
      */
     public enum Intent {
@@ -97,117 +95,97 @@ public class RepresentationService {
     /**
      * Returns a representation of a single object.
      *
-     * <p>
-     *     By default this representation is as per section 14.4 of the
-     *     RO spec, v1.0.
-     * </p>
+     * @apiNote By default this representation is as per section 14.4 of the RO spec, v1.0.
      */
-    public Response objectRepresentation(
+    public ResponseEntity<Object> objectRepresentation(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
 
-        final Response.ResponseBuilder responseBuilder = buildResponse(
+        final var response = buildResponse(
                 connegService -> connegService.buildResponse(resourceContext, objectAdapter));
 
-        assertContentNegotiationServiceHandled(responseBuilder);
-        return buildResponse(responseBuilder);
+        return assertContentNegotiationServiceHandled(response);
     }
 
     /**
      * Returns a representation of a single property of an object.
      *
-     * <p>
-     *     By default this representation is as per section 16.4 of the
-     *     RO spec, v1.0.
-     * </p>
+     * @apiNote By default this representation is as per section 16.4 of theRO spec, v1.0.
      */
-    public Response propertyDetails(
+    public ResponseEntity<Object> propertyDetails(
             final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty) {
 
-        final Response.ResponseBuilder responseBuilder = buildResponse(
+        final var response = buildResponse(
                 connegService -> connegService.buildResponse(resourceContext, objectAndProperty));
 
-        assertContentNegotiationServiceHandled(responseBuilder);
-        return buildResponse(responseBuilder);
+        return assertContentNegotiationServiceHandled(response);
     }
 
     /**
      * Returns a representation of a single collection of an object.
      *
-     * <p>
-     *     By default this representation is as per section 17.5 of the
-     *     RO spec, v1.0.
-     * </p>
+     * @apiNote By default this representation is as per section 17.5 of the RO spec, v1.0.
      */
-    public Response collectionDetails(
+    public ResponseEntity<Object> collectionDetails(
             final IResourceContext resourceContext,
             final ManagedCollection objectAndCollection) {
 
-        final Response.ResponseBuilder responseBuilder = buildResponse(
+        final var response = buildResponse(
                 connegService -> connegService.buildResponse(resourceContext, objectAndCollection));
 
-        assertContentNegotiationServiceHandled(responseBuilder);
-        return buildResponse(responseBuilder);
+        return assertContentNegotiationServiceHandled(response);
     }
 
     /**
      * Returns a representation of a single action (prompt) of an object.
      *
-     * <p>
-     *     By default this representation is as per section 18.2 of the
-     *     RO spec, v1.0.
-     * </p>
+     * @apiNote By default this representation is as per section 18.2 of the RO spec, v1.0.
      */
-    public Response actionPrompt(
+    public ResponseEntity<Object> actionPrompt(
             final IResourceContext resourceContext,
             final ManagedAction objectAndAction) {
 
-        final Response.ResponseBuilder responseBuilder = buildResponse(
+        final var response = buildResponse(
                 connegService -> connegService.buildResponse(resourceContext, objectAndAction));
 
-        assertContentNegotiationServiceHandled(responseBuilder);
-        return buildResponse(responseBuilder);
+        return assertContentNegotiationServiceHandled(response);
     }
 
     /**
      * Returns a representation of a single action invocation of an object.
      *
-     * <p>
-     *     By default this representation is as per section 19.5 of the
-     *     RO spec, v1.0.
-     * </p>
+     * @apiNote By default this representation is as per section 19.5 of the RO spec, v1.0.
      */
-    public Response actionResult(
+    public ResponseEntity<Object> actionResult(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        final Response.ResponseBuilder responseBuilder = buildResponse(
+        final var response = buildResponse(
                 connegService -> connegService.buildResponse(resourceContext, objectAndActionInvocation));
 
-        assertContentNegotiationServiceHandled(responseBuilder);
-        return buildResponse(responseBuilder);
+        return assertContentNegotiationServiceHandled(response);
     }
 
-    void assertContentNegotiationServiceHandled(final Response.ResponseBuilder responseBuilder) {
+    <T> ResponseEntity<T> assertContentNegotiationServiceHandled(final ResponseEntity<T> responseBuilder) {
         if (responseBuilder == null) {
-            throw new IllegalStateException("Could not locate " + ContentNegotiationService.class.getSimpleName() + " to handle request");
+            throw _Exceptions.illegalState("Could not locate %s to handle request",
+                ContentNegotiationService.class.getSimpleName());
         }
+        return responseBuilder;
     }
 
     /**
      * Iterates over all {@link #contentNegotiationServices injected} {@link ContentNegotiationService}s to find one
      * that returns a {@link Response.ResponseBuilder} using the provided function.
      *
-     * <p>
-     *     There will always be at least one such service, namely the
-     *     {@link ContentNegotiationServiceForRestfulObjectsV1_0}.
-     * </p>
+     * <p>There will always be at least one such service, namely the
+     * {@link ContentNegotiationServiceForRestfulObjectsV1_0}.
      *
      * @param connegServiceBuildResponse - the function to ask of the {@link ContentNegotiationService}.
      */
-    Response.ResponseBuilder buildResponse(
-            final Function<ContentNegotiationService, Response.ResponseBuilder> connegServiceBuildResponse) {
+    ResponseEntity<Object> buildResponse(
+            final Function<ContentNegotiationService,  ResponseEntity<Object>> connegServiceBuildResponse) {
 
         if(log.isDebugEnabled()) {
             log.debug("ContentNegotiationServices:\n{}", contentNegotiationServices.stream()
@@ -227,13 +205,6 @@ public class RepresentationService {
             }
         }
         return null;
-    }
-
-    /**
-     * Override to allow further customization.
-     */
-    protected Response buildResponse(final Response.ResponseBuilder responseBuilder) {
-        return responseBuilder.build();
     }
 
 }

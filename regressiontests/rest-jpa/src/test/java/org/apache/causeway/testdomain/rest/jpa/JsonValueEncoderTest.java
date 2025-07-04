@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.boot.test.context.SpringBootTest;
+
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -41,13 +42,13 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueConverter.Context;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
+import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 @SpringBootTest(classes={
         Configuration_headless.class,
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
+        CausewayModuleViewerRestfulObjectsViewer.class
 })
 class JsonValueEncoderTest {
 

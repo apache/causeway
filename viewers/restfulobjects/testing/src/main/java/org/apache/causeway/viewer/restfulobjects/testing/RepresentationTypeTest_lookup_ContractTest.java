@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.testing;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +53,7 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
 
     @Test
     public void whenUnknown() {
-        assertThat(RepresentationType.lookup(MediaType.APPLICATION_SVG_XML), is(RepresentationType.GENERIC));
+        assertThat(RepresentationType.lookup("application/svg+xml"), is(RepresentationType.GENERIC));
         assertThat(RepresentationType.lookup("foobar"), is(RepresentationType.GENERIC));
 
     }

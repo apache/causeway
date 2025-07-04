@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;

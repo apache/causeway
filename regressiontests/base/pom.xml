@@ -108,11 +108,11 @@
 			<type>pom</type>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-			<optional>true</optional>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.apache.causeway.viewer</groupId>-->
+<!--			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>-->
+<!--			<optional>true</optional>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-wicket-viewer</artifactId>

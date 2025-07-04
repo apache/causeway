@@ -42,7 +42,6 @@ module org.apache.causeway.core.config {
     requires jakarta.persistence;
     requires java.sql;
     requires jakarta.validation;
-    requires jakarta.ws.rs;
     requires jakarta.inject;
     requires org.hibernate.validator;
     requires spring.aop;

@@ -18,29 +18,21 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.homepage.HomePageResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+@RestController
 @Slf4j
 public class HomePageResourceServerside
 extends ResourceAbstract
@@ -52,10 +44,7 @@ implements HomePageResource {
     }
 
     @Override
-    @Produces({
-        MediaType.APPLICATION_JSON,
-        RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    public Response homePage() {
+    public ResponseEntity<Object> homePage() {
 
         var resourceContext = createResourceContext(
                 RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
@@ -64,43 +53,40 @@ implements HomePageResource {
         homePageReprRenderer.includesSelf();
 
         return _EndpointLogging.response(log, "GET /",
-                Responses.ofOk(homePageReprRenderer, Caching.ONE_DAY).build());
+            responseFactory.ok(homePageReprRenderer, Caching.ONE_DAY));
     }
 
     @Override
-    public Response deleteHomePageNotAllowed() {
+    public ResponseEntity<Object> deleteHomePageNotAllowed() {
         throw _EndpointLogging.error(log, "DELETE /",
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting the home page resource is not allowed."));
     }
 
     @Override
-    public Response putHomePageNotAllowed() {
+    public ResponseEntity<Object> putHomePageNotAllowed() {
         throw _EndpointLogging.error(log, "PUT /",
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Putting to the home page resource is not allowed."));
     }
 
     @Override
-    public Response postHomePageNotAllowed() {
+    public ResponseEntity<Object> postHomePageNotAllowed() {
         throw _EndpointLogging.error(log, "POST /",
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Posting to the home page resource is not allowed."));
     }
 
     @Override
-    @GET
-    @Path("/notAuthenticated")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response notAuthenticated() {
+    public ResponseEntity<Object> notAuthenticated() {
         throw _EndpointLogging.error(log, "GET /notAuthenticated",
-                RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED));
+                RestfulObjectsApplicationException.create(HttpStatus.UNAUTHORIZED));
     }
 
 }

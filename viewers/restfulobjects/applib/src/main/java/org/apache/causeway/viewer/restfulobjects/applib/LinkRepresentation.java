@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -81,7 +81,7 @@ public final class LinkRepresentation extends JsonRepresentation {
     public MediaType getType() {
         final String typeStr = asObjectNode().path("type").textValue();
         if (typeStr == null) {
-            return MediaType.APPLICATION_JSON_TYPE;
+            return MediaType.APPLICATION_JSON;
         }
         return MediaType.valueOf(typeStr);
     }

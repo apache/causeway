@@ -72,7 +72,10 @@ import lombok.SneakyThrows;
         classes = {
                 CausewayViewerRestfulObjectsIntegTestManifest.class,
         },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "causeway.viewer.restfulobjects.path-prefix=/restful"
+        }
 )
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

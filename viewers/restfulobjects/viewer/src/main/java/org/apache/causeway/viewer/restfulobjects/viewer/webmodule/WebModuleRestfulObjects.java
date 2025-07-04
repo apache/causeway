@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule;
+package org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -35,8 +35,6 @@ import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
-import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
-
 import lombok.Getter;
 
 /**
@@ -44,7 +42,7 @@ import lombok.Getter;
  *
  * @since 2.0 {@index}
  *
- * @implNote CDI feels responsible to resolve injection points for any Servlet or Filter
+ * @implNote CDI resolves injection points for any Servlet or Filter
  * we register programmatically on the ServletContext.
  * As long as injection points are considered to be resolved by Spring, we can workaround this fact:
  * By replacing annotations {@code @Inject} with {@code @Autowire} for any Servlet or Filter,
@@ -53,10 +51,10 @@ import lombok.Getter;
  */
 @Service
 //CAUTION: SwaggerServiceMenu refers to this name
-@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleJaxrsRestEasy")
+@Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".WebModuleRestfulObjects")
 @jakarta.annotation.Priority(PriorityPrecedence.MIDPOINT - 80)
-@Qualifier("JaxrsRestEasy")
-public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
+@Qualifier("RestfulObjects")
+public final class WebModuleRestfulObjects extends WebModuleAbstract {
 
     private static final String INTERACTION_FILTER_NAME = "CausewayRestfulObjectsInteractionFilter";
 
@@ -67,7 +65,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     private final String urlPattern;
 
     @Inject
-    public WebModuleJaxrsResteasy(
+    public WebModuleRestfulObjects(
             final CausewayConfiguration causewayConfiguration,
             final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
@@ -79,7 +77,7 @@ public final class WebModuleJaxrsResteasy extends WebModuleAbstract {
     }
 
     @Getter
-    private final String name = "JaxrsRestEasy";
+    private final String name = "RestfulObjects";
 
     @Override
     public void prepare(final WebModuleContext ctx) {

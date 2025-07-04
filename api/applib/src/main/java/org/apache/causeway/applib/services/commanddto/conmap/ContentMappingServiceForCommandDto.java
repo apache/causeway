@@ -23,7 +23,7 @@ import java.util.List;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.jspecify.annotations.Nullable;

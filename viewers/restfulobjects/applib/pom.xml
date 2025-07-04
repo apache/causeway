@@ -17,7 +17,9 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,12 +28,14 @@
         <version>${revision}</version>
     </parent>
 
-	<artifactId>causeway-viewer-restfulobjects-applib</artifactId>
-	<name>Apache Causeway Viewer - RO (AppLib)</name>
+    <artifactId>causeway-viewer-restfulobjects-applib</artifactId>
+    <name>Apache Causeway Viewer - RO (AppLib)</name>
 
     <properties>
-        <jar-plugin.automaticModuleName>org.apache.causeway.viewer.restfulobjects.applib</jar-plugin.automaticModuleName>
-        <git-plugin.propertiesDir>org/apache/causeway/viewer/restfulobjects/applib</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>
+            org.apache.causeway.viewer.restfulobjects.applib</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>
+            org/apache/causeway/viewer/restfulobjects/applib</git-plugin.propertiesDir>
     </properties>
 
     <dependencies>
@@ -40,10 +44,21 @@
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-applib</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.causeway.commons</groupId>
             <artifactId>causeway-commons</artifactId>
+        </dependency>
+
+<!--        TODO CAUSEWAY-3892 should no longer be required-->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
 
         <dependency>

@@ -18,9 +18,11 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -40,7 +42,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleViewerRestfulObjectsApplib.class,
@@ -67,4 +69,9 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 public class CausewayModuleRestfulObjectsRendering {
 
     public static final String NAMESPACE = "causeway.viewer.roRendering";
+
+    @Bean
+    ResponseFactory responseFactory(MetaModelContext mmc) {
+        return new ResponseFactory(mmc);
+    }
 }

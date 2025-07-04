@@ -47,7 +47,9 @@ import org.apache.causeway.viewer.restfulobjects.test.domain.dom.StaffMemberRepo
         UniversityModule.class,
         CausewayModulePersistenceJpaEclipselink.class,
 })
-@TestPropertySource(properties = "logging.level.org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault=DEBUG")
+@TestPropertySource(properties = {
+        "logging.level.org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault=DEBUG",
+        "logging.level.org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside=DEBUG"})
 @DirtiesContext
 public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsIntegTestAbstract {
 

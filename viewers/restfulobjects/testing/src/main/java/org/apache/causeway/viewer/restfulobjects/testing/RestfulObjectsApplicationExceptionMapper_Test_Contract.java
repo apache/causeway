@@ -18,8 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.testing;
 
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.Response;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,48 +29,44 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.causeway.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
+import org.apache.causeway.viewer.restfulobjects.viewer.exhandling.ExceptionResponseFactory;
 
 /**
  * contract test.
  */
 public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
-    private ExceptionMapperForRestfulObjectsApplication exceptionMapper;
+    private ExceptionResponseFactory exceptionMapper;
 
-    HttpHeaders mockHttpHeaders = Mockito.mock(HttpHeaders.class);
+    final HttpHeaders mockHttpHeaders = Mockito.mock(HttpHeaders.class);
 
     @BeforeEach
     public void setUp() throws Exception {
-        /*sonar-ignore-on*/
-        exceptionMapper = new ExceptionMapperForRestfulObjectsApplication() {
-            {
-                httpHeaders = mockHttpHeaders;
-            }
-        };
-        /*sonar-ignore-off*/
+        exceptionMapper = new ExceptionResponseFactory(List.of());
     }
 
     @Test
     public void simpleNoMessage() throws Exception {
 
         // given
-        final HttpStatusCode status = HttpStatusCode.BAD_REQUEST;
+        final var status = HttpStatus.BAD_REQUEST;
         final RestfulObjectsApplicationException ex = RestfulObjectsApplicationException.create(status);
 
         // when
-        final Response response = exceptionMapper.toResponse(ex);
+        var response = exceptionMapper.buildResponse(ex, mockHttpHeaders);
 
         // then
-        assertThat(HttpStatusCode.lookup(response.getStatus()), is(status));
-        assertThat(response.getMetadata().get("Warning"), is(nullValue()));
+        assertThat(HttpStatus.valueOf(response.getStatusCode().value()), is(status));
+        assertThat(response.getHeaders().get("Warning"), is(nullValue()));
 
         // and then
-        final String entity = (String) response.getEntity();
+        final String entity = (String) response.getBody();
         assertThat(entity, is(not(nullValue())));
     }
 
@@ -80,16 +75,16 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
 
         // givens
         final RestfulObjectsApplicationException ex =
-                RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "foobar");
+                RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST, "foobar");
 
         // when
-        final Response response = exceptionMapper.toResponse(ex);
+        var response = exceptionMapper.buildResponse(ex, mockHttpHeaders);
 
         // then
-        assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects " + ex.getMessage()));
+        assertThat(response.getHeaders().get("Warning").get(0), is("199 RestfulObjects " + ex.getMessage()));
 
         // and then
-        final String entity = (String) response.getEntity();
+        final String entity = (String) response.getBody();
         assertThat(entity, is(not(nullValue())));
     }
 
@@ -99,16 +94,16 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
         // given
         final Exception exception = new Exception("barfoo");
         final RestfulObjectsApplicationException ex =
-                RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, exception, "foobar");
+                RestfulObjectsApplicationException.createWithCauseAndMessage(HttpStatus.BAD_REQUEST, exception, "foobar");
 
         // when
-        final Response response = exceptionMapper.toResponse(ex);
-        final String entity = (String) response.getEntity();
+        var response = exceptionMapper.buildResponse(ex, mockHttpHeaders);
+        final String entity = (String) response.getBody();
         assertThat(entity, is(not(nullValue())));
         final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
 
         // then
-        assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
+        assertThat(response.getHeaders().get("Warning").get(0), is("199 RestfulObjects foobar"));
         assertThat(jsonRepr.getString("message"), is("foobar"));
         final JsonRepresentation causedByRepr = jsonRepr.getRepresentation("causedBy");
         assertThat(causedByRepr, is(nullValue()));
@@ -120,16 +115,16 @@ public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
         // given
         var cause = new Exception("barfoo", new Exception("root-cause-message"));
         var ex = RestfulObjectsApplicationException
-                .createWithCauseAndMessage(HttpStatusCode.BAD_REQUEST, cause, "foobar");
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, cause, "foobar");
 
         // when
-        final Response response = exceptionMapper.toResponse(ex);
-        final String entity = (String) response.getEntity();
+        var response = exceptionMapper.buildResponse(ex, mockHttpHeaders);
+        final String entity = (String) response.getBody();
         assertThat(entity, is(not(nullValue())));
         final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
 
         // then
-        assertThat((String) response.getMetadata().get("Warning").get(0), is("199 RestfulObjects foobar"));
+        assertThat(response.getHeaders().get("Warning").get(0), is("199 RestfulObjects foobar"));
         assertThat(jsonRepr.getString("message"), is("foobar"));
         var detailJson = jsonRepr.getRepresentation("detail");
         assertThat(detailJson, is(not(nullValue())));

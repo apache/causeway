@@ -17,18 +17,18 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.restfulobjects.applib {
-    exports org.apache.causeway.viewer.restfulobjects.applib.homepage;
-    exports org.apache.causeway.viewer.restfulobjects.applib.errors;
-    exports org.apache.causeway.viewer.restfulobjects.applib.util;
+    exports org.apache.causeway.viewer.restfulobjects.applib;
+    exports org.apache.causeway.viewer.restfulobjects.applib.boot;
     exports org.apache.causeway.viewer.restfulobjects.applib.domaintypes;
     exports org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
-    exports org.apache.causeway.viewer.restfulobjects.applib.version;
-    exports org.apache.causeway.viewer.restfulobjects.applib.boot;
-    exports org.apache.causeway.viewer.restfulobjects.applib;
+    exports org.apache.causeway.viewer.restfulobjects.applib.dtos;
+    exports org.apache.causeway.viewer.restfulobjects.applib.errors;
     exports org.apache.causeway.viewer.restfulobjects.applib.health;
+    exports org.apache.causeway.viewer.restfulobjects.applib.homepage;
     exports org.apache.causeway.viewer.restfulobjects.applib.menubars;
     exports org.apache.causeway.viewer.restfulobjects.applib.user;
-    exports org.apache.causeway.viewer.restfulobjects.applib.dtos;
+    exports org.apache.causeway.viewer.restfulobjects.applib.util;
+    exports org.apache.causeway.viewer.restfulobjects.applib.version;
 
     requires static lombok;
 
@@ -40,5 +40,6 @@ module org.apache.causeway.viewer.restfulobjects.applib {
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;
+    requires spring.web;
     requires com.fasterxml.jackson.datatype.jsr310;
 }

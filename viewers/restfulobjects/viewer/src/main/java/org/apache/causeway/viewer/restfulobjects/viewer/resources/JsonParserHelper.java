@@ -21,11 +21,12 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.http.HttpStatus;
+
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderService;
@@ -64,7 +65,8 @@ public class JsonParserHelper {
     ManagedObject parseAsMapWithSingleValue(final JsonRepresentation arguments) {
         final JsonRepresentation representation = arguments.getRepresentation("value");
         if (arguments.size() != 1 || representation == null) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "Body should be a map with a single key 'value' whose value represents an instance of type '%s'", resourceFor(objectSpec));
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST,
+                "Body should be a map with a single key 'value' whose value represents an instance of type '%s'".formatted(resourceFor(objectSpec)));
         }
 
         return objectAdapterFor(arguments);

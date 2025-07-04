@@ -56,8 +56,6 @@ import org.apache.causeway.extensions.executionoutbox.restclient.api.OutboxClien
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.security.bypass.CausewayModuleSecurityBypass;
 import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixturesApplib;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 @SpringBootTest(
@@ -73,8 +71,8 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
                 //CausewayModuleViewerRestfulObjectsJaxrsResteasy.class, // replaced
                 SpringBeanProcessorRegressionWorkaround.class,
                 CausewayModuleViewerRestfulObjectsViewer.class,
-                WebModuleJaxrsResteasy.class,
-                RestfulObjectsJaxbWriterForXml.class,
+                //WebModuleJaxrsResteasy.class,
+                //RestfulObjectsJaxbWriterForXml.class,
                 // ---
 
                 CausewayModuleCoreWebapp.class,
