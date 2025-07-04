@@ -16,25 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.mappers;
+package org.apache.causeway.viewer.restfulobjects.viewer.util;
 
-import jakarta.inject.Singleton;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.Provider;
+import java.util.Enumeration;
 
-import org.springframework.stereotype.Component;
+import jakarta.servlet.http.HttpServletRequest;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.springframework.http.HttpHeaders;
 
-@Component
-@Provider
-@Singleton
-@jakarta.annotation.Priority(PriorityPrecedence.LATE)
-public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<RuntimeException> {
+import lombok.experimental.UtilityClass;
 
-    @Override
-    public Response toResponse(final RuntimeException ex) {
-        return buildResponse(ex);
+@UtilityClass
+public class RequestHeaderUtil {
+
+    public HttpHeaders httpHeadersFromServletRequest(HttpServletRequest request) {
+        var headers = new HttpHeaders();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement();
+            Enumeration<String> values = request.getHeaders(name);
+            while (values.hasMoreElements()) {
+                headers.add(name, values.nextElement());
+            }
+        }
+        return headers;
     }
-
 }

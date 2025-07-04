@@ -19,15 +19,18 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -42,7 +45,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.UrlDecoderUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -51,6 +54,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 public abstract class ResourceAbstract
 implements HasMetaModelContext {
@@ -58,11 +62,11 @@ implements HasMetaModelContext {
     @Getter(onMethod_={@Override})
     @Autowired protected MetaModelContext metaModelContext;
     @Autowired protected WebAppContextPath webAppContextPath;
+    @Autowired protected ResponseFactory responseFactory;
 
-    @Autowired ServletWebRequest servletWebRequest;
-
-    @Deprecated @Autowired HttpServletRequest httpServletRequest;
-    @Deprecated @Autowired HttpServletResponse httpServletResponse;
+    @Autowired protected HttpServletRequest httpServletRequest;
+    @Autowired protected HttpServletResponse httpServletResponse;
+    @Value("${causeway.viewer.restfulobjects.path-prefix}") String restfulPath;
 
     protected ResourceAbstract() {
     }
@@ -94,18 +98,17 @@ implements HasMetaModelContext {
             final RequestParams requestParams) {
 
         if (!getInteractionService().isInInteraction()) {
-            throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
+            throw RestfulObjectsApplicationException.create(HttpStatus.UNAUTHORIZED);
         }
 
-        var reqUrl = servletWebRequest.getRequest().getRequestURL().toString();
+        var requestUrl = parseUrl(httpServletRequest.getRequestURL().toString());
 
         // eg. http://localhost:8080/ctx/restful/
         final String restfulAbsoluteBase = getConfiguration().getViewer().getRestfulobjects().getBaseUri()
-            //.orElseGet(()->uriInfo.getBaseUri().toString()) //FIXME[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3892]
-            .orElseGet(()->"TODO");
+            .orElseGet(()->restfulAbsoluteBase(requestUrl));
 
         // eg. /ctx/restful/
-        var restfulRelativeBase = "TODO"; //uriInfo.getBaseUri().getRawPath();
+        var restfulRelativeBase = requestUrl.getPath();
 
         // eg. http://localhost:8080/
         var serverAbsoluteBase =
@@ -148,12 +151,23 @@ implements HasMetaModelContext {
                 .filter(_Predicates.not(ManagedObjects::isNullOrUnspecifiedOrEmpty))
                 .orElseThrow(()->onRoException.apply(
                         RestfulObjectsApplicationException
-                                .createWithMessage(HttpStatusCode.NOT_FOUND,
-                                        "Could not determine adapter for bookmark: '%s'",
-                                        bookmark)));
+                                .createWithMessage(HttpStatus.NOT_FOUND,
+                                        "Could not determine adapter for bookmark: '%s'".formatted(bookmark))));
     }
 
     // -- HELPER
+
+    @SneakyThrows
+    private URL parseUrl(String url) {
+        return new URL(url);
+    }
+
+    /** if not configured can be re-constructed */
+    @SneakyThrows
+    private String restfulAbsoluteBase(URL requestUrl) {
+        var base = webAppContextPath.prependContextPath(restfulPath);
+        return new URL(requestUrl.getProtocol(), requestUrl.getHost(), requestUrl.getPort(), base).toExternalForm();
+    }
 
     private String getUrlDecodedQueryStringIfAny() {
         final String queryStringIfAny = httpServletRequest.getQueryString();

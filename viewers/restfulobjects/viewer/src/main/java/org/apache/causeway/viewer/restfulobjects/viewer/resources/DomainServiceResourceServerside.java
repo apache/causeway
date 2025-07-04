@@ -20,21 +20,16 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.io.InputStream;
 
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Response;
-
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
@@ -44,8 +39,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescri
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Path("/services")
+@RestController
 @Slf4j
 public class DomainServiceResourceServerside
 extends ResourceAbstract
@@ -57,13 +51,7 @@ implements DomainServiceResource {
     }
 
     @Override
-//    @GET
-//    @Path("/")
-//    @Produces({
-//        MediaType.APPLICATION_JSON,
-//        RestfulMediaType.APPLICATION_JSON_LIST,
-//        RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response services() {
+    public ResponseEntity<Object> services() {
 
         var resourceContext = createResourceContext(
                 RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
@@ -76,47 +64,41 @@ implements DomainServiceResource {
             .with(resourceContext.streamServiceAdapters());
 
         return _EndpointLogging.response(log, "GET /services/",
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+                responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
     @Override
-    public Response deleteServicesNotAllowed() {
+    public ResponseEntity<Object> deleteServicesNotAllowed() {
         throw _EndpointLogging.error(log, "DELETE /services",
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting the services resource is not allowed."));
     }
 
     @Override
-    public Response putServicesNotAllowed() {
+    public ResponseEntity<Object> putServicesNotAllowed() {
         throw _EndpointLogging.error(log, "PUT /services",
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Putting to the services resource is not allowed."));
     }
 
     @Override
-    public Response postServicesNotAllowed() {
+    public ResponseEntity<Object> postServicesNotAllowed() {
         throw _EndpointLogging.error(log, "POST /services",
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Posting to the services resource is not allowed."));
     }
 
     // DOMAIN SERVICE
 
     @Override
-//    @GET
-//    @Path("/{serviceId}")
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-    public Response service(
-            @PathParam("serviceId") final String serviceId) {
+    public ResponseEntity<Object> service(
+            final String serviceId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS,
@@ -131,57 +113,45 @@ implements DomainServiceResource {
             .includesSelf();
 
         return _EndpointLogging.response(log, "GET /services/{}", serviceId,
-                Responses.ofOk(renderer, Caching.ONE_DAY).build());
+                responseFactory.ok(renderer, Caching.ONE_DAY));
     }
 
-//    @DELETE
-//    @Path("/{serviceId}")
     @Override
-    public Response deleteServiceNotAllowed(
-            @PathParam("serviceId") final String serviceId) {
+    public ResponseEntity<Object> deleteServiceNotAllowed(
+            final String serviceId) {
         throw _EndpointLogging.error(log, "DELETE /services/{}", serviceId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting a service resource is not allowed."));
     }
 
-//    @PUT
-//    @Path("/{serviceId}")
     @Override
-    public Response putServiceNotAllowed(
-            @PathParam("serviceId") final String serviceId) {
+    public ResponseEntity<Object> putServiceNotAllowed(
+            final String serviceId) {
         throw _EndpointLogging.error(log, "PUT /services/{}", serviceId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Putting to a service resource is not allowed."));
     }
 
-//    @POST
-//    @Path("/{serviceId}")
     @Override
-    public Response postServiceNotAllowed(
-            @PathParam("serviceId") final String serviceId) {
+    public ResponseEntity<Object> postServiceNotAllowed(
+            final String serviceId) {
         throw _EndpointLogging.error(log, "POST /services/{}", serviceId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Posting to a service resource is not allowed."));
     }
 
     // DOMAIN SERVICE ACTION
 
     @Override
-//    @GET
-//    @Path("/{serviceId}/actions/{actionId}")
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-    public Response actionPrompt(
-            @PathParam("serviceId") final String serviceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> actionPrompt(
+            final String serviceId,
+            final String actionId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS,
@@ -193,58 +163,46 @@ implements DomainServiceResource {
                 domainResourceHelper.actionPrompt(actionId));
     }
 
-//    @DELETE
-//    @Path("/{serviceId}/actions/{actionId}")
     @Override
-    public Response deleteActionPromptNotAllowed(
-            @PathParam("serviceId") final String serviceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> deleteActionPromptNotAllowed(
+            final String serviceId,
+            final String actionId) {
         throw _EndpointLogging.error(log, "DELETE /services/{}/actions/{}", serviceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting action prompt resource is not allowed."));
     }
 
-//    @PUT
-//    @Path("/{serviceId}/actions/{actionId}")
     @Override
-    public Response putActionPromptNotAllowed(
-            @PathParam("serviceId") final String serviceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> putActionPromptNotAllowed(
+            final String serviceId,
+            final String actionId) {
         throw _EndpointLogging.error(log, "PUT /services/{}/actions/{}", serviceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Putting to an action prompt resource is not allowed."));
     }
 
-//    @POST
-//    @Path("/{serviceId}/actions/{actionId}")
     @Override
-    public Response postActionPromptNotAllowed(
-            @PathParam("serviceId") final String serviceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> postActionPromptNotAllowed(
+            final String serviceId,
+            final String actionId) {
         throw _EndpointLogging.error(log, "POST /services/{}/actions/{}", serviceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                        HttpStatus.METHOD_NOT_ALLOWED,
                         "Posting to an action prompt resource is not allowed."));
     }
 
     // DOMAIN SERVICE ACTION INVOKE
 
     @Override
-//    @GET
-//    @Path("/{serviceId}/actions/{actionId}/invoke")
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-    public Response invokeActionQueryOnly(
-            final @PathParam("serviceId") String serviceId,
-            final @PathParam("actionId") String actionId,
-            final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
+    public ResponseEntity<Object> invokeActionQueryOnly(
+            final String serviceId,
+            final String actionId,
+            final String xCausewayUrlEncodedQueryString) {
 
         final String urlUnencodedQueryString = UrlUtils.urlDecodeUtf8(
                 xCausewayUrlEncodedQueryString != null
@@ -264,16 +222,9 @@ implements DomainServiceResource {
     }
 
     @Override
-//    @PUT
-//    @Path("/{serviceId}/actions/{actionId}/invoke")
-//    //@Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-    public Response invokeActionIdempotent(
-            final @PathParam("serviceId") String serviceId,
-            final @PathParam("actionId") String actionId,
+    public ResponseEntity<Object> invokeActionIdempotent(
+            final String serviceId,
+            final String actionId,
             final InputStream body) {
 
         var resourceContext = createResourceContext(
@@ -290,16 +241,9 @@ implements DomainServiceResource {
     }
 
     @Override
-//    @POST
-//    @Path("/{serviceId}/actions/{actionId}/invoke")
-//    //@Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-    public Response invokeAction(
-            @PathParam("serviceId") final String serviceId,
-            @PathParam("actionId") final String actionId,
+    public ResponseEntity<Object> invokeAction(
+            final String serviceId,
+            final String actionId,
             final InputStream body) {
 
         var resourceContext = createResourceContext(
@@ -315,16 +259,14 @@ implements DomainServiceResource {
                 domainResourceHelper.invokeAction(actionId, arguments));
     }
 
-//    @DELETE
-//    @Path("/{serviceId}/actions/{actionId}/invoke")
     @Override
-    public Response deleteInvokeActionNotAllowed(
-            @PathParam("serviceId") final String serviceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> deleteInvokeActionNotAllowed(
+            final String serviceId,
+            final String actionId) {
         throw _EndpointLogging.error(log, "DELETE /services/{}/actions/{}/invoke", serviceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                    HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting an action invocation resource is not allowed."));
     }
 

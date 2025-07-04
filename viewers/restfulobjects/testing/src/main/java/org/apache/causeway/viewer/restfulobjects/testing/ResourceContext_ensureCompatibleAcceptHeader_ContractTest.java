@@ -138,7 +138,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         try {
             instantiateResourceContext(representationType);
         } catch(RestfulObjectsApplicationException ex ) {
-            assertThat(ex.getHttpStatusCode(), is(HttpStatusCode.NOT_ACCEPTABLE));
+            assertThat(ex.httpStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
         }
     }
 
@@ -150,7 +150,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         try {
             instantiateResourceContext(representationType);
         } catch(RestfulObjectsApplicationException ex ) {
-            assertThat(ex.getHttpStatusCode(), is(HttpStatusCode.NOT_ACCEPTABLE));
+            assertThat(ex.httpStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
         }
     }
 
@@ -162,7 +162,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         try {
             instantiateResourceContext(representationType);
         } catch(RestfulObjectsApplicationException ex ) {
-            assertThat(ex.getHttpStatusCode(), is(HttpStatusCode.NOT_ACCEPTABLE));
+            assertThat(ex.httpStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
         }
     }
 

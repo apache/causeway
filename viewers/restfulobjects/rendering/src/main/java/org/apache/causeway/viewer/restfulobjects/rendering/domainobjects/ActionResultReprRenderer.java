@@ -77,8 +77,9 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
         return this;
     }
 
-    public void using(final ObjectAdapterLinkTo adapterLinkTo) {
+    public ActionResultReprRenderer using(final ObjectAdapterLinkTo adapterLinkTo) {
         this.adapterLinkTo = adapterLinkTo.with(objectAdapter);
+        return this;
     }
 
     @Override

@@ -20,36 +20,35 @@ package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.InputStream;
 
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.QueryParam;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import jakarta.ws.rs.core.Response;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@RequestMapping("${roPrefix}/services")
+@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/services")
 public interface DomainServiceResource {
 
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public Response services();
+    public ResponseEntity<Object> services();
 
     @DeleteMapping
-    public Response deleteServicesNotAllowed();
+    public ResponseEntity<Object> deleteServicesNotAllowed();
 
     @PutMapping
-    public Response putServicesNotAllowed();
+    public ResponseEntity<Object> putServicesNotAllowed();
 
     @PostMapping
-    public Response postServicesNotAllowed();
+    public ResponseEntity<Object> postServicesNotAllowed();
 
     // -- DOMAIN SERVICE
 
@@ -59,16 +58,16 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response service(@PathParam("serviceId") final String serviceId);
+    public ResponseEntity<Object> service(@PathVariable String serviceId);
 
     @DeleteMapping(path = "/{serviceId}")
-    public Response deleteServiceNotAllowed(@PathParam("serviceId") final String serviceId);
+    public ResponseEntity<Object> deleteServiceNotAllowed(@PathVariable String serviceId);
 
     @PutMapping(path = "/{serviceId}")
-    public Response putServiceNotAllowed(@PathParam("serviceId") final String serviceId);
+    public ResponseEntity<Object> putServiceNotAllowed(@PathVariable String serviceId);
 
     @PostMapping(path = "/{serviceId}")
-    public Response postServiceNotAllowed(@PathParam("serviceId") final String serviceId);
+    public ResponseEntity<Object> postServiceNotAllowed(@PathVariable String serviceId);
 
     // -- DOMAIN SERVICE ACTION
 
@@ -78,16 +77,16 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+    public ResponseEntity<Object> actionPrompt(@PathVariable String serviceId, @PathVariable String actionId);
 
     @DeleteMapping(path = "/{serviceId}/actions/{actionId}")
-    public Response deleteActionPromptNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+    public ResponseEntity<Object> deleteActionPromptNotAllowed(@PathVariable String serviceId, @PathVariable String actionId);
 
     @PutMapping(path = "/{serviceId}/actions/{actionId}")
-    public Response putActionPromptNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+    public ResponseEntity<Object> putActionPromptNotAllowed(@PathVariable String serviceId, @PathVariable String actionId);
 
     @PostMapping(path = "/{serviceId}/actions/{actionId}")
-    public Response postActionPromptNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+    public ResponseEntity<Object> postActionPromptNotAllowed(@PathVariable String serviceId, @PathVariable String actionId);
 
     // -- DOMAIN SERVICE ACTION INVOKE
 
@@ -103,7 +102,7 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeActionQueryOnly(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, @QueryParam("x-causeway-querystring") final String xCausewayQueryString);
+    public ResponseEntity<Object> invokeActionQueryOnly(@PathVariable String serviceId, @PathVariable String actionId, @RequestParam("x-causeway-querystring") String xCausewayQueryString);
 
     @PutMapping(
         path = "/{serviceId}/actions/{actionId}/invoke",
@@ -111,15 +110,15 @@ public interface DomainServiceResource {
             MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeActionIdempotent(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);
+    public ResponseEntity<Object> invokeActionIdempotent(@PathVariable String serviceId, @PathVariable String actionId, InputStream arguments);
 
     @PostMapping(path = "/{serviceId}/actions/{actionId}/invoke",
         produces = {
             MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream arguments);
+    public ResponseEntity<Object> invokeAction(@PathVariable String serviceId, @PathVariable String actionId, InputStream arguments);
 
     @DeleteMapping(path = "/{serviceId}/actions/{actionId}/invoke")
-    public Response deleteInvokeActionNotAllowed(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
+    public ResponseEntity<Object> deleteInvokeActionNotAllowed(@PathVariable String serviceId, @PathVariable String actionId);
 }

@@ -22,8 +22,10 @@ import java.util.List;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -33,8 +35,6 @@ import org.apache.causeway.applib.services.conmap.ContentMappingService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
@@ -66,10 +66,11 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     @Inject private List<ContentMappingService> contentMappingServices;
 
     /**
-     * search for an accept header in form <code>application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
+     * search for an accept header in form
+     * <code>application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
 
@@ -99,10 +100,11 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
     }
 
     /**
-     * search for an accept header in form <code>application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
+     * search for an accept header in form
+     * <code>application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto</code>
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
@@ -115,12 +117,12 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
 
         final Object domainObject = returnedObjectOf(objectAndActionInvocation);
         if(domainObject == null) {
-            throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
+            throw RestfulObjectsApplicationException.create(HttpStatus.NOT_FOUND);
         }
         return buildResponse(resourceContext, domainObject, representationType);
     }
 
-    protected Response.ResponseBuilder buildResponse(
+    protected ResponseEntity<Object> buildResponse(
             final IResourceContext renderContext,
             final Object domainObject,
             final RepresentationType representationType) {
@@ -143,7 +145,7 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
             ensureJaxbAnnotated(mappedDomainObject.getClass());
         }
 
-        return Response.ok(mappedDomainObject, MediaTypes.toJakarta(mediaType));
+        return responseFactory.ok(mappedDomainObject, mediaType);
     }
 
     /**

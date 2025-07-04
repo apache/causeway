@@ -28,10 +28,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.http.HttpStatus;
+
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 
@@ -70,7 +71,7 @@ public record RequestParams(
             return _Strings.ofBytes(_Bytes.of(body), StandardCharsets.UTF_8);
         } catch (final IOException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read body");
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not read body");
         }
     }
 
@@ -90,18 +91,18 @@ public record RequestParams(
             final JsonRepresentation jsonRepr = JsonMapper.instance().read(rawArgs);
             if (!jsonRepr.isMap()) {
                 throw RestfulObjectsApplicationException
-                .createWithMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, "could not read %s as a JSON map", argsNature);
+                .createWithMessage(HttpStatus.BAD_REQUEST, "could not read %s as a JSON map".formatted(argsNature));
             }
             return jsonRepr;
         } catch (final JsonParseException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not parse %s".formatted(argsNature));
         } catch (final JsonMappingException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read %s as JSON", argsNature);
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not read %s as JSON".formatted(argsNature));
         } catch (final IOException e) {
             throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not parse %s", argsNature);
+                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not parse %s".formatted(argsNature));
         }
 
     }

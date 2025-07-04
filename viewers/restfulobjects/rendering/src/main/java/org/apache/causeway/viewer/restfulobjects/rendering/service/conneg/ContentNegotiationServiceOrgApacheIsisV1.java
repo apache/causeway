@@ -21,11 +21,10 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
 import java.util.List;
 
 import jakarta.inject.Named;
-import org.springframework.http.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.ResponseBuilder;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -35,7 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,35 +53,35 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     public static final String ACCEPT_PROFILE = "urn:org.apache.isis/v1";
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
         return whenV1ThenNotImplemented(resourceContext);
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty)  {
         return whenV1ThenNotImplemented(resourceContext);
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedCollection managedCollection) {
         return whenV1ThenNotImplemented(resourceContext);
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedAction objectAndAction)  {
         return whenV1ThenNotImplemented(resourceContext);
     }
 
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return whenV1ThenNotImplemented(resourceContext);
@@ -95,14 +94,14 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
 
-    private ResponseBuilder whenV1ThenNotImplemented(final IResourceContext resourceContext) {
+    private ResponseEntity<Object> whenV1ThenNotImplemented(final IResourceContext resourceContext) {
         if(!canAccept(resourceContext)) {
             return null;
         }
         log.warn("profile '{}' is no longer supported use '{}' instead",
                 ACCEPT_PROFILE,
                 ContentNegotiationServiceOrgApacheCausewayV2.ACCEPT_PROFILE);
-        return Responses.ofNotImplemented();
+        return ResponseFactory.notImplemented();
     }
 
 }

@@ -18,75 +18,68 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.domaintypes;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
 import org.springframework.http.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/domain-types")
+@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/domain-types")
 public interface DomainTypeResource {
 
-    @GET
-    @Path("/")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
-    public abstract Response domainTypes();
+    @GetMapping(path = "/", produces = {MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_TYPE_LIST})
+    ResponseEntity<Object> domainTypes();
 
-    @GET
-    @Path("/{domainType}")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
-    public abstract Response domainType(@PathParam("domainType") final String domainType);
+    @GetMapping(path = "/{domainType}", produces = {MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE})
+    ResponseEntity<Object> domainType(@PathVariable String domainType);
 
-    @GET
-    @Path("/{domainType}/layout")
-    @Produces({
-        MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
-        MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_LAYOUT_BS
+    @GetMapping(path = "/{domainType}/layout", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_LAYOUT_BS,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_LAYOUT_BS
     })
-    public abstract Response layout(@PathParam("domainType") final String domainType);
+    ResponseEntity<Object> layout(@PathVariable String domainType);
 
-    @GET
-    @Path("/{domainType}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
-    public abstract Response typeProperty(@PathParam("domainType") final String domainType, @PathParam("propertyId") final String propertyId);
+    @GetMapping(path = "/{domainType}/properties/{propertyId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION
+    })
+    ResponseEntity<Object> typeProperty(@PathVariable String domainType, @PathVariable String propertyId);
 
-    @GET
-    @Path("/{domainType}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
-    public abstract Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId);
+    @GetMapping(path = "/{domainType}/collections/{collectionId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION
+    })
+    ResponseEntity<Object> typeCollection(@PathVariable String domainType, @PathVariable String collectionId);
 
-    @GET
-    @Path("/{domainType}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
-    public abstract Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId);
+    @GetMapping(path = "/{domainType}/actions/{actionId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION
+    })
+    ResponseEntity<Object> typeAction(@PathVariable String domainType, @PathVariable String actionId);
 
-    @GET
-    @Path("/{domainType}/actions/{actionId}/params/{paramId}")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
-    public abstract Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramId") final String paramId);
+    @GetMapping(path = "/{domainType}/actions/{actionId}/params/{paramId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION
+    })
+    ResponseEntity<Object> typeActionParam(@PathVariable String domainType, @PathVariable String actionId, @PathVariable String paramId);
 
-    @GET
-    @Path("/{domainType}/isSubtypeOf/invoke")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public abstract Response domainTypeIsSubtypeOf(
-            @PathParam("domainType") final String domainType,
-            @QueryParam("supertype") String superType, // simple style
-            @QueryParam("args") final String argumentsQueryString // formal style
+    @GetMapping(path = "/{domainType}/isSubtypeOf/invoke", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR
+    })
+    ResponseEntity<Object> domainTypeIsSubtypeOf(
+            @PathVariable String domainType,
+            @RequestParam("supertype") String superType, // simple style
+            @RequestParam("args") String argumentsQueryString // formal style
             );
 
-    @GET
-    @Path("/{domainType}/isSupertypeOf/invoke")
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    public abstract Response domainTypeIsSupertypeOf(
-            @PathParam("domainType") final String domainType,
-            @QueryParam("supertype") String superType, // simple style
-            @QueryParam("args") final String argumentsQueryString // formal style
+    @GetMapping(path = "/{domainType}/isSupertypeOf/invoke", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR
+    })
+    ResponseEntity<Object> domainTypeIsSupertypeOf(
+            @PathVariable String domainType,
+            @RequestParam("supertype") String superType, // simple style
+            @RequestParam("args") String argumentsQueryString // formal style
             );
 }

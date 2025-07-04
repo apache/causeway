@@ -75,10 +75,11 @@ public class MediaTypes {
     //org.springframework.http.MediaType;
     //jakarta.ws.rs.core.MediaType;
     public jakarta.ws.rs.core.MediaType toJakarta(MediaType mediaType) {
-        throw new UnsupportedOperationException();
+        return new jakarta.ws.rs.core.MediaType(mediaType.getType(), mediaType.getSubtype());
+
     }
     public MediaType fromJakarta(jakarta.ws.rs.core.MediaType mediaType) {
-        throw new UnsupportedOperationException();
+        return new MediaType(mediaType.getType(), mediaType.getSubtype());
     }
 
 }

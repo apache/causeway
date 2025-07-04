@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.mappers.entity;
+package org.apache.causeway.viewer.restfulobjects.viewer.exhandling.entity;
 
 import java.util.List;
 import java.util.stream.Stream;

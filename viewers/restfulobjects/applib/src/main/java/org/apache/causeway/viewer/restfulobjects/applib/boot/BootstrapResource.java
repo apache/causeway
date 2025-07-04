@@ -18,19 +18,17 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.boot;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/boot")
+@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/boot")
 public interface BootstrapResource {
 
-    @GET
-    @Produces({ MediaType.TEXT_HTML_VALUE })
+    @GetMapping(path = "/", produces = {MediaType.TEXT_HTML_VALUE})
     public String bootstrap();
 
 }

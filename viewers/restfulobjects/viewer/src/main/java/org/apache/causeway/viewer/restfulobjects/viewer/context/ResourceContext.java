@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -49,7 +49,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.DomainModel;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
@@ -59,6 +58,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
+import org.apache.causeway.viewer.restfulobjects.viewer.util.RequestHeaderUtil;
 
 public record ResourceContext(
     MetaModelContext metaModelContext,
@@ -112,7 +112,7 @@ implements IResourceContext {
             final JsonRepresentation requestArgsAsMap) {
 
         this(metaModelContext, resourceDescriptor,
-            httpHeadersFromServletRequest(httpServletRequest),
+            RequestHeaderUtil.httpHeadersFromServletRequest(httpServletRequest),
             httpServletRequest, httpServletResponse,
             _Strings.suffix(applicationAbsoluteBase, "/"),
             _Strings.suffix(restfulAbsoluteBase, "/"),
@@ -144,8 +144,8 @@ implements IResourceContext {
     private void ensureDomainModelQueryParamSupported() {
         final DomainModel domainModel = arg(queryStringAsJsonRepr(), RequestParameter.DOMAIN_MODEL);
         if(domainModel != DomainModel.FORMAL) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,
-                    "x-ro-domain-model of '%s' is not supported", domainModel);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST,
+                    "x-ro-domain-model of '%s' is not supported".formatted(domainModel));
         }
     }
 
@@ -241,8 +241,8 @@ implements IResourceContext {
                 .orElse(null);
 
         if(serviceAdapter==null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND,
-                    "Could not locate service '%s'", serviceIdOrAlias);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.NOT_FOUND,
+                    "Could not locate service '%s'".formatted(serviceIdOrAlias));
         }
         return serviceAdapter;
     }
@@ -263,22 +263,5 @@ implements IResourceContext {
             HttpHeaders httpHeaders) {
         throw _Exceptions.notImplemented();
     }
-
-    // -- HELPER
-
-    static HttpHeaders httpHeadersFromServletRequest(HttpServletRequest request) {
-        var headers = new HttpHeaders();
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String name = headerNames.nextElement();
-            Enumeration<String> values = request.getHeaders(name);
-            while (values.hasMoreElements()) {
-                headers.add(name, values.nextElement());
-            }
-        }
-        return headers;
-    }
-
-
 
 }

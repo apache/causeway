@@ -18,17 +18,20 @@
  */
 package org.apache.causeway.applib.client;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Strings.KeyValuePair;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -87,11 +90,18 @@ public enum RepresentationTypeSimplifiedV2 {
     public boolean isValues()               { return this == VALUES; }
     public boolean isVoid()                 { return this == VOID; }
 
-    public String getContentTypeHeaderValue(final String profileName) {
-        return "application/json;"
-                + "profile=\"" + profileName + "\""
-                + ";repr-type=\"" + typeLiteral + "\"";
+    public MediaType getResponseContentType(final String profileName) {
+        return new MediaType("application", "json", Map.of(
+            "profile", profileName,
+            "repr-type", typeLiteral));
     }
+
+//TODO[causeway-applib-CAUSEWAY-3892] remove
+//    private String contentTypeValue(final String profileName) {
+//        return "application/json;"
+//                + "profile=\"" + profileName + "\""
+//                + ";repr-type=\"" + typeLiteral + "\"";
+//    }
 
     public static Optional<RepresentationTypeSimplifiedV2> parse(
             final @Nullable String typeLiteral) {
@@ -125,16 +135,16 @@ public enum RepresentationTypeSimplifiedV2 {
 
         return stringStream
                 //.peek(System.err::println)//debug
-        .map(String::trim)
-        .filter(_Strings::isNotEmpty)
-        //.map(s->s.replace("profile=\"urn:org.restfulobjects:repr-types/", "repr-type=\""))
-        .filter(s->s.startsWith("repr-type"))
-        .map(s->_Strings.parseKeyValuePair(s, '=').orElse(null))
-        .filter(Objects::nonNull)
-        .map(KeyValuePair::value)
-        .filter(_Strings::isNotEmpty)
-        .findAny()
-        .map(RepresentationTypeSimplifiedV2::trimQuotesIfAny);
+            .map(String::trim)
+            .filter(_Strings::isNotEmpty)
+            //.map(s->s.replace("profile=\"urn:org.restfulobjects:repr-types/", "repr-type=\""))
+            .filter(s->s.startsWith("repr-type"))
+            .map(s->_Strings.parseKeyValuePair(s, '=').orElse(null))
+            .filter(Objects::nonNull)
+            .map(KeyValuePair::value)
+            .filter(_Strings::isNotEmpty)
+            .findAny()
+            .map(RepresentationTypeSimplifiedV2::trimQuotesIfAny);
     }
 
 }

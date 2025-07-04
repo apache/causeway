@@ -18,34 +18,34 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.version;
 
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import org.springframework.http.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/version")
+@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/version")
 public interface VersionResource {
 
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_VERSION })
-    public Response version();
+    @GetMapping(
+        path = "/",
+        produces = {MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_VERSION})
+    ResponseEntity<Object> version();
 
-    @DELETE
-    public Response deleteVersionNotAllowed();
+    @DeleteMapping
+    ResponseEntity<Object> deleteVersionNotAllowed();
 
-    @PUT
-    public Response putVersionNotAllowed();
+    @PutMapping
+    ResponseEntity<Object> putVersionNotAllowed();
 
-    @POST
-    public Response postVersionNotAllowed();
+    @PostMapping
+    ResponseEntity<Object> postVersionNotAllowed();
 
 }

@@ -198,12 +198,12 @@ extends ReprRendererAbstract<ManagedMember> {
         }
     }
 
-    public void withMemberMode(final ManagedMember.RepresentationMode memberMode) {
-        if(memberMode.isWrite()) {
-            this.asMutated();
-        } else {
-            this.asStandalone();
-        }
+    public AbstractObjectMemberReprRenderer<T> withMemberMode(final ManagedMember.RepresentationMode memberMode) {
+        return switch (memberMode) {
+            case READ -> this.asStandalone();
+            case WRITE -> this.asMutated();
+            case AUTO -> this;
+        };
     }
 
     private void addLinkToSelf() {

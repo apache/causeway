@@ -196,7 +196,7 @@ public enum RepresentationType {
     }
 
     public MediaType getJsonMediaType(final Map<String, String> mediaTypeParams) {
-        Map<String, String> parameters = new HashMap<>(jsonMediaType.getParameters());
+        var parameters = new HashMap<>(jsonMediaType.getParameters());
         parameters.putAll(mediaTypeParams);
         return new MediaType(jsonMediaType.getType(), jsonMediaType.getSubtype(), parameters);
     }

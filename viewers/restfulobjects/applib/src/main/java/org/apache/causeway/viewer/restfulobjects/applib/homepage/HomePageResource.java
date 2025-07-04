@@ -18,9 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.homepage;
 
-import jakarta.ws.rs.core.Response;
-
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,20 +31,22 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 /**
  * @since 1.x {@index}
  */
-@RequestMapping("${roPrefix}")
+@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}")
 public interface HomePageResource {
 
-    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    public Response homePage(/*@RequestHeader HttpHeaders headers*/);
+    @GetMapping(
+        path = "/",
+        produces = { MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    ResponseEntity<Object> homePage();
 
     @DeleteMapping
-    public Response deleteHomePageNotAllowed();
+    ResponseEntity<Object> deleteHomePageNotAllowed();
 
     @PutMapping
-    public Response putHomePageNotAllowed();
+    ResponseEntity<Object> putHomePageNotAllowed();
 
     @PostMapping
-    public Response postHomePageNotAllowed();
+    ResponseEntity<Object> postHomePageNotAllowed();
 
     /**
      * Not part of the RO spec; this resource always returns 401, and is
@@ -54,6 +55,6 @@ public interface HomePageResource {
     @GetMapping(
         path = "/notAuthenticated",
         produces = { MediaType.APPLICATION_JSON_VALUE })
-    public Response notAuthenticated();
+    ResponseEntity<Object> notAuthenticated();
 
 }

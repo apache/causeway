@@ -19,32 +19,29 @@
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
-import jakarta.ws.rs.Produces;
-import org.springframework.http.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.CausewayRestfulObjectsInteractionFilter;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
+@RestController
 @Slf4j
-public class UserResourceServerside extends ResourceAbstract implements UserResource {
+public class UserResourceServerside extends ResourceAbstract
+implements UserResource {
 
     public UserResourceServerside() {
         super();
@@ -52,8 +49,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     }
 
     @Override
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_USER })
-    public Response user() {
+    public ResponseEntity<Object> user() {
 
         var resourceContext = createResourceContext(
                 RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
@@ -61,32 +57,32 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         final UserReprRenderer renderer = new UserReprRenderer(resourceContext, null, JsonRepresentation.newMap());
         renderer.includesSelf().with(resourceContext.getInteractionService().currentInteractionContextElseFail());
 
-        return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
+        return _EndpointLogging.response(log, "GET /user", responseFactory.ok(renderer, Caching.ONE_HOUR));
     }
 
     @Override
-    public Response deleteUserNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting the user resource is not allowed.");
-
-    }
-
-    @Override
-    public Response putUserNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Putting to the user resource is not allowed.");
+    public ResponseEntity<Object> deleteUserNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.METHOD_NOT_ALLOWED, "Deleting the user resource is not allowed.");
 
     }
 
     @Override
-    public Response postUserNotAllowed() {
-        throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the user resource is not allowed.");
+    public ResponseEntity<Object> putUserNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.METHOD_NOT_ALLOWED, "Putting to the user resource is not allowed.");
+
+    }
+
+    @Override
+    public ResponseEntity<Object> postUserNotAllowed() {
+        throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.METHOD_NOT_ALLOWED, "Posting to the user resource is not allowed.");
     }
 
     /**
      * Not part of the Restful Objects spec.
      */
     @Override
-    @Produces({ MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    public Response logout() {
+    @SneakyThrows
+    public ResponseEntity<Object> logout() {
 
         var resourceContext = createResourceContext(
                 RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
@@ -98,12 +94,9 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
 
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).
-        try {
-            final URI location = new URI("?" + CausewayRestfulObjectsInteractionFilter.CAUSEWAY_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT);
-            return Response.temporaryRedirect(location).build();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+
+        final URI location = new URI("?" + CausewayRestfulObjectsInteractionFilter.CAUSEWAY_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT);
+        return _EndpointLogging.response(log, "GET /user/logout", ResponseFactory.temporaryRedirect(location));
     }
 
     private void logout(final ResourceContext resourceContext) {
