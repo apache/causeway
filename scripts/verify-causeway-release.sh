@@ -145,7 +145,7 @@ if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
 fi
 
 cat <<EOF >/tmp/url.txt
-https://repository.apache.org/service/local/repositories/orgapachecauseway-$NEXUSREPONUM/content/org/apache/causeway/causeway-bom/$VERSION/causeway-bom-$VERSION-source-release.zip.asc
+https://repository.apache.org/service/local/repositories/orgapachecauseway-$NEXUSREPONUM/content/org/apache/causeway/causeway-bom/$VERSION/causeway-bom-$VERSION-source-release.zip
 EOF
 
 # The work starts here
