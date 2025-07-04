@@ -40,7 +40,7 @@ import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-import org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.CausewayModuleViewerRestfulObjectsJaxrsResteasy;
+import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import({
     Configuration_usingJpa.class,
-    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class
+    CausewayModuleViewerRestfulObjectsViewer.class
 })
 @DisabledIfRunningWithSurefire
 @Slf4j

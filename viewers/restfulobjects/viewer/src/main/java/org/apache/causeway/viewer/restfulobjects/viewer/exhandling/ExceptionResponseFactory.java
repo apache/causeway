@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.exceprecog.RootCauseFinder;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
@@ -128,7 +129,9 @@ public record ExceptionResponseFactory(
 
         var builder = ResponseEntity.status(httpStatus);
 
-        var acceptableMediaTypes = httpHeaders.getAccept();
+        var acceptableMediaTypes = Try.call(()->httpHeaders.getAccept())
+            .getValue()
+            .orElseGet(List::of);
         var serializationStrategy = acceptableMediaTypes.contains(MediaType.APPLICATION_XML)
                 || acceptableMediaTypes.contains(RepresentationType.OBJECT_LAYOUT.getXmlMediaType())
             ? SerializationStrategy.XML

@@ -110,8 +110,9 @@ public class JpaRestEndpointService {
     // -- NEW REQUEST BUILDER
 
     public Invocation.Builder newInvocationBuilder(final RestfulClient client, final String endpointPath) {
+        var accept = RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(Object.class, SuppressionType.all()).toString();
         return client.request(endpointPath)
-                .accept(RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(Object.class, SuppressionType.all()).getType());
+                .accept(accept);
     }
 
     // -- ENDPOINTS

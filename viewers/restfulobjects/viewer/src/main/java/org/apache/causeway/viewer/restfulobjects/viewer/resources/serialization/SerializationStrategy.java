@@ -32,6 +32,10 @@ public enum SerializationStrategy {
             return jaxbAnnotatedObject;
         }
 
+        @Override public MediaType type(RepresentationType representationType) {
+            return representationType.getXmlMediaType();
+        }
+
     },
 
     JSON {
@@ -39,6 +43,10 @@ public enum SerializationStrategy {
             return JsonUtils.toStringUtf8(
                     jaxbAnnotatedObject,
                     JsonUtils::jaxbAnnotationSupport);
+        }
+
+        @Override public MediaType type(RepresentationType representationType) {
+            return representationType.getJsonMediaType();
         }
 
     },
@@ -51,15 +59,16 @@ public enum SerializationStrategy {
                     JsonUtils::indentedOutput);
         }
 
+        @Override public MediaType type(RepresentationType representationType) {
+            return representationType.getJsonMediaType();
+        }
+
     },
 
     ;
 
-    public abstract Object entity(final Object jaxbAnnotatedObject);
-
-    public MediaType type(final RepresentationType representationType) {
-        return representationType.getXmlMediaType();
-    }
+    public abstract Object entity(Object jaxbAnnotatedObject);
+    public abstract MediaType type(RepresentationType representationType);
 
     public static SerializationStrategy determineFrom(final Collection<MediaType> acceptableMediaTypes) {
 

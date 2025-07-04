@@ -150,14 +150,15 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
      * Remove any single quotes.
      */
     private String sanitize(String mediaParam) {
-        if (mediaParam == null) {
-            return null;
-        }
+        if (mediaParam == null) return null;
+
         mediaParam = mediaParam.trim();
-        if(mediaParam.startsWith("'")) {
+        while(mediaParam.startsWith("'")
+                || mediaParam.startsWith("\"")) {
             mediaParam = mediaParam.substring(1);
         }
-        if(mediaParam.endsWith("'")) {
+        while(mediaParam.endsWith("'")
+            || mediaParam.endsWith("\"")) {
             mediaParam = mediaParam.substring(0, mediaParam.length()-1);
         }
         return mediaParam;

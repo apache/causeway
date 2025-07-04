@@ -92,7 +92,7 @@ public enum RepresentationTypeSimplifiedV2 {
 
     public MediaType getResponseContentType(final String profileName) {
         return new MediaType("application", "json", Map.of(
-            "profile", profileName,
+            "profile", _Strings.asDoubleQuoted.apply(profileName),
             "repr-type", typeLiteral));
     }
 
