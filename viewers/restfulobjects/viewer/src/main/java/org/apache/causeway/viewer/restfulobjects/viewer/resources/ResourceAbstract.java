@@ -66,7 +66,7 @@ implements HasMetaModelContext {
 
     @Autowired protected HttpServletRequest httpServletRequest;
     @Autowired protected HttpServletResponse httpServletResponse;
-    @Value("${causeway.viewer.restfulobjects.path-prefix}") String restfulPath;
+    @Value("${causeway.viewer.restfulobjects.base-path}") String restfulPath;
 
     protected ResourceAbstract() {
     }

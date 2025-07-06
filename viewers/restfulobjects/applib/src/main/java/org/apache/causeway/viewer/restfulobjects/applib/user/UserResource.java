@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 /**
  * @since 1.x {@index}
  */
-@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/user")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/user")
 public interface UserResource {
 
     @GetMapping(path = "/", produces = {MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_USER})

@@ -52,15 +52,16 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
                 CalendarEventSemantics.class // register semantics for testing
                 },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {"causeway.viewer.restfulobjects.path-prefix=/restful"}
+        properties = {"causeway.viewer.restfulobjects.base-path=/restful"}
 )
 @Import({
     Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsViewer.class
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@Disabled //TODO[causeway-regressiontests-CAUSEWAY-3866] not fully migrated from JDO to JPA yet
 class RestServiceTest extends RegressionTestWithJpaFixtures {
+
+    private static final boolean USE_REQUEST_DEBUG_LOGGING = true;
 
     @LocalServerPort int port; // just for reference (not used)
     @Inject JpaRestEndpointService restService;
@@ -70,8 +71,7 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
     @BeforeEach
     void checkPrereq() {
         assertTrue(restService.getPort()>0);
-        var useRequestDebugLogging = true;
-        this.restfulClient = restService.newClient(useRequestDebugLogging);
+        this.restfulClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
     }
 
     @Test @Order(1)

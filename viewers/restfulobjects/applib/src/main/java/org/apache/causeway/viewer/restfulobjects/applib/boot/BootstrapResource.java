@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * @since 1.x {@index}
  */
-@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/boot")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/boot")
 public interface BootstrapResource {
 
     @GetMapping(path = "/", produces = {MediaType.TEXT_HTML_VALUE})

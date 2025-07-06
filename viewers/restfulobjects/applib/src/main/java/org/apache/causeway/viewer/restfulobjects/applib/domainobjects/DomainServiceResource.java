@@ -35,7 +35,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 /**
  * @since 1.x {@index}
  */
-@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/services")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/services")
 public interface DomainServiceResource {
 
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_LIST, RestfulMediaType.APPLICATION_JSON_ERROR })

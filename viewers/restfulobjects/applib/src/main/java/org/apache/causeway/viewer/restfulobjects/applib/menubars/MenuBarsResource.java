@@ -33,7 +33,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
  *
  * @since 1.x {@index}
  */
-@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/menuBars")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/menuBars")
 public interface MenuBarsResource {
 
     /**

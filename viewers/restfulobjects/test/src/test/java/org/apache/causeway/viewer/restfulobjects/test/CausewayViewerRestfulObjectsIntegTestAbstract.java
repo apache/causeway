@@ -74,7 +74,7 @@ import lombok.SneakyThrows;
         },
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = {
-                "causeway.viewer.restfulobjects.path-prefix=/restful"
+                "causeway.viewer.restfulobjects.base-path=/restful"
         }
 )
 

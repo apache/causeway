@@ -93,7 +93,7 @@ public class CausewayRestfulObjectsInteractionFilter2 extends OncePerRequestFilt
     @Autowired private SpecificationLoader specificationLoader;
     @Autowired private TransactionService transactionService;
     @Autowired private CausewayConfiguration causewayConfiguration;
-    @Value("${causeway.viewer.restfulobjects.path-prefix}") String restfulPath;
+    @Value("${causeway.viewer.restfulobjects.base-path}") String restfulPath;
 
     @Builder
     record Config(

@@ -37,7 +37,7 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/swagger")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/swagger")
 @Slf4j
 public class SwaggerSpecResource {
 

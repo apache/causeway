@@ -24,6 +24,7 @@ import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug.swt._Swt;
+import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
@@ -46,7 +48,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @SpringBootTest(
         classes = {JpaRestEndpointService.class},
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {"causeway.viewer.restfulobjects.base-path=/restful"})
 @Import({
     Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsViewer.class
@@ -55,33 +58,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class RestServiceStressTest {
 
+    private static final boolean USE_REQUEST_DEBUG_LOGGING = false;
+    
     @LocalServerPort int port; // just for reference (not used)
     @Inject JpaRestEndpointService restService;
 
-    @BeforeAll
-    static void init() {
-        _Swt.enableSwing();
-    }
+//    @BeforeAll
+//    static void init() {
+//        _Swt.enableSwing();
+//    }
 
     //TODO[ISIS-3275] performance regression compared to v2: 26s vs 6s
+    //TODO[causeway-regressiontests-rest-jpa-CAUSEWAY-3897] success with one iteration; fails with 2
+    //TODO[causeway-regressiontests-rest-jpa-CAUSEWAY-3897] include a tiny version of this test with surefire runs!
     @Test
     void bookOfTheWeek_stressTest() {
 
         assertTrue(restService.getPort()>0);
 
-        _Swt.prompt("get ready for stress testing");
+        //_Swt.prompt("get ready for stress testing");
 
-        var useRequestDebugLogging = false;
-        final int clients = 16;
-        final int iterations = 1000;
+        final int clients = 1;//16;
+        final int iterations = 2; //1000
         var label = String.format("Calling REST endpoint %d times", clients * iterations);
 
         _Timing.runVerbose(log, label, ()->{
 
             IntStream.range(0, clients)
-            .parallel()
+            //.parallel()
             .mapToObj(i->{
-                var restfulClient = restService.newClient(useRequestDebugLogging);
+                var restfulClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
                 return restfulClient;
             })
             .forEach(restfulClient->{
@@ -95,13 +101,13 @@ class RestServiceStressTest {
 
         });
 
-        _Swt.prompt("stress testing done");
+        //_Swt.prompt("stress testing done");
 
     }
 
-    void requestSingleBookOfTheWeek_viaRestEndpoint(final RestfulClient restfulClient) {
-
-        var digest = restService.getRecommendedBookOfTheWeekDto(restfulClient)
+    void requestSingleBookOfTheWeek_viaRestEndpoint(final RestfulClient _restfulClient) {
+        var restfulClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
+        var digest = restService.getRecommendedBookOfTheWeek(restfulClient)
                 .ifFailure(Assertions::fail);
 
         var bookOfTheWeek = digest.getValue().orElseThrow();

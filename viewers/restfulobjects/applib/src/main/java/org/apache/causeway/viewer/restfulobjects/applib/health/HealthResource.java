@@ -31,7 +31,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 /**
  * @since 1.x {@index}
  */
-@RequestMapping("${causeway.viewer.restfulobjects.path-prefix}/health")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/health")
 public interface HealthResource {
 
     @GetMapping(path = "/", produces = {
