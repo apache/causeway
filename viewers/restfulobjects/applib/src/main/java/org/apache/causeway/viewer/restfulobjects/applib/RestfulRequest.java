@@ -108,7 +108,7 @@ public final class RestfulRequest {
 
     public static class Header<X> {
         public static final Header<String> IF_MATCH = new Header<String>("If-Match", Parser.forString());
-        public static final Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfJaxRsMediaTypes());
+        public static final Header<List<MediaType>> ACCEPT = new Header<List<MediaType>>("Accept", Parser.forListOfMediaTypes());
 
         private final String name;
         private final Parser<X> parser;

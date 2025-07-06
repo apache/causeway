@@ -39,7 +39,6 @@
         <module>rendering</module>
         <module>viewer</module>
         <module>test</module>
-        <module>testing</module>
     </modules>
 
 </project>

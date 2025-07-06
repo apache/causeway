@@ -18,9 +18,175 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
-import org.apache.causeway.viewer.restfulobjects.testing.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import java.util.Arrays;
+import java.util.List;
 
-public class ResourceContext_ensureCompatibleAcceptHeader_Test 
-extends ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.context.WebApplicationContext;
+
+import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.security.authentication.InteractionContextFactory;
+import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
+
+class ResourceContext_ensureCompatibleAcceptHeader_Test {
+
+    /*sonar-ignore-on*/
+
+    protected final InteractionContext iaContext = InteractionContextFactory.testing();
+
+    HttpHeaders mockHttpHeaders = Mockito.mock(HttpHeaders.class);
+    HttpServletRequest mockHttpServletRequest = Mockito.mock(HttpServletRequest.class);
+    ServletContext mockServletContext = Mockito.mock(ServletContext.class);
+    InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
+    Interaction mockInteraction = Mockito.mock(Interaction.class);
+    SpecificationLoader mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
+    WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
+    InteractionLayerTracker mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
+    AuthenticationManager mockAuthenticationManager = Mockito.mock(AuthenticationManager.class);
+
+    MetaModelContext metaModelContext;
+
+    @BeforeEach
+    void setUp() throws Exception {
+
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .specificationLoader(mockSpecificationLoader)
+                .authentication(iaContext)
+                .singleton(mockAuthenticationManager)
+                .singleton(mockInteractionLayerTracker)
+                .singleton(mockInteractionService)
+                .build();
+
+        Mockito
+        .when(webApplicationContext.getBean(MetaModelContext.class))
+        .thenReturn(metaModelContext);
+
+        Mockito
+        .when(mockServletContext.getAttribute("org.springframework.web.context.WebApplicationContext.ROOT"))
+        .thenReturn(webApplicationContext);
+
+        Mockito
+        .when(mockHttpServletRequest.getServletContext())
+        .thenReturn(mockServletContext);
+
+        Mockito
+        .when(mockHttpServletRequest.getQueryString())
+        .thenReturn("");
+
+    }
+
+    @Test
+    void noop() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(representationType.getJsonMediaType()));
+
+        instantiateResourceContext(representationType);
+    }
+
+    @Test
+    void happyCase() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(representationType.getJsonMediaType()));
+
+        instantiateResourceContext(representationType);
+    }
+
+    @Test
+    void acceptGenericAndProduceGeneric() throws Exception {
+        final RepresentationType representationType = RepresentationType.GENERIC;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(MediaType.APPLICATION_JSON));
+
+        instantiateResourceContext(representationType);
+    }
+
+    @Test
+    void acceptGenericAndProduceSpecific() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(MediaType.APPLICATION_JSON));
+
+        instantiateResourceContext(representationType);
+    }
+
+    @Test
+    void nonMatching() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList(MediaType.APPLICATION_ATOM_XML));
+
+        try {
+            instantiateResourceContext(representationType);
+        } catch(RestfulObjectsApplicationException ex ) {
+            assertThat(ex.httpStatus(), is(HttpStatus.NOT_ACCEPTABLE));
+        }
+    }
+
+    @Test
+    void nonMatchingProfile() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(RepresentationType.USER.getJsonMediaType()));
+
+        try {
+            instantiateResourceContext(representationType);
+        } catch(RestfulObjectsApplicationException ex ) {
+            assertThat(ex.httpStatus(), is(HttpStatus.NOT_ACCEPTABLE));
+        }
+    }
+
+    @Test
+    void nonMatchingProfile_ignoreGeneric() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(List.of(RepresentationType.USER.getJsonMediaType(), MediaType.APPLICATION_JSON));
+
+        try {
+            instantiateResourceContext(representationType);
+        } catch(RestfulObjectsApplicationException ex ) {
+            assertThat(ex.httpStatus(), is(HttpStatus.NOT_ACCEPTABLE));
+        }
+    }
+
+    @Test
+    void emptyList_isOK() throws Exception {
+        final RepresentationType representationType = RepresentationType.HOME_PAGE;
+        givenHttpHeadersGetAcceptableMediaTypesReturns(Arrays.<MediaType> asList());
+
+        instantiateResourceContext(representationType);
+    }
+
+    private void givenHttpHeadersGetAcceptableMediaTypesReturns(final List<MediaType> mediaTypes) {
+        Mockito
+        .when(mockHttpHeaders.getAccept())
+        .thenReturn(mediaTypes);
+    }
+
+    private ResourceContext instantiateResourceContext(
+            final RepresentationType representationType) {
+
+        var resourceDescriptor = new ResourceDescriptor(representationType, null, null, ResourceLink.NONE);
+
+        return ResourceContext.forTesting(resourceDescriptor, mockHttpServletRequest, mockHttpHeaders);
+    }
+
+    /*sonar-ignore-off*/
 }

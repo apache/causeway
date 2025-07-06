@@ -96,13 +96,6 @@ public enum RepresentationTypeSimplifiedV2 {
             "repr-type", typeLiteral));
     }
 
-//TODO[causeway-applib-CAUSEWAY-3892] remove
-//    private String contentTypeValue(final String profileName) {
-//        return "application/json;"
-//                + "profile=\"" + profileName + "\""
-//                + ";repr-type=\"" + typeLiteral + "\"";
-//    }
-
     public static Optional<RepresentationTypeSimplifiedV2> parse(
             final @Nullable String typeLiteral) {
         return Stream.of(RepresentationTypeSimplifiedV2.values())

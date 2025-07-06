@@ -16,11 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer;
+package org.apache.causeway.viewer.restfulobjects.viewer.repr;
 
-import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_getMediaType_ContractTest;
+import org.junit.jupiter.api.Test;
 
-public class RepresentationTypeTest_getMediaType 
-extends RepresentationTypeTest_getMediaType_ContractTest {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
+
+/**
+ * contract test.
+ */
+class RepresentationTypeTest_getMediaType_Test {
+
+    @Test
+    void whenHasProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
+    }
+
+    @Test
+    void whenHasNoProfile() {
+        assertThat(RepresentationType.GENERIC.getMediaTypeProfile(), is(nullValue()));
+    }
 
 }

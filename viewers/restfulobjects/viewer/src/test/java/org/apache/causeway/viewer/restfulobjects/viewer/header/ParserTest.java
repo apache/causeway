@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.testing;
+package org.apache.causeway.viewer.restfulobjects.viewer.header;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,27 +25,42 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.springframework.http.CacheControl;
 
+import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
+import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
-public abstract class Parser_forCacheControl_ContractTest {
+class ParserTest {
 
     @Test
-    public void forCacheControl() {
+    void forCacheControl() {
         final Parser<CacheControl> parser = Parser.forCacheControl();
 
         final CacheControl cc1 = CacheControl.maxAge(2000, TimeUnit.SECONDS);
         final CacheControl cc2 = CacheControl.noCache();
         for (final CacheControl v : new CacheControl[] { cc1, cc2 }) {
-            final String asString = parser.asString(v);
-            final CacheControl valueOf = parser.valueOf(asString);
-            ////TODO[causeway-viewer-restfulobjects-testing-CAUSEWAY-3897] reinstate 
-            //assertThat(v.maxAge(), is(equalTo(valueOf.getMaxAge())));
-            //assertThat(v.isNoCache(), is(equalTo(valueOf.isNoCache())));
+            var afterRoundtrip = parser.valueOf(parser.asString(v));
+            assertEquals(v.getHeaderValue(), afterRoundtrip.getHeaderValue());
         }
     }
 
+    @Test
+    void forMediaType() {
+        final Parser<org.springframework.http.MediaType> parser = Parser.forMediaType();
+
+        for (final org.springframework.http.MediaType v : new org.springframework.http.MediaType[] {
+                org.springframework.http.MediaType.APPLICATION_ATOM_XML,
+                org.springframework.http.MediaType.APPLICATION_JSON,
+                org.springframework.http.MediaType.APPLICATION_XHTML_XML,
+                MediaTypes.parse(RestfulMediaType.APPLICATION_JSON_OBJECT)
+        }) {
+            final String asString = parser.asString(v);
+            final org.springframework.http.MediaType valueOf = parser.valueOf(asString);
+            assertThat(v, is(equalTo(valueOf)));
+        }
+    }
 
 }

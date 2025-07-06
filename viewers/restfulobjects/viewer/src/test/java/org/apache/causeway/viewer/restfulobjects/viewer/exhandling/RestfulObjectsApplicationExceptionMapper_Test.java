@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.testing;
+package org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
 
 import java.util.List;
 
@@ -40,19 +40,19 @@ import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionR
 /**
  * contract test.
  */
-public abstract class RestfulObjectsApplicationExceptionMapper_ContractTest {
+class RestfulObjectsApplicationExceptionMapper_Test {
 
     private ExceptionResponseFactory exceptionMapper;
 
     final HttpHeaders mockHttpHeaders = Mockito.mock(HttpHeaders.class);
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         exceptionMapper = new ExceptionResponseFactory(List.of());
     }
 
     @Test
-    public void simpleNoMessage() throws Exception {
+    void simpleNoMessage() throws Exception {
 
         // given
         final var status = HttpStatus.BAD_REQUEST;
@@ -71,7 +71,7 @@ public abstract class RestfulObjectsApplicationExceptionMapper_ContractTest {
     }
 
     @Test
-    public void entity_withMessage() throws Exception {
+    void entity_withMessage() throws Exception {
 
         // givens
         final RestfulObjectsApplicationException ex =
@@ -89,7 +89,7 @@ public abstract class RestfulObjectsApplicationExceptionMapper_ContractTest {
     }
 
     @Test
-    public void entity_forException() throws Exception {
+    void entity_forException() throws Exception {
 
         // given
         final Exception exception = new Exception("barfoo");
@@ -110,7 +110,7 @@ public abstract class RestfulObjectsApplicationExceptionMapper_ContractTest {
     }
 
     @Test
-    public void entity_forExceptionWithCause() throws Exception {
+    void entity_forExceptionWithCause() throws Exception {
 
         // given
         var cause = new Exception("barfoo", new Exception("root-cause-message"));

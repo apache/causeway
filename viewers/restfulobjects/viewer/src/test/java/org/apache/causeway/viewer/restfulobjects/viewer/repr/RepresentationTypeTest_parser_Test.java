@@ -16,10 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer;
+package org.apache.causeway.viewer.restfulobjects.viewer.repr;
 
-import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_parser_ContractTest;
+import org.junit.jupiter.api.Test;
 
-public abstract class RepresentationTypeTest_parser extends RepresentationTypeTest_parser_ContractTest {
+import static org.junit.jupiter.api.Assertions.assertSame;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
+
+/**
+ * contract test.
+ */
+class RepresentationTypeTest_parser_Test {
+
+    @Test
+    void roundtrips() {
+        final Parser<RepresentationType> parser = RepresentationType.parser();
+        for (final RepresentationType repType : RepresentationType.values()) {
+            final String asString = parser.asString(repType);
+            final RepresentationType roundtripped = parser.valueOf(asString);
+            assertSame(roundtripped, repType);
+        }
+    }
 
 }

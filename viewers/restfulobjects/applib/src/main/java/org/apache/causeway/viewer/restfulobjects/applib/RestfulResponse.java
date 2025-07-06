@@ -252,7 +252,7 @@ public class RestfulResponse<T> {
         public static final Header<String> WARNING = new Header<String>("Warning", warningParser());
         public static final Header<Date> LAST_MODIFIED = new Header<Date>("Last-Modified", Parser.forDate());
         public static final Header<CacheControl> CACHE_CONTROL = new Header<CacheControl>("Cache-Control", Parser.forCacheControl());
-        public static final Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forJaxRsMediaType());
+        public static final Header<MediaType> CONTENT_TYPE = new Header<MediaType>("Content-Type", Parser.forMediaType());
         public static final Header<Integer> CONTENT_LENGTH = new Header<Integer>("Content-Length", Parser.forInteger());
         public static final Header<String> ETAG = new Header<String>("ETag", Parser.forETag());
 

@@ -16,10 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer;
+package org.apache.causeway.viewer.restfulobjects.viewer.repr;
 
-import org.apache.causeway.viewer.restfulobjects.testing.Parser_forJaxRsMediaType_ContractTest;
+import org.junit.jupiter.api.Test;
 
-public class Parser_forJaxRsMediaType_Test extends Parser_forJaxRsMediaType_ContractTest {
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
+
+/**
+ * contract test.
+ */
+class RepresentationTypeTest_getName_Test {
+
+    @Test
+    void selectedValues() {
+        assertThat(RepresentationType.VERSION.getName(), is("version"));
+        assertThat(RepresentationType.HOME_PAGE.getName(), is("homePage"));
+        assertThat(RepresentationType.ACTION_PARAMETER_DESCRIPTION.getName(), is("actionParameterDescription"));
+    }
 
 }

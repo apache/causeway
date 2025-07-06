@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.testing;
+package org.apache.causeway.viewer.restfulobjects.viewer.repr;
 
 import org.springframework.http.MediaType;
 
@@ -32,10 +32,10 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 /**
  * contract test.
  */
-public abstract class RepresentationTypeTest_lookup_ContractTest {
+class RepresentationTypeTest_lookup_Test {
 
     @Test
-    public void roundtrip() {
+    void roundtrip() {
         for (final RepresentationType repType : RepresentationType.values()) {
             final String name = repType.getName();
             final RepresentationType lookup = RepresentationType.lookup(name);
@@ -44,7 +44,7 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
     }
 
     @Test
-    public void roundtrip_overloaded() {
+    void roundtrip_overloaded() {
         for (final RepresentationType repType : RepresentationType.values()) {
             final MediaType mediaType = repType.getJsonMediaType();
             final RepresentationType lookup = RepresentationType.lookup(mediaType);
@@ -53,20 +53,20 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
     }
 
     @Test
-    public void whenUnknown() {
+    void whenUnknown() {
         assertThat(RepresentationType.lookup("application/svg+xml"), is(RepresentationType.GENERIC));
         assertThat(RepresentationType.lookup("foobar"), is(RepresentationType.GENERIC));
 
     }
 
     @Test
-    public void whenNull() {
+    void whenNull() {
         assertThat(RepresentationType.lookup((MediaType) null), is(RepresentationType.GENERIC));
         assertThat(RepresentationType.lookup((String) null), is(RepresentationType.GENERIC));
     }
 
     @Test
-    public void whenDomainObjectWithXRoParameter() {
+    void whenDomainObjectWithXRoParameter() {
         MediaType toLookup = RepresentationType.DOMAIN_OBJECT
                 .getMediaType("x-ro-domain-type", _Strings.asDoubleQuoted.apply("http://mycompany.com:39393/domain-types/JdkValuedEntities"));
 
