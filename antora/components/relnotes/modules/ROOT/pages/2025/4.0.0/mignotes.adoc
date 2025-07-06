@@ -10,9 +10,11 @@ Upgrade Summary:
 . upgrade to *JUnit 6* (as _Spring_ does)
 . *Shiro* support removed ✅
 . *JDO* support removed ✅
+. *Joda* time support removed ✅
+. *RestEasy* integration removed ✅ 
 . Causeway now uses *slf4j* (instead of _log4j_) ✅
-. migrate to *Maven 4* (optional)
-. ditch *Joda* time support (optional)
+. Migrate build requirements to *Maven 4* ✅
+. ditch *rest-client* artifact in favor of Spring's RestClient (optional)
 . ditch *encrypt-jbcrypt* artifact (optional)
 
 == Configuration
@@ -29,9 +31,48 @@ Some presets for the _Spring Configuration_ have been removed
 
 | CausewayPresets.*Log4j
 
+|===
+
+[cols="m,m", options="header"]
+.org.apache.causeway.core.config.CausewayConfiguration
+|===
+
+| New | Details
+
+| causeway.restfulobjects.basePath=/restful
+| configures the servlet-context relative path prefix for the _Restful Objects Viewer_; replaces `resteasy.jaxrs.defaultPath=/restful`
 
 |===
 
+== RestEasy Integration Removed
+
+[source,xml]
+----
+<!-- REMOVED 
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+</dependency> 
+-->
+
+<!-- USE INSTEAD -->
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
+</dependency>
+----
+
+[source,java]
+----
+@Import({
+    //..
+
+    // REST
+    
+    // CausewayModuleViewerRestfulObjectsJaxrsResteasy.class <-- REMOVED
+    CausewayModuleViewerRestfulObjectsViewer.class, // <-- USE INSTEAD
+})
+----
 
 
 
