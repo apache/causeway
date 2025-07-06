@@ -21,12 +21,12 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import jakarta.ws.rs.WebApplicationException;
+import org.springframework.http.HttpStatus;
 
-public final class UrlDecoderUtils {
+import lombok.experimental.UtilityClass;
 
-    private UrlDecoderUtils() {
-    }
+@UtilityClass
+public class UrlDecoderUtils {
 
     public static final String URL_ENCODING_CHAR_SET = "UTF-8";
 
@@ -34,7 +34,7 @@ public final class UrlDecoderUtils {
         try {
             return URLDecoder.decode(oidStr, URL_ENCODING_CHAR_SET);
         } catch (final UnsupportedEncodingException e) {
-            throw new WebApplicationException(e);
+            throw RestfulObjectsApplicationException.createWithCause(HttpStatus.BAD_REQUEST, e);
         }
     }
 

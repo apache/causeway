@@ -135,7 +135,7 @@ public record ExceptionResponseFactory(
             ? SerializationStrategy.XML
             : SerializationStrategy.JSON;
 
-        final String message = exceptionPojo.getMessage();
+        final String message = exceptionPojo.message();
         if (message != null) {
             builder = builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }

@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.Response;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

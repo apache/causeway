@@ -32,6 +32,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -45,7 +46,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
@@ -138,7 +138,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         try {
             instantiateResourceContext(representationType);
         } catch(RestfulObjectsApplicationException ex ) {
-            assertThat(ex.httpStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
+            assertThat(ex.httpStatus(), is(HttpStatus.NOT_ACCEPTABLE));
         }
     }
 
@@ -150,7 +150,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         try {
             instantiateResourceContext(representationType);
         } catch(RestfulObjectsApplicationException ex ) {
-            assertThat(ex.httpStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
+            assertThat(ex.httpStatus(), is(HttpStatus.NOT_ACCEPTABLE));
         }
     }
 
@@ -162,7 +162,7 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
         try {
             instantiateResourceContext(representationType);
         } catch(RestfulObjectsApplicationException ex ) {
-            assertThat(ex.httpStatus(), is(HttpStatusCode.NOT_ACCEPTABLE));
+            assertThat(ex.httpStatus(), is(HttpStatus.NOT_ACCEPTABLE));
         }
     }
 

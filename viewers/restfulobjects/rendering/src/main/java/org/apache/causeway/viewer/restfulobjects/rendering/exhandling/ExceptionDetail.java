@@ -31,11 +31,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.exceprecog.RootCauseFinder;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @XmlRootElement(
         name = "exceptionDetail"
@@ -49,39 +45,28 @@ import lombok.NoArgsConstructor;
                 "causedBy"
         }
         )
-@XmlAccessorType(XmlAccessType.FIELD)
-@NoArgsConstructor
-public class ExceptionDetail {
-
-    @Getter private String className;
-    @Getter private String message;
-
-    @XmlElementWrapper()
-    @XmlElement(name="element")
-    private List<String> stackTrace = _Lists.newArrayList();
-
-    @Getter private ExceptionDetail causedBy;
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public record ExceptionDetail(
+        String className,
+        String message,
+        @XmlElementWrapper()
+        @XmlElement(name="element")
+        List<String> stackTrace,
+        ExceptionDetail causedBy) {
 
     public ExceptionDetail(
             final Throwable ex,
             final @Nullable List<RootCauseFinder> rootCauseFinders) {
-        this.className = ex.getClass().getName();
-        this.message = ex.getMessage();
-
-        Stream.of(ex.getStackTrace())
-            .map(ExceptionDetail::format)
-            .forEach(stackTrace::add);
-
-        this.causedBy = _Exceptions.getRootCause(ex, rootCauseFinders)
-            .filter(cause->cause!=ex)
-            .map(cause->new ExceptionDetail(cause, rootCauseFinders))
-            .orElse(null);
-    }
-
-    // -- HELPER
-
-    private static String format(final StackTraceElement stackTraceElement) {
-        return stackTraceElement.toString();
+        this(
+            ex.getClass().getName(),
+            ex.getMessage(),
+            Stream.of(ex.getStackTrace())
+                .map(StackTraceElement::toString)
+                .toList(),
+            _Exceptions.getRootCause(ex, rootCauseFinders)
+                .filter(cause->cause!=ex)
+                .map(cause->new ExceptionDetail(cause, rootCauseFinders))
+                .orElse(null));
     }
 
 }

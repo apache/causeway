@@ -16,28 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.rendering.exhandling;
+package org.apache.causeway.viewer.restfulobjects.applib.util;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import org.apache.causeway.applib.layout.links.Link;
+import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 
-@XmlRootElement(
-        name = "exception"
-        )
-@XmlType(
-        name = "exception"
-        , propOrder = {
-                "httpStatusCode",
-                "message",
-                "detail",
-        }
-        )
-@XmlAccessorType(XmlAccessType.PROPERTY)
-public record ExceptionPojo(
-        int httpStatusCode,
-        String message,
-        ExceptionDetail detail) {
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
+public class Links {
+    
+    public Link get(
+            final Rel rel,
+            final String href,
+            final String type) {
+        return new Link(rel.getName(), "GET", href, type);
+    }
+    
 }

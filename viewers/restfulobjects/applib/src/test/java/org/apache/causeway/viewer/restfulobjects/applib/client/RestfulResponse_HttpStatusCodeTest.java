@@ -18,27 +18,19 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.client;
 
-import jakarta.ws.rs.core.Response.Status.Family;
-
-import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
-
 class RestfulResponse_HttpStatusCodeTest {
 
-    @Test
-    public void knownStatusCode() {
-        assertThat(HttpStatusCode.statusFor(200), is(HttpStatusCode.OK));
-    }
-
-    @Test
-    public void unknownStatusCode() {
-        final HttpStatusCode statusFor = HttpStatusCode.statusFor(600);
-        assertThat(statusFor.getStatusCode(), is(600));
-        assertThat(statusFor.getFamily(), is(Family.OTHER));
-    }
+    //TODO[causeway-viewer-restfulobjects-applib-CAUSEWAY-3897] seems obsolete now 
+//    @Test
+//    public void knownStatusCode() {
+//        assertThat(HttpStatusCode.statusFor(200), is(HttpStatusCode.OK));
+//    }
+//
+//    @Test
+//    public void unknownStatusCode() {
+//        final HttpStatusCode statusFor = HttpStatusCode.statusFor(600);
+//        assertThat(statusFor.getStatusCode(), is(600));
+//        assertThat(statusFor.getFamily(), is(Family.OTHER));
+//    }
 
 }

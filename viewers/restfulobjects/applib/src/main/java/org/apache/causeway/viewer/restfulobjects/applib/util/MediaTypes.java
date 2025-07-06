@@ -71,15 +71,4 @@ public class MediaTypes {
 
     }
 
-    //TODO[causeway-viewer-restfulobjects-applib-CAUSEWAY-3892] remove
-    //org.springframework.http.MediaType;
-    //jakarta.ws.rs.core.MediaType;
-    public jakarta.ws.rs.core.MediaType toJakarta(MediaType mediaType) {
-        return new jakarta.ws.rs.core.MediaType(mediaType.getType(), mediaType.getSubtype());
-
-    }
-    public MediaType fromJakarta(jakarta.ws.rs.core.MediaType mediaType) {
-        return new MediaType(mediaType.getType(), mediaType.getSubtype());
-    }
-
 }

@@ -20,8 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.function.Consumer;
 
-import jakarta.ws.rs.HttpMethod;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +32,7 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.menubars.MenuBarsResource;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Links;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -82,9 +81,8 @@ implements MenuBarsResource {
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
                         logicalTypeName, SERVICE_IDENTIFIER, actionLayoutData.getId());
-                Link link = new Link(
-                        Rel.ACTION.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.ACTION,
                         resourceContext.restfulUrlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());
                 actionLayoutData.setLink(link);

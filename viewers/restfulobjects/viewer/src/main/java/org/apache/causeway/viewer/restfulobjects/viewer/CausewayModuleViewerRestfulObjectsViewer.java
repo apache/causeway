@@ -30,7 +30,6 @@ import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionResponseFactory;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.causeway.viewer.restfulobjects.viewer.exhandling.ExceptionMapperForRestfulObjects;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside;
@@ -63,8 +62,9 @@ import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.WebModuleRestf
         SwaggerSpecResource.class,
 
         ExceptionMapperForRestfulObjects.class,
-        AcceptHeaderServiceForRest.RequestFilter.class,
-        AcceptHeaderServiceForRest.ResponseFilter.class,
+        //TODO[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3897] cleanup
+        //AcceptHeaderServiceForRest.RequestFilter.class,
+        //AcceptHeaderServiceForRest.ResponseFilter.class,
 
         //CausewayRestfulObjectsInteractionFilter2.class
         WebModuleRestfulObjects.class

@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.io.InputStream;
 import java.util.Optional;
 
-import jakarta.ws.rs.HttpMethod;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +46,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Links;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
@@ -273,9 +272,8 @@ implements DomainObjectResource {
         grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                Link link = new Link(
-                        Rel.ELEMENT.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.ELEMENT,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId
                                 ),
@@ -285,9 +283,8 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                Link link = new Link(
-                        Rel.ACTION.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.ACTION,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
                                 ),
@@ -297,9 +294,8 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                Link link = new Link(
-                        Rel.PROPERTY.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.PROPERTY,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
                                 ),
@@ -309,9 +305,8 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                Link link = new Link(
-                        Rel.COLLECTION.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.COLLECTION,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
                                 ),

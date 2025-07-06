@@ -40,7 +40,6 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires jakarta.inject;
     requires java.sql;
     
-    requires jakarta.ws.rs; //FIXME remove
     requires jakarta.xml.bind;
     requires jakarta.servlet;
 

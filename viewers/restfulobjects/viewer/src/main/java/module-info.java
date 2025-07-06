@@ -32,7 +32,6 @@ module org.apache.causeway.viewer.restfulobjects.viewer {
     requires jakarta.annotation;
     requires jakarta.inject;
     requires jakarta.transaction;
-    requires jakarta.ws.rs; //FIXME remove
     requires jakarta.xml.bind;
     requires jakarta.servlet;
     requires org.apache.causeway.applib;

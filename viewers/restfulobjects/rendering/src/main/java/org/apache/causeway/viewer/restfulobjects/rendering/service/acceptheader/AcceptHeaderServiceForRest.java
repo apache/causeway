@@ -21,12 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader
 import java.io.IOException;
 import java.util.List;
 import jakarta.inject.Named;
-import jakarta.ws.rs.container.ContainerRequestContext;
-import jakarta.ws.rs.container.ContainerRequestFilter;
-import jakarta.ws.rs.container.ContainerResponseContext;
-import jakarta.ws.rs.container.ContainerResponseFilter;
 import org.springframework.http.MediaType;
-import jakarta.ws.rs.ext.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -74,32 +69,33 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
         return mediaTypesByThread.get();
     }
 
-    @Component
-    @Provider
-    public static class RequestFilter implements ContainerRequestFilter  {
-        @Override
-        public void filter(final ContainerRequestContext requestContext) throws IOException {
-            var acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
-
-            final List<MediaType> mediaTypes = stream(acceptableMediaTypes)
-                    .filter(_NullSafe::isPresent)
-                    .map(MediaTypes::fromJakarta)
-                    .toList();
-
-            setMediaTypes(mediaTypes);
-        }
-    }
-
-    @Component
-    @Provider
-    public static class ResponseFilter implements ContainerResponseFilter {
-        @Override
-        public void filter(
-                final ContainerRequestContext requestContext,
-                final ContainerResponseContext responseContext) throws IOException {
-
-            removeMediaTypes();
-        }
-    }
+//TODO[causeway-viewer-restfulobjects-rendering-CAUSEWAY-3897] do this else where     
+//    @Component
+//    @Provider
+//    public static class RequestFilter implements ContainerRequestFilter  {
+//        @Override
+//        public void filter(final ContainerRequestContext requestContext) throws IOException {
+//            var acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
+//
+//            final List<MediaType> mediaTypes = stream(acceptableMediaTypes)
+//                    .filter(_NullSafe::isPresent)
+//                    .map(MediaTypes::fromJakarta)
+//                    .toList();
+//
+//            setMediaTypes(mediaTypes);
+//        }
+//    }
+//
+//    @Component
+//    @Provider
+//    public static class ResponseFilter implements ContainerResponseFilter {
+//        @Override
+//        public void filter(
+//                final ContainerRequestContext requestContext,
+//                final ContainerResponseContext responseContext) throws IOException {
+//
+//            removeMediaTypes();
+//        }
+//    }
 
 }

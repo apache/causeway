@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.ws.rs.core.HttpHeaders;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -56,7 +56,7 @@ public interface IResourceContext extends HasMetaModelContext {
     String applicationUrlFor(final String url);
 
     /**
-     * Returns the {@link HttpHeaders#getAcceptableMediaTypes() acceptable media types}
+     * Returns the {@link HttpHeaders#getAccept() acceptable media types}
      * as obtained from {@link HttpHeaders}.
      */
     List<MediaType> acceptableMediaTypes();

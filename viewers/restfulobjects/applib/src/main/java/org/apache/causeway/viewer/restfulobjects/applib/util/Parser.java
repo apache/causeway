@@ -26,9 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.ext.RuntimeDelegate;
-
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.internal._Constants;
@@ -120,22 +118,15 @@ public abstract class Parser<T> {
 
             @Override
             public CacheControl valueOf(final String str) {
-                if (str == null) {
-                    return null;
-                }
-                CacheControl cacheControl =
-                        RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
-                        .fromString(str);
-                // workaround for bug in CacheControl's equals() method
-                cacheControl.getCacheExtension();
-                cacheControl.getNoCacheFields();
+                if (str == null) return null;
+                CacheControl cacheControl = CacheControl.noCache();
+                //TODO[causeway-viewer-restfulobjects-applib-CAUSEWAY-3897] implement parser 
                 return cacheControl;
             }
 
             @Override
             public String asString(final CacheControl cacheControl) {
-                return RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
-                        .toString(cacheControl);
+                return cacheControl.toString();
             }
         };
     }
