@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.util;
+package org.apache.causeway.viewer.restfulobjects.rendering.util;
 
 import java.util.Enumeration;
 
@@ -32,11 +32,13 @@ public class RequestHeaderUtil {
     public HttpHeaders httpHeadersFromServletRequest(HttpServletRequest request) {
         var headers = new HttpHeaders();
         Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String name = headerNames.nextElement();
-            Enumeration<String> values = request.getHeaders(name);
-            while (values.hasMoreElements()) {
-                headers.add(name, values.nextElement());
+        if(headerNames!=null) {
+            while (headerNames.hasMoreElements()) {
+                String name = headerNames.nextElement();
+                Enumeration<String> values = request.getHeaders(name);
+                while (values.hasMoreElements()) {
+                    headers.add(name, values.nextElement());
+                }
             }
         }
         return headers;

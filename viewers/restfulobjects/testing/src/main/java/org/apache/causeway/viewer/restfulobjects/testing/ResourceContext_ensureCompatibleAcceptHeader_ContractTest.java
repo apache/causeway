@@ -47,9 +47,9 @@ import org.apache.causeway.core.security.authentication.manager.AuthenticationMa
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.context;
+package org.apache.causeway.viewer.restfulobjects.rendering.context;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -39,7 +39,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -55,29 +54,27 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainO
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService.Intent;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestHeaderUtil;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
-import org.apache.causeway.viewer.restfulobjects.viewer.util.RequestHeaderUtil;
 
 public record ResourceContext(
-    MetaModelContext metaModelContext,
-    ResourceDescriptor resourceDescriptor,
-    HttpHeaders httpHeaders,
-    HttpServletRequest httpServletRequest,
-    HttpServletResponse httpServletResponse,
-    String applicationAbsoluteBase,
-    String restfulAbsoluteBase,
+        MetaModelContext metaModelContext,
+        ResourceDescriptor resourceDescriptor,
+        HttpHeaders httpHeaders,
+        HttpServletRequest httpServletRequest,
+        HttpServletResponse httpServletResponse,
+        String applicationAbsoluteBase,
+        String restfulAbsoluteBase,
 
-    List<List<String>> followLinks,
-    boolean isValidateOnly,
+        List<List<String>> followLinks,
+        boolean isValidateOnly,
 
-    InteractionInitiatedBy interactionInitiatedBy,
+        InteractionInitiatedBy interactionInitiatedBy,
 
-    JsonRepresentation queryStringAsJsonRepr,
-    ObjectAdapterLinkTo objectAdapterLinkTo,
-    Set<Bookmark> rendered
-)
+        JsonRepresentation queryStringAsJsonRepr,
+        ObjectAdapterLinkTo objectAdapterLinkTo,
+        Set<Bookmark> rendered
+        )
 implements IResourceContext {
 
     // -- NON CANONICAL CONSTRUCTORS
@@ -94,11 +91,11 @@ implements IResourceContext {
             final Map<String, String[]> requestParams) {
 
         this(
-            metaModelContext,
-            resourceDescriptor,
-            applicationAbsoluteBase, restfulAbsoluteBase,
-            httpServletRequest, httpServletResponse, interactionInitiatedBy,
-            requestArgsAsMap(requestParams, urlUnencodedQueryString));
+                metaModelContext,
+                resourceDescriptor,
+                applicationAbsoluteBase, restfulAbsoluteBase,
+                httpServletRequest, httpServletResponse, interactionInitiatedBy,
+                requestArgsAsMap(requestParams, urlUnencodedQueryString));
     }
 
     private ResourceContext(
@@ -112,20 +109,20 @@ implements IResourceContext {
             final JsonRepresentation requestArgsAsMap) {
 
         this(metaModelContext, resourceDescriptor,
-            RequestHeaderUtil.httpHeadersFromServletRequest(httpServletRequest),
-            httpServletRequest, httpServletResponse,
-            _Strings.suffix(applicationAbsoluteBase, "/"),
-            _Strings.suffix(restfulAbsoluteBase, "/"),
-            Collections.unmodifiableList(arg(requestArgsAsMap, RequestParameter.FOLLOW_LINKS)),
-            arg(requestArgsAsMap, RequestParameter.VALIDATE_ONLY),
-            interactionInitiatedBy,
-            requestArgsAsMap,
-            switch(resourceDescriptor.resourceLink()) {
+                RequestHeaderUtil.httpHeadersFromServletRequest(httpServletRequest),
+                httpServletRequest, httpServletResponse,
+                _Strings.suffix(applicationAbsoluteBase, "/"),
+                _Strings.suffix(restfulAbsoluteBase, "/"),
+                Collections.unmodifiableList(arg(requestArgsAsMap, RequestParameter.FOLLOW_LINKS)),
+                arg(requestArgsAsMap, RequestParameter.VALIDATE_ONLY),
+                interactionInitiatedBy,
+                requestArgsAsMap,
+                switch(resourceDescriptor.resourceLink()) {
                 case NONE -> null;
                 case OBJECT -> new DomainObjectLinkTo();
                 case SERVICE -> new DomainServiceLinkTo();
-            },
-            new HashSet<>());
+                },
+                new HashSet<>());
 
         ensureDomainModelQueryParamSupported();
     }
@@ -169,8 +166,8 @@ implements IResourceContext {
             return map;
         } else {
             return Optional.ofNullable(urlUnencodedQueryString)
-                .orElseGet(RequestParams::ofEmptyQueryString)
-                .asMap();
+                    .orElseGet(RequestParams::ofEmptyQueryString)
+                    .asMap();
         }
     }
 
@@ -207,8 +204,8 @@ implements IResourceContext {
     @Override
     public boolean canEagerlyRender(final ManagedObject objectAdapter) {
         return ManagedObjects.bookmark(objectAdapter)
-        .map(rendered::add)
-        .orElse(true);
+                .map(rendered::add)
+                .orElse(true);
     }
 
     @Override
@@ -221,7 +218,7 @@ implements IResourceContext {
         return applicationAbsoluteBase + (
                 url.startsWith("/")
                 ? url.substring(1)
-                : url);
+                        : url);
     }
 
     @Override
@@ -251,17 +248,22 @@ implements IResourceContext {
 
     public static ResourceContext forTesting(String queryString, HttpServletRequest servletRequest) {
         return new ResourceContext(MetaModelContext.instanceNullable(),
-            ResourceDescriptor.empty(), null, null,
-            RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
-            servletRequest, null,
-            null, (Map<String, String[]>)null);
+                ResourceDescriptor.empty(), null, null,
+                RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
+                servletRequest, null,
+                null, (Map<String, String[]>)null);
     }
 
     public static ResourceContext forTesting(
             ResourceDescriptor resourceDescriptor,
-            HttpServletRequest httpServletRequest,
+            HttpServletRequest servletRequest,
             HttpHeaders httpHeaders) {
-        throw _Exceptions.notImplemented();
+        return new ResourceContext(MetaModelContext.instanceNullable(),
+                resourceDescriptor, null, null,
+                null, //RequestParams
+                servletRequest, null,
+                null, (Map<String, String[]>)null);
     }
 
 }
+

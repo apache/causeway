@@ -16,10 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy;
+package org.apache.causeway.viewer.restfulobjects.viewer.context;
 
-import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_getName_ContractTest;
+import org.apache.causeway.viewer.restfulobjects.testing.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
 
-public class RepresentationTypeTest_getName extends RepresentationTypeTest_getName_ContractTest {
+public class ResourceContext_ensureCompatibleAcceptHeader_Test 
+extends ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
 }

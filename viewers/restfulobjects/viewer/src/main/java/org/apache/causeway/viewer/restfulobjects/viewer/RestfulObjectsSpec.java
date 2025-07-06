@@ -16,10 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy;
+package org.apache.causeway.viewer.restfulobjects.viewer;
 
-import org.apache.causeway.viewer.restfulobjects.testing.RepresentationTypeTest_parser_ContractTest;
+import lombok.experimental.UtilityClass;
 
-public abstract class RepresentationTypeTest_parser extends RepresentationTypeTest_parser_ContractTest {
+@UtilityClass
+public class RestfulObjectsSpec {
+
+    public static final String SPEC_VERSION = "1.0.0";
 
 }

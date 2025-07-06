@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.context;
+package org.apache.causeway.viewer.restfulobjects.viewer;
 
-import org.apache.causeway.viewer.restfulobjects.testing.ResourceContext_ensureCompatibleAcceptHeader_ContractTest;
+import org.apache.causeway.viewer.restfulobjects.testing.Parser_forCacheControl_ContractTest;
 
-public class ResourceContext_ensureCompatibleAcceptHeader_Test 
-extends ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
+public class Parser_forCacheControl_Test extends Parser_forCacheControl_ContractTest {
 
 }

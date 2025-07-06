@@ -20,6 +20,10 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.concurrent.atomic.LongAdder;
 
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.http.ResponseEntity;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -33,16 +37,12 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.http.ResponseEntity;
 
 record _DomainResourceHelper(
     ResourceContext resourceContext,

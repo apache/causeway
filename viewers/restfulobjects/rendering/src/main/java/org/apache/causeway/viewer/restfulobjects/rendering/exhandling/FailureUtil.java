@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
+package org.apache.causeway.viewer.restfulobjects.rendering.exhandling;
 
 import java.util.Optional;
 

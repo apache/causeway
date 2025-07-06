@@ -35,12 +35,12 @@ import org.springframework.http.HttpStatus;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.causeway.viewer.restfulobjects.viewer.exhandling.ExceptionResponseFactory;
+import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionResponseFactory;
 
 /**
  * contract test.
  */
-public abstract class RestfulObjectsApplicationExceptionMapper_Test_Contract {
+public abstract class RestfulObjectsApplicationExceptionMapper_ContractTest {
 
     private ExceptionResponseFactory exceptionMapper;
 

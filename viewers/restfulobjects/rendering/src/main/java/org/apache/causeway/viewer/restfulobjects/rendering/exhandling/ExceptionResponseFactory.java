@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
+package org.apache.causeway.viewer.restfulobjects.rendering.exhandling;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,9 +35,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
 import org.apache.causeway.viewer.restfulobjects.rendering.ExceptionWithBody;
 import org.apache.causeway.viewer.restfulobjects.rendering.ExceptionWithHttpStatusCode;
-import org.apache.causeway.viewer.restfulobjects.viewer.exhandling.entity.ExceptionDetail;
-import org.apache.causeway.viewer.restfulobjects.viewer.exhandling.entity.ExceptionPojo;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization.SerializationStrategy;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.SerializationStrategy;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 

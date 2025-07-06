@@ -16,11 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.jaxrsresteasy.mappers;
+package org.apache.causeway.viewer.restfulobjects.rendering.context;
 
-import org.apache.causeway.viewer.restfulobjects.testing.RestfulObjectsApplicationExceptionMapper_Test_Contract;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 
-public class RestfulObjectsApplicationExceptionMapper_Test extends
-        RestfulObjectsApplicationExceptionMapper_Test_Contract {
+/**
+ * @since 2.0
+ */
+public record ResourceDescriptor(
+        RepresentationType representationType,
+        Where where,
+        RepresentationService.Intent intent,
+        ResourceLink resourceLink) {
+
+    public enum ResourceLink {
+        NONE,
+        OBJECT,
+        SERVICE
+    }
+
+    public static ResourceDescriptor empty() {
+        // in support of testing
+        return new ResourceDescriptor(null, null, null, ResourceLink.NONE);
+    }
 
 }

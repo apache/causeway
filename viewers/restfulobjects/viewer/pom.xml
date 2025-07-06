@@ -64,6 +64,11 @@
             <artifactId>causeway-core-internaltestsupport</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.viewer</groupId>
+            <artifactId>causeway-viewer-restfulobjects-testing</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

@@ -117,12 +117,6 @@
 			<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
 			<scope>test</scope>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.apache.causeway.viewer</groupId>-->
-<!--			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

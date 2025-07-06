@@ -32,8 +32,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -16,13 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp;
+package org.apache.causeway.viewer.restfulobjects.viewer;
 
-import lombok.experimental.UtilityClass;
+import org.apache.causeway.viewer.restfulobjects.testing.Parser_forJaxRsMediaType_ContractTest;
 
-@UtilityClass
-public class RestfulObjectsSpec {
-
-    public static final String SPEC_VERSION = "1.0.0";
+public class Parser_forJaxRsMediaType_Test extends Parser_forJaxRsMediaType_ContractTest {
 
 }

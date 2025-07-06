@@ -19,12 +19,8 @@
 module org.apache.causeway.viewer.restfulobjects.viewer {
 
     exports org.apache.causeway.viewer.restfulobjects.viewer;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.context;
     exports org.apache.causeway.viewer.restfulobjects.viewer.exhandling;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.exhandling.entity;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp;
     exports org.apache.causeway.viewer.restfulobjects.viewer.resources;
-    exports org.apache.causeway.viewer.restfulobjects.viewer.resources.serialization;
     exports org.apache.causeway.viewer.restfulobjects.viewer.util;
     exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule;
     exports org.apache.causeway.viewer.restfulobjects.viewer.webmodule.auth;

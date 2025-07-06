@@ -41,6 +41,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
@@ -54,7 +56,6 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeActio
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.viewer.util.UrlParserUtils;
 
 import lombok.extern.slf4j.Slf4j;

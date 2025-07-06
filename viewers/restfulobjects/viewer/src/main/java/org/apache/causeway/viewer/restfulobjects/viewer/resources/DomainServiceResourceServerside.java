@@ -31,11 +31,12 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainServiceResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.extern.slf4j.Slf4j;
 

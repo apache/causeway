@@ -35,8 +35,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.menubars.MenuBarsResource;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
 
 import lombok.extern.slf4j.Slf4j;
 

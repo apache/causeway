@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.restfulobjects.viewer.context;
+package org.apache.causeway.viewer.restfulobjects.rendering.context;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,10 +38,11 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+//import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
 import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 
 class ResourceContext_getArg_Test {
 
@@ -49,7 +50,7 @@ class ResourceContext_getArg_Test {
     private ServletContext mockServletContext;
     private InteractionService mockInteractionService;
     private InteractionLayerTracker mockInteractionLayerTracker;
-    private AuthenticationManager mockAuthenticationManager;
+    //private AuthenticationManager mockAuthenticationManager;
     private SpecificationLoader mockSpecificationLoader;
     private WebApplicationContext webApplicationContext;
 
@@ -62,7 +63,7 @@ class ResourceContext_getArg_Test {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .specificationLoader(mockSpecificationLoader)
                 .singleton(mockInteractionService)
-                .singleton(mockAuthenticationManager)
+      //          .singleton(mockAuthenticationManager)
                 .singleton(mockInteractionLayerTracker)
                 .build();
 
@@ -70,7 +71,7 @@ class ResourceContext_getArg_Test {
         mockServletContext = Mockito.mock(ServletContext.class);
         mockInteractionService = Mockito.mock(InteractionService.class);
         mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
-        mockAuthenticationManager = Mockito.mock(AuthenticationManager.class);
+        //mockAuthenticationManager = Mockito.mock(AuthenticationManager.class);
         mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
         webApplicationContext = Mockito.mock(WebApplicationContext.class);
 

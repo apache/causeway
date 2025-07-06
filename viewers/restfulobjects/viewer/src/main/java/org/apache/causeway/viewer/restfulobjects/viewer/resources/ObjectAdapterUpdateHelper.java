@@ -27,7 +27,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 
 /**
  * Utility class that encapsulates the logic for updating an

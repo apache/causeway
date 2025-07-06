@@ -26,6 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 
 /**
@@ -67,7 +68,7 @@ public abstract class RepresentationTypeTest_lookup_ContractTest {
     @Test
     public void whenDomainObjectWithXRoParameter() {
         MediaType toLookup = RepresentationType.DOMAIN_OBJECT
-                .getMediaType("x-ro-domain-type", "http://mycompany.com:39393/domain-types/JdkValuedEntities");
+                .getMediaType("x-ro-domain-type", _Strings.asDoubleQuoted.apply("http://mycompany.com:39393/domain-types/JdkValuedEntities"));
 
         // ignores the parameter ...
         assertThat(

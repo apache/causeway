@@ -48,10 +48,11 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.UrlDecoderUtils;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.Getter;
 import lombok.SneakyThrows;

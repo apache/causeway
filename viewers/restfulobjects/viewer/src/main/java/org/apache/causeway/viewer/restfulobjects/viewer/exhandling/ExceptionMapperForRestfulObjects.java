@@ -31,7 +31,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 //import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.causeway.viewer.restfulobjects.viewer.util.RequestHeaderUtil;
+import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionResponseFactory;
+import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestHeaderUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ExceptionMapperForRestfulObjects {
 
     @Autowired protected ExceptionResponseFactory exceptionResponseFactory;
-    //@Autowired protected HttpServletRequest httpServletRequest;
 
     @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
