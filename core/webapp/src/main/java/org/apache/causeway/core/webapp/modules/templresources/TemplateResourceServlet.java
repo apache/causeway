@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._StringInterpolation;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.commons.InputStreamExtensions;
 import org.apache.causeway.core.metamodel.commons.ResourceUtil;
@@ -52,14 +52,14 @@ public class TemplateResourceServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private _StringInterpolation templateVariables;
 
-    @Autowired private RestEasyConfiguration restEasyConfiguration;
+    @Autowired private RestfulPathProvider restfulPathProvider;
     @Autowired private WebAppContextPath webAppContextPath;
 
     @Override
     public void init(final ServletConfig config) throws ServletException {
         super.init(config);
 
-        final String restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath();
+        final String restfulPath = restfulPathProvider.getRestfulPath().orElse("");
         final String restfulBase = webAppContextPath.prependContextPath(restfulPath);
         templateVariables = new _StringInterpolation(pair("restful-base", restfulBase));
     }

@@ -42,7 +42,8 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.LocalResourcePath;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
 
 /**
@@ -61,18 +62,17 @@ public class SwaggerServiceMenu {
 
     private final SwaggerService swaggerService;
     private final ServiceRegistry serviceRegistry;
-    private final RestEasyConfiguration restEasyConfiguration;
     private final String basePath;
 
     @Inject
     public SwaggerServiceMenu(
             final SwaggerService swaggerService,
             final ServiceRegistry serviceRegistry,
-            final RestEasyConfiguration restEasyConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
         this.swaggerService = swaggerService;
         this.serviceRegistry = serviceRegistry;
-        this.restEasyConfiguration = restEasyConfiguration;
-        this.basePath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+        this.basePath = restfulPathProvider.getRestfulPath().orElse("") + "/";
     }
 
     public static abstract class ActionDomainEvent<T> extends CausewayModuleApplib.ActionDomainEvent<T> { }

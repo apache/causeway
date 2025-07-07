@@ -20,27 +20,23 @@ package org.apache.causeway.core.config.applib;
 
 import java.util.Optional;
 
-import jakarta.inject.Inject;
-
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.mixins.rest.Object_openRestApi;
-import org.apache.causeway.core.config.RestEasyConfiguration;
-
-import lombok.RequiredArgsConstructor;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.CausewayConfiguration;
 
 /**
  * Exposes the path that the Restful Objects viewer's REST API has been
  * configured for, to the {@link Object_openRestApi} mixin action.
  */
 @Component
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class RestfulPathProvider implements Object_openRestApi.RestfulPathProvider {
-
-    private final RestEasyConfiguration restEasyConfiguration;
+public record RestfulPathProvider(CausewayConfiguration configuration)
+implements Object_openRestApi.RestfulPathProvider {
 
     @Override
     public Optional<String> getRestfulPath() {
-        return Optional.ofNullable(restEasyConfiguration.getJaxrs().getDefaultPath());
+        return _Strings.nonEmpty(configuration.getViewer().getRestfulobjects().getBasePath());
     }
+
 }

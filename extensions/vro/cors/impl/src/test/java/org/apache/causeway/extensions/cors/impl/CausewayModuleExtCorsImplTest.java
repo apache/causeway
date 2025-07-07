@@ -24,20 +24,17 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.RestEasyConfiguration;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 
 class CausewayModuleExtCorsImplTest {
 
     private CausewayConfiguration causewayDefaultConfiguration;
-    private RestEasyConfiguration restEasyConfiguration;
 
     @BeforeEach
     void setUp() {
         causewayDefaultConfiguration = MetaModelContext_forTesting
                 .buildDefault()
                 .getConfiguration();
-        restEasyConfiguration = new RestEasyConfiguration();
     }
 
     @Test
@@ -46,7 +43,7 @@ class CausewayModuleExtCorsImplTest {
         var causewayModuleExtCors = new CausewayModuleExtCors();
 
         // when
-        var filterRegistration = causewayModuleExtCors.createCorsFilterRegistration(causewayDefaultConfiguration, restEasyConfiguration);
+        var filterRegistration = causewayModuleExtCors.createCorsFilterRegistration(causewayDefaultConfiguration);
 
         // then
         assertTrue(filterRegistration.getUrlPatterns().contains("/restful/*"));

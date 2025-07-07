@@ -26,10 +26,8 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV2;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
@@ -55,10 +53,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
         ValueSchemaFactoryDefault.class,
 
         // @Service's
-        AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
         ContentNegotiationServiceOrgApacheCausewayV2.class,
-        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported)
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoderServiceDefault.class,
         RepresentationService.class,

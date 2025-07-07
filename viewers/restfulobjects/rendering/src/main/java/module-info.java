@@ -23,7 +23,6 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     exports org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
     exports org.apache.causeway.viewer.restfulobjects.rendering.exhandling;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
@@ -39,7 +38,7 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires jakarta.annotation;
     requires jakarta.inject;
     requires java.sql;
-    
+
     requires jakarta.xml.bind;
     requires jakarta.servlet;
 

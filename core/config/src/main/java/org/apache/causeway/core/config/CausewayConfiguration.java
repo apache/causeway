@@ -2782,6 +2782,9 @@ public class CausewayConfiguration {
              */
             private boolean suppressUpdateLink = false;
 
+			@jakarta.validation.constraints.Pattern(regexp="^[/].*[^/]$")
+			private String basePath = "/restful";
+
             /**
              * If left unset (the default), then the RO viewer will use the {@link jakarta.ws.rs.core.UriInfo}
              * (injected using {@link jakarta.ws.rs.core.Context}) to figure out the base Uri (used to render

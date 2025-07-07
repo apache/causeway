@@ -34,7 +34,8 @@ import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
@@ -58,7 +59,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JpaRestEndpointService {
 
     private final Environment environment;
-    private final RestEasyConfiguration restEasyConfiguration;
+    private final CausewayConfiguration causewayConfiguration;
     private final WebAppContextPath webAppContextPath;
     private final JpaTestFixtures jpaTestFixtures;
     private final InteractionService interactionService;
@@ -82,11 +83,13 @@ public class JpaRestEndpointService {
             final boolean useRequestDebugLogging,
             final @NonNull Can<ClientConversationFilter> additionalFilters) {
 
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+
         var restRootPath =
                 String.format("http://localhost:%d%s/",
                         getPort(),
                         webAppContextPath
-                            .prependContextPath(this.restEasyConfiguration.getJaxrs().getDefaultPath())
+                            .prependContextPath(restfulPathProvider.getRestfulPath().orElse(""))
                 );
 
         log.debug("new restful client created for {}", restRootPath);

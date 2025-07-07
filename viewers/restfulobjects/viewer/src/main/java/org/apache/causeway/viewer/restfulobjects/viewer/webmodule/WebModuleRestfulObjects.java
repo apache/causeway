@@ -31,10 +31,11 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.webapp.modules.WebModuleAbstract;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
+
 import lombok.Getter;
 
 /**
@@ -59,7 +60,6 @@ public final class WebModuleRestfulObjects extends WebModuleAbstract {
     private static final String INTERACTION_FILTER_NAME = "CausewayRestfulObjectsInteractionFilter";
 
     private final CausewayConfiguration causewayConfiguration;
-    private final RestEasyConfiguration restEasyConfiguration;
 
     private final String restfulPath;
     private final String urlPattern;
@@ -67,12 +67,10 @@ public final class WebModuleRestfulObjects extends WebModuleAbstract {
     @Inject
     public WebModuleRestfulObjects(
             final CausewayConfiguration causewayConfiguration,
-            final RestEasyConfiguration restEasyConfiguration,
             final ServiceInjector serviceInjector) {
         super(serviceInjector);
         this.causewayConfiguration = causewayConfiguration;
-        this.restEasyConfiguration = restEasyConfiguration;
-        this.restfulPath = this.restEasyConfiguration.getJaxrs().getDefaultPath() + "/";
+        this.restfulPath = new RestfulPathProvider(causewayConfiguration).getRestfulPath().orElse("") + "/";
         this.urlPattern = this.restfulPath + "*";
     }
 
@@ -88,9 +86,7 @@ public final class WebModuleRestfulObjects extends WebModuleAbstract {
 
         super.prepare(ctx);
 
-        if(!isApplicable(ctx)) {
-            return;
-        }
+        if(!isApplicable(ctx)) return;
 
         ctx.addProtectedPath(urlPattern);
     }

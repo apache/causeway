@@ -32,7 +32,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,20 +46,21 @@ public class CausewayModuleExtCors {
 
     @Bean
     public FilterRegistrationBean<Filter> createCorsFilterRegistration(
-            final CausewayConfiguration causewayConfiguration,
-            final RestEasyConfiguration restEasyConfiguration) {
+            final CausewayConfiguration causewayConfiguration) {
 
-        String resteasyBase = restEasyConfiguration.getJaxrs().getDefaultPath();
-        if(!resteasyBase.endsWith("/*")) {
-            resteasyBase = resteasyBase + "/*";
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+
+        String restfulBase = restfulPathProvider.getRestfulPath().orElse("");
+        if(!restfulBase.endsWith("/*")) {
+            restfulBase = restfulBase + "/*";
         }
         log.info("Setting up CORS to filter resteasy-base at '{}' with {}",
-                resteasyBase,
+                restfulBase,
                 causewayConfiguration.getExtensions().getCors());
 
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(createCorsFilter(causewayConfiguration));
-        filterRegistrationBean.setUrlPatterns(Collections.singletonList(resteasyBase));
+        filterRegistrationBean.setUrlPatterns(Collections.singletonList(restfulBase));
         filterRegistrationBean.setOrder(PriorityPrecedence.EARLY - 100);
 
         return filterRegistrationBean;
