@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
@@ -148,6 +149,8 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         // given
         final var staffName = "Fred Smith";
 
+        _Debug.log("PHASE 1 -----------------------------------------------------------");
+
         final var bookmarkBeforeIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
@@ -155,12 +158,17 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
 
         assertThat(bookmarkBeforeIfAny).isEmpty();
 
+        _Debug.log("PHASE 2 -----------------------------------------------------------");
+
         // and given
         final var departmentName = "Classics";
         final var departmentBookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = departmentRepository.findByName(departmentName);
             return bookmarkService.bookmarkFor(staffMember).orElseThrow();
         }).valueAsNonNullElseFail();
+
+
+        _Debug.log("PHASE 3 -----------------------------------------------------------");
 
         // and given
         final Blob photo = readFileAsBlob("StaffMember-photo-Bar.pdf");
@@ -174,6 +182,8 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
 
         Approvals.verify(args.getEntity(), jsonOptions());
 
+        _Debug.log("PHASE 4 -----------------------------------------------------------");
+
         // when
         var response = requestBuilder.post(args);
 
@@ -186,8 +196,10 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         var entity = response.readEntity(String.class);
         assertNotNull(entity);
 
+        _Debug.log("PHASE 5 -----------------------------------------------------------");
+
         // and also object is created in database
-        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRES_NEW, () -> {
+        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
         }).valueAsNonNullElseFail();
@@ -202,6 +214,8 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         // given
         final var staffName = "Fred Smith";
 
+        _Debug.log("PHASE 1 -----------------------------------------------------------");
+
         final var bookmarkBeforeIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
@@ -209,12 +223,16 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
 
         assertThat(bookmarkBeforeIfAny).isEmpty();
 
+        _Debug.log("PHASE 2 -----------------------------------------------------------");
+
         // and given
         final var departmentName = "Classics";
         final var departmentBookmark = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = departmentRepository.findByName(departmentName);
             return bookmarkService.bookmarkFor(staffMember).orElseThrow();
         }).valueAsNonNullElseFail();
+
+        _Debug.log("PHASE 3 -----------------------------------------------------------");
 
         // and given
         final Blob photo = readFileAsBlob("StaffMember-photo-Bar.pdf");
@@ -233,6 +251,8 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
 
         Approvals.verify(args.getEntity(), jsonOptions());
 
+        _Debug.log("PHASE 4 -----------------------------------------------------------");
+
         // when
         var response = requestBuilder.post(args);
 
@@ -245,8 +265,10 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         var entity = response.readEntity(String.class);
         assertNotNull(entity);
 
+        _Debug.log("PHASE 5 -----------------------------------------------------------");
+
         // and also object is created in database
-        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRES_NEW, () -> {
+        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
         }).valueAsNonNullElseFail();

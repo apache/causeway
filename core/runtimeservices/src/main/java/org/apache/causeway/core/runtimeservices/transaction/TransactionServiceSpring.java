@@ -20,6 +20,7 @@ package org.apache.causeway.core.runtimeservices.transaction;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
@@ -54,6 +55,7 @@ import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
@@ -116,21 +118,25 @@ implements
 
         Try<T> result = null;
 
+        var uuid = UUID.randomUUID();
+        _Debug.log("tx START %s (%d) -----------------------------------------------------------", uuid, def.getPropagationBehavior());
+
         try {
             TransactionStatus txStatus = platformTransactionManager.getTransaction(def);
             registerTransactionSynchronizations(txStatus);
 
             result = Try.call(() -> {
-                        final T callResult = callable.call();
 
-                        if(!FlushMgmt.isAutoFlushSuppressed()) {
-                            // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
-                            txStatus.flush();
-                        }
+                    final T callResult = callable.call();
 
-                        return callResult;
-                    })
-                    .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
+                    if(!FlushMgmt.isAutoFlushSuppressed()) {
+                        // we flush here to ensure that the result captures any exception, eg from a declarative constraint violation
+                        txStatus.flush();
+                    }
+
+                    return callResult;
+                })
+                .mapFailure(ex->translateExceptionIfPossible(ex, platformTransactionManager));
 
             if(result.isFailure()) {
                 // if this is a nested transaction, then the javadoc says it will actually be just a call to
@@ -155,7 +161,7 @@ implements
 
             return Try.failure(translateExceptionIfPossible(ex, platformTransactionManager));
         }
-
+        _Debug.log("tx END %s ----------------------------------------------------------", uuid);
         return result;
     }
 

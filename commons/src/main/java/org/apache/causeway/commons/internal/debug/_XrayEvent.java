@@ -88,7 +88,7 @@ public class _XrayEvent {
      */
     void record(final int depthLimit, final _IconResource icon, final String format, final Object...args) {
         var stackTrace = _Exceptions.streamStackTrace()
-                .skip(3)
+                .skip(4)
                 .filter(_XrayEvent::accept)
                 .collect(Can.toCan());
                 //.reverse();
