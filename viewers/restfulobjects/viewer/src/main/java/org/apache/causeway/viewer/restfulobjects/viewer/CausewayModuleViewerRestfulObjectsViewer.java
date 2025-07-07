@@ -62,10 +62,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.WebModuleRestf
         SwaggerSpecResource.class,
 
         ExceptionMapperForRestfulObjects.class,
-        //TODO[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3897] cleanup
-        //AcceptHeaderServiceForRest.RequestFilter.class,
-        //AcceptHeaderServiceForRest.ResponseFilter.class,
-
+        //TODO[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3897] perhaps migrate web-module to once-per-request filter?
         //CausewayRestfulObjectsInteractionFilter2.class
         WebModuleRestfulObjects.class
 
