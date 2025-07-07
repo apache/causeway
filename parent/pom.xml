@@ -166,12 +166,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.5.0</version>
+                    <version>3.6.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>3.2.7</version>
+                    <version>3.2.8</version>
                     <configuration>
                         <gpgArguments>
                             <arg>--digest-algo=SHA512</arg>
@@ -1310,7 +1310,7 @@
                     <plugin>
                         <groupId>io.opentelemetry.contrib</groupId>
                         <artifactId>opentelemetry-maven-extension</artifactId>
-                        <version>1.46.0-alpha</version>
+                        <version>1.47.0-alpha</version>
                         <extensions>true</extensions>
                     </plugin>
                 </plugins>

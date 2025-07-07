@@ -89,7 +89,7 @@ identified
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <graaljs.version>24.2.1</graaljs.version>
-        <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
+        <graphql-java-extended-scalars.version>24.0</graphql-java-extended-scalars.version>
         <guava.version>33.4.8-jre</guava.version>
 
         <hibernate-validator.version>9.0.1.Final</hibernate-validator.version> <!--
@@ -115,9 +115,9 @@ identified
         <jspecify.version>1.0.0</jspecify.version>
         <jsr305.version>3.0.2</jsr305.version>
         <jsoup.version>1.21.1</jsoup.version>
-        <junit-jupiter.version>5.13.2</junit-jupiter.version> <!-- overrides
+        <junit-jupiter.version>5.13.3</junit-jupiter.version> <!-- overrides
         spring -->
-        <junit-platform.version>1.13.2</junit-platform.version>
+        <junit-platform.version>1.13.3</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <lombok.version>1.18.38</lombok.version> <!-- overriding Spring -->
