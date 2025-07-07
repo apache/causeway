@@ -20,232 +20,146 @@ package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
 import java.io.InputStream;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/objects")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/objects")
 public interface DomainObjectResource {
 
-    @POST
-    @Path("/{domainType}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    @PostMapping(path = "/{domainType}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response persist(@PathParam("domainType") String domainType, final InputStream object);
+    public ResponseEntity<Object> persist(@PathVariable String domainType, InputStream object);
 
-    // //////////////////////////////////////////////////////////
-    // domain object
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT
 
-    @GET
-    @Path("/{domainType}/{instanceId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    @GetMapping(path = "/{domainType}/{instanceId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+        })
+    public ResponseEntity<Object> object(@PathVariable String domainType, @PathVariable String instanceId);
+
+    @PutMapping(path = "/{domainType}/{instanceId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
+    public ResponseEntity<Object> object(@PathVariable String domainType, @PathVariable String instanceId, InputStream arguments);
 
-    @PUT
-    @Path("/{domainType}/{instanceId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    @DeleteMapping(path = "/{domainType}/{instanceId}")
+    public ResponseEntity<Object> deleteMethodNotSupported(@PathVariable String domainType, @PathVariable String instanceId);
+
+    @PostMapping(path = "/{domainType}/{instanceId}")
+    public ResponseEntity<Object> postMethodNotAllowed(@PathVariable String domainType, @PathVariable String instanceId);
+
+    // -- DOMAIN OBJECT IMAGE
+
+    @GetMapping(path = "/{domainType}/{instanceId}/image", produces = {
+            "image/png",
+            "image/gif",
+            "image/jpeg",
+            "image/jpg",
+            "image/svg+xml"
     })
-    public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream arguments);
+    public ResponseEntity<Object> image(
+            @PathVariable
+            String domainType,
+            @PathVariable
+            String instanceId);
 
-    @DELETE
-    @Path("/{domainType}/{instanceId}")
-    public Response deleteMethodNotSupported(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
+    // -- DOMAIN OBJECT LAYOUT
 
-    @POST
-    @Path("/{domainType}/{instanceId}")
-    public Response postMethodNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId);
-
-    // //////////////////////////////////////////////////////////
-    // domain object image
-    // //////////////////////////////////////////////////////////
-
-    @GET
-    @Path("/{domainType}/{instanceId}/image")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        "image/png"
+    @GetMapping(path = "/{domainType}/{instanceId}/object-layout", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS
     })
-    public Response image(
-            @PathParam("domainType")
-            final String domainType,
-            @PathParam("instanceId")
-            final String instanceId);
+    public ResponseEntity<Object> layout(
+            @PathVariable
+            String domainType,
+            @PathVariable
+            String instanceId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object layout
-    // //////////////////////////////////////////////////////////
+    // -- DOMAIN OBJECT PROPERTY
 
-    @GET
-    @Path("/{domainType}/{instanceId}/object-layout")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS
+    @GetMapping(path = "/{domainType}/{instanceId}/properties/{propertyId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response layout(
-            @PathParam("domainType")
-            final String domainType,
-            @PathParam("instanceId")
-            final String instanceId);
+    public ResponseEntity<Object> propertyDetails(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String propertyId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object property
-    // //////////////////////////////////////////////////////////
-
-    @GET
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+    @PutMapping(path = "/{domainType}/{instanceId}/properties/{propertyId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
+    public ResponseEntity<Object> modifyProperty(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String propertyId, InputStream arguments);
 
-    @PUT
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+    @DeleteMapping(path = "/{domainType}/{instanceId}/properties/{propertyId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream arguments);
+    public ResponseEntity<Object> clearProperty(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String propertyId);
 
-    @DELETE
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+    @PostMapping(path = "/{domainType}/{instanceId}/properties/{propertyId}")
+    public ResponseEntity<Object> postPropertyNotAllowed(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String propertyId);
+
+    // -- DOMAIN OBJECT COLLECTION
+
+    @GetMapping(path = "/{domainType}/{instanceId}/collections/{collectionId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
+    public ResponseEntity<Object> accessCollection(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String collectionId);
 
-    @POST
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    public Response postPropertyNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId);
+    // -- DOMAIN OBJECT ACTION
 
-    // //////////////////////////////////////////////////////////
-    // domain object collection
-    // //////////////////////////////////////////////////////////
-
-    @GET
-    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+    @GetMapping(path = "/{domainType}/{instanceId}/actions/{actionId}", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
+    public ResponseEntity<Object> actionPrompt(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId);
 
-//XXX[CAUSEWAY-3084] - removal of (direct) collection modification - business logic should handle that via actions instead
-//    @PUT
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
-//
-//    @POST
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream arguments);
-//
-//    @DELETE
-//    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-//    @Consumes({ MediaType.WILDCARD })
-//    @Produces({
-//        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-//        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-//    })
-//    public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId);
+    @DeleteMapping(path = "/{domainType}/{instanceId}/actions/{actionId}")
+    public ResponseEntity<Object> deleteActionPromptNotAllowed(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId);
 
-    // //////////////////////////////////////////////////////////
-    // domain object action
-    // //////////////////////////////////////////////////////////
+    @PutMapping(path = "/{domainType}/{instanceId}/actions/{actionId}")
+    public ResponseEntity<Object> putActionPromptNotAllowed(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId);
 
-    @GET
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+    @PostMapping(path = "/{domainType}/{instanceId}/actions/{actionId}")
+    public ResponseEntity<Object> postActionPromptNotAllowed(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId);
+
+    // -- DOMAIN OBJECT ACTION INVOKE
+
+    @GetMapping(path = "/{domainType}/{instanceId}/actions/{actionId}/invoke", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
+    public ResponseEntity<Object> invokeActionQueryOnly(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId, @RequestParam("x-causeway-querystring") String xCausewayQueryString);
 
-    @DELETE
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    public Response deleteActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
-
-    @PUT
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    public Response putActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
-
-    @POST
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    public Response postActionPromptNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
-
-    // //////////////////////////////////////////////////////////
-    // domain object action invoke
-    // //////////////////////////////////////////////////////////
-
-    @GET
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    @PutMapping(path = "/{domainType}/{instanceId}/actions/{actionId}/invoke", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-causeway-querystring") final String xCausewayQueryString);
+    public ResponseEntity<Object> invokeActionIdempotent(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId, InputStream arguments);
 
-    @PUT
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    @PostMapping(path = "/{domainType}/{instanceId}/actions/{actionId}/invoke", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML_VALUE, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    public Response invokeActionIdempotent(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
+    public ResponseEntity<Object> invokeAction(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId, InputStream arguments);
 
-    @POST
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
-
-    @DELETE
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    public Response deleteInvokeActionNotAllowed(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId);
+    @DeleteMapping(path = "/{domainType}/{instanceId}/actions/{actionId}/invoke")
+    public ResponseEntity<Object> deleteInvokeActionNotAllowed(@PathVariable String domainType, @PathVariable String instanceId, @PathVariable String actionId);
 
 }

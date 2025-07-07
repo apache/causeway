@@ -137,13 +137,6 @@ identified
         <quartz-scheduler.version>2.5.0</quartz-scheduler.version>
         <querydsl.version>5.1.0</querydsl.version>
 
-        <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
-        <resteasy-spring.version>3.2.0.Final</resteasy-spring.version>
-        <resteasy.version>6.2.12.Final</resteasy.version> <!-- be awre of
-        potential clashes with
-        https://mvnrepository.com/artifact/org.jboss.resteasy/resteasy-spring-boot-starter -->
-        <resteasy-jaxb-provider.version>6.2.2.Final</resteasy-jaxb-provider.version>
-
         <select2.version>4.0.13</select2.version>
         <simpleslackapi.version>1.4.0</simpleslackapi.version>
         <slf4j-api.version>2.0.17</slf4j-api.version> <!-- also provided by
@@ -529,13 +522,6 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
-                <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-rendering</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
@@ -544,13 +530,6 @@ identified
             <dependency>
                 <groupId>org.apache.causeway.viewer</groupId>
                 <artifactId>causeway-viewer-restfulobjects-test</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.viewer</groupId>
-                <artifactId>causeway-viewer-restfulobjects-testing</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
                 <scope>compile</scope>
@@ -1837,23 +1816,6 @@ identified
                 <groupId>org.jdom</groupId>
                 <artifactId>jdom2</artifactId>
                 <version>${jdom.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-spring-boot-starter</artifactId>
-                <version>${resteasy-spring-boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy.spring</groupId>
-                <artifactId>resteasy-spring</artifactId>
-                <version>${resteasy-spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>resteasy-jaxb-provider</artifactId>
-                <version>${resteasy.version}</version>
             </dependency>
 
             <dependency>

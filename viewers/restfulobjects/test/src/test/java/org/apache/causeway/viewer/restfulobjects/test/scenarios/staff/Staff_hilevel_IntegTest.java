@@ -187,7 +187,7 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertNotNull(entity);
 
         // and also object is created in database
-        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRES_NEW, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
         }).valueAsNonNullElseFail();
@@ -246,7 +246,7 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
         assertNotNull(entity);
 
         // and also object is created in database
-        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRES_NEW, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
         }).valueAsNonNullElseFail();

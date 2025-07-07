@@ -18,30 +18,33 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.applib.services.exceprecog.RootCauseFinder;
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
 import org.apache.causeway.viewer.restfulobjects.rendering.CausewayModuleRestfulObjectsRendering;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
-import org.apache.causeway.viewer.restfulobjects.viewer.mappers.ExceptionMapperForObjectNotFound;
-import org.apache.causeway.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRestfulObjectsApplication;
-import org.apache.causeway.viewer.restfulobjects.viewer.mappers.ExceptionMapperForRuntimeException;
+import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionResponseFactory;
+import org.apache.causeway.viewer.restfulobjects.viewer.exhandling.ExceptionMapperForRestfulObjects;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainObjectResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainServiceResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.DomainTypeResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.HomePageResourceServerside;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ImageResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.MenuBarsResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.SwaggerSpecResource;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.UserResourceServerside;
 import org.apache.causeway.viewer.restfulobjects.viewer.resources.VersionResourceServerside;
+import org.apache.causeway.viewer.restfulobjects.viewer.webmodule.WebModuleRestfulObjects;
 
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleCoreWebapp.class,
@@ -53,19 +56,22 @@ import org.apache.causeway.viewer.restfulobjects.viewer.resources.VersionResourc
         DomainTypeResourceServerside.class,
         UserResourceServerside.class,
         MenuBarsResourceServerside.class,
-        ImageResourceServerside.class,
         DomainObjectResourceServerside.class,
         DomainServiceResourceServerside.class,
         VersionResourceServerside.class,
         SwaggerSpecResource.class,
 
-        ExceptionMapperForRestfulObjectsApplication.class,
-        ExceptionMapperForRuntimeException.class,
-        ExceptionMapperForObjectNotFound.class,
-        AcceptHeaderServiceForRest.RequestFilter.class,
-        AcceptHeaderServiceForRest.ResponseFilter.class,
+        ExceptionMapperForRestfulObjects.class,
+        //TODO[causeway-viewer-restfulobjects-viewer-CAUSEWAY-3897] perhaps migrate web-module to once-per-request filter?
+        //CausewayRestfulObjectsInteractionFilter2.class
+        WebModuleRestfulObjects.class
 
 })
 public class CausewayModuleViewerRestfulObjectsViewer {
+
+    @Bean
+    ExceptionResponseFactory exceptionResponseFactory(@Autowired(required = false) List<RootCauseFinder> rootCauseFinders) {
+        return new ExceptionResponseFactory(rootCauseFinders!=null ? rootCauseFinders : List.of());
+    }
 
 }

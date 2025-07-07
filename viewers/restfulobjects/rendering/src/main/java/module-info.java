@@ -17,16 +17,17 @@
  *  under the License.
  */
 module org.apache.causeway.viewer.restfulobjects.rendering {
+    exports org.apache.causeway.viewer.restfulobjects.rendering;
+    exports org.apache.causeway.viewer.restfulobjects.rendering.context;
+    exports org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
+    exports org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
+    exports org.apache.causeway.viewer.restfulobjects.rendering.exhandling;
+    exports org.apache.causeway.viewer.restfulobjects.rendering.service;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.conneg;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger;
+    exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
     exports org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
     exports org.apache.causeway.viewer.restfulobjects.rendering.util;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
-    exports org.apache.causeway.viewer.restfulobjects.rendering;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader;
-    exports org.apache.causeway.viewer.restfulobjects.rendering.service;
 
     requires static lombok;
 
@@ -37,8 +38,10 @@ module org.apache.causeway.viewer.restfulobjects.rendering {
     requires jakarta.annotation;
     requires jakarta.inject;
     requires java.sql;
-    requires jakarta.ws.rs;
+
     requires jakarta.xml.bind;
+    requires jakarta.servlet;
+
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.core.config;

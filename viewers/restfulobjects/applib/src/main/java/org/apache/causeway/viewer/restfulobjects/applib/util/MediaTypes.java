@@ -21,13 +21,16 @@ package org.apache.causeway.viewer.restfulobjects.applib.util;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.ws.rs.core.MediaType;
+import org.springframework.http.MediaType;
 
 import org.apache.causeway.commons.internal.base._Strings;
+
+import lombok.experimental.UtilityClass;
 
 /**
  * @since 1.x {@index}
  */
+@UtilityClass
 public class MediaTypes {
 
     /**
@@ -38,7 +41,7 @@ public class MediaTypes {
      *
      * @param type
      */
-    public static MediaType parse(String type) {
+    public MediaType parse(String type) {
 
         if(type==null)
             return MediaType.valueOf(null);

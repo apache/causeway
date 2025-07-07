@@ -59,7 +59,6 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
         EclipselinkConfiguration.DdlGeneration.class,
         EclipselinkConfiguration.Jdbc.BatchWriting.class,
         EclipselinkConfiguration.Jdbc.CacheStatements.class,
-        RestEasyConfiguration.class,
 })
 public class CausewayModuleCoreConfig {
 

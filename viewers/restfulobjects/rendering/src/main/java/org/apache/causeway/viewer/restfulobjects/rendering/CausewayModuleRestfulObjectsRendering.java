@@ -18,16 +18,16 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheCausewayV2;
-import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceOrgApacheIsisV1;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceXRoDomainType;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceDefault;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.SwaggerServiceMenu;
@@ -40,7 +40,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleViewerRestfulObjectsApplib.class,
@@ -53,10 +53,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
         ValueSchemaFactoryDefault.class,
 
         // @Service's
-        AcceptHeaderServiceForRest.class,
         ContentNegotiationServiceForRestfulObjectsV1_0.class,
         ContentNegotiationServiceOrgApacheCausewayV2.class,
-        ContentNegotiationServiceOrgApacheIsisV1.class, // to intercept client requests and respond with HTTP 501 (no longer supported)
         ContentNegotiationServiceXRoDomainType.class,
         JsonValueEncoderServiceDefault.class,
         RepresentationService.class,
@@ -67,4 +65,9 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.J
 public class CausewayModuleRestfulObjectsRendering {
 
     public static final String NAMESPACE = "causeway.viewer.roRendering";
+
+    @Bean
+    ResponseFactory responseFactory(MetaModelContext mmc) {
+        return new ResponseFactory(mmc);
+    }
 }

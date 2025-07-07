@@ -18,43 +18,43 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.homepage;
 
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}")
 public interface HomePageResource {
 
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
-    public Response homePage();
+    @GetMapping(
+        path = "/",
+        produces = { MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    ResponseEntity<Object> homePage();
 
-    @DELETE
-    public Response deleteHomePageNotAllowed();
+    @DeleteMapping
+    ResponseEntity<Object> deleteHomePageNotAllowed();
 
-    @PUT
-    public Response putHomePageNotAllowed();
+    @PutMapping
+    ResponseEntity<Object> putHomePageNotAllowed();
 
-    @POST
-    public Response postHomePageNotAllowed();
+    @PostMapping
+    ResponseEntity<Object> postHomePageNotAllowed();
 
     /**
      * Not part of the RO spec; this resource always returns 401, and is
      * intended to be redirected to if credentials cannot be obtained.
      */
-    @GET
-    @Path("/notAuthenticated")
-    @Produces({ MediaType.APPLICATION_JSON })
-    public Response notAuthenticated();
+    @GetMapping(
+        path = "/notAuthenticated",
+        produces = { MediaType.APPLICATION_JSON_VALUE })
+    ResponseEntity<Object> notAuthenticated();
 
 }

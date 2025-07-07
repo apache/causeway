@@ -68,11 +68,11 @@
 			<artifactId>causeway-mavendeps-webapp</artifactId>
 			<type>pom</type>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-			<scope>test</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.apache.causeway.viewer</groupId>-->
+<!--			<artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>-->
+<!--			<scope>test</scope>-->
+<!--		</dependency>-->
 
 		<dependency>
             <groupId>org.apache.causeway.extensions</groupId>

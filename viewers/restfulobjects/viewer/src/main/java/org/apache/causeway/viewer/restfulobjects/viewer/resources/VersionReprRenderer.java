@@ -27,7 +27,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
-import org.apache.causeway.viewer.restfulobjects.viewer.jaxrsapp.RestfulObjectsSpec;
+import org.apache.causeway.viewer.restfulobjects.viewer.RestfulObjectsSpec;
 
 public class VersionReprRenderer
 extends ReprRendererAbstract<Void> {

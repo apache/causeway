@@ -89,11 +89,9 @@ additional
             <artifactId>spring-boot-health</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <scope>compile</scope> <!-- compile: makes it transitive -->
         </dependency>
 
         <!-- TESTING -->

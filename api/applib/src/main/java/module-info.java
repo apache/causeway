@@ -125,6 +125,8 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.value;
     exports org.apache.causeway.applib.value.semantics;
 
+    requires static lombok;
+
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
     requires transitive java.desktop;
@@ -133,14 +135,14 @@ module org.apache.causeway.applib {
     requires transitive jakarta.annotation;
     requires transitive jakarta.inject;
     requires transitive jakarta.persistence;
-    requires transitive jakarta.ws.rs;
     requires transitive jakarta.xml.bind;
-    requires static lombok;
+
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
     requires transitive spring.beans;
     requires transitive spring.context;
     requires transitive spring.core;
+    requires transitive spring.web;
     requires spring.tx;
     requires org.slf4j;
 

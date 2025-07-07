@@ -20,7 +20,9 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import java.util.concurrent.atomic.LongAdder;
 
-import jakarta.ws.rs.core.Response;
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.http.ResponseEntity;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.SemanticsOf;
@@ -35,14 +37,12 @@ import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-
-import org.jspecify.annotations.NonNull;
 
 record _DomainResourceHelper(
     ResourceContext resourceContext,
@@ -90,7 +90,7 @@ record _DomainResourceHelper(
      * Simply delegates to the {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to
      * render a representation of the object.
      */
-    public Response objectRepresentation() {
+    public ResponseEntity<Object> objectRepresentation() {
         transactionService.flushTransaction();
         return representationService
                 .objectRepresentation(resourceContext, objectAdapter);
@@ -101,7 +101,7 @@ record _DomainResourceHelper(
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of that property.
      */
-    public Response propertyDetails(
+    public ResponseEntity<Object> propertyDetails(
             final String propertyId,
             final ManagedMember.RepresentationMode representationMode) {
 
@@ -118,7 +118,7 @@ record _DomainResourceHelper(
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of that collection.
      */
-    public Response collectionDetails(
+    public ResponseEntity<Object> collectionDetails(
             final String collectionId,
             final ManagedMember.RepresentationMode representationMode) {
 
@@ -135,7 +135,7 @@ record _DomainResourceHelper(
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of that object's action (arguments).
      */
-    public Response actionPrompt(final String actionId) {
+    public ResponseEntity<Object> actionPrompt(final String actionId) {
 
         var action = ObjectAdapterAccessHelper.of(resourceContext, objectAdapter)
                 .getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
@@ -155,7 +155,7 @@ record _DomainResourceHelper(
      *     otherwise an error response is thrown.
      * </p>
      */
-    public Response invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
+    public ResponseEntity<Object> invokeActionQueryOnly(final String actionId, final JsonRepresentation arguments) {
 
         return invokeAction(
                 actionId, AccessIntent.MUTATE, SemanticConstraint.SAFE,
@@ -172,7 +172,7 @@ record _DomainResourceHelper(
      *     semantics otherwise an error response is thrown.
      * </p>
      */
-    public Response invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
+    public ResponseEntity<Object> invokeActionIdempotent(final String actionId, final JsonRepresentation arguments) {
 
         return invokeAction(
                 actionId, AccessIntent.MUTATE, SemanticConstraint.IDEMPOTENT,
@@ -184,7 +184,7 @@ record _DomainResourceHelper(
      * {@link org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService} to render a representation
      * of the result of that action.
      */
-    public Response invokeAction(final String actionId, final JsonRepresentation arguments) {
+    public ResponseEntity<Object> invokeAction(final String actionId, final JsonRepresentation arguments) {
 
         return invokeAction(
                 actionId, AccessIntent.MUTATE, SemanticConstraint.NONE,
@@ -193,7 +193,7 @@ record _DomainResourceHelper(
 
     // -- HELPER
 
-    private Response invokeAction(
+    private ResponseEntity<Object> invokeAction(
             final @NonNull String actionId,
             final @NonNull AccessIntent intent,
             final @NonNull SemanticConstraint semanticConstraint,
@@ -275,7 +275,7 @@ record _DomainResourceHelper(
         }
 
         if(resourceContext.isValidateOnly()) {
-            return Response.noContent().build(); // do not progress any further
+            return ResponseEntity.noContent().build(); // do not progress any further
         }
 
         var resultOrVeto = actionInteraction.invokeWith(pendingArgs);

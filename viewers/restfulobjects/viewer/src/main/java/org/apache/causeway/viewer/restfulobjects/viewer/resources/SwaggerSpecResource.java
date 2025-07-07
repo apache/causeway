@@ -18,77 +18,57 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
 
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.swagger.Format;
 import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Path("/swagger")
+@RestController
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/swagger")
 @Slf4j
 public class SwaggerSpecResource {
 
     private final SwaggerService swaggerService;
     private final InteractionService interactionService;
-
-    @Context HttpHeaders httpHeaders;
-    @Context HttpServletRequest httpServletRequest;
+    private final HttpServletRequest httpServletRequest;
 
     @Inject
     public SwaggerSpecResource(
-            final @Context SwaggerService swaggerService,
-            final @Context InteractionService interactionService) {
+            final SwaggerService swaggerService,
+            final InteractionService interactionService,
+            final HttpServletRequest httpServletRequest) {
         this.swaggerService = swaggerService;
         this.interactionService = interactionService;
+        this.httpServletRequest = httpServletRequest;
         log.debug("<init>");
     }
 
-    @Path("/private")
-    @GET
-    @Consumes({ MediaType.WILDCARD, MediaType.APPLICATION_JSON, "text/yaml" })
-    @Produces({
-        MediaType.APPLICATION_JSON, "text/yaml"
-    })
+    @GetMapping(path = "/private", produces = {MediaType.APPLICATION_JSON_VALUE, "text/yaml"})
     public String swaggerPrivate() {
         return _EndpointLogging.stringResponse(log, "GET /swagger/private",
                 swagger(Visibility.PRIVATE));
     }
 
-    @Path("/prototyping")
-    @GET
-    @Consumes({ MediaType.WILDCARD, MediaType.APPLICATION_JSON, "text/yaml" })
-    @Produces({
-        MediaType.APPLICATION_JSON, "text/yaml"
-    })
+    @GetMapping(path = "/prototyping", produces = {MediaType.APPLICATION_JSON_VALUE, "text/yaml"})
     public String swaggerPrototyping() {
         return _EndpointLogging.stringResponse(log, "GET /swagger/prototyping",
                 swagger(Visibility.PRIVATE_WITH_PROTOTYPING));
     }
 
-    @Path("/public")
-    @GET
-    @Consumes({ MediaType.WILDCARD, MediaType.APPLICATION_JSON, "text/yaml" })
-    @Produces({
-        MediaType.APPLICATION_JSON, "text/yaml"
-    })
+    @GetMapping(path = "/public", produces = {MediaType.APPLICATION_JSON_VALUE, "text/yaml"})
     public String swaggerPublic() {
         return _EndpointLogging.stringResponse(log, "GET /swagger/public",
                 swagger(Visibility.PUBLIC));
@@ -97,46 +77,39 @@ public class SwaggerSpecResource {
     // -- HELPER
 
     private String swagger(final Visibility visibility) {
-
-        var format = deriveFrom(httpHeaders);
-        var callable = new MyCallable(swaggerService, visibility, format);
-
+        var callable = new MyCallable(swaggerService, visibility, formatFromRequest());
         var spec = interactionService.callAnonymous(callable);
         return spec;
     }
 
-    private Format deriveFrom(final HttpHeaders httpHeaders) {
-        final List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
+    private Format formatFromRequest() {
+        var acceptableMediaTypes = MediaType.parseMediaTypes(httpServletRequest.getHeader(HttpHeaders.ACCEPT));
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            if(acceptableMediaType.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+            if(acceptableMediaType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
                 return Format.JSON;
             }
         }
         final MediaType applYaml = new MediaType("application", "yaml");
         final MediaType textYaml = new MediaType("text", "yaml");
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            if (acceptableMediaType.isCompatible(applYaml) ||
-                    acceptableMediaType.isCompatible(textYaml)) {
+            if (acceptableMediaType.isCompatibleWith(applYaml) ||
+                    acceptableMediaType.isCompatibleWith(textYaml)) {
                 return Format.YAML;
             }
         }
         return Format.JSON;
     }
 
-    @RequiredArgsConstructor
-    static class MyCallable implements Callable<String> {
-
-        private final SwaggerService swaggerService;
-        private final Visibility visibility;
-        private final Format format;
+    record MyCallable(
+        SwaggerService swaggerService,
+        Visibility visibility,
+        Format format) implements Callable<String> {
 
         @Override
         public String call() throws Exception {
-
 //            return format==Format.YAML
 //                    ? _Strings.readFromResource(SwaggerSpecGenerator.class, "openapi-sample.yaml", StandardCharsets.UTF_8)
 //                    : _Strings.readFromResource(SwaggerSpecGenerator.class, "openapi-sample.json", StandardCharsets.UTF_8);
-
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
 

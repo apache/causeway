@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jakarta.ws.rs.core.Response;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -48,24 +46,24 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
  */
 public final class JsonMapper {
 
-    public static String getEntityAsStringFrom(final Response response) {
-
-        final Object result = response.getEntity();
-
-        if(result == null)
-            return null;
-
-        if(result instanceof String) {
-            return (String) result;
-        }
-
-        // TODO [andi-huber] just a wild guess
-        return response.readEntity(String.class);
-
-        // legacy code ...
-        // final ClientResponse<?> clientResponse = (ClientResponse<?>) response;
-        // return clientResponse.getEntity(String.class);
-    }
+//    public static String getEntityAsStringFrom(final Response response) {
+//
+//        final Object result = response.getEntity();
+//
+//        if(result == null)
+//            return null;
+//
+//        if(result instanceof String) {
+//            return (String) result;
+//        }
+//
+//        // TODO [andi-huber] just a wild guess
+//        return response.readEntity(String.class);
+//
+//        // legacy code ...
+//        // final ClientResponse<?> clientResponse = (ClientResponse<?>) response;
+//        // return clientResponse.getEntity(String.class);
+//    }
 
     public enum PrettyPrinting {
         ENABLE,
@@ -138,13 +136,13 @@ public final class JsonMapper {
         return objectMapper.readValue(json, requiredType);
     }
 
-    public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        final String entity = getEntityAsStringFrom(response);
-        if (entity == null) {
-            return null;
-        }
-        return read(entity, requiredType);
-    }
+//    public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
+//        final String entity = getEntityAsStringFrom(response);
+//        if (entity == null) {
+//            return null;
+//        }
+//        return read(entity, requiredType);
+//    }
 
     public String write(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
         return objectMapper.writeValueAsString(object);

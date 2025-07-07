@@ -21,22 +21,10 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 import java.io.InputStream;
 import java.util.Optional;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HttpMethod;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.stereotype.Component;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -48,7 +36,6 @@ import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
@@ -58,21 +45,19 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse;
-import org.apache.causeway.viewer.restfulobjects.applib.RestfulResponse.HttpStatusCode;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.applib.util.Links;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor;
+import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceDescriptor.ResourceLink;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
-import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
-import org.apache.causeway.viewer.restfulobjects.viewer.resources.ResourceDescriptor.ResourceLink;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Component
-@Path("/objects")
+@RestController
 @Slf4j
 public class DomainObjectResourceServerside
 extends ResourceAbstract
@@ -86,15 +71,8 @@ implements DomainObjectResource {
     // PERSIST
 
     @Override
-    @POST
-    @Path("/{domainType}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response persist(
-            @PathParam("domainType") final String domainType,
+    public ResponseEntity<Object> persist(
+            final String domainType,
             final InputStream object) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
@@ -105,7 +83,7 @@ implements DomainObjectResource {
         if (!objectRepr.isMap()) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr));
+                    .createWithMessage(HttpStatus.BAD_REQUEST, "Body is not a map; got %s".formatted(objectRepr)));
         }
 
         var domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
@@ -114,7 +92,8 @@ implements DomainObjectResource {
         if (domainTypeSpec == null) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType));
+                    .createWithMessage(HttpStatus.BAD_REQUEST,
+                        "Could not determine type of domain object to persist (no class with domainType Id of '%s')".formatted(domainType)));
         }
 
         final ManagedObject adapter = domainTypeSpec.createObject();
@@ -125,20 +104,20 @@ implements DomainObjectResource {
         if (membersMap == null) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find members map; got %s", objectRepr));
+                    .createWithMessage(HttpStatus.BAD_REQUEST, "Could not find members map; got %s".formatted(objectRepr)));
         }
 
         if (!updateHelper.copyOverProperties(membersMap, ObjectAdapterUpdateHelper.Intent.PERSISTING_NEW)) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value"));
+                    .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, "Illegal property value"));
         }
 
         final Consent validity = adapter.objSpec().isValid(adapter, InteractionInitiatedBy.USER);
         if (validity.isVetoed()) {
             throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
-                    .createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReasonAsString().orElse(null)));
+                    .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, validity.getReasonAsString().orElse(null)));
         }
 
         MmEntityUtils.persistInCurrentTransaction(adapter);
@@ -152,16 +131,9 @@ implements DomainObjectResource {
     // DOMAIN OBJECT
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response object(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId) {
+    public ResponseEntity<Object> object(
+            final String domainType,
+            final String instanceId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS,
@@ -176,16 +148,9 @@ implements DomainObjectResource {
     }
 
     @Override
-    @PUT
-    @Path("/{domainType}/{instanceId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response object(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
+    public ResponseEntity<Object> object(
+            final String domainType,
+            final String instanceId,
             final InputStream object) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
@@ -197,7 +162,7 @@ implements DomainObjectResource {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithMessage(
-                            HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", argRepr));
+                        HttpStatus.BAD_REQUEST, "Body is not a map; got %s".formatted(argRepr)));
         }
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
@@ -208,7 +173,7 @@ implements DomainObjectResource {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
-                            HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value"));
+                        HttpStatus.BAD_REQUEST, argRepr, "Illegal property value"));
         }
 
         final Consent validity = objectAdapter.objSpec().isValid(objectAdapter, InteractionInitiatedBy.USER);
@@ -216,7 +181,7 @@ implements DomainObjectResource {
             throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
-                            HttpStatusCode.BAD_REQUEST, argRepr, validity.getReasonAsString().orElse(null)));
+                        HttpStatus.BAD_REQUEST, argRepr, validity.getReasonAsString().orElse(null)));
         }
 
         var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
@@ -225,78 +190,47 @@ implements DomainObjectResource {
                 domainResourceHelper.objectRepresentation());
     }
 
-    @DELETE
-    @Path("/{domainType}/{instanceId}")
     @Override
-    public Response deleteMethodNotSupported(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId) {
+    public ResponseEntity<Object> deleteMethodNotSupported(
+            final String domainType,
+            final String instanceId) {
         throw _EndpointLogging.error(log, "DELETE /objects/{}/{}", domainType, instanceId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED, "Deleting objects is not supported."));
+                    HttpStatus.METHOD_NOT_ALLOWED, "Deleting objects is not supported."));
     }
 
-    @POST
-    @Path("/{domainType}/{instanceId}")
     @Override
-    public Response postMethodNotAllowed(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId) {
+    public ResponseEntity<Object> postMethodNotAllowed(
+            final String domainType,
+            final String instanceId) {
         throw _EndpointLogging.error(log, "POST /objects/{}/{}", domainType, instanceId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed."));
+                    HttpStatus.METHOD_NOT_ALLOWED, "Posting to object resource is not allowed."));
     }
 
     // DOMAIN OBJECT LAYOUT
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}/object-icon")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        "image/png",
-        "image/gif",
-        "image/jpeg",
-        "image/jpg",
-        "image/svg+xml"
-    })
-    public Response image(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId) {
-
-//        createResourceContext(
-//                RepresentationType.OBJECT_ICON, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+    public ResponseEntity<Object> image(
+            final String domainType,
+            final String instanceId) {
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/object-icon", domainType, instanceId, roEx));
         var objectIcon = objectAdapter.getIcon();
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/object-icon", domainType, instanceId,
-                Response
-                .ok(
+            responseFactory.ok(
                         objectIcon.asBytes(),
-                        objectIcon.getMimeType().getBaseType())
-                .build());
-    }
-
-    public Response.ResponseBuilder objectIconResponse(
-            final @NonNull ObjectIcon objectIcon) {
-        return Response.ok();
+                        MediaType.parseMediaType(objectIcon.getMimeType().getBaseType())));
     }
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}/object-layout")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_LAYOUT_BS,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_LAYOUT_BS
-    })
-    public Response layout(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId) {
+    public ResponseEntity<Object> layout(
+            final String domainType,
+            final String instanceId) {
 
         var resourceContext = createResourceContext(
                 RepresentationType.OBJECT_LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
@@ -309,12 +243,11 @@ implements DomainObjectResource {
 
                     addLinks(resourceContext, domainType, instanceId, grid);
 
-                    return Response.status(Response.Status.OK)
-                            .entity(serializationStrategy.entity(grid))
-                            .type(serializationStrategy.type(RepresentationType.OBJECT_LAYOUT));
+                    return responseFactory.ok(
+                            serializationStrategy.entity(grid),
+                            serializationStrategy.type(RepresentationType.OBJECT_LAYOUT));
                 })
-                .orElseGet(Responses::ofNotFound)
-                .build());
+                .orElseGet(ResponseFactory::notFound));
     }
 
     private Optional<Grid> layoutAsGrid(
@@ -339,9 +272,8 @@ implements DomainObjectResource {
         grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                Link link = new Link(
-                        Rel.ELEMENT.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.ELEMENT,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId
                                 ),
@@ -351,9 +283,8 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                Link link = new Link(
-                        Rel.ACTION.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.ACTION,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
                                 ),
@@ -363,9 +294,8 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                Link link = new Link(
-                        Rel.PROPERTY.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.PROPERTY,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
                                 ),
@@ -375,9 +305,8 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                Link link = new Link(
-                        Rel.COLLECTION.getName(),
-                        HttpMethod.GET,
+                Link link = Links.get(
+                        Rel.COLLECTION,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()
                                 ),
@@ -390,17 +319,10 @@ implements DomainObjectResource {
     // DOMAIN OBJECT PROPERTY
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response propertyDetails(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("propertyId") final String propertyId) {
+    public ResponseEntity<Object> propertyDetails(
+            final String domainType,
+            final String instanceId,
+            final String propertyId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS,
@@ -416,17 +338,10 @@ implements DomainObjectResource {
     }
 
     @Override
-    @PUT
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response modifyProperty(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("propertyId") final String propertyId,
+    public ResponseEntity<Object> modifyProperty(
+            final String domainType,
+            final String instanceId,
+            final String propertyId,
             final InputStream body) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
@@ -456,17 +371,10 @@ implements DomainObjectResource {
     }
 
     @Override
-    @DELETE
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response clearProperty(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("propertyId") final String propertyId) {
+    public ResponseEntity<Object> clearProperty(
+            final String domainType,
+            final String instanceId,
+            final String propertyId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.GENERIC, Where.OBJECT_FORMS,
@@ -488,35 +396,26 @@ implements DomainObjectResource {
                 .propertyDetails(propertyId, ManagedMember.RepresentationMode.WRITE));
     }
 
-    @POST
-    @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Override
-    public Response postPropertyNotAllowed(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("propertyId") final String propertyId) {
+    public ResponseEntity<Object> postPropertyNotAllowed(
+            final String domainType,
+            final String instanceId,
+            final String propertyId) {
 
         throw _EndpointLogging.error(log, "POST /objects/{}/{}/properties/{}", domainType, instanceId, propertyId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
+                    HttpStatus.METHOD_NOT_ALLOWED,
                         "Posting to a property resource is not allowed."));
     }
 
     // DOMAIN OBJECT COLLECTION
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response accessCollection(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("collectionId") final String collectionId) {
+    public ResponseEntity<Object> accessCollection(
+            final String domainType,
+            final String instanceId,
+            final String collectionId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES,
@@ -534,17 +433,10 @@ implements DomainObjectResource {
     // DOMAIN OBJECT ACTION
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response actionPrompt(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> actionPrompt(
+            final String domainType,
+            final String instanceId,
+            final String actionId) {
 
         var resourceContext = createResourceContext(new ResourceDescriptor(
                 RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS,
@@ -558,66 +450,53 @@ implements DomainObjectResource {
                 domainResourceHelper.actionPrompt(actionId));
     }
 
-    @DELETE
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Override
-    public Response deleteActionPromptNotAllowed(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> deleteActionPromptNotAllowed(
+            final String domainType,
+            final String instanceId,
+            final String actionId) {
 
         throw _EndpointLogging.error(log, "DELETE /objects/{}/{}/actions/{}", domainType, instanceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
+                    HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting action prompt resource is not allowed."));
     }
 
-    @POST
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Override
-    public Response postActionPromptNotAllowed(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> postActionPromptNotAllowed(
+            final String domainType,
+            final String instanceId,
+            final String actionId) {
 
         throw _EndpointLogging.error(log, "POST /objects/{}/{}/actions/{}", domainType, instanceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
+                    HttpStatus.METHOD_NOT_ALLOWED,
                         "Posting to an action prompt resource is not allowed."));
     }
 
-    @PUT
-    @Path("/{domainType}/{instanceId}/actions/{actionId}")
     @Override
-    public Response putActionPromptNotAllowed(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> putActionPromptNotAllowed(
+            final String domainType,
+            final String instanceId,
+            final String actionId) {
 
         throw _EndpointLogging.error(log, "PUT /objects/{}/{}/actions/{}", domainType, instanceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        HttpStatusCode.METHOD_NOT_ALLOWED,
+                    HttpStatus.METHOD_NOT_ALLOWED,
                         "Putting to an action prompt resource is not allowed."));
     }
 
     // DOMAIN OBJECT ACTION INVOKE
 
     @Override
-    @GET
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response invokeActionQueryOnly(
-            final @PathParam("domainType") String domainType,
-            final @PathParam("instanceId") String instanceId,
-            final @PathParam("actionId") String actionId,
-            final @QueryParam("x-causeway-querystring") String xCausewayUrlEncodedQueryString) {
+    public ResponseEntity<Object> invokeActionQueryOnly(
+            final String domainType,
+            final String instanceId,
+            final String actionId,
+            final String xCausewayUrlEncodedQueryString) {
 
         final String urlUnencodedQueryString = UrlUtils.urlDecodeUtf8(
                 xCausewayUrlEncodedQueryString != null
@@ -639,17 +518,10 @@ implements DomainObjectResource {
     }
 
     @Override
-    @PUT
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response invokeActionIdempotent(
-            final @PathParam("domainType") String domainType,
-            final @PathParam("instanceId") String instanceId,
-            final @PathParam("actionId") String actionId,
+    public ResponseEntity<Object> invokeActionIdempotent(
+            final String domainType,
+            final String instanceId,
+            final String actionId,
             final InputStream body) {
 
         var resourceContext = createResourceContext(
@@ -668,17 +540,10 @@ implements DomainObjectResource {
     }
 
     @Override
-    @POST
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    @Produces({
-        MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
-        MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
-    })
-    public Response invokeAction(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("actionId") final String actionId,
+    public ResponseEntity<Object> invokeAction(
+            final String domainType,
+            final String instanceId,
+            final String actionId,
             final InputStream body) {
 
         var resourceContext = createResourceContext(
@@ -696,18 +561,16 @@ implements DomainObjectResource {
                 domainResourceHelper.invokeAction(actionId, arguments));
     }
 
-    @DELETE
-    @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Override
-    public Response deleteInvokeActionNotAllowed(
-            @PathParam("domainType") final String domainType,
-            @PathParam("instanceId") final String instanceId,
-            @PathParam("actionId") final String actionId) {
+    public ResponseEntity<Object> deleteInvokeActionNotAllowed(
+            final String domainType,
+            final String instanceId,
+            final String actionId) {
 
         throw _EndpointLogging.error(log, "DELETE /objects/{}/{}/actions/{}/invoke", domainType, instanceId, actionId,
                 RestfulObjectsApplicationException
                 .createWithMessage(
-                        RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED,
+                    HttpStatus.METHOD_NOT_ALLOWED,
                         "Deleting an action invocation resource is not allowed."));
     }
 

@@ -24,8 +24,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.databind.node.POJONode;
 
@@ -52,7 +52,7 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
-import org.apache.causeway.viewer.restfulobjects.rendering.Responses;
+import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 
@@ -83,14 +83,11 @@ extends ContentNegotiationServiceAbstract {
      * within that map.
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedObject objectAdapter) {
 
-        boolean canAccept = canAccept(resourceContext);
-        if(!canAccept) {
-            return null;
-        }
+        if(!canAccept(resourceContext)) return null;
 
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
@@ -106,21 +103,16 @@ extends ContentNegotiationServiceAbstract {
         } else {
             $$roRepresentation = null;
         }
-        final Response.ResponseBuilder responseBuilder =
-                restfulObjectsV1_0.buildResponseTo(
-                        resourceContext, objectAdapter, $$roRepresentation, rootRepresentation);
-
-        responseBuilder.type(
-                RepresentationTypeSimplifiedV2.OBJECT.getContentTypeHeaderValue(ACCEPT_PROFILE));
-
-        return responseBuilder(responseBuilder);
+        return restfulObjectsV1_0.buildResponseTo(
+            resourceContext, objectAdapter, $$roRepresentation, rootRepresentation,
+            RepresentationTypeSimplifiedV2.OBJECT.getResponseContentType(ACCEPT_PROFILE));
     }
 
     /**
      * Individual property of an object is not supported.
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedProperty objectAndProperty)  {
 
@@ -132,13 +124,12 @@ extends ContentNegotiationServiceAbstract {
      * as an object in the list with a single property named '$$ro'
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedCollection managedCollection) {
 
-        if(!canAccept(resourceContext)) {
-            return null;
-        }
+        if(!canAccept(resourceContext)) return null;
+
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
@@ -157,22 +148,16 @@ extends ContentNegotiationServiceAbstract {
         } else {
             $$roRepresentation = null;
         }
-
-        final Response.ResponseBuilder responseBuilder =
-                restfulObjectsV1_0.buildResponseTo(
-                        resourceContext, managedCollection, $$roRepresentation, rootRepresentation);
-
-        responseBuilder.type(
-                RepresentationTypeSimplifiedV2.OBJECT_COLLECTION.getContentTypeHeaderValue(ACCEPT_PROFILE));
-
-        return responseBuilder(responseBuilder);
+        return restfulObjectsV1_0.buildResponseTo(
+            resourceContext, managedCollection, $$roRepresentation, rootRepresentation,
+            RepresentationTypeSimplifiedV2.OBJECT_COLLECTION.getResponseContentType(ACCEPT_PROFILE));
     }
 
     /**
      * Action prompt is not supported.
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ManagedAction objectAndAction)  {
         return null;
@@ -188,13 +173,12 @@ extends ContentNegotiationServiceAbstract {
      * with a single '$$ro' property (similar to {@link #buildResponse(IResourceContext, ManagedCollection)})
      */
     @Override
-    public Response.ResponseBuilder buildResponse(
+    public ResponseEntity<Object> buildResponse(
             final IResourceContext resourceContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        if(!canAccept(resourceContext)) {
-            return null;
-        }
+        if(!canAccept(resourceContext)) return null;
+
         final EnumSet<SuppressionType> suppression = suppress(resourceContext);
         final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
@@ -216,7 +200,7 @@ extends ContentNegotiationServiceAbstract {
 
             if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
 
             } else {
                 rootRepresentation = JsonRepresentation.newMap();
@@ -231,7 +215,7 @@ extends ContentNegotiationServiceAbstract {
 
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
 
             }
 
@@ -256,7 +240,7 @@ extends ContentNegotiationServiceAbstract {
 
             if(!objectAndActionInvocation.hasElements()) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
 
             }
 
@@ -278,7 +262,7 @@ extends ContentNegotiationServiceAbstract {
             var dto = dtoForValue(returnedAdapter).orElse(null);
             if(dto==null) {
                 // 404 not found
-                return Responses.ofNotFound();
+                return ResponseFactory.notFound();
             }
 
             var jsonNode = new POJONode(dto);
@@ -295,12 +279,9 @@ extends ContentNegotiationServiceAbstract {
         default:
             throw _Exceptions.unmatchedCase(resultType);
         }
-
-        var responseBuilder = restfulObjectsV1_0
-                .buildResponseTo(resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation)
-                .type(headerContentType.getContentTypeHeaderValue(ACCEPT_PROFILE));  // set appropriate Content-Type
-
-        return responseBuilder(responseBuilder);
+        return restfulObjectsV1_0.buildResponseTo(
+            resourceContext, objectAndActionInvocation, $$roRepresentation, rootRepresentation,
+            headerContentType.getResponseContentType(ACCEPT_PROFILE));  // set appropriate Content-Type
     }
 
     private Optional<Object> dtoForValue(final @Nullable ManagedObject valueObject) {
@@ -315,13 +296,6 @@ extends ContentNegotiationServiceAbstract {
                         _Casts.uncheckedCast(valSpec.valueFacetElseFail().selectDefaultSemantics().orElseThrow()))
                 : ScalarValueDtoV2.forValue(valueObject.getPojo());
         return Optional.of(dto);
-    }
-
-    /**
-     * For easy subclassing to further customize, eg additional headers
-     */
-    protected Response.ResponseBuilder responseBuilder(final Response.ResponseBuilder responseBuilder) {
-        return responseBuilder;
     }
 
     boolean canAccept(final IResourceContext resourceContext) {

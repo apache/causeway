@@ -18,359 +18,53 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import jakarta.ws.rs.core.CacheControl;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.ext.RuntimeDelegate;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
 
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 /**
  * @since 1.x {@index}
  */
-public abstract class Parser<T> {
+public interface Parser<T> {
 
-    public T valueOf(final List<String> str) {
-        if (str == null) {
-            return null;
-        }
-        if (str.size() == 0) {
-            return null;
-        }
+    T valueOf(String str);
+    String asString(T t);
+
+    default T valueOf(final List<String> str) {
+        if (str == null || str.size() == 0) return null;
         return valueOf(str.get(0));
     }
 
-    public T valueOf(final String[] str) {
-        if (str == null) {
-            return null;
-        }
-        if (str.length == 0) {
-            return null;
-        }
+    default T valueOf(final String[] str) {
+        if (str == null || str.length == 0) return null;
         return valueOf(str[0]);
     }
 
-    public T valueOf(final JsonRepresentation jsonRepresentation) {
-        if (jsonRepresentation == null) {
-            return null;
-        }
+    default T valueOf(final JsonRepresentation jsonRepresentation) {
+        if (jsonRepresentation == null) return null;
         return valueOf(jsonRepresentation.asString());
     }
 
-    public JsonRepresentation asJsonRepresentation(final T t) {
+    default JsonRepresentation asJsonRepresentation(final T t) {
         return JsonRepresentation.newMap("dummy", asString(t)).getRepresentation("dummy");
     }
 
-    public abstract T valueOf(String str);
+    // -- FACTORIES
 
-    public abstract String asString(T t);
-
-    public static final Parser<String> forString() {
-        return new Parser<String>() {
-            @Override
-            public String valueOf(final String str) {
-                return str;
-            }
-
-            @Override
-            public String asString(final String t) {
-                return t;
-            }
-        };
-    }
-
-    public static Parser<Date> forDate() {
-
-        return new Parser<Date>() {
-            private final SimpleDateFormat RFC1123_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyyy HH:mm:ss z");
-
-            @Override
-            public Date valueOf(final String str) {
-                if (str == null) {
-                    return null;
-                }
-                try {
-                    return RFC1123_DATE_FORMAT.parse(str);
-                } catch (final ParseException e) {
-                    return null;
-                }
-            }
-
-            @Override
-            public String asString(final Date t) {
-                return RFC1123_DATE_FORMAT.format(t);
-            }
-        };
-    }
-
-    public static Parser<CacheControl> forCacheControl() {
-        return new Parser<CacheControl>() {
-
-            @Override
-            public CacheControl valueOf(final String str) {
-                if (str == null) {
-                    return null;
-                }
-                CacheControl cacheControl =
-                        RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
-                        .fromString(str);
-                // workaround for bug in CacheControl's equals() method
-                cacheControl.getCacheExtension();
-                cacheControl.getNoCacheFields();
-                return cacheControl;
-            }
-
-            @Override
-            public String asString(final CacheControl cacheControl) {
-                return RuntimeDelegate.getInstance().createHeaderDelegate(CacheControl.class)
-                        .toString(cacheControl);
-            }
-        };
-    }
-
-    public static Parser<MediaType> forJaxRsMediaType() {
-        return new Parser<MediaType>() {
-            @Override
-            public MediaType valueOf(final String str) {
-                if (str == null) {
-                    return null;
-                }
-                return MediaType.valueOf(str);
-            }
-
-            @Override
-            public String asString(final MediaType t) {
-                return t.toString();
-            }
-
-        };
-    }
-
-    public static Parser<Boolean> forBoolean() {
-        return new Parser<Boolean>() {
-            @Override
-            public Boolean valueOf(final String str) {
-                if (str == null) {
-                    return null;
-                }
-                return "yes".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)
-                        ? Boolean.TRUE
-                                : Boolean.FALSE;
-            }
-
-            @Override
-            public String asString(final Boolean t) {
-                return t ? "yes" : "no";
-            }
-
-        };
-    }
-
-    public static Parser<Integer> forInteger() {
-        return new Parser<Integer>() {
-
-            @Override
-            public Integer valueOf(final String str) {
-                if (str == null) {
-                    return null;
-                }
-                return Integer.valueOf(str);
-            }
-
-            @Override
-            public String asString(final Integer t) {
-                return t.toString();
-            }
-        };
-    }
-
-    public static Parser<List<String>> forListOfStrings() {
-        return new Parser<List<String>>() {
-
-            @Override
-            public List<String> valueOf(final List<String> strings) {
-                if (strings == null) {
-                    return Collections.emptyList();
-                }
-                if (strings.size() == 1) {
-                    // special case processing to handle comma-separated values
-                    return valueOf(strings.get(0));
-                }
-                return strings;
-            }
-
-            @Override
-            public List<String> valueOf(final String[] strings) {
-                if (strings == null) {
-                    return Collections.emptyList();
-                }
-                if (strings.length == 1) {
-                    // special case processing to handle comma-separated values
-                    return valueOf(strings[0]);
-                }
-                return Arrays.asList(strings);
-            }
-
-            @Override
-            public List<String> valueOf(final String str) {
-                if (str == null) {
-                    return Collections.emptyList();
-                }
-                return _Strings.splitThenStream(str, ",")
-                        .collect(Collectors.toList());
-            }
-
-            @Override
-            public String asString(final List<String> strings) {
-                return _NullSafe.stream(strings)
-                        .collect(Collectors.joining(","));
-            }
-        };
-    }
-
-    public static Parser<List<List<String>>> forListOfListOfStrings() {
-        return new Parser<List<List<String>>>() {
-
-            @Override
-            public List<List<String>> valueOf(final List<String> str) {
-                if (str == null) {
-                    return null;
-                }
-                if (str.size() == 0) {
-                    return null;
-                }
-                final List<List<String>> listOfLists = _Lists.newArrayList();
-                for (final String s : str) {
-                    listOfLists.add(PathNode.split(s));
-                }
-                return listOfLists;
-            }
-
-            @Override
-            public List<List<String>> valueOf(final String[] str) {
-                if (str == null) {
-                    return null;
-                }
-                if (str.length == 0) {
-                    return null;
-                }
-                return valueOf(Arrays.asList(str));
-            }
-
-            @Override
-            public List<List<String>> valueOf(final String str) {
-                if (str == null || str.isEmpty()) {
-                    return Collections.emptyList();
-                }
-
-                return _Strings.splitThenStream(str, ",")
-                        .map(PathNode::split)
-                        .collect(Collectors.toList());
-            }
-
-            @Override
-            public String asString(final List<List<String>> listOfLists) {
-
-                return _NullSafe.stream(listOfLists)
-                        .map(listOfStrings->_NullSafe.stream(listOfStrings).collect(Collectors.joining(".")))
-                        .collect(Collectors.joining(","));
-            }
-        };
-    }
-
-    public static Parser<String[]> forArrayOfStrings() {
-        return new Parser<String[]>() {
-
-            @Override
-            public String[] valueOf(final List<String> strings) {
-                if (strings == null) {
-                    return _Constants.emptyStringArray;
-                }
-                if (strings.size() == 1) {
-                    // special case processing to handle comma-separated values
-                    return valueOf(strings.get(0));
-                }
-                return strings.toArray(new String[] {});
-            }
-
-            @Override
-            public String[] valueOf(final String[] strings) {
-                if (strings == null) {
-                    return _Constants.emptyStringArray;
-                }
-                if (strings.length == 1) {
-                    // special case processing to handle comma-separated values
-                    return valueOf(strings[0]);
-                }
-                return strings;
-            }
-
-            @Override
-            public String[] valueOf(final String str) {
-                if (str == null) {
-                    return _Constants.emptyStringArray;
-                }
-
-                return _Strings.splitThenStream(str, ",")
-                        .collect(Collectors.toList())
-                        .toArray(_Constants.emptyStringArray);
-            }
-
-            @Override
-            public String asString(final String[] strings) {
-                return _NullSafe.stream(strings)
-                        .collect(Collectors.joining(","));
-            }
-        };
-    }
-
-    public static Parser<List<MediaType>> forListOfJaxRsMediaTypes() {
-        return new Parser<List<MediaType>>() {
-
-            @Override
-            public List<MediaType> valueOf(final String str) {
-                if (str == null) {
-                    return Collections.emptyList();
-                }
-
-                return _Strings.splitThenStream(str, ",")
-                        .map(MediaType::valueOf)
-                        .collect(Collectors.toList());
-            }
-
-            @Override
-            public String asString(final List<MediaType> listOfMediaTypes) {
-
-                return _NullSafe.stream(listOfMediaTypes)
-                        .map(MediaType::toString)
-                        .collect(Collectors.joining(","));
-            }
-        };
-    }
-
-    public static Parser<String> forETag() {
-        return new Parser<String>(){
-
-            @Override
-            public String valueOf(final String str) {
-                return null;
-            }
-
-            @Override
-            public String asString(final String t) {
-                return null;
-            }};
-    }
+    static Parser<Boolean> forBoolean() { return new Parsers.BooleanParser(); }
+    static Parser<Date> forDate() { return new Parsers.DateParser(); }
+    static Parser<Integer> forInteger() { return new Parsers.IntegerParser(); }
+    static Parser<String> forString() { return new Parsers.StringParser(); }
+    static Parser<MediaType> forMediaType() { return new Parsers.MediaTypeParser(); }
+    static Parser<String> forETag() { return new Parsers.ETagParser(); }
+    static Parser<CacheControl> forCacheControl() { return new Parsers.CacheControlParser(); }
+    static Parser<List<String>> forListOfStrings() { return new Parsers.ListOfStringsParser(); }
+    static Parser<List<List<String>>> forListOfListOfStrings() { return new Parsers.ListOfListOfStringsParser(); }
+    static Parser<String[]> forArrayOfStrings() { return new Parsers.ArrayOfStringsParser(); }
+    static Parser<List<MediaType>> forListOfMediaTypes() { return new Parsers.ListOfMediaTypesParser(); }
 
 }

@@ -18,34 +18,34 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.health;
 
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
 
 /**
  * @since 1.x {@index}
  */
-@Path("/health")
+@RequestMapping("${causeway.viewer.restfulobjects.base-path}/health")
 public interface HealthResource {
 
-    @GET
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HEALTH })
-    public Response health();
+    @GetMapping(path = "/", produces = {
+            MediaType.APPLICATION_JSON_VALUE, RestfulMediaType.APPLICATION_JSON_HEALTH
+    })
+    public ResponseEntity<Object> health();
 
-    @DELETE
-    public Response deleteHealthNotAllowed();
+    @DeleteMapping
+    public ResponseEntity<Object> deleteHealthNotAllowed();
 
-    @PUT
-    public Response putHealthNotAllowed();
+    @PutMapping
+    public ResponseEntity<Object> putHealthNotAllowed();
 
-    @POST
-    public Response postHealthNotAllowed();
+    @PostMapping
+    public ResponseEntity<Object> postHealthNotAllowed();
 
 }

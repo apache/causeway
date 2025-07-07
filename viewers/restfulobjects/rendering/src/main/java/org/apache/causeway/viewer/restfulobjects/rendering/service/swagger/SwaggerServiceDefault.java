@@ -30,7 +30,8 @@ import org.apache.causeway.applib.services.swagger.Format;
 import org.apache.causeway.applib.services.swagger.SwaggerService;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.RestEasyConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.viewer.restfulobjects.applib.CausewayModuleViewerRestfulObjectsApplib;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal.OpenApiSpecGenerator;
@@ -58,12 +59,13 @@ public class SwaggerServiceDefault implements SwaggerService {
     @Inject
     public SwaggerServiceDefault(
             final OpenApiSpecGenerator swaggerSpecGenerator,
-            final RestEasyConfiguration restEasyConfiguration,
+            final CausewayConfiguration causewayConfiguration,
             final WebAppContextPath webAppContextPath) {
 
         this.swaggerSpecGenerator = swaggerSpecGenerator;
 
-        var restfulPath = restEasyConfiguration.getJaxrs().getDefaultPath();
+        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
+        var restfulPath = restfulPathProvider.getRestfulPath().orElse("");
         var restfulBase = webAppContextPath.prependContextPath(restfulPath);
 
         this.basePath = _Strings.suffix(restfulBase, "/");
