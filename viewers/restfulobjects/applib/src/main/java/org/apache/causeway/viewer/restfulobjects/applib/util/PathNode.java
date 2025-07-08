@@ -112,7 +112,7 @@ public record PathNode(
     }
 
     public boolean hasCriteria() {
-        return criteria.isEmpty();
+        return !criteria.isEmpty();
     }
 
     public boolean matches(final JsonRepresentation repr) {

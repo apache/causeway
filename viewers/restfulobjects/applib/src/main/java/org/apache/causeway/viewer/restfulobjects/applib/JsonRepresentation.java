@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,6 +51,7 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
@@ -62,8 +64,9 @@ import org.apache.causeway.viewer.restfulobjects.applib.util.PathNode;
  */
 public class JsonRepresentation {
 
-    private static final Pattern FORMAT_BIG_DECIMAL = Pattern.compile("big-decimal\\((\\d+),(\\d+)\\)");
-    private static final Pattern FORMAT_BIG_INTEGER = Pattern.compile("big-integer\\((\\d+)\\)");
+    private final static Pattern FORMAT_BIG_DECIMAL = Pattern.compile("big-decimal\\((\\d+),(\\d+)\\)");
+    private final static Pattern FORMAT_BIG_INTEGER = Pattern.compile("big-integer\\((\\d+)\\)");
+    private final static Map<Class<?>, Function<JsonNode, ?>> REPRESENTATION_INSTANTIATORS = initRepresentationInstantiators();
 
     public interface HasLinkToSelf {
         public LinkRepresentation getSelf();
@@ -81,29 +84,14 @@ public class JsonRepresentation {
         public JsonRepresentation getExtensions();
     }
 
-    private final static Map<Class<?>, Function<JsonNode, ?>> REPRESENTATION_INSTANTIATORS = Map.of(
-        String.class, input -> {
-            if (!input.isTextual()) {
-                throw new IllegalStateException("found node that is not a string " + input.toString());
-            }
-            return input.textValue();
-        },
-        JsonNode.class, input -> input);
-
     private static <T> Function<JsonNode, ?> representationInstantiatorFor(final Class<T> representationType) {
-        Function<JsonNode, ?> transformer = REPRESENTATION_INSTANTIATORS.get(representationType);
-        if (transformer == null) {
-            transformer = input -> {
-                try {
-                    final Constructor<T> constructor = representationType.getConstructor(JsonNode.class);
-                    return constructor.newInstance(input);
-                } catch (final Exception e) {
-                    throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
-                }
-            };
-            REPRESENTATION_INSTANTIATORS.put(representationType, transformer);
-        }
-        return transformer;
+        return REPRESENTATION_INSTANTIATORS.computeIfAbsent(representationType, __->t -> {
+            try {
+                return representationType.getConstructor(JsonNode.class).newInstance(t);
+            } catch (final Exception e) {
+                throw new IllegalArgumentException("Conversions from JsonNode to " + representationType + " are not supported");
+            }
+        });
     }
 
     public static JsonRepresentation jsonAsMap(final @Nullable String keyValuePairsAsJson) {
@@ -178,14 +166,11 @@ public class JsonRepresentation {
 
     public JsonRepresentation getRepresentation(final String pathTemplate, final Object... args) {
         final String pathStr = String.format(pathTemplate, args);
-
         final JsonNode node = getNode(pathStr);
 
-        if (representsNull(node)) {
-            return null;
-        }
-
-        return new JsonRepresentation(node);
+        return representsNull(node)
+            ? null
+            : new JsonRepresentation(node);
     }
 
     // -- ARRAY
@@ -211,9 +196,7 @@ public class JsonRepresentation {
     }
 
     private JsonRepresentation getArray(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
 
         if (!isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an array"));
@@ -226,9 +209,8 @@ public class JsonRepresentation {
     }
 
     private JsonRepresentation getArrayEnsured(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         return new JsonRepresentation(node).ensureArray();
     }
 
@@ -255,9 +237,8 @@ public class JsonRepresentation {
     }
 
     private JsonRepresentation getMap(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         if (isArray(node) || node.isValueNode()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a map"));
         }
@@ -342,9 +323,8 @@ public class JsonRepresentation {
     }
 
     private Boolean getBoolean(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         checkValue(path, node, "a boolean");
         if (!node.isBoolean()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a boolean"));
@@ -370,9 +350,8 @@ public class JsonRepresentation {
     }
 
     private Byte getByte(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         checkValue(path, node, "an byte");
         if (!node.isNumber()) {
             // there is no node.isByte()
@@ -428,9 +407,8 @@ public class JsonRepresentation {
     }
 
     private Character getChar(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node)) return null;
+
         checkValue(path, node, "an short");
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not textual"));
@@ -472,9 +450,8 @@ public class JsonRepresentation {
     }
 
     private Integer getInt(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "an int");
         if (!node.isInt()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not an int"));
@@ -512,9 +489,8 @@ public class JsonRepresentation {
     }
 
     private Long getLong(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a long");
         if(node.isInt()) {
             return Long.valueOf(node.intValue());
@@ -543,9 +519,8 @@ public class JsonRepresentation {
     }
 
     private Float getFloat(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a float");
         if (!node.isNumber()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a number"));
@@ -583,9 +558,8 @@ public class JsonRepresentation {
     }
 
     private Double getDouble(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a double");
         if (!node.isDouble()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a double"));
@@ -752,9 +726,8 @@ public class JsonRepresentation {
     }
 
     private BigDecimal getBigDecimal(final String path, final String format, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         final String requiredType = "a bigdecimal";
         if(!isBigDecimal(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is not " + requiredType));
@@ -829,9 +802,8 @@ public class JsonRepresentation {
     }
 
     private String getString(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
+
         checkValue(path, node, "a string");
         if (!node.isTextual()) {
             throw new IllegalArgumentException(formatExMsg(path, "is not a string"));
@@ -847,9 +819,7 @@ public class JsonRepresentation {
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isLink, getLink, asLink
-    // ///////////////////////////////////////////////////////////////////////
+    // -- LINK
 
     public boolean isLink() {
         return isLink(asJsonNode());
@@ -886,9 +856,7 @@ public class JsonRepresentation {
     }
 
     private LinkRepresentation getLink(final String path, final JsonNode node) {
-        if (representsNull(node)) {
-            return null;
-        }
+        if (representsNull(node))  return null;
 
         if (isArray(node)) {
             throw new IllegalArgumentException(formatExMsg(path, "is an array that does not represent a link"));
@@ -904,9 +872,7 @@ public class JsonRepresentation {
         return link;
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // getNull, isNull
-    // ///////////////////////////////////////////////////////////////////////
+    // -- NULL
 
     public boolean isNull() {
         return isNull(asJsonNode());
@@ -1115,37 +1081,6 @@ public class JsonRepresentation {
                 .map(typedTransformer);
     }
 
-    //[ahuber] replaced by streamArrayElements
-    //    public Iterable<JsonRepresentation> arrayIterable() {
-    //        return arrayIterable(JsonRepresentation.class);
-    //    }
-
-    //[ahuber] replaced by streamArrayElements
-    //    public <T> Iterable<T> arrayIterable(final Class<T> requiredType) {
-    //        return new Iterable<T>() {
-    //            @Override
-    //            public Iterator<T> iterator() {
-    //                return arrayIterator(requiredType);
-    //            }
-    //        };
-    //    }
-
-    //[ahuber] replaced by streamArrayElements
-    //    public Iterator<JsonRepresentation> arrayIterator() {
-    //        return arrayIterator(JsonRepresentation.class);
-    //    }
-
-    //[ahuber] replaced by streamArrayElements
-    //    public <T> Iterator<T> arrayIterator(final Class<T> requiredType) {
-    //        ensureIsAnArrayAtLeastAsLargeAs(0);
-    //        final Function<JsonNode, ?> transformer = representationInstantiatorFor(requiredType);
-    //        final ArrayNode arrayNode = (ArrayNode) jsonNode;
-    //        final Iterator<JsonNode> iterator = arrayNode.iterator();
-    //        // necessary to do in two steps
-    //        final Function<JsonNode, T> typedTransformer = asT(transformer);
-    //        return Iterators.transform(iterator, typedTransformer);
-    //    }
-
     @SuppressWarnings("unchecked")
     private static <T> Function<JsonNode, T> asT(final Function<JsonNode, ?> transformer) {
         return (Function<JsonNode, T>) transformer;
@@ -1176,9 +1111,7 @@ public class JsonRepresentation {
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // mutable (map)
-    // ///////////////////////////////////////////////////////////////////////
+    // -- MUTABLE (MAP)
 
     public boolean mapHas(final String key) {
         if (!isMap()) {
@@ -1209,9 +1142,8 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null)  return this;
+
         final JsonRepresentation array = JsonRepresentation.newArray();
         for (final Object v : value) {
             array.arrayAdd(v);
@@ -1225,8 +1157,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.set(path.getTail(), value != null ? new POJONode(value) : NullNode.getInstance());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.set(path.tail(), value != null ? new POJONode(value) : NullNode.getInstance());
         return this;
     }
 
@@ -1234,12 +1166,11 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null) return this;
+
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.set(path.getTail(), value.asJsonNode());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.set(path.tail(), value.asJsonNode());
         return this;
     }
 
@@ -1247,12 +1178,11 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null) return this;
+
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1260,12 +1190,11 @@ public class JsonRepresentation {
         if (!isMap()) {
             throw new IllegalStateException("does not represent map");
         }
-        if (value == null) {
-            return this;
-        }
+        if (value == null) return this;
+
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.set(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.set(path.tail(), value);
         return this;
     }
 
@@ -1290,8 +1219,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1304,8 +1233,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1318,8 +1247,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1332,8 +1261,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1346,8 +1275,8 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
-        node.put(path.getTail(), value);
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
+        node.put(path.tail(), value);
         return this;
     }
 
@@ -1368,11 +1297,11 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
         if (value != null) {
-            node.put(path.getTail(), value.toString());
+            node.put(path.tail(), value.toString());
         } else {
-            node.set(path.getTail(), NullNode.getInstance());
+            node.set(path.tail(), NullNode.getInstance());
         }
         return this;
     }
@@ -1394,11 +1323,11 @@ public class JsonRepresentation {
             throw new IllegalStateException("does not represent map");
         }
         final Path path = Path.parse(key);
-        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.getHead());
+        final ObjectNode node = walkNodeUpTo(asObjectNode(), path.head());
         if (value != null) {
-            node.put(path.getTail(), value.toString());
+            node.put(path.tail(), value.toString());
         } else {
-            node.set(path.getTail(), NullNode.getInstance());
+            node.set(path.tail(), NullNode.getInstance());
         }
         return this;
     }
@@ -1421,21 +1350,13 @@ public class JsonRepresentation {
 
     // -- PATH
 
-    private static class Path {
-        private final List<String> head;
-        private final String tail;
+    private record Path(
+        List<String> head,
+        String tail) {
 
         private Path(final List<String> head, final String tail) {
             this.head = Collections.unmodifiableList(head);
             this.tail = tail;
-        }
-
-        public List<String> getHead() {
-            return head;
-        }
-
-        public String getTail() {
-            return tail;
         }
 
         public static Path parse(final String pathStr) {
@@ -1605,12 +1526,9 @@ public class JsonRepresentation {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         JsonRepresentation other = (JsonRepresentation) obj;
         if (jsonNode == null) {
             if (other.jsonNode != null)
@@ -1625,7 +1543,21 @@ public class JsonRepresentation {
         return jsonNode.toString();
     }
 
-    // -- UTIL
+    // -- HELPER
+
+    private static Map<Class<?>, Function<JsonNode, ?>> initRepresentationInstantiators() {
+        var map = new ConcurrentHashMap<Class<?>, Function<JsonNode, ?>>();
+
+        map.put(String.class, input -> {
+            if (!input.isTextual()) {
+                throw new IllegalStateException("found node that is not a string " + input.toString());
+            }
+            return input.textValue();
+        });
+        map.put(JsonNode.class, input -> input);
+
+        return map;
+    }
 
     /**
      * Walks the path, ensuring keys exist and are maps, or creating required
@@ -1653,7 +1585,7 @@ public class JsonRepresentation {
                 node.set(key, jsonNode);
             } else {
                 if (!jsonNode.isObject()) {
-                    throw new IllegalArgumentException(String.format("walking path: '%s', existing key '%s' is not a map", keys, key));
+                    throw _Exceptions.illegalArgument("walking path: '%s', existing key '%s' is not a map", keys, key);
                 }
             }
             node = (ObjectNode) jsonNode;

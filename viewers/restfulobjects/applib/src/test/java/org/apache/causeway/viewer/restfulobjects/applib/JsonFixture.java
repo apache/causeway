@@ -25,7 +25,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
 
 public class JsonFixture {
@@ -33,10 +33,10 @@ public class JsonFixture {
     private JsonFixture() {
     }
 
-    public static JsonNode readJson(final String resourceName) 
+    public static JsonNode readJson(final String resourceName)
             throws JsonParseException, JsonMappingException, IOException {
 
-        String json = _Resources.loadAsString(JsonFixture.class, resourceName, StandardCharsets.UTF_8);
+        var json = _Strings.read(JsonFixture.class.getResourceAsStream(resourceName), StandardCharsets.UTF_8);
 
         return JsonMapper.instance().read(json, JsonNode.class);
     }

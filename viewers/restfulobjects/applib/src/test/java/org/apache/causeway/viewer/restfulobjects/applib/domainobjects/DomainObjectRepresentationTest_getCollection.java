@@ -37,12 +37,12 @@ class DomainObjectRepresentationTest_getCollection {
     private DomainObjectRepresentation representation;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         representation = new DomainObjectRepresentation(readJson("domainObjectRepresentation.json"));
     }
 
     @Test
-    public void getCollection() throws IOException {
+    void getCollection() throws IOException {
         final JsonRepresentation flag = representation.getCollection("someCollection");
         assertThat(flag, is(not(nullValue())));
         assertThat(flag.getBoolean("value"), is(true));

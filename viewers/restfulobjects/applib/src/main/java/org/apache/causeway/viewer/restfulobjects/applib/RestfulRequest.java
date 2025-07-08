@@ -86,12 +86,9 @@ public final class RestfulRequest {
         }
 
         public Q valueOf(final JsonRepresentation parameterRepresentation) {
-            if (parameterRepresentation == null) {
-                return defaultValue;
-            }
-            if (!parameterRepresentation.isMap()) {
-                return defaultValue;
-            }
+            if (parameterRepresentation == null) return defaultValue;
+            if (!parameterRepresentation.isMap()) return defaultValue;
+
             final Q parsedValue = getParser().valueOf(parameterRepresentation.getRepresentation(getName()));
             return parsedValue != null ? parsedValue : defaultValue;
         }

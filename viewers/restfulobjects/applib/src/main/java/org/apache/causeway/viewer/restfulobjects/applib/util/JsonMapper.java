@@ -111,6 +111,6 @@ public record JsonMapper(
         return objectMapper;
     }
 
-    private static Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap<>();
+    private static final Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap<>();
 
 }
