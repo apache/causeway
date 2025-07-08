@@ -58,19 +58,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
-
 	<dependencies>
 
         <dependency>

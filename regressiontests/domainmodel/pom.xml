@@ -40,15 +40,6 @@
 		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/domainmodel</git-plugin.propertiesDir>
     </properties>
 
-	<build>
-		<testResources>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.causeway.regressiontests</groupId>

@@ -37,32 +37,6 @@
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/wicket/ui</git-plugin.propertiesDir>
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>net.alchim31.maven</groupId>
-				<artifactId>yuicompressor-maven-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-		</plugins>
-	</build>
-
 	<dependencies>
 
 		<dependency>

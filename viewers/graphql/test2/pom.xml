@@ -45,18 +45,6 @@
 
     </properties>
 
-    <build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>false</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
 	<dependencies>
 
 		<!-- TESTING -->

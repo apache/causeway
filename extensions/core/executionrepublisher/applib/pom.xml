@@ -35,25 +35,6 @@
         <git-plugin.propertiesDir>org/apache/causeway/extensions/executionrepublisher/applib</git-plugin.propertiesDir>
     </properties>
 
-    <build>
-        <resources>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-    </build>
-
     <dependencies>
 
         <dependency>

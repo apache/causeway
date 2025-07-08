@@ -37,14 +37,6 @@
 		<git-plugin.propertiesDir>org/apache/causeway/viewer/graphql/viewer</git-plugin.propertiesDir>
 	</properties>
 
-	<build>
-		<testResources>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
 	<dependencies>
 
         <dependency>
