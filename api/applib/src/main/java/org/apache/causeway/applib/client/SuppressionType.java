@@ -20,8 +20,13 @@ package org.apache.causeway.applib.client;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -58,16 +63,20 @@ public enum SuppressionType {
     /**
      * suppress all '$$...' entries
      */
-    ALL
+    ALL;
 
-    ;
-
-    public static EnumSet<SuppressionType> all() { return EnumSet.of(ALL); };
+    public static EnumSet<SuppressionType> all() { return EnumSet.of(ALL); }
 
     public static EnumSet<SuppressionType> setOf(final SuppressionType ... types){
         final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
         stream(types).forEach(set::add);
         return set;
+    }
+
+    public static Optional<String> toLiteral(final @Nullable EnumSet<SuppressionType> suppressionTypes) {
+        return _Strings.nonEmpty(_NullSafe.stream(suppressionTypes)
+                .map(SuppressionType::name)
+                .collect(Collectors.joining(",")));
     }
 
     public static class ParseUtil {

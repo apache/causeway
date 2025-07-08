@@ -45,7 +45,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class Staff_hilevel_IntegTest extends Abstract_IntegTest {
+class Staff_IntegTest extends Abstract_IntegTest {
 
     final String staffName = "Fred Smith";
 
@@ -153,7 +153,7 @@ class Staff_hilevel_IntegTest extends Abstract_IntegTest {
     }
 
     private String asAbsoluteHref(final Bookmark bookmark) {
-        return String.format("%s%s", restfulClient.getConfig().getRestfulBaseUrl(), asRelativeHref(bookmark));
+        return String.format("%s%s", baseUrl(), asRelativeHref(bookmark));
     }
 
     private String asRelativeHref(final Bookmark bookmark) {

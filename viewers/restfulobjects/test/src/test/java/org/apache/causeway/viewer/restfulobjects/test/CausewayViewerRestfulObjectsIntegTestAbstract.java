@@ -58,10 +58,6 @@ import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.viewer.restfulobjects.applib.client.ConversationLogger;
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
-
 import static org.apache.causeway.commons.internal.assertions._Assert.assertNotNull;
 
 import lombok.SneakyThrows;
@@ -171,19 +167,6 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
                     throw new AssertionFailedError("StatusCode NOT_FOUND expected, but got: " + response.getStatusCode());
             }
         };
-    }
-
-    @Deprecated
-    protected RestfulClient restfulClient() {
-        var clientConfig = RestfulClientConfig.builder()
-                .restfulBaseUrl(String.format("http://0.0.0.0:%d/restful/", port))
-                .authenticationMode(AuthenticationMode.BASIC)
-                .basicAuthUser("any")           // using bypass auth.
-                .basicAuthPassword("any")
-                .useRequestDebugLogging(true) // default = false
-                .build();
-
-        return RestfulClient.ofConfig(clientConfig);
     }
 
     public enum BookmarkOptions {

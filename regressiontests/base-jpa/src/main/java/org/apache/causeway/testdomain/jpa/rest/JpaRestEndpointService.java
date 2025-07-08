@@ -18,39 +18,55 @@
  */
 package org.apache.causeway.testdomain.jpa.rest;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-
 import jakarta.inject.Inject;
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.GenericType;
 import jakarta.xml.bind.JAXBException;
 
-import org.jspecify.annotations.NonNull;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpInputMessage;
+import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClient.Builder;
+import org.springframework.web.client.RestClient.RequestBodySpec;
+import org.springframework.web.client.RestClient.RequestBodyUriSpec;
 
-import org.apache.causeway.applib.client.SuppressionType;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEvent;
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
+import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
 import org.apache.causeway.testdomain.jpa.JpaTestFixtures;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.ldap.LdapConstants;
 import org.apache.causeway.testdomain.util.dto.BookDto;
-import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClientMediaType;
-import org.apache.causeway.viewer.restfulobjects.client.log.ClientConversationFilter;
+import org.apache.causeway.viewer.restfulobjects.applib.client.ActionParameterModel;
+import org.apache.causeway.viewer.restfulobjects.applib.client.CausewayMediaTypes;
+import org.apache.causeway.viewer.restfulobjects.applib.client.ConversationLogger;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -75,191 +91,195 @@ public class JpaRestEndpointService {
 
     // -- NEW CLIENT
 
-    public RestfulClient newClient(final boolean useRequestDebugLogging) {
-        return newClient(useRequestDebugLogging, Can.empty());
+    @Getter(lazy = true) @Accessors(fluent=true)
+    private final String baseUrl = "http://0.0.0.0:%d%s/".formatted(getPort(), webAppContextPath
+            .prependContextPath(new RestfulPathProvider(causewayConfiguration).getRestfulPath().orElse("")));
+
+    record ValueHolder(String type, Object value) {
+        ValueDecomposition parseValueDecomposition() {
+            return ValueDecomposition.destringify(ValueType.COMPOSITE, (String)value);
+        }
+        @SuppressWarnings("unchecked")
+        <T> T value(final Class<T> requiredType){
+            return (T) value;
+        }
+    }
+    record CausewayMessageConverter() implements HttpMessageConverter<Object> {
+
+        @Override
+        public boolean canRead(final Class<?> clazz, @Nullable final MediaType mediaType) {
+            return clazz.equals(ValueDecomposition.class);
+        }
+
+        @Override
+        public boolean canWrite(final Class<?> clazz, @Nullable final MediaType mediaType) {
+            return false;
+        }
+
+        @Override
+        public List<MediaType> getSupportedMediaTypes() {
+            return List.of(MediaType.APPLICATION_JSON);
+        }
+
+        @Override
+        public Object read(final Class<? extends Object> clazz, final HttpInputMessage inputMessage)
+            throws IOException, HttpMessageNotReadableException {
+            var bytes = _Bytes.of(inputMessage.getBody());
+            var json = new String(bytes, StandardCharsets.UTF_8);
+            var valueHolder = JsonUtils.tryRead(ValueHolder.class, json)
+                .valueAsNonNullElseFail();
+            return ValueDecomposition.destringify(ValueType.COMPOSITE, valueHolder.value(String.class));
+        }
+
+        @Override
+        public void write(final Object t, @Nullable final MediaType contentType, final HttpOutputMessage outputMessage)
+            throws IOException, HttpMessageNotWritableException {
+            // TODO Auto-generated method stub
+
+        }
+
     }
 
-    public RestfulClient newClient(
-            final boolean useRequestDebugLogging,
-            final @NonNull Can<ClientConversationFilter> additionalFilters) {
+    protected Builder restClient() {
+        return RestClient.builder()
+            .messageConverters(converters->converters.add(0, new CausewayMessageConverter()))
+            .baseUrl(baseUrl())
+            .defaultHeaders(headers -> headers.setBasicAuth(LdapConstants.SVEN_PRINCIPAL, "pass"));
+    }
+    protected Builder restClient(final Logger logger) {
+        return restClient()
+            .bufferContent((uri, method)->true)
+            .requestInterceptor(new ConversationLogger(msg->logger.info(msg)));
+    }
+    protected ActionParameterModel actParamModel() {
+        return ActionParameterModel.create(baseUrl());
+    }
 
-        var restfulPathProvider = new RestfulPathProvider(causewayConfiguration);
-
-        var restRootPath =
-                String.format("http://localhost:%d%s/",
-                        getPort(),
-                        webAppContextPath
-                            .prependContextPath(restfulPathProvider.getRestfulPath().orElse(""))
-                );
-
-        log.debug("new restful client created for {}", restRootPath);
-
-        var clientConfig = RestfulClientConfig.builder()
-                .restfulBaseUrl(restRootPath)
-                // setup basic-auth
-                .authenticationMode(AuthenticationMode.BASIC)
-                .basicAuthUser(LdapConstants.SVEN_PRINCIPAL)
-                .basicAuthPassword("pass")
-                // setup request/response debug logging
-                .useRequestDebugLogging(useRequestDebugLogging)
-                // register additional filter if any
-                .clientConversationFilters(additionalFilters.toList())
-                .build();
-
-        var client = RestfulClient.ofConfig(clientConfig);
-        return client;
+    public RestClient newClient(final boolean useRequestDebugLogging) {
+        log.debug("new restful client created for {}", baseUrl());
+        return useRequestDebugLogging
+            ? restClient(log).build()
+            : restClient().build();
     }
 
     // -- NEW REQUEST BUILDER
 
-    public Invocation.Builder newInvocationBuilder(final RestfulClient client, final String endpointPath) {
-        var accept = RestfulClientMediaType.SIMPLE_JSON.mediaTypeFor(Object.class, SuppressionType.all()).toString();
-        return client.request(endpointPath)
-                .accept(accept);
+    public RequestBodySpec request(final RequestBodyUriSpec requestBodyUriSpec, final String uri,
+        final ActionParameterModel actParamModel) {
+        return requestBodyUriSpec
+            .uri(INVENTORY_RESOURCE + uri)
+            .accept(CausewayMediaTypes.CAUSEWAY_JSON_V2_LIGHT)
+            .body(actParamModel.toJson());
     }
 
     // -- ENDPOINTS
 
-    public Try<JpaBook> getRecommendedBookOfTheWeek(final RestfulClient client) {
+    public Try<JpaBook> getRecommendedBookOfTheWeek(final RestClient client) {
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeek/invoke");
-        var args = client.arguments()
-                .build();
+        var response = request(client.post(), "/actions/recommendedBookOfTheWeek/invoke", actParamModel())
+            .retrieve();
 
-        var response = request.post(args);
-        var digest = client.digest(response, JpaBook.class);
-
-        return digest;
+        var entity = response.body(JpaBook.class);
+        return Try.success(entity);
     }
 
-    public Try<BookDto> getRecommendedBookOfTheWeekDto(final RestfulClient client) {
+    public Try<BookDto> getRecommendedBookOfTheWeekDto(final RestClient client) {
+        var response = request(client.post(), "/actions/recommendedBookOfTheWeekDto/invoke", actParamModel())
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekDto/invoke");
-        var args = client.arguments()
-                .build();
-
-        var response = request.post(args);
-        var digest = client.digest(response, BookDto.class);
-
-        return digest;
+        var entity = response.body(BookDto.class);
+        return Try.success(entity);
     }
 
-    public Try<Can<JpaBook>> getMultipleBooks(final RestfulClient client) throws JAXBException {
+    public Try<Can<JpaBook>> getMultipleBooks(final RestClient client) throws JAXBException {
+        var response = request(client.post(),"/actions/multipleBooks/invoke", actParamModel()
+                .addActionParameter("nrOfBooks", 3))
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/multipleBooks/invoke");
-        var args = client.arguments()
-                .addActionParameter("nrOfBooks", 3)
-                .build();
+        List<JpaBook> books = response
+            .body(new ParameterizedTypeReference<List<JpaBook>>() {});
 
-        var response = request.post(args);
-        var digest = client.digestList(response, JpaBook.class, new GenericType<List<JpaBook>>() {});
-
-        return digest;
+        return Try.success(Can.ofCollection(books));
     }
 
-    public Try<JpaBook> storeBook(final RestfulClient client, final JpaBook newBook) throws JAXBException {
+    public Try<JpaBook> storeBook(final RestClient client, final JpaBook newBook) throws JAXBException {
+        var response = request(client.post(), "/actions/storeBook/invoke", actParamModel()
+            .addActionParameter("newBook", BookDto.from(newBook).encode()))
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/storeBook/invoke");
-        var args = client.arguments()
-                .addActionParameter("newBook", BookDto.from(newBook).encode())
-                .build();
-
-        var response = request.post(args);
-        var digest = client.digest(response, JpaBook.class);
-
-        return digest;
+        var entity = response.body(JpaBook.class);
+        return Try.success(entity);
     }
 
-    public Try<BookDto> getRecommendedBookOfTheWeekAsDto(final RestfulClient client) {
+    public Try<BookDto> getRecommendedBookOfTheWeekAsDto(final RestClient client) {
+        var response = request(client.post(), "/actions/recommendedBookOfTheWeekAsDto/invoke", actParamModel())
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/recommendedBookOfTheWeekAsDto/invoke");
-        var args = client.arguments()
-                .build();
-
-        var response = request.post(args);
-        var digest = client.digest(response, BookDto.class);
-
-        return digest;
+        var entity = response.body(BookDto.class);
+        return Try.success(entity);
     }
 
-    public Try<Can<BookDto>> getMultipleBooksAsDto(final RestfulClient client) throws JAXBException {
+    public Try<Can<BookDto>> getMultipleBooksAsDto(final RestClient client) throws JAXBException {
+        var response = request(client.post(), "/actions/multipleBooksAsDto/invoke", actParamModel()
+            .addActionParameter("nrOfBooks", 2))
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/multipleBooksAsDto/invoke");
-        var args = client.arguments()
-                .addActionParameter("nrOfBooks", 2)
-                .build();
+        List<BookDto> books = response
+            .body(new ParameterizedTypeReference<List<BookDto>>() {});
 
-        var response = request.post(args);
-        var digest = client.digestList(response, BookDto.class, new GenericType<List<BookDto>>() {});
-
-        return digest;
+        return Try.success(Can.ofCollection(books));
     }
 
-    public Try<JpaInventoryJaxbVm> getInventoryAsJaxbVm(final RestfulClient client) {
+    public Try<JpaInventoryJaxbVm> getInventoryAsJaxbVm(final RestClient client) {
+        var response = request(client.post(), "/actions/inventoryAsJaxbVm/invoke", actParamModel())
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/inventoryAsJaxbVm/invoke");
-        var args = client.arguments()
-                .build();
-
-        var response = request.post(args);
-        var digest = client.digest(response, JpaInventoryJaxbVm.class);
-        return digest;
+        return JsonUtils.tryRead(JpaInventoryJaxbVm.class, response.body(String.class),
+            JsonUtils::jaxbAnnotationSupport,
+            m->m.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES),
+            m->m.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES));
+         //var entity = response.body(JpaInventoryJaxbVm.class);
+        //return Try.success(entity);
     }
 
-    public Try<Can<JpaBook>> getBooksFromInventoryAsJaxbVm(final RestfulClient client) {
-
+    public Try<Can<JpaBook>> getBooksFromInventoryAsJaxbVm(final RestClient client) {
         var objectId = interactionService.callAnonymous(
                 ()->jpaTestFixtures.getInventoryJaxbVmAsBookmark().identifier());
 
         // using domain object alias ...
-        var request = newInvocationBuilder(client,
-                "objects/testdomain.jpa.JpaInventoryJaxbVmAlias/"
-                        + objectId + "/actions/listBooks/invoke");
+        var response = client
+            .post()
+            .uri("objects/testdomain.jpa.JpaInventoryJaxbVmAlias/%s/actions/listBooks/invoke"
+                .formatted(objectId))
+            .accept(CausewayMediaTypes.CAUSEWAY_JSON_V2_LIGHT)
+            .body(actParamModel().toJson())
+            .retrieve();
 
-        var args = client.arguments()
-                .build();
+        List<JpaBook> books = response
+            .body(new ParameterizedTypeReference<List<JpaBook>>() {});
 
-        var response = request.post(args);
-        var digest = client.digestList(response, JpaBook.class, new GenericType<List<JpaBook>>() {});
-
-        return digest;
+        return Try.success(Can.ofCollection(books));
     }
 
     public Try<CalendarEvent> echoCalendarEvent(
-            final RestfulClient client, final CalendarEvent calendarEvent) {
-
+            final RestClient client, final CalendarEvent calendarEvent) {
         var calSemantics = new CalendarEventSemantics();
+        var response = request(client.post(),"/actions/echoCalendarEvent/invoke", actParamModel()
+            .addActionParameter("calendarEvent", calSemantics.decompose(calendarEvent)))
+            .retrieve();
+        var entity = response.body(ValueDecomposition.class);
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/echoCalendarEvent/invoke");
-        var args = client.arguments()
-                .addActionParameter("calendarEvent", calSemantics.decompose(calendarEvent))
-                .build();
-
-        var response = request.post(args);
-        var digest = client.digestValue(response, calSemantics);
-
-        return digest;
+        var calendarEventEcho = calSemantics.compose(entity);
+        return Try.success(calendarEventEcho);
     }
 
-    public Try<String> getHttpSessionInfo(final RestfulClient client) {
+    public Try<String> getHttpSessionInfo(final RestClient client) {
+        var args = actParamModel();
+        var response = request(client.post(), "/actions/httpSessionInfo/invoke", args)
+            .retrieve();
 
-        var request = newInvocationBuilder(client,
-                INVENTORY_RESOURCE + "/actions/httpSessionInfo/invoke");
-        var args = client.arguments()
-                .build();
-
-        var response = request.post(args);
-        var digest = client.digest(response, String.class);
-
-        return digest;
+        var entity = response.body(ValueHolder.class);
+        return Try.success((String)entity.value());
     }
 
     // -- HELPER

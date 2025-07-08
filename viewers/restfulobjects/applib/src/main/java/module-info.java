@@ -36,7 +36,7 @@ module org.apache.causeway.viewer.restfulobjects.applib {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    requires org.apache.causeway.applib;
+    requires transitive org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;

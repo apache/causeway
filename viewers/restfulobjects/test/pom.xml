@@ -41,19 +41,6 @@
 		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
-	<build>
-		<testResources>
-			<testResource>
-				<directory>src/test/resources</directory>
-				<filtering>true</filtering>
-			</testResource>
-			<testResource>
-				<directory>src/test/java</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-	</build>
-
 	<dependencies>
 
 		<!-- TESTING -->
@@ -109,11 +96,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
-			<artifactId>causeway-viewer-restfulobjects-client</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.causeway.viewer</groupId>
 			<artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -159,12 +141,6 @@
 		<dependency>
 			<groupId>com.approvaltests</groupId>
 			<artifactId>approvaltests</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
 			<scope>test</scope>
 		</dependency>
 

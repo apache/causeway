@@ -34,7 +34,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.test.CausewayViewerRestfulObjectsIntegTestAbstract;
 import org.apache.causeway.viewer.restfulobjects.test.domain.UniversityModule;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
@@ -56,8 +55,6 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
     @Inject protected DeptHeadRepository deptHeadRepository;
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
-
-    @Deprecated protected RestfulClient restfulClient;
 
     protected Abstract_IntegTest(final Class<?> resourceBaseClazz) {
         super(resourceBaseClazz);
@@ -96,14 +93,11 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
 
         });
 
-        restfulClient = restfulClient();
     }
 
     @Override
     @AfterEach
     protected void afterEach(){
-        restfulClient.close();
-
         transactionService.runTransactional(Propagation.REQUIRED, () -> {
             staffMemberRepository.removeAll();
             deptHeadRepository.findAll().forEach(x -> x.setDepartment(null));

@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.client.RestClient;
 
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
 import org.apache.causeway.testdomain.jpa.JpaInventoryJaxbVm;
@@ -43,7 +44,6 @@ import org.apache.causeway.testdomain.jpa.RegressionTestWithJpaFixtures;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.entities.JpaBook;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 @SpringBootTest(
@@ -66,22 +66,18 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
     @LocalServerPort int port; // just for reference (not used)
     @Inject JpaRestEndpointService restService;
 
-    private RestfulClient restfulClient;
+    private RestClient restClient;
 
     @BeforeEach
     void checkPrereq() {
         assertTrue(restService.getPort()>0);
-        this.restfulClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
+        this.restClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
     }
 
     @Test @Order(1)
     void httpSessionInfo() {
-        var digest = restService.getHttpSessionInfo(restfulClient)
-                .ifFailureFail();
-
-        var httpSessionInfo = digest.getValue().orElseThrow();
-
-        assertNotNull(httpSessionInfo);
+        var httpSessionInfo = restService.getHttpSessionInfo(restClient)
+                .valueAsNonNullElseFail();
 
         // NB: this works only because we excluded wicket viewer from the app.
         assertEquals("no http-session", httpSessionInfo);
@@ -89,10 +85,10 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(2)
     void bookOfTheWeek_viaRestEndpoint() {
-        var digest = restService.getRecommendedBookOfTheWeek(restfulClient)
+        var entity = restService.getRecommendedBookOfTheWeek(restClient)
                 .ifFailureFail();
 
-        var bookOfTheWeek = digest.getValue().orElseThrow();
+        var bookOfTheWeek = entity.valueAsNonNullElseFail();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -103,10 +99,10 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
         var newBook = JpaBook.of("REST Book", "A sample REST book for testing.", 77.,
                 "REST Author", "REST ISBN", "REST Publisher");
 
-        var digest = restService.storeBook(restfulClient, newBook)
+        var entity = restService.storeBook(restClient, newBook)
                 .ifFailureFail();
 
-        var storedBook = digest.getValue().orElseThrow();
+        var storedBook = entity.valueAsNonNullElseFail();
 
         assertNotNull(storedBook);
         assertEquals("REST Book", storedBook.getName());
@@ -114,12 +110,12 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(4)
     void multipleBooks_viaRestEndpoint() throws JAXBException {
-        var digest = restService.getMultipleBooks(restfulClient)
+        var entity = restService.getMultipleBooks(restClient)
                 .ifFailureFail();
 
         var expectedBookTitles = JpaTestFixtures.expectedBookTitles();
 
-        var multipleBooks = digest.getValue().orElseThrow()
+        var multipleBooks = entity.valueAsNonNullElseFail()
                 .filter(book->expectedBookTitles.contains(book.getName()));
 
         assertEquals(3, multipleBooks.size());
@@ -127,10 +123,10 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(5)
     void bookOfTheWeek_asDto_viaRestEndpoint() {
-        var digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
+        var entity = restService.getRecommendedBookOfTheWeekAsDto(restClient)
                 .ifFailureFail();
 
-        var bookOfTheWeek = digest.getValue().orElseThrow();
+        var bookOfTheWeek = entity.valueAsNonNullElseFail();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -138,10 +134,10 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(6)
     void multipleBooks_asDto_viaRestEndpoint() throws JAXBException {
-        var digest = restService.getMultipleBooksAsDto(restfulClient)
+        var entity = restService.getMultipleBooksAsDto(restClient)
                 .ifFailureFail();
 
-        var multipleBooks = digest.getValue().orElseThrow();
+        var multipleBooks = entity.valueAsNonNullElseFail();
 
         assertEquals(2, multipleBooks.size());
 
@@ -152,10 +148,8 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(7)
     void inventoryAsJaxbVm_viaRestEndpoint() {
-        var digest = restService.getInventoryAsJaxbVm(restfulClient)
-                .ifFailureFail();
-
-        final JpaInventoryJaxbVm inventoryAsJaxbVm = digest.getValue().orElseThrow();
+        final JpaInventoryJaxbVm inventoryAsJaxbVm = restService.getInventoryAsJaxbVm(restClient)
+                .valueAsNonNullElseFail();
 
         assertNotNull(inventoryAsJaxbVm);
         assertEquals("Bookstore", inventoryAsJaxbVm.getName());
@@ -163,10 +157,10 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(8)
     void listBooks_fromInventoryAsJaxbVm_viaRestEndpoint() {
-        var digest = restService.getBooksFromInventoryAsJaxbVm(restfulClient)
+        var entity = restService.getBooksFromInventoryAsJaxbVm(restClient)
                 .ifFailure(Assertions::fail);
 
-        var books = digest.getValue().orElseThrow();
+        var books = entity.valueAsNonNullElseFail();
 
         var expectedBookTitles = JpaTestFixtures.expectedBookTitles();
 
@@ -192,10 +186,10 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
          * "cardinality":4
          * }
          */
-        var digest = restService.echoCalendarEvent(restfulClient, calSample)
+        var entity = restService.echoCalendarEvent(restClient, calSample)
                 .ifFailure(Assertions::fail);
 
-        var calSampleEchoed = digest.getValue().orElseThrow();
+        var calSampleEchoed = entity.valueAsNonNullElseFail();
         assertEquals(calSample, calSampleEchoed);
     }
 

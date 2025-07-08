@@ -22,7 +22,6 @@ import java.util.stream.IntStream;
 
 import jakarta.inject.Inject;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,12 +31,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.client.RestClient;
 
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.testdomain.jpa.conf.Configuration_usingJpa;
 import org.apache.causeway.testdomain.jpa.rest.JpaRestEndpointService;
 import org.apache.causeway.testing.unittestsupport.applib.annotations.DisabledIfRunningWithSurefire;
-import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRestfulObjectsViewer;
 
 import lombok.extern.slf4j.Slf4j;
@@ -80,17 +79,12 @@ class RestServiceStressTest {
 
             IntStream.range(0, clients)
             //.parallel()
-            .mapToObj(i->{
-                var restfulClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
-                return restfulClient;
-            })
-            .forEach(restfulClient->{
-
+            .mapToObj(i->restService.newClient(USE_REQUEST_DEBUG_LOGGING))
+            .forEach(restClient->{
                 IntStream.range(0, iterations)
                 .forEach(iter->{
-                    requestSingleBookOfTheWeek_viaRestEndpoint(restfulClient);
+                    requestSingleBookOfTheWeek_viaRestEndpoint(restClient);
                 });
-
             });
 
         });
@@ -99,12 +93,9 @@ class RestServiceStressTest {
 
     }
 
-    void requestSingleBookOfTheWeek_viaRestEndpoint(final RestfulClient _restfulClient) {
-        var restfulClient = restService.newClient(USE_REQUEST_DEBUG_LOGGING);
-        var digest = restService.getRecommendedBookOfTheWeekAsDto(restfulClient)
-                .ifFailure(Assertions::fail);
-
-        var bookOfTheWeek = digest.getValue().orElseThrow();
+    void requestSingleBookOfTheWeek_viaRestEndpoint(final RestClient restClient) {
+        var bookOfTheWeek = restService.getRecommendedBookOfTheWeekAsDto(restClient)
+            .valueAsNonNullElseFail();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
