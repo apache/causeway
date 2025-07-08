@@ -46,7 +46,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
-import org.apache.causeway.viewer.restfulobjects.applib.util.Links;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
@@ -272,7 +271,7 @@ implements DomainObjectResource {
         grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                Link link = Links.get(
+                Link link = newLink(
                         Rel.ELEMENT,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId
@@ -283,7 +282,7 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                Link link = Links.get(
+                Link link = newLink(
                         Rel.ACTION,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/actions/" + actionLayoutData.getId()
@@ -294,7 +293,7 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                Link link = Links.get(
+                Link link = newLink(
                         Rel.PROPERTY,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/properties/" + propertyLayoutData.getId()
@@ -305,7 +304,7 @@ implements DomainObjectResource {
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                Link link = Links.get(
+                Link link = newLink(
                         Rel.COLLECTION,
                         resourceContext.restfulUrlFor(
                                 "objects/" + domainType + "/" + instanceId + "/collections/" + collectionLayoutData.getId()

@@ -32,7 +32,6 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.menubars.MenuBarsResource;
-import org.apache.causeway.viewer.restfulobjects.applib.util.Links;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -81,7 +80,7 @@ implements MenuBarsResource {
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
                         logicalTypeName, SERVICE_IDENTIFIER, actionLayoutData.getId());
-                Link link = Links.get(
+                Link link = newLink(
                         Rel.ACTION,
                         resourceContext.restfulUrlFor(relativeUrl),
                         RepresentationType.OBJECT_ACTION.getJsonMediaType().toString());

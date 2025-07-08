@@ -42,7 +42,7 @@ public class UrlUtils {
      * @see URLDecoder
      */
     @SneakyThrows
-    public static String urlDecodeUtf8(final @Nullable String input) {
+    public @Nullable String urlDecodeUtf8(final @Nullable String input) {
         return input!=null
              ? URLDecoder.decode(input, StandardCharsets.UTF_8)
              : input;
@@ -54,7 +54,7 @@ public class UrlUtils {
      * @see URLEncoder
      */
     @SneakyThrows
-    public static String urlEncodeUtf8(final @Nullable String input) {
+    public @Nullable String urlEncodeUtf8(final @Nullable String input) {
         return input!=null
                 ? URLEncoder.encode(input, StandardCharsets.UTF_8)
                 : input;

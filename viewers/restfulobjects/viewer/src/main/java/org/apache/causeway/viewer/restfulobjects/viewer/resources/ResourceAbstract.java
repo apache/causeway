@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
@@ -44,6 +45,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
@@ -154,6 +156,13 @@ implements HasMetaModelContext {
                         RestfulObjectsApplicationException
                                 .createWithMessage(HttpStatus.NOT_FOUND,
                                         "Could not determine adapter for bookmark: '%s'".formatted(bookmark))));
+    }
+
+    protected static Link newLink(
+            final Rel rel,
+            final String href,
+            final String type) {
+        return new Link(rel.getName(), "GET", href, type);
     }
 
     // -- HELPER

@@ -24,8 +24,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 
-import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
-
 class ResourceContext_stripQuotes_Test {
 
     @Test

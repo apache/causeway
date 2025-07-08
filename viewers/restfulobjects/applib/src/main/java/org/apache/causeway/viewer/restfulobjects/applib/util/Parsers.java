@@ -40,9 +40,9 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class Parsers {
+class Parsers {
 
-    public record BooleanParser() implements Parser<Boolean> {
+    record BooleanParser() implements Parser<Boolean> {
         @Override public Boolean valueOf(final String str) {
             if (str == null) return null;
             return "yes".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)
@@ -54,7 +54,7 @@ public class Parsers {
         }
     }
 
-    public record IntegerParser() implements Parser<Integer> {
+    record IntegerParser() implements Parser<Integer> {
         @Override public Integer valueOf(final String str) {
             if (str == null) return null;
             return Integer.valueOf(str);
@@ -64,12 +64,12 @@ public class Parsers {
         }
     }
 
-    public record StringParser() implements Parser<String> {
+    record StringParser() implements Parser<String> {
         @Override public String valueOf(final String str) { return str; }
         @Override public String asString(final String t) { return t; }
     }
 
-    public record DateParser() implements Parser<Date> {
+    record DateParser() implements Parser<Date> {
         final static SimpleDateFormat RFC1123_DATE_FORMAT = new SimpleDateFormat("EEE, dd MMM yyyyy HH:mm:ss z");
         @Override public Date valueOf(final String str) {
             if (!StringUtils.hasLength(str)) return null;
@@ -86,7 +86,7 @@ public class Parsers {
         }
     }
 
-    public record MediaTypeParser() implements Parser<MediaType> {
+    record MediaTypeParser() implements Parser<MediaType> {
         @Override public MediaType valueOf(final String str) {
             if (!StringUtils.hasLength(str)) return null;
             return MediaType.valueOf(str);
@@ -96,9 +96,48 @@ public class Parsers {
                     ? t.toString()
                     : null;
         }
+//legacy utility code - perhaps not needed any more
+//        /**
+//         * Same as {@code MediaType.valueOf(type)}, but with fallback in case {@code MediaType.valueOf(type)}
+//         * throws an IllegalArgumentException.
+//         * <p>
+//         * The fallback is to retry with some special characters replaces in String {@code type}.
+//         *
+//         * @param type
+//         */
+//        private MediaType parse(String type) {
+//
+//            if(type==null) return null;
+//
+//            try {
+//
+//                return MediaType.valueOf(type);
+//
+//            } catch (IllegalArgumentException e) {
+//
+//                List<String> chunks = _Strings.splitThenStream(type, ";")
+//                        .collect(Collectors.toList());
+//
+//                final StringBuilder sb = new StringBuilder();
+//                sb.append(chunks.get(0));
+//
+//                if(chunks.size()>1) {
+//                    chunks.stream()
+//                    .skip(1)
+//                    .map(chunk->chunk.replace(":", "..").replace("/", "."))
+//                    .forEach(chunk->sb.append(';').append(chunk));
+//                }
+//
+//                return MediaType.valueOf(sb.toString());
+//
+//            }
+//
+//        }
     }
 
-    public record CacheControlParser() implements Parser<CacheControl> {
+
+
+    record CacheControlParser() implements Parser<CacheControl> {
         @Override public CacheControl valueOf(String str) {
             //Cache-Control: no-cache, no-store, max-age=3600
             var directives = _Strings.splitThenStream(str.toLowerCase(Locale.US), ",")
@@ -115,7 +154,7 @@ public class Parsers {
                             builder = CacheControl.maxAge(Integer.parseInt(directive.substring("max-age=".length())), TimeUnit.SECONDS);
                         }
                     }
-                };
+                }
             }
             // modifications
             for(String directive : directives) {
@@ -133,7 +172,7 @@ public class Parsers {
                     case "proxy-revalidate" -> builder = builder.proxyRevalidate();
                     case "immutable" -> builder = builder.immutable();
                     default -> {}
-                };
+                }
             }
             return builder;
         }
@@ -142,16 +181,16 @@ public class Parsers {
         }
     }
 
-    public record ETagParser() implements Parser<String> {
-        @Override public String valueOf(String str) {
-            return null;
-        }
-        @Override public String asString(String t) {
-            return null;
-        }
-    }
+//    record ETagParser() implements Parser<String> {
+//        @Override public String valueOf(String str) {
+//            return null;
+//        }
+//        @Override public String asString(String t) {
+//            return null;
+//        }
+//    }
 
-    public record ListOfStringsParser() implements Parser<List<String>> {
+    record ListOfStringsParser() implements Parser<List<String>> {
         @Override public List<String> valueOf(final List<String> strings) {
             if (strings == null) return Collections.emptyList();
             if (strings.size() == 1) {
@@ -181,7 +220,7 @@ public class Parsers {
         }
     }
 
-    public record ListOfListOfStringsParser() implements Parser<List<List<String>>> {
+    record ListOfListOfStringsParser() implements Parser<List<List<String>>> {
         @Override public List<List<String>> valueOf(final List<String> str) {
             if (str == null || str.size() == 0) return null;
             final List<List<String>> listOfLists = _Lists.newArrayList();
@@ -207,7 +246,7 @@ public class Parsers {
         }
     }
 
-    public record ArrayOfStringsParser() implements Parser<String[]> {
+    record ArrayOfStringsParser() implements Parser<String[]> {
         @Override public String[] valueOf(final List<String> strings) {
             if (strings == null) return _Constants.emptyStringArray;
             if (strings.size() == 1) {
@@ -236,7 +275,7 @@ public class Parsers {
         }
     }
 
-    public record ListOfMediaTypesParser() implements Parser<List<MediaType>> {
+    record ListOfMediaTypesParser() implements Parser<List<MediaType>> {
         @Override public List<MediaType> valueOf(final String str) {
             if (str == null) return Collections.emptyList();
             return _Strings.splitThenStream(str, ",")
@@ -247,6 +286,19 @@ public class Parsers {
             return _NullSafe.stream(listOfMediaTypes)
                     .map(MediaType::toString)
                     .collect(Collectors.joining(","));
+        }
+    }
+
+    record WarningParser() implements Parser<String> {
+        private static final String PREFIX = "199 RestfulObjects ";
+        @Override public String valueOf(String str) {
+            return stripPrefix(str, PREFIX);
+        }
+        @Override public String asString(String str) {
+            return PREFIX + str;
+        }
+        private String stripPrefix(String str, String prefix) {
+            return str.startsWith(prefix) ? str.substring(prefix.length()) : str;
         }
     }
 

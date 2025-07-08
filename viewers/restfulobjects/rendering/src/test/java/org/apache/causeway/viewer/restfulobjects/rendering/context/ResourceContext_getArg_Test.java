@@ -41,8 +41,6 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 //import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulRequest.RequestParameter;
-import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
-import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 
 class ResourceContext_getArg_Test {
 
@@ -99,7 +97,7 @@ class ResourceContext_getArg_Test {
 
     @Test
     void whenArgExists() throws Exception {
-        final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("x-ro-page", "123").asJsonNode());
+        final String queryString = JsonRepresentation.newMap("x-ro-page", "123").asUrlEncoded();
         resourceContext = ResourceContext.forTesting(queryString, mockHttpServletRequest);
         final Integer arg = ResourceContext.arg(resourceContext.queryStringAsJsonRepr(), RequestParameter.PAGE);
         assertThat(arg, equalTo(123));
@@ -107,7 +105,7 @@ class ResourceContext_getArg_Test {
 
     @Test
     void whenArgDoesNotExist() throws Exception {
-        final String queryString = UrlEncodingUtils.urlEncode(JsonRepresentation.newMap("xxx", "123").asJsonNode());
+        final String queryString = JsonRepresentation.newMap("xxx", "123").asUrlEncoded();
         resourceContext = ResourceContext.forTesting(queryString, mockHttpServletRequest);
         final Integer arg = ResourceContext.arg(resourceContext.queryStringAsJsonRepr(), RequestParameter.PAGE);
         assertThat(arg, equalTo(RequestParameter.PAGE.getDefault()));

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -36,7 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.causeway.viewer.restfulobjects.applib.Rel;
 import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.applib.domaintypes.DomainTypeResource;
-import org.apache.causeway.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.causeway.viewer.restfulobjects.rendering.Caching;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.causeway.viewer.restfulobjects.rendering.ResponseFactory;
@@ -319,7 +319,7 @@ implements DomainTypeResource {
         }
 
         // formal style; must parse from args that has a link with an href to the domain type
-        var requestParams = RequestParams.ofQueryString(UrlEncodingUtils.urlDecode(argsAsUrlEncodedQueryString));
+        var requestParams = RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(argsAsUrlEncodedQueryString));
         final String href = linkFromFormalArgs(requestParams, argsParamId, onRoException);
         return UrlParserUtils.domainTypeFrom(href);
     }

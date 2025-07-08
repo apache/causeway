@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -44,46 +43,57 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 /**
  * @since 1.x {@index}
  */
-public final class JsonMapper {
-
-//    public static String getEntityAsStringFrom(final Response response) {
-//
-//        final Object result = response.getEntity();
-//
-//        if(result == null)
-//            return null;
-//
-//        if(result instanceof String) {
-//            return (String) result;
-//        }
-//
-//        // TODO [andi-huber] just a wild guess
-//        return response.readEntity(String.class);
-//
-//        // legacy code ...
-//        // final ClientResponse<?> clientResponse = (ClientResponse<?>) response;
-//        // return clientResponse.getEntity(String.class);
-//    }
+public record JsonMapper(
+    ObjectMapper objectMapper,
+    PrettyPrinting prettyPrinting) {
 
     public enum PrettyPrinting {
         ENABLE,
         DISABLE
     }
 
+    /**
+     * Returns a {@link org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled} JSON mapper.
+     */
+    public static final JsonMapper instance() {
+        return instance(PrettyPrinting.ENABLE);
+    }
+
+    public static final JsonMapper instance(final PrettyPrinting prettyPrinting) {
+        return instanceByConfig.computeIfAbsent(prettyPrinting, JsonMapper::new);
+    }
+
+    public JsonRepresentation read(final String json) throws JsonParseException, JsonMappingException, IOException {
+        return read(json, JsonRepresentation.class);
+    }
+
+    public <T> T read(final String json, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
+        return objectMapper.readValue(json, requiredType);
+    }
+
+    public String write(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
+        return objectMapper.writeValueAsString(object);
+    }
+
+    // -- HELPER
+
+    // non canonical constructor
+    private JsonMapper(final PrettyPrinting prettyPrinting) {
+        this(createObjectMapper(prettyPrinting), prettyPrinting);
+    }
+
     private static final class JsonRepresentationDeserializer extends JsonDeserializer<JsonRepresentation> {
         @Override
         public JsonRepresentation deserialize(final JsonParser jp, final DeserializationContext ctxt) throws IOException {
-            JsonNode node = jp.getCodec().readTree(jp);
-            return new JsonRepresentation(node);
+            return new JsonRepresentation(jp.getCodec().readTree(jp));
         }
     }
 
     private static final class JsonRepresentationSerializer extends JsonSerializer<Object> {
         @Override
-        public void serialize(final Object value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException, JsonProcessingException {
-            final JsonRepresentation jsonRepresentation = (JsonRepresentation) value;
-            final JsonNode jsonNode = jsonRepresentation.asJsonNode();
-            jgen.writeTree(jsonNode);
+        public void serialize(final Object value, final JsonGenerator jgen, final SerializerProvider provider)
+            throws IOException, JsonProcessingException {
+            jgen.writeTree(((JsonRepresentation) value).asJsonNode());
         }
     }
 
@@ -102,50 +112,5 @@ public final class JsonMapper {
     }
 
     private static Map<PrettyPrinting, JsonMapper> instanceByConfig = new ConcurrentHashMap<>();
-
-    /**
-     * Returns a {@link org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper.PrettyPrinting#ENABLE pretty-printing enabled} JSON mapper.
-     */
-    public static final JsonMapper instance() {
-        return instance(PrettyPrinting.ENABLE);
-    }
-
-    public static final JsonMapper instance(final PrettyPrinting prettyPrinting) {
-        final JsonMapper jsonMapper = instanceByConfig.get(prettyPrinting);
-        if (jsonMapper != null) {
-            return jsonMapper;
-        }
-        // there could be a race-condition here, but it doesn't matter; last one wins.
-        final JsonMapper mapper = new JsonMapper(prettyPrinting);
-        instanceByConfig.put(prettyPrinting, mapper);
-
-        return mapper;
-    }
-
-    private final ObjectMapper objectMapper;
-
-    private JsonMapper(final PrettyPrinting prettyPrinting) {
-        objectMapper = createObjectMapper(prettyPrinting);
-    }
-
-    public JsonRepresentation read(final String json) throws JsonParseException, JsonMappingException, IOException {
-        return read(json, JsonRepresentation.class);
-    }
-
-    public <T> T read(final String json, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-        return objectMapper.readValue(json, requiredType);
-    }
-
-//    public <T> T read(final Response response, final Class<T> requiredType) throws JsonParseException, JsonMappingException, IOException {
-//        final String entity = getEntityAsStringFrom(response);
-//        if (entity == null) {
-//            return null;
-//        }
-//        return read(entity, requiredType);
-//    }
-
-    public String write(final Object object) throws JsonGenerationException, JsonMappingException, IOException {
-        return objectMapper.writeValueAsString(object);
-    }
 
 }

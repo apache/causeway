@@ -34,13 +34,16 @@ import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 /**
  * @since 1.x {@index}
  */
-public class PathNode {
+public record PathNode(
+        String key,
+        Map<String, String> criteria
+    ) {
 
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
     private static final Pattern LIST_CRITERIA_SYNTAX = Pattern.compile("^([^=]+)=(.+)$");
 
-    public static final PathNode NULL = new PathNode("", Collections.<String, String> emptyMap());
+    public static final PathNode NULL = new PathNode("", Collections.emptyMap());
 
     public static List<String> split(String path) {
         List<String> parts = _Lists.newArrayList();
@@ -103,31 +106,20 @@ public class PathNode {
         return new PathNode(key, criteria);
     }
 
-    private final String key;
-    private final Map<String, String> criteria;
-
-    private PathNode(final String key, final Map<String, String> criteria) {
+    public PathNode(final String key, final Map<String, String> criteria) {
         this.key = key;
         this.criteria = Collections.unmodifiableMap(criteria);
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public Map<String, String> getCriteria() {
-        return criteria;
-    }
-
     public boolean hasCriteria() {
-        return !getCriteria().isEmpty();
+        return criteria.isEmpty();
     }
 
     public boolean matches(final JsonRepresentation repr) {
         if (!repr.isMap()) {
             return false;
         }
-        for (final Map.Entry<String, String> criterium : getCriteria().entrySet()) {
+        for (final Map.Entry<String, String> criterium : criteria.entrySet()) {
             String requiredValue = criterium.getValue();
             if(requiredValue != null) {
                 // list syntax
@@ -167,12 +159,9 @@ public class PathNode {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         PathNode other = (PathNode) obj;
         if (key == null) {
             if (other.key != null)

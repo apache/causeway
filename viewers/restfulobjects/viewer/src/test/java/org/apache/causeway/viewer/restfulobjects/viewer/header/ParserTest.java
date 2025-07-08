@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.header;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.http.CacheControl;
 
 import org.apache.causeway.viewer.restfulobjects.applib.RestfulMediaType;
-import org.apache.causeway.viewer.restfulobjects.applib.util.MediaTypes;
 import org.apache.causeway.viewer.restfulobjects.applib.util.Parser;
 
 class ParserTest {
@@ -51,12 +51,12 @@ class ParserTest {
     void forMediaType() {
         final Parser<org.springframework.http.MediaType> parser = Parser.forMediaType();
 
-        for (final org.springframework.http.MediaType v : new org.springframework.http.MediaType[] {
+        for (final org.springframework.http.MediaType v : List.of(
                 org.springframework.http.MediaType.APPLICATION_ATOM_XML,
                 org.springframework.http.MediaType.APPLICATION_JSON,
                 org.springframework.http.MediaType.APPLICATION_XHTML_XML,
-                MediaTypes.parse(RestfulMediaType.APPLICATION_JSON_OBJECT)
-        }) {
+                Parser.forMediaType().valueOf(RestfulMediaType.APPLICATION_JSON_OBJECT)
+        )) {
             final String asString = parser.asString(v);
             final org.springframework.http.MediaType valueOf = parser.valueOf(asString);
             assertThat(v, is(equalTo(valueOf)));

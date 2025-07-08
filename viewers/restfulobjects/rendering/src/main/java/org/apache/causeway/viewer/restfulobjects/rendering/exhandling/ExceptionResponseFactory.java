@@ -72,7 +72,7 @@ public record ExceptionResponseFactory(
         var builder = ResponseEntity.status(httpStatus);
 
         if (message != null) {
-            builder = builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
+            builder = builder.header(RestfulResponse.Header.WARNING.name(), RestfulResponse.Header.WARNING.render(message));
         }
 
         // hmm; the mediaType doesn't seem to be specified in the RO spec
@@ -137,7 +137,7 @@ public record ExceptionResponseFactory(
 
         final String message = exceptionPojo.message();
         if (message != null) {
-            builder = builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
+            builder = builder.header(RestfulResponse.Header.WARNING.name(), RestfulResponse.Header.WARNING.render(message));
         }
 
         return builder

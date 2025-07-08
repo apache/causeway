@@ -49,18 +49,15 @@ public interface Parser<T> {
         return valueOf(jsonRepresentation.asString());
     }
 
-    default JsonRepresentation asJsonRepresentation(final T t) {
-        return JsonRepresentation.newMap("dummy", asString(t)).getRepresentation("dummy");
-    }
-
     // -- FACTORIES
 
     static Parser<Boolean> forBoolean() { return new Parsers.BooleanParser(); }
     static Parser<Date> forDate() { return new Parsers.DateParser(); }
     static Parser<Integer> forInteger() { return new Parsers.IntegerParser(); }
     static Parser<String> forString() { return new Parsers.StringParser(); }
+    static Parser<String> forWarning() { return new Parsers.WarningParser(); }
     static Parser<MediaType> forMediaType() { return new Parsers.MediaTypeParser(); }
-    static Parser<String> forETag() { return new Parsers.ETagParser(); }
+    //static Parser<String> forETag() { return new Parsers.ETagParser(); }
     static Parser<CacheControl> forCacheControl() { return new Parsers.CacheControlParser(); }
     static Parser<List<String>> forListOfStrings() { return new Parsers.ListOfStringsParser(); }
     static Parser<List<List<String>>> forListOfListOfStrings() { return new Parsers.ListOfListOfStringsParser(); }

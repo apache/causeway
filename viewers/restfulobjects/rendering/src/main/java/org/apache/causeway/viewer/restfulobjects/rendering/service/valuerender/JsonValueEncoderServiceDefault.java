@@ -61,12 +61,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
 
-    private final SpecificationLoader specificationLoader;
     private final Map<Class<?>, JsonValueConverter> converterByClass;
 
     @Inject
     public JsonValueEncoderServiceDefault(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
         this.converterByClass = _JsonValueConverters.byClass();
     }
 
