@@ -598,6 +598,61 @@ Now that the release is complete, tidy up these branches and then set up the `-S
 IMPORTANT: The `vN-{jpa,jdo}` branches should always work against the most recent release, whereas the `vN-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
 
 
+== Update the petclinic app
+
+The link:https://github.com/apache/causeway-app-petclinic[petclinic tutorial app] should be updated with example tags for each of its exercises.
+
+* Checkout the repo
+
+* Create a new branch
++
+[source,bash,subs="attributes+"]
+----
+git checkout -b {page-causewayreleaseversion}
+----
+
+* Reset to the `v3` branch, which contains the scripts required to create the new tags.
++
+[source,bash,subs="attributes+"]
+----
+git reset --hard v3
+----
+
+* Set the version using the `setver.sh` script (basically just runs `mvn versions:set`).
++
+[source,bash,subs="attributes+"]
+----
+./setver.sh -v {page-causewayreleaseversion}
+----
+
+* Create the new tags using `tagger.sh`:
++
+[source,bash,subs="attributes+"]
+----
+PREV_VERSION=...                              # <.>
+./tagger.sh -p $PREV_VERSION -v {page-causewayreleaseversion}
+----
+<.> adjust as necessary; should be the immediately previous version, eg `3.3.0` precedes `3.4.0`.
+
+* confirm that the last tag builds and runs ok.
++
+If it doesn't, identify where the problem arises, and fix it.
++
+[TIP]
+====
+The 05-01 tag is broken due to mvn versions not set at that point; but 05-02 should work.
+====
+
+* Push the tags:
++
+[source,bash,subs="attributes+"]
+----
+for a in `git tag -l | grep {page-causewayreleaseversion}`
+do
+    git push origin $a
+done
+----
+
 == Update the reference app
 
 The link:https://github.com/apache/causeway-app-referenceapp[reference app] has a configuration property `causeway.viewer.common.application.version` (in link:https://github.com/apache/causeway-app-referenceapp/blob/master/domain/src/main/resources/application.yml#L91[application.yml]); this should be updated.
