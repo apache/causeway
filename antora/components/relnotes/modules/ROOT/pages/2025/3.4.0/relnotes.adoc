@@ -9,26 +9,27 @@ It includes an upgrade to Spring Boot 3.5, as well as various bug fixes.
 
 The API for the `Wrapper` programming model has been overhauled, see the xref:./mignotes.adoc[migration notes].
 
+This is primarily a bug-fix release, also including the upgrade to Spring Boot 3.5.
 
 
 == New Feature
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3886[CAUSEWAY-3886] - Utility to measure metaclass memory usage using jmx
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3896[CAUSEWAY-3896] - [Wrapper] Async Wrapping Programming Model Overhaul
 
 
 == Improvement
 
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3896[CAUSEWAY-3896] - [Wrapper] Async Wrapping Programming Model Overhaul
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3893[CAUSEWAY-3893] - CausewayConfiguration#valueOf(..) potentially throws preventing App Context Initialization
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3891[CAUSEWAY-3891] - pdf.js download response allows caching, leads to confusing behaviour for end-users.
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3888[CAUSEWAY-3888] - [Tabular] Out of Memory issues when exporting large Tabular Data to XLSX
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3884[CAUSEWAY-3884] - [Persistence] Fleshout EntityOrmMetadata support for EclipseLink
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3883[CAUSEWAY-3883] - WrapperFactory leaks memory (metaspace) every time it is called.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3891[CAUSEWAY-3891] - `pdf.js` download response allows caching, leads to confusing behaviour for end-users.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3884[CAUSEWAY-3884] - [Persistence] Flesh out `EntityOrmMetadata` support for EclipseLink
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3883[CAUSEWAY-3883] - `WrapperFactory` leaks memory (metaspace) every time it is called.
 
 
 == Bug
 
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3881[CAUSEWAY-3881] - [Wicket Viewer] BookmarkedPagesPanel throws when click on 'Clear all'
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3893[CAUSEWAY-3893] - `CausewayConfiguration#valueOf(..)` potentially throws preventing App Context Initialization
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3888[CAUSEWAY-3888] - [Tabular] Out of Memory issues when exporting large Tabular Data to XLSX
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3881[CAUSEWAY-3881] - [Wicket Viewer] `BookmarkedPagesPanel` throws when click on 'Clear all'
 
 
 == Dependency upgrade
@@ -38,9 +39,12 @@ The API for the `Wrapper` programming model has been overhauled, see the xref:./
 
 == Documentation
 
-* link:https://issues.apache.org/jira/browse/CAUSEWAY-3887[CAUSEWAY-3887] - Markdown ComponentFactory not found from SimpleApp
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3887[CAUSEWAY-3887] - Markdown `ComponentFactory` not found from SimpleApp
 
 
 == Task
 
 * link:https://issues.apache.org/jira/browse/CAUSEWAY-3882[CAUSEWAY-3882] - 3.4.0 release activities
+
+
+
