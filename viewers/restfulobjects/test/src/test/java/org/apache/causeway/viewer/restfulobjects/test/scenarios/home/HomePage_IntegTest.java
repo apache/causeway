@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.home;
 
-import jakarta.ws.rs.client.Invocation;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
@@ -27,6 +25,9 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class HomePage_IntegTest extends Abstract_IntegTest {
 
     @Test
@@ -34,16 +35,14 @@ class HomePage_IntegTest extends Abstract_IntegTest {
     void homePage() {
 
         // given
-        Invocation.Builder request = restfulClient.request("/");
+        var response = restGetJson("/", log);
 
         // when
-        var response = request.get();
+        var entity = response
+            .body(String.class);
 
         // then
-        assertResponseOK(response);
-
-        var entity = response.readEntity(String.class);
-
         Approvals.verify(entity, jsonOptions());
     }
+
 }

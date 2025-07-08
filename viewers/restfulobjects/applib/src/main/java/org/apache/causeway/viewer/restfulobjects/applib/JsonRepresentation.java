@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -84,8 +83,9 @@ public class JsonRepresentation {
         public JsonRepresentation getExtensions();
     }
 
-    private static <T> Function<JsonNode, ?> representationInstantiatorFor(final Class<T> representationType) {
-        return REPRESENTATION_INSTANTIATORS.computeIfAbsent(representationType, __->t -> {
+    @SuppressWarnings("unchecked")
+    private static <T> Function<JsonNode, T> representationInstantiatorFor(final Class<T> representationType) {
+        return (Function<JsonNode, T>) REPRESENTATION_INSTANTIATORS.computeIfAbsent(representationType, __->t -> {
             try {
                 return representationType.getConstructor(JsonNode.class).newInstance(t);
             } catch (final Exception e) {
@@ -834,11 +834,7 @@ public class JsonRepresentation {
             return false;
         }
 
-        final LinkRepresentation link = new LinkRepresentation(node);
-        if (link.getHref() == null) {
-            return false;
-        }
-        return true;
+        return new LinkRepresentation(node).getHref() != null;
     }
 
     /**
@@ -901,8 +897,7 @@ public class JsonRepresentation {
      * {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there
      * was no node with the provided path.
      *
-     * <p>
-     * Use {@link #isNull(String)} to check first, if required.
+     * <p>Use {@link #isNull(String)} to check first, if required.
      */
     public JsonRepresentation getNull(final String path) {
         return getNull(path, getNode(path));
@@ -914,8 +909,7 @@ public class JsonRepresentation {
      * {@link JsonRepresentation#isNull()}), or returns <tt>null</tt> if there
      * was no node with the provided path.
      *
-     * <p>
-     * Use {@link #isNull()} to check first, if required.
+     * <p>Use {@link #isNull()} to check first, if required.
      */
     public JsonRepresentation asNull() {
         return getNull(null, asJsonNode());
@@ -973,10 +967,9 @@ public class JsonRepresentation {
     }
 
     /**
-     * Convenience to simply &quot;downcast&quot;.
+     * Convenience to simply 'downcast'.
      *
-     * <p>
-     * In fact, the method creates a new instance of the specified type, which
+     * <p>In fact, the method creates a new instance of the specified type, which
      * shares the underlying {@link #jsonNode jsonNode}.
      */
     public <T extends JsonRepresentation> T as(final Class<T> cls) {
@@ -1072,18 +1065,8 @@ public class JsonRepresentation {
 
     public <T> Stream<T> streamArrayElements(final Class<T> requiredType) {
         ensureIsAnArrayAtLeastAsLargeAs(0);
-        final Function<JsonNode, ?> transformer = representationInstantiatorFor(requiredType);
-        final ArrayNode arrayNode = (ArrayNode) jsonNode;
-        final Iterator<JsonNode> iterator = arrayNode.iterator();
-        // necessary to do in two steps
-        final Function<JsonNode, T> typedTransformer = asT(transformer);
-        return _NullSafe.stream(iterator)
-                .map(typedTransformer);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> Function<JsonNode, T> asT(final Function<JsonNode, ?> transformer) {
-        return (Function<JsonNode, T>) transformer;
+        return _NullSafe.stream(jsonNode.iterator())
+                .map(representationInstantiatorFor(requiredType));
     }
 
     public JsonRepresentation arrayGet(final int i) {

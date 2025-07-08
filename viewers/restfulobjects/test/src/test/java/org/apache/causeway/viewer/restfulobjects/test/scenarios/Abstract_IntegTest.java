@@ -32,7 +32,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
-
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
@@ -58,7 +57,7 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
     @Inject protected StaffMemberRepository staffMemberRepository;
     @Inject protected BookmarkService bookmarkService;
 
-    protected RestfulClient restfulClient;
+    @Deprecated protected RestfulClient restfulClient;
 
     protected Abstract_IntegTest(final Class<?> resourceBaseClazz) {
         super(resourceBaseClazz);

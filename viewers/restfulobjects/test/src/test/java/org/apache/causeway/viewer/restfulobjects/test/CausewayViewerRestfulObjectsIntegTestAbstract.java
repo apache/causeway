@@ -19,7 +19,9 @@
 package org.apache.causeway.viewer.restfulobjects.test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 import jakarta.inject.Inject;
 
@@ -34,17 +36,28 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.opentest4j.AssertionFailedError;
+import org.slf4j.Logger;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClient.Builder;
+import org.springframework.web.client.RestClient.ResponseSpec;
 
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.viewer.restfulobjects.applib.client.ConversationLogger;
 import org.apache.causeway.viewer.restfulobjects.client.AuthenticationMode;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClient;
 import org.apache.causeway.viewer.restfulobjects.client.RestfulClientConfig;
@@ -110,6 +123,57 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    protected String baseUrl() {
+        return "http://0.0.0.0:%d/restful/".formatted(port);
+    }
+
+    protected Builder restClient() {
+        return RestClient.builder()
+            .baseUrl(baseUrl())
+            .defaultHeaders(headers -> headers.setBasicAuth("usr", "pass"));
+    }
+    protected Builder restClient(final Logger logger) {
+        return restClient()
+            .bufferContent((uri, method)->true)
+            .requestInterceptor(new ConversationLogger(msg->logger.info(msg)));
+    }
+    protected ResponseSpec restGetJson(final String uri, final Logger logger) {
+        return restClient(logger).build()
+            .get()
+            .uri(uri)
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(assertStatusOkResponseErrorHandler());
+    }
+
+    protected ResponseErrorHandler assertStatusOkResponseErrorHandler() {
+        return new ResponseErrorHandler() {
+            @Override
+            public boolean hasError(final ClientHttpResponse response) throws IOException {
+                return !response.getStatusCode().equals(HttpStatus.OK);
+            }
+            @Override
+            public void handleError(final URI url, final HttpMethod method, final ClientHttpResponse response) throws IOException {
+                throw new AssertionFailedError("StatusCode not OK: " + response.getStatusCode());
+            }
+        };
+    }
+
+    protected ResponseErrorHandler assertStatusNotFoundResponseErrorHandler() {
+        return new ResponseErrorHandler() {
+            @Override
+            public boolean hasError(final ClientHttpResponse response) throws IOException {
+                return true; //handle any status
+            }
+            @Override
+            public void handleError(final URI url, final HttpMethod method, final ClientHttpResponse response) throws IOException {
+                if(!response.getStatusCode().equals(HttpStatus.NOT_FOUND))
+                    throw new AssertionFailedError("StatusCode NOT_FOUND expected, but got: " + response.getStatusCode());
+            }
+        };
+    }
+
+    @Deprecated
     protected RestfulClient restfulClient() {
         var clientConfig = RestfulClientConfig.builder()
                 .restfulBaseUrl(String.format("http://0.0.0.0:%d/restful/", port))

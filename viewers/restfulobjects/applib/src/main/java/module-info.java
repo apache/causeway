@@ -19,6 +19,7 @@
 module org.apache.causeway.viewer.restfulobjects.applib {
     exports org.apache.causeway.viewer.restfulobjects.applib;
     exports org.apache.causeway.viewer.restfulobjects.applib.boot;
+    exports org.apache.causeway.viewer.restfulobjects.applib.client;
     exports org.apache.causeway.viewer.restfulobjects.applib.domaintypes;
     exports org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
     exports org.apache.causeway.viewer.restfulobjects.applib.dtos;
@@ -35,7 +36,6 @@ module org.apache.causeway.viewer.restfulobjects.applib {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.databind;
-    //requires jakarta.ws.rs;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;

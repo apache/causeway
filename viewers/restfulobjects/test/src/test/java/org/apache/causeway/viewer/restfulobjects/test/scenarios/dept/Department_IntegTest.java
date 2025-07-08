@@ -18,22 +18,21 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.dept;
 
-import jakarta.ws.rs.client.Invocation;
-import jakarta.ws.rs.core.Response;
-
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
 import org.apache.causeway.viewer.restfulobjects.test.scenarios.Abstract_IntegTest;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class Department_IntegTest extends Abstract_IntegTest {
 
     @Test
@@ -46,17 +45,11 @@ class Department_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(classics).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s", bookmark.logicalTypeName(), bookmark.identifier()));
-
         // when
-        var response = request.get();
+        var response = restGetJson("/objects/%s/%s".formatted(bookmark.logicalTypeName(), bookmark.identifier()), log);
 
         // then
-        var entity = response.readEntity(String.class);
-
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        var entity = response.body(String.class);
         Approvals.verify(entity, jsonOptions());
     }
 
@@ -70,17 +63,11 @@ class Department_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(classics).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.logicalTypeName(), bookmark.identifier()));
-
         // when
-        var response = request.get();
+        var response = restGetJson("/objects/%s/%s/collections/staffMembers".formatted(bookmark.logicalTypeName(), bookmark.identifier()), log);
 
         // then
-        var entity = response.readEntity(String.class);
-
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        var entity = response.body(String.class);
         Approvals.verify(entity, jsonOptions());
     }
 
@@ -94,17 +81,11 @@ class Department_IntegTest extends Abstract_IntegTest {
             return bookmarkService.bookmarkFor(classics).orElseThrow();
         }).valueAsNonNullElseFail();
 
-        Invocation.Builder request = restfulClient.request(String.format("/objects/%s/%s/collections/staffMembers", bookmark.logicalTypeName(), bookmark.identifier()));
-
         // when
-        var response = request.get();
+        var response = restGetJson("/objects/%s/%s/collections/staffMembers".formatted(bookmark.logicalTypeName(), bookmark.identifier()), log);
 
         // then
-        var entity = response.readEntity(String.class);
-
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.OK.getStatusCode());
+        var entity = response.body(String.class);
         Approvals.verify(entity, jsonOptions());
     }
 
@@ -112,20 +93,17 @@ class Department_IntegTest extends Abstract_IntegTest {
     @UseReporter(DiffReporter.class)
     void does_not_exist() {
 
-        // given
-        Invocation.Builder request = restfulClient.request("/objects/university.dept.Department/9999999");
-
         // when
-        var response = request.get();
+        var response = restClient(log).build()
+            .get()
+            .uri("/objects/university.dept.Department/9999999")
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(assertStatusNotFoundResponseErrorHandler());
 
         // then
-        var entity = response.readEntity(String.class);
-
-        assertThat(response)
-                .extracting(Response::getStatus)
-                .isEqualTo(Response.Status.NOT_FOUND.getStatusCode());
+        var entity = response.body(String.class);
         Approvals.verify(entity, jsonOptions());
-
     }
 
 }
