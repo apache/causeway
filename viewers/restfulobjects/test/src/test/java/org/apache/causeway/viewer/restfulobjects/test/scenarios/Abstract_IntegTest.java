@@ -34,7 +34,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.services.xactn.TransactionState;
 import org.apache.causeway.persistence.jpa.eclipselink.CausewayModulePersistenceJpaEclipselink;
 import org.apache.causeway.viewer.restfulobjects.test.CausewayViewerRestfulObjectsIntegTestAbstract;
 import org.apache.causeway.viewer.restfulobjects.test.domain.UniversityModule;
@@ -94,25 +93,11 @@ public abstract class Abstract_IntegTest extends CausewayViewerRestfulObjectsInt
             staffMemberRepository.create("Margaret Randall", physics);
 
         });
-
     }
 
     @Override
     @AfterEach
     protected void afterEach(){
-
-        int maxiter = 20;
-        while(maxiter>0
-                && transactionService.currentTransactionState()!=TransactionState.NONE) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.err.printf("Waiting for current transaction to complete (%d)%n", maxiter);
-            --maxiter;
-        }
-
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             staffMemberRepository.removeAll();
             deptHeadRepository.findAll().forEach(x -> x.setDepartment(null));

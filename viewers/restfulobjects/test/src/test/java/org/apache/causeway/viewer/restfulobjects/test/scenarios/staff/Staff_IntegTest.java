@@ -116,6 +116,8 @@ class Staff_IntegTest extends Abstract_IntegTest {
         var entity = response.body(String.class);
         assertNotNull(entity);
 
+        Thread.sleep(2000);
+
         epilog();
     }
 
