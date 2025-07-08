@@ -29,18 +29,6 @@ Note that the binaries are _not_ an ASF release, they merely exist on the Maven 
 That said, you might also want to verify the release by pulling the binaries from the Maven staging repository.
 Details of how to do this are also documented below.
 
-== Prerequisites
-
-You will also require the following commands/tools:
-
-* `bash` - to run shell script
-* `curl` - to download the ZIP and ASC files
-* `gpg` - to verify signatures
-* `unzip` - to unzip the ZIP files
-* JDK 17
-
-* Apache Maven (`mvn`) 3.9.6+
-
 == Verifying source artifacts
 
 The easiest way to verify the source artifacts is to use a script that automates the steps.

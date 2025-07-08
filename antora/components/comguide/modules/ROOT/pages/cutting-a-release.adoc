@@ -573,14 +573,13 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly  # <.>
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
+find . -name pom.xml -exec sed -i '' "s/<version>${CAUSEWAYREL}-SNAPSHOT<\/version>/<version>${CAUSEWAYREL}<\/version>/g" {} +
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
 ----
-+
-<.> the top-level `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
+
+The parent `pom.xml` references the ASF staging repository, so this will pull down the release if not already present in `~/.m2/repository`.
 
 ** Test the app
 +
@@ -610,8 +609,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
+find . -name pom.xml -exec sed -i '' "s/<version>${CAUSEWAYREL}-SNAPSHOT<\/version>/<version>${CAUSEWAYREL}<\/version>/g" {} +
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
@@ -666,8 +664,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jpa
 
-mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly  # <.>
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
+find . -name pom.xml -exec sed -i '' "s/<version>${CAUSEWAYREL}-SNAPSHOT<\/version>/<version>${CAUSEWAYREL}<\/version>/g" {} +
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jpa)"
@@ -703,8 +700,7 @@ git pull --ff-only
 
 git checkout -b $CAUSEWAYBRANCH-jdo
 
-mvnd versions:update-parent -DparentVersion="[$CAUSEWAYREL,$CAUSEWAYREL]" -Dskip.nightly
-mvnd versions:set -DnewVersion=$CAUSEWAYREL
+find . -name pom.xml -exec sed -i '' "s/<version>${CAUSEWAYREL}-SNAPSHOT<\/version>/<version>${CAUSEWAYREL}<\/version>/g" {} +
 
 git add .
 git commit -m "$CAUSEWAYJIRA - updates to $CAUSEWAYREL (jdo)"
