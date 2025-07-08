@@ -25,6 +25,8 @@ Description
 
 TLP releases:
 
+  * causeway-3.4.0                                 :  8 Jul 2025
+
   * causeway-3.3.0                                 :  8 Apr 2025
 
   * causeway-3.2.0                                 :  4 Jan 2025
@@ -206,7 +208,7 @@ Resources:
   -------------   -----  -----------------------------------------------------
   Source code     git    https://github.com/apache/causeway.git
   Source code     gitrw  https://github.com/apache/causeway.git
-  Status file     www    https://raw.githubusercontent.com/apache/causeway/master/STATUS
+  Status file     www    https://raw.githubusercontent.com/apache/causeway/main/STATUS
   Website         www    https://causeway.apache.org
   Mailing list    dev    dev@causeway.apache.org
   Mailing list    users  users@causeway.apache.org

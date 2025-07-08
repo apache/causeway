@@ -48,17 +48,20 @@ if [ -z "$REVISION" ]; then
   export REVISION="SNAPSHOT"
 fi
 
-if [ -z "$ANTORA_CMD" ]; then
-  ANTORA_CMD=$(command -v antora 2>/dev/null)
-  if [ -z "$ANTORA_CMD" ]; then
-#    ANTORA_CMD=$(npm bin)/antora #fails with unknown command 'bin' on ubuntu ... our CI build env
-    ANTORA_CMD="npx antora"
-  fi
-fi
+#if [ -z "$ANTORA_CMD" ]; then
+#  ANTORA_CMD=$(command -v antora 2>/dev/null)
+#  if [ -z "$ANTORA_CMD" ]; then
+##    ANTORA_CMD=$(npm bin)/antora #fails with unknown command 'bin' on ubuntu ... our CI build env
+#    ANTORA_CMD="npx antora"
+#  fi
+#fi
+ANTORA_CMD="npx antora"
 
 echo "running antora ..."
 echo "$ANTORA_CMD --redirect-facility static --stacktrace $PLAYBOOK"
+export NODE_OPTIONS="--max-old-space-size=4096"
 $ANTORA_CMD --redirect-facility static --stacktrace $PLAYBOOK
+exit 0
 
 # clean up
 rm $PLAYBOOK

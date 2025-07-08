@@ -24,7 +24,7 @@
 # where nexus_repo_number, causeway_version and [RC_number] are as advised in
 # releese candidate vote message.
 #
-#    eg: ./verify_causeway_release.sh 1101 2.0.0-M3 RC1
+#    eg: ./verify_causeway_release.sh 1033 3.4.0 RC1
 #
 #
 # prereqs:
@@ -32,7 +32,7 @@
 #    gpg
 #    unzip
 #    jdk 11+ (make sure you have the 'jar' command!)
-#    mvn 3.6.0+
+#    mvn 3.9.10+
 #
 
 ## uncomment for single line step through debugging
@@ -145,7 +145,7 @@ if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
 fi
 
 cat <<EOF >/tmp/url.txt
-http://repository.apache.org/content/repositories/orgapachecauseway-$NEXUSREPONUM/org/apache/causeway/causeway-bom/$VERSION/causeway-bom-$VERSION-source-release.zip
+https://repository.apache.org/service/local/repositories/orgapachecauseway-$NEXUSREPONUM/content/org/apache/causeway/causeway-bom/$VERSION/causeway-bom-$VERSION-source-release.zip
 EOF
 
 # The work starts here
