@@ -26,9 +26,10 @@ set -e
 
 echo "===========  ECLIPSE PERSISTENCE PARENT POM FIX  ==========="
 
-mvn dependency:get -Dartifact=org.eclipse.persistence:org.eclipse.persistence.parent:4.0.7
+cd /tmp
+mvn dependency:get -Dartifact=org.eclipse.persistence:org.eclipse.persistence.parent:4.0.7:pom -DsonatypeOssDistMgmtStagingUrl=https://jakarta.oss.sonatype.org/content/repositories/staging/ -Dtransitive=false
 
 OFFENDING_POM=~/.m2/repository/org/eclipse/persistence/org.eclipse.persistence.parent/4.0.7/org.eclipse.persistence.parent-4.0.7.pom
 FIXED_POM=$1/org.eclipse.persistence.parent-4.0.7.pom
 
-cp -fv ${OFFENDING_POM} ${FIXED_POM} 
+cp -fv ${FIXED_POM} ${OFFENDING_POM} 
