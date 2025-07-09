@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.test.scenarios.staff;
 
+import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
@@ -35,6 +37,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.handler.RetryHandler;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.viewer.restfulobjects.applib.client.ActionParameterModel;
 import org.apache.causeway.viewer.restfulobjects.test.domain.dom.Department;
@@ -116,29 +119,32 @@ class Staff_IntegTest extends Abstract_IntegTest {
         var entity = response.body(String.class);
         assertNotNull(entity);
 
-        Thread.sleep(2000);
-
-        epilog();
+        epilog(5);
     }
 
     // -- HELPER
 
     void prolog() {
-        final var bookmarkBeforeIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
-            final var staffMember = staffMemberRepository.findByName(staffName);
-            return bookmarkService.bookmarkFor(staffMember);
-        }).valueAsNonNullElseFail();
-
-        assertThat(bookmarkBeforeIfAny).isEmpty();
+        assertThat(staffMemberBookmark()).isEmpty();
     }
 
-    void epilog() {
-        // and also object is created in database
-        final var bookmarkAfterIfAny = transactionService.callTransactional(Propagation.REQUIRED, () -> {
+    /**
+     * For some reason this epilog might be called too early, so we retry.
+     */
+    void epilog(final int maxAttempts) {
+        var retryHandler = new RetryHandler(maxAttempts, Duration.ofMillis(200));
+        var bookmarkAfterIfAny = retryHandler.retryUntilValid(this::staffMemberBookmark, Optional::isPresent,
+            ()->"staffMemberBookmark is empty, even after maxAttempts=%d".formatted(maxAttempts))
+            .valueAsNonNullElseFail();
+
+        assertThat(bookmarkAfterIfAny).isNotEmpty();
+    }
+
+    Optional<Bookmark> staffMemberBookmark() {
+        return transactionService.callTransactional(Propagation.REQUIRED, () -> {
             final var staffMember = staffMemberRepository.findByName(staffName);
             return bookmarkService.bookmarkFor(staffMember);
         }).valueAsNonNullElseFail();
-        assertThat(bookmarkAfterIfAny).isNotEmpty();
     }
 
     Bookmark departmentBookmark(final String departmentName) {
