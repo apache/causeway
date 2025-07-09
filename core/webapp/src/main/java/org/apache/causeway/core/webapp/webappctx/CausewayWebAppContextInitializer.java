@@ -19,7 +19,6 @@
 package org.apache.causeway.core.webapp.webappctx;
 
 import java.util.EventListener;
-
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
@@ -33,6 +32,7 @@ import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Oneshot;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.webapp.modules.WebModule;
 import org.apache.causeway.core.webapp.modules.WebModuleContext;
@@ -67,16 +67,21 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
 
-        // onStartup(...) must be a one shot, otherwise ignore with warning
-        if(!oneshot.trigger()) {
-            log.warn("Spring tries to startup this initializer more than once."
-                    + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
-            return;
-        }
+        // does not play well with @DirtiesContext, hence we skip those guards for testing
+        if(!CausewaySystemEnvironment.isUnitTesting()) {
 
-        if(!isCausewayProvisioned()) {
-            log.error("skipping initialization, Spring should already have provisioned all configured Beans");
-            return;
+            // onStartup(...) must be a one shot, otherwise ignore with warning
+            if(!oneshot.trigger()) {
+                log.warn("Spring tries to startup this initializer more than once."
+                        + " This is most likely a Spring configuration issue, check your bootstrapping setup.");
+                return;
+            }
+
+            if(!isCausewayProvisioned()) {
+                log.error("skipping initialization, Spring should already have provisioned all configured Beans");
+                return;
+            }
+
         }
 
         // set the ServletContext initializing thread as preliminary default until overridden by

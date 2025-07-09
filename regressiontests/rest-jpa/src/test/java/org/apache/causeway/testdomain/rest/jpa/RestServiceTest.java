@@ -35,6 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.test.LocalServerPort;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.web.client.RestClient;
 
 import org.apache.causeway.extensions.fullcalendar.applib.value.CalendarEventSemantics;
@@ -58,6 +60,7 @@ import org.apache.causeway.viewer.restfulobjects.viewer.CausewayModuleViewerRest
     Configuration_usingJpa.class,
     CausewayModuleViewerRestfulObjectsViewer.class
 })
+@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RestServiceTest extends RegressionTestWithJpaFixtures {
 

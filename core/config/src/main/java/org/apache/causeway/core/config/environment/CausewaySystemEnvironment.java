@@ -78,7 +78,6 @@ public class CausewaySystemEnvironment {
         if(primed!=null) {
             _Context.remove(CausewaySystemEnvironment.class);
             this.setPrototyping(primed.isPrototyping());
-            this.setUnitTesting(primed.isUnitTesting());
         }
         _Context.putSingleton(CausewaySystemEnvironment.class, this);
     }
@@ -124,7 +123,7 @@ public class CausewaySystemEnvironment {
      * Must be set prior to configuration bootstrapping.
      * @param isUnitTesting
      */
-    public void setUnitTesting(final boolean isUnitTesting) {
+    public static void setUnitTesting(final boolean isUnitTesting) {
         System.setProperty("UNITTESTING", ""+isUnitTesting);
     }
 
@@ -141,7 +140,7 @@ public class CausewaySystemEnvironment {
         return decideDeploymentType();
     }
 
-    public boolean isUnitTesting() {
+    public static boolean isUnitTesting() {
         return "true".equalsIgnoreCase(getProperty("UNITTESTING"));
     }
 

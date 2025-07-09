@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
@@ -88,11 +87,7 @@ implements HasImperativeAspect {
             }
             return null;
         } catch (final RuntimeException ex) {
-            var isUnitTesting = Optional.ofNullable(getMetaModelContext())
-                    .map(MetaModelContext::getSystemEnvironment)
-                    .map(CausewaySystemEnvironment::isUnitTesting)
-                    .orElse(false);
-            if(!isUnitTesting) {
+            if(!CausewaySystemEnvironment.isUnitTesting()) {
                 log.warn("Failed Title {}", owningAdapter.objSpec(), ex);
             }
             return "Failed Title";
