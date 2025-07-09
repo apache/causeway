@@ -68,11 +68,11 @@ jobs:
       uses: stCarolas/setup-maven@v5
       with:
         maven-version: 3.9.10
-    - name: Set up Maven (4.0.0-rc-3)
+    - name: Set up Maven (4.0.0-rc-4)
       if: matrix.language == 'java' && env.BRANCH_NAME == 'v4'
       uses: stCarolas/setup-maven@v5
       with:
-        maven-version: 4.0.0-rc-3
+        maven-version: 4.0.0-rc-4
 
     - name: Print Maven Version
       if: matrix.language == 'java'
