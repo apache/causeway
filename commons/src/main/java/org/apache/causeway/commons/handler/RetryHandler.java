@@ -29,11 +29,15 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
+ * Retries a given task until its return value is valid.
  *
  * @since 4.0
  */
 public record RetryHandler(
     int maxAttempts,
+    /**
+     * Time delay between attempts.
+     */
     Duration delay) {
 
     // canonical constructor with argument validation
@@ -48,24 +52,39 @@ public record RetryHandler(
         this.delay = delay;
     }
 
-    public <T, E extends Throwable> Try<T> retryUntilValid(Callable<T> task, Predicate<T> isValid, Supplier<String> onInvalidMessage) {
+    /**
+     * Executes given {@code task} for {@link #maxAttempts} until the {@code isValid} predicate passes its test on the
+     * {@code task}'s return value. If all attempts fail, returns a failed {@link Try}, wrapping a {@link RetryException}
+     * with a message as provided by {@code onInvalidMessage}.
+     *
+     * <p> The initial {@code task} execution is without delay.
+     *
+     * <p> It the task throws any exception, this method immediately returns a failed {@link Try}, wrapping that exception.
+     *
+     * <p> If the {@link Thread#sleep(long)}, as used for the delay, throws any exception,
+     * this method immediately returns a failed {@link Try}, wrapping that exception.
+     *
+     * @param <T> task return type
+     * @param task that will be retried until {@code isValid} predicate tests positive
+     * @param isValid predicate to validate the task return value
+     * @param onInvalidMessage provides the exception message for when all attempts had failed
+     */
+    public <T> Try<T> retryUntilValid(Callable<T> task, Predicate<T> isValid, Supplier<String> onInvalidMessage) {
 
         for(int attemptCount = 1; attemptCount<=maxAttempts; ++attemptCount) {
             Try<T> tryT = Try.call(task);
             if(tryT.isFailure()) return tryT; // if we don't even get to validate, return immediately
 
-            var optionalT = tryT.getValue();
+            var t = tryT.getValue().orElse(null);
 
-            if(optionalT.isPresent()
-                && isValid.test(optionalT.get())) {
-                return Try.success(optionalT.get());
-            }
+            if(isValid.test(t)) return Try.success(t);
 
-            if(attemptCount < maxAttempts) {
-                // if not last try, delay next try
+            // if not last attempt, delay next attempt (that is, if delay is non-zero)
+            if(attemptCount < maxAttempts
+                && !delay.isZero()) {
                 try {
                     Thread.sleep(delay.toMillis());
-                } catch (InterruptedException e) {
+                } catch (Throwable e) {
                     return Try.failure(e);
                 }
             }
