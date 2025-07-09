@@ -111,6 +111,11 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
+    - name: Fix Eclipse Persistence Parent POM (Version 4.0.7)
+      if: matrix.language == 'java'
+      shell: bash
+      run: bash $CI_SCRIPTS_PATH/fix_eclipse_persistence_parent_pom.sh $CI_SCRIPTS_PATH
+
     - name: Build Artifacts
       if: matrix.language == 'java'
       shell: bash
