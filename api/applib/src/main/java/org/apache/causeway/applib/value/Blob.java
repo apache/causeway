@@ -26,9 +26,11 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
@@ -36,6 +38,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -52,7 +55,6 @@ import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.commons.io.ZipUtils.ZipOptions;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -173,6 +175,14 @@ public record Blob(
     }
 
     /**
+     * Converts to a {@link Clob}, using UTF-8
+     * for the underlying byte[] to String conversion.
+     */
+    public Clob toClobUtf8() {
+        return toClob(StandardCharsets.UTF_8);
+    }
+
+    /**
      * Does not close the OutputStream.
      */
     @SneakyThrows
@@ -211,6 +221,21 @@ public record Blob(
     public DataSource asDataSource() {
         return DataSource.ofBytes(_NullSafe.toNonNull(bytes()));
     }
+
+    // -- MAPPING
+
+    /**
+     * Allows fluent chaining of {@link Blob} operators.
+     * @param mapper when {@code null} method acts as an identity operation
+     */
+    public Blob flatMap(
+            @Nullable UnaryOperator<Blob> mapper) {
+        return mapper != null
+            ? mapper.apply(this)
+            : this;
+    }
+
+    // -- COMPRESSION
 
     /**
      * Returns a new {@link Blob} that has this Blob's underlying byte array

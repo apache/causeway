@@ -89,7 +89,7 @@ public class CommandReplayOnSecondaryService {
         public class ActionDomainEvent extends CommandReplayOnSecondaryService.ActionDomainEvent<uploadCommands> { }
 
         @MemberSupport public void act(final Clob commandsDtoAsXml) {
-            var chars = commandsDtoAsXml.getChars();
+            var chars = commandsDtoAsXml.chars();
             List<CommandDto> commandDtoList;
 
             try {

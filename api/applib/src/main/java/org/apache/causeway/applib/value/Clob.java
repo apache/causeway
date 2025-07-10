@@ -30,6 +30,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 import jakarta.activation.MimeType;
 import jakarta.activation.MimeTypeParseException;
@@ -78,7 +79,7 @@ public record Clob(
     MimeType mimeType,
     CharSequence chars
     ) implements NamedWithMimeType {
-    
+
 
     // -- FACTORIES
 
@@ -179,10 +180,18 @@ public record Clob(
         this.chars = chars;
     }
 
+    // -- MAPPING
+
     /**
-     * @deprecated use {@link #chars()} instead
+     * Allows fluent chaining of {@link Clob} operators.
+     * @param mapper when {@code null} method acts as an identity operation
      */
-    public CharSequence getChars() { return chars(); }
+    public Clob flatMap(
+            @Nullable UnaryOperator<Clob> mapper) {
+        return mapper != null
+            ? mapper.apply(this)
+            : this;
+    }
 
     // -- UTILITIES
 
@@ -264,7 +273,7 @@ public record Clob(
 
     @Override
     public String toString() {
-        return name() + " [" + mimeType().getBaseType() + "]: " + getChars().length() + " chars";
+        return name() + " [" + mimeType().getBaseType() + "]: " + chars().length() + " chars";
     }
 
     /**
