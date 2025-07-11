@@ -4,5 +4,43 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
 
+This is primarily a maintenance release.
+It includes an upgrade to Spring Boot 3.5, as well as various bug fixes.
+
+The API for the `Wrapper` programming model has been overhauled, see the xref:./mignotes.adoc[migration notes].
 
 
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3886[CAUSEWAY-3886] - Utility to measure metaclass memory usage using jmx
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3896[CAUSEWAY-3896] - [Wrapper] Async Wrapping Programming Model Overhaul
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3893[CAUSEWAY-3893] - CausewayConfiguration#valueOf(..) potentially throws preventing App Context Initialization
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3891[CAUSEWAY-3891] - pdf.js download response allows caching, leads to confusing behaviour for end-users.
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3888[CAUSEWAY-3888] - [Tabular] Out of Memory issues when exporting large Tabular Data to XLSX
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3884[CAUSEWAY-3884] - [Persistence] Fleshout EntityOrmMetadata support for EclipseLink
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3883[CAUSEWAY-3883] - WrapperFactory leaks memory (metaspace) every time it is called.
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3881[CAUSEWAY-3881] - [Wicket Viewer] BookmarkedPagesPanel throws when click on 'Clear all'
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3855[CAUSEWAY-3855] - Upgrade to Spring Boot 3.5
+
+
+== Documentation
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3887[CAUSEWAY-3887] - Markdown ComponentFactory not found from SimpleApp
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3882[CAUSEWAY-3882] - 3.4.0 release activities
