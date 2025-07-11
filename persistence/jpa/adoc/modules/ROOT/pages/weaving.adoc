@@ -69,7 +69,7 @@ The workaround is to use xref:#compiletime[static] weaving instead.
 The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate the dynamic agent approach.
 
 To enable runtime weaving, set xref:refguide:config:sections/eclipselink.adoc#eclipselink.weaving[eclipselink.weaving]:
-+
+
 [source,properties]
 .application.properties
 ----
