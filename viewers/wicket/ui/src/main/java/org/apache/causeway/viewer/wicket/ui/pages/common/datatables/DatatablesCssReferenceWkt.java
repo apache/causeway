@@ -45,5 +45,5 @@ public class DatatablesCssReferenceWkt extends WebjarsCssResourceReference {
     }
 
     private static final String RESOURCE = DatatablesDotNet.formatWithVersion(
-            "datatables/%s/css/jquery.dataTables.min.css");
+            "datatables/%s/css/dataTables.dataTables.min.css");
 }
