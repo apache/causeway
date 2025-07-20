@@ -46,5 +46,5 @@ public class DatatablesJavaScriptReferenceWkt extends WebjarsJavaScriptResourceR
     }
 
     private static final String RESOURCE = DatatablesDotNet.formatWithVersion(
-            "datatables/%s/js/jquery.dataTables.min.js");
+            "datatables/%s/js/dataTables.min.js");
 }
