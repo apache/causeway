@@ -116,7 +116,7 @@ identified
         <datanucleus-jodatime.version>6.0.1</datanucleus-jodatime.version>
         <datanucleus-rdbms.version>6.0.10</datanucleus-rdbms.version>
 
-        <datasource-proxy-spring-boot-starter.version>1.11.0</datasource-proxy-spring-boot-starter.version>
+        <datasource-proxy-spring-boot-starter.version>1.12.0</datasource-proxy-spring-boot-starter.version>
 
         <datatables.version>2.3.0</datatables.version> <!-- keep in sync with
         DatatablesDotNet -->
