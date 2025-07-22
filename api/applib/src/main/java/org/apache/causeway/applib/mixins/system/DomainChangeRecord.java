@@ -21,6 +21,7 @@ package org.apache.causeway.applib.mixins.system;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -161,8 +162,8 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     @Retention(RetentionPolicy.RUNTIME)
     @interface TargetLogicalTypeName {
         int MAX_LENGTH = 255;
-        boolean NULLABLE = false;
-        String ALLOWS_NULL = "false";
+        boolean NULLABLE = HasTarget.Target.NULLABLE;
+        String ALLOWS_NULL = HasTarget.Target.ALLOWS_NULL;
     }
 
     /**
@@ -170,7 +171,9 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
      */
     @TargetLogicalTypeName
     default String getTargetLogicalTypeName() {
-        return getTarget().getLogicalTypeName();
+        return Optional.ofNullable(getTarget())
+                .map(Bookmark::getLogicalTypeName)
+                .orElse(null);
     }
 
 
@@ -330,6 +333,18 @@ public interface DomainChangeRecord extends HasInteractionId, HasUsername, HasTa
     }
     default boolean hidePostValue() {
         return getType() != ChangeType.AUDIT_ENTRY;
+    }
+
+    /**
+     * A no-op implementation of {@link DomainChangeRecord} that can be used for testing.
+     */
+    class Empty implements DomainChangeRecord {
+        @Override public ChangeType getType() {return null;}
+        @Override public UUID getInteractionId() {return null;}
+        @Override public String getUsername() {return "";}
+        @Override public java.sql.Timestamp getTimestamp() {return null;}
+        @Override public Bookmark getTarget() {return null;}
+        @Override public String getLogicalMemberIdentifier() {return "";}
     }
 
 }
