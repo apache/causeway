@@ -21,53 +21,42 @@ package org.apache.causeway.core.runtimeservices.wrapper.handlers;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Blackhole;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.val;
 
 /**
  * @param <T>
  */
-public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
-
-    private ObjectManager objectManager;
+public abstract class DelegatingInvocationHandlerAbstract<T> implements DelegatingInvocationHandler<T> {
 
     // getter is API
-    @Getter(onMethod = @__(@Override)) private final T delegate;
-    @Getter protected final WrapperFactory wrapperFactory;
-    @Getter private final SyncControl syncControl;
+    @Getter protected final MetaModelContext metaModelContext;
+
+    @Getter(onMethod_ = {@Override})
+    private final Class<T> targetClass;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    // getter and setter are API
-    @Getter(onMethod = @__(@Override)) @Setter(onMethod = @__(@Override))
-    private boolean resolveObjectChangedEnabled;
-
-    public DelegatingInvocationHandlerDefault(
+    public DelegatingInvocationHandlerAbstract(
             final @NonNull MetaModelContext metaModelContext,
-            final @NonNull T delegate,
-            final SyncControl syncControl) {
-        this.delegate = delegate;
-        this.objectManager = metaModelContext.getObjectManager();
-        this.wrapperFactory = metaModelContext.getWrapperFactory();
-        this.syncControl = syncControl;
+            final Class<T> targetClass) {
+        this.metaModelContext = metaModelContext;
+        this.targetClass = targetClass;
 
         try {
-            equalsMethod = delegate.getClass().getMethod("equals", _Constants.classesOfObject);
-            hashCodeMethod = delegate.getClass().getMethod("hashCode", _Constants.emptyClasses);
-            toStringMethod = delegate.getClass().getMethod("toString", _Constants.emptyClasses);
+            equalsMethod = this.targetClass.getMethod("equals", _Constants.classesOfObject);
+            hashCodeMethod = this.targetClass.getMethod("hashCode", _Constants.emptyClasses);
+            toStringMethod = this.targetClass.getMethod("toString", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF
             throw new RuntimeException("An Object method could not be found: " + e.getMessage());
@@ -75,28 +64,24 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
     }
 
-    protected void resolveIfRequired(final ManagedObject adapter) {
+    protected ManagedObject adaptAndGuardAgainstWrappingNotSupported(final Object domainObject) {
 
-        if(!resolveObjectChangedEnabled) {
-            return;
+        if(domainObject == null) {
+            return null;
         }
-        if(adapter==null) {
-            return;
-        }
-        if(!ManagedObjects.isEntity(adapter)) {
-            return;
+        val adapter = metaModelContext.getObjectManager().adapt(domainObject);
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
+                || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
+            throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
+                    domainObject.getClass().getName());
         }
 
-        _Blackhole.consume(adapter.getPojo());
+        return adapter;
     }
 
-    protected void resolveIfRequired(final Object domainObject) {
-        resolveIfRequired(objectManager.adapt(domainObject));
-    }
-
-    protected Object delegate(final Method method, final Object[] args)
+    protected Object delegate(Object proxyObject, final Method method, final Object[] args)
             throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        return method.invoke(getDelegate(), args);
+        return method.invoke(getTarget(proxyObject), args);
     }
 
     protected boolean isObjectMethod(final Method method) {
@@ -109,7 +94,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     }
 
     protected InteractionEvent notifyListeners(final InteractionEvent interactionEvent) {
-        wrapperFactory.notifyListeners(interactionEvent);
+        metaModelContext.getWrapperFactory().notifyListeners(interactionEvent);
         return interactionEvent;
     }
 

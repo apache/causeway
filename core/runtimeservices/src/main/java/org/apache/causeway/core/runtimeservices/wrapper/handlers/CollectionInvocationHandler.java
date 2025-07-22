@@ -28,11 +28,12 @@ class CollectionInvocationHandler<T, C extends Collection<?>>
 extends PluralInvocationHandlerAbstract<T, C> {
 
     public CollectionInvocationHandler(
+            final Object proxyObject,
             final C collectionToBeProxied,
             final DomainObjectInvocationHandler<T> handler,
             final OneToManyAssociation otma) {
 
-        super(collectionToBeProxied, handler, otma,
+        super(proxyObject, collectionToBeProxied, handler, otma,
                 CollectionSemantics
                     .valueOfElseFail(collectionToBeProxied.getClass()));
 

@@ -26,6 +26,8 @@ import org.springframework.lang.Nullable;
  */
 public interface _ProxyFactoryService {
 
+    String WRAPPER_INVOCATION_CONTEXT_FIELD_NAME = "__causeway_wrapperInvocationContext";
+
     <T> _ProxyFactory<T> factory(
             Class<T> base,
             @Nullable Class<?>[] interfaces,
