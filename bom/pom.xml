@@ -39,7 +39,7 @@ identified
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0-M1</version>
         <relativePath />
     </parent>
     <groupId>org.apache.causeway</groupId>
@@ -144,7 +144,7 @@ identified
 
         <sql-formatter.version>2.0.5</sql-formatter.version>
         <snakeyaml.version>2.0</snakeyaml.version>
-        <spring-boot.version>4.0.0-SNAPSHOT</spring-boot.version>
+        <spring-boot.version>4.0.0-M1</spring-boot.version>
 
         <surefire-plugin.argLine>
             -Xmx384m
@@ -1946,41 +1946,6 @@ identified
 
         </dependencies>
     </dependencyManagement>
-
-    <repositories>
-        <repository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>https://repo.maven.apache.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- required for RestEasy -->
-            <id>JBoss Public Release</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
 
     <!-- META DATA -->
 
