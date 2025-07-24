@@ -21,9 +21,7 @@ To enable static weaving, set xref:refguide:config:sections/eclipselink.adoc#ecl
 eclipselink.weaving=static
 ----
 
-WARNING: The ability to set `static` as a value is currently broken in 2.0.0/3.0.0; but a fix is available in the xref:comguide::nightly-builds.adoc[].
-
-In addition, add the following to the `pom.xml` of all modules that contain JPA entities:
+In addition, add the link:https://github.com/ethlo/eclipselink-maven-plugin[eclipselink-maven-plugin] to the `pom.xml` of all modules that contain JPA entities, specifying the base package(s) to be weaved.:
 
 [source,xml]
 .pom.xml
@@ -42,7 +40,9 @@ In addition, add the following to the `pom.xml` of all modules that contain JPA 
                         <goal>weave</goal>
                     </goals>
                     <configuration>
-                        <basePackage>domainapp.modules.simple.dom</basePackage> <!--.-->
+                        <basePackages>
+                            <basePackage>domainapp.modules.simple.dom</basePackage> <!--.-->
+                        </basePackages>
                     </configuration>
                 </execution>
             </executions>
@@ -62,10 +62,6 @@ NOTE: Thanks for the contribution via link:https://the-asf.slack.com/archives/CF
 [#runtime]
 == Dynamic (Runtime) Weaving
 
-
-WARNING: This is currently broken in 2.0.0/3.0.0.
-The workaround is to use xref:#compiletime[static] weaving instead.
-
 The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate the dynamic agent approach.
 
 To enable runtime weaving, set xref:refguide:config:sections/eclipselink.adoc#eclipselink.weaving[eclipselink.weaving]:
@@ -82,7 +78,7 @@ It's also necessary to run the application with the `spring-instrument.jar` Java
 +
 [source,bash]
 ----
-mvn dependency:fetchData -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
+mvn dependency:get -DgroupId=org.springframework -DartifactId=spring-instrument -Dversion=XXX
 ----
 =
 changing "XXX" to the value that `${spring-framework.version}` resolves to, from the Causeway parent `pom.xml`.
