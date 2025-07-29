@@ -25,6 +25,8 @@ import java.util.function.Function;
 
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.error.ErrorDetails;
+import org.apache.causeway.applib.services.error.ErrorReportingService;
+import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -34,6 +36,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Three cases: authorization exception, else recognized, else or not recognized.
+ *
+ * <p> Supports a {@link ErrorReportingService} if configured, that optionally may return a {@link Ticket}
+ * to represent the fact that the error has been recorded.
  */
 public record ExceptionModel(
     ExceptionType exceptionType,
@@ -89,20 +94,6 @@ public record ExceptionModel(
 
         return new ExceptionModel(exceptionType, mainMessage, asStackTrace(ex), asStackTraces(ex));
     }
-
-
-//    private Ticket ticket;
-//    public Optional<Ticket> getTicket() {
-//        return Optional.ofNullable(ticket);
-//    }
-//
-//    /**
-//     * Optionally called if an {@link ErrorReportingService} has been configured and returns a <tt>non-null</tt> ticket
-//     * to represent the fact that the error has been recorded.
-//     */
-//    public void setTicket(final Ticket ticket) {
-//        this.ticket = ticket;
-//    }
 
     public boolean isRecognized() {
         return exceptionType==ExceptionType.RECOGNIZED;
