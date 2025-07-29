@@ -22,6 +22,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
@@ -35,11 +36,11 @@ class JarManifestPanel extends Panel {
     private static final String ID_LINE = "manifestAttributeLine";
 
     public JarManifestPanel(String id, JarManifestModel manifestModel) {
-        super(id, manifestModel);
+        super(id, Model.of(manifestModel));
 
         final MarkupContainer container = new WebMarkupContainer(ID_MANIFEST_ATTRIBUTES);
         container.add(
-                new JarManifestListView(ID_MANIFEST_ATTRIBUTE, JarManifestPanel.ID_LINE, manifestModel.getDetail()));
+                new JarManifestListView(ID_MANIFEST_ATTRIBUTE, JarManifestPanel.ID_LINE, manifestModel.manifests()));
         add(container);
     }
 

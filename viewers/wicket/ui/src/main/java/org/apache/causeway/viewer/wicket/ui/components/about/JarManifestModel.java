@@ -20,7 +20,9 @@ package org.apache.causeway.viewer.wicket.ui.components.about;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -36,22 +38,14 @@ import jakarta.inject.Provider;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.viewer.wicket.model.models.ModelAbstract;
 
-class JarManifestModel extends ModelAbstract<JarManifestModel> {
-
-    private static final long serialVersionUID = 1L;
-
-//    private static final List<String> VERSION_KEY_CANDIDATES =
-//            Arrays.asList("Implementation-Version", "Build-Time");
-
-    private final List<JarManifestAttributes> manifests = _Lists.newArrayList();
+record JarManifestModel(List<JarManifestAttributes> manifests) implements Serializable {
 
     /**
      * @param metaInfManifestProvider provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
      */
-    public JarManifestModel(final Provider<InputStream> metaInfManifestProvider) {
-        super();
+    public static JarManifestModel of(final Provider<InputStream> metaInfManifestProvider) {
+        var manifests = new ArrayList<JarManifestAttributes>();
         Manifest manifest;
         try(var metaInfManifestIs = metaInfManifestProvider.get()) {
             manifest = new Manifest(metaInfManifestIs);
@@ -66,7 +60,7 @@ class JarManifestModel extends ModelAbstract<JarManifestModel> {
         try {
             resEnum = _Context.getDefaultClassLoader().getResources(JarFile.MANIFEST_NAME);
         } catch (IOException e) {
-            return;
+            return new JarManifestModel(manifests);
         }
         final List<JarManifest> jarManifests = _Lists.newArrayList();
         while (resEnum.hasMoreElements()) {
@@ -89,6 +83,7 @@ class JarManifestModel extends ModelAbstract<JarManifestModel> {
         for (JarManifest jarManifest : jarManifests) {
             jarManifest.addAttributesTo(manifests);
         }
+        return new JarManifestModel(manifests);
     }
 
     private static class JarManifest implements Comparable<JarManifest> {
@@ -171,7 +166,7 @@ class JarManifestModel extends ModelAbstract<JarManifestModel> {
         return new JarName(JarName.Type.OTHER, strippedPath);
     }
 
-    public static String stripSuffix(String path, final String suffix) {
+    private static String stripSuffix(String path, final String suffix) {
         int indexOf = path.indexOf(suffix);
         if(indexOf != -1) {
             path = path.substring(0, indexOf);
@@ -179,27 +174,13 @@ class JarManifestModel extends ModelAbstract<JarManifestModel> {
         return path;
     }
 
-    static void addAttributes(final Manifest manifest, final List<JarManifestAttributes> attributes) {
+    private static void addAttributes(final Manifest manifest, final List<JarManifestAttributes> attributes) {
         final Attributes mainAttribs = manifest.getMainAttributes();
         Set<Entry<Object, Object>> entrySet = mainAttribs.entrySet();
         for (Entry<Object, Object> entry : entrySet) {
             JarManifestAttributes attribute = JarManifestAttributes.attribute(entry);
             attributes.add(attribute);
         }
-    }
-
-    @Override
-    protected JarManifestModel load() {
-        return this;
-    }
-
-    @Override
-    public void setObject(final JarManifestModel ex) {
-        // no-op
-    }
-
-    public List<JarManifestAttributes> getDetail() {
-        return manifests;
     }
 
 }

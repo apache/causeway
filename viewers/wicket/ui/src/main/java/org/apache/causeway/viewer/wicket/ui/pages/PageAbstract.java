@@ -369,7 +369,7 @@ implements ActionPromptProvider {
 
     protected void bookmarkPageIfShown(final BookmarkableModel model) {
         getBookmarkedPagesModel()
-        .ifPresent(bm->bm.bookmarkPage(model));
+        .ifPresent(bm->bm.add(model));
     }
 
     protected void removeAnyBookmark(final UiObjectWkt model) {

@@ -33,17 +33,13 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
  *
  * @since 2.0
  */
-public class TimeTakenModel
+public record TimeTakenModel()
 implements IModel<String> {
-    private static final long serialVersionUID = 1L;
 
     public static IModel<String> createForPrototypingElseBlank(final MetaModelContext mmc) {
         return mmc.getSystemEnvironment().isPrototyping()
             ? new TimeTakenModel()
             : Model.of("");
-    }
-
-    protected TimeTakenModel() {
     }
 
     @Override

@@ -22,9 +22,6 @@ import java.util.List;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
-import org.apache.causeway.applib.services.error.ErrorDetails;
-import org.apache.causeway.applib.services.error.ErrorReportingService;
-import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
@@ -48,35 +45,6 @@ public class ErrorPage extends PageAbstract {
         super(PageParameterUtils.newPageParameters(), null);
 
         addBookmarkedPages(themeDiv);
-
-        var errorReportingService = super.getMetaModelContext().getServiceRegistry()
-                .lookupService(ErrorReportingService.class).orElse(null);
-
-        if(errorReportingService != null) {
-
-            final String mainMessage = exceptionModel.getMainMessage();
-            final boolean recognized = exceptionModel.isRecognized();
-            final boolean authorizationException = exceptionModel.isAuthorizationException();
-
-            final List<StackTraceDetail> stackTrace = exceptionModel.getStackTrace();
-            final List<String> stackDetailList = transform(stackTrace);
-
-            final List<List<StackTraceDetail>> stackTraces = exceptionModel.getStackTraces();
-            final List<List<String>> stackDetailLists = _Lists.newArrayList();
-            for (List<StackTraceDetail> trace : stackTraces) {
-                stackDetailLists.add(transform(trace));
-            }
-
-            final ErrorDetails errorDetails =
-                    new ErrorDetails(mainMessage, recognized, authorizationException, stackDetailList, stackDetailLists);
-
-            final Ticket ticket = errorReportingService.reportError(errorDetails);
-
-            if (ticket != null) {
-                exceptionModel.setTicket(ticket);
-            }
-
-        }
 
         var pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
 

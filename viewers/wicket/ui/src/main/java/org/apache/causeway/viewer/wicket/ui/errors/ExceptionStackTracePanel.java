@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.errors;
 
-import java.util.List;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -32,7 +30,7 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-
+import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -46,7 +44,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 public class ExceptionStackTracePanel
-extends PanelBase<List<StackTraceDetail>> {
+extends PanelBase<ExceptionModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,16 +79,18 @@ extends PanelBase<List<StackTraceDetail>> {
             final String id,
             final ExceptionModel exceptionModel) {
 
-        super(id, exceptionModel);
+        super(id, Model.of(exceptionModel));
 
-        var ticketIfAny = exceptionModel.getTicket();
+        var ticketOptional = lookupService(ErrorReportingService.class)
+            .map(errorReportingService->
+                errorReportingService.reportError(exceptionModel.asErrorDetails(StackTraceDetail::line)));
 
-        var mainMessage = ticketIfAny
+        var mainMessage = ticketOptional
             .map(Ticket::getUserMessage)
             .orElseGet(exceptionModel::getMainMessage);
         Wkt.labelAdd(this, ID_MAIN_MESSAGE, mainMessage);
 
-        ticketIfAny
+        ticketOptional
             .map(Ticket::getMarkup)
             .ifPresentOrElse(ticketMarkup->{
                 Wkt.markupAdd(this, ID_TICKET_MARKUP, ticketMarkup);
@@ -101,7 +101,7 @@ extends PanelBase<List<StackTraceDetail>> {
         final boolean suppressExceptionDetail =
                 exceptionModel.isAuthorizationException()
                 || exceptionModel.isRecognized()
-                || ticketIfAny
+                || ticketOptional
                     .map(Ticket::getStackTracePolicy)
                     .map(Ticket.StackTracePolicy.HIDE::equals)
                     .orElse(false);

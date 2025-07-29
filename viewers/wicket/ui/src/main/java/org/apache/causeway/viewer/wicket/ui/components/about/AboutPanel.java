@@ -79,7 +79,7 @@ extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutMode
         if(jarManifestModel == null) {
             Provider<InputStream> metaInfManifestProvider =
                     () -> servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
-            jarManifestModel = new JarManifestModel(metaInfManifestProvider);
+            jarManifestModel = JarManifestModel.of(metaInfManifestProvider);
         }
 
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
