@@ -18,14 +18,16 @@
  */
 module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model;
-    exports org.apache.causeway.viewer.commons.model.layout;
+    exports org.apache.causeway.viewer.commons.model.about;
+    exports org.apache.causeway.viewer.commons.model.action;
+    exports org.apache.causeway.viewer.commons.model.attrib;
+    exports org.apache.causeway.viewer.commons.model.decorators;
+    exports org.apache.causeway.viewer.commons.model.error;
     exports org.apache.causeway.viewer.commons.model.components;
+    exports org.apache.causeway.viewer.commons.model.hints;
+    exports org.apache.causeway.viewer.commons.model.layout;
     exports org.apache.causeway.viewer.commons.model.mixin;
     exports org.apache.causeway.viewer.commons.model.object;
-    exports org.apache.causeway.viewer.commons.model.action;
-    exports org.apache.causeway.viewer.commons.model.decorators;
-    exports org.apache.causeway.viewer.commons.model.attrib;
-    exports org.apache.causeway.viewer.commons.model.hints;
 
     requires static lombok;
     requires transitive org.apache.causeway.applib;

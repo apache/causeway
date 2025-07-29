@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.errors;
+package org.apache.causeway.viewer.commons.model.error;
 
 import java.io.Serializable;
 import java.util.List;

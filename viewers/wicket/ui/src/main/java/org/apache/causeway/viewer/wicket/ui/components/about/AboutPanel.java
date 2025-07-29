@@ -30,6 +30,7 @@ import org.apache.wicket.model.LambdaModel;
 
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.viewer.commons.model.about.JarManifestModel;
 import org.apache.causeway.viewer.wicket.model.models.AboutModel;
 import org.apache.causeway.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;

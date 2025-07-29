@@ -24,10 +24,10 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
+import org.apache.causeway.viewer.commons.model.error.StackTraceDetail;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
-import org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 

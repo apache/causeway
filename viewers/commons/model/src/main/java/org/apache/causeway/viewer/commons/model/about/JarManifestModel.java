@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.about;
+package org.apache.causeway.viewer.commons.model.about;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +39,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.context._Context;
 
-record JarManifestModel(List<JarManifestAttributes> manifests) implements Serializable {
+public record JarManifestModel(List<JarManifestAttributes> manifests) implements Serializable {
 
     /**
      * @param metaInfManifestProvider provide using <tt>getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")</tt>
@@ -140,12 +140,10 @@ record JarManifestModel(List<JarManifestAttributes> manifests) implements Serial
 
         // split the path into parts, and reverse
         List<String> parts = _Strings.splitThenStream(strippedPath, "/")
-        .flatMap(s->_Strings.splitThenStream(s, "\\"))
-        .filter(_Strings::isNotEmpty)
-        .collect(Collectors.toList());
+            .flatMap(s->_Strings.splitThenStream(s, "\\"))
+            .filter(_Strings::isNotEmpty)
+            .collect(Collectors.toList());
 
-        //XXX legacy of
-        //List<String> parts = _Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
         Collections.reverse(parts);
 
         // searching from the end, return the jar name if possible

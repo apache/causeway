@@ -24,6 +24,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
+import org.apache.causeway.viewer.commons.model.error.StackTraceDetail;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 public final class StackTraceListView
@@ -33,7 +34,7 @@ extends ListView<StackTraceDetail> {
     private final String idLine;
 
     public StackTraceListView(final String id, final String idLine,
-            final List<org.apache.causeway.viewer.wicket.ui.errors.StackTraceDetail> list) {
+            final List<org.apache.causeway.viewer.commons.model.error.StackTraceDetail> list) {
         super(id, list);
         this.idLine = idLine;
     }

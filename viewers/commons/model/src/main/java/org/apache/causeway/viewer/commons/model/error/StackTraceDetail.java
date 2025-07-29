@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.errors;
+package org.apache.causeway.viewer.commons.model.error;
 
 import java.io.Serializable;
 
@@ -24,7 +24,7 @@ public record StackTraceDetail(
         Type type,
         String line) implements Serializable {
 
-    enum Type {
+    public enum Type {
         EXCEPTION_CLASS_NAME,
         EXCEPTION_MESSAGE,
         STACKTRACE_ELEMENT,

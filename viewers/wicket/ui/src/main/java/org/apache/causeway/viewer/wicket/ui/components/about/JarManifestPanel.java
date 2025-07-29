@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.viewer.commons.model.about.JarManifestModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 
 class JarManifestPanel extends Panel {

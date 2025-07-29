@@ -33,6 +33,8 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
+import org.apache.causeway.viewer.commons.model.error.StackTraceDetail;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;

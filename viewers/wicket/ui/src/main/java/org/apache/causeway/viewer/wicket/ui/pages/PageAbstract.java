@@ -53,6 +53,7 @@ import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.debug._Debug;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEnvelopeEvent;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
@@ -70,7 +71,6 @@ import org.apache.causeway.viewer.wicket.ui.components.actionprompt.ActionPrompt
 import org.apache.causeway.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
-import org.apache.causeway.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.causeway.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.causeway.viewer.wicket.ui.pages.common.bootstrap.css.BootstrapOverridesCssResourceReference;
 import org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome.FontAwesomeCssReferenceWkt;

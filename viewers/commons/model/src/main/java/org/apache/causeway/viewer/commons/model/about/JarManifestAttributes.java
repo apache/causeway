@@ -16,17 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.about;
+package org.apache.causeway.viewer.commons.model.about;
 
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Map.Entry;
 
-record JarManifestAttributes(
+public record JarManifestAttributes(
         Type type,
         String line) implements Serializable {
 
-    enum Type {
+    public enum Type {
         JAR_NAME,
         JAR_URL,
         MANIFEST_ATTRIBUTE

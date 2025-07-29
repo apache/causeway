@@ -24,6 +24,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
+import org.apache.causeway.viewer.commons.model.about.JarManifestAttributes;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 final class JarManifestListView extends ListView<JarManifestAttributes> {
