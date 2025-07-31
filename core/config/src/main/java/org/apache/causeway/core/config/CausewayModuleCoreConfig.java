@@ -53,7 +53,6 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 })
 @EnableConfigurationProperties({
         CausewayConfiguration.class,
-        DatanucleusConfiguration.class,
         EclipselinkConfiguration.class,
         EclipselinkConfiguration.Weaving.class,
         EclipselinkConfiguration.DdlGeneration.class,
