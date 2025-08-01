@@ -85,6 +85,7 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.Tempora
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
@@ -99,6 +100,7 @@ import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 
+import org.springframework.boot.context.properties.bind.ConstructorBinding;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.boot.convert.DurationUnit;
 
@@ -1003,33 +1005,41 @@ public record CausewayConfiguration(
                      * <p>The CSS class for individual actions can be overridden using
                      * {@link org.apache.causeway.applib.annotation.ActionLayout#cssClass()}.
                      */
-                    @DefaultValue({
-                        "add.*:btn-info",
-                        "remove.*:btn-warning",
+                    String[] patterns,
+                    // internal
+                    _StableValue<Map<Pattern, String>> _patternsAsMap) {
 
-                        "start.*:btn-info",
-                        "play.*:btn-info",
-                        "stop.*:btn-warning",
+                    // non canonical constructor to hide the internal _StableValue from Spring
+                    @ConstructorBinding
+                    public CssClass(
+                        @DefaultValue({
+                            "add.*:btn-info",
+                            "remove.*:btn-warning",
 
-                        "reset.*:btn-warning",
+                            "start.*:btn-info",
+                            "play.*:btn-info",
+                            "stop.*:btn-warning",
 
-                        "new.*:btn-info",
-                        "create.*:btn-info",
-                        "delete.*:btn-danger",
+                            "reset.*:btn-warning",
 
-                        "verify.*:btn-success",
-                        "decline.*:btn-danger",
+                            "new.*:btn-info",
+                            "create.*:btn-info",
+                            "delete.*:btn-danger",
 
-                        "save.*:btn-success",
+                            "verify.*:btn-success",
+                            "decline.*:btn-danger",
 
-                        "approve.*:btn-success",
-                        "reject.*:btn-danger",
+                            "save.*:btn-success",
 
-                    })
-                    String[] patterns) {
+                            "approve.*:btn-success",
+                            "reject.*:btn-danger",
+                        })
+                        String[] patterns) {
+                        this(patterns, new _StableValue<>());
+                    }
 
-                    //(lazy = true) //TODO
-                    public Map<Pattern, String> patternsAsMap() { return asMap(patterns()); }
+                    //lazy
+                    public Map<Pattern, String> patternsAsMap() { return _patternsAsMap.orElseSet(()->asMap(patterns())); }
                 }
 
                 public record CssClassFa(
@@ -1043,116 +1053,124 @@ public record CausewayConfiguration(
                      * <p>The font awesome class for individual actions can be overridden using
                      * {@link org.apache.causeway.applib.annotation.ActionLayout#cssClassFa()}.
                      */
-                    @DefaultValue({
+                    String[] patterns,
+                    // internal
+                    _StableValue<Map<Pattern, String>> _patternsAsMap) {
 
-                        "all.*:fa-solid fa-list",
-                        "list.*:fa-solid fa-list",
+                    // non canonical constructor to hide the internal _StableValue from Spring
+                    @ConstructorBinding
+                    public CssClassFa(
+                        @DefaultValue({
 
-                        "find.*:fa-search",
-                        "lookup.*:fa-search",
-                        "search.*:fa-search",
+                            "all.*:fa-solid fa-list",
+                            "list.*:fa-solid fa-list",
 
-                        "send.*:fa-regular fa-paper-plane",
+                            "find.*:fa-search",
+                            "lookup.*:fa-search",
+                            "search.*:fa-search",
 
-                        "open.*:fa-solid fa-arrow-up-right-from-square",
-                        "close.*:fa-solid fa-regular fa-rectangle-xmark",
+                            "send.*:fa-regular fa-paper-plane",
 
-                        "recent.*:fa-solid fa-clock-rotate-left",
+                            "open.*:fa-solid fa-arrow-up-right-from-square",
+                            "close.*:fa-solid fa-regular fa-rectangle-xmark",
 
-                        "lock.*:fa-solid fa-lock",
-                        "unlock.*:fa-solid fa-unlock",
+                            "recent.*:fa-solid fa-clock-rotate-left",
 
-                        "permit.*:fa-solid fa-unlock",
-                        "review.*:fa-solid fa-eye",
+                            "lock.*:fa-solid fa-lock",
+                            "unlock.*:fa-solid fa-unlock",
 
-                        "add.*:fa-regular fa-square-plus",
-                        "plus.*:fa-regular fa-square-plus",
-                        "remove.*:fa-regular fa-square-minus",
-                        "minus.*:fa-regular fa-square-minus",
+                            "permit.*:fa-solid fa-unlock",
+                            "review.*:fa-solid fa-eye",
 
-                        "sign.*:fa-solid fa-signature",
+                            "add.*:fa-regular fa-square-plus",
+                            "plus.*:fa-regular fa-square-plus",
+                            "remove.*:fa-regular fa-square-minus",
+                            "minus.*:fa-regular fa-square-minus",
 
-                        "clear.*:fa-solid fa-broom",
+                            "sign.*:fa-solid fa-signature",
 
-                        "create.*:fa-regular fa-square-plus",
-                        "new.*:fa-regular fa-square-plus",
-                        "delete.*:fa-solid fa-trash",
+                            "clear.*:fa-solid fa-broom",
 
-                        "change.*:fa-regular fa-pen-to-square",
-                        "edit.*:fa-regular fa-pen-to-square",
-                        "maintain.*:fa-regular fa-pen-to-square",
-                        "update.*:fa-regular fa-pen-to-square",
+                            "create.*:fa-regular fa-square-plus",
+                            "new.*:fa-regular fa-square-plus",
+                            "delete.*:fa-solid fa-trash",
 
-                        "cut.*:fa-solid fa-scissors",
-                        "move.*:fa-solid fa-angles-right",
-                        "copy.*:fa-regular fa-copy",
-                        "duplicate.*:fa-solid fa-clone",
-                        "clone.*:fa-solid fa-clone",
-                        "categorise.*:fa-regular fa-folder-open",
+                            "change.*:fa-regular fa-pen-to-square",
+                            "edit.*:fa-regular fa-pen-to-square",
+                            "maintain.*:fa-regular fa-pen-to-square",
+                            "update.*:fa-regular fa-pen-to-square",
 
-                        "download.*:fa-solid fa-download",
-                        "upload.*:fa-solid fa-upload",
+                            "cut.*:fa-solid fa-scissors",
+                            "move.*:fa-solid fa-angles-right",
+                            "copy.*:fa-regular fa-copy",
+                            "duplicate.*:fa-solid fa-clone",
+                            "clone.*:fa-solid fa-clone",
+                            "categorise.*:fa-regular fa-folder-open",
 
-                        "execute.*:fa-solid fa-bolt",
-                        "run.*:fa-solid fa-bolt",
-                        "trigger.*:fa-solid fa-bolt",
+                            "download.*:fa-solid fa-download",
+                            "upload.*:fa-solid fa-upload",
 
-                        "link.*:fa-solid fa-link",
-                        "unlink.*:fa-solid fa-link-slash",
+                            "execute.*:fa-solid fa-bolt",
+                            "run.*:fa-solid fa-bolt",
+                            "trigger.*:fa-solid fa-bolt",
 
-                        "start.*:fa-solid fa-play",
-                        "play.*:fa-solid fa-play",
-                        "resume.*:fa-solid fa-play",
-                        "pause.*:fa-solid fa-pause",
-                        "suspend.*:fa-solid fa-pause",
-                        "stop.*:fa-solid fa-stop",
-                        "terminate.*:fa-solid fa-stop",
+                            "link.*:fa-solid fa-link",
+                            "unlink.*:fa-solid fa-link-slash",
 
-                        "previous.*:fa-backward-step",
-                        "next.*:fa-forward-step",
+                            "start.*:fa-solid fa-play",
+                            "play.*:fa-solid fa-play",
+                            "resume.*:fa-solid fa-play",
+                            "pause.*:fa-solid fa-pause",
+                            "suspend.*:fa-solid fa-pause",
+                            "stop.*:fa-solid fa-stop",
+                            "terminate.*:fa-solid fa-stop",
 
-                        "approve.*:fa-regular fa-thumbs-up",
-                        "reject.*:fa-regular fa-thumbs-down",
+                            "previous.*:fa-backward-step",
+                            "next.*:fa-forward-step",
 
-                        "verify.*:fa-solid fa-check",
-                        "decline.*:fa-solid fa-xmark",
-                        "cancel.*:fa-solid fa-xmark",
+                            "approve.*:fa-regular fa-thumbs-up",
+                            "reject.*:fa-regular fa-thumbs-down",
 
-                        "discard.*:fa-regular fa-trash-can",
+                            "verify.*:fa-solid fa-check",
+                            "decline.*:fa-solid fa-xmark",
+                            "cancel.*:fa-solid fa-xmark",
 
-                        "assign.*:fa-regular fa-hand-point-right",
+                            "discard.*:fa-regular fa-trash-can",
 
-                        "calculate.*:fa-calculator",
+                            "assign.*:fa-regular fa-hand-point-right",
 
-                        "import.*:fa-solid fa-file-import",
-                        "export.*:fa-solid fa-file-export",
+                            "calculate.*:fa-calculator",
 
-                        "first.*:fa-regular fa-star",
+                            "import.*:fa-solid fa-file-import",
+                            "export.*:fa-solid fa-file-export",
 
-                        "install.*:fa-solid fa-wrench",
+                            "first.*:fa-regular fa-star",
 
-                        "setup.*:fa-solid fa-gear",
-                        "configure.*:fa-solid fa-gear",
+                            "install.*:fa-solid fa-wrench",
 
-                        "refresh.*:fa-sync",
-                        "renew.*:fa-rotate-right",
-                        "reset.*:fa-rotate-left",
+                            "setup.*:fa-solid fa-gear",
+                            "configure.*:fa-solid fa-gear",
 
-                        "save.*:fa-regular fa-floppy-disk",
+                            "refresh.*:fa-sync",
+                            "renew.*:fa-rotate-right",
+                            "reset.*:fa-rotate-left",
 
-                        "switch.*:fa-exchange",
-                        "random.*:fa-shuffle",
+                            "save.*:fa-regular fa-floppy-disk",
 
-                        "view.*:fa-regular fa-eye",
+                            "switch.*:fa-exchange",
+                            "random.*:fa-shuffle",
 
-                        "wizard.*:fa-solid fa-wand-magic-sparkles"
+                            "view.*:fa-regular fa-eye",
 
-                    })
-                    String[] patterns) {
+                            "wizard.*:fa-solid fa-wand-magic-sparkles"
 
-                    //(lazy = true) //TODO
-                    public Map<Pattern, String> patternsAsMap() { return asMap(patterns()); }
+                        })
+                        String[] patterns) {
+                        this(patterns, new _StableValue<>());
+                    }
 
+                    //lazy
+                    public Map<Pattern, String> patternsAsMap() { return _patternsAsMap.orElseSet(()->asMap(patterns())); }
                 }
             }
 
