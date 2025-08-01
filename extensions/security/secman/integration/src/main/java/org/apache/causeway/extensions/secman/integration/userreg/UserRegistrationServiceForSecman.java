@@ -78,7 +78,7 @@ public class UserRegistrationServiceForSecman implements UserRegistrationService
             applicationUser.setEmailAddress(emailAddress);
         }
 
-        causewayConfiguration.getExtensions().getSecman().getUserRegistration().getInitialRoleNames().stream()
+        causewayConfiguration.extensions().secman().userRegistration().initialRoleNames().stream()
                 .map(applicationRoleRepository::findByName)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

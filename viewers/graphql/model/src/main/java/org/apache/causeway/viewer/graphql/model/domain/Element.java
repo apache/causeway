@@ -45,7 +45,7 @@ public abstract class Element {
 
     protected Element(final Context context) {
         this.context = context;
-        this.graphqlConfiguration = this.context.causewayConfiguration.getViewer().getGraphql();
+        this.graphqlConfiguration = this.context.causewayConfiguration.viewer().graphql();
     }
 
     protected final GraphQLFieldDefinition setField(final GraphQLFieldDefinition field) {

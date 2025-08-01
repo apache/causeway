@@ -29,9 +29,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 /**
- *
  * @since 2.0
- *
  */
 @Configuration
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelContextFactory")
@@ -41,15 +39,16 @@ public class MetaModelContextFactory {
     @Bean(destroyMethod = "onDestroy")
     public MetaModelContext metaModelContext(final CausewaySystemEnvironment systemEnvironment) {
 
-        var ioc = systemEnvironment.getIocContainer();
+        var ioc = systemEnvironment.springContextHolder();
         var mmc = new MetaModelContext_usingSpring(ioc);
 
-        if(isIntegrationTesting()) {
-            MetaModelContext.setOrReplace(mmc);
+        //TODO potentially problematic when testing concurrently
+        if(systemEnvironment.isIntegrationTesting()) {
+            MetaModelContextSingletonHolder.setOrReplace(mmc);
             return mmc;
         }
 
-        MetaModelContext.set(mmc);
+        MetaModelContextSingletonHolder.set(mmc);
         return mmc;
     }
 
@@ -58,18 +57,9 @@ public class MetaModelContextFactory {
         return new ObjectManager(mmc);
     }
 
-    // -- HELPER
-
-    /**
-     * Whether we find Spring's ContextCache on the class path.
-     */
-    private static boolean isIntegrationTesting() {
-        try {
-            Class.forName("org.springframework.test.context.cache.ContextCache");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    //JUnit
+    public static void setTestContext(MetaModelContext mmc) {
+        MetaModelContextSingletonHolder.setOrReplace(mmc);
     }
 
 }

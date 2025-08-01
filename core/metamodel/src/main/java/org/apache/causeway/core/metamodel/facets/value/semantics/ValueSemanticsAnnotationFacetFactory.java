@@ -122,7 +122,7 @@ extends FacetFactoryAbstract {
                         MinFractionalDigitsFacetFromValueSemanticsAnnotation
                                 .create(valueSemanticsIfAny, facetHolder),
                         // support for @jakarta.validation.constraints.Digits (if supported)
-                        getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()
+                        getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()
                                 ? MinFractionalDigitsFacetFromJavaxValidationDigitsAnnotation
                                             .create(digitsIfAny, facetHolder)
                                 : Optional.empty()

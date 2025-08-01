@@ -81,7 +81,7 @@ class ActionInteractionTest_notUsingAllowSafeSemantics extends InteractionTestAb
     @Test
     void assert_prereq() {
         var config = super.objectManager.getConfiguration();
-        assertFalse(config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission());
+        assertFalse(config.security().actionsWithSafeSemanticsRequireOnlyViewingPermission());
     }
 
     @Test

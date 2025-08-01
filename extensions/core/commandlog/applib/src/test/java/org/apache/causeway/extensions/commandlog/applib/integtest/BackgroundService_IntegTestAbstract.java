@@ -76,13 +76,13 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     @BeforeAll
     static void setup_environment() {
-        prototypingOrig = new CausewaySystemEnvironment().isPrototyping();
-        new CausewaySystemEnvironment().setPrototyping(true);
+        prototypingOrig = CausewaySystemEnvironment.deploymentTypeFromEnvironment().isPrototyping();
+        CausewaySystemEnvironment.setPrototyping(true);
     }
 
     @AfterAll
     static void reset_environment() {
-        new CausewaySystemEnvironment().setPrototyping(prototypingOrig);
+        CausewaySystemEnvironment.setPrototyping(prototypingOrig);
     }
 
     @BeforeEach

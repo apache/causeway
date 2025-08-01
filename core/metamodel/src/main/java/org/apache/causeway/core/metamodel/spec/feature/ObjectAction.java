@@ -37,7 +37,6 @@ import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
@@ -286,10 +285,7 @@ public interface ObjectAction extends ObjectMember {
 
         if(needsFallback) {
             // modal vs side-bar
-            var dialogModeAsConfigured = Optional.ofNullable(
-                    getMetaModelContext().getConfiguration().getViewer().getWicket().getDialogMode())
-                    .orElseGet(()->new Wicket().getDialogMode());
-            switch (dialogModeAsConfigured) {
+            switch (getWicketViewerSettings().dialogMode()) {
             case SIDEBAR:
                 return PromptStyle.DIALOG_SIDEBAR;
             case MODAL:

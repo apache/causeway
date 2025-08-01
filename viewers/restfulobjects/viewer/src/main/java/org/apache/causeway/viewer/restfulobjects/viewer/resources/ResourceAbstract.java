@@ -107,7 +107,7 @@ implements HasMetaModelContext {
         var requestUrl = parseUrl(httpServletRequest.getRequestURL().toString());
 
         // eg. http://localhost:8080/ctx/restful/
-        final String restfulAbsoluteBase = getConfiguration().getViewer().getRestfulobjects().getBaseUri()
+        final String restfulAbsoluteBase = getConfiguration().viewer().restfulobjects().baseUri()
             .orElseGet(()->restfulAbsoluteBase(requestUrl));
 
         // eg. /ctx/restful/

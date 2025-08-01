@@ -38,7 +38,7 @@ public class CausewayLocaleInitializer {
 
     @PostConstruct
     public void initLocale() {
-        final Optional<String> localeSpecOpt = configuration.getCore().getRuntime().getLocale();
+        final Optional<String> localeSpecOpt = configuration.core().runtime().locale();
         localeSpecOpt.map(CausewayLocaleInitializer::toLocale).ifPresent(CausewayLocaleInitializer::setLocaleDefault);
         log.debug("locale is {}", Locale.getDefault());
     }

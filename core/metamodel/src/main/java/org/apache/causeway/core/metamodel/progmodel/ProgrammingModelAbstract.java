@@ -24,33 +24,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.SetMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactory;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessor;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 
-import lombok.Getter;
-
 public abstract class ProgrammingModelAbstract
 implements
-    ProgrammingModel,
-    HasMetaModelContext {
+    ProgrammingModel {
 
-    @Getter(onMethod_ = {@Override})
-    private final MetaModelContext metaModelContext;
+    private final ServiceInjector serviceInjector;
 
     private List<FacetFactory> unmodifiableFactories;
     private List<MetaModelValidator> unmodifiableValidators;
     private List<MetaModelPostProcessor> unmodifiablePostProcessors;
 
-    protected ProgrammingModelAbstract(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
+    protected ProgrammingModelAbstract(final ServiceInjector serviceInjector) {
+        this.serviceInjector = serviceInjector;
     }
 
     /**
@@ -61,18 +56,18 @@ implements
         if(isInitialized()) return;
 
         // for all registered facet-factories that also implement MetaModelRefiner
-        for (var facetFactory : snapshotFactories(filter, metaModelContext)) {
+        for (var facetFactory : snapshotFactories(filter)) {
             if(facetFactory instanceof MetaModelRefiner metaModelRefiner) {
                 metaModelRefiner.refineProgrammingModel(this);
             }
         }
 
         this.unmodifiableFactories =
-                Collections.unmodifiableList(snapshotFactories(filter, metaModelContext));
+                Collections.unmodifiableList(snapshotFactories(filter));
         this.unmodifiableValidators =
-                Collections.unmodifiableList(snapshotValidators(filter, metaModelContext));
+                Collections.unmodifiableList(snapshotValidators(filter));
         this.unmodifiablePostProcessors =
-                Collections.unmodifiableList(snapshotPostProcessors(filter, metaModelContext));
+                Collections.unmodifiableList(snapshotPostProcessors(filter));
     }
 
     // -- SETUP
@@ -84,7 +79,7 @@ implements
             final Marker ... markers) {
 
         assertNotInitialized();
-        metaModelContext.getServiceInjector().injectServicesInto(instance);
+        serviceInjector.injectServicesInto(instance);
         var factoryEntry = new ProgrammingModelEntry<>(instance, markers);
         factoryEntriesByOrder.putElement(order, factoryEntry);
     }
@@ -96,7 +91,7 @@ implements
             final Marker... markers) {
 
         assertNotInitialized();
-        metaModelContext.getServiceInjector().injectServicesInto(instance);
+        serviceInjector.injectServicesInto(instance);
         var validatorEntry = new ProgrammingModelEntry<>(instance, markers);
         validatorEntriesByOrder.putElement(order, validatorEntry);
     }
@@ -108,7 +103,7 @@ implements
             final Marker... markers) {
 
         assertNotInitialized();
-        metaModelContext.getServiceInjector().injectServicesInto(instance);
+        serviceInjector.injectServicesInto(instance);
         var postProcessorEntry = new ProgrammingModelEntry<>(instance, markers);
         postProcessorEntriesByOrder.putElement(order, postProcessorEntry);
     }
@@ -156,8 +151,7 @@ implements
         factoryEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<FacetFactory> snapshotFactories(
-            final ProgrammingModelInitFilter filter,
-            final MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter) {
 
         var factories = _Lists.<FacetFactory>newArrayList();
         for(var order : FacetProcessingOrder.values()) {
@@ -176,8 +170,7 @@ implements
         validatorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<MetaModelValidator> snapshotValidators(
-            final ProgrammingModelInitFilter filter,
-            final MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter) {
 
         var validators = _Lists.<MetaModelValidator>newArrayList();
         for(var order : ValidationOrder.values()) {
@@ -197,8 +190,7 @@ implements
         postProcessorEntriesByOrder = _Multimaps.newSetMultimap(LinkedHashSet::new);
 
     private List<MetaModelPostProcessor> snapshotPostProcessors(
-            final ProgrammingModelInitFilter filter,
-            final MetaModelContext metaModelContext) {
+            final ProgrammingModelInitFilter filter) {
 
         var postProcessors = _Lists.<MetaModelPostProcessor>newArrayList();
         for(var order : PostProcessingOrder.values()) {

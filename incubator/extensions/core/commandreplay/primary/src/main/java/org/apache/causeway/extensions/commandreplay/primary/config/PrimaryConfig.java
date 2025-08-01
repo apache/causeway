@@ -41,10 +41,10 @@ public class PrimaryConfig {
     @Getter final String secondaryBaseUrlWicket;
 
     public PrimaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
-        var config = causewayConfiguration.getExtensions().getCommandReplay();
+        var config = causewayConfiguration.extensions().commandReplay();
 
-        var secondaryAccess = config.getSecondaryAccess();
-        secondaryBaseUrlWicket = secondaryAccess.getBaseUrlWicket().orElse(null);
+        var secondaryAccess = config.secondaryAccess();
+        secondaryBaseUrlWicket = secondaryAccess.baseUrlWicket().orElse(null);
     }
 
     public boolean isConfigured() {

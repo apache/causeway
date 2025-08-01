@@ -69,7 +69,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
         addFacet(new TitleFacetNone(facetHolder));
         addFacet(new PagedFacetFromConfiguration(
-                        getConfiguration().getApplib().getAnnotation().getDomainObjectLayout().getPaged(),
+                        getConfiguration().applib().annotation().domainObjectLayout().paged(),
                         facetHolder));
     }
 
@@ -85,7 +85,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             addFacet(new MaxLengthFacetUnlimited(facetedMethod));
             addFacet(new MultiLineFacetNone(facetedMethod));
             addFacet(new LabelAtFacetFromLayoutConfiguration(
-                    getConfiguration().getApplib().getAnnotation().getPropertyLayout().getLabelPosition(),
+                    getConfiguration().applib().annotation().propertyLayout().labelPosition(),
                     facetedMethod));
         }
         if (featureType.isAction()) {
@@ -94,7 +94,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         if (featureType.isCollection()) {
             addFacet(
                     new PagedFacetFromConfiguration(
-                            getConfiguration().getApplib().getAnnotation().getCollectionLayout().getPaged(),
+                            getConfiguration().applib().annotation().collectionLayout().paged(),
                             facetedMethod));
         }
 
@@ -107,7 +107,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             addFacet(new MultiLineFacetNone(typedHolder));
             addFacet(new MaxLengthFacetUnlimited(typedHolder));
             addFacet(new LabelAtFacetFromLayoutConfiguration(
-                    getConfiguration().getApplib().getAnnotation().getParameterLayout().getLabelPosition(),
+                    getConfiguration().applib().annotation().parameterLayout().labelPosition(),
                     typedHolder));
         }
     }

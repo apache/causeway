@@ -22,13 +22,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 abstract class ChoiceProviderTestAbstract {

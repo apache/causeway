@@ -88,7 +88,7 @@ public class PasswordResetEmailPanel extends PanelBase<Void> {
         var passwordResetEvent = new PasswordResetEvent(
                 email,
                 confirmationUrl,
-                getApplicationSettings().getName());
+                getApplicationSettings().name());
 
         boolean emailSent = super.getEmailNotificationService().send(passwordResetEvent);
         if (emailSent) {

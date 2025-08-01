@@ -399,7 +399,7 @@ implements
                 lifecycleEvent,
                 ObjectCreatedEvent.Noop.class,
                 ObjectCreatedEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getCreatedLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().createdLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -417,7 +417,7 @@ implements
                 lifecycleEvent,
                 ObjectLoadedEvent.Noop.class,
                 ObjectLoadedEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getLoadedLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().loadedLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -435,7 +435,7 @@ implements
                 lifecycleEvent,
                 ObjectPersistingEvent.Noop.class,
                 ObjectPersistingEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getPersistingLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().persistingLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -453,7 +453,7 @@ implements
                 lifecycleEvent,
                 ObjectPersistedEvent.Noop.class,
                 ObjectPersistedEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getPersistedLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().persistedLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -471,7 +471,7 @@ implements
                 lifecycleEvent,
                 ObjectRemovingEvent.Noop.class,
                 ObjectRemovingEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getRemovingLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().removingLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -489,7 +489,7 @@ implements
                 lifecycleEvent,
                 ObjectUpdatedEvent.Noop.class,
                 ObjectUpdatedEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getUpdatedLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().updatedLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -507,7 +507,7 @@ implements
                 lifecycleEvent,
                 ObjectUpdatingEvent.Noop.class,
                 ObjectUpdatingEvent.Default.class,
-                getConfiguration().getApplib().getAnnotation().getDomainObject().getUpdatingLifecycleEvent().isPostForDefault())
+                getConfiguration().applib().annotation().domainObject().updatingLifecycleEvent().postForDefault())
                 )
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
                 holder, lifecycleEvent))
@@ -632,7 +632,7 @@ implements
                 }
 
                 private boolean logicalTypeNameIsNotIncludedInAliased(final ObjectSpecification objectSpecification) {
-                    if (getConfiguration().getCore().getMetaModel().getValidator().isAllowLogicalTypeNameAsAlias()) {
+                    if (getConfiguration().core().metaModel().validator().allowLogicalTypeNameAsAlias()) {
                         return objectSpecification.getAliases()
                                 .map(LogicalType::logicalName).stream()
                                 .noneMatch(name -> objectSpecification.logicalTypeName().equals(name));

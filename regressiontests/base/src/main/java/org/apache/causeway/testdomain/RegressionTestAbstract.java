@@ -31,7 +31,6 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 /**
@@ -39,10 +38,6 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
  * with {@link #run(ThrowingRunnable)} or {@link #call(Callable)}.
  */
 public abstract class RegressionTestAbstract {
-
-    {
-        CausewaySystemEnvironment.setUnitTesting(true);
-    }
 
     protected void run(final ThrowingRunnable runnable) {
         interactionService.runAnonymous(() ->

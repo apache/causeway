@@ -174,12 +174,12 @@ extends TextFieldWithConverter<T> {
                 .useCloseIcon(FontAwesome6IconType.check_s)
                 );
 
-        var causewayDatePickerConfig = mmc.getConfiguration().getViewer().getWicket().getDatePicker();
+        var causewayDatePickerConfig = mmc.getConfiguration().viewer().wicket().datePicker();
 
         //XXX future extensions might allow to set bounds on a per member basis (via ValueSemantics annotation)
-        config.minDate(causewayDatePickerConfig.getMinDate());
-        config.maxDate(causewayDatePickerConfig.getMaxDate());
-        config.allowInputToggle(causewayDatePickerConfig.isPopupOnFocus());
+        config.minDate(causewayDatePickerConfig.minDate());
+        config.maxDate(causewayDatePickerConfig.maxDate());
+        config.allowInputToggle(causewayDatePickerConfig.popupOnFocus());
         return config;
     }
 

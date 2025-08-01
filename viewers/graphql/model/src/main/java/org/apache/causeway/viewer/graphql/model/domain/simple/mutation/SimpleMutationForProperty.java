@@ -63,7 +63,7 @@ public class SimpleMutationForProperty extends Element {
         this.objectSpec = objectSpec;
         this.oneToOneAssociation = oneToOneAssociation;
 
-        this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        this.argumentName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
 
         GraphQLOutputType type = context.typeMapper.outputTypeFor(objectSpec, SchemaType.RICH);  // setter returns void, so will return target instead.
         if (type != null) {
@@ -146,7 +146,7 @@ public class SimpleMutationForProperty extends Element {
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
         // add target
-        var targetArgName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        var targetArgName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
                         .name(targetArgName)

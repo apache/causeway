@@ -69,6 +69,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return commandLogEntryClass;
     }
 
+    @Override
     public C createEntryAndPersist(
             final Command command, final UUID parentInteractionIdIfAny, final ExecuteIn executeIn) {
         C c = factoryService.detachedEntity(commandLogEntryClass);
@@ -145,6 +146,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findByTargetAndFromAndTo(
             final Bookmark target,
             final @Nullable LocalDate from,
@@ -201,6 +203,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findRecentByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -211,6 +214,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public List<CommandLogEntry> findRecentByTargetOrResult(final Bookmark targetOrResult) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -289,6 +293,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
                     Query.named(commandLogEntryClass, CommandLogEntry.Nq.FIND_BACKGROUND_AND_NOT_YET_STARTED)));
     }
 
+    @Override
     public List<CommandLogEntry> findRecentBackgroundByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -345,6 +350,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         );
     }
 
+    @Override
     public C saveForReplay(final CommandDto dto) {
 
         if(dto.getMember().getInteractionType() == InteractionType.ACTION_INVOCATION) {
@@ -374,6 +380,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
         return commandJdo;
     }
 
+    @Override
     public List<CommandLogEntry> saveForReplay(final CommandsDto commandsDto) {
         var commandDtos = commandsDto.getCommandDto();
         var commands = new ArrayList<CommandLogEntry>();
@@ -453,7 +460,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public List<CommandLogEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return _Casts.uncheckedCast(repositoryService().allInstances(commandLogEntryClass));
@@ -464,7 +471,7 @@ public abstract class CommandLogEntryRepositoryAbstract<C extends CommandLogEntr
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(commandLogEntryClass);

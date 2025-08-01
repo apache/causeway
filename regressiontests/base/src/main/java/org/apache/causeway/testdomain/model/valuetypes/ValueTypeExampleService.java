@@ -23,8 +23,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-
 import org.junit.jupiter.params.provider.Arguments;
 
 import org.springframework.stereotype.Service;
@@ -33,10 +31,9 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.internal.base._Strings;
 
 @Service
-public class ValueTypeExampleService {
-
-    @Inject ValueSemanticsResolver valueSemanticsResolver;
-    @Inject List<ValueTypeExample<?>> examples;
+public record ValueTypeExampleService(
+    ValueSemanticsResolver valueSemanticsResolver,
+    List<ValueTypeExample<?>> examples) {
 
     public record Scenario(
             String name,

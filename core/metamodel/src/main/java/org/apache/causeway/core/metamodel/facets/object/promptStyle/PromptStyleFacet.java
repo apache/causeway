@@ -42,7 +42,7 @@ public record PromptStyleFacet(
        return new PromptStyleFacet("CompositeValueEdit", PromptStyle.INLINE_AS_IF_EDIT, facetHolder, Precedence.SYNTHESIZED, false);
    }
    public static PromptStyleFacet asConfgured(final CausewayConfiguration configuration, final FacetHolder facetHolder) {
-       return new PromptStyleFacet("Configuration", configuration.getViewer().getWicket().getPromptStyle(), facetHolder, Precedence.DEFAULT, false);
+       return new PromptStyleFacet("Configuration", configuration.viewer().wicket().promptStyle(), facetHolder, Precedence.DEFAULT, false);
    }
 
    @Override public Class<? extends Facet> facetType() { return getClass(); }

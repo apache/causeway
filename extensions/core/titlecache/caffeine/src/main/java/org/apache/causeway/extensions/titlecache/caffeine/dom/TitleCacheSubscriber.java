@@ -146,9 +146,9 @@ public class TitleCacheSubscriber implements EntityTitleSubscriber {
     private Cache addCache(
             final CausewayModuleApplib.TitleUiEvent<?> ev,
             final String logicalTypeName) {
-        var titlecacheConfig = causewayConfiguration.getExtensions().getTitlecache().getCaffeine();
-        int expiryDurationInMinutes = titlecacheConfig.getExpiryDurationInMinutes();
-        int maxSizeInEntries = titlecacheConfig.getMaxSizeInEntries();
+        var titlecacheConfig = causewayConfiguration.extensions().titlecache().caffeine();
+        int expiryDurationInMinutes = titlecacheConfig.expiryDurationInMinutes();
+        int maxSizeInEntries = titlecacheConfig.maxSizeInEntries();
         if(ev instanceof CachedWithCacheSettings) {
             var settings = (CachedWithCacheSettings) ev;
             expiryDurationInMinutes = settings.expiryDurationInMinutes();

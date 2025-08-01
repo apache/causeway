@@ -29,7 +29,7 @@ public record WelcomeModel(String welcomeText)
 implements IModel<String> {
 
     public WelcomeModel(final CausewayConfiguration config) {
-        this(config.getViewer().getWicket().getWelcome().getText());
+        this(config.viewer().wicket().welcome().text());
     }
 
     @Override

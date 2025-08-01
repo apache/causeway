@@ -133,7 +133,7 @@ public abstract class ApplicationUser
     }
 
     @Programmatic protected Secman getSecmanConfig() {
-        return config.getExtensions().getSecman();
+        return config.extensions().secman();
     }
 
     @ObjectSupport public String title() {
@@ -633,7 +633,7 @@ public abstract class ApplicationUser
         for (final RoleMemento role : currentUser.roles()) {
             final String roleName = role.name();
             if(adminRoleName.equals(roleName)) return true;
-            
+
             // format could also be realmName:roleName, eg. with Shiro
             // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
             // simply check that the last part matches the role name.
@@ -654,7 +654,7 @@ public abstract class ApplicationUser
     }
 
     @Programmatic private String getAdminRoleName() {
-        var adminRoleName = _Strings.emptyToNull(getSecmanConfig().getSeed().getAdmin().getRoleName());
+        var adminRoleName = _Strings.emptyToNull(getSecmanConfig().seed().admin().roleName());
         // guard against empty admin role name
         _Assert.assertNotNull(adminRoleName, ()->"secman-config.seed.admin.role-name must not be empty");
         return adminRoleName;

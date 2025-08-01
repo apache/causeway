@@ -73,9 +73,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         return representation;
     }
 
-    // ///////////////////////////////////////////////////
-    // value
-    // ///////////////////////////////////////////////////
+    // -- VALUE
 
     private void addValue(final LinkFollowSpecs linkFollower) {
         var valueAdapterIfAny = objectMember.get(objectAdapter, getInteractionInitiatedBy());
@@ -94,7 +92,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                             representation,
                             JsonValueConverter.Context.of(
                                     objectMember,
-                                    resourceContext.config().isSuppressMemberExtensions()));
+                                    resourceContext.config().suppressMemberExtensions()));
             return;
         }
 
@@ -130,9 +128,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
 
     }
 
-    // ///////////////////////////////////////////////////
-    // details link
-    // ///////////////////////////////////////////////////
+    // -- DETAILS LINK
 
     /**
      * Mandatory hook method to support x-ro-follow-links
@@ -145,9 +141,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
-    // ///////////////////////////////////////////////////
-    // mutators
-    // ///////////////////////////////////////////////////
+    // -- MUTATORS
 
     @Override
     protected void addMutatorLinksIfEnabled() {
@@ -159,9 +153,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
             .forEach(this::addLinkFor);
     }
 
-    // ///////////////////////////////////////////////////
-    // choices
-    // ///////////////////////////////////////////////////
+    // -- CHOICES
 
     private ObjectPropertyReprRenderer addChoices() {
         final Object propertyChoices = propertyChoices();
@@ -189,13 +181,11 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         return list;
     }
 
-    // ///////////////////////////////////////////////////
-    // extensions and links
-    // ///////////////////////////////////////////////////
+    // -- EXTENSIONS AND LINKS
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().isSuppressDescribedByLinks()) {
+        if(resourceContext.config().suppressDescribedByLinks()) {
             return;
         }
         final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();

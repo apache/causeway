@@ -33,9 +33,12 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
 import org.apache.causeway.applib.locale.UserLocale;
@@ -55,8 +58,6 @@ import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * @since 2.x {@index}
@@ -387,19 +388,19 @@ ValueSemanticsProvider<T> {
     // -- TRANSLATION SUPPORT
 
     @Autowired(required = false) // nullable (JUnit support)
-    protected TranslationService translationService;
+    protected Provider<TranslationService> translationService;
     protected String translate(final String text) {
         return translationService!=null
-                ? translationService.translate(TranslationContext.empty(), text)
+                ? translationService.get().translate(TranslationContext.empty(), text)
                 : text;
     }
 
     // -- PLACEHOLDER RENDERING
 
     @Autowired(required = false) // nullable (JUnit support)
-    private Optional<PlaceholderRenderService> placeholderRenderService = Optional.empty();
+    private Optional<Provider<PlaceholderRenderService>> placeholderRenderService = Optional.empty();
     protected PlaceholderRenderService getPlaceholderRenderService() {
-        return placeholderRenderService.orElseGet(PlaceholderRenderService::fallback);
+        return placeholderRenderService.map(Provider::get).orElseGet(PlaceholderRenderService::fallback);
     }
 
 }

@@ -201,7 +201,7 @@ implements ApplicationUserRepository {
     @Override
     public boolean isAdminUser(final ApplicationUser user) {
         return Objects.equals(
-                config.getExtensions().getSecman().getSeed().getAdmin().getUserName(),
+                config.extensions().secman().seed().admin().userName(),
                 user.getName());
     }
 

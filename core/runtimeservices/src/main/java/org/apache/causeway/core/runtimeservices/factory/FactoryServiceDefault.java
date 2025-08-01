@@ -21,7 +21,6 @@ package org.apache.causeway.core.runtimeservices.factory;
 import java.util.Optional;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
@@ -56,12 +55,13 @@ import org.jspecify.annotations.NonNull;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".FactoryServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class FactoryServiceDefault implements FactoryService {
+public record FactoryServiceDefault(
+        InteractionService interactionService, // dependsOn
+        Provider<SpecificationLoader> specificationLoaderProvider,
+        CausewaySystemEnvironment causewaySystemEnvironment,
+        Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider)
+implements FactoryService {
 
-    @Inject InteractionService interactionService; // dependsOn
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
-    @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
     private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
 
     @Override
@@ -75,7 +75,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T get(final @NonNull Class<T> requiredType) {
-        return causewaySystemEnvironment.getIocContainer()
+        return causewaySystemEnvironment.springContextHolder()
                 .get(requiredType)
                 .orElseThrow(()->_Exceptions.noSuchElement("not an injectable type %s", requiredType));
     }
@@ -156,7 +156,7 @@ public class FactoryServiceDefault implements FactoryService {
     // -- HELPER
 
     private ObjectSpecification loadSpecElseFail(final @NonNull Class<?> type) {
-        return specificationLoader.specForTypeElseFail(type);
+        return specificationLoaderProvider().get().specForTypeElseFail(type);
     }
 
     /** handles injection, post-construct and publishing */
@@ -185,7 +185,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> TreeNode<T> treeNode(T root) {
-        return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(specificationLoader)));
+        return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(specificationLoaderProvider().get())));
     }
 
 }

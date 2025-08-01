@@ -112,9 +112,9 @@ import org.jspecify.annotations.NonNull;
         CausewayModuleCoreSecurity.class,
 
         // @Configuration's
-        MetaModelContextFactory.class,
         CausewayModuleCoreMetamodelMixins.class,
         CausewayModuleCoreMetamodelConfigurationDefault.class,
+        MetaModelContextFactory.class,
 
         // @Component's
         ProgrammingModelInitFilterDefault.class,

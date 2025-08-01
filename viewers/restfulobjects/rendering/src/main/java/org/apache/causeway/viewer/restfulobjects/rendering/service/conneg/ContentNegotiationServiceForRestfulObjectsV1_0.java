@@ -328,7 +328,7 @@ implements ContentNegotiationService {
          */
         STRICT;
         static AcceptChecking fromConfig(final CausewayConfiguration configuration) {
-            return configuration.getViewer().getRestfulobjects().isStrictAcceptChecking()
+            return configuration.viewer().restfulobjects().strictAcceptChecking()
                     ? AcceptChecking.STRICT
                     : AcceptChecking.RELAXED;
         }

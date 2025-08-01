@@ -186,13 +186,13 @@ implements MetaModelRefiner {
     private List<TypeValidator> getTypeValidators(final CausewayConfiguration configuration) {
 
         final List<TypeValidator> typeValidators = _Lists.newArrayList();
-        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNotAbstract()) {
+        if(configuration.core().metaModel().validator().jaxbViewModel().notAbstract()) {
             typeValidators.add(new JaxbViewModelNotAbstractValidator());
         }
-        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNotInnerClass()) {
+        if(configuration.core().metaModel().validator().jaxbViewModel().notInnerClass()) {
             typeValidators.add(new JaxbViewModelNotInnerClassValidator());
         }
-        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isNoArgConstructor()) {
+        if(configuration.core().metaModel().validator().jaxbViewModel().noArgConstructor()) {
             typeValidators.add(new JaxbViewModelPublicNoArgConstructorValidator());
         }
         return typeValidators;
@@ -200,10 +200,10 @@ implements MetaModelRefiner {
 
     private List<AssociationValidator> getAssociationValidators(final CausewayConfiguration configuration) {
         final List<AssociationValidator> associationValidators = _Lists.newArrayList();
-        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isReferenceTypeAdapter()) {
+        if(configuration.core().metaModel().validator().jaxbViewModel().referenceTypeAdapter()) {
             associationValidators.add(new PropertyValidatorForReferenceTypes());
         }
-        if(configuration.getCore().getMetaModel().getValidator().getJaxbViewModel().isDateTimeTypeAdapter()) {
+        if(configuration.core().metaModel().validator().jaxbViewModel().dateTimeTypeAdapter()) {
             associationValidators.add(new PropertyValidatorForDateTypes(java.sql.Timestamp.class));
             associationValidators.add(new PropertyValidatorForDateTypes(ZonedDateTime.class));
             associationValidators.add(new PropertyValidatorForDateTypes(OffsetDateTime.class));

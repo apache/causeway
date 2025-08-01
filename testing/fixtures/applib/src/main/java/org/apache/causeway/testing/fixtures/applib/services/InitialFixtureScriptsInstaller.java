@@ -58,7 +58,7 @@ public class InitialFixtureScriptsInstaller {
 
         this.fixtureScripts = fixtureScripts;
 
-        final Class<?> initialScript = causewayConfiguration.getTesting().getFixtures().getInitialScript();
+        final Class<?> initialScript = causewayConfiguration.testing().fixtures().initialScript();
         if (initialScript != null
                 && FixtureScript.class.isAssignableFrom(initialScript)) {
             try {

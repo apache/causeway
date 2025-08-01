@@ -23,7 +23,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
@@ -35,10 +34,11 @@ import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
 
     // @Component
+    CausewayConfiguration.class,
     PatternsConverter.class,
     CausewayBeanFactoryPostProcessor.class,
     CausewayLocaleInitializer.class,
@@ -52,7 +52,7 @@ import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
     WebAppContextPath.class,
 })
 @EnableConfigurationProperties({
-        CausewayConfiguration.class,
+        CausewayConfiguration.Causeway.class,
         EclipselinkConfiguration.class,
         EclipselinkConfiguration.Weaving.class,
         EclipselinkConfiguration.DdlGeneration.class,
@@ -74,24 +74,21 @@ public class CausewayModuleCoreConfig {
         @Value("#{systemProperties['spring.mail.properties.mail.smtp.timeout']}") Integer smtpTimeout,
         @Value("#{systemProperties['spring.mail.properties.mail.smtp.connectiontimeout']}") Integer smtpConnectionTimeout) {
 
-        var emailConfiguration = conf.getCore().getRuntimeServices().getEmail();
+        var emailConfiguration = conf.core().runtimeServices().email();
 
-        String senderUsername = _Strings.emptyToNull(senderEmailUsername);
-        String senderPassword = _Strings.emptyToNull(senderEmailPassword);
-        String senderHostName = _Strings.emptyToNull(senderEmailHostName);
-        int senderPort = senderEmailPort!=null ? senderEmailPort : 587;
-        boolean isSenderTlsEnabled = senderEmailTlsEnabled!=null ? senderEmailTlsEnabled : true;
-        int socketTimeout = smtpTimeout!=null ? smtpTimeout : 2000;
-        int socketConnectionTimeout = smtpConnectionTimeout!=null ? smtpConnectionTimeout : 2000;
-        boolean isThrowExceptionOnFail = emailConfiguration.isThrowExceptionOnFail();
-        String senderAddress = _Strings.emptyToNull(emailConfiguration.getSender().getAddress());
-        String overrideTo = _Strings.emptyToNull(emailConfiguration.getOverride().getTo());
-        String overrideCc = _Strings.emptyToNull(emailConfiguration.getOverride().getCc());
-        String overrideBcc = _Strings.emptyToNull(emailConfiguration.getOverride().getBcc());
-
-        return new EmailConfiguration(senderUsername, senderPassword, senderHostName, senderPort,
-            isSenderTlsEnabled, socketTimeout, socketConnectionTimeout,
-            isThrowExceptionOnFail, senderAddress, overrideTo, overrideCc, overrideBcc);
+        return new EmailConfiguration(
+            _Strings.emptyToNull(senderEmailUsername),
+            _Strings.emptyToNull(senderEmailPassword),
+            _Strings.emptyToNull(senderEmailHostName),
+            senderEmailPort!=null ? senderEmailPort : 587,
+            senderEmailTlsEnabled!=null ? senderEmailTlsEnabled : true,
+            smtpTimeout!=null ? smtpTimeout : 2000,
+            smtpConnectionTimeout!=null ? smtpConnectionTimeout : 2000,
+            emailConfiguration.throwExceptionOnFail(),
+            _Strings.emptyToNull(emailConfiguration.sender().address()),
+            _Strings.emptyToNull(emailConfiguration.override().to()),
+            _Strings.emptyToNull(emailConfiguration.override().cc()),
+            _Strings.emptyToNull(emailConfiguration.override().bcc()));
     }
 
 }

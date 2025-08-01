@@ -43,8 +43,8 @@ public class CssClassFacetOnActionFromConfiguredRegex extends CssClassFacetSimpl
     private static Optional<String> cssIfAnyFor(
             final String name, final CausewayConfiguration causewayConfiguration) {
 
-        var cssClassByPattern = causewayConfiguration.getApplib().getAnnotation().getActionLayout()
-                .getCssClass().getPatternsAsMap();
+        var cssClassByPattern = causewayConfiguration.applib().annotation().actionLayout()
+                .cssClass().patternsAsMap();
 
         for (Map.Entry<Pattern, String> entry : cssClassByPattern.entrySet()) {
             final Pattern pattern = entry.getKey();

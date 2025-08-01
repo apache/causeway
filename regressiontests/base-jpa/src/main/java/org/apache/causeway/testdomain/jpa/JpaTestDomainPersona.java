@@ -99,7 +99,7 @@ public enum JpaTestDomainPersona
                 @Override
                 protected void execute(final ExecutionContext ec) {
 
-                    var regularUserRoleName = causewayConfig.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
+                    var regularUserRoleName = causewayConfig.extensions().secman().seed().regularUser().roleName();
                     var regularUserRole = applicationRoleRepository.findByName(regularUserRoleName).orElse(null);
                     var username = LdapConstants.SVEN_PRINCIPAL;
                     ApplicationUser svenUser = applicationUserRepository.findByUsername(username).orElse(null);

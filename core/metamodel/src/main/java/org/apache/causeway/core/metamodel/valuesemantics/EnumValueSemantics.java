@@ -84,7 +84,7 @@ implements
             final TranslationService translationService,
             final Class<T> enumClass) {
         super();
-        this.translationService = translationService;
+        this.translationService = () -> translationService;
         this.correspondingClass = enumClass;
         this.maxLength = maxLengthFor(enumClass);
         this.enumSpecLazy = _Lazy.threadSafe(()->loadEnumSpec(enumClass));
@@ -194,7 +194,7 @@ implements
             .map(MmTitleUtils::titleOf)
             .orElseGet(()->Enums.getFriendlyNameOf(objectAsEnum.name()));
 
-        return Optional.ofNullable(translationService)
+        return Optional.ofNullable(translationService.get())
                 .map(ts->ts.translate(TranslationContext.forEnum(objectAsEnum), friendlyNameOfEnum))
                 .orElse(friendlyNameOfEnum);
     }

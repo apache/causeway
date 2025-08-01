@@ -341,7 +341,7 @@ implements MemberExecutorService {
             return resultAdapter;
         }
 
-        if (!getConfiguration().getCore().getMetaModel().isFilterVisibility()
+        if (!getConfiguration().core().metaModel().filterVisibility()
                 || resultAdapter instanceof PackedManagedObject) {
             return resultAdapter;
         }

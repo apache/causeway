@@ -67,7 +67,7 @@ public class ApplicationUser_lock {
 
     @MemberSupport public String disableAct() {
         if(applicationUserRepository.isAdminUser(target)) {
-            return String.format("Cannot lock the '%s' user.", config.getExtensions().getSecman().getSeed().getAdmin().getUserName());
+            return String.format("Cannot lock the '%s' user.", config.extensions().secman().seed().admin().userName());
         }
         return ApplicationUserStatus.canLock(target.getStatus())
                 ? null

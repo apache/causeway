@@ -32,7 +32,7 @@ public class SimpleTopLevelQuery
     public SimpleTopLevelQuery(final Context context) {
         super(SCHEMA_STRATEGY, context);
 
-        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+        var graphqlConfiguration = context.causewayConfiguration.viewer().graphql();
 
         buildObjectType();
 

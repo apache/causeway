@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -43,6 +42,7 @@ import org.apache.causeway.applib.services.confview.ConfigurationProperty;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -99,8 +99,8 @@ implements
         var sb = new StringBuilder();
 
         String head = String.format("APACHE CAUSEWAY %s (%s) ",
-                configuration.getViewer().getCommon().getApplication().getVersion(),
-                systemEnvironment.getDeploymentType().name());
+                configuration.viewer().common().application().version(),
+                systemEnvironment.deploymentType().name());
 
         final Map<String, ConfigurationProperty> map = scopedConf.get().get(Scope.PRIMARY.ordinal());
 
@@ -157,8 +157,8 @@ implements
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-        add("Causeway Version", configuration.getViewer().getCommon().getApplication().getVersion(), map);
-        add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
+        add("Causeway Version", configuration.viewer().common().application().version(), map);
+        add("Deployment Type", systemEnvironment.deploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 
         addSystemProperty("java.version", map);
@@ -233,7 +233,7 @@ implements
         }
         return map;
     }
-    
+
     private static void logRetrievalFailure(final String propName, Throwable error) {
         log.warn("failed to load configuration property '{}'", propName, error);
     }
@@ -252,7 +252,7 @@ implements
         case NEVER_SHOW:
             return false;
         case SHOW_ONLY_IN_PROTOTYPE:
-            return systemEnvironment.getDeploymentType().isPrototyping();
+            return systemEnvironment.deploymentType().isPrototyping();
         case ALWAYS_SHOW:
             return true;
         default:
@@ -261,10 +261,9 @@ implements
     }
 
     private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {
-        return Optional.ofNullable(
-                configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
-                // fallback to configuration default policy
-                .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
+        var policy = configuration.core().config().configurationPropertyVisibilityPolicy();
+        _Assert.assertNotNull(policy);
+        return policy;
     }
 
 }

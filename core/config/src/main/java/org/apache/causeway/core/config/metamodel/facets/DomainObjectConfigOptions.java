@@ -33,10 +33,10 @@ public final class DomainObjectConfigOptions {
         TRUE,
         FALSE;
     }
-    
+
     public static EntityChangePublishingPolicy entityChangePublishingPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getDomainObject().getEntityChangePublishing();
+        return configuration.applib().annotation().domainObject().entityChangePublishing();
     }
 
 }

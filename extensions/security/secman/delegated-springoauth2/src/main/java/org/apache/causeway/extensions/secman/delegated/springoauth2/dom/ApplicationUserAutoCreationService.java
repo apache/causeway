@@ -47,11 +47,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.mixins.ApplicationU
 import lombok.RequiredArgsConstructor;
 
 /**
- * This service automatically creates an {@link ApplicationUser} if an end-user successfully logged in via Oauth.
+ * This service automatically creates an {@link ApplicationUser} if an end-user successfully logged in via OAuth.
  *
- * <p>
- *     The initial set of rules are as per {@link CausewayConfiguration.Extensions.Secman.DelegatedUsers.AutoCreatePolicy}
- * </p>
+ * <p>The initial set of rules are as per
+ * {@link org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.DelegatedUsers.AutoCreatePolicy}
  *
  * @since 2.0 {@index}
  */
@@ -80,15 +79,15 @@ public class ApplicationUserAutoCreationService {
         var username = oidcUser.getPreferredUsername();
         var email = oidcUser.getEmail();
 
-        var secmanConfig = causewayConfiguration.getExtensions().getSecman().getDelegatedUsers();
-        switch (secmanConfig.getAutoCreatePolicy()) {
+        var secmanConfig = causewayConfiguration.extensions().secman().delegatedUsers();
+        switch (secmanConfig.autoCreatePolicy()) {
             case DO_NOT_AUTO_CREATE:
                 break;
             case AUTO_CREATE_AS_LOCKED:
-                create(username, email, secmanConfig.getInitialRoleNames(), ApplicationUserStatus.LOCKED);
+                create(username, email, secmanConfig.initialRoleNames(), ApplicationUserStatus.LOCKED);
                 break;
             case AUTO_CREATE_AS_UNLOCKED:
-                create(username, email, secmanConfig.getInitialRoleNames(), ApplicationUserStatus.UNLOCKED);
+                create(username, email, secmanConfig.initialRoleNames(), ApplicationUserStatus.UNLOCKED);
                 break;
         }
     }

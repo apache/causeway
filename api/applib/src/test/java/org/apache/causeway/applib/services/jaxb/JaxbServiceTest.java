@@ -35,12 +35,12 @@ import lombok.SneakyThrows;
 
 class JaxbServiceTest {
 
-    private JaxbService.Simple simple;
+    private JaxbService simple;
     private ActionInvocationDto sampleDto;
 
     @BeforeEach
     void setUp() throws Exception {
-        simple = new JaxbService.Simple();
+        simple = JaxbService.simple();
         sampleDto = getSample();
     }
 

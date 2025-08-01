@@ -94,7 +94,7 @@ public class RichAction
     }
 
     private boolean isInvokeAllowed(final ObjectAction objectAction) {
-        var apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
         switch (apiVariant) {
             case QUERY_ONLY:
             case QUERY_AND_MUTATIONS:

@@ -59,7 +59,7 @@ public class CommonMeta extends ElementCustom {
         super(TypeNames.metaTypeNameFor(objectInteractor.getObjectSpecification(), objectInteractor.getSchemaType()), context);
         this.holder = objectInteractor;
 
-        this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+        this.graphqlConfiguration = context.causewayConfiguration.viewer().graphql();
 
         if(isBuilt()) {
             this.metaId = null;
@@ -85,12 +85,12 @@ public class CommonMeta extends ElementCustom {
         addChildFieldFor(this.metaIcon = isResourceNotForbidden() ? new CommonMetaIcon(context) : null);
         addChildFieldFor(this.metaGrid = isResourceNotForbidden() ? new CommonMetaGrid(context) : null);
 
-        var fieldName = graphqlConfiguration.getMetaData().getFieldName();
+        var fieldName = graphqlConfiguration.metaData().fieldName();
         buildObjectTypeAndField(fieldName, "Object metadata");
     }
 
     private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.getResources().getResponseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     private boolean isEntity() {

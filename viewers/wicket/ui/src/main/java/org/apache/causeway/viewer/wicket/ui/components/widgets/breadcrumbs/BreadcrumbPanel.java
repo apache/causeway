@@ -153,7 +153,7 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
+        boolean shouldShow = getWicketViewerSettings().bookmarkedPages().showDropDownOnFooter();
         setVisible(shouldShow);
     }
 

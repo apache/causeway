@@ -24,6 +24,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.core.io.AbstractResource;
 
 import org.apache.causeway.applib.services.jaxb.JaxbService;
@@ -32,12 +33,12 @@ import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDefault;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
@@ -63,15 +64,16 @@ implements HasMetaModelContext {
     @BeforeEach
     final void setUp() throws Exception {
         var mmcBuilder = MetaModelContext_forTesting.builder()
-                .memberExecutor(Mockito.mock(MemberExecutorService.class))
-                ;
+                .testPropertyValues(TestPropertyValues.of(
+                    "causeway.core.metaModel.introspector.lockAfterFullIntrospection=false"))
+                .memberExecutor(Mockito.mock(MemberExecutorService.class));
 
         // install runtime services into MMC (extend as needed)
 
         onSetUp(mmcBuilder);
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsMarshallerService.class, ()->{
                     var jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     return new MenuBarsMarshallerServiceBootstrap(
@@ -79,7 +81,7 @@ implements HasMetaModelContext {
                 }));
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsLoaderService.class, ()->{
                     return new MenuBarsLoaderServiceDefault(
                             menubarsLayoutXmlResourceRef,
@@ -87,7 +89,7 @@ implements HasMetaModelContext {
                 }));
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsService.class, ()->{
 
                     var messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
@@ -103,8 +105,6 @@ implements HasMetaModelContext {
                     }));
 
         metaModelContext = mmcBuilder.build();
-
-        getConfiguration().getCore().getMetaModel().getIntrospector().setLockAfterFullIntrospection(false);
 
         afterSetUp();
     }

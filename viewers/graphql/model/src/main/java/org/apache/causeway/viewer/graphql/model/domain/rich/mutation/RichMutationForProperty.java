@@ -49,8 +49,6 @@ import org.apache.causeway.viewer.graphql.model.types.TypeMapper;
 //@Slf4j
 public class RichMutationForProperty extends Element {
 
-    private static final SchemaType SCHEMA_TYPE = SchemaType.RICH;
-
     private final ObjectSpecification objectSpec;
     private final OneToOneAssociation oneToOneAssociation;
     private String argumentName;
@@ -63,7 +61,7 @@ public class RichMutationForProperty extends Element {
         this.objectSpec = objectSpec;
         this.oneToOneAssociation = oneToOneAssociation;
 
-        this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        this.argumentName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
 
         GraphQLOutputType type = context.typeMapper.outputTypeFor(objectSpec, SchemaType.RICH);  // setter returns void, so will return target instead.
         if (type != null) {
@@ -146,7 +144,7 @@ public class RichMutationForProperty extends Element {
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
         // add target
-        var targetArgName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        var targetArgName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
         fieldBuilder.argument(
                 GraphQLArgument.newArgument()
                         .name(targetArgName)

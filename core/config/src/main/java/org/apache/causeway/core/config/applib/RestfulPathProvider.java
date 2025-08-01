@@ -36,7 +36,7 @@ implements Object_openRestApi.RestfulPathProvider {
 
     @Override
     public Optional<String> getRestfulPath() {
-        return _Strings.nonEmpty(configuration.getViewer().getRestfulobjects().getBasePath());
+        return _Strings.nonEmpty(configuration.viewer().restfulobjects().basePath());
     }
 
 }

@@ -50,7 +50,7 @@ public class CommandReplayAnalyserException implements CommandReplayAnalyser {
 
     @PostConstruct
     public void init() {
-        enabled = causewayConfiguration.getExtensions().getCommandReplay().getAnalyser().getResult().isEnabled();
+        enabled = causewayConfiguration.extensions().commandReplay().analyser().result().enabled();
     }
 
     @Override

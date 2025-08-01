@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.handler.ChainOfResponsibility;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ProtoObject;
@@ -48,7 +48,7 @@ record ObjectLoaderFactory() {
                 var logicalType = spec.logicalType();
                 var servicePojo = spec.getServiceRegistry()
                     .lookupRegisteredBeanById(logicalType)
-                    .flatMap(_SingletonBeanProvider::lookupInstance)
+                    .flatMap(SingletonBeanProvider::lookupInstance)
                     .orElseThrow(()->_Exceptions.noSuchElement(
                             "loader: %s loading logicalType %s",
                             this.getClass().getName(), logicalType));

@@ -87,7 +87,7 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
     }
 
     private ThemeProvider createFallbackThemeProvider() {
-        var themeName = configuration.getViewer().getWicket().getThemes().getInitial();
+        var themeName = configuration.viewer().wicket().themes().initial();
         if ("default".equalsIgnoreCase(themeName)) {
             // in effect uses the bootstrap 'default' theme
             return new NoopThemeProvider();
@@ -115,7 +115,7 @@ public class CausewayWicketThemeSupportDefault implements CausewayWicketThemeSup
      */
     private List<String> filterThemes(final List<String> availableThemes) {
 
-        var configuredThemes = configuration.getViewer().getWicket().getThemes().getEnabled();
+        var configuredThemes = configuration.viewer().wicket().themes().enabled();
         if (configuredThemes == null || configuredThemes.isEmpty()) {
             return Collections.emptyList();
         }

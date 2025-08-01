@@ -108,7 +108,7 @@ public class AccountManagementPageAbstract extends WebPageBase {
     private final static List<String> suppressedExceptionMessages = Arrays.asList("Requested page is no longer available.");
 
     private void addPageTitle() {
-        var applicationName = getApplicationSettings().getName();
+        var applicationName = getApplicationSettings().name();
         Wkt.labelAdd(this, ID_PAGE_TITLE, applicationName);
     }
 
@@ -128,10 +128,10 @@ public class AccountManagementPageAbstract extends WebPageBase {
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
                 BootstrapJavaScriptReference.instance())));
 
-        getWicketViewerSettings().getCss()
+        getWicketViewerSettings().css()
         .ifPresent(css -> response.render(CssReferenceHeaderItem.forUrl(css)));
 
-        getWicketViewerSettings().getJs()
+        getWicketViewerSettings().js()
         .ifPresent(js -> response.render(JavaScriptReferenceHeaderItem.forUrl(js)));
     }
 

@@ -139,7 +139,7 @@ implements ActionPromptProvider {
 
             themeDiv = Wkt.containerAdd(this, ID_THEME);
 
-            String applicationName = getApplicationSettings().getName();
+            String applicationName = getApplicationSettings().name();
             Wkt.cssAppend(themeDiv, Wkt.cssNormalize(applicationName));
 
             boolean devUtilitiesEnabled = getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled();
@@ -220,7 +220,7 @@ implements ActionPromptProvider {
     protected void setTitle(final String title) {
         Wkt.labelAdd(this, ID_PAGE_TITLE, title != null
                 ? title
-                : getApplicationSettings().getName());
+                : getApplicationSettings().name());
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -246,17 +246,17 @@ implements ActionPromptProvider {
         new JGrowlBehaviour()
             .renderFeedbackMessages(response);
 
-        getWicketViewerSettings().getCss()
+        getWicketViewerSettings().css()
         .ifPresent(applicationCss -> {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         });
 
-        getWicketViewerSettings().getJs()
+        getWicketViewerSettings().js()
         .ifPresent(applicationJs -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         });
 
-        getWicketViewerSettings().getLiveReloadUrl()
+        getWicketViewerSettings().liveReloadUrl()
         .ifPresent(liveReloadUrl -> {
             response.render(JavaScriptReferenceHeaderItem.forUrl(liveReloadUrl));
         });
@@ -360,11 +360,11 @@ implements ActionPromptProvider {
     }
 
     private boolean isShowBookmarks() {
-        return getWicketViewerSettings().getBookmarkedPages().isShowChooser();
+        return getWicketViewerSettings().bookmarkedPages().showChooser();
     }
 
     protected boolean isShowBreadcrumbs() {
-        return getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
+        return getWicketViewerSettings().bookmarkedPages().showDropDownOnFooter();
     }
 
     protected void bookmarkPageIfShown(final BookmarkableModel model) {
@@ -414,8 +414,8 @@ implements ActionPromptProvider {
 
         var dialogMode =
                 sort.policy().isInjectable()
-                        ? getWicketViewerSettings().getDialogModeForMenu()
-                        : getWicketViewerSettings().getDialogMode();
+                        ? getWicketViewerSettings().dialogModeForMenu()
+                        : getWicketViewerSettings().dialogMode();
         switch (dialogMode) {
         case SIDEBAR:
             return actionPromptSidebar;

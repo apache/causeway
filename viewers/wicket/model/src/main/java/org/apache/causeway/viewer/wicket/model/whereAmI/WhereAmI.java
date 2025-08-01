@@ -36,9 +36,9 @@ public record WhereAmI(
 
     public static WhereAmI of(final UiObjectWkt startOfChain) {
         var mmc = startOfChain.getMetaModelContext();
-        var settings = mmc.getConfiguration().getViewer().getWicket().getBreadcrumbs();
-        var isWhereAmIEnabled = settings.isEnabled();
-        int maxChainLength = settings.getMaxParentChainLength();
+        var settings = mmc.getConfiguration().viewer().wicket().breadcrumbs();
+        var isWhereAmIEnabled = settings.enabled();
+        int maxChainLength = settings.maxParentChainLength();
 
         var adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();

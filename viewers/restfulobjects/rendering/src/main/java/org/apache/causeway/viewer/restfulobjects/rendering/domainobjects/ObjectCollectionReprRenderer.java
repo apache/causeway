@@ -63,7 +63,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
         final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
         final boolean eagerlyRender = !followValue.isTerminated()
-                || (resourceContext.config().isHonorUiHints()
+                || (resourceContext.config().honorUiHints()
                         && Facets.defaultViewIsTable(objectMember));
 
         if ((mode.isInline() && eagerlyRender)
@@ -94,7 +94,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         final boolean eagerlyRender = !followHref.isTerminated()
-                || (resourceContext.config().isHonorUiHints()
+                || (resourceContext.config().honorUiHints()
                         && Facets.defaultViewIsTable(objectMember)
                         && resourceContext.canEagerlyRender(valueAdapter));
 
@@ -146,7 +146,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().isSuppressDescribedByLinks()) {
+        if(resourceContext.config().suppressDescribedByLinks()) {
             return;
         }
         final JsonRepresentation link =

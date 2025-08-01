@@ -504,7 +504,7 @@ implements
         if (containerRequest instanceof HttpServletRequest) {
             var cookies = Can.ofArray(((HttpServletRequest) containerRequest).getCookies());
             var cookieKey = _Strings.nullToEmpty(
-                    getConfiguration().getViewer().getWicket().getRememberMe().getCookieKey());
+                    getConfiguration().viewer().wicket().rememberMe().cookieKey());
 
             for (var cookie : cookies) {
                 if (cookieKey.equals(cookie.getName())) {

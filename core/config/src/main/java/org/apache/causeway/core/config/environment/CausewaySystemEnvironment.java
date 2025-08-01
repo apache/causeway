@@ -18,13 +18,11 @@
  */
 package org.apache.causeway.core.config.environment;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.inject.Singleton;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.context.ApplicationContext;
@@ -33,54 +31,50 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.ioc._IocContainer;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Represents configuration, that is required in an early bootstrapping phase.
  * Regarded immutable during an application's life-cycle.
  *
- * @since 2.0
  * @implNote acts as the framework's bootstrapping entry-point for Spring
+ * @since 2.0
  */
 @Service
-@Named(CausewayModuleCoreConfig.NAMESPACE + "..CausewaySystemEnvironment")
+@Named(CausewayModuleCoreConfig.NAMESPACE + ".CausewaySystemEnvironment")
 @Priority(0) // same as PriorityPrecedence#FIRST
 @Qualifier("Default")
-@Singleton
 @Slf4j
 public class CausewaySystemEnvironment {
 
-    @Inject private ApplicationContext springContext;
+    @Getter @Accessors(fluent=true)
+    private SpringContextHolder springContextHolder;
 
-    @Getter private _IocContainer iocContainer;
+    @Getter @Accessors(fluent=true)
+    private final DeploymentType deploymentType;
+
+    @Autowired
+    public CausewaySystemEnvironment(ApplicationContext springContext) {
+        this.springContextHolder = new SpringContextHolder(springContext);
+        this.deploymentType = deploymentTypeFromEnvironment();
+        log.info("init for %s (hashCode = {})", deploymentType, this.hashCode());
+    }
+
+    //JUnit
+    public CausewaySystemEnvironment() {
+        this.springContextHolder = null;
+        this.deploymentType = deploymentTypeFromEnvironment();
+    }
 
     // -- LIFE-CYCLE
-
-    @PostConstruct
-    public void postConstruct() {
-
-        this.iocContainer = _IocContainer.spring(springContext);
-
-        log.info("postConstruct (hashCode = {})", this.hashCode());
-
-        // when NOT bootstrapped with Spring, postConstruct() never gets called
-
-        // when bootstrapped with Spring, postConstruct() must happen before any call to get() above,
-        // otherwise we copy over settings from the primed instance already created with get() above,
-        // then on the _Context replace the primed with this one
-        var primed = _Context.getIfAny(CausewaySystemEnvironment.class);
-        if(primed!=null) {
-            _Context.remove(CausewaySystemEnvironment.class);
-            this.setPrototyping(primed.isPrototyping());
-        }
-        _Context.putSingleton(CausewaySystemEnvironment.class, this);
-    }
 
     @PreDestroy
     public void preDestroy() {
@@ -95,71 +89,49 @@ public class CausewaySystemEnvironment {
 
     @EventListener(ContextClosedEvent.class)
     public void onContextAboutToClose(final ContextClosedEvent event) {
-        // happens before any @PostConstruct
-        // as a consequence, no managed bean should touch the _Context during its post-construct phase
+        // happens before any @PreDestroy
+        // as a consequence, no managed bean should touch the _Context during its pre-detroy phase
         // as it has already been cleared here
         log.info("Context about to close.");
-        this.iocContainer = null;
+        this.springContextHolder = null;
         _Context.clear();
     }
 
     @EventListener(ApplicationFailedEvent.class)
-    public void onContextRefreshed(final ApplicationFailedEvent event) {
+    public void onApplicationFailed(final ApplicationFailedEvent event) {
         // happens eg. when DN finds non enhanced entity classes
         log.error("Application failed to start", event.getException());
-    }
-
-    // -- SHORTCUTS
-
-    public _IocContainer ioc() {
-        return getIocContainer();
     }
 
     // -- SETUP
 
     /**
-     * For framework internal unit tests.<p>
-     * Let the framework know what context we are running on.
-     * Must be set prior to configuration bootstrapping.
-     * @param isUnitTesting
+     * Whether a Spring context is missing. (But could be integration testing instead.)
      */
-    public static void setUnitTesting(final boolean isUnitTesting) {
-        System.setProperty("UNITTESTING", ""+isUnitTesting);
+    public boolean isUnitTesting() {
+        return springContextHolder==null;
     }
 
-    /**
-     * To set the framework's deployment-type programmatically.<p>
-     * Must be set prior to configuration bootstrapping.
-     * @param isPrototyping
-     */
-    public void setPrototyping(final boolean isPrototyping) {
-        System.setProperty("PROTOTYPING", ""+isPrototyping);
-    }
-
-    public DeploymentType getDeploymentType() {
-        return decideDeploymentType();
-    }
-
-    public static boolean isUnitTesting() {
-        return "true".equalsIgnoreCase(getProperty("UNITTESTING"));
+    public boolean isIntegrationTesting() {
+        return _isIntegrationTesting.orElseSet(CausewaySystemEnvironment::checkWhetherIntegrationTesting);
     }
 
     public boolean isPrototyping() {
-        return getDeploymentType().isPrototyping();
+        return deploymentType.isPrototyping();
     }
 
-    // -- HELPER
+    // -- UTIL
 
-    private DeploymentType decideDeploymentType() {
+    public static DeploymentType deploymentTypeFromEnvironment() {
         boolean anyVoteForPrototyping = false;
         boolean anyVoteForProduction = false;
 
-        // system environment priming (lowest prio)
+        // system environment priming (lowest priority)
 
         anyVoteForPrototyping|=
                 isSet(getEnv("PROTOTYPING"));
 
-        // system property priming (medium prio)
+        // system property priming (medium priority)
 
         anyVoteForPrototyping|=
                 isSet(getProperty("PROTOTYPING"));
@@ -167,23 +139,29 @@ public class CausewaySystemEnvironment {
         anyVoteForPrototyping|=
                 "PROTOTYPING".equalsIgnoreCase(getProperty("causeway.deploymentType"));
 
-        // system property override (highest prio)
+        // system property override (highest priority)
 
         anyVoteForProduction|= isNotSet(getProperty("PROTOTYPING"));
 
         anyVoteForProduction|=
                 "PRODUCTION".equalsIgnoreCase(getProperty("causeway.deploymentType"));
 
-        final boolean isPrototyping = anyVoteForPrototyping && !anyVoteForProduction;
-
-        final DeploymentType deploymentType =
-                isPrototyping
-                        ? DeploymentType.PROTOTYPING
-                        : DeploymentType.PRODUCTION;
-
-        return deploymentType;
-
+        var isPrototyping = anyVoteForPrototyping && !anyVoteForProduction;
+        return isPrototyping
+            ? DeploymentType.PROTOTYPING
+            : DeploymentType.PRODUCTION;
     }
+
+    /**
+     * To set the framework's deployment-type programmatically.<p>
+     * Must be set prior to configuration bootstrapping.
+     * @param isPrototyping
+     */
+    public static void setPrototyping(final boolean isPrototyping) {
+        System.setProperty("PROTOTYPING", ""+isPrototyping);
+    }
+
+    // -- HELPER
 
     private static String getEnv(final String envVar) {
         return trim(System.getenv(envVar));
@@ -203,6 +181,19 @@ public class CausewaySystemEnvironment {
 
     private static boolean isNotSet(final String value) {
         return "false".equalsIgnoreCase(value);
+    }
+
+    private _StableValue<Boolean> _isIntegrationTesting = new _StableValue<Boolean>();
+    /**
+     * Whether we find Spring's ContextCache on the class path.
+     */
+    private static boolean checkWhetherIntegrationTesting() {
+        try {
+            Class.forName("org.springframework.test.context.cache.ContextCache");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

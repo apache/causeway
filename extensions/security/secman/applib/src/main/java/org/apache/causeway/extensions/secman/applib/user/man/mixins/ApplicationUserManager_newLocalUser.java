@@ -129,7 +129,7 @@ public class ApplicationUserManager_newLocalUser {
     }
 
     @MemberSupport public ApplicationRole defaultInitialRole() {
-        var regularUserRoleName = config.getExtensions().getSecman().getSeed().getRegularUser().getRoleName();
+        var regularUserRoleName = config.extensions().secman().seed().regularUser().roleName();
         return applicationRoleRepository
                 .findByNameCached(regularUserRoleName)
                 .orElse(null);

@@ -110,9 +110,9 @@ public class LayoutLoadersGitHubMenu {
     }
 
     boolean isNotConfigured() {
-        var layoutLoadersGitHub = causewayConfiguration.getExtensions().getLayoutLoaders().getGithub();
-        return layoutLoadersGitHub.getRepository() == null ||
-                layoutLoadersGitHub.getApiKey() == null;
+        var layoutLoadersGitHub = causewayConfiguration.extensions().layoutLoaders().github();
+        return layoutLoadersGitHub.repository() == null ||
+                layoutLoadersGitHub.apiKey() == null;
     }
 
 }

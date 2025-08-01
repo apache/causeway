@@ -148,7 +148,7 @@ extends FacetFactoryAbstract {
                 PrototypeFacetForActionAnnotation
                 .create(
                         actionIfAny, facetedMethod,
-                        ()->super.getSystemEnvironment().getDeploymentType()));
+                        ()->super.getSystemEnvironment().deploymentType()));
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

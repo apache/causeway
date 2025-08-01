@@ -28,8 +28,8 @@ extends DefaultViewFacetAbstract {
 
     public static DefaultViewFacet create(
             final FacetHolder holder) {
-        final String defaultView = holder.getConfiguration().getApplib().getAnnotation()
-                .getCollectionLayout().getDefaultView().toNameLower();
+        final String defaultView = holder.getConfiguration().applib().annotation()
+                .collectionLayout().defaultView().toNameLower();
         return new DefaultViewFacetAsConfigured(_Strings.nullToEmpty(defaultView), holder);
     }
 

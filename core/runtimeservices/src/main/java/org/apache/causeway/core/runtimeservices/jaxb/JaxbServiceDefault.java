@@ -18,16 +18,16 @@
  */
 package org.apache.causeway.core.runtimeservices.jaxb;
 
+import java.util.Map;
+
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.Unmarshaller;
+import jakarta.inject.Provider;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.jspecify.annotations.Nullable;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -36,16 +36,14 @@ import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
+import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 
 /**
  * Default implementation of {@link JaxbService}.
@@ -55,50 +53,56 @@ import lombok.SneakyThrows;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".JaxbServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class JaxbServiceDefault extends Simple {
+public record JaxbServiceDefault(
+    JaxbService delegate) implements JaxbService {
 
-    private final ServiceInjector serviceInjector;
-    private final SpecificationLoader specLoader;
-
-    @SneakyThrows
-    @Override
-    protected JAXBContext jaxbContextForList(final @NonNull DomainObjectList domainObjectList) {
-        var elementType = specLoader
-                .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
-                .map(ObjectSpecification::getCorrespondingClass)
-                .orElse(null);
-        if (elementType!=null
-                && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
-            return JaxbUtils.jaxbContextFor(DomainObjectList.class, elementType);
-        } else {
-            return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
-        }
+    @Autowired
+    public JaxbServiceDefault(
+            ServiceInjector serviceInjector,
+            Provider<SpecificationLoader> specLoaderProvider) {
+        this(new JaxbService.JaxbServiceInternal(new JaxbService.JaxbServiceInternal.Config(
+            marshaller->{
+                marshaller.setAdapter(PersistentEntityAdapter.class,
+                    serviceInjector.injectServicesInto(new PersistentEntityAdapter()));
+                marshaller.setAdapter(PersistentEntitiesAdapter.class,
+                        serviceInjector.injectServicesInto(new PersistentEntitiesAdapter()));
+            },
+            unmarshaller->{
+                unmarshaller.setAdapter(PersistentEntityAdapter.class,
+                    serviceInjector.injectServicesInto(new PersistentEntityAdapter()));
+                unmarshaller.setAdapter(PersistentEntitiesAdapter.class,
+                        serviceInjector.injectServicesInto(new PersistentEntitiesAdapter()));
+            },
+            domainObjectList->{
+                var elementCls = Try.call(()->_Context.loadClass(domainObjectList.getElementTypeFqcn()))
+                    .getValue() // silently ignore class loading issues
+                    .orElse(null);
+                var elementType = specLoaderProvider.get()
+                    .specForType(elementCls)
+                    .map(ObjectSpecification::getCorrespondingClass)
+                    .orElse(null);
+                if (elementType!=null
+                        && elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
+                    return JaxbUtils.jaxbContextFor(DomainObjectList.class, elementType);
+                } else {
+                    return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
+                }
+            })));
     }
 
     @Override
-    protected void configure(final Unmarshaller unmarshaller) {
-        unmarshaller.setAdapter(PersistentEntityAdapter.class,
-                serviceInjector.injectServicesInto(new PersistentEntityAdapter()));
-        unmarshaller.setAdapter(PersistentEntitiesAdapter.class,
-                serviceInjector.injectServicesInto(new PersistentEntitiesAdapter()));
+    public <T> T fromXml(Class<T> domainClass, String xml, @Nullable Map<String, Object> unmarshallerProperties) {
+        return delegate.fromXml(domainClass, xml, unmarshallerProperties);
     }
 
     @Override
-    protected void configure(final Marshaller marshaller) {
+    public String toXml(Object domainObject, @Nullable Map<String, Object> marshallerProperties) {
+        return delegate.toXml(domainObject, marshallerProperties);
+    }
 
-//debug
-//        marshaller.setListener(new Marshaller.Listener() {
-//            @Override
-//            public void beforeMarshal(final Object source) {
-//                System.err.printf("beforeMarshal %s%n", source);
-//            }
-//        });
-
-        marshaller.setAdapter(PersistentEntityAdapter.class,
-                serviceInjector.injectServicesInto(new PersistentEntityAdapter()));
-        marshaller.setAdapter(PersistentEntitiesAdapter.class,
-                serviceInjector.injectServicesInto(new PersistentEntitiesAdapter()));
+    @Override
+    public Map<String, String> toXsd(Object domainObject, CausewaySchemas causewaySchemas) {
+        return delegate.toXsd(domainObject, causewaySchemas);
     }
 
 }

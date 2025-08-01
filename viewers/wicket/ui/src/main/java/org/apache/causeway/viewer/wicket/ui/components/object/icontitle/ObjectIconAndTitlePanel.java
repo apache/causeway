@@ -250,10 +250,10 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
         }
 
         if(model.getRenderingHint().isInStandaloneTableTitleColumn()) {
-            return getWicketViewerSettings().getMaxTitleLengthInStandaloneTables();
+            return getWicketViewerSettings().maxTitleLengthInStandaloneTables();
         }
         if(model.getRenderingHint().isInParentedTableTitleColumn()) {
-            return getWicketViewerSettings().getMaxTitleLengthInParentedTables();
+            return getWicketViewerSettings().maxTitleLengthInParentedTables();
         }
         return titleString.length();
     }

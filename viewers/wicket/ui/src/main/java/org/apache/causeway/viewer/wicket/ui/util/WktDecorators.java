@@ -251,8 +251,8 @@ public class WktDecorators {
             final ActionDecorationModel decorationModel) {
         // ellipsis
         if(decorationModel.isBoundToDialog()) {
-            var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
-            if(wicketConfig.isActionIndicationWhenBoundToDialog()) {
+            var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().viewer().wicket();
+            if(wicketConfig.actionIndicationWhenBoundToDialog()) {
                 var ellipsifiedModel = actionLabel.getDefaultModel().combineWith(Model.of("…"), (a, b)->a + b);
                 actionLabel.setDefaultModel(ellipsifiedModel);
             }

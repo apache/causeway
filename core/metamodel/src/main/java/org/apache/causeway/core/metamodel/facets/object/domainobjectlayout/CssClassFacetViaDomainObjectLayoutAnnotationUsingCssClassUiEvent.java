@@ -47,8 +47,8 @@ extends CssClassFacetAbstract {
                 cssClassUiEventClass,
                 CssClassUiEvent.Noop.class,
                 CssClassUiEvent.Default.class,
-                facetHolder.getConfiguration().getApplib().getAnnotation()
-                    .getDomainObjectLayout().getCssClassUiEvent().isPostForDefault()))
+                facetHolder.getConfiguration().applib().annotation()
+                    .domainObjectLayout().cssClassUiEvent().postForDefault()))
         .map(cssClassUiEventClass -> {
             return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
                     cssClassUiEventClass, metamodelEventService, facetHolder);

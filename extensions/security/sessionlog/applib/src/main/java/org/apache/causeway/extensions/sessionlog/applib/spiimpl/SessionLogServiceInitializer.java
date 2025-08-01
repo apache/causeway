@@ -53,7 +53,7 @@ public class SessionLogServiceInitializer implements MetamodelListener {
 
     @Override
     public void onMetamodelLoaded() {
-        if (!causewayConfiguration.getExtensions().getSessionLog().isAutoLogoutOnRestart()) {
+        if (!causewayConfiguration.extensions().sessionLog().autoLogoutOnRestart()) {
             return;
         }
 

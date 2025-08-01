@@ -25,6 +25,8 @@ import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -41,12 +43,12 @@ class OffsetDateTimeConverterTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<OffsetDateTime>(OffsetDateTime.class,
+        converterTester = new ConverterTester<>(OffsetDateTime.class, TestPropertyValues.empty(),
                 new OffsetDateTimeValueSemantics());
         converterTester.setScenario(
-                Locale.ENGLISH,
-                converterTester.converterForProperty(
-                        CustomerWithOffsetDateTime.class, "value", ViewOrEditMode.EDITING));
+            Locale.ENGLISH,
+            converterTester.converterForProperty(
+                    CustomerWithOffsetDateTime.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

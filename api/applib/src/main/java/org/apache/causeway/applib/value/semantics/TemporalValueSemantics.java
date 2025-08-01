@@ -21,11 +21,13 @@ package org.apache.causeway.applib.value.semantics;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
-import lombok.Data;
-import org.jspecify.annotations.NonNull;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Common base for {@link java.time.temporal.Temporal} value types.
@@ -57,29 +59,25 @@ extends
         public boolean isOutput() {return this == OUTPUT;}
     }
 
-    @Data
-    public static class TemporalDisplayPattern {
-
+    public record TemporalDisplayPattern(
         /**
          * The locale-independent (canonical) pattern used for displaying dates in the UI.
          *
-         * <p>
-         *     By default, a locale-specific date pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format).
-         * </p>
+         * <p>By default, a locale-specific date pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format).
          */
-        private String datePattern;
-
+        String datePattern,
         /**
          * The locale-independent (canonical) pattern used for displaying date/times in the UI.
          *
-         * <p>
-         *     By default, a locale-specific date/time pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format) for both the date and time parts.
-         * </p>
+         * <p>By default, a locale-specific date/time pattern is used (using {@link java.time.format.FormatStyle#MEDIUM} format)
+         * for both the date and time parts.
          */
-        private String dateTimePattern;
+        String dateTimePattern
+        ) {
+
     }
 
-    @Data
+    @Getter @Accessors(fluent=true)
     public static class TemporalEditingPattern {
 
         /**
@@ -249,24 +247,24 @@ extends
             switch (temporalCharacteristic) {
             case DATE_TIME:
                 var dateTimePattern =
-                    String.format(getDateTimeJoiningPattern(),
-                            getDatePattern(),
+                    String.format(dateTimeJoiningPattern(),
+                            datePattern(),
                             timePattern(timePrecision, direction));
                 return offsetCharacteristic.isLocal()
                         ? dateTimePattern
-                        : String.format(getZoneJoiningPattern(),
+                        : String.format(zoneJoiningPattern(),
                                 dateTimePattern,
                                 zonePattern(offsetCharacteristic, direction));
             case DATE_ONLY:
                 return offsetCharacteristic.isLocal()
-                        ? getDatePattern()
-                        : String.format(getZoneJoiningPattern(),
-                                getDatePattern(),
+                        ? datePattern()
+                        : String.format(zoneJoiningPattern(),
+                                datePattern(),
                                 zonePattern(offsetCharacteristic,direction));
             case TIME_ONLY:
                 return offsetCharacteristic.isLocal()
                         ? timePattern(timePrecision, direction)
-                        : String.format(getZoneJoiningPattern(),
+                        : String.format(zoneJoiningPattern(),
                                 timePattern(timePrecision, direction),
                                 zonePattern(offsetCharacteristic, direction));
             default:
@@ -281,12 +279,12 @@ extends
             switch(offsetCharacteristic) {
             case OFFSET:
                 return direction.isInput()
-                        ? getOffsetPatternForInput()
-                        : getOffsetPatternForOutput();
+                        ? offsetPatternForInput()
+                        : offsetPatternForOutput();
             case ZONED:
                 return direction.isInput()
-                        ? getZoneIdPatternForInput()
-                        : getZoneIdPatternForOutput();
+                        ? zoneIdPatternForInput()
+                        : zoneIdPatternForOutput();
             default:
                 throw _Exceptions.unexpectedCodeReach();
             }
@@ -310,18 +308,18 @@ extends
         private String timePattern(final @NonNull TimePrecision timePrecision) {
             switch (timePrecision) {
             case NANO_SECOND:
-                return getTimePatternNanoSecond();
+                return timePatternNanoSecond();
             case MICRO_SECOND:
-                return getTimePatternMicroSecond();
+                return timePatternMicroSecond();
             case MILLI_SECOND:
-                return getTimePatternMilliSecond();
+                return timePatternMilliSecond();
             case UNSPECIFIED:
             case SECOND:
-                return getTimePatternSecond();
+                return timePatternSecond();
             case MINUTE:
-                return getTimePatternMinute();
+                return timePatternMinute();
             case HOUR:
-                return getTimePatternHour();
+                return timePatternHour();
             }
             throw _Exceptions.unmatchedCase(timePrecision);
         }

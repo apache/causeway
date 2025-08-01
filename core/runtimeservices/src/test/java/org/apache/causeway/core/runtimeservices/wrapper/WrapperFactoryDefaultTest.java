@@ -29,8 +29,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.wrapper.control.SyncControl;
 import org.apache.causeway.commons.internal.proxy.ProxyFactoryService;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.core.runtime.wrap.WrappingObject;
 
 import lombok.RequiredArgsConstructor;

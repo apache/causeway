@@ -109,7 +109,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
 
     private boolean isEagerInitialize() {
         ApplicationFeaturesInitConfiguration setting =
-                configuration.getCore().getRuntimeServices().getApplicationFeatures().getInit();
+                configuration.core().runtimeServices().applicationFeatures().init();
         return setting == ApplicationFeaturesInitConfiguration.EAGER
                 || setting == ApplicationFeaturesInitConfiguration.EAGERLY;
     }

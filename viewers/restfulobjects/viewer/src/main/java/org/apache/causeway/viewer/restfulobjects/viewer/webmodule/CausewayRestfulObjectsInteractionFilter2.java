@@ -266,7 +266,7 @@ public class CausewayRestfulObjectsInteractionFilter2 extends OncePerRequestFilt
     private Config createConfig() {
 
         return new Config(
-            causewayConfiguration.getViewer().getRestfulobjects().getAuthentication().getStrategyClassName(),
+            causewayConfiguration.viewer().restfulobjects().authentication().strategyClassName(),
             "auto", // ... 401 and a basic authentication challenge if request originates from web browser
             String.join(",",
                 this.restfulPath + "swagger",

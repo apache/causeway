@@ -155,7 +155,7 @@ implements ImperativeFacet {
 
             return stringBuilder.toString().trim();
         } catch (final RuntimeException ex) {
-            var isUnitTesting = super.getMetaModelContext().getSystemEnvironment().isUnitTesting();
+            var isUnitTesting = getSystemEnvironment().isUnitTesting();
             if(!isUnitTesting) {
                 log.warn("Title failure", ex);
             }

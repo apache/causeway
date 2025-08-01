@@ -46,7 +46,7 @@ extends FacetFactoryAbstract {
             return;
         }
 
-        if(getConfiguration().getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().isEnable()) {
+        if(getConfiguration().applib().annotation().viewModel().validation().semanticChecking().enable()) {
             checkViewModelSemantics(processClassContext);
         }
     }

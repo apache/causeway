@@ -27,11 +27,13 @@ import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -63,8 +65,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.schema.metamodel.v2.MetamodelDto;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Default implementation of {@link MetaModelService}.
  *
@@ -74,21 +74,25 @@ import org.jspecify.annotations.NonNull;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class MetaModelServiceDefault implements MetaModelService {
+public record MetaModelServiceDefault(
+    Provider<SpecificationLoader> specificationLoaderProvider,
+    GridService gridService
+    ) implements MetaModelService {
 
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private GridService gridService;
+    private SpecificationLoader specificationLoader() {
+        return specificationLoaderProvider.get();
+    }
 
     @Override
     public Optional<LogicalType> lookupLogicalTypeByName(final @Nullable String logicalTypeName) {
-        return specificationLoader.specForLogicalTypeName(logicalTypeName)
+        return specificationLoader().specForLogicalTypeName(logicalTypeName)
                 .map(ObjectSpecification::logicalType);
     }
 
     @Override
     public Can<LogicalType> logicalTypeAndAliasesFor(final LogicalType logicalType) {
         Set<LogicalType> logicalTypes = new TreeSet<>();
-        specificationLoader.specForLogicalType(logicalType)
+        specificationLoader().specForLogicalType(logicalType)
                 .ifPresent(objectSpecification -> {
                     logicalTypes.add(logicalType);
                     objectSpecification.getAliases().stream().forEach(logicalTypes::add);
@@ -105,7 +109,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public Optional<LogicalType> lookupLogicalTypeByClass(final @Nullable Class<?> domainType) {
-        return specificationLoader.specForType(domainType)
+        return specificationLoader().specForType(domainType)
                 .map(ObjectSpecification::logicalType);
     }
 
@@ -113,13 +117,13 @@ public class MetaModelServiceDefault implements MetaModelService {
     public void rebuild(final Class<?> domainType) {
 
         gridService.remove(domainType);
-        specificationLoader.reloadSpecification(domainType);
+        specificationLoader().reloadSpecification(domainType);
     }
 
     @Override
     public DomainModel getDomainModel() {
 
-        var specifications = specificationLoader.snapshotSpecifications();
+        var specifications = specificationLoader().snapshotSpecifications();
 
         final List<DomainMember> rows = _Lists.newArrayList();
         for (final ObjectSpecification spec : specifications) {
@@ -172,7 +176,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpec = specificationLoader.specForType(domainType).orElse(null);
+        final ObjectSpecification objectSpec = specificationLoader().specForType(domainType).orElse(null);
         if(objectSpec == null) {
             return BeanSort.UNKNOWN;
         }
@@ -200,7 +204,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         final Class<?> domainType;
         switch (mode) {
         case RELAXED:
-            domainType = specificationLoader.specForBookmark(bookmark)
+            domainType = specificationLoader().specForBookmark(bookmark)
                 .map(ObjectSpecification::getCorrespondingClass)
                 .orElse(null);
             break;
@@ -208,7 +212,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         case STRICT:
             // fall through to...
         default:
-            domainType = specificationLoader.specForBookmark(bookmark)
+            domainType = specificationLoader().specForBookmark(bookmark)
                 .map(ObjectSpecification::getCorrespondingClass)
                 .orElseThrow(()->_Exceptions
                         .noSuchElement("Cannot resolve logical type name %s to a java class",
@@ -228,7 +232,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLoader.specForLogicalTypeName(logicalTypeName).orElse(null);
+        final ObjectSpecification spec = specificationLoader().specForLogicalTypeName(logicalTypeName).orElse(null);
         if(spec == null) {
             return null;
         }
@@ -256,13 +260,13 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(config.isIncludeShadowedFacets()) {
             metaModelAnnotators.add(new ShadowedFactetAttributeAnnotator(new ExporterConfig(){}));
         }
-        return new MetaModelExporter(specificationLoader, metaModelAnnotators)
+        return new MetaModelExporter(specificationLoader(), metaModelAnnotators)
                 .exportMetaModel(config);
     }
 
     @Override
     public ObjectGraph exportObjectGraph(final @NonNull BiPredicate<BeanSort, LogicalType> filter) {
-        var objectSpecs = specificationLoader
+        var objectSpecs = specificationLoader()
                 .snapshotSpecifications()
                 .stream()
                 .filter(spec->filter.test(spec.getBeanSort(), spec.logicalType()))

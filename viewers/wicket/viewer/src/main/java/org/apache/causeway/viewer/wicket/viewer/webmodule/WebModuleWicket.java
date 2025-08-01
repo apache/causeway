@@ -72,13 +72,13 @@ public final class WebModuleWicket extends WebModuleAbstract {
         this.causewaySystemEnvironment = causewaySystemEnvironment;
         this.causewayConfiguration = causewayConfiguration;
 
-        this.wicketBasePath = this.causewayConfiguration.getViewer().getWicket().getBasePath();
+        this.wicketBasePath = this.causewayConfiguration.viewer().wicket().basePath();
 
         deploymentMode = this.causewaySystemEnvironment.isPrototyping()
                 ? "development"
                 : "deployment";
 
-        wicketApp = causewayConfiguration.getViewer().getWicket().getApp();
+        wicketApp = causewayConfiguration.viewer().wicket().app();
 
         requireNonNull(wicketBasePath, "Config property 'causeway.viewer.wicket.base-path' is required.");
         requireNonNull(wicketApp, "Config property 'causeway.viewer.wicket.app' is required.");

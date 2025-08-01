@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.value.Password;
 import org.apache.causeway.applib.value.semantics.Parser;
@@ -180,7 +181,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
             if(valueType.equals(Password.class)) {
                 var recoveredValue = (Password)parser.parseTextRepresentation(context, stringified);
-                assertTrue(recoveredValue.checkPassword("(suppressed)"));
+                assertTrue(recoveredValue.checkPassword(PlaceholderLiteral.SUPPRESSED.getLiteral()));
 
             } else {
 

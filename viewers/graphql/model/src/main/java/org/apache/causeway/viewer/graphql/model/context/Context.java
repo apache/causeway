@@ -79,7 +79,7 @@ public class Context {
     }
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
-        return causewaySystemEnvironment.getDeploymentType().isProduction()
+        return causewaySystemEnvironment.deploymentType().isProduction()
                 ? ActionScope.PRODUCTION_ONLY
                 : ActionScope.ANY;
     }
@@ -89,7 +89,7 @@ public class Context {
     }
 
     public List<? extends ObjectSpecification> objectSpecifications(final Predicate<ObjectSpecification> predicate) {
-        var includeEntities = causewayConfiguration.getViewer().getGraphql().getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
+        var includeEntities = causewayConfiguration.viewer().graphql().apiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL;
         return specificationLoader.snapshotSpecifications()
                 .filter(x -> x.getCorrespondingClass().getPackage() != Either.class.getPackage())   // exclude the org.apache_causeway.commons.functional
                 .distinct((a, b) -> a.logicalTypeName().equals(b.logicalTypeName()))

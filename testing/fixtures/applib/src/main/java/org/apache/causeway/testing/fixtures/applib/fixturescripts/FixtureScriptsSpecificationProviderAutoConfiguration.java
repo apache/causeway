@@ -47,23 +47,23 @@ public class FixtureScriptsSpecificationProviderAutoConfiguration  {
     @Qualifier("Default")
     FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider(final CausewayConfiguration causewayConfiguration) {
 
-        var fixturesConfig = causewayConfiguration.getTesting().getFixtures().getFixtureScriptsSpecification();
+        var fixturesConfig = causewayConfiguration.testing().fixtures().fixtureScriptsSpecification();
         var builder = builderFrom(fixturesConfig);
 
-        builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.getNonPersistedObjectsStrategy().name()));
-        builder.with(FixtureScripts.MultipleExecutionStrategy.valueOf(fixturesConfig.getMultipleExecutionStrategy().name()));
-        builder.withRecreate((Class) fixturesConfig.getRecreate());
-        builder.withRunScriptDefault((Class) fixturesConfig.getRunScriptDefault());
+        builder.with(FixtureScripts.NonPersistedObjectsStrategy.valueOf(fixturesConfig.nonPersistedObjectsStrategy().name()));
+        builder.with(FixtureScripts.MultipleExecutionStrategy.valueOf(fixturesConfig.multipleExecutionStrategy().name()));
+        builder.withRecreate((Class) fixturesConfig.recreate());
+        builder.withRunScriptDefault((Class) fixturesConfig.runScriptDefault());
 
         return builder::build;
     }
 
-    private static FixtureScriptsSpecification.Builder builderFrom(CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
-        var contextClass = fixturesConfig.getContextClass();
+    private static FixtureScriptsSpecification.Builder builderFrom(final CausewayConfiguration.Testing.Fixtures.FixtureScriptsSpecification fixturesConfig) {
+        var contextClass = fixturesConfig.contextClass();
         if(contextClass != null) {
             return FixtureScriptsSpecification.builder(contextClass);
         }
-        var packagePrefix = fixturesConfig.getPackagePrefix(); // could be null; this is legitimate
+        var packagePrefix = fixturesConfig.packagePrefix(); // could be null; this is legitimate
         return FixtureScriptsSpecification.builder(packagePrefix);
     }
 

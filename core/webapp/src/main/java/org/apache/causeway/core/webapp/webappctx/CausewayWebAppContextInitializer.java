@@ -61,6 +61,7 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
     @Inject private ServiceRegistry serviceRegistry; // this dependency ensures Causeway has been initialized/provisioned
     @Inject private CausewayConfiguration causewayConfiguration;
     @Inject private WebAppContextPath webAppContextPath;
+    @Inject private CausewaySystemEnvironment systemEnvironment;
 
     // -- INTERFACE IMPLEMENTATION
 
@@ -68,7 +69,7 @@ public class CausewayWebAppContextInitializer implements ServletContextInitializ
     public void onStartup(final ServletContext servletContext) throws ServletException {
 
         // does not play well with @DirtiesContext, hence we skip those guards for testing
-        if(!CausewaySystemEnvironment.isUnitTesting()) {
+        if(!systemEnvironment.isUnitTesting()) {
 
             // onStartup(...) must be a one shot, otherwise ignore with warning
             if(!oneshot.trigger()) {

@@ -24,8 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.jspecify.annotations.Nullable;
@@ -42,7 +42,6 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -58,13 +57,12 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".BookmarkServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public class BookmarkServiceDefault implements BookmarkService {
-
-    @Inject private SpecificationLoader specificationLoader;
-    @Inject private WrapperFactory wrapperFactory;
-    @Inject private ObjectManager objectManager;
-    @Inject private MetaModelContext mmc;
-    @Inject private MetaModelService metaModelService;
+public record BookmarkServiceDefault(
+        Provider<SpecificationLoader> specificationLoaderProvider,
+        WrapperFactory wrapperFactory,
+        ObjectManager objectManager,
+        MetaModelService metaModelService
+    ) implements BookmarkService {
 
     @Override
     public Optional<Object> lookup(final @Nullable BookmarkHolder bookmarkHolder) {
@@ -96,7 +94,7 @@ public class BookmarkServiceDefault implements BookmarkService {
     @Override
     public Optional<Object> lookup(final @Nullable Bookmark bookmark) {
         try {
-            return mmc.getObjectManager().loadObject(bookmark)
+            return objectManager.loadObject(bookmark)
                     .map(ManagedObject::getPojo);
         } catch(ObjectNotFoundException ex) {
             return Optional.empty();
@@ -122,7 +120,7 @@ public class BookmarkServiceDefault implements BookmarkService {
                 || cls==null) {
             return Optional.empty();
         }
-        return specificationLoader.specForType(cls)
+        return specificationLoaderProvider.get().specForType(cls)
                 .map(ObjectSpecification::logicalType)
                 .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
@@ -135,7 +133,7 @@ public class BookmarkServiceDefault implements BookmarkService {
                         ()->_Exceptions.illegalArgument(
                         "cannot create bookmark for type %s",
                         domainObject!=null
-                            ? specificationLoader.specForType(domainObject.getClass())
+                            ? specificationLoaderProvider.get().specForType(domainObject.getClass())
                                     .map(spec->spec.toString())
                                     .orElseGet(()->domainObject.getClass().getName())
                             : "<null>"));

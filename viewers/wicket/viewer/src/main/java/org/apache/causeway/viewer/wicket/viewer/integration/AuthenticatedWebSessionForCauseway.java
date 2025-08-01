@@ -40,6 +40,7 @@ import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.viewer.wicket.model.causeway.HasAmendableInteractionContext;
@@ -216,7 +217,7 @@ implements
             return null;
         }
         if (Optional.ofNullable(getMetaModelContext())
-                .map(HasMetaModelContext::getAuthenticationManager)
+                .map(MetaModelContext::getAuthenticationManager)
                 .filter(x -> x.isSessionValid(interactionContext))
                 .isEmpty()) {
             return null;
@@ -229,7 +230,7 @@ implements
     @Override
     public AuthenticationManager getAuthenticationManager() {
         return Optional.ofNullable(getMetaModelContext())
-                .map(HasMetaModelContext::getAuthenticationManager)
+                .map(MetaModelContext::getAuthenticationManager)
                 .orElse(null);
     }
 

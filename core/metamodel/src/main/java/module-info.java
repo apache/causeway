@@ -18,7 +18,6 @@
  */
 open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel;
-    exports org.apache.causeway.core.metamodel._testing;
     exports org.apache.causeway.core.metamodel.commons; //XXX eventually move to ~.util or replace by core-commons
     exports org.apache.causeway.core.metamodel.consent;
     exports org.apache.causeway.core.metamodel.context;
@@ -125,8 +124,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.specloader
             to org.apache.causeway.core.runtimeservices,
             org.apache.causeway.persistence.commons,
-            //TODO probably don't expose SpecificationLoader to persistence
-            org.apache.causeway.persistence.jdo.metamodel,
             //TODO probably don't expose SpecificationLoader to viewers
             org.apache.causeway.viewer.restfulobjects.rendering,
             org.apache.causeway.viewer.restfulobjects.viewer,
@@ -151,6 +148,8 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.deadlock;
     exports org.apache.causeway.core.metamodel.facets.object.autocomplete;
 
+    requires static lombok;
+
     requires jakarta.activation;
     requires jakarta.annotation;
     requires java.desktop;
@@ -159,7 +158,7 @@ open module org.apache.causeway.core.metamodel {
     requires java.xml;
     requires jakarta.xml.bind;
     requires jakarta.inject;
-    requires static lombok;
+
     requires transitive org.apache.causeway.applib;
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.core.config;

@@ -47,11 +47,11 @@ extends TitleFacetAbstract {
             final FacetHolder facetHolder) {
 
         var isPostForDefault = facetHolder.getConfiguration()
-                .getApplib()
-                .getAnnotation()
-                .getDomainObjectLayout()
-                .getTitleUiEvent()
-                .isPostForDefault();
+                .applib()
+                .annotation()
+                .domainObjectLayout()
+                .titleUiEvent()
+                .postForDefault();
 
         return domainObjectLayoutIfAny
                 .map(DomainObjectLayout::titleUiEvent)

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 
 class CausewayModuleExtCorsImplTest {
 

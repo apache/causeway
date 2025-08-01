@@ -37,7 +37,7 @@ public class CausewayTimeZoneInitializer {
 
     @PostConstruct
     public void initTimeZone() {
-        final String timeZoneSpec = configuration.getCore().getRuntime().getTimezone();
+        final String timeZoneSpec = configuration.core().runtime().timezone();
         if (timeZoneSpec != null) {
             TimeZone timeZone;
             timeZone = TimeZone.getTimeZone(timeZoneSpec);

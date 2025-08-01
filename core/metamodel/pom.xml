@@ -83,11 +83,11 @@
 
         <!-- TESTING -->
         
-        <dependency>
-            <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.causeway.core</groupId>-->
+<!--            <artifactId>causeway-core-internaltestsupport</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
     </dependencies>
 

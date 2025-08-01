@@ -176,7 +176,7 @@ implements
     private Changes evaluateChanges() {
         var changedProperties = evaluateChangedProperties();
 
-        var isCountersAndDetail = causewayConfiguration.getApplib().getService().getMetricsService().getLevel().isCountersAndDetail();
+        var isCountersAndDetail = causewayConfiguration.applib().service().metricsService().level().isCountersAndDetail();
         Set<Bookmark> loadedBookmarks =
                 isCountersAndDetail
                         ? enlistedPropertyChangeRecordsById.keySet()
@@ -658,12 +658,12 @@ implements
 
         @Override
         public boolean isSuppressAutoFlush() {
-            return causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isSuppressAutoFlush();
+            return causewayConfiguration.persistence().commons().entityChangeTracker().suppressAutoFlush();
         }
 
         @Override
         public boolean isEnabled() {
-            return causewayConfiguration.getPersistence().getCommons().getEntityChangeTracker().isEnabled();
+            return causewayConfiguration.persistence().commons().entityChangeTracker().enabled();
         }
     }
 

@@ -41,12 +41,12 @@ public class ScalarMarshallerJdk8ZonedDateTime extends ScalarMarshallerAbstract<
     @Inject
     public ScalarMarshallerJdk8ZonedDateTime(final CausewayConfiguration causewayConfiguration) {
         super(ZonedDateTime.class, Scalars.GraphQLString, causewayConfiguration);
-        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
+        scalarMarshallerConfig = causewayConfiguration.viewer().graphql().scalarMarshaller();
     }
 
     @Override
     public ZonedDateTime unmarshal(Object graphValue, Class<?> targetType) {
         String argumentStr = (String) graphValue;
-        return ZonedDateTime.parse(argumentStr, DateTimeFormatter.ofPattern(scalarMarshallerConfig.getZonedDateTimeFormat()));
+        return ZonedDateTime.parse(argumentStr, DateTimeFormatter.ofPattern(scalarMarshallerConfig.zonedDateTimeFormat()));
     }
 }

@@ -70,7 +70,7 @@ implements HasObjectFeature {
 
         var context = JsonValueConverter.Context.of(
                 getObjectFeature(),
-                getResourceContext().config().isSuppressMemberExtensions());
+                getResourceContext().config().suppressMemberExtensions());
         final Object value = jsonValueEncoder.asObject(objectAdapter, context);
 
         representation.mapPut("value", value);

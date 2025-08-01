@@ -133,9 +133,9 @@ public class CommonDomainObject
 
         // add domain object lookup to top-level query
         var fieldName = String.format("%s%s%s",
-                graphqlConfiguration.getLookup().getFieldNamePrefix(),  // eg "_gqlv_lookup__"
+                graphqlConfiguration.lookup().fieldNamePrefix(),  // eg "_gqlv_lookup__"
                 TypeNames.objectTypeFieldNameFor(objectSpecification),
-                graphqlConfiguration.getLookup().getFieldNameSuffix());
+                graphqlConfiguration.lookup().fieldNameSuffix());
 
         return buildFieldDefinition(fieldName, gqlInputObjectType);
     }
@@ -150,7 +150,7 @@ public class CommonDomainObject
                 .name(fieldName)
                 .type(this.context.typeMapper.outputTypeFor(objectSpec, getSchemaType()))
                 .argument(GraphQLArgument.newArgument()
-                        .name(graphqlConfiguration.getLookup().getArgName())   // eg "object"
+                        .name(graphqlConfiguration.lookup().argName())   // eg "object"
                         .type(gqlInputObjectType)
                         .build())
                 .build();
@@ -165,13 +165,13 @@ public class CommonDomainObject
                 .forEach(coll -> collections.add(addChildFieldFor(schemaStrategy.newCollection(this, coll, context))));
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .filter((this::inApiScope))
-                .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.getApiVariant(), act))
+                .filter(act -> schemaStrategy.shouldInclude(graphqlConfiguration.apiVariant(), act))
                 .forEach(act -> actions.add(addChildFieldFor(schemaStrategy.newAction(this, act, context))));
     }
 
     @SuppressWarnings("unused")
     private ActionScope determineActionScope() {
-        return context.causewaySystemEnvironment.getDeploymentType().isProduction()
+        return context.causewaySystemEnvironment.deploymentType().isProduction()
                 ? ActionScope.PRODUCTION
                 : ActionScope.PROTOTYPE;
     }

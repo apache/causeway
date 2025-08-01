@@ -35,9 +35,9 @@ public class RichTopLevelQuery
     public RichTopLevelQuery(final Context context) {
         super(SCHEMA_STRATEGY, context);
 
-        var graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+        var graphqlConfiguration = context.causewayConfiguration.viewer().graphql();
 
-        if (graphqlConfiguration.getSchema().getRich().isEnableScenarioTesting()) {
+        if (graphqlConfiguration.schema().rich().enableScenarioTesting()) {
             addChildFieldFor(scenario = new Scenario(SCHEMA_STRATEGY, context));
         } else {
             scenario = null;

@@ -106,7 +106,7 @@ final class ProgrammingModelDefault
 extends ProgrammingModelAbstract {
 
     ProgrammingModelDefault(final MetaModelContext mmc, final Iterable<MetaModelRefiner> refiners) {
-        super(mmc);
+        super(mmc.getServiceInjector());
 
         // acts on the peer objects (FacetedMethod etc), rather than ObjectMembers etc
         addFacetFactories();
@@ -120,13 +120,13 @@ extends ProgrammingModelAbstract {
         for (var metaModelRefiner : refiners) {
             metaModelRefiner.refineProgrammingModel(this);
         }
-        
-        this.mixinNamingStrategy = new _MixedInMemberNamingStrategy();    
+
+        this.mixinNamingStrategy = new _MixedInMemberNamingStrategy();
     }
-    
+
     @Getter(onMethod_={@Override}) @Accessors(fluent=true)
     private final MixinNamingStrategy mixinNamingStrategy;
-    
+
     // -- HELPER
 
     private void addFacetFactories() {

@@ -87,8 +87,8 @@ public class CommonDomainService
 
     private void addActions() {
 
-        var apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
-        var apiScope = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
+        var apiScope = context.causewayConfiguration.viewer().graphql().apiVariant();
         objectSpecification.streamActions(context.getActionScope(), MixedIn.INCLUDED)
                 .filter(this::inApiScope)
                 .filter(objectAction -> objectAction.getSemantics().isSafeInNature() ||

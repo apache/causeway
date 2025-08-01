@@ -368,9 +368,9 @@ public class Wkt {
             final SerializableBiConsumer<AjaxButton, AjaxRequestTarget> onClick) {
 
         // be aware: settings is not Serializable
-        var isPreventDoubleClickForFormSubmit = settings.isPreventDoubleClickForFormSubmit();
+        var isPreventDoubleClickForFormSubmit = settings.preventDoubleClickForFormSubmit();
 
-        return settings.isUseIndicatorForFormSubmit()
+        return settings.useIndicatorForFormSubmit()
         ? new IndicatingAjaxButton(id, labelModel) {
             private static final long serialVersionUID = 1L;
             @Override public void onSubmit(final AjaxRequestTarget target) {

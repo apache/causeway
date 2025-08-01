@@ -84,16 +84,16 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
-        var secmanConfig = config.getExtensions().getSecman();
+        var secmanConfig = config.extensions().secman();
         var persistenceStack = causewayBeanTypeRegistry.persistenceStack();
 
         // used as log message provider below - assuming file was found and is readable
-        final Supplier<String> yamlFilePath = ()->new File(secmanConfig.getSeed().getYamlFile()).getAbsolutePath();
+        final Supplier<String> yamlFilePath = ()->new File(secmanConfig.seed().yamlFile()).getAbsolutePath();
 
         // if a config option ..secman.seed.yamlFile is present,
         // try to use it as alternative seeding strategy,
         // then exit
-        final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.getSeed().getYamlFile())
+        final ApplicationSecurityDto dto = _Strings.nonEmpty(secmanConfig.seed().yamlFile())
                 .map(File::new)
                 .filter(File::exists)
                 .filter(File::canRead)

@@ -214,8 +214,8 @@ implements TemporalValueSemantics<T> {
 
         var dateAndTimeFormatStyle = DateAndTimeFormatStyle.forContext(mmc, context);
 
-        var datePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern();
-        var dateTimePattern = mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDateTimePattern();
+        var datePattern = mmc.getConfiguration().valueTypes().temporal().display().datePattern();
+        var dateTimePattern = mmc.getConfiguration().valueTypes().temporal().display().dateTimePattern();
         var temporalNoZoneRenderingFormat = getTemporalNoZoneRenderingFormat(
                 context, temporalCharacteristic, offsetCharacteristic,
                 dateAndTimeFormatStyle.dateFormatStyle(),
@@ -388,7 +388,7 @@ implements TemporalValueSemantics<T> {
                             .map(ValueSemanticsProvider.Context::featureIdentifier)
                             .orElse(null)));
 
-            // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern());
+            // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().valueTypes().temporal().display().datePattern());
             var dateFormatStyle = featureIfAny
                     .flatMap(feature->feature.lookupFacet(DateFormatStyleFacet.class))
                     .map(DateFormatStyleFacet::getDateFormatStyle)
@@ -417,12 +417,12 @@ implements TemporalValueSemantics<T> {
     private org.apache.causeway.core.config.CausewayConfiguration.ValueTypes.Temporal temporalConfig() {
         return Optional.ofNullable(mmc) // nullable .. JUnit support
                 .map(MetaModelContext::getConfiguration)
-                .map(conf->conf.getValueTypes().getTemporal())
-                .orElseGet(CausewayConfiguration.ValueTypes.Temporal::new);
+                .map(conf->conf.valueTypes().temporal())
+                .orElseGet(()->new CausewayConfiguration.ValueTypes.Temporal(new TemporalEditingPattern(), new TemporalDisplayPattern(null, null)));
     }
 
     protected TemporalEditingPattern temporalEditingPattern() {
-        return temporalConfig().getEditing();
+        return temporalConfig().editing();
     }
 
 }

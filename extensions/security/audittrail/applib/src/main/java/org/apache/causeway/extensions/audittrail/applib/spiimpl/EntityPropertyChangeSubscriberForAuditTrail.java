@@ -63,7 +63,7 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getAuditTrail().getPersist().isEnabled();
+        return causewayConfiguration.extensions().auditTrail().persist().isEnabled();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EntityPropertyChangeSubscriberForAuditTrail implements EntityProper
     }
 
     @Override
-    public void onChanging(Can<EntityPropertyChange> entityPropertyChanges) {
+    public void onChanging(final Can<EntityPropertyChange> entityPropertyChanges) {
         if (!isEnabled()) {
             return;
         }

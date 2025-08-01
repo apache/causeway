@@ -47,7 +47,7 @@ class CausewayConfigBeanTest {
     void configurationBean_shouldBePickedUpBySpring() {
         assertNotNull(causewayConfiguration);
         assertTrue(causewayConfiguration
-                .getCore().getMetaModel().getIntrospector().getPolicy()
+                .core().metaModel().introspector().policy()
                 .getMemberAnnotationPolicy().isMemberAnnotationsRequired());
     }
 

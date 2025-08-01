@@ -76,7 +76,7 @@ extends FaImperativeFacetAbstract {
         super(facetHolder);
         this.objectSpecification = objectSpecification;
         this.faIconByPattern = getConfiguration()
-                .getApplib().getAnnotation().getActionLayout().getCssClassFa().getPatternsAsMap();
+                .applib().annotation().actionLayout().cssClassFa().patternsAsMap();
         this.memberNamedFacet = memberNamedFacet;
 
         // an optimization, not strictly required

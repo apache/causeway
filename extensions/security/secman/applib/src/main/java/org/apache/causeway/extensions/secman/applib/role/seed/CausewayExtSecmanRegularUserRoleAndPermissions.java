@@ -38,27 +38,21 @@ import org.apache.causeway.testing.fixtures.applib.CausewayModuleTestingFixtures
 /**
  * Sets up a role for regular users of the security module.
  *
- * <p>
- * These permissions are intended to be sufficient for most regular users
+ * <p>These permissions are intended to be sufficient for most regular users
  * to have access to the 'safe' features provided by the core framework
  * (in particular, everything under the {@link CausewayModuleApplib#NAMESPACE causeway.applib}
  * namespace.
- * </p>
  *
- * <p>
- * That said, it does <i>not</i> include the ability to impersonate other users
+ * <p>That said, it does <i>not</i> include the ability to impersonate other users
  * (for this, grant the
  * {@link CausewaySudoImpersonateRoleAndPermissions}
  * role), and also does <i>not</i> include the ability to access the
  * configuration properties (for this, grant the
  * {@link CausewaySudoImpersonateRoleAndPermissions}
  * role).
- * </p>
  *
- * <p>
- * The permissions also provide the ability to lookup their user account using
+ * <p>The permissions also provide the ability to lookup their user account using
  * the {@link MeService}, and for viewing and maintaining their user details.
- * </p>
  *
  * @see CausewaySudoImpersonateRoleAndPermissions
  * @see CausewayConfigurationRoleAndPermissions
@@ -70,7 +64,7 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
     @Inject private CausewaySystemEnvironment env;
 
     public CausewayExtSecmanRegularUserRoleAndPermissions(final Secman config) {
-        super(config.getSeed().getRegularUser().getRoleName(), "Regular user of the security module");
+        super(config.seed().regularUser().roleName(), "Regular user of the security module");
     }
 
     @Override
@@ -99,12 +93,12 @@ public class CausewayExtSecmanRegularUserRoleAndPermissions extends AbstractRole
                 ApplicationFeatureId.newMember(ApplicationUser.LOGICAL_TYPE_NAME, "updateFaxNumber"),
 
                 // optionally allow access to documentation menu and pages, based on module presence
-                env.getIocContainer().containsBean("org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp")
+                env.springContextHolder().containsBean("org.apache.causeway.extensions.docgen.help.CausewayModuleExtDocgenHelp")
                     ? ApplicationFeatureId.newNamespace(CausewayExtDocgenRoleAndPermissions.NAMESPACE)
                     : null,
 
                 // optionally allow access to layout menu and pages, based on module presence
-                env.getIocContainer().containsBean("org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub")
+                env.springContextHolder().containsBean("org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub")
                     ? ApplicationFeatureId.newNamespace(CausewayExtLayoutLoadersRoleAndPermissions.NAMESPACE)
                     : null
         );

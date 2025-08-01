@@ -178,11 +178,11 @@ implements CollectionCountProvider {
             .orElse(null);
 
         final int maxColumnTitleLength = getModel().getVariant().isParented()
-            ? wktConfig.getMaxTitleLengthInParentedTables()
-            : wktConfig.getMaxTitleLengthInStandaloneTables();
+            ? wktConfig.maxTitleLengthInParentedTables()
+            : wktConfig.maxTitleLengthInStandaloneTables();
 
         var opts = new ColumnAbbreviationOptions(columns.size()==0
-            ? wktConfig.getMaxTitleLengthInTablesNotHavingAnyPropertyColumn()
+            ? wktConfig.maxTitleLengthInTablesNotHavingAnyPropertyColumn()
             : -1 /* don't override */);
 
         columns.add(0, new TitleColumn(elementType, variant, contextBookmark, maxColumnTitleLength, opts));

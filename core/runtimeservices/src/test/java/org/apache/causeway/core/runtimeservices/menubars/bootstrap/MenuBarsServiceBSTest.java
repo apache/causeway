@@ -30,15 +30,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.core.io.ByteArrayResource;
 
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
 
 class MenuBarsServiceBSTest
@@ -51,13 +52,14 @@ extends RuntimeServicesTestAbstract {
 
     @Override
     protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
-        mmcBuilder.singleton(new Bar()); // install the menu-entry contributing domain service
+        mmcBuilder
+            .testPropertyValues(TestPropertyValues.of(
+                "causeway.core.metaModel.introspector.validateIncrementally=false"))
+            .singleton(new Bar()); // install the menu-entry contributing domain service
     }
 
     @Override
     protected void afterSetUp() {
-
-        getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
 
         layoutService = getServiceRegistry()
                 .lookupServiceElseFail(LayoutService.class);

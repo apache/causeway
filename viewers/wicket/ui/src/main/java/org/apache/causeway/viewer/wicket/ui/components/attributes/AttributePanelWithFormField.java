@@ -273,7 +273,7 @@ extends AttributePanelWithInlinePrompt {
     }
 
     private void replaceDisabledTagWithReadonlyTagIfApplicable() {
-        if(!getWicketViewerSettings().isReplaceDisabledTagWithReadonlyTag()) return;
+        if(!getWicketViewerSettings().replaceDisabledTagWithReadonlyTag()) return;
         //[CAUSEWAY-3727] select2 does not seem to support this replacement behavior
         if(this instanceof AttributePanelWithSelect) return;
         Wkt.behaviorAddReplaceDisabledTagWithReadonlyTag(getFormComponent());

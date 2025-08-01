@@ -72,7 +72,7 @@ public class CausewayModuleSecuritySpring {
 
     @PostConstruct
     public void disableCsrf() {
-        if(causewayConfiguration.getSecurity().getSpring().isAllowCsrfFilters()) {
+        if(causewayConfiguration.security().spring().allowCsrfFilters()) {
             return; // don't interfere
         }
         log.debug("About to disable any CSRF filters.");

@@ -35,12 +35,9 @@ import graphql.scalars.ExtendedScalars;
 @Priority(PriorityPrecedence.LATE)
 public class ScalarMarshallerJdk8OffsetTime extends ScalarMarshallerAbstract<OffsetTime> {
 
-    private final CausewayConfiguration.Viewer.Graphql.ScalarMarshaller scalarMarshallerConfig;
-
     @Inject
     public ScalarMarshallerJdk8OffsetTime(final CausewayConfiguration causewayConfiguration) {
         super(OffsetTime.class, ExtendedScalars.Time, causewayConfiguration);
-        scalarMarshallerConfig = causewayConfiguration.getViewer().getGraphql().getScalarMarshaller();
     }
 
     @Override

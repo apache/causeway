@@ -94,7 +94,7 @@ implements
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
     final MetamodelEventService runtimeEventService;
-    final SpecificationLoader specificationLoader;
+    final Provider<SpecificationLoader> specificationLoaderProvider;
     final ServiceInjector serviceInjector;
 
     final ClockService clockService;
@@ -109,7 +109,7 @@ implements
     @Inject
     public InteractionServiceDefault(
             final MetamodelEventService runtimeEventService,
-            final SpecificationLoader specificationLoader,
+            final Provider<SpecificationLoader> specificationLoaderProvider,
             final ServiceInjector serviceInjector,
             final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
@@ -117,7 +117,7 @@ implements
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
-        this.specificationLoader = specificationLoader;
+        this.specificationLoaderProvider = specificationLoaderProvider;
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
@@ -135,6 +135,8 @@ implements
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
         runtimeEventService.fireBeforeMetamodelLoading();
+
+        var specificationLoader = specificationLoaderProvider.get();
 
         var taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)

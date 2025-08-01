@@ -157,7 +157,7 @@ implements ApplicationRoleRepository {
 
     @Override
     public boolean isAdminRole(final ApplicationRole genericRole) {
-        var adminRoleName = config.getExtensions().getSecman().getSeed().getAdmin().getRoleName();
+        var adminRoleName = config.extensions().secman().seed().admin().roleName();
         final ApplicationRole adminRole = findByNameCached(adminRoleName).orElse(null);
         return Objects.equals(adminRole, genericRole);
     }

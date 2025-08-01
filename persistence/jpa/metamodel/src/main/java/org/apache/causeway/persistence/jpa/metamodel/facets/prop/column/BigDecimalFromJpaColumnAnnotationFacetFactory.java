@@ -58,7 +58,7 @@ implements MetaModelRefiner {
         addFacetIfPresent(
                 MaxFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
 
-        if (getConfiguration().getValueTypes().getBigDecimal().isUseScaleForMinFractionalFacet()) {
+        if (getConfiguration().valueTypes().bigDecimal().useScaleForMinFractionalFacet()) {
             addFacetIfPresent(
                     MinFractionalDigitsFacetFromJpaColumnAnnotation.create(jpaColumnIfAny, holder));
         }

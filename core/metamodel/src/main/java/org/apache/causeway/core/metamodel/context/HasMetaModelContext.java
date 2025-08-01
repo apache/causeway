@@ -18,18 +18,10 @@
  */
 package org.apache.causeway.core.metamodel.context;
 
-import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
-
-import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
@@ -41,9 +33,6 @@ import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Application;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
@@ -52,13 +41,11 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
-import org.apache.causeway.core.metamodel.services.message.MessageBroker;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
-public interface HasMetaModelContext {
+public interface HasMetaModelContext extends MetaModelContext  {
 
     // -- INTERFACE
 
@@ -66,190 +53,138 @@ public interface HasMetaModelContext {
         return MetaModelContext.instanceElseFail();
     }
 
-    // -- SHORTCUTS
+    // -- DELEGATING
 
+    @Override
     default CausewaySystemEnvironment getSystemEnvironment() {
         return getMetaModelContext().getSystemEnvironment();
     }
 
+    @Override
     default CausewayConfiguration getConfiguration() {
         return getMetaModelContext().getConfiguration();
     }
-    
+
+    @Override
     default ProgrammingModel getProgrammingModel() {
         return getMetaModelContext().getProgrammingModel();
     }
 
+    @Override
     default ServiceInjector getServiceInjector() {
         return getMetaModelContext().getServiceInjector();
     }
 
+    @Override
     default ServiceRegistry getServiceRegistry() {
         return getMetaModelContext().getServiceRegistry();
     }
 
+    @Override
     default FactoryService getFactoryService() {
         return getMetaModelContext().getFactoryService();
     }
 
+    @Override
     default MemberExecutorService getMemberExecutor() {
         return getMetaModelContext().getMemberExecutor();
     }
 
+    @Override
     default SpecificationLoader getSpecificationLoader() {
         return getMetaModelContext().getSpecificationLoader();
     }
 
+    @Override
     default TranslationService getTranslationService() {
         return getMetaModelContext().getTranslationService();
     }
 
+    @Override
     default AuthorizationManager getAuthorizationManager() {
         return getMetaModelContext().getAuthorizationManager();
     }
 
+    @Override
     default AuthenticationManager getAuthenticationManager() {
         return getMetaModelContext().getAuthenticationManager();
     }
 
+    @Override
     default TitleService getTitleService() {
         return getMetaModelContext().getTitleService();
     }
 
+    @Override
     default RepositoryService getRepositoryService() {
         return getMetaModelContext().getRepositoryService();
     }
 
+    @Override
     default ManagedObject getHomePageAdapter() {
         return getMetaModelContext().getHomePageAdapter();
     }
 
+    @Override
     default TransactionService getTransactionService() {
         return getMetaModelContext().getTransactionService();
     }
 
+    @Override
     default ObjectIconService getObjectIconService() {
         return getMetaModelContext().getObjectIconService();
     }
 
+    @Override
     default MessageService getMessageService() {
         return getMetaModelContext().getMessageService();
     }
 
+    @Override
     default ObjectManager getObjectManager() {
         return getMetaModelContext().getObjectManager();
     }
 
+    @Override
     default WrapperFactory getWrapperFactory() {
         return getMetaModelContext().getWrapperFactory();
     }
 
+    @Override
     default PlaceholderRenderService getPlaceholderRenderService() {
         return getMetaModelContext().getPlaceholderRenderService();
     }
 
+    @Override
     default WebAppContextPath getWebAppContextPath() {
         return getMetaModelContext().getWebAppContextPath();
     }
 
+    @Override
     default MenuBarsService getMenuBarsService() {
         return getMetaModelContext().getMenuBarsService();
     }
 
+    @Override
     default InteractionService getInteractionService() {
         return getMetaModelContext().getInteractionService();
     }
-    
+
+    @Override
     default CommandDtoFactory getCommandDtoFactory() {
         return getMetaModelContext().getCommandDtoFactory();
     }
 
-    default Optional<UserLocale> currentUserLocale() {
-        return getInteractionService().currentInteractionContext()
-                .map(InteractionContext::getLocale);
-    }
+    // -- SERVICE SUPPORT
 
-    // -- SPEC SHORTCUTS
-
-    default Optional<ObjectSpecification> specForType(final @Nullable Class<?> type) {
-        return getSpecificationLoader().specForType(type);
-    }
-
-    default ObjectSpecification specForTypeElseFail(final @Nullable Class<?> type) {
-        return getSpecificationLoader().specForTypeElseFail(type);
-    }
-
-    // -- SERVICE SHORTCUTS
-
-    public default <T> Optional<T> lookupService(final Class<T> serviceClass) {
-        return getMetaModelContext().getServiceRegistry().lookupService(serviceClass);
-    }
-
-    public default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
-        return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(serviceClass);
-    }
-
-    public default <T> T lookupServiceElseFallback(final Class<T> serviceClass, final Supplier<T> fallback) {
-        return getMetaModelContext().getServiceRegistry().lookupService(serviceClass)
-                .orElseGet(fallback);
-    }
-
-    public default <T> T loadServiceIfAbsent(final Class<T> type, final @Nullable T instanceIfAny) {
-        return instanceIfAny==null
-                ? lookupServiceElseFail(type)
-                : instanceIfAny;
-    }
-
-    public default <T> T injectServicesInto(final T pojo) {
-        return getMetaModelContext().getServiceInjector().injectServicesInto(pojo);
-    }
-
-    // -- ADVANCED SHORTCUTS
-
-    public default Optional<MessageBroker> getMessageBroker() {
-        // session scoped!
-        return getMetaModelContext().getServiceRegistry().lookupService(MessageBroker.class);
-    }
-
-    public default AsciiIdentifierService getAsciiIdentifierService() {
-        return getMetaModelContext().getServiceRegistry().lookupService(AsciiIdentifierService.class).orElse(featureId -> featureId);
-    }
-
-    default ManagedObject lookupServiceAdapterById(final String serviceId) {
-        return getMetaModelContext().lookupServiceAdapterById(serviceId);
-    }
-
+    @Override
     default Stream<ManagedObject> streamServiceAdapters() {
         return getMetaModelContext().streamServiceAdapters();
     }
 
-    // -- VIEWER SHORTCUTS
-
-    default Common getCommonViewerSettings() {
-        return getConfiguration().getViewer().getCommon();
-    }
-
-    default Wicket getWicketViewerSettings() {
-        return getConfiguration().getViewer().getWicket();
-    }
-
-    default Application getApplicationSettings() {
-        return getCommonViewerSettings().getApplication();
-    }
-
-    /**
-     * Translate without context: Tooltips, Button-Labels, etc.
-     */
-    default String translate(final String input) {
-        return getTranslationService().translate(TranslationContext.empty(), input);
-    }
-
-    default String translate(final TranslationContext tc, final String text) {
-        return getTranslationService().translate(tc, text);
-    }
-
-    default boolean isPrototyping() {
-        return getSystemEnvironment().isPrototyping();
+    @Override
+    default ManagedObject lookupServiceAdapterById(final String serviceId) {
+        return getMetaModelContext().lookupServiceAdapterById(serviceId);
     }
 
 }

@@ -55,7 +55,7 @@ enum AttributePanelAdditionalButton {
                 final FieldFragment fieldFragment) {
             var precondition = renderScenario!=RenderScenario.CAN_EDIT_INLINE_VIA_ACTION
                     && attributeModel.getSystemEnvironment().isPrototyping()
-                    && attributeModel.getConfiguration().getViewer().getWicket().isDisableReasonExplanationInPrototypingModeEnabled();
+                    && attributeModel.getConfiguration().viewer().wicket().disableReasonExplanationInPrototypingModeEnabled();
             return precondition
                     && attributeModel.disabledReason()
                         .map(InteractionVeto::vetoConsent)
@@ -95,7 +95,7 @@ enum AttributePanelAdditionalButton {
             }
 
             // visible only if feature is not required and not already cleared
-            return attributeModel.getConfiguration().getViewer().getWicket().isClearFieldButtonEnabled()
+            return attributeModel.getConfiguration().viewer().wicket().clearFieldButtonEnabled()
                     && !attributeModel.isRequired()
                     && attributeModel.proposedValue().isPresent();
 

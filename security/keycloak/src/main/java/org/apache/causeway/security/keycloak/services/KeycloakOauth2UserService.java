@@ -93,9 +93,9 @@ public class KeycloakOauth2UserService extends OidcUserService {
 
         final List<String> combinedRoles = new ArrayList<>();
 
-        if(causewayConfiguration.getSecurity().getKeycloak().isExtractClientRoles()) {
+        if(causewayConfiguration.security().keycloak().extractClientRoles()) {
             // attempt to parse out 'resource_access.${client_id}.roles'
-            var rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getClientRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.security().keycloak().clientRolePrefix()).orElse("");
             asNonEmptyMap(token.getClaims().get("resource_access"))
             .ifPresent(resourceMap->{
                 final String clientId = userRequest.getClientRegistration().getClientId();
@@ -107,9 +107,9 @@ public class KeycloakOauth2UserService extends OidcUserService {
             });
         }
 
-        if (causewayConfiguration.getSecurity().getKeycloak().isExtractRealmRoles()) {
+        if (causewayConfiguration.security().keycloak().extractRealmRoles()) {
             // attempt to parse out 'realm_access.roles'
-            var rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRealmRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.security().keycloak().realmRolePrefix()).orElse("");
             asNonEmptyMap(token.getClaims().get("realm_access"))
             .ifPresent(realmAccessMap->{
                 asNonEmptyCollection(realmAccessMap.get("roles"))
@@ -119,9 +119,9 @@ public class KeycloakOauth2UserService extends OidcUserService {
             });
         }
 
-        if (causewayConfiguration.getSecurity().getKeycloak().isExtractRoles()) {
+        if (causewayConfiguration.security().keycloak().extractRoles()) {
             // attempt to parse out 'roles'
-            var rolePrefix = Optional.ofNullable(causewayConfiguration.getSecurity().getKeycloak().getRolePrefix()).orElse("");
+            var rolePrefix = Optional.ofNullable(causewayConfiguration.security().keycloak().rolePrefix()).orElse("");
             asNonEmptyCollection(token.getClaims().get("roles"))
             .ifPresent(roles->{
                 forEachNonNullIn(roles, role -> combinedRoles.add(rolePrefix + role));
