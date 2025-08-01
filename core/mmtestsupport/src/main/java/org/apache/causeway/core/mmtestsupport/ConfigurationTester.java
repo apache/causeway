@@ -20,16 +20,20 @@ package org.apache.causeway.core.mmtestsupport;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.core.env.AbstractEnvironment;
 
+import org.apache.causeway.commons.internal.base._StableValue;
+import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 /**
+ * When using module path requires:
  * <pre>
  * --add-exports org.hibernate.validator/org.hibernate.validator.internal.engine=spring.core
  * --add-exports org.hibernate.validator/org.hibernate.validator.internal.constraintvalidators.bv=org.apache.causeway.core.config
@@ -41,18 +45,24 @@ public record ConfigurationTester(
      */
     TestPropertyValues testPropertyValues) {
 
+    private static _StableValue<CausewayConfiguration> DEFAULT_CAUSEWAY_CONFIGURATION_HOLDER = new _StableValue<>();
+    private static LongAdder longAdder = new LongAdder();
+
     public void test(final Consumer<CausewayConfiguration> configConsumer) {
-        testPropertyValues.applyToSystemProperties(()->{
-            new ApplicationContextRunner()
-                .withUserConfiguration(CausewayModuleCoreConfig.class)
-                .run(ctx -> {
-                    var config = ctx.getBean(CausewayConfiguration.Causeway.class);
-                    configConsumer.accept(createConfig(config));
-                });
-        });
+        configConsumer.accept(createCausewayConfiguration());
     }
 
     public CausewayConfiguration causewayConfiguration() {
+        if(isDefaultConfiguration()) {
+            return DEFAULT_CAUSEWAY_CONFIGURATION_HOLDER.orElseSet(this::createCausewayConfiguration);
+        }
+        return createCausewayConfiguration();
+    }
+
+    // -- HELPER
+
+    private CausewayConfiguration createCausewayConfiguration() {
+        var watch = _Timing.now();
         final var causewayRef = new AtomicReference<CausewayConfiguration.Causeway>();
         testPropertyValues.applyToSystemProperties(()->{
             new ApplicationContextRunner()
@@ -62,10 +72,14 @@ public record ConfigurationTester(
                     causewayRef.set(causeway);
                 });
         });
+        longAdder.increment();
+        System.err.printf("%d %s%n", longAdder.longValue(), watch.toString());
         return createConfig(causewayRef.get());
     }
 
-    // -- HELPER
+    private boolean isDefaultConfiguration() {
+        return testPropertyValues.equals(TestPropertyValues.empty());
+    }
 
     private static CausewayConfiguration createConfig(final CausewayConfiguration.Causeway causeway) {
         return new CausewayConfiguration(emptyEnvironment(), Optional.empty(), causeway);
