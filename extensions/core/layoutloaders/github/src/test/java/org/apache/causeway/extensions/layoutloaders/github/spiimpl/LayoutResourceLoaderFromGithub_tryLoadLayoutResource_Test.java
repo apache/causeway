@@ -30,6 +30,9 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.CausewayConfiguration.Causeway;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions;
+import org.apache.causeway.core.config.CausewayConfiguration.Extensions.LayoutLoaders;
 import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub;
 import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 
@@ -48,9 +51,11 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @BeforeEach
     void setup() {
 
-        var causewayConfiguration = CausewayConfiguration.defaults();
-        causewayConfiguration.extensions().layoutLoaders().github().setApiKey(getApiKey());
-        causewayConfiguration.extensions().layoutLoaders().github().setRepository("apache/causeway-app-simpleapp");
+        var github = new LayoutLoaders.Github(getApiKey(), "apache/causeway-app-simpleapp");
+
+        var causewayConfiguration = new CausewayConfiguration(null, java.util.Optional.empty(),
+            new Causeway(null, null, null, null, null, null, null, null, null,
+                new Extensions(null, null, null, null, null, null, new LayoutLoaders(github), null, null, null)));
 
         var module = new CausewayModuleExtLayoutLoadersGithub();
         var restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);

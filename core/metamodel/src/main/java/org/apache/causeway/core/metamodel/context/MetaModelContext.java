@@ -19,75 +19,96 @@
 package org.apache.causeway.core.metamodel.context;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.menu.MenuBarsService;
+import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
+import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
 /**
  * @since 2.0
  */
 @Programmatic
-public abstract class MetaModelContext implements HasMetaModelContext {
-
-    @Override
-    public final MetaModelContext getMetaModelContext() {
-        return this;
-    }
+public interface MetaModelContext extends MetaModelContextShortcuts {
 
     // -- INSTANCE (SINGLETON)
 
-    public static Optional<MetaModelContext> instance() {
-        return Optional.ofNullable(INSTANCE_HOLDER.get());
+    static Optional<MetaModelContext> instance() {
+        return MetaModelContextSingletonHolder.instance();
     }
-
     @Nullable
-    public static MetaModelContext instanceNullable() {
+    static MetaModelContext instanceNullable() {
         return instance().orElse(null);
     }
-
-    public static MetaModelContext instanceElseFail() {
+    static MetaModelContext instanceElseFail() {
         return instance()
                 .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
     }
 
     // -- UTILITY
 
-    public static  TranslationService translationServiceOrFallback() {
-        return MetaModelContext.instance()
-                .map(MetaModelContext::getTranslationService)
-                .orElseGet(TranslationService::identity);
+    static TranslationService translationServiceOrFallback() {
+        return instance()
+            .map(MetaModelContext::getTranslationService)
+            .orElseGet(TranslationService::identity);
     }
 
-    // -- HELPER
+    // -- SHORTCUTS
 
-    protected static final AtomicReference<MetaModelContext> INSTANCE_HOLDER = new AtomicReference<>();
-
-    /**
-     * Internal: clears the singleton instance reference
-     */
-    protected static void clear() {
-        INSTANCE_HOLDER.set(null);
+    @Override
+    default MetaModelContext mmc() {
+        return this;
     }
 
-    /**
-     * Internal: set singleton. Override NOT allowed.
-     */
-    protected static void set(final MetaModelContext mmc) {
-        _Assert.assertNull(MetaModelContext.INSTANCE_HOLDER.get(),
-                ()->"MetaModelContext singelton is already instantiated, override is not allowed!");
-        setOrReplace(mmc);
-    }
+    // -- BEANS
 
-    /**
-     * Internal: set or replace singleton. Override allowed.
-     */
-    public static void setOrReplace(final MetaModelContext mmc) {
-        MetaModelContext.INSTANCE_HOLDER.set(mmc);
-    }
+    CausewaySystemEnvironment getSystemEnvironment();
+    CausewayConfiguration getConfiguration();
+    ProgrammingModel getProgrammingModel();
+    ServiceInjector getServiceInjector();
+    ServiceRegistry getServiceRegistry();
+    FactoryService getFactoryService();
+    MemberExecutorService getMemberExecutor();
+    SpecificationLoader getSpecificationLoader();
+    TranslationService getTranslationService();
+    AuthorizationManager getAuthorizationManager();
+    AuthenticationManager getAuthenticationManager();
+    TitleService getTitleService();
+    RepositoryService getRepositoryService();
+    ManagedObject getHomePageAdapter();
+    TransactionService getTransactionService();
+    ObjectIconService getObjectIconService();
+    MessageService getMessageService();
+    ObjectManager getObjectManager();
+    WrapperFactory getWrapperFactory();
+    PlaceholderRenderService getPlaceholderRenderService();
+    WebAppContextPath getWebAppContextPath();
+    MenuBarsService getMenuBarsService();
+    InteractionService getInteractionService();
+    CommandDtoFactory getCommandDtoFactory();
 
 }

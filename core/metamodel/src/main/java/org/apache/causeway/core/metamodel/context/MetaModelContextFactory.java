@@ -29,9 +29,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 
 /**
- *
  * @since 2.0
- *
  */
 @Configuration
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetaModelContextFactory")
@@ -43,20 +41,26 @@ public class MetaModelContextFactory {
 
         var ioc = systemEnvironment.springContextHolder();
         var mmc = new MetaModelContext_usingSpring(ioc);
-        var mmcRecord = new MmcRecord(ioc);
+        //var mmcRecord = new MmcRecord(ioc);
 
+        //TODO potentially problematic when testing concurrently
         if(isIntegrationTesting()) {
-            MetaModelContext.setOrReplace(mmc);
+            MetaModelContextSingletonHolder.setOrReplace(mmc);
             return mmc;
         }
 
-        MetaModelContext.set(mmc);
+        MetaModelContextSingletonHolder.set(mmc);
         return mmc;
     }
 
     @Bean
     public ObjectManager objectManager(final MetaModelContext mmc) {
         return new ObjectManager(mmc);
+    }
+
+    //JUnit
+    public static void setTestContext(MetaModelContext mmc) {
+        MetaModelContextSingletonHolder.setOrReplace(mmc);
     }
 
     // -- HELPER

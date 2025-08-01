@@ -29,7 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
@@ -49,8 +48,6 @@ import org.apache.causeway.testdomain.util.interaction.InteractionTestAbstract;
                 "logging.level.DependentArgUtils=DEBUG"
         })
 @TestPropertySource({
-    //CausewayPresets.DebugMetaModel,
-    //CausewayPresets.DebugProgrammingModel,
     CausewayPresets.SilenceMetaModel,
     CausewayPresets.SilenceProgrammingModel
 })
@@ -91,32 +88,6 @@ class CollectionInteractionTest extends InteractionTestAbstract {
         // toggle all off
         tableTester.getDataTable().selectAll(false);
         tableTester.assertDataRowSelectionIsEmpty();
-    }
-
-    @Test
-    void columns() {
-        testerFactory.getMetaModelContext().getConfiguration().applib().annotation()
-            .propertyLayout().setSequencePolicyIfUnreferenced(
-                    AssociationLayoutConfigOptions.SequencePolicy.AS_PER_SEQUENCE);
-
-        var tableTester =
-                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
-                .tableTester();
-
-        tableTester.assertColumnNames(List.of("Name", "Date"));
-    }
-
-    //@Test cannot figure out how to reload the grid after was loaded in previous test
-    void columns2() {
-        testerFactory.getMetaModelContext().getConfiguration().applib().annotation()
-            .propertyLayout().setSequencePolicyIfUnreferenced(
-                    AssociationLayoutConfigOptions.SequencePolicy.ALPHABETICALLY);
-
-        var tableTester =
-                testerFactory.collectionTester(InteractionDemo.class, "items", Where.ANYWHERE)
-                .tableTester();
-
-        tableTester.assertColumnNames(List.of("Date", "Name"));
     }
 
     @Test

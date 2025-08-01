@@ -24,6 +24,8 @@ import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -40,12 +42,12 @@ class LocalDateTimeConverterTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        converterTester = new ConverterTester<LocalDateTime>(LocalDateTime.class,
+        converterTester = new ConverterTester<>(LocalDateTime.class, TestPropertyValues.empty(),
                 new LocalDateTimeValueSemantics());
         converterTester.setScenario(
-                Locale.ENGLISH,
-                converterTester.converterForProperty(
-                        CustomerWithLocalDateTime.class, "value", ViewOrEditMode.EDITING));
+            Locale.ENGLISH,
+            converterTester.converterForProperty(
+                    CustomerWithLocalDateTime.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

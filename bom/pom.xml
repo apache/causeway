@@ -246,13 +246,6 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
-                <artifactId>causeway-core-configtest</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-interaction</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
@@ -268,6 +261,20 @@ identified
             <dependency>
                 <groupId>org.apache.causeway.core</groupId>
                 <artifactId>causeway-core-metamodel</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.core</groupId>
+                <artifactId>causeway-core-mmtestsupport</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.core</groupId>
+                <artifactId>causeway-core-mmtest</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
                 <scope>compile</scope>

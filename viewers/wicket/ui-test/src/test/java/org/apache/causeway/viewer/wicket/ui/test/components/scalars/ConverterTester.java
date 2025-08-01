@@ -33,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.id.LogicalType;
@@ -46,10 +48,10 @@ import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.core.security._testing.InteractionService_forTesting;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
 
@@ -70,18 +72,23 @@ public class ConverterTester<T extends Serializable> {
         ConverterBasedOnValueSemantics<T> converter;
     }
 
-    public ConverterTester(final Class<T> valueType, final ValueSemanticsAbstract<T> valueSemantics,
+    public ConverterTester(
+            final Class<T> valueType,
+            final TestPropertyValues testPropertyValues,
+            final ValueSemanticsAbstract<T> valueSemantics,
             final Object ...additionalSingletons) {
-        this(valueType, valueSemantics, VirtualClock.frozenTestClock(), additionalSingletons);
+        this(valueType, testPropertyValues, valueSemantics, VirtualClock.frozenTestClock(), additionalSingletons);
     }
 
     public ConverterTester(
             final @NonNull Class<T> valueType,
+            final @NonNull TestPropertyValues testPropertyValues,
             final @NonNull ValueSemanticsAbstract<T> valueSemantics,
             final @NonNull VirtualClock virtualClock,
             final Object ...additionalSingletons) {
 
         mmc = MetaModelContext_forTesting.builder()
+                .testPropertyValues(testPropertyValues)
                 .valueSemantic(valueSemantics)
                 .singleton(new ClockService(null) {
                     @Override public VirtualClock getClock() {
@@ -110,6 +117,7 @@ public class ConverterTester<T extends Serializable> {
         this.scenario = new Scenario(locale, converter);
     }
 
+    @SuppressWarnings("unchecked")
     public ConverterBasedOnValueSemantics<T> converterForProperty(
             final Class<?> type,
             final String propertyId,

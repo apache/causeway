@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
@@ -31,6 +30,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.LongValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.ShortValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender.JsonValueEncoderServiceDefault;
 
 abstract class JsonValueEncoderTestAbstract {

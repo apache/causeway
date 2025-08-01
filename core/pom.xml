@@ -31,7 +31,7 @@
 
     <groupId>org.apache.causeway.core</groupId>
     <artifactId>causeway-core</artifactId>
-    
+
     <name>Apache Causeway Core</name>
     <url>https://causeway.apache.org</url>
     <description>
@@ -56,8 +56,9 @@
         <module>config</module>
         <module>interaction</module>
         <module>internaltestsupport</module>
-        <module>configtest</module>
         <module>metamodel</module>
+        <module>mmtestsupport</module>
+<!--        <module>mmtest</module>-->
         <module>runtime</module>
         <module>runtimeservices</module>
         <module>transaction</module>

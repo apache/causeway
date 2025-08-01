@@ -56,11 +56,11 @@ import org.apache.causeway.core.security.authorization.manager.AuthorizationMana
 
 import lombok.Getter;
 
-class MetaModelContext_usingSpring extends MetaModelContext {
+class MetaModelContext_usingSpring implements MetaModelContext {
 
-    private final SpringContextHolder iocContainer;
-    public MetaModelContext_usingSpring(final SpringContextHolder iocContainer) {
-        this.iocContainer = iocContainer;
+    private final SpringContextHolder springContextHolder;
+    public MetaModelContext_usingSpring(final SpringContextHolder springContextHolder) {
+        this.springContextHolder = springContextHolder;
     }
 
     /**
@@ -68,7 +68,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
      * {@link MetaModelContextFactory#metaModelContext(CausewaySystemEnvironment)}.
      */
     void onDestroy() {
-        MetaModelContext.clear();
+        MetaModelContextSingletonHolder.clear();
     }
 
     @Getter(lazy=true)
@@ -82,7 +82,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     @Getter(lazy=true)
     private final ProgrammingModel programmingModel =
     getSingletonElseFail(ProgrammingModel.class);
-    
+
     @Getter(lazy=true)
     private final ServiceInjector serviceInjector =
     getSingletonElseFail(ServiceInjector.class);
@@ -167,7 +167,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     @Getter(lazy = true)
     private final CommandDtoFactory commandDtoFactory =
     getSingletonElseFail(CommandDtoFactory.class);
-    
+
     @Override
     public final ManagedObject getHomePageAdapter() {
         final Object pojo = getHomePageResolverService().getHomePage();
@@ -189,18 +189,17 @@ class MetaModelContext_usingSpring extends MetaModelContext {
     // -- HELPER
 
     private <T> T getSingletonElseFail(final Class<T> type) {
-        return iocContainer.getSingletonElseFail(type);
+        return springContextHolder.getSingletonElseFail(type);
     }
 
     private <T> Optional<T> getDefault(final Class<T> type) {
-        return iocContainer.select(type).getFirst();
+        return springContextHolder.select(type).getFirst();
     }
 
     private final _Lazy<Map<String, ManagedObject>> objectAdaptersForBeansOfKnownSort =
             _Lazy.threadSafe(this::collectBeansOfKnownSort);
 
     private Map<String, ManagedObject> collectBeansOfKnownSort() {
-
         return getServiceRegistry()
                 .streamRegisteredBeans()
                 .map(this::toManagedObject)

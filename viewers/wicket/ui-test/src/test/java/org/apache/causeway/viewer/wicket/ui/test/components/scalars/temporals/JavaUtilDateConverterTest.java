@@ -23,6 +23,8 @@ import java.util.Locale;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -42,13 +44,13 @@ class JavaUtilDateConverterTest {
     @BeforeEach
     void setUp() throws Exception {
 
-        converterTester = new ConverterTester<java.util.Date>(java.util.Date.class,
+        converterTester = new ConverterTester<>(java.util.Date.class, TestPropertyValues.empty(),
                 new JavaUtilDateValueSemantics(),
                 new LocalDateTimeValueSemantics());
         converterTester.setScenario(
-                Locale.ENGLISH,
-                converterTester.converterForProperty(
-                        CustomerWithJavaSqlDate.class, "value", ViewOrEditMode.EDITING));
+            Locale.ENGLISH,
+            converterTester.converterForProperty(
+                    CustomerWithJavaSqlDate.class, "value", ViewOrEditMode.EDITING));
     }
 
     @Test

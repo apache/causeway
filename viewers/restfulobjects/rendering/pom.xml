@@ -59,7 +59,7 @@
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.causeway.core</groupId>
-            <artifactId>causeway-core-internaltestsupport</artifactId>
+            <artifactId>causeway-core-mmtestsupport</artifactId>
             <scope>test</scope>
         </dependency>
 

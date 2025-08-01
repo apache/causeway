@@ -41,8 +41,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.commons.internal.collections._Maps;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 
 import lombok.Getter;

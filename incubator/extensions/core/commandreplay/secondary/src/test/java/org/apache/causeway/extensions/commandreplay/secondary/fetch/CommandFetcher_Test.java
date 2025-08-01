@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
 import org.apache.causeway.core.internaltestsupport.annotations.DisabledIfRunningWithSurefire;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.extensions.commandreplay.secondary.config.SecondaryConfig;
 import org.apache.causeway.extensions.commandreplay.secondary.status.StatusException;
 

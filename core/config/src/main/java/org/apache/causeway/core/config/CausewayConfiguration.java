@@ -147,12 +147,6 @@ public record CausewayConfiguration(
     Causeway causeway
     ) {
 
-    // TODO remove
-    @Deprecated
-    public static CausewayConfiguration defaults() {
-        throw _Exceptions.unsupportedOperation();
-    }
-
     public static final String ROOT_PREFIX = "causeway";
 
 

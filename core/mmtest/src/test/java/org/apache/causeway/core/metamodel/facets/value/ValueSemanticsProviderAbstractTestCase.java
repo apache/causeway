@@ -1,0 +1,198 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.facets.value;
+
+import java.util.Locale;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Mockito;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.boot.test.util.TestPropertyValues;
+
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.applib.value.semantics.Parser;
+import org.apache.causeway.applib.value.semantics.Renderer;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
+import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.Mocking;
+import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer;
+import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializer.Format;
+import org.apache.causeway.core.metamodel.facets.object.value.ValueSerializerDefault;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.valuesemantics.StringValueSemantics;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
+
+import lombok.Getter;
+
+abstract class ValueSemanticsProviderAbstractTestCase<T> {
+
+    private Mocking mocking = new Mocking();
+    protected InteractionService mockInteractionService;
+    protected ManagedObject mockAdapter;
+    protected CausewayConfiguration causewayConfiguration;
+
+    protected MetaModelContext metaModelContext;
+
+    @Getter private ValueSemanticsProvider<T> semantics;
+    @Getter private ValueSerializer<T> valueSerializer;
+
+    @BeforeEach
+    final void setUpMmc() throws Exception {
+
+        Locale.setDefault(Locale.UK);
+
+        mockInteractionService = Mockito.mock(InteractionService.class);
+
+        metaModelContext = MetaModelContext_forTesting.builder()
+                .testPropertyValues(TestPropertyValues.empty())
+                .interactionService(mockInteractionService)
+                .build();
+
+        causewayConfiguration = metaModelContext.getConfiguration();
+    }
+
+    protected void allowMockAdapterToReturn(final Object pojo) {
+        mockAdapter = mocking.asValue(pojo);
+    }
+
+    protected void setSemantics(final ValueSemanticsAbstract<T> valueSemantics) {
+        this.semantics = valueSemantics;
+        this.valueSerializer = new ValueSerializerDefault<>(valueSemantics);
+    }
+
+    protected ManagedObject createAdapter(final Object object) {
+        return mockAdapter;
+    }
+
+    protected Parser<T> getParser() {
+        return semantics.getParser();
+    }
+
+    protected Renderer<T> getRenderer() {
+        return semantics.getRenderer();
+    }
+
+    @Test
+    final void parseNull() throws Exception {
+        if(!isValueSemanticsProviderSetup()) return;
+        if(isBlobOrClob()) return; // those have no parser
+        assertEquals(null, semantics.getParser().parseTextRepresentation(null, null));
+    }
+
+    @Test
+    final void parseEmptyString() throws Exception {
+        if(!isValueSemanticsProviderSetup()) return;
+        if(isBlobOrClob()) return; // those have no parser
+        final Object newValue = semantics.getParser().parseTextRepresentation(null, "");
+
+        if(semantics instanceof StringValueSemantics) {
+            // string parsing is an unary identity
+            assertEquals("", newValue);
+        } else {
+            assertNull(newValue);
+        }
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(Format.class)
+    final void valueSerializer(final Format format) {
+        if(!isValueSemanticsProviderSetup()) return;
+
+        final T value = getSample();
+        final String encoded = getValueSerializer().enstring(format, value);
+
+        switch(format) {
+        case JSON:
+            assertValueEncodesToJsonAs(value, encoded);
+            break;
+        case URL_SAFE:
+            assertTrue(_Strings.isUrlSafe(encoded));
+        }
+
+        T decoded = getValueSerializer().destring(format, encoded);
+
+        Optional.ofNullable(semantics.getOrderRelation())
+            .ifPresentOrElse(rel->Assertions.assertTrue(rel.equals(value, decoded)),
+                    ()->Assertions.assertEquals(value, decoded));
+    }
+
+    protected abstract T getSample();
+    protected abstract void assertValueEncodesToJsonAs(T a, String json);
+
+    @ParameterizedTest
+    @EnumSource(Format.class)
+    final void decodeNULL(final Format format) throws Exception {
+        if(!isValueSemanticsProviderSetup()) return;
+
+        final Object newValue = getValueSerializer()
+                .destring(format, ValueSerializerDefault.ENCODED_NULL);
+        assertNull(newValue);
+    }
+
+    @ParameterizedTest
+    @EnumSource(Format.class)
+    final void emptyEncoding(final Format format) {
+        if(!isValueSemanticsProviderSetup()) return;
+
+        assertEquals(ValueSerializerDefault.ENCODED_NULL, getValueSerializer()
+                .enstring(format, null));
+    }
+
+    @Test
+    final void titleOfForNullObject() {
+        if(!isValueSemanticsProviderSetup()) return;
+
+        if(semantics instanceof StringValueSemantics) {
+            // string representation has null-to-empty semantics
+            assertEquals("",
+                    semantics.getRenderer().titlePresentation(null, null));
+        } else {
+            assertEquals(PlaceholderLiteral.NULL_REPRESENTATION.getLiteral(),
+                    semantics.getRenderer().titlePresentation(null, null));
+        }
+
+    }
+
+    // precondition for testing
+    private boolean isValueSemanticsProviderSetup() {
+        return semantics!=null;
+    }
+
+    private boolean isBlobOrClob() {
+        return semantics.getCorrespondingClass().equals(Blob.class)
+                || semantics.getCorrespondingClass().equals(Clob.class);
+    }
+
+}

@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -34,7 +35,7 @@ import org.springframework.dao.RecoverableDataAccessException;
 import org.springframework.dao.TransientDataAccessResourceException;
 
 import org.apache.causeway.applib.services.exceprecog.Category;
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.mmtestsupport.ConfigurationTester;
 
 class ExceptionRecognizerForDataAccessExceptionTest {
 
@@ -42,7 +43,8 @@ class ExceptionRecognizerForDataAccessExceptionTest {
 
     @BeforeEach
     public void setUp() {
-        var conf = CausewayConfiguration.defaults();
+        var conf = new ConfigurationTester(TestPropertyValues.empty())
+            .causewayConfiguration();
         recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);
     }
 
