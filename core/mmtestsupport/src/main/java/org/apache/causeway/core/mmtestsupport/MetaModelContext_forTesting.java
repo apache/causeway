@@ -598,10 +598,7 @@ implements MetaModelContext {
         return this;
     }
 
-    @Override
-    public CommandDtoFactory getCommandDtoFactory() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    @Getter
+    private CommandDtoFactory commandDtoFactory;
 
 }

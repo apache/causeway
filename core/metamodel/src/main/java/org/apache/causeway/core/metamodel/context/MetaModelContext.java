@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.context;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.jspecify.annotations.Nullable;
 
@@ -77,7 +78,7 @@ public interface MetaModelContext extends MetaModelContextShortcuts {
             .orElseGet(TranslationService::identity);
     }
 
-    // -- SHORTCUTS
+    // -- DELEGATE
 
     @Override
     default MetaModelContext mmc() {
@@ -110,5 +111,10 @@ public interface MetaModelContext extends MetaModelContextShortcuts {
     MenuBarsService getMenuBarsService();
     InteractionService getInteractionService();
     CommandDtoFactory getCommandDtoFactory();
+
+    // -- SERVICE SUPPORT
+
+    Stream<ManagedObject> streamServiceAdapters();
+    ManagedObject lookupServiceAdapterById(final String serviceId);
 
 }

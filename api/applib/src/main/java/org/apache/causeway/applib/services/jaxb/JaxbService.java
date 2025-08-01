@@ -29,6 +29,8 @@ import jakarta.xml.bind.Unmarshaller;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.stereotype.Service;
+
 import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -106,6 +108,7 @@ public interface JaxbService {
         return new JaxbServiceInternal(JaxbServiceInternal.Config.simple());
     }
 
+    @Service
     record JaxbServiceInternal(
         Config config
         ) implements JaxbService {

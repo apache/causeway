@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.context;
 
 import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Programmatic;
@@ -32,7 +30,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Application;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -95,14 +92,6 @@ public interface MetaModelContextShortcuts {
 
     default AsciiIdentifierService getAsciiIdentifierService() {
         return mmc().getServiceRegistry().lookupService(AsciiIdentifierService.class).orElse(featureId -> featureId);
-    }
-
-    default ManagedObject lookupServiceAdapterById(final String serviceId) {
-        return lookupServiceAdapterById(serviceId);
-    }
-
-    default Stream<ManagedObject> streamServiceAdapters() {
-        return streamServiceAdapters();
     }
 
     // -- CONFIG SHORTCUTS

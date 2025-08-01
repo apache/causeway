@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.context;
 
+import java.util.stream.Stream;
+
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -171,6 +173,18 @@ public interface HasMetaModelContext extends MetaModelContext  {
     @Override
     default CommandDtoFactory getCommandDtoFactory() {
         return getMetaModelContext().getCommandDtoFactory();
+    }
+
+    // -- SERVICE SUPPORT
+
+    @Override
+    default Stream<ManagedObject> streamServiceAdapters() {
+        return getMetaModelContext().streamServiceAdapters();
+    }
+
+    @Override
+    default ManagedObject lookupServiceAdapterById(final String serviceId) {
+        return getMetaModelContext().lookupServiceAdapterById(serviceId);
     }
 
 }

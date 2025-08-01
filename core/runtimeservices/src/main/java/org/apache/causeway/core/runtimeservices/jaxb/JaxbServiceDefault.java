@@ -58,8 +58,8 @@ public record JaxbServiceDefault(
 
     @Autowired
     public JaxbServiceDefault(
-        ServiceInjector serviceInjector,
-        Provider<SpecificationLoader> specLoaderProvider) {
+            ServiceInjector serviceInjector,
+            Provider<SpecificationLoader> specLoaderProvider) {
         this(new JaxbService.JaxbServiceInternal(new JaxbService.JaxbServiceInternal.Config(
             marshaller->{
                 marshaller.setAdapter(PersistentEntityAdapter.class,
