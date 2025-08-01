@@ -79,7 +79,7 @@ public class Context {
     }
 
     public ImmutableEnumSet<ActionScope> getActionScope() {
-        return causewaySystemEnvironment.getDeploymentType().isProduction()
+        return causewaySystemEnvironment.deploymentType().isProduction()
                 ? ActionScope.PRODUCTION_ONLY
                 : ActionScope.ANY;
     }

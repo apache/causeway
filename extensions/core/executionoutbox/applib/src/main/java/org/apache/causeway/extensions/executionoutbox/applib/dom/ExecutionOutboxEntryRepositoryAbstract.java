@@ -190,7 +190,7 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
      */
     @Override
     public List<ExecutionOutboxEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         return _Casts.uncheckedCast(repositoryService().allInstances(executionOutboxEntryClass));
@@ -201,7 +201,7 @@ public abstract class ExecutionOutboxEntryRepositoryAbstract<E extends Execution
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot removeAll in production systems");
         }
         repositoryService().removeAll(executionOutboxEntryClass);

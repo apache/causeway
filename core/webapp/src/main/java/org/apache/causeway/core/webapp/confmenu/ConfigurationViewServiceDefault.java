@@ -100,7 +100,7 @@ implements
 
         String head = String.format("APACHE CAUSEWAY %s (%s) ",
                 configuration.viewer().common().application().version(),
-                systemEnvironment.getDeploymentType().name());
+                systemEnvironment.deploymentType().name());
 
         final Map<String, ConfigurationProperty> map = scopedConf.get().get(Scope.PRIMARY.ordinal());
 
@@ -158,7 +158,7 @@ implements
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
         add("Causeway Version", configuration.viewer().common().application().version(), map);
-        add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
+        add("Deployment Type", systemEnvironment.deploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 
         addSystemProperty("java.version", map);
@@ -252,7 +252,7 @@ implements
         case NEVER_SHOW:
             return false;
         case SHOW_ONLY_IN_PROTOTYPE:
-            return systemEnvironment.getDeploymentType().isPrototyping();
+            return systemEnvironment.deploymentType().isPrototyping();
         case ALWAYS_SHOW:
             return true;
         default:

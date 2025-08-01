@@ -70,6 +70,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         this.factoryService = factoryService;
     }
 
+    @Override
     public E createEntryAndPersist(final Execution execution) {
         E e = factoryService.detachedEntity(executionLogEntryClass);
         e.init(execution);
@@ -138,6 +139,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -146,6 +148,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTargetAndTimestampAfter(final Bookmark target, final Timestamp timestamp) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -156,6 +159,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTargetAndTimestampBefore(final Bookmark target, final Timestamp timestamp) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -166,6 +170,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findByTargetAndTimestampBetween(final Bookmark target, final Timestamp timestampFrom, final Timestamp timestampTo) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -219,6 +224,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
         );
     }
 
+    @Override
     public List<ExecutionLogEntry> findRecentByTarget(final Bookmark target) {
         return _Casts.uncheckedCast(
                 repositoryService().allMatches(
@@ -242,7 +248,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
      */
     @Override
     public List<ExecutionLogEntry> findAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'findAll' in production systems");
         }
         return _Casts.uncheckedCast(repositoryService().allInstances(executionLogEntryClass));
@@ -253,7 +259,7 @@ public abstract class ExecutionLogEntryRepositoryAbstract<E extends ExecutionLog
      */
     @Override
     public void removeAll() {
-        if (causewaySystemEnvironment.getDeploymentType().isProduction()) {
+        if (causewaySystemEnvironment.deploymentType().isProduction()) {
             throw new IllegalStateException("Cannot call 'removeAll' in production systems");
         }
         repositoryService().removeAll(executionLogEntryClass);

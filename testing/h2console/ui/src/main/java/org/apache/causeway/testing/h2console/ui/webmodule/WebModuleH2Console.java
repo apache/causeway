@@ -167,7 +167,7 @@ public class WebModuleH2Console extends WebModuleAbstract {
     // -- HELPER
 
     private boolean isPrototyping() {
-        return causewaySystemEnvironment.getDeploymentType().isPrototyping();
+        return causewaySystemEnvironment.deploymentType().isPrototyping();
     }
 
     private boolean isH2MemConnectionUsed(final DataSourceIntrospectionService datasourceIntrospector) {

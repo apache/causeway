@@ -41,10 +41,9 @@ public class MetaModelContextFactory {
 
         var ioc = systemEnvironment.springContextHolder();
         var mmc = new MetaModelContext_usingSpring(ioc);
-        //var mmcRecord = new MmcRecord(ioc);
 
         //TODO potentially problematic when testing concurrently
-        if(isIntegrationTesting()) {
+        if(systemEnvironment.isIntegrationTesting()) {
             MetaModelContextSingletonHolder.setOrReplace(mmc);
             return mmc;
         }
@@ -61,20 +60,6 @@ public class MetaModelContextFactory {
     //JUnit
     public static void setTestContext(MetaModelContext mmc) {
         MetaModelContextSingletonHolder.setOrReplace(mmc);
-    }
-
-    // -- HELPER
-
-    /**
-     * Whether we find Spring's ContextCache on the class path.
-     */
-    private static boolean isIntegrationTesting() {
-        try {
-            Class.forName("org.springframework.test.context.cache.ContextCache");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 }

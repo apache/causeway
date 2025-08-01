@@ -157,7 +157,7 @@ implements MetaModelContext {
         });
 
     @Builder.Default @Getter
-    private CausewaySystemEnvironment systemEnvironment = newCausewaySystemEnvironment();
+    private CausewaySystemEnvironment systemEnvironment = new CausewaySystemEnvironment();
 
     @Builder.Default @Getter
     private ClassSubstitutorRegistry classSubstitutorRegistry =
@@ -304,12 +304,6 @@ implements MetaModelContext {
                     SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
                 )
                 );
-    }
-
-    private static CausewaySystemEnvironment newCausewaySystemEnvironment() {
-        var env = new CausewaySystemEnvironment();
-        env.setUnitTesting(true);
-        return env;
     }
 
     @Override

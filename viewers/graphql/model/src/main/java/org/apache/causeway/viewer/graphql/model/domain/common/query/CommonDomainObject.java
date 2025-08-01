@@ -171,7 +171,7 @@ public class CommonDomainObject
 
     @SuppressWarnings("unused")
     private ActionScope determineActionScope() {
-        return context.causewaySystemEnvironment.getDeploymentType().isProduction()
+        return context.causewaySystemEnvironment.deploymentType().isProduction()
                 ? ActionScope.PRODUCTION
                 : ActionScope.PROTOTYPE;
     }

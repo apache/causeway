@@ -182,7 +182,7 @@ public final class InteractionUtils {
     }
 
     private CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
+        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
                 return ownerAdapter.getConfiguration().prototyping().ifHiddenPolicy();
@@ -193,7 +193,7 @@ public final class InteractionUtils {
     }
 
     private CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
+        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
                 return ownerAdapter.getConfiguration().prototyping().ifDisabledPolicy();

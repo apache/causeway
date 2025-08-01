@@ -59,7 +59,7 @@ public enum IntrospectionMode {
 
     public static boolean isFullIntrospect(CausewayConfiguration configuration, CausewaySystemEnvironment causewaySystemEnvironment) {
         var introspectionMode = configuration.core().metaModel().introspector().mode();
-        return introspectionMode.isFullIntrospect(causewaySystemEnvironment.getDeploymentType());
+        return introspectionMode.isFullIntrospect(causewaySystemEnvironment.deploymentType());
     }
 
 }
