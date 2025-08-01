@@ -41,7 +41,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
@@ -62,7 +61,6 @@ class ResourceContext_ensureCompatibleAcceptHeader_Test {
     ServletContext mockServletContext = Mockito.mock(ServletContext.class);
     InteractionService mockInteractionService = Mockito.mock(InteractionService.class);
     Interaction mockInteraction = Mockito.mock(Interaction.class);
-    SpecificationLoader mockSpecificationLoader = Mockito.mock(SpecificationLoader.class);
     WebApplicationContext webApplicationContext = Mockito.mock(WebApplicationContext.class);
     InteractionLayerTracker mockInteractionLayerTracker = Mockito.mock(InteractionLayerTracker.class);
     AuthenticationManager mockAuthenticationManager = Mockito.mock(AuthenticationManager.class);
@@ -73,7 +71,6 @@ class ResourceContext_ensureCompatibleAcceptHeader_Test {
     void setUp() throws Exception {
 
         metaModelContext = MetaModelContext_forTesting.builder()
-                .specificationLoader(mockSpecificationLoader)
                 .authentication(iaContext)
                 .singleton(mockAuthenticationManager)
                 .singleton(mockInteractionLayerTracker)
