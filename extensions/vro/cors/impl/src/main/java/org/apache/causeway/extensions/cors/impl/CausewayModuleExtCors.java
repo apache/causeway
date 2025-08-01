@@ -56,7 +56,7 @@ public class CausewayModuleExtCors {
         }
         log.info("Setting up CORS to filter resteasy-base at '{}' with {}",
                 restfulBase,
-                causewayConfiguration.getExtensions().getCors());
+                causewayConfiguration.extensions().cors());
 
         final FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(createCorsFilter(causewayConfiguration));
@@ -68,14 +68,14 @@ public class CausewayModuleExtCors {
 
     private CorsFilter createCorsFilter(final CausewayConfiguration configuration) {
 
-        var causewayCorsConfig = configuration.getExtensions().getCors();
+        var causewayCorsConfig = configuration.extensions().cors();
 
         var corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(causewayCorsConfig.isAllowCredentials());
-        corsConfiguration.setAllowedHeaders(causewayCorsConfig.getAllowedHeaders());
-        corsConfiguration.setAllowedMethods(causewayCorsConfig.getAllowedMethods());
-        corsConfiguration.setAllowedOrigins(causewayCorsConfig.getAllowedOrigins());
-        corsConfiguration.setExposedHeaders(causewayCorsConfig.getExposedHeaders());
+        corsConfiguration.setAllowCredentials(causewayCorsConfig.allowCredentials());
+        corsConfiguration.setAllowedHeaders(causewayCorsConfig.allowedHeaders());
+        corsConfiguration.setAllowedMethods(causewayCorsConfig.allowedMethods());
+        corsConfiguration.setAllowedOrigins(causewayCorsConfig.allowedOrigins());
+        corsConfiguration.setExposedHeaders(causewayCorsConfig.exposedHeaders());
 
         var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

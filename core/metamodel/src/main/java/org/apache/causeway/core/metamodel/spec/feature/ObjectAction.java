@@ -287,8 +287,8 @@ public interface ObjectAction extends ObjectMember {
         if(needsFallback) {
             // modal vs side-bar
             var dialogModeAsConfigured = Optional.ofNullable(
-                    getMetaModelContext().getConfiguration().getViewer().getWicket().getDialogMode())
-                    .orElseGet(()->new Wicket().getDialogMode());
+                    getMetaModelContext().getConfiguration().viewer().wicket().dialogMode())
+                    .orElseGet(()->Wicket.defaults().dialogMode());
             switch (dialogModeAsConfigured) {
             case SIDEBAR:
                 return PromptStyle.DIALOG_SIDEBAR;

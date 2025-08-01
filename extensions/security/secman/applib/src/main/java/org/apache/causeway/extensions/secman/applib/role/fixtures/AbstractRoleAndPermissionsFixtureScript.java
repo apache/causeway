@@ -108,7 +108,8 @@ implements FixtureScriptWithExecutionStrategy {
             }
         }
 
-        if (causewayConfiguration.getExtensions().getSecman().getFixtureScripts().getAbstractRoleAndPermissionsFixtureScript().getUnknownFeatureIdCheckingPolicy().isFailFast()) {
+        if (causewayConfiguration.extensions().secman().fixtureScripts().abstractRoleAndPermissionsFixtureScript()
+            .unknownFeatureIdCheckingPolicy().isFailFast()) {
             // ensure all featureIds specified actually exist.
             var buf = new StringBuilder();
             for(var featureId : missingFeatureIds) {

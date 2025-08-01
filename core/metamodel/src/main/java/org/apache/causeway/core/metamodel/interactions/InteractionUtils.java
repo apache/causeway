@@ -185,7 +185,7 @@ public final class InteractionUtils {
         DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
-                return ownerAdapter.getConfiguration().getPrototyping().getIfHiddenPolicy();
+                return ownerAdapter.getConfiguration().prototyping().ifHiddenPolicy();
             case PRODUCTION:
             default:
                 return CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
@@ -196,7 +196,7 @@ public final class InteractionUtils {
         DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().getDeploymentType();
         switch (deploymentType) {
             case PROTOTYPING:
-                return ownerAdapter.getConfiguration().getPrototyping().getIfDisabledPolicy();
+                return ownerAdapter.getConfiguration().prototyping().ifDisabledPolicy();
             case PRODUCTION:
             default:
                 return CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE;

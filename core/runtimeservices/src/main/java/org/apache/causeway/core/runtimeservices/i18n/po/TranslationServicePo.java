@@ -70,7 +70,7 @@ public class TranslationServicePo implements TranslationService {
     @PostConstruct
     public void init() {
 
-        final Mode translationMode = configuration.getCore().getRuntimeServices().getTranslation().getPo().getMode();
+        final Mode translationMode = configuration.core().runtimeServices().translation().po().mode();
 
         if(translationMode == Mode.DISABLED) {
             // switch to disabled mode

@@ -112,7 +112,7 @@ public record BookmarkedPagesModel(
     }
 
     private int getMaxSize() {
-        return MetaModelContext.instanceElseFail().getWicketViewerSettings().getBookmarkedPages().getMaxSize();
+        return MetaModelContext.instanceElseFail().getWicketViewerSettings().bookmarkedPages().maxSize();
     }
 
     private static void trim(final List<?> list, final int requiredSize) {

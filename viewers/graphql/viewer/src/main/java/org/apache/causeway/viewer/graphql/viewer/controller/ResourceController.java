@@ -63,7 +63,7 @@ public class ResourceController {
             final CausewayConfiguration causewayConfiguration) {
         this.bookmarkService = bookmarkService;
         this.objectManager = objectManager;
-        this.graphqlConfiguration = causewayConfiguration.getViewer().getGraphql();
+        this.graphqlConfiguration = causewayConfiguration.viewer().graphql();
     }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{propertyId}/blobBytes")
@@ -72,7 +72,7 @@ public class ResourceController {
             @PathVariable final String id,
             @PathVariable final String propertyId
     ) {
-        var responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.resources().responseType();
 
         // TODO: perhaps a filter would factor this check out?
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
@@ -101,7 +101,7 @@ public class ResourceController {
             @PathVariable final String id,
             @PathVariable final String propertyId
     ) {
-        var responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.resources().responseType();
 
         // TODO: perhaps a filter would factor this check out?
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
@@ -129,14 +129,14 @@ public class ResourceController {
             @PathVariable final String id,
             @PathVariable final String _meta
     ) {
-        var responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.resources().responseType();
 
         // TODO: perhaps a filter would factor this check out?
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if (!_meta.equals(graphqlConfiguration.getMetaData().getFieldName())) {
+        if (!_meta.equals(graphqlConfiguration.metaData().fieldName())) {
             return ResponseEntity.notFound().build();
         }
 
@@ -165,11 +165,11 @@ public class ResourceController {
             @PathVariable final String _meta
     ) {
         // TODO: perhaps a filter would factor this check out?
-        var responseType = graphqlConfiguration.getResources().getResponseType();
+        var responseType = graphqlConfiguration.resources().responseType();
         if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        if (!_meta.equals(graphqlConfiguration.getMetaData().getFieldName())) {
+        if (!_meta.equals(graphqlConfiguration.metaData().fieldName())) {
             return ResponseEntity.notFound().build();
         }
 

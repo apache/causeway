@@ -65,7 +65,7 @@ implements
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {
-        var shouldCheck = getConfiguration().getCore().getMetaModel().getValidator().isExplicitLogicalTypeNames();
+        var shouldCheck = getConfiguration().core().metaModel().validator().explicitLogicalTypeNames();
         if(!shouldCheck) return;
 
         programmingModel.addValidatorSkipManagedBeans(objectSpec-> {

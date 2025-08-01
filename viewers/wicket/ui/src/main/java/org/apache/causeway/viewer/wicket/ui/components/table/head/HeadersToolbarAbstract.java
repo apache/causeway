@@ -91,7 +91,7 @@ abstract class HeadersToolbarAbstract<S> extends AbstractToolbar {
             final CausewayConfiguration.Viewer.Wicket wicketConfig) {
         super(table);
 
-        this.useIndicatorForSortableColumn = wicketConfig.isUseIndicatorForSortableColumn();
+        this.useIndicatorForSortableColumn = wicketConfig.useIndicatorForSortableColumn();
 
         RefreshingView<IColumn<T, S>> headers = new RefreshingView<IColumn<T, S>>("headers") {
             private static final long serialVersionUID = 1L;

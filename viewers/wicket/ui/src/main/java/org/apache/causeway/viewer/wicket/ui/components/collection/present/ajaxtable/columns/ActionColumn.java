@@ -45,8 +45,8 @@ extends GenericColumnAbstract {
             final @NonNull Identifier featureId,
             final @NonNull ObjectSpecification elementType,
             final @NonNull Variant collectionVariant) {
-        var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
-        if(!wktConfig.isActionColumnEnabled()) return Optional.empty();
+        var wktConfig = elementType.getMetaModelContext().getConfiguration().viewer().wicket();
+        if(!wktConfig.actionColumnEnabled()) return Optional.empty();
 
         var actions = elementType.streamActionsForColumnRendering(featureId)
                 .collect(Can.toCan());

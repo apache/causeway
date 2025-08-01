@@ -92,14 +92,14 @@ extends FacetFactoryTestAbstract {
     void allowingEntityChangePublishingToReturn(final DomainObjectConfigOptions.EntityChangePublishingPolicy value) {
         if(value!=null) {
             getConfiguration()
-                .getApplib().getAnnotation().getDomainObject().setEntityChangePublishing(value);
+                .applib().annotation().domainObject().setEntityChangePublishing(value);
         }
     }
 
     void allowingObjectsEditingToReturn(final DomainObjectConfigOptions.EditingObjectsConfiguration value) {
         if(value!=null) {
             getConfiguration()
-                .getApplib().getAnnotation().getDomainObject().setEditing(value);
+                .applib().annotation().domainObject().setEditing(value);
         }
     }
 
@@ -676,7 +676,7 @@ extends FacetFactoryTestAbstract {
             metaModelContext = MetaModelContext_forTesting.builder()
                     .refiners(Can.of(__->facetFactory))
                     .build();
-            getConfiguration().getCore().getMetaModel().getValidator().setAllowLogicalTypeNameAsAlias(true);
+            getConfiguration().core().metaModel().validator().setAllowLogicalTypeNameAsAlias(true);
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
 
@@ -690,7 +690,7 @@ extends FacetFactoryTestAbstract {
             metaModelContext = MetaModelContext_forTesting.builder()
                     .refiners(Can.of(__->facetFactory))
                     .build();
-            getConfiguration().getCore().getMetaModel().getValidator().setAllowLogicalTypeNameAsAlias(true);
+            getConfiguration().core().metaModel().validator().setAllowLogicalTypeNameAsAlias(true);
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
 

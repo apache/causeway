@@ -53,7 +53,7 @@ public class ExecutionSubscriberForExecutionLog implements ExecutionSubscriber {
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getExecutionLog().getPersist().isEnabled();
+        return causewayConfiguration.extensions().executionLog().persist().isEnabled();
     }
 
     @Override

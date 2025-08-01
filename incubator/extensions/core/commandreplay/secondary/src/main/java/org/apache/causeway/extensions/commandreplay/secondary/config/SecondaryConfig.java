@@ -49,17 +49,17 @@ public class SecondaryConfig {
     @Getter final List<String> quartzRoles;
 
     public SecondaryConfig(@NotNull final CausewayConfiguration causewayConfiguration) {
-        var config = causewayConfiguration.getExtensions().getCommandReplay();
+        var config = causewayConfiguration.extensions().commandReplay();
 
-        var primaryAccess = config.getPrimaryAccess();
-        primaryUser = primaryAccess.getUser().orElse(null);
-        primaryPassword = primaryAccess.getPassword().orElse(null);
-        primaryBaseUrlRestful = primaryAccess.getBaseUrlRestful().orElse(null);
-        primaryBaseUrlWicket = primaryAccess.getBaseUrlWicket().orElse(null);
-        batchSize = config.getBatchSize();
+        var primaryAccess = config.primaryAccess();
+        primaryUser = primaryAccess.user().orElse(null);
+        primaryPassword = primaryAccess.password().orElse(null);
+        primaryBaseUrlRestful = primaryAccess.baseUrlRestful().orElse(null);
+        primaryBaseUrlWicket = primaryAccess.baseUrlWicket().orElse(null);
+        batchSize = config.batchSize();
 
-        quartzUser = config.getQuartzSession().getUser();
-        quartzRoles = config.getQuartzSession().getRoles();
+        quartzUser = config.quartzSession().user();
+        quartzRoles = config.quartzSession().roles();
     }
 
     public boolean isConfigured() {

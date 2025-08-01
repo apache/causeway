@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -62,7 +61,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeClassifier;
@@ -217,7 +216,7 @@ extends MetaModelContext {
     private List<ValueSemanticsProvider<?>> valueSemantics;
 
     @Singular
-    private List<_SingletonBeanProvider> singletonProviders;
+    private List<SingletonBeanProvider> singletonProviders;
 
     // -- SERVICE SUPPORT
 
@@ -271,19 +270,19 @@ extends MetaModelContext {
                 .filter(_NullSafe::isPresent);
     }
 
-    Stream<_SingletonBeanProvider> streamBeanAdapters() {
+    Stream<SingletonBeanProvider> streamBeanAdapters() {
         return _Streams.concat(
-                streamSingletons().map(_SingletonBeanProvider::forTesting),
+                streamSingletons().map(SingletonBeanProvider::forTesting),
                 singletonProviders.stream(),
                 discoveredServices.stream(),
                 Stream.of(
                     // support for lazy bean providers,
-                    _SingletonBeanProvider.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
-                    _SingletonBeanProvider.forTestingLazy(GridService.class, this::getGridService),
-                    _SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
-                    _SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
-                    _SingletonBeanProvider.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    _SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
+                    SingletonBeanProvider.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
+                    SingletonBeanProvider.forTestingLazy(GridService.class, this::getGridService),
+                    SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
+                    SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
+                    SingletonBeanProvider.forTestingLazy(LayoutService.class, this::getLayoutService),
+                    SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
                 )
                 );
     }
@@ -294,15 +293,16 @@ extends MetaModelContext {
         return env;
     }
 
-    private static CausewayConfiguration newCausewayConfiguration() {
-        var properties = _Maps.<String, String>newHashMap();
-        var config = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
-            @Override
-            public String getProperty(final String key) {
-                return properties.get(key);
+    private static AbstractEnvironment emptyEnvironment() {
+        return new AbstractEnvironment() {
+            @Override public String getProperty(final String key) {
+                return null;
             }
-        }).build();
-        return config;
+        };
+    }
+
+    private static CausewayConfiguration newCausewayConfiguration() {
+        return new CausewayConfiguration(emptyEnvironment(), Optional.empty(), null); //FIXME
     }
 
     @Override
@@ -365,6 +365,7 @@ extends MetaModelContext {
 
     private final _Lazy<ProgrammingModel> programmingModelRef =
             _Lazy.threadSafe(()->initProgrammingModel());
+    @Override
     public ProgrammingModel getProgrammingModel() {
         return programmingModelRef.get();
     }
@@ -434,27 +435,6 @@ extends MetaModelContext {
         return new WebAppContextPath();
     }
 
-    public void runWithConfigProperties(final Consumer<Map<String, String>> setup, final Runnable runnable) {
-        var properties = _Maps.<String, String>newHashMap();
-        setup.accept(properties);
-
-        var currentConfigBackup = this.configuration;
-        try {
-
-            this.configuration = CausewayConfiguration.builder().environment(new AbstractEnvironment() {
-                @Override
-                public String getProperty(final String key) {
-                    return properties.get(key);
-                }
-            }).build();
-
-            runnable.run();
-        } finally {
-            this.configuration = currentConfigBackup;
-        }
-
-    }
-
     // -- LAYOUT TESTING SUPPORT
 
     @Getter(lazy = true)
@@ -464,7 +444,7 @@ extends MetaModelContext {
     private final MenuBarsService menuBarsService = createMenuBarsService();
     private final MenuBarsService createMenuBarsService() {
         return getSingletonProviders().stream()
-                .filter(_SingletonBeanProvider.satisfying(MenuBarsService.class))
+                .filter(SingletonBeanProvider.satisfying(MenuBarsService.class))
                 .findFirst()
                 .map(provider->(MenuBarsService)provider.getInstanceElseFail())
                 .orElseGet(MenuBarsService::forTesting);
@@ -529,12 +509,12 @@ extends MetaModelContext {
     }
 
     @Builder.Default
-    private final Set<_SingletonBeanProvider> discoveredServices = _Sets.newHashSet();
+    private final Set<SingletonBeanProvider> discoveredServices = _Sets.newHashSet();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void registerAsService(final ServiceInstance serviceInstance) {
         var spec = serviceInstance.specification();
-        discoveredServices.add(_SingletonBeanProvider.forTestingLazy(
+        discoveredServices.add(SingletonBeanProvider.forTestingLazy(
                 spec.logicalTypeName(),
                 (Class)spec.getCorrespondingClass(),
                 serviceInstance::pojo));
@@ -563,7 +543,7 @@ extends MetaModelContext {
         return map;
     }
 
-    private Optional<ServiceInstance> toServiceInstance(final _SingletonBeanProvider managedBeanAdapter) {
+    private Optional<ServiceInstance> toServiceInstance(final SingletonBeanProvider managedBeanAdapter) {
         var servicePojo = managedBeanAdapter.getInstanceElseFail();
 
         if(ProgrammingModelConstants.TypeVetoMarker.anyMatchOn(managedBeanAdapter.beanClass())) {

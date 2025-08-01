@@ -37,7 +37,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -75,8 +75,8 @@ class SpringServiceProvisioningTest {
     @Test
     void dump_all() throws IOException {
 
-        final List<String> beans = causewaySystemEnvironment.getIocContainer().streamAllBeans()
-                .map(_SingletonBeanProvider::id)
+        final List<String> beans = causewaySystemEnvironment.springContextHolder().streamAllBeans()
+                .map(SingletonBeanProvider::id)
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -90,7 +90,7 @@ class SpringServiceProvisioningTest {
     void builtInServices_shouldBeSetUp() throws IOException {
 
         var managedServices = serviceRegistry.streamRegisteredBeans()
-                .map(_SingletonBeanProvider::beanClass)
+                .map(SingletonBeanProvider::beanClass)
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
 

@@ -54,7 +54,7 @@ implements PropertyOrCollectionAccessorFacet {
     }
 
     protected final boolean isConfiguredToFilterForVisibility() {
-        return getConfiguration().getCore().getMetaModel().isFilterVisibility();
+        return getConfiguration().core().metaModel().filterVisibility();
     }
 
 }

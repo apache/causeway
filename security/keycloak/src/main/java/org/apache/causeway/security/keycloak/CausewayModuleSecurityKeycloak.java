@@ -82,8 +82,8 @@ public class CausewayModuleSecurityKeycloak {
             final List<LoginSuccessHandlerUNUSED> loginSuccessHandlersUNUSED,
             final List<LogoutHandler> logoutHandlers) throws Exception {
 
-        var successUrl = causewayConfiguration.getSecurity().getKeycloak().getLoginSuccessUrl();
-        var realm = causewayConfiguration.getSecurity().getKeycloak().getRealm();
+        var successUrl = causewayConfiguration.security().keycloak().loginSuccessUrl();
+        var realm = causewayConfiguration.security().keycloak().realm();
         var loginPage = OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
                 + "/" + realm;
 

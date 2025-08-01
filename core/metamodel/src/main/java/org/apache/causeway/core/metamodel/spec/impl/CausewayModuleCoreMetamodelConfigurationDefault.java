@@ -33,7 +33,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModelInitFilter;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
     SpecificationLoaderDefault.class,
 })

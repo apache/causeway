@@ -75,7 +75,7 @@ public interface HasMetaModelContext {
     default CausewayConfiguration getConfiguration() {
         return getMetaModelContext().getConfiguration();
     }
-    
+
     default ProgrammingModel getProgrammingModel() {
         return getMetaModelContext().getProgrammingModel();
     }
@@ -159,7 +159,7 @@ public interface HasMetaModelContext {
     default InteractionService getInteractionService() {
         return getMetaModelContext().getInteractionService();
     }
-    
+
     default CommandDtoFactory getCommandDtoFactory() {
         return getMetaModelContext().getCommandDtoFactory();
     }
@@ -226,15 +226,15 @@ public interface HasMetaModelContext {
     // -- VIEWER SHORTCUTS
 
     default Common getCommonViewerSettings() {
-        return getConfiguration().getViewer().getCommon();
+        return getConfiguration().viewer().common();
     }
 
     default Wicket getWicketViewerSettings() {
-        return getConfiguration().getViewer().getWicket();
+        return getConfiguration().viewer().wicket();
     }
 
     default Application getApplicationSettings() {
-        return getCommonViewerSettings().getApplication();
+        return getCommonViewerSettings().application();
     }
 
     /**

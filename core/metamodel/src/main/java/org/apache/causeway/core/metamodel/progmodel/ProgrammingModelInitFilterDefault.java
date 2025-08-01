@@ -50,7 +50,7 @@ public class ProgrammingModelInitFilterDefault implements ProgrammingModelInitFi
     @PostConstruct
     public void init() {
         var isIgnoreDeprecated =
-                configuration.getCore().getMetaModel().getProgrammingModel().isIgnoreDeprecated();
+                configuration.core().metaModel().programmingModel().ignoreDeprecated();
 
         this.filterOnMarker = isIgnoreDeprecated
                 ? excluding(EnumSet.of(ProgrammingModel.Marker.DEPRECATED))

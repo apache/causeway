@@ -155,11 +155,11 @@ public class WebModuleH2Console extends WebModuleAbstract {
         }
 
         private boolean isWebAllowRemoteAccess() {
-            return causewayConfiguration.getPrototyping().getH2Console().isWebAllowRemoteAccess();
+            return causewayConfiguration.prototyping().h2Console().webAllowRemoteAccess();
         }
 
         private boolean isGenerateRandomWebAdminPassword() {
-            return causewayConfiguration.getPrototyping().getH2Console().isGenerateRandomWebAdminPassword();
+            return causewayConfiguration.prototyping().h2Console().generateRandomWebAdminPassword();
         }
 
     }

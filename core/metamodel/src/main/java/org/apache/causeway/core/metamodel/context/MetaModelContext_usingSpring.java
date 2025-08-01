@@ -39,8 +39,8 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.ioc._IocContainer;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
@@ -58,8 +58,8 @@ import lombok.Getter;
 
 class MetaModelContext_usingSpring extends MetaModelContext {
 
-    private final _IocContainer iocContainer;
-    public MetaModelContext_usingSpring(final _IocContainer iocContainer) {
+    private final SpringContextHolder iocContainer;
+    public MetaModelContext_usingSpring(final SpringContextHolder iocContainer) {
         this.iocContainer = iocContainer;
     }
 
@@ -211,7 +211,7 @@ class MetaModelContext_usingSpring extends MetaModelContext {
                         LinkedHashMap::new));
     }
 
-    private ManagedObject toManagedObject(final _SingletonBeanProvider managedBeanAdapter) {
+    private ManagedObject toManagedObject(final SingletonBeanProvider managedBeanAdapter) {
         var servicePojo = managedBeanAdapter.getInstanceElseFail();
         return getSpecificationLoader()
                 .specForType(servicePojo.getClass())

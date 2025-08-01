@@ -83,7 +83,7 @@ public class DomainModelValidator {
     }
 
     private static boolean isRecreateRequired(final CausewayConfiguration configuration, final CausewaySystemEnvironment causewaySystemEnvironment) {
-        final IntrospectionMode mode = configuration.getCore().getMetaModel().getIntrospector().getMode();
+        final IntrospectionMode mode = configuration.core().metaModel().introspector().mode();
         switch (mode) {
             case FULL:
                 return false;

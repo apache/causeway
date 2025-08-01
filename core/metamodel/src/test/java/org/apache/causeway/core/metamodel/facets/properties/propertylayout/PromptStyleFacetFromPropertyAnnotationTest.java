@@ -39,7 +39,7 @@ import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleF
 
 class PromptStyleFacetFromPropertyAnnotationTest {
 
-    CausewayConfiguration stubConfiguration = CausewayConfiguration.builder().build();
+    CausewayConfiguration stubConfiguration = CausewayConfiguration.defaults();
 
     FacetHolder mockFacetHolder;
     PropertyLayout mockPropertyLayout;
@@ -79,7 +79,7 @@ class PromptStyleFacetFromPropertyAnnotationTest {
     @Test
     void when_annotated_with_as_configured() throws Exception {
 
-        stubConfiguration.getViewer().getWicket().setPromptStyle(PromptStyle.INLINE);
+        stubConfiguration.viewer().wicket().setPromptStyle(PromptStyle.INLINE);
 
         Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
         Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))

@@ -43,16 +43,18 @@ public class SchemaStrategySimple implements SchemaStrategy {
 
     @Override
     public String topLevelFieldNameFrom(CausewayConfiguration.Viewer.Graphql graphqlConfiguration) {
-        return graphqlConfiguration.getSchema().getSimple().getTopLevelFieldName();
+        return graphqlConfiguration.schema().simple().topLevelFieldName();
     }
 
+    @Override
     public Element newProperty(
             final ObjectInteractor holder,
             final OneToOneAssociation otoa,
             final Context context
     ) {
         return new SimpleProperty(holder, otoa, context);
-    };
+    }
+    @Override
     public Element newCollection(
             final ObjectInteractor holder,
             final OneToManyAssociation otma,
@@ -60,6 +62,7 @@ public class SchemaStrategySimple implements SchemaStrategy {
     ) {
         return new SimpleCollection(holder, otma, context);
     }
+    @Override
     public Element newAction(
             final ObjectInteractor holder,
             final ObjectAction objectAction,

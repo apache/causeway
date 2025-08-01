@@ -29,9 +29,16 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
+ * <h1>- internal use only -</h1>
+ * <p>
+ * Framework internal Bean provider support.
+ * <p>
+ * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ * These may be changed or removed without notice!
+ *
  * @since 2.0
  */
-public record _SingletonBeanProvider(
+public record SingletonBeanProvider(
         /**
          * Unique bean name (not an alias).
          * Corresponds to the logical-type-name (Causeway semantics).
@@ -44,18 +51,18 @@ public record _SingletonBeanProvider(
 
     // -- TEST FACTORIES
 
-    public static <T> _SingletonBeanProvider forTestingLazy(
+    public static <T> SingletonBeanProvider forTestingLazy(
             final String logicalTypeName, final Class<T> beanClass, final Supplier<T> beanProvider) {
-        return new _SingletonBeanProvider(logicalTypeName, beanClass, beanProvider);
+        return new SingletonBeanProvider(logicalTypeName, beanClass, beanProvider);
     }
 
-    public static <T> _SingletonBeanProvider forTestingLazy(
+    public static <T> SingletonBeanProvider forTestingLazy(
             final Class<T> beanClass, final Supplier<T> beanProvider) {
-        return new _SingletonBeanProvider(beanClass.getName(), beanClass, beanProvider);
+        return new SingletonBeanProvider(beanClass.getName(), beanClass, beanProvider);
     }
 
-    public static <T> _SingletonBeanProvider forTesting(final T bean) {
-        return new _SingletonBeanProvider(bean.getClass().getName(), bean.getClass(), ()->bean);
+    public static <T> SingletonBeanProvider forTesting(final T bean) {
+        return new SingletonBeanProvider(bean.getClass().getName(), bean.getClass(), ()->bean);
     }
 
     public Optional<?> lookupInstance() {
@@ -76,7 +83,7 @@ public record _SingletonBeanProvider(
 
     @Override
     public final boolean equals(final Object obj) {
-        return obj instanceof _SingletonBeanProvider other
+        return obj instanceof SingletonBeanProvider other
                 ? Objects.equals(this.id(), other.id())
                         && Objects.equals(this.beanClass(), other.beanClass())
                 : false;
@@ -92,7 +99,7 @@ public record _SingletonBeanProvider(
 
     // -- UTILITY
 
-    public static Predicate<_SingletonBeanProvider> satisfying(final Class<?> requiredType) {
+    public static Predicate<SingletonBeanProvider> satisfying(final Class<?> requiredType) {
         return singletonProvider->singletonProvider.isCandidateFor(requiredType);
     }
 

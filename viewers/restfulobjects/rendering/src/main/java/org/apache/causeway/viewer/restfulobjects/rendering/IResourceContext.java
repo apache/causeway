@@ -75,7 +75,7 @@ public interface IResourceContext extends HasMetaModelContext {
     boolean isValidateOnly();
 
     default Restfulobjects config() {
-        return getMetaModelContext().getConfiguration().getViewer().getRestfulobjects();
+        return getMetaModelContext().getConfiguration().viewer().restfulobjects();
     }
 
     /**

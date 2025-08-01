@@ -50,21 +50,21 @@ public final class MmEventUtils {
                     eventType,
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
-                    config.getApplib().getAnnotation().getAction().getDomainEvent().isPostForDefault());
+                    config.applib().annotation().action().domainEvent().postForDefault());
         }
         if(PropertyDomainEvent.class.isAssignableFrom(eventType)) {
             return MmEventUtils.eventTypeIsPostable(
                     eventType,
                     PropertyDomainEvent.Noop.class,
                     PropertyDomainEvent.Default.class,
-                    config.getApplib().getAnnotation().getProperty().getDomainEvent().isPostForDefault());
+                    config.applib().annotation().property().domainEvent().postForDefault());
         }
         if(CollectionDomainEvent.class.isAssignableFrom(eventType)) {
             return MmEventUtils.eventTypeIsPostable(
                     eventType,
                     CollectionDomainEvent.Noop.class,
                     CollectionDomainEvent.Default.class,
-                    config.getApplib().getAnnotation().getCollection().getDomainEvent().isPostForDefault());
+                    config.applib().annotation().collection().domainEvent().postForDefault());
         }
         return false;
     }

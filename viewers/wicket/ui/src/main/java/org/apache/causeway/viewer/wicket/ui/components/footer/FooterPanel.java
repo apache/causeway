@@ -76,7 +76,7 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addCredits() {
 
-        var credits = super.getCommonViewerSettings().getCredit();
+        var credits = super.getCommonViewerSettings().credit();
         var hasAnyCredits = !_NullSafe.isEmpty(credits);
 
         var creditItems = new RepeatingView("creditItems");
@@ -95,10 +95,10 @@ extends PanelAbstract<String, Model<String>> {
                 var creditLink = newCreditLinkComponent(credit);
                 listItem.add(creditLink);
 
-                var imageUrl = webAppContextPath.prependContextPathIfLocal(credit.getImage());
+                var imageUrl = webAppContextPath.prependContextPathIfLocal(credit.image());
 
                 creditLink.add(new CreditImage("creditImage", imageUrl));
-                creditLink.add(new CreditName("creditName", credit.getName()));
+                creditLink.add(new CreditName("creditName", credit.name()));
 
             });
         }
@@ -111,9 +111,9 @@ extends PanelAbstract<String, Model<String>> {
 
         var creditLinkId = "creditLink";
 
-        final WebMarkupContainer creditLink = (credit.getUrl() != null)
+        final WebMarkupContainer creditLink = (credit.url() != null)
 
-                ? new ExternalLink(creditLinkId, credit.getUrl()) {
+                ? new ExternalLink(creditLinkId, credit.url()) {
                         private static final long serialVersionUID = 1L;
 
                         @Override
@@ -130,7 +130,7 @@ extends PanelAbstract<String, Model<String>> {
 
     private void addBreadcrumbs() {
 
-        boolean showBreadcrumbs = getWicketViewerSettings().getBookmarkedPages().isShowDropDownOnFooter();
+        boolean showBreadcrumbs = getWicketViewerSettings().bookmarkedPages().showDropDownOnFooter();
         final Component breadcrumbPanel =
                 showBreadcrumbs
                 ? new BreadcrumbPanel(ID_BREADCRUMBS)
@@ -142,7 +142,7 @@ extends PanelAbstract<String, Model<String>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        final boolean showFooter = getWicketViewerSettings().isShowFooter();
+        final boolean showFooter = getWicketViewerSettings().showFooter();
 
         if(!showFooter) {
             setVisible(false);
@@ -159,7 +159,7 @@ extends PanelAbstract<String, Model<String>> {
         add(aboutLink);
 
         final String applicationVersion =
-                getApplicationSettings().getVersion();
+                getApplicationSettings().version();
 
         Wkt.labelAdd(aboutLink, ID_ABOUT_MESSAGE,
                 _Strings.isNotEmpty(applicationVersion)

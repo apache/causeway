@@ -136,7 +136,7 @@ public class ConverterTester<T extends Serializable> {
     }
 
     public CausewayConfiguration.ValueTypes.BigDecimal getConfigurationForBigDecimalValueType() {
-        return mmc.getConfiguration().getValueTypes().getBigDecimal();
+        return mmc.getConfiguration().valueTypes().bigDecimal();
     }
 
     /**

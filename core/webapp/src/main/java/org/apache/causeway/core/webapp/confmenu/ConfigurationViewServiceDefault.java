@@ -99,7 +99,7 @@ implements
         var sb = new StringBuilder();
 
         String head = String.format("APACHE CAUSEWAY %s (%s) ",
-                configuration.getViewer().getCommon().getApplication().getVersion(),
+                configuration.viewer().common().application().version(),
                 systemEnvironment.getDeploymentType().name());
 
         final Map<String, ConfigurationProperty> map = scopedConf.get().get(Scope.PRIMARY.ordinal());
@@ -157,7 +157,7 @@ implements
 
     private Map<String, ConfigurationProperty> loadEnvironment() {
         final Map<String, ConfigurationProperty> map = _Maps.newTreeMap();
-        add("Causeway Version", configuration.getViewer().getCommon().getApplication().getVersion(), map);
+        add("Causeway Version", configuration.viewer().common().application().version(), map);
         add("Deployment Type", systemEnvironment.getDeploymentType().name(), map);
         //add("Unit Testing", ""+systemEnvironment.isUnitTesting(), map);
 
@@ -233,7 +233,7 @@ implements
         }
         return map;
     }
-    
+
     private static void logRetrievalFailure(final String propName, Throwable error) {
         log.warn("failed to load configuration property '{}'", propName, error);
     }
@@ -262,9 +262,9 @@ implements
 
     private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {
         return Optional.ofNullable(
-                configuration.getCore().getConfig().getConfigurationPropertyVisibilityPolicy())
+                configuration.core().config().configurationPropertyVisibilityPolicy())
                 // fallback to configuration default policy
-                .orElseGet(()->new CausewayConfiguration.Core.Config().getConfigurationPropertyVisibilityPolicy());
+                .orElseGet(()->CausewayConfiguration.Core.Config.defaults().configurationPropertyVisibilityPolicy());
     }
 
 }

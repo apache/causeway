@@ -206,7 +206,7 @@ public class WktTooltips {
     private static TextMode getTooltipTextMode() {
         var textMode = MetaModelContext.instance()
                 .map(MetaModelContext::getConfiguration)
-                .map(cfg->cfg.getViewer().getWicket().getTooltipTextMode())
+                .map(cfg->cfg.viewer().wicket().tooltipTextMode())
                 .orElseGet(TextMode::defaults);
         return textMode;
     }

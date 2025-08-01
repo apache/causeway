@@ -41,7 +41,7 @@ extends ImmutableFacetAbstract {
             final FacetHolder holder) {
 
         final boolean editingDisabledByDefault =
-                configuration.getApplib().getAnnotation().getDomainObject().getEditing()
+                configuration.applib().annotation().domainObject().editing()
                 == DomainObjectConfigOptions.EditingObjectsConfiguration.FALSE;
 
         if(domainObjectIfAny.isPresent()) {

@@ -110,18 +110,18 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             final DataSource dataSource,
             final CausewayConfiguration causewayConfiguration) {
 
-        var persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.persistence().schema();
 
-        if(!persistenceSchemaConf.getAutoCreateSchemas().isEmpty()) {
+        if(!persistenceSchemaConf.autoCreateSchemas().isEmpty()) {
 
-            log.info("about to create db schema(s) {}", persistenceSchemaConf.getAutoCreateSchemas());
+            log.info("about to create db schema(s) {}", persistenceSchemaConf.autoCreateSchemas());
 
             try(var con = dataSource.getConnection()){
 
                 var s = con.createStatement();
 
-                for(var schema : persistenceSchemaConf.getAutoCreateSchemas()) {
-                    s.execute(persistenceSchemaConf.getCreateSchemaSqlTemplate().formatted(schema));
+                for(var schema : persistenceSchemaConf.autoCreateSchemas()) {
+                    s.execute(persistenceSchemaConf.createSchemaSqlTemplate().formatted(schema));
                 }
 
             }
@@ -137,9 +137,9 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
             final JpaProperties properties,
             final CausewayConfiguration causewayConfiguration) {
 
-        var persistenceSchemaConf = causewayConfiguration.getPersistence().getSchema();
+        var persistenceSchemaConf = causewayConfiguration.persistence().schema();
 
-        persistenceSchemaConf.getAdditionalOrmFiles()
+        persistenceSchemaConf.additionalOrmFiles()
             .forEach(schema->properties.getMappingResources()
                 .add("META-INF/orm-%s.xml".formatted(schema)));
 

@@ -93,7 +93,7 @@ implements RepositoryService, HasMetaModelContext {
     @PostConstruct
     public void init() {
         var disableAutoFlush =
-                causewayConfiguration.getPersistence().getCommons().getRepositoryService().isDisableAutoFlush();
+                causewayConfiguration.persistence().commons().repositoryService().disableAutoFlush();
         this.autoFlush = !disableAutoFlush;
     }
 

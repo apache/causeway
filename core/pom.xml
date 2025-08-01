@@ -56,6 +56,7 @@
         <module>config</module>
         <module>interaction</module>
         <module>internaltestsupport</module>
+        <module>configtest</module>
         <module>metamodel</module>
         <module>runtime</module>
         <module>runtimeservices</module>

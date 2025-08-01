@@ -42,7 +42,7 @@ class ExceptionRecognizerForDataAccessExceptionTest {
 
     @BeforeEach
     public void setUp() {
-        var conf = CausewayConfiguration.builder().build();
+        var conf = CausewayConfiguration.defaults();
         recognizerForDae = new ExceptionRecognizerForDataAccessException(conf);
     }
 

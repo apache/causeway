@@ -68,7 +68,7 @@ class DomainModelTest_usingBadDomain_noAnnotationEnforced extends CausewayIntegr
     @Test
     void actionAnnotation_shouldBeOptionalByThisTestClass() {
         assertFalse(configuration
-                .getCore().getMetaModel().getIntrospector().getPolicy()
+                .core().metaModel().introspector().policy()
                 .getMemberAnnotationPolicy().isMemberAnnotationsRequired());
     }
 

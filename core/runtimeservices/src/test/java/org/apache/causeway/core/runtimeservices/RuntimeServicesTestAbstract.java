@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.ioc._SingletonBeanProvider;
+import org.apache.causeway.commons.internal.ioc.SingletonBeanProvider;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting;
 import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -71,7 +71,7 @@ implements HasMetaModelContext {
         onSetUp(mmcBuilder);
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsMarshallerService.class, ()->{
                     var jaxbService = getServiceRegistry().lookupServiceElseFail(JaxbService.class);
                     return new MenuBarsMarshallerServiceBootstrap(
@@ -79,7 +79,7 @@ implements HasMetaModelContext {
                 }));
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsLoaderService.class, ()->{
                     return new MenuBarsLoaderServiceDefault(
                             menubarsLayoutXmlResourceRef,
@@ -87,7 +87,7 @@ implements HasMetaModelContext {
                 }));
 
         mmcBuilder.singletonProvider(
-                _SingletonBeanProvider
+                SingletonBeanProvider
                 .forTestingLazy(MenuBarsService.class, ()->{
 
                     var messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
@@ -104,7 +104,7 @@ implements HasMetaModelContext {
 
         metaModelContext = mmcBuilder.build();
 
-        getConfiguration().getCore().getMetaModel().getIntrospector().setLockAfterFullIntrospection(false);
+        getConfiguration().core().metaModel().introspector().setLockAfterFullIntrospection(false);
 
         afterSetUp();
     }

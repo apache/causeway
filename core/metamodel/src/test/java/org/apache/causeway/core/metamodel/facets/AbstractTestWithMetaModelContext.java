@@ -48,7 +48,7 @@ implements HasMetaModelContext {
     protected final void setupWithProgrammingModel(final BiConsumer<MetaModelContext, ProgrammingModelAbstract> factory) {
         metaModelContext = MetaModelContext_forTesting.builder()
                 .programmingModelFactory((mmc, refiners)->{
-                    var progModel = new ProgrammingModelAbstract(mmc) {
+                    var progModel = new ProgrammingModelAbstract(mmc.getServiceInjector()) {
                         @Override protected void assertNotInitialized(){}
                         @Override public MixinNamingStrategy mixinNamingStrategy() {
                             throw _Exceptions.notImplemented();

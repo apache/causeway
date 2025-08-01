@@ -95,8 +95,8 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
     @Test
     void columns() {
-        testerFactory.getMetaModelContext().getConfiguration().getApplib().getAnnotation()
-            .getPropertyLayout().setSequencePolicyIfUnreferenced(
+        testerFactory.getMetaModelContext().getConfiguration().applib().annotation()
+            .propertyLayout().setSequencePolicyIfUnreferenced(
                     AssociationLayoutConfigOptions.SequencePolicy.AS_PER_SEQUENCE);
 
         var tableTester =
@@ -108,8 +108,8 @@ class CollectionInteractionTest extends InteractionTestAbstract {
 
     //@Test cannot figure out how to reload the grid after was loaded in previous test
     void columns2() {
-        testerFactory.getMetaModelContext().getConfiguration().getApplib().getAnnotation()
-            .getPropertyLayout().setSequencePolicyIfUnreferenced(
+        testerFactory.getMetaModelContext().getConfiguration().applib().annotation()
+            .propertyLayout().setSequencePolicyIfUnreferenced(
                     AssociationLayoutConfigOptions.SequencePolicy.ALPHABETICALLY);
 
         var tableTester =

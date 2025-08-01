@@ -55,7 +55,7 @@ extends FacetFactoryTestAbstract {
     }
 
     void allowingPublishingConfigurationToReturn(final ActionConfigOptions.PublishingPolicy value) {
-        getConfiguration().getApplib().getAnnotation().getAction().setExecutionPublishing(value);
+        getConfiguration().applib().annotation().action().setExecutionPublishing(value);
     }
 
 }

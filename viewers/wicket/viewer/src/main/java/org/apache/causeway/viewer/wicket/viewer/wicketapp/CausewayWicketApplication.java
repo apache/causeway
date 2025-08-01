@@ -212,7 +212,7 @@ implements
 
             //XXX CAUSEWAY-2530, don't recreate expired pages
             getPageSettings().setRecreateBookmarkablePagesAfterExpiry(false);
-            getMarkupSettings().setStripWicketTags(configuration.getViewer().getWicket().isStripWicketTags());
+            getMarkupSettings().setStripWicketTags(configuration.viewer().wicket().stripWicketTags());
 
             configureSecurity(configuration);
 
@@ -257,9 +257,9 @@ implements
      * protected visibility to allow ad-hoc overriding of some other authentication strategy.
      */
     protected IAuthenticationStrategy newAuthenticationStrategy(final CausewayConfiguration configuration) {
-        var rememberMe = configuration.getViewer().getWicket().getRememberMe();
-        var cookieKey = rememberMe.getCookieKey();
-        var encryptionKey = rememberMe.getEncryptionKey().orElse(defaultEncryptionKey());
+        var rememberMe = configuration.viewer().wicket().rememberMe();
+        var cookieKey = rememberMe.cookieKey();
+        var encryptionKey = rememberMe.encryptionKey().orElse(defaultEncryptionKey());
         return new DefaultAuthenticationStrategy(cookieKey, _CryptFactory.sunJceCrypt(encryptionKey));
     }
 

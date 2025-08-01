@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.accmngt.password_reset;
 
-import java.util.concurrent.Callable;
-
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -49,7 +47,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
     private PasswordResetPage(final PageParameters parameters, ExceptionModel exceptionModel) {
         super(parameters, exceptionModel);
 
-        boolean suppressPasswordResetLink = getWicketViewerSettings().isSuppressPasswordReset();
+        boolean suppressPasswordResetLink = getWicketViewerSettings().suppressPasswordReset();
         if(suppressPasswordResetLink) {
             throw new RestartResponseAtInterceptPageException(WicketSignInPage.class);
         }
@@ -73,14 +71,11 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                 error(getString("passwordResetExpiredOrInvalidToken"));
                 addOrReplace(addPasswordResetEmailPanel(ID_CONTENT_PANEL));
             } else {
-                Boolean emailExists = getInteractionService().callAnonymous(new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() throws Exception {
-                        var serviceRegistry = getServiceRegistry();
-                        var userRegistrationService = serviceRegistry
-                                .lookupServiceElseFail(UserRegistrationService.class);
-                        return userRegistrationService.emailExists(email);
-                    }
+                Boolean emailExists = getInteractionService().callAnonymous(() -> {
+                    var serviceRegistry = getServiceRegistry();
+                    var userRegistrationService = serviceRegistry
+                            .lookupServiceElseFail(UserRegistrationService.class);
+                    return userRegistrationService.emailExists(email);
                 });
                 if (!emailExists) {
                     error(getString("noUserForAnEmailValidToken"));

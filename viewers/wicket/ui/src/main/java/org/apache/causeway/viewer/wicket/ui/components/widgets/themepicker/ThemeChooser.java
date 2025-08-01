@@ -154,7 +154,7 @@ extends PanelAbstract<Void, IModel<Void>> {
     protected void onConfigure() {
         super.onConfigure();
 
-        boolean shouldShow = getWicketViewerSettings().getThemes().isShowChooser();
+        boolean shouldShow = getWicketViewerSettings().themes().showChooser();
         setVisible(shouldShow);
     }
 

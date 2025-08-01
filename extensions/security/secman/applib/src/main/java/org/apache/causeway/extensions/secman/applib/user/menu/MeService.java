@@ -113,7 +113,7 @@ public class MeService {
 
         @EventListener(UserMenu.me.ActionDomainEvent.class)
         public void on(final UserMenu.me.ActionDomainEvent event) {
-            switch (causewayConfiguration.getExtensions().getSecman().getUserMenuMeActionPolicy()) {
+            switch (causewayConfiguration.extensions().secman().userMenuMeActionPolicy()) {
                 case HIDE:
                     event.hide();
                     break;

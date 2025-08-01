@@ -157,7 +157,7 @@ public abstract class ElementCustom
     }
 
     protected boolean inApiScope(ObjectAction act) {
-        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
+        if (graphqlConfiguration.apiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
             return true;
         }
         var returnType = act.getElementType();
@@ -166,7 +166,7 @@ public abstract class ElementCustom
     }
 
     protected boolean inApiScope(final ObjectAssociation objAssoc) {
-        if (graphqlConfiguration.getApiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
+        if (graphqlConfiguration.apiScope() == CausewayConfiguration.Viewer.Graphql.ApiScope.ALL) {
             return true;
         }
         return objAssoc.getElementType().isViewModelOrValue();

@@ -184,7 +184,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().isSuppressDescribedByLinks()) {
+        if(resourceContext.config().suppressDescribedByLinks()) {
             return;
         }
         final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();

@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
@@ -56,7 +57,6 @@ import org.apache.causeway.core.security.authentication.InteractionContextFactor
 
 import lombok.Builder;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public abstract class FacetFactoryTestAbstract
 implements HasMetaModelContext {
@@ -144,10 +144,10 @@ implements HasMetaModelContext {
         methodRemover = new MethodRemover_forTesting();
 
         metaModelContext = setUpMmc(MetaModelContext_forTesting.builder()
-                .translationService(mockTranslationService)
-                .interactionService(mockInteractionService)
-                .memberExecutor(mockMemberExecutorService)
-                .valueSemantic(new IntValueSemantics()));
+            .translationService(mockTranslationService)
+            .interactionService(mockInteractionService)
+            .memberExecutor(mockMemberExecutorService)
+            .valueSemantic(new IntValueSemantics()));
 
         Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
     }

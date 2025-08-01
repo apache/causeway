@@ -55,8 +55,8 @@ public record LayoutPrefixFacetForUiEvent(
                         layoutUiEvent,
                         LayoutUiEvent.Noop.class,
                         LayoutUiEvent.Default.class,
-                        facetHolder.getConfiguration().getApplib().getAnnotation()
-                            .getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
+                        facetHolder.getConfiguration().applib().annotation()
+                            .domainObjectLayout().layoutUiEvent().postForDefault()))
                 .map(layoutUiEvent -> new LayoutPrefixFacetForUiEvent("DomainObjectLayoutAnnotationWithLayoutUiEvent",
                     _Casts.uncheckedCast(layoutUiEvent), metamodelEventService,
                     facetHolder, Precedence.EVENT));

@@ -129,7 +129,7 @@ implements
 
     @Override
     public BigDecimal parseTextRepresentation(final ValueSemanticsProvider.Context context, final String text) {
-        var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.getValueTypes().getBigDecimal())
+        var parsePolicy = isUseGroupingSeparatorFrom(causewayConfiguration.valueTypes().bigDecimal())
                                 ? GroupingSeparatorPolicy.ALLOW
                                 : GroupingSeparatorPolicy.DISALLOW;
         return super.parseDecimal(context, text, parsePolicy)
@@ -137,7 +137,7 @@ implements
     }
 
     private boolean isUseGroupingSeparatorFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return bigDecimalConfig.getEditing().isUseGroupingSeparator() || bigDecimalConfig.getDisplay().isUseGroupingSeparator();
+        return bigDecimalConfig.editing().useGroupingSeparator() || bigDecimalConfig.display().useGroupingSeparator();
     }
 
     @Override
@@ -149,11 +149,11 @@ implements
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
 
-        var bigDecimalConfig = causewayConfiguration.getValueTypes().getBigDecimal();
+        var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
         format.setGroupingUsed(
                 usedFor == PARSING
-                    ? bigDecimalConfig.getEditing().isUseGroupingSeparator()
-                    : bigDecimalConfig.getDisplay().isUseGroupingSeparator()
+                    ? bigDecimalConfig.editing().useGroupingSeparator()
+                    : bigDecimalConfig.display().useGroupingSeparator()
         );
 
         if(context==null) return;
@@ -169,7 +169,7 @@ implements
         // we skip this when PARSING,
         // because we want to firstly parse any number value into a BigDecimal,
         // no matter the minimumFractionDigits, which can always be filled up with '0' digits later
-        if(usedFor.isRendering() || bigDecimalConfig.getEditing().isPreserveScale()) {
+        if(usedFor.isRendering() || bigDecimalConfig.editing().preserveScale()) {
 
             // if there is a facet specifying minFractionalDigits (ie the scale), then apply it
             OptionalInt optionalInt = Facets.minFractionalDigits(feature);
@@ -184,8 +184,8 @@ implements
     }
 
     private static Optional<Integer> minScaleFrom(final CausewayConfiguration.ValueTypes.BigDecimal bigDecimalConfig) {
-        return Optional.ofNullable(bigDecimalConfig.getDisplay().getMinScale())
-                       .or(() -> Optional.ofNullable(bigDecimalConfig.getDisplay().getMinScale()));
+        return Optional.ofNullable(bigDecimalConfig.display().minScale())
+                       .or(() -> Optional.ofNullable(bigDecimalConfig.display().minScale()));
     }
 
     @Override

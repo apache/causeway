@@ -53,7 +53,7 @@ class TemporalValueSemanticsProviderTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        editingPattern = (new CausewayConfiguration.ValueTypes.Temporal()).getEditing();
+        editingPattern = (CausewayConfiguration.ValueTypes.Temporal.defaults()).editing();
     }
 
     @ParameterizedTest

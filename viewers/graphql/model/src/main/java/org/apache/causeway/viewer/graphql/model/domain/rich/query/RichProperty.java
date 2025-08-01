@@ -101,7 +101,7 @@ public class RichProperty
     }
 
     private boolean isSetterAllowed() {
-        var apiVariant = context.causewayConfiguration.getViewer().getGraphql().getApiVariant();
+        var apiVariant = context.causewayConfiguration.viewer().graphql().apiVariant();
         switch (apiVariant) {
             case QUERY_ONLY:
             case QUERY_AND_MUTATIONS:
@@ -122,6 +122,7 @@ public class RichProperty
         return getOneToOneAssociation().getElementType().getCorrespondingClass() == Clob.class;
     }
 
+    @Override
     public void addGqlArgument(
             final OneToOneAssociation oneToOneAssociation,
             final GraphQLFieldDefinition.Builder builder,

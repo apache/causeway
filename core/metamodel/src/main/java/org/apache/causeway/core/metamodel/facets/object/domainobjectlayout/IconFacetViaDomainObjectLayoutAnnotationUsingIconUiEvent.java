@@ -47,8 +47,8 @@ extends IconFacetAbstract {
                         iconUiEvent,
                         IconUiEvent.Noop.class,
                         IconUiEvent.Default.class,
-                        facetHolder.getConfiguration().getApplib().getAnnotation()
-                            .getDomainObjectLayout().getIconUiEvent().isPostForDefault()))
+                        facetHolder.getConfiguration().applib().annotation()
+                            .domainObjectLayout().iconUiEvent().postForDefault()))
                 .map(iconUiEvent -> {
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
                             iconUiEvent, metamodelEventService, facetHolder);

@@ -180,7 +180,8 @@ public class CommandDtoFactoryDefault implements CommandDtoFactory {
     }
 
     private boolean isParamIdentifierStrategySetToUseId() {
-        return causewayConfiguration.getSchema().getCommand().getParamIdentifierStrategy() == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
+        return causewayConfiguration.schema().command().paramIdentifierStrategy()
+            == CausewayConfiguration.Schema.Command.ParamIdentifierStrategy.BY_ID;
     }
 
 }

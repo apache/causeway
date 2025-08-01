@@ -31,7 +31,7 @@ public final class CollectionLayoutConfigOptions {
         }
 
         public static DefaultView from(final CausewayConfiguration configuration) {
-            return configuration.getApplib().getAnnotation().getCollectionLayout().getDefaultView();
+            return configuration.applib().annotation().collectionLayout().defaultView();
         }
 
     }

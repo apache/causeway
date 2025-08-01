@@ -48,9 +48,9 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
     @BeforeEach
     void setup() {
 
-        var causewayConfiguration = CausewayConfiguration.builder().build();
-        causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setApiKey(getApiKey());
-        causewayConfiguration.getExtensions().getLayoutLoaders().getGithub().setRepository("apache/causeway-app-simpleapp");
+        var causewayConfiguration = CausewayConfiguration.defaults();
+        causewayConfiguration.extensions().layoutLoaders().github().setApiKey(getApiKey());
+        causewayConfiguration.extensions().layoutLoaders().github().setRepository("apache/causeway-app-simpleapp");
 
         var module = new CausewayModuleExtLayoutLoadersGithub();
         var restTemplateForSearch = module.restTemplateForGithubSearch(causewayConfiguration);
@@ -61,7 +61,8 @@ class LayoutResourceLoaderFromGithub_tryLoadLayoutResource_Test {
         layoutLoaderMenu.new enableDynamicLayoutLoading().act();
         Assertions.assertThat(layoutLoaderMenu.isEnabled()).isTrue();
 
-        loader = new LayoutResourceLoaderFromGithub(restTemplateForSearch, restTemplateForContent, causewayConfiguration, layoutLoaderMenu, () -> queryResultsCache);
+        loader = new LayoutResourceLoaderFromGithub(restTemplateForSearch, restTemplateForContent, causewayConfiguration,
+            layoutLoaderMenu, () -> queryResultsCache);
     }
 
     @Test

@@ -71,7 +71,7 @@ abstract class ValueSemanticsProviderAbstractTestCase<T> {
         Locale.setDefault(Locale.UK);
 
         mockInteractionService = Mockito.mock(InteractionService.class);
-        causewayConfiguration = new CausewayConfiguration(null, Optional.empty());
+        causewayConfiguration = CausewayConfiguration.defaults();
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .interactionService(mockInteractionService)

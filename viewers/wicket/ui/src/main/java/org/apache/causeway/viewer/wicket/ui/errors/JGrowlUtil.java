@@ -32,17 +32,17 @@ public class JGrowlUtil {
     static enum MessageSeverity {
         INFO {
             @Override long delayMillis(final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
-                return messagePopups.getInfoDelay().toMillis();
+                return messagePopups.infoDelay().toMillis();
             }
         },
         WARNING {
             @Override long delayMillis(final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
-                return messagePopups.getWarningDelay().toMillis();
+                return messagePopups.warningDelay().toMillis();
             }
         }, // sticky
         DANGER{
             @Override long delayMillis(final CausewayConfiguration.Viewer.Wicket.MessagePopups messagePopups) {
-                return messagePopups.getErrorDelay().toMillis();
+                return messagePopups.errorDelay().toMillis();
             }
         } // sticky
         ;
@@ -57,7 +57,7 @@ public class JGrowlUtil {
     public String asJGrowlCalls(final MessageBroker messageBroker, final CausewayConfiguration configuration) {
         var buf = new StringBuilder();
 
-        var messagePopupConfig = configuration.getViewer().getWicket().getMessagePopups();
+        var messagePopupConfig = configuration.viewer().wicket().messagePopups();
         for (String info : messageBroker.drainMessages()) {
             addJGrowlCall(info, JGrowlUtil.MessageSeverity.INFO, messagePopupConfig, buf);
         }
@@ -88,8 +88,8 @@ public class JGrowlUtil {
         buf.append(", {");
         buf.append("type: \"").append(severity.cssClassSuffix()).append('"');
         buf.append(String.format(", delay: %d", severity.delayMillis(messagePopups)));
-        buf.append(String.format(", placement: { from: '%s', align: '%s' }", messagePopups.getPlacement().getVertical().name().toLowerCase(), messagePopups.getPlacement().getHorizontal().name().toLowerCase()));
-        buf.append(String.format(", offset: %d", messagePopups.getOffset()));
+        buf.append(String.format(", placement: { from: '%s', align: '%s' }", messagePopups.placement().vertical().name().toLowerCase(), messagePopups.placement().horizontal().name().toLowerCase()));
+        buf.append(String.format(", offset: %d", messagePopups.offset()));
         buf.append('}');
         buf.append(");\n");
     }

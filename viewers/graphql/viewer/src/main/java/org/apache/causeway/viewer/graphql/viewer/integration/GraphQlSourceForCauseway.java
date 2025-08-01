@@ -66,7 +66,7 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
         this.context = context;
         this.executionStrategy = executionStrategy;
 
-        this.graphqlConfiguration = causewayConfiguration.getViewer().getGraphql();
+        this.graphqlConfiguration = causewayConfiguration.viewer().graphql();
     }
 
     @PostConstruct
@@ -99,8 +99,8 @@ public class GraphQlSourceForCauseway implements GraphQlSource {
             throw new IllegalStateException("Metamodel is not fully introspected");
         }
 
-        var topLevelQuery = determineTopLevelQueryFrom(graphqlConfiguration.getSchemaStyle());
-        var topLevelMutation = determineTopLevelMutationFrom(graphqlConfiguration.getSchemaStyle());
+        var topLevelQuery = determineTopLevelQueryFrom(graphqlConfiguration.schemaStyle());
+        var topLevelMutation = determineTopLevelMutationFrom(graphqlConfiguration.schemaStyle());
 
         topLevelQuery.addDataFetchers();
         topLevelMutation.addDataFetchers();

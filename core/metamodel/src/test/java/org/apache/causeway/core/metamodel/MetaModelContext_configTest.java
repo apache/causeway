@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 class MetaModelContext_configTest {
 
     private MetaModelContext mmc;
-    
+
     @BeforeEach
     void setUp() {
         mmc = MetaModelContext_forTesting.buildDefault();
@@ -42,20 +42,6 @@ class MetaModelContext_configTest {
         assertEquals(null, environment().getProperty("test"));
     }
 
-    @Test
-    void shouldAllowOverrideForTesting() {
-
-        mmcForTesting()
-        .runWithConfigProperties(
-            map->map.put("test", "Hello World!"),
-            ()->{
-                assertEquals("Hello World!", environment().getProperty("test"));
-            });
-
-        // expected post condition
-        assertEquals(null, environment().getProperty("test"));
-    }
-
     // -- HELPER
 
     private MetaModelContext_forTesting mmcForTesting() {
@@ -63,7 +49,7 @@ class MetaModelContext_configTest {
     }
 
     private ConfigurableEnvironment environment() {
-        return mmcForTesting().getConfiguration().getEnvironment();
+        return mmcForTesting().getConfiguration().environment();
     }
-    
+
 }

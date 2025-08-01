@@ -233,8 +233,8 @@ implements HasMetaModelContext {
     }
 
     private String timezoneCookieName() {
-        var rememberMe = getConfiguration().getViewer().getWicket().getRememberMe();
-        var cookieName = rememberMe.getCookieKey()+"_tz";
+        var rememberMe = getConfiguration().viewer().wicket().rememberMe();
+        var cookieName = rememberMe.cookieKey()+"_tz";
         return cookieName;
     }
 
@@ -310,7 +310,7 @@ implements HasMetaModelContext {
             return getMetaModelContext().getServiceRegistry().lookupService(TimeZoneChoiceProvider.class)
                     .orElseGet(TimeZoneChoiceProvider::fallback);
         }
-        
+
     }
 
     /**

@@ -97,7 +97,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
         _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
-        this.indicatorAppenderIfAny = getSettings().isUseIndicatorForNoArgAction()
+        this.indicatorAppenderIfAny = getSettings().useIndicatorForNoArgAction()
                 ? new AjaxIndicatorAppender()
                 : null;
 
@@ -123,7 +123,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     @Override
     protected void updateAjaxAttributes(final AjaxRequestAttributes attributes) {
         super.updateAjaxAttributes(attributes);
-        if(getSettings().isPreventDoubleClickForNoArgAction()) {
+        if(getSettings().preventDoubleClickForNoArgAction()) {
             PanelUtil.disableBeforeReenableOnComplete(attributes, this);
         }
 
@@ -261,7 +261,7 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     }
 
     public Wicket getSettings() {
-        return getMetaModelContext().getConfiguration().getViewer().getWicket();
+        return getMetaModelContext().getConfiguration().viewer().wicket();
     }
 
     @Override

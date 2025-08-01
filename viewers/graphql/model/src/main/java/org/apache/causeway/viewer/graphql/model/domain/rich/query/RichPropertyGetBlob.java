@@ -47,7 +47,7 @@ public class RichPropertyGetBlob
         super(TypeNames.propertyLobTypeNameFor(memberInteractor.getObjectSpecification(), memberInteractor.getObjectMember(), memberInteractor.getSchemaType()), context);
         this.memberInteractor = memberInteractor;
 
-        this.graphqlConfiguration = context.causewayConfiguration.getViewer().getGraphql();
+        this.graphqlConfiguration = context.causewayConfiguration.viewer().graphql();
 
         if (isBuilt()) {
             // type already exists, nothing else to do.
@@ -68,7 +68,7 @@ public class RichPropertyGetBlob
     }
 
     private boolean isResourceNotForbidden() {
-        return graphqlConfiguration.getResources().getResponseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
+        return graphqlConfiguration.resources().responseType() != CausewayConfiguration.Viewer.Graphql.ResponseType.FORBIDDEN;
     }
 
     @Override

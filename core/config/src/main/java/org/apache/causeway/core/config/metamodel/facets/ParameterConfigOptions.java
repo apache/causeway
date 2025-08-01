@@ -51,7 +51,7 @@ public final class ParameterConfigOptions {
 
     public static PrecedingParametersPolicy precedingParametersPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getParameter().getPrecedingParametersPolicy();
+        return configuration.applib().annotation().parameter().precedingParametersPolicy();
     }
 
 }

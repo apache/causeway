@@ -46,12 +46,12 @@ class ViewModelSemanticCheckingFacetFactoryTest {
     @BeforeEach
     public void setUp() throws Exception {
 
-        var configuration = CausewayConfiguration.builder().build();
-        configuration.getApplib().getAnnotation().getViewModel().getValidation().getSemanticChecking().setEnable(true);
+        var configuration = CausewayConfiguration.defaults();
+        configuration.applib().annotation().viewModel().validation().semanticChecking().setEnable(true);
 
         metaModelContext = MetaModelContext_forTesting.builder()
                 .configuration(configuration)
-                .programmingModelFactory((mmc, refiners)->new ProgrammingModelAbstract(mmc) {
+                .programmingModelFactory((mmc, refiners)->new ProgrammingModelAbstract(mmc.getServiceInjector()) {
                     @Override public MixinNamingStrategy mixinNamingStrategy() {
                         throw _Exceptions.notImplemented();
                     }

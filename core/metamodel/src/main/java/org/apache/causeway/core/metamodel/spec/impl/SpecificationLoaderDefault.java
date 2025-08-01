@@ -159,7 +159,7 @@ implements
         this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
         this.valueSemanticsResolver = valueSemanticsRegistry;
         this.classSubstitutorRegistry = classSubstitutorRegistry;
-        this.parallel = causewayConfiguration.getCore().getMetaModel().getIntrospector().isParallelize();
+        this.parallel = causewayConfiguration.core().metaModel().introspector().parallelize();
     }
 
     /** JUnit Test Support */
@@ -391,7 +391,7 @@ implements
             // getValidationResult() is lazily populated later on first request anyway
             return;
         }
-        if(!causewayConfiguration.getCore().getMetaModel().getIntrospector().isValidateIncrementally()) {
+        if(!causewayConfiguration.core().metaModel().introspector().validateIncrementally()) {
             // re-validation after the initial one can be turned off by means of above config option
             return;
         }

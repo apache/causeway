@@ -30,16 +30,16 @@ import org.apache.causeway.extensions.secman.applib.user.fixtures.AbstractUserAn
  */
 public class CausewayExtSecmanAdminUser extends AbstractUserAndRolesFixtureScript {
 
-    public CausewayExtSecmanAdminUser(final Secman config, String... roleNames) {
+    public CausewayExtSecmanAdminUser(final Secman config, final String... roleNames) {
         super(
-                config.getSeed().getAdmin().getUserName(),
-                config.getSeed().getAdmin().getPassword(),
+                config.seed().admin().userName(),
+                config.seed().admin().password(),
                 null,
                 GlobalTenancy.TENANCY_PATH,
                 AccountType.LOCAL,
                 Can.of(
-                        config.getSeed().getAdmin().getRoleName(),
-                        config.getSeed().getRegularUser().getRoleName()
+                        config.seed().admin().roleName(),
+                        config.seed().regularUser().roleName()
                 ).addAll(
                         Can.of(roleNames)
                 )

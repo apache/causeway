@@ -75,7 +75,7 @@ public class FactoryServiceDefault implements FactoryService {
 
     @Override
     public <T> T get(final @NonNull Class<T> requiredType) {
-        return causewaySystemEnvironment.getIocContainer()
+        return causewaySystemEnvironment.springContextHolder()
                 .get(requiredType)
                 .orElseThrow(()->_Exceptions.noSuchElement("not an injectable type %s", requiredType));
     }

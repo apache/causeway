@@ -29,6 +29,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
@@ -57,8 +60,8 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
 
         context = new ValueSemanticsProvider.Context(mockIdentifier, null);
 
-        causewayConfiguration = CausewayConfiguration.builder().build();
-        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setMinScale(null);
+        causewayConfiguration = CausewayConfiguration.defaults();
+        causewayConfiguration.valueTypes().bigDecimal().display().setMinScale(null);
 
         // expecting
         Mockito.lenient().when(mockSpecificationLoader.loadFeature(mockIdentifier)).thenReturn(Optional.of(mockObjectFeature));
@@ -101,7 +104,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.empty());
 
-        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setMinScale(fallbackScale);
+        causewayConfiguration.valueTypes().bigDecimal().display().setMinScale(fallbackScale);
 
         // when
         DecimalFormat format = new DecimalFormat();
@@ -124,7 +127,7 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.empty());
 
-        causewayConfiguration.getValueTypes().getBigDecimal().getDisplay().setMinScale(null);
+        causewayConfiguration.valueTypes().bigDecimal().display().setMinScale(null);
 
         // when
         DecimalFormat format = new DecimalFormat();

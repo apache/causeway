@@ -41,8 +41,9 @@ public class MetaModelContextFactory {
     @Bean(destroyMethod = "onDestroy")
     public MetaModelContext metaModelContext(final CausewaySystemEnvironment systemEnvironment) {
 
-        var ioc = systemEnvironment.getIocContainer();
+        var ioc = systemEnvironment.springContextHolder();
         var mmc = new MetaModelContext_usingSpring(ioc);
+        var mmcRecord = new MmcRecord(ioc);
 
         if(isIntegrationTesting()) {
             MetaModelContext.setOrReplace(mmc);

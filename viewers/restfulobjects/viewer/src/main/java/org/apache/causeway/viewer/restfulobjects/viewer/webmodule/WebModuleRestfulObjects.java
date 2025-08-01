@@ -94,8 +94,8 @@ public final class WebModuleRestfulObjects extends WebModuleAbstract {
     @Override
     public Can<ServletContextListener> init(final ServletContext ctx) throws ServletException {
 
-        var authenticationStrategyClassName = causewayConfiguration.getViewer()
-                .getRestfulobjects().getAuthentication().getStrategyClassName();
+        var authenticationStrategyClassName = causewayConfiguration.viewer()
+                .restfulobjects().authentication().strategyClassName();
 
         registerFilter(ctx, INTERACTION_FILTER_NAME, CausewayRestfulObjectsInteractionFilter.class)
         .ifPresent(filterReg -> {

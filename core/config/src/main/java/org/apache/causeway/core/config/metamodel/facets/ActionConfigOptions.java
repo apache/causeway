@@ -26,12 +26,12 @@ public final class ActionConfigOptions {
 
     public static PublishingPolicy actionCommandPublishingPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getAction().getCommandPublishing();
+        return configuration.applib().annotation().action().commandPublishing();
     }
 
     public static PublishingPolicy actionExecutionPublishingPolicy(
             final @NonNull CausewayConfiguration configuration) {
-        return configuration.getApplib().getAnnotation().getAction().getExecutionPublishing();
+        return configuration.applib().annotation().action().executionPublishing();
     }
 
     public static enum PublishingPolicy {

@@ -109,7 +109,7 @@ public class RunBackgroundCommandsJob implements Job {
             for (CommandDto dto : commandDtos) {
                 Try<?> attempt = executeCommandWithinTransaction(dto, interactionContext);
                 if(attempt.isFailure()) {
-                    var onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+                    var onFailurePolicy = causewayConfiguration.extensions().commandLog().runBackgroundCommands().onFailurePolicy();
                     if (onFailurePolicy == CausewayConfiguration.Extensions.CommandLog.RunBackgroundCommands.OnFailurePolicy.STOP_THE_LINE) {
                         break;
                     }
@@ -144,7 +144,7 @@ public class RunBackgroundCommandsJob implements Job {
                 commandLogEntryRepository.findBackgroundAndNotYetStarted()
                         .stream()
                         .map(CommandLogEntry::getCommandDto)
-                        .limit(causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getBatchSize())
+                        .limit(causewayConfiguration.extensions().commandLog().runBackgroundCommands().batchSize())
                         .collect(Collectors.toList())
                 )
                 .ifFailureFail()
@@ -196,7 +196,7 @@ public class RunBackgroundCommandsJob implements Job {
         }
 
         // a failure has occurred
-        var onFailurePolicy = causewayConfiguration.getExtensions().getCommandLog().getRunBackgroundCommands().getOnFailurePolicy();
+        var onFailurePolicy = causewayConfiguration.extensions().commandLog().runBackgroundCommands().onFailurePolicy();
         switch (onFailurePolicy) {
             case CONTINUE_WITH_NEXT:
                 // the result _will_ contain a failure

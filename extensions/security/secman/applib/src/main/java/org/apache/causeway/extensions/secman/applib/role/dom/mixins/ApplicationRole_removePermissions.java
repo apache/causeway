@@ -86,7 +86,7 @@ public class ApplicationRole_removePermissions {
             return false;
         }
         if(applicationRoleRepository.isAdminRole(target)
-                && isStickyAdminNamespace(config.getExtensions().getSecman(), permission.getFeatureFqn())) {
+                && isStickyAdminNamespace(config.extensions().secman(), permission.getFeatureFqn())) {
 
             messageService.warnUser("Cannot remove top-level namespace permissions for the admin role.");
             return false;
@@ -95,8 +95,8 @@ public class ApplicationRole_removePermissions {
     }
 
     private static boolean isStickyAdminNamespace(final Secman secman, final String featureFqn) {
-        var adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
-        return _NullSafe.stream(adminNamespacePermissions.getSticky())
+        var adminNamespacePermissions = secman.seed().admin().namespacePermissions();
+        return _NullSafe.stream(adminNamespacePermissions.sticky())
                 .anyMatch(stickyPackage -> stickyPackage.equals(featureFqn));
     }
 

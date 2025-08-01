@@ -74,7 +74,7 @@ public class SimpleMutationForAction extends Element {
         this.objectSpec = objectSpec;
         this.objectAction = objectAction;
 
-        this.argumentName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        this.argumentName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
 
         GraphQLOutputType type = typeFor(objectAction);
         if (type != null) {
@@ -194,7 +194,7 @@ public class SimpleMutationForAction extends Element {
     private void addGqlArguments(final GraphQLFieldDefinition.Builder fieldBuilder) {
 
         var arguments = new ArrayList<GraphQLArgument>();
-        var argName = context.causewayConfiguration.getViewer().getGraphql().getMutation().getTargetArgName();
+        var argName = context.causewayConfiguration.viewer().graphql().mutation().targetArgName();
 
         // add target (if not a service)
         if (! objectSpec.getBeanSort().isManagedBeanContributing()) {

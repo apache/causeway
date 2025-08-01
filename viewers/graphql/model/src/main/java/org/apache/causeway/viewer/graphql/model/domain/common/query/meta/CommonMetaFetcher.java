@@ -117,7 +117,7 @@ public class CommonMetaFetcher {
                 .flatMap(Bookmarkable::getBookmark
                 ).map(bookmark -> String.format(
                         "//%s/object/%s:%s/%s/%s",
-                        graphqlPath, bookmark.logicalTypeName(), bookmark.identifier(), causewayConfiguration.getViewer().getGraphql().getMetaData().getFieldName(), resource))
+                        graphqlPath, bookmark.logicalTypeName(), bookmark.identifier(), causewayConfiguration.viewer().graphql().metaData().fieldName(), resource))
                 .orElse(null);
     }
 

@@ -54,12 +54,12 @@ public class UserMementoProviderDefault implements UserMementoProvider {
             final ExecutionContext executionContext,
             final ExecutionStrategyParameters parameters) {
 
-        var fallbackUsername = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getUsername();
+        var fallbackUsername = causewayConfiguration.viewer().graphql().authentication().fallback().username();
         if (fallbackUsername == null) {
             return null;
         }
 
-        var fallbackRoles = causewayConfiguration.getViewer().getGraphql().getAuthentication().getFallback().getRoles();
+        var fallbackRoles = causewayConfiguration.viewer().graphql().authentication().fallback().roles();
         var roles = Can.ofStream(fallbackRoles.stream().map(roleName -> RoleMemento.builder().name(roleName).build()));
         return UserMemento.builder(fallbackUsername)
                 .roles(roles)

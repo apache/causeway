@@ -165,7 +165,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         // naturally supports attribute inheritance from the type's hierarchy
         this.introspectionPolicy = this.lookupFacet(IntrospectionPolicyFacet.class)
                 .map(introspectionPolicyFacet->introspectionPolicyFacet.getIntrospectionPolicy())
-                .orElseGet(()->mmc.getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy());
+                .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
         this.facetedMethodsBuilder =
                 new FacetedMethodsBuilder(this, facetProcessor, classSubstitutorRegistry);

@@ -90,7 +90,7 @@ public class RegistrationFormPanel extends PanelBase<Void> {
                 final EmailRegistrationEvent emailRegistrationEvent = new EmailRegistrationEvent(
                         email,
                         confirmationUrl,
-                        getApplicationSettings().getName());
+                        getApplicationSettings().name());
 
                 boolean emailSent = emailNotificationService.send(emailRegistrationEvent);
                 if (emailSent) {

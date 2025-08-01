@@ -54,7 +54,7 @@ implements HasMetaModelContext {
     // -- FAVICON SUPPORT
 
     protected void renderFavicon(final IHeaderResponse response) {
-        getApplicationSettings().getFaviconUrl()
+        getApplicationSettings().faviconUrl()
         .filter(_Strings::isNotEmpty)
         .map(getWebAppContextPath()::prependContextPathIfLocal)
         .ifPresent(faviconUrl->{

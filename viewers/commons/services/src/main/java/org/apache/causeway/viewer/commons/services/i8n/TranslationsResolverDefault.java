@@ -67,7 +67,7 @@ public class TranslationsResolverDefault implements TranslationsResolver {
     public List<String> readLines(final String fileName) {
 
         final String configLocation =
-                causewayConfiguration.getCore().getRuntimeServices().getTranslation().getResourceLocation();
+                causewayConfiguration.core().runtimeServices().translation().resourceLocation();
 
         try {
             if(configLocation != null) {

@@ -60,7 +60,7 @@ public class CausewayAjaxDataTable extends DataTableWithPagesAndFilter<DataRow, 
     }
 
     private void buildGui() {
-        var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().getViewer().getWicket();
+        var wicketConfig = MetaModelContext.instanceElseFail().getConfiguration().viewer().wicket();
 
         addTopToolbar(new HeadersToolbar(this, this.dataProvider, wicketConfig));
 

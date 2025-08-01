@@ -104,9 +104,9 @@ public class CausewayModuleExtCommandReplaySecondary {
             final @Qualifier("ReplicateAndReplayJob") JobDetail job) {
         var triggerFactory = new SimpleTriggerFactoryBean();
         triggerFactory.setJobDetail(job);
-        var config = causewayConfiguration.getExtensions().getCommandReplay().getQuartzReplicateAndReplayJob();
-        triggerFactory.setRepeatInterval(config.getRepeatInterval());
-        triggerFactory.setStartDelay(config.getStartDelay());
+        var config = causewayConfiguration.extensions().commandReplay().quartzReplicateAndReplayJob();
+        triggerFactory.setRepeatInterval(config.repeatInterval());
+        triggerFactory.setStartDelay(config.startDelay());
         triggerFactory.setRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY);
         return triggerFactory;
     }

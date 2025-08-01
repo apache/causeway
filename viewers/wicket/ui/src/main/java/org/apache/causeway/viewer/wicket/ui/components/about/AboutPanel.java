@@ -73,9 +73,9 @@ extends PanelAbstract<CausewayConfiguration.Viewer.Common.Application, AboutMode
     public AboutPanel(final String id, final AboutModel aboutModel) {
         super(id);
 
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, LambdaModel.of(()->aboutModel.getObject().getName())));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, LambdaModel.of(()->aboutModel.getObject().getVersion())));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, LambdaModel.of(()->aboutModel.getObject().getAbout())));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, LambdaModel.of(()->aboutModel.getObject().name())));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, LambdaModel.of(()->aboutModel.getObject().version())));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, LambdaModel.of(()->aboutModel.getObject().about())));
 
         if(jarManifestModel == null) {
             Provider<InputStream> metaInfManifestProvider =

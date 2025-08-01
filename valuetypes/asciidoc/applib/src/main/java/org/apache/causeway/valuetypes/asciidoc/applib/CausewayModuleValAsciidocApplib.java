@@ -66,8 +66,8 @@ public class CausewayModuleValAsciidocApplib {
     public AdocToHtmlConverter createAdocToHtmlConverter(final CausewayConfiguration config) throws MalformedURLException {
         var asciidoctor = Asciidoctor.Factory.create();
 
-        var krokiBaseUri = config.getValueTypes().getKroki().getBackendUrl();
-        var requestTimeout = config.getValueTypes().getKroki().getRequestTimeout();
+        var krokiBaseUri = config.valueTypes().kroki().backendUrl();
+        var requestTimeout = config.valueTypes().kroki().requestTimeout();
 
         if(krokiBaseUri!=null) {
             asciidoctor.javaExtensionRegistry().preprocessor(new OpenBlockPreProcessor());

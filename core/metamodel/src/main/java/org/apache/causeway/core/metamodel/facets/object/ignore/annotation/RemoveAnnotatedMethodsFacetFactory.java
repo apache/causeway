@@ -44,7 +44,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
 
-        var policy = getMetaModelContext().getConfiguration().getCore().getMetaModel().getIntrospector().getPolicy();
+        var policy = getMetaModelContext().getConfiguration().core().metaModel().introspector().policy();
         switch (policy) {
             case ENCAPSULATION_ENABLED:
                 getClassCache()

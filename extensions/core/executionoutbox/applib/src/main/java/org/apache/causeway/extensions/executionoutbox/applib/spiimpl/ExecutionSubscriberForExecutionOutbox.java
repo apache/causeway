@@ -53,7 +53,7 @@ public class ExecutionSubscriberForExecutionOutbox implements ExecutionSubscribe
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getExecutionOutbox().getPersist().isEnabled();
+        return causewayConfiguration.extensions().executionOutbox().persist().isEnabled();
     }
 
     @Override

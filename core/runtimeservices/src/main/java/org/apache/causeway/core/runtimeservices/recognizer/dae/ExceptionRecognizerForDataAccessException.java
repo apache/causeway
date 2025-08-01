@@ -63,8 +63,8 @@ implements ExceptionRecognizer {
 
     @Inject
     public ExceptionRecognizerForDataAccessException(final CausewayConfiguration conf) {
-        this.disabled = conf.getCore().getRuntimeServices()
-              .getExceptionRecognizer().getDae().isDisable();
+        this.disabled = conf.core().runtimeServices()
+              .exceptionRecognizer().dae().disable();
     }
 
     @Override

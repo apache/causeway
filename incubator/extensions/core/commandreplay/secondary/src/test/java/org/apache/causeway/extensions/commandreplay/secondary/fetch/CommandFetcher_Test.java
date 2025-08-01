@@ -22,7 +22,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +40,11 @@ import org.apache.causeway.extensions.commandreplay.secondary.status.StatusExcep
         },
         webEnvironment = SpringBootTest.WebEnvironment.NONE,
         properties = {
+                "causeway.extensions.commandReplay.primaryAccess.user=sven",
+                "causeway.extensions.commandReplay.primaryAccess.password=pass",
+                "causeway.extensions.commandReplay.primaryAccess.baseUrlRestful=http://localhost:8080/restful/",
+                "causeway.extensions.commandReplay.primaryAccess.baseUrlWicket=http://localhost:8080/wicket/",
+                "causeway.extensions.commandReplay.batchSize=10",
                 // "causeway.core.meta-model.introspector.parallelize=false",
                 // "logging.level.ObjectSpecificationAbstract=TRACE"
         })
@@ -56,12 +64,12 @@ class CommandFetcher_Test {
         // given
         var mmc = MetaModelContext_forTesting.buildDefault();
 
-        var config = mmc.getConfiguration().getExtensions().getCommandReplay();
-        config.getPrimaryAccess().setUser(Optional.of("sven"));
-        config.getPrimaryAccess().setPassword(Optional.of("pass"));
-        config.getPrimaryAccess().setBaseUrlRestful(Optional.of("http://localhost:8080/restful/"));
-        config.getPrimaryAccess().setBaseUrlWicket(Optional.of("http://localhost:8080/wicket/"));
-        config.setBatchSize(10);
+        var config = mmc.getConfiguration().extensions().commandReplay();
+        assertThat(config.primaryAccess().user(), is(Optional.of("sven")));
+        assertThat(config.primaryAccess().password(), is(Optional.of("pass")));
+        assertThat(config.primaryAccess().baseUrlRestful(), is(Optional.of("http://localhost:8080/restful/")));
+        assertThat(config.primaryAccess().baseUrlWicket(), is(Optional.of("http://localhost:8080/wicket/")));
+        assertThat(config.batchSize(), is(10));
 
         var secondaryConfig = new SecondaryConfig(mmc.getConfiguration());
         var useRequestDebugLogging = true;

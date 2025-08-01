@@ -64,7 +64,7 @@ public class CommandSubscriberForCommandLog implements CommandSubscriber {
 
     @Override
     public boolean isEnabled() {
-        return causewayConfiguration.getExtensions().getCommandLog().getPersist().isEnabled();
+        return causewayConfiguration.extensions().commandLog().persist().isEnabled();
     }
 
     @Override

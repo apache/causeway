@@ -67,8 +67,8 @@ implements MenuBarsLoaderService {
     public MenuBarsLoaderServiceDefault(final MetaModelContext mmc) {
         this.supportsReloading = mmc.getSystemEnvironment().isPrototyping();
 
-        var menubarsLayoutFile = mmc.getConfiguration().getViewer().getCommon().getApplication()
-                .getMenubarsLayoutFile();
+        var menubarsLayoutFile = mmc.getConfiguration().viewer().common().application()
+                .menubarsLayoutFile();
         var menubarsLayoutResource = new ClassPathResource(menubarsLayoutFile);
         if(!menubarsLayoutResource.exists()) {
             log.warn("menubarsLayoutFile {} (as configured for Apache Causeway) not found",

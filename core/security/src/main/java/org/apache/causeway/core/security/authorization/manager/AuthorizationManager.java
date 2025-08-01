@@ -65,7 +65,7 @@ public class AuthorizationManager {
             final Optional<AuthorizorChooser> authorizorChooserIfAny) {
 
         this.actionsWithSafeSemanticsRequireOnlyViewingPermission =
-                config.getSecurity().isActionsWithSafeSemanticsRequireOnlyViewingPermission();
+                config.security().actionsWithSafeSemanticsRequireOnlyViewingPermission();
         this.actionSemanticsResolver = actionSemanticsResolver;
 
         _Assert.assertTrue(_NullSafe.size(authorizors)>0, ()->

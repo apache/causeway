@@ -35,10 +35,11 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.ioc._IocContainer;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -58,14 +59,15 @@ public class CausewaySystemEnvironment {
 
     @Inject private ApplicationContext springContext;
 
-    @Getter private _IocContainer iocContainer;
+    @Getter @Accessors(fluent=true)
+    private SpringContextHolder springContextHolder;
 
     // -- LIFE-CYCLE
 
     @PostConstruct
     public void postConstruct() {
 
-        this.iocContainer = _IocContainer.spring(springContext);
+        this.springContextHolder = new SpringContextHolder(springContext);
 
         log.info("postConstruct (hashCode = {})", this.hashCode());
 
@@ -95,24 +97,18 @@ public class CausewaySystemEnvironment {
 
     @EventListener(ContextClosedEvent.class)
     public void onContextAboutToClose(final ContextClosedEvent event) {
-        // happens before any @PostConstruct
-        // as a consequence, no managed bean should touch the _Context during its post-construct phase
+        // happens before any @PreDestroy
+        // as a consequence, no managed bean should touch the _Context during its pre-detroy phase
         // as it has already been cleared here
         log.info("Context about to close.");
-        this.iocContainer = null;
+        this.springContextHolder = null;
         _Context.clear();
     }
 
     @EventListener(ApplicationFailedEvent.class)
-    public void onContextRefreshed(final ApplicationFailedEvent event) {
+    public void onApplicationFailed(final ApplicationFailedEvent event) {
         // happens eg. when DN finds non enhanced entity classes
         log.error("Application failed to start", event.getException());
-    }
-
-    // -- SHORTCUTS
-
-    public _IocContainer ioc() {
-        return getIocContainer();
     }
 
     // -- SETUP
@@ -123,6 +119,7 @@ public class CausewaySystemEnvironment {
      * Must be set prior to configuration bootstrapping.
      * @param isUnitTesting
      */
+    @Deprecated //TODO use autodetect instead (class-path analysis)
     public static void setUnitTesting(final boolean isUnitTesting) {
         System.setProperty("UNITTESTING", ""+isUnitTesting);
     }

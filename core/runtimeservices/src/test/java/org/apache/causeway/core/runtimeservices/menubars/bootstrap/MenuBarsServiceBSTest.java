@@ -57,7 +57,7 @@ extends RuntimeServicesTestAbstract {
     @Override
     protected void afterSetUp() {
 
-        getConfiguration().getCore().getMetaModel().getIntrospector().setValidateIncrementally(false);
+        getConfiguration().core().metaModel().introspector().setValidateIncrementally(false);
 
         layoutService = getServiceRegistry()
                 .lookupServiceElseFail(LayoutService.class);

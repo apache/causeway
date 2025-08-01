@@ -35,9 +35,9 @@ import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPe
 import org.apache.causeway.extensions.secman.applib.role.fixtures.AbstractRoleAndPermissionsFixtureScript;
 
 /**
- * Sets up a role for administrators (whose name is {@link Admin#getRoleName() configurable}
- * with an initial set of permissions being the union of {@link NamespacePermissions#getSticky()}
- * and {@link NamespacePermissions#getAdditional()}.
+ * Sets up a role for administrators (whose name is {@link Admin#roleName() configurable}
+ * with an initial set of permissions being the union of {@link NamespacePermissions#sticky()}
+ * and {@link NamespacePermissions#additional()}.
  *
  * @see Secman
  *
@@ -48,7 +48,7 @@ public class CausewayExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPer
     private final Set<String> adminInitialPackagePermissions;
 
     public CausewayExtSecmanAdminRoleAndPermissions(final Secman config) {
-        super(config.getSeed().getAdmin().getRoleName(), "Administer security");
+        super(config.seed().admin().roleName(), "Administer security");
         this.adminInitialPackagePermissions = streamAdminNamespacePermissions(config)
                 .collect(Collectors.toCollection(LinkedHashSet::new)); // preserve order, discard duplicates
     }
@@ -67,10 +67,10 @@ public class CausewayExtSecmanAdminRoleAndPermissions extends AbstractRoleAndPer
     // -- HELPER
 
     private static Stream<String> streamAdminNamespacePermissions(final Secman secman) {
-        var adminNamespacePermissions = secman.getSeed().getAdmin().getNamespacePermissions();
+        var adminNamespacePermissions = secman.seed().admin().namespacePermissions();
         return Stream.concat(
-                _NullSafe.stream(adminNamespacePermissions.getSticky()),
-                _NullSafe.stream(adminNamespacePermissions.getAdditional()));
+                _NullSafe.stream(adminNamespacePermissions.sticky()),
+                _NullSafe.stream(adminNamespacePermissions.additional()));
     }
 
 }

@@ -19,61 +19,69 @@
 package org.apache.causeway.core.config;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
+//--add-exports org.hibernate.validator/org.hibernate.validator.internal.engine=spring.core
+//--add-exports org.hibernate.validator/org.hibernate.validator.internal.constraintvalidators.bv=org.apache.causeway.core.config
 class CausewayConfiguration_getMaxTitleLengthInParentedTables_Test {
 
-    private CausewayConfiguration configuration;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        configuration = CausewayConfiguration.builder().build();
-    }
+    private ConfigurationFactory configurationFactory = new ConfigurationFactory();
 
     @Test
     void when_not_set() throws Exception {
-        // when
-        int val = configuration.getViewer().getWicket().getMaxTitleLengthInParentedTables();
-
-        // then
-        Assertions.assertThat(val).isEqualTo(12);
+        configurationFactory.test(
+            TestPropertyValues.empty(),
+            causeway->{
+                // when
+                int val = causeway.viewer().wicket().maxTitleLengthInParentedTables();
+                // then
+                Assertions.assertThat(val).isEqualTo(12);
+            });
     }
 
     @Test
-    void when_not_set_explicitly_but_fallback_has_been() throws Exception {
-        // given
-        configuration.getViewer().getWicket().setMaxTitleLengthInTables(20);
-
-        // when
-        int val = configuration.getViewer().getWicket().getMaxTitleLengthInParentedTables();
-
-        // then
-        Assertions.assertThat(val).isEqualTo(20);
+    void when_not_set_explicitly_but_fallback_has_been() {
+        configurationFactory.test(
+            TestPropertyValues.of(
+                // given
+                "causeway.viewer.wicket.maxTitleLengthInTables=20"),
+            causeway->{
+                // when
+                int val = causeway.viewer().wicket().maxTitleLengthInParentedTables();
+                // then
+                Assertions.assertThat(val).isEqualTo(20);
+            });
     }
 
     @Test
-    void when_set_explicitly() throws Exception {
-        // given
-        configuration.getViewer().getWicket().setMaxTitleLengthInParentedTables(25);
-
-        // when
-        int val = configuration.getViewer().getWicket().getMaxTitleLengthInParentedTables();
-
-        // then
-        Assertions.assertThat(val).isEqualTo(25);
+    void when_set_explicitly() {
+        configurationFactory.test(
+            TestPropertyValues.of(
+                // given
+                "causeway.viewer.wicket.maxTitleLengthInParentedTables=25"),
+            causeway->{
+                // when
+                int val = causeway.viewer().wicket().maxTitleLengthInParentedTables();
+                // then
+                Assertions.assertThat(val).isEqualTo(25);
+            });
     }
 
     @Test
-    void when_set_explicitly_ignores_fallback_has_been() throws Exception {
-        // given
-        configuration.getViewer().getWicket().setMaxTitleLengthInTables(20);
-        configuration.getViewer().getWicket().setMaxTitleLengthInParentedTables(25);
+    void when_set_explicitly_ignores_fallback_has_been() {
+        configurationFactory.test(
+            TestPropertyValues.of(
+                // given
+                "causeway.viewer.wicket.maxTitleLengthInTables=20",
+                "causeway.viewer.wicket.maxTitleLengthInParentedTables=25"),
+            causeway->{
+                // when
+                int val = causeway.viewer().wicket().maxTitleLengthInParentedTables();
+                // then
+                Assertions.assertThat(val).isEqualTo(25);
+            });
 
-        // when
-        int val = configuration.getViewer().getWicket().getMaxTitleLengthInParentedTables();
-
-        // then
-        Assertions.assertThat(val).isEqualTo(25);
     }
 }

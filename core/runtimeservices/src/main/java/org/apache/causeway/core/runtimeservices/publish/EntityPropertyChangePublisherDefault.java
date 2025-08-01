@@ -119,7 +119,8 @@ public class EntityPropertyChangePublisherDefault implements EntityPropertyChang
                     () -> getCannotPublishReason(uniquePropertyChanges)
             );
 
-            if (uniquePropertyChanges.size() <= causewayConfiguration.getCore().getRuntimeServices().getEntityPropertyChangePublisher().getBulk().getThreshold()) {
+            if (uniquePropertyChanges.size() <= causewayConfiguration.core().runtimeServices()
+                .entityPropertyChangePublisher().bulk().threshold()) {
                 uniquePropertyChanges.forEach(propertyChange -> {
                     for (var subscriber : enabledSubscribers) {
                         subscriber.onChanging(propertyChange);
