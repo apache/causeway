@@ -445,7 +445,7 @@ implements MetaModelContext {
     // -- LAYOUT TESTING SUPPORT
 
     @Getter(lazy = true)
-    private final JaxbService jaxbService = new JaxbService.Simple();
+    private final JaxbService jaxbService = JaxbService.simple();
 
     @Getter(lazy = true)
     private final MenuBarsService menuBarsService = createMenuBarsService();
@@ -481,7 +481,8 @@ implements MetaModelContext {
             getGridMarshallerService(),
             List.of(
                     new GridSystemServiceBootstrap(
-                            this,
+                            getConfiguration(),
+                            ()->getSpecificationLoader(),
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),

@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
 import org.apache.causeway.commons.internal.resources._Resources;
 
 class BSMenuBarsTest {
@@ -37,7 +36,7 @@ class BSMenuBarsTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        jaxbService = new Simple() {};
+        jaxbService = JaxbService.simple();
     }
 
     @AfterEach

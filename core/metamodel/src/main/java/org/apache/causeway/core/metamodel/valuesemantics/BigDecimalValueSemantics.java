@@ -40,7 +40,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.schema.common.v2.ValueType;
 import org.apache.causeway.schema.common.v2.ValueWithTypeDto;
@@ -60,8 +60,6 @@ implements
     Renderer<BigDecimal>,
     IdStringifier.EntityAgnostic<BigDecimal> {
 
-    @Setter @Inject
-    private SpecificationLoader specificationLoader;
     @Setter @Inject
     private CausewayConfiguration causewayConfiguration;
 
@@ -148,6 +146,8 @@ implements
     @Override
     protected void configureDecimalFormat(
             final Context context, final DecimalFormat format, final FormatUsageFor usedFor) {
+
+        var specificationLoader = MetaModelContext.instanceElseFail().getSpecificationLoader();
 
         var bigDecimalConfig = causewayConfiguration.valueTypes().bigDecimal();
         format.setGroupingUsed(

@@ -37,6 +37,7 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.digits.MinFractiona
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.mmtestsupport.ConfigurationTester;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 
 class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
 
@@ -60,8 +61,11 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         // expecting
         Mockito.lenient().when(mockSpecificationLoader.loadFeature(mockIdentifier)).thenReturn(Optional.of(mockObjectFeature));
 
+        MetaModelContext_forTesting.builder()
+            .specificationLoader(mockSpecificationLoader)
+            .build();
+
         valueSemantics = new BigDecimalValueSemantics();
-        valueSemantics.setSpecificationLoader(mockSpecificationLoader);
     }
 
     @Test

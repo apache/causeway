@@ -19,11 +19,14 @@
 package org.apache.causeway.applib.services.jaxb;
 
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.domain.DomainObjectList;
@@ -31,7 +34,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.io.JaxbUtils;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -100,7 +102,23 @@ public interface JaxbService {
             CausewaySchemas causewaySchemas);
 
     /** 'Simple' because no injection point resolving or advanced {@link DomainObjectList} handling. */
-    class Simple implements JaxbService {
+    static JaxbService simple() {
+        return new JaxbServiceInternal(JaxbServiceInternal.Config.simple());
+    }
+
+    record JaxbServiceInternal(
+        Config config
+        ) implements JaxbService {
+
+        public record Config(
+            Consumer<Marshaller> marshallerConfigurer,
+            Consumer<Unmarshaller> unmarshallerConfigurer,
+            Function<DomainObjectList, JAXBContext> jaxbContextForListProvider) {
+            /** 'Simple' because no injection point resolving or advanced {@link DomainObjectList} handling. */
+            static Config simple() {
+                return new Config(__->{}, __->{}, __->JaxbUtils.jaxbContextFor(DomainObjectList.class, true));
+            }
+        }
 
         @Override
         @Nullable
@@ -109,14 +127,13 @@ public interface JaxbService {
                 final @Nullable String xml,
                 final @Nullable Map<String, Object> unmarshallerProperties) {
 
-            if (xml == null) {
-                return null;
-            }
+            if (xml == null) return null;
+
             return JaxbUtils.tryRead(domainClass, xml, opts->{
                 for (var entry : _NullSafe.entrySet(unmarshallerProperties)) {
                     opts.property(entry.getKey(), entry.getValue());
                 }
-                opts.unmarshallerConfigurer(this::configure);
+                opts.unmarshallerConfigurer(config.unmarshallerConfigurer());
                 return opts;
             })
             .ifFailureFail()
@@ -129,38 +146,19 @@ public interface JaxbService {
                 final @Nullable Map<String, Object> marshallerProperties) {
 
             var jaxbContext = domainObject instanceof DomainObjectList
-                    ? jaxbContextForList((DomainObjectList)domainObject)
+                    ? config.jaxbContextForListProvider().apply((DomainObjectList)domainObject)
                     : JaxbUtils.jaxbContextFor(domainObject.getClass(), true);
 
             return Try.call(()->JaxbUtils.toStringUtf8(domainObject, opts->{
                 for (var entry : _NullSafe.entrySet(marshallerProperties)) {
                     opts.property(entry.getKey(), entry.getValue());
                 }
-                opts.marshallerConfigurer(this::configure);
+                opts.marshallerConfigurer(config.marshallerConfigurer());
                 opts.jaxbContextOverride(jaxbContext);
                 return opts;
             }))
             .ifFailureFail()
             .getValue().orElse(null);
-        }
-
-        /**
-         * Optional hook
-         */
-        protected JAXBContext jaxbContextForList(final @NonNull DomainObjectList list) {
-            return JaxbUtils.jaxbContextFor(DomainObjectList.class, true);
-        }
-
-        /**
-         * Optional hook
-         */
-        protected void configure(final Unmarshaller unmarshaller) {
-        }
-
-        /**
-         * Optional hook
-         */
-        protected void configure(final Marshaller marshaller) {
         }
 
         @Override

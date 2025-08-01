@@ -34,7 +34,7 @@ public class BSMenuBars_roundtrip_Test {
 
     @BeforeEach
     public void setUp() throws Exception {
-        jaxbService = new JaxbService.Simple();
+        jaxbService = JaxbService.simple();
     }
 
     @AfterEach
