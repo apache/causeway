@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.action;
 
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -25,10 +26,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.springframework.boot.test.util.TestPropertyValues;
+
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
+import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions.PublishingPolicy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -44,8 +48,22 @@ extends ActionAnnotationFacetFactoryTest {
         facetFactory.processExecutionPublishing(processMethodContext, actionIfAny);
     }
 
+    @Override
+    protected void setup() {
+        //overrides default setup method to do nothing
+    }
+
+    private void allowingPublishingConfigurationToReturn(final @Nullable PublishingPolicy publishingPolicyOverride) {
+        var testPropertyValues = publishingPolicyOverride!=null
+            ? TestPropertyValues.of("causeway.applib.annotation.action.executionPublishing=" + publishingPolicyOverride.name())
+            : TestPropertyValues.empty();
+        super.setup(builder->builder.testPropertyValues(testPropertyValues));
+        facetFactory = new ActionAnnotationFacetFactory(getMetaModelContext());
+    }
+
     @Test
     void given_HasInteractionId_thenIgnored() {
+        allowingPublishingConfigurationToReturn(null); // defaults
         actionScenario(SomeHasInteractionId.class, "someAction", (processMethodContext, facetHolder, facetedMethod)->{
             processExecutionPublishing(facetFactory, processMethodContext);
             assertFalse(ExecutionPublishingFacet.isPublishingEnabled(facetedMethod));

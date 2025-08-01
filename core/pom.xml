@@ -58,7 +58,7 @@
         <module>internaltestsupport</module>
         <module>metamodel</module>
         <module>mmtestsupport</module>
-<!--        <module>mmtest</module>-->
+        <module>mmtest</module>
         <module>runtime</module>
         <module>runtimeservices</module>
         <module>transaction</module>

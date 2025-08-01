@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
@@ -117,23 +118,20 @@ implements HasMetaModelContext {
         }
     }
 
-    // --
+    // -- SETUP
 
     @Getter(onMethod_ = {@Override})
     private MetaModelContext metaModelContext;
 
     private MethodRemover_forTesting methodRemover;
 
-    /**
-     * Override, if a custom {@link MetaModelContext_forTesting} is required for certain tests.
-     */
-    protected MetaModelContext_forTesting setUpMmc(
-            final MetaModelContext_forTesting.MetaModelContext_forTestingBuilder builder) {
-        return builder.build();
+    @BeforeEach
+    protected void setup() {
+        setup(__->{});
     }
 
-    @BeforeEach
-    protected void setUpAll() {
+    protected final void setup(
+        final Consumer<MetaModelContext_forTesting.MetaModelContext_forTestingBuilder> customizer) {
 
         var mockTranslationService = Mockito.mock(TranslationService.class);
         var mockInteractionService = Mockito.mock(InteractionService.class);
@@ -141,16 +139,22 @@ implements HasMetaModelContext {
 
         var iaContext = InteractionContextFactory.testing();
 
-        methodRemover = new MethodRemover_forTesting();
+        this.methodRemover = new MethodRemover_forTesting();
 
-        metaModelContext = setUpMmc(MetaModelContext_forTesting.builder()
+        var builder = MetaModelContext_forTesting.builder()
             .translationService(mockTranslationService)
             .interactionService(mockInteractionService)
             .memberExecutor(mockMemberExecutorService)
-            .valueSemantic(new IntValueSemantics()));
+            .valueSemantic(new IntValueSemantics());
+
+        customizer.accept(builder);
+
+        this.metaModelContext = builder.build();
 
         Mockito.when(mockInteractionService.currentInteractionContext()).thenReturn(Optional.of(iaContext));
     }
+
+    // -- TEAR DOWN
 
     @AfterEach
     protected void tearDownAll() {
@@ -188,7 +192,6 @@ implements HasMetaModelContext {
                 FacetedMethod facetedMethod,
                 OneToManyAssociation mixedInColl);
     }
-
     @FunctionalInterface
     protected static interface ParameterScenarioConsumer {
         void accept(

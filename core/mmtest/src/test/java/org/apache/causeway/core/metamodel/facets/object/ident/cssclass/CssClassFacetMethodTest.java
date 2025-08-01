@@ -49,8 +49,9 @@ extends FacetFactoryTestAbstract {
     private ObjectSupportFacetFactory facetFactory;
 
     @BeforeEach
-    void setup() {
+    final void beforeEach() {
         facetFactory = new ObjectSupportFacetFactory(getMetaModelContext());
+        super.setup();
     }
 
     @AfterEach

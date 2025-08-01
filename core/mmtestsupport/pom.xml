@@ -28,6 +28,8 @@ additional
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.core.mmtestsupport</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/core/mmtestsupport</git-plugin.propertiesDir>
+        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy test
+        artifiacts -->
     </properties>
 
     <description>

@@ -24,8 +24,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 
 class ActionAnnotationFacetFactoryTest
@@ -39,7 +37,7 @@ extends FacetFactoryTestAbstract {
     }
 
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         facetFactory = null;
     }
 
@@ -53,11 +51,6 @@ extends FacetFactoryTestAbstract {
         public UUID getInteractionId() {
             return null;
         }
-    }
-
-    void allowingPublishingConfigurationToReturn(final ActionConfigOptions.PublishingPolicy value) {
-        throw _Exceptions.unsupportedOperation();
-        //FIXME getConfiguration().applib().annotation().action().setExecutionPublishing(value);
     }
 
 }

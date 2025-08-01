@@ -42,7 +42,6 @@ import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.metamodel.facets.DomainObjectConfigOptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.AbstractTestWithMetaModelContext;
@@ -65,15 +64,10 @@ import org.apache.causeway.core.metamodel.facets.objectvalue.choices.ChoicesFace
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting;
 
-class DomainObjectAnnotationFacetFactoryTest
+abstract class DomainObjectAnnotationFacetFactoryTest
 extends FacetFactoryTestAbstract {
 
     DomainObjectAnnotationFacetFactory facetFactory;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
-    }
 
     @AfterEach
     protected void tearDown() throws Exception {
@@ -92,22 +86,28 @@ extends FacetFactoryTestAbstract {
 
     }
 
+    @Override
+    protected void setup() {
+        //overrides default setup method to do nothing
+    }
+
     void allowingEntityChangePublishingToReturn(final DomainObjectConfigOptions.EntityChangePublishingPolicy value) {
-        if(value!=null) {
-            throw _Exceptions.unsupportedOperation();
-            //FIXME getConfiguration().applib().annotation().domainObject().setEntityChangePublishing(value);
-        }
+        var testPropertyValues = value!=null
+            ? TestPropertyValues.of("causeway.applib.annotation.domainObject.entityChangePublishing=" + value.name())
+            : TestPropertyValues.empty();
+        super.setup(builder->builder.testPropertyValues(testPropertyValues));
+        facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
     }
-
     void allowingObjectsEditingToReturn(final DomainObjectConfigOptions.EditingObjectsConfiguration value) {
-        if(value!=null) {
-            throw _Exceptions.unsupportedOperation();
-            //FIXME getConfiguration().applib().annotation().domainObject().setEditing(value);
-        }
+        var testPropertyValues = value!=null
+            ? TestPropertyValues.of("causeway.applib.annotation.domainObject.editing=" + value.name())
+            : TestPropertyValues.empty();
+        super.setup(builder->builder.testPropertyValues(testPropertyValues));
+        facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
     }
-
     protected void ignoringConfiguration() {
-
+        super.setup();
+        facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
     }
 
     public static class EntityChangePublishing extends DomainObjectAnnotationFacetFactoryTest {
@@ -224,7 +224,6 @@ extends FacetFactoryTestAbstract {
             }
 
         }
-
     }
 
     public static class AutoComplete extends DomainObjectAnnotationFacetFactoryTest {
@@ -247,6 +246,11 @@ extends FacetFactoryTestAbstract {
 
         @DomainObject
         class CustomerWithDomainObjectButNoAutoCompleteRepository {
+        }
+
+        @BeforeEach
+        public void setUp() {
+            ignoringConfiguration();
         }
 
         @Test
@@ -332,10 +336,8 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectButNoBounded {
         }
 
-        @Override
         @BeforeEach
-        public void setUp() throws Exception {
-            super.setUp();
+        public void setUp() {
             ignoringConfiguration();
         }
 
@@ -380,7 +382,6 @@ extends FacetFactoryTestAbstract {
                 assertNoMethodsRemoved();
             });
         }
-
     }
 
     public static class Editing extends DomainObjectAnnotationFacetFactoryTest {
@@ -432,9 +433,11 @@ extends FacetFactoryTestAbstract {
                 });
             }
 
+
+
             @Test
             public void configured_value_set_to_defaults() {
-                //allowingConfigurationToReturn("causeway.objects.editing", "foobar");
+                ignoringConfiguration();
                 objectScenario(DomainObjectAnnotationFacetFactoryTest.Customer.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
@@ -478,7 +481,7 @@ extends FacetFactoryTestAbstract {
 
             @Test
             public void configured_value_set_to_defaults() {
-                //allowingConfigurationToReturn("causeway.objects.editing", "foobar");
+                ignoringConfiguration();
                 objectScenario(CustomerWithDomainObjectAndEditingSetToAsConfigured.class, (processClassContext, facetHolder)->{
                     facetFactory.process(processClassContext);
 
@@ -536,10 +539,8 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectButNoObjectType {
         }
 
-        @Override
         @BeforeEach
-        public void setUp() throws Exception {
-            super.setUp();
+        public void setUp() {
             ignoringConfiguration();
         }
 
@@ -596,10 +597,8 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectButNoNature {
         }
 
-        @Override
         @BeforeEach
-        public void setUp() throws Exception {
-            super.setUp();
+        public void setUp() {
             ignoringConfiguration();
         }
 
