@@ -20,8 +20,6 @@ package org.apache.causeway.extensions.secman.integration.permissions;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -35,7 +33,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman;
 import org.apache.causeway.core.config.CausewayConfiguration.Extensions.Secman.PermissionsEvaluationPolicy;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionMode;
@@ -78,9 +75,7 @@ implements PermissionsEvaluationService {
 
     @Inject
     public PermissionsEvaluationServiceForSecman(final CausewayConfiguration causewayConfiguration) {
-        this.policy = Optional.ofNullable(
-                causewayConfiguration.extensions().secman().permissionsEvaluationPolicy())
-                .orElseGet(()->Secman.defaults().permissionsEvaluationPolicy()); // use config defaults as fallback
+        this.policy = causewayConfiguration.extensions().secman().permissionsEvaluationPolicy();
         _Assert.assertNotNull(policy);
     }
 

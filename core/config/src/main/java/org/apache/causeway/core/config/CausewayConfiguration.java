@@ -86,7 +86,6 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.Tempora
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
@@ -355,7 +354,7 @@ public record CausewayConfiguration(
             @DefaultValue("false")
             boolean extractRoles,
             /**
-             * If {@link #extractRoles()}  roles are to be extracted}, this allows the resultant role to be optionally prefixed.
+             * If {@link org.apache.causeway.core.config.CausewayConfiguration.Security.Keycloak#extractRoles()} roles are to be extracted}, this allows the resultant role to be optionally prefixed.
              */
             String rolePrefix) {
         }
@@ -1616,11 +1615,6 @@ public record CausewayConfiguration(
                 ALWAYS_SHOW
             }
 
-            // TODO remove
-            @Deprecated
-            public static Config defaults() {
-                throw _Exceptions.unsupportedOperation();
-            }
         }
 
         public record MetaModel(
@@ -2121,7 +2115,9 @@ public record CausewayConfiguration(
              *
              * <p>If a password is generated, it is logged to the logging subsystem (Log4j2).
              *
-             * <p>Recommended (<code>true</code>) when {@link #webAllowRemoteAccess()} is also <code>true</code>.
+             * <p>Recommended (<code>true</code>) when
+             * {@link org.apache.causeway.core.config.CausewayConfiguration.Prototyping.H2Console#webAllowRemoteAccess()}
+             * is also <code>true</code>.
              */
             @DefaultValue("false")
             boolean generateRandomWebAdminPassword) {
@@ -2591,7 +2587,9 @@ public record CausewayConfiguration(
                      */
                     String username,
                     /**
-                     * Used as the set of roles for the default {@link #username()} (if not provided by other means).
+                     * Used as the set of roles for the default
+                     * {@link org.apache.causeway.core.config.CausewayConfiguration.Viewer.Graphql.Authentication.Fallback#username()}
+                     * (if not provided by other means).
                      */
                     List<String> roles
                     ) {
@@ -3294,13 +3292,6 @@ public record CausewayConfiguration(
 
                 }
             }
-
-            // TODO remove
-            @Deprecated
-            public static Wicket defaults() {
-                throw _Exceptions.unsupportedOperation();
-            }
-
         }
     }
 
@@ -3318,13 +3309,6 @@ public record CausewayConfiguration(
             @DefaultValue
             TemporalDisplayPattern display
             ) {
-
-            //TODO can this be removed ?
-            @Deprecated
-            public static Temporal defaults() {
-                return new Temporal(new TemporalEditingPattern(), new TemporalDisplayPattern(null, null));
-            }
-
         }
 
         public record BigDecimal(
@@ -3415,7 +3399,8 @@ public record CausewayConfiguration(
             URL backendUrl,
 
             /**
-             * Max time for requests to the {@link #getBackendUrl()},
+             * Max time for requests to the
+             * {@link org.apache.causeway.core.config.CausewayConfiguration.ValueTypes.Kroki#backendUrl()},
              * when waiting for a response. (default: 5 seconds)
              */
             @DurationUnit(ChronoUnit.MILLIS)
@@ -4195,12 +4180,6 @@ public record CausewayConfiguration(
                 HIDE,
                 DISABLE,
                 ENABLE
-            }
-
-            //TODO remove
-            @Deprecated
-            public static Secman defaults() {
-                throw _Exceptions.unsupportedOperation();
             }
         }
 

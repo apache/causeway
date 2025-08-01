@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -43,6 +42,7 @@ import org.apache.causeway.applib.services.confview.ConfigurationProperty;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -261,10 +261,9 @@ implements
     }
 
     private ConfigurationPropertyVisibilityPolicy getConfigurationPropertyVisibilityPolicy() {
-        return Optional.ofNullable(
-                configuration.core().config().configurationPropertyVisibilityPolicy())
-                // fallback to configuration default policy
-                .orElseGet(()->CausewayConfiguration.Core.Config.defaults().configurationPropertyVisibilityPolicy());
+        var policy = configuration.core().config().configurationPropertyVisibilityPolicy();
+        _Assert.assertNotNull(policy);
+        return policy;
     }
 
 }

@@ -418,7 +418,7 @@ implements TemporalValueSemantics<T> {
         return Optional.ofNullable(mmc) // nullable .. JUnit support
                 .map(MetaModelContext::getConfiguration)
                 .map(conf->conf.valueTypes().temporal())
-                .orElseGet(CausewayConfiguration.ValueTypes.Temporal::defaults);
+                .orElseGet(()->new CausewayConfiguration.ValueTypes.Temporal(new TemporalEditingPattern(), new TemporalDisplayPattern(null, null)));
     }
 
     protected TemporalEditingPattern temporalEditingPattern() {

@@ -20,7 +20,6 @@ package org.apache.causeway.core.mmtestsupport;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Consumer;
 
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -28,7 +27,6 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.core.env.AbstractEnvironment;
 
 import org.apache.causeway.commons.internal.base._StableValue;
-import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 
@@ -46,23 +44,21 @@ public record ConfigurationTester(
     TestPropertyValues testPropertyValues) {
 
     private static _StableValue<CausewayConfiguration> DEFAULT_CAUSEWAY_CONFIGURATION_HOLDER = new _StableValue<>();
-    private static LongAdder longAdder = new LongAdder();
 
     public void test(final Consumer<CausewayConfiguration> configConsumer) {
-        configConsumer.accept(createCausewayConfiguration());
+        configConsumer.accept(causewayConfiguration());
     }
 
     public CausewayConfiguration causewayConfiguration() {
         if(isDefaultConfiguration()) {
-            return DEFAULT_CAUSEWAY_CONFIGURATION_HOLDER.orElseSet(this::createCausewayConfiguration);
+            return DEFAULT_CAUSEWAY_CONFIGURATION_HOLDER.orElseSet(this::causewayConfigurationNoCache);
         }
-        return createCausewayConfiguration();
+        return causewayConfigurationNoCache();
     }
 
     // -- HELPER
 
-    private CausewayConfiguration createCausewayConfiguration() {
-        var watch = _Timing.now();
+    private CausewayConfiguration causewayConfigurationNoCache() {
         final var causewayRef = new AtomicReference<CausewayConfiguration.Causeway>();
         testPropertyValues.applyToSystemProperties(()->{
             new ApplicationContextRunner()
@@ -72,8 +68,6 @@ public record ConfigurationTester(
                     causewayRef.set(causeway);
                 });
         });
-        longAdder.increment();
-        System.err.printf("%d %s%n", longAdder.longValue(), watch.toString());
         return createConfig(causewayRef.get());
     }
 

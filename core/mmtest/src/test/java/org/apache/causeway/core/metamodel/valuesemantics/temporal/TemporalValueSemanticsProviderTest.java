@@ -24,13 +24,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.jspecify.annotations.Nullable;
+import org.springframework.boot.test.util.TestPropertyValues;
 
 import org.apache.causeway.applib.annotation.TimePrecision;
 import org.apache.causeway.applib.locale.UserLocale;
@@ -41,10 +43,8 @@ import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.Editing
 import org.apache.causeway.applib.value.semantics.TemporalValueSemantics.TemporalEditingPattern;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider.Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.mmtestsupport.ConfigurationTester;
 import org.apache.causeway.schema.common.v2.ValueType;
-
-import org.jspecify.annotations.NonNull;
 
 class TemporalValueSemanticsProviderTest {
 
@@ -53,7 +53,8 @@ class TemporalValueSemanticsProviderTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        editingPattern = (CausewayConfiguration.ValueTypes.Temporal.defaults()).editing();
+        editingPattern = new ConfigurationTester(TestPropertyValues.empty())
+            .causewayConfiguration().valueTypes().temporal().editing();
     }
 
     @ParameterizedTest
