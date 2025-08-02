@@ -37,6 +37,7 @@ Some presets for the _Spring Configuration_ have been removed
 == RestEasy Integration Removed
 
 [source,xml]
+.Maven
 ----
 <!-- REMOVED 
 <dependency>
@@ -53,6 +54,7 @@ Some presets for the _Spring Configuration_ have been removed
 ----
 
 [source,java]
+.Spring bean import
 ----
 @Import({
     //..
@@ -64,15 +66,27 @@ Some presets for the _Spring Configuration_ have been removed
 })
 ----
 
-[cols="m,m", options="header"]
-.org.apache.causeway.core.config.CausewayConfiguration
-|===
+[source,yaml]
+.application.yaml (Spring configuration properties)
+----
+#configures the servlet-context relative path prefix for the _Restful Objects Viewer_
 
-| New | Details
+# removed ..
+#resteasy:
+#  jaxrs:
+#    defaultPath: /restful
+#
 
-| causeway.viewer.restfulobjects.basePath=/restful
-| configures the servlet-context relative path prefix for the _Restful Objects Viewer_; replaces `resteasy.jaxrs.defaultPath=/restful`
+causeway:
+  viewer:
+    restfulobjects:
+      basePath: /restful
+----
 
-|===
+== Immutable Configuration
+
+`CausewayConfiguration` was refactored using Java records over regular classes, 
+in effect all accessors have been renamed, stripping any `get` or `is` prefixes. 
+`CausewayConfiguration` is now immutable.
 
 
