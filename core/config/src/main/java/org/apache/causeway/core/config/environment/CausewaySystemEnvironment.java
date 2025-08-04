@@ -45,7 +45,8 @@ import lombok.extern.slf4j.Slf4j;
  * Represents configuration, that is required in an early bootstrapping phase.
  * Regarded immutable during an application's life-cycle.
  *
- * @implNote acts as the framework's bootstrapping entry-point for Spring
+ * @apiNote acts as the framework's bootstrapping entry-point for Spring
+ * @implNote not a record, since {@link SpringContextHolder} reference is cleared on pre-destroy
  * @since 2.0
  */
 @Service
