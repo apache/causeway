@@ -53,10 +53,8 @@ class ServiceActionUtil {
         var menuItemLabel = Wkt.labelAdd(actionLink, "menuLinkLabel", menuItem.getName());
 
         WktDecorators
-            .decorateMenuAction(actionLink, listItem, menuItemLabel, 
-                    ActionDecorationModel.builder(actionLink)
-                        .actionStyle(ActionStyle.MENU_ITEM)
-                        .build());
+            .decorateMenuAction(actionLink, listItem, menuItemLabel,
+                    ActionDecorationModel.of(actionLink, ActionStyle.MENU_ITEM));
 
         var leafItem = new Fragment("content", "leafItem", parent);
         leafItem.add(actionLink);
@@ -107,13 +105,13 @@ class ServiceActionUtil {
             var menuSection = CssMenuItem.newSpacer();
             currentTopLevelMenu.addSubMenuItem(menuSection);
         }
-        
+
         @Override
         public void onMenuAction(MenuAction menuAction) {
             var menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name(), newActionLink(menuAction.managedAction().orElseThrow()));
             currentTopLevelMenu.addSubMenuItem(menuItem);
         }
-        
+
         @Override
         public void onSectionLabel(final String named) {
             var menuSectionLabel = CssMenuItem.newSectionLabel(named);

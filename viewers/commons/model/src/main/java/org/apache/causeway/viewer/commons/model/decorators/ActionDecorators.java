@@ -41,18 +41,18 @@ public class ActionDecorators {
         MENU_ITEM;
     }
 
-    public enum ButtonModifier {
-        NONE,
+    public enum VisualRank {
+        DEFAULT,
         /**
          * With respect to UI visual hierarchy, actions that appear in the field-set header
          * are ranked higher than those that appear inside a field-set.
          * <p>
          * Consequently, viewers may reflect lower visual rank e.g. by rendering the latter action buttons as outlined.
          */
-        LOWER_VISUAL_RANK,
+        LOWER,
     }
 
-    public enum MenuItemModifier {
+    public enum LabelIndent {
         NONE,
         /**
          * For menu items that are rendered in vertical sequence, some may have icons some may not.
@@ -68,32 +68,38 @@ public class ActionDecorators {
     public record ActionDecorationModel(
             ObjectAction action,
             ActionStyle actionStyle,
-            ButtonModifier buttonModifier,
-            MenuItemModifier menuItemModifier,
+            VisualRank visualRank,
+            LabelIndent labelIndent,
             Optional<DisablingDecorationModel> disabling,
             Optional<PrototypingDecorationModel> prototyping,
             Optional<FontAwesomeLayers> fontAwesomeLayers,
             Optional<String> describedAs,
             Optional<String> additionalCssClass) {
 
-        public static ActionDecorationModelBuilder builder(
-                final HasManagedAction managedActionHolder) {
+        public static ActionDecorationModel of(
+                final HasManagedAction managedActionHolder, final ActionStyle actionStyle) {
             var managedAction = managedActionHolder.getManagedAction();
             var action = managedAction.getAction();
+            var labelIndent = switch (actionStyle) {
+                case BUTTON -> LabelIndent.NONE;
+                case MENU_ITEM -> LabelIndent.FORCE_ALIGNMENT_WITH_BLANK_ICON;
+            };
             return builderInternal()
                 .action(action)
-                .buttonModifier(managedActionHolder.isPositionedInsideFieldSet()
+                .actionStyle(actionStyle)
+                .visualRank(managedActionHolder.isPositionedInsideFieldSet()
                         || action.isPrototype()
-                        ? ButtonModifier.LOWER_VISUAL_RANK
-                        : ButtonModifier.NONE)
-                .menuItemModifier(MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON) // default
+                        ? VisualRank.LOWER
+                        : VisualRank.DEFAULT)
+                .labelIndent(labelIndent)
                 .prototyping(action.isPrototype()
                         ? Optional.of(PrototypingDecorationModel.of(managedAction))
                         : Optional.empty())
                 .describedAs(managedAction.getDescription())
                 .disabling(DisablingDecorationModel.of(managedAction.checkUsability()))
                 .additionalCssClass(managedActionHolder.getAdditionalCssClass())
-                .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(true));
+                .fontAwesomeLayers(managedActionHolder.lookupFontAwesomeLayers(labelIndent))
+                .build();
         }
 
         public Identifier featureIdentifier() {
@@ -109,17 +115,17 @@ public class ActionDecorators {
         }
 
         /**
-         * @see ButtonModifier
+         * @see VisualRank
          */
         public boolean isLowerVisualRank() {
-            return buttonModifier==ButtonModifier.LOWER_VISUAL_RANK;
+            return visualRank==VisualRank.LOWER;
         }
 
         /**
-         * @see MenuItemModifier
+         * @see LabelIndent
          */
         public boolean isForceAlignmentWithBlankIcon() {
-            return menuItemModifier==MenuItemModifier.FORCE_ALIGNMENT_WITH_BLANK_ICON;
+            return labelIndent==LabelIndent.FORCE_ALIGNMENT_WITH_BLANK_ICON;
         }
 
         /**

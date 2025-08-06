@@ -22,7 +22,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.Model;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -120,9 +119,7 @@ implements Menuable {
 
             WktDecorators.decorateMenuAction(
                     actionLink, actionLink, label,
-                    ActionDecorationModel.builder(actionLinkElseFail())
-                        .actionStyle(ActionStyle.MENU_ITEM)
-                        .build());
+                    ActionDecorationModel.of(actionLinkElseFail(), ActionStyle.MENU_ITEM));
 
             // .. and hide label
             WktComponents.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
