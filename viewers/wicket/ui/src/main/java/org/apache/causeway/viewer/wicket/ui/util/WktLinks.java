@@ -32,7 +32,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
@@ -40,7 +40,6 @@ import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.Acti
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -65,9 +64,7 @@ public final class WktLinks {
 
         WktDecorators.decorateActionLink(
                 link, tooltipReceiver, actionLabel,
-                ActionDecorationModel.builder(link)
-                    .actionStyle(actionStyle)
-                    .build());
+                ActionDecorationModel.of(link, actionStyle));
 
         return link;
     }

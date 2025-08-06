@@ -26,12 +26,14 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.LabelIndent;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
 
 /**
@@ -96,16 +98,17 @@ public interface HasManagedAction {
      *      but not in horizontal action panels,
      *      where e.g. LinkAndLabel correspond to a UI button.
      */
-    default Optional<FontAwesomeLayers> lookupFontAwesomeLayers(final boolean forceAlignmentOnIconAbsence) {
+    default Optional<FontAwesomeLayers> lookupFontAwesomeLayers(final LabelIndent labelIndent) {
         var managedAction = getManagedAction();
         return ObjectAction.Util.cssClassFaFactoryFor(
                     managedAction.getAction(),
                     managedAction.getOwner())
-                .map(cssClassFaFactory->
-                    forceAlignmentOnIconAbsence
-                        ? cssClassFaFactory.getLayers().emptyToBlank()
-                        : cssClassFaFactory.getLayers()
-                    );
+                .map(FaLayersProvider::getLayers)
+                .map(layers->
+                    switch(labelIndent) {
+                        case FORCE_ALIGNMENT_WITH_BLANK_ICON -> layers.emptyToBlank();
+                        case NONE -> layers;
+                    });
     }
 
     default Optional<String> getAdditionalCssClass() {
@@ -120,10 +123,10 @@ public interface HasManagedAction {
             final ActionLayout.Position position) {
         return a -> a.getPosition() == position;
     }
-    
+
     /**
      * With respect to UI visual hierarchy, actions that appear in the field-set header
-     * are ranked higher than those that appear inside a field-set. 
+     * are ranked higher than those that appear inside a field-set.
      */
     default boolean isPositionedInsideFieldSet() {
         return isPositionedAt(Position.BELOW)
