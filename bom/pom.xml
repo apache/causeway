@@ -1106,6 +1106,13 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-tabular-pdf</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>

@@ -24,6 +24,7 @@ import java.util.Optional;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceUnitUtil;
+import jakarta.persistence.TypedQuery;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -37,7 +38,6 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
@@ -133,16 +133,7 @@ class JpaEntityFacet
             // guard against misuse
             _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
 
-            var entityManager = getEntityManager();
-
-            var cb = entityManager.getCriteriaBuilder();
-            var cr = cb.createQuery(entityClass);
-
-            cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
-
-            var typedQuery = entityManager
-                    .createQuery(cr);
-
+            var typedQuery = selectFrom(entityClass);
             if (range.hasOffset()) {
                 typedQuery.setFirstResult(range.getStartAsInt());
             }
@@ -280,5 +271,14 @@ class JpaEntityFacet
     protected PersistenceUnitUtil getPersistenceUnitUtil(final EntityManager entityManager) {
         return entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
     }
+    
+    // -- HELPER
 
+    private <T> TypedQuery<T> selectFrom(Class<T> entityClass) {
+        var entityManager = getEntityManager();
+        var q = entityManager.getCriteriaBuilder().createQuery(entityClass);
+        q.select(q.from(entityClass));
+        return entityManager
+                .createQuery(q);
+    }
 }
