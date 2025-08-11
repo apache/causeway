@@ -5,7 +5,7 @@
 
 Upgrade Summary:
 
-. stay at *Java 17* baseline (as _Spring_ does)
+. stay at *Java 17* baseline (as _Spring_ does; however, JRuby 10.x as used for AsciiDoc extensions requires Java 21+ runtime)
 . upgrade to *Jackson 3* (as _Spring_ does) 
 . upgrade to *JUnit 6* (as _Spring_ does)
 . *Shiro* support removed ✅
