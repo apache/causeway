@@ -1286,6 +1286,13 @@ identified
             </dependency>
             <dependency>
                 <groupId>org.apache.causeway.extensions</groupId>
+                <artifactId>causeway-extensions-tabular-pdf</artifactId>
+                <version>3.5.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.causeway.extensions</groupId>
                 <artifactId>causeway-extensions-fullcalendar</artifactId>
                 <version>3.5.0-SNAPSHOT</version>
                 <type>pom</type>
