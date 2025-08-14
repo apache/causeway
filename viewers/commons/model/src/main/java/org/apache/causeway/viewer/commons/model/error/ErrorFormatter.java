@@ -18,30 +18,22 @@
  */
 package org.apache.causeway.viewer.commons.model.error;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
-public record StackTraceDetail(
-        Type type,
-        String line) implements Serializable {
+public interface ErrorFormatter {
 
-    public enum Type {
-        EXCEPTION_CLASS_NAME,
-        EXCEPTION_MESSAGE,
-        STACKTRACE_ELEMENT,
-        LITERAL
+    default String formatClass(Class<? extends Throwable> errorClass) {
+        return errorClass.getName();
     }
 
-    public static StackTraceDetail exceptionClassName(final Throwable cause) {
-        return new StackTraceDetail(StackTraceDetail.Type.EXCEPTION_CLASS_NAME, cause.getClass().getName());
+    default String formatMessage(String errorMessage) {
+        return errorMessage;
     }
 
-    public static StackTraceDetail exceptionMessage(final Throwable cause) {
-        return new StackTraceDetail(StackTraceDetail.Type.EXCEPTION_MESSAGE, cause.getMessage());
-    }
-
-    public static StackTraceDetail element(final StackTraceElement el) {
-        var buf = new StringBuilder();
-        buf.append("    ")
+    default String formatElement(StackTraceElement el) {
+        return new StringBuilder()
             .append(el.getClassName())
             .append("#")
             .append(el.getMethodName())
@@ -49,17 +41,22 @@ public record StackTraceDetail(
             .append(el.getFileName())
             .append(":")
             .append(el.getLineNumber())
-            .append(")\n");
-
-        return new StackTraceDetail(StackTraceDetail.Type.STACKTRACE_ELEMENT, buf.toString());
+            .append(")\n")
+            .toString();
     }
 
-    public static StackTraceDetail spacer() {
-        return new StackTraceDetail(Type.LITERAL, "");
+    default List<String> chainJoiningLines() {
+        return List.of("", "caused By:", "");
     }
 
-    public static StackTraceDetail causedBy() {
-        return new StackTraceDetail(Type.LITERAL, "Caused by:");
+    default List<String> toLines(Throwable cause) {
+        var lines = new ArrayList<String>();
+        lines.add(formatClass(cause.getClass()));
+        lines.add(formatMessage(cause.getMessage()));
+        Stream.of(cause.getStackTrace())
+            .map(this::formatElement)
+            .forEach(lines::add);
+        return lines;
     }
 
 }

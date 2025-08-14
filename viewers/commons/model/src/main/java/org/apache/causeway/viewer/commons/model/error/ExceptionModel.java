@@ -19,9 +19,9 @@
 package org.apache.causeway.viewer.commons.model.error;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.error.ErrorDetails;
@@ -29,7 +29,6 @@ import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -43,8 +42,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 public record ExceptionModel(
     ExceptionType exceptionType,
     String mainMessage,
-    List<StackTraceDetail> stackTraceDetailList,
-    List<List<StackTraceDetail>> stackTraceDetailLists) implements Serializable {
+    List<Throwable> causalChain) implements Serializable {
 
     private static final String MAIN_MESSAGE_IF_NOT_RECOGNIZED = "Sorry, an unexpected error occurred.";
 
@@ -92,7 +90,7 @@ public record ExceptionModel(
             }
         }
 
-        return new ExceptionModel(exceptionType, mainMessage, asStackTrace(ex), asStackTraces(ex));
+        return new ExceptionModel(exceptionType, mainMessage, _Exceptions.getCausalChain(ex));
     }
 
     public boolean isRecognized() {
@@ -110,80 +108,43 @@ public record ExceptionModel(
         return exceptionType==ExceptionType.AUTHORIZATION_EXCEPTION;
     }
 
-    public List<StackTraceDetail> getStackTrace() {
-        return stackTraceDetailList;
-    }
-    public List<List<StackTraceDetail>> getStackTraces() {
-        return stackTraceDetailLists;
+    public ErrorDetails asErrorDetails() {
+        return asErrorDetails(new ErrorFormatter() {});
     }
 
-    public ErrorDetails asErrorDetails(Function<StackTraceDetail, String> formatter) {
-        final boolean recognized = isRecognized();
-        final boolean authorizationException = isAuthorizationException();
-
-        final List<String> stackDetailList = stackTraceDetailList
-            .stream()
-            .map(formatter)
-            .toList();
-
-        final List<List<StackTraceDetail>> stackTraces = getStackTraces();
-        final List<List<String>> stackDetailLists = _Lists.newArrayList();
-        for (List<StackTraceDetail> trace : stackTraces) {
-            stackDetailLists.add(trace.stream()
-                .map(formatter)
+    public ErrorDetails asErrorDetails(ErrorFormatter formatter) {
+        return new ErrorDetails(
+            mainMessage,
+            isRecognized(),
+            isAuthorizationException(),
+            flatten(causalChain, formatter),
+            causalChain.stream()
+                .map(formatter::toLines)
                 .toList());
-        }
-
-        return new ErrorDetails(mainMessage, recognized, authorizationException, stackDetailList, stackDetailLists);
     }
 
     // -- HELPER
 
+    private List<String> flatten(List<Throwable> causalChain, ErrorFormatter formatter) {
+        var lines = new ArrayList<String>();
+        int count = 0;
+        for(var throwable : causalChain) {
+            if(count>0) {
+                lines.addAll(formatter.chainJoiningLines());
+            }
+            lines.addAll(formatter.toLines(throwable));
+            count++;
+        }
+        return lines;
+    }
+
     private static <T extends Exception> T causalChainOf(final Exception ex, final Class<T> exType) {
-        final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
-        for (Throwable cause : causalChain) {
+        for (Throwable cause : _Exceptions.getCausalChain(ex)) {
             if(exType.isAssignableFrom(cause.getClass())) {
                 return _Casts.uncheckedCast(cause);
             }
         }
         return null;
-    }
-
-    private static List<StackTraceDetail> asStackTrace(final Throwable ex) {
-        List<StackTraceDetail> stackTrace = _Lists.newArrayList();
-        List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
-        boolean firstTime = true;
-        for(Throwable cause: causalChain) {
-            if(!firstTime) {
-                stackTrace.add(StackTraceDetail.spacer());
-                stackTrace.add(StackTraceDetail.causedBy());
-                stackTrace.add(StackTraceDetail.spacer());
-            } else {
-                firstTime = false;
-            }
-            append(cause, stackTrace);
-        }
-        return stackTrace;
-    }
-
-    private static List<List<StackTraceDetail>> asStackTraces(final Throwable ex) {
-        List<List<StackTraceDetail>> stackTraces = _Lists.newArrayList();
-
-        List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
-        for(Throwable cause: causalChain) {
-            List<StackTraceDetail> stackTrace = _Lists.newArrayList();
-            append(cause, stackTrace);
-            stackTraces.add(stackTrace);
-        }
-        return stackTraces;
-    }
-
-    private static void append(final Throwable cause, final List<StackTraceDetail> stackTrace) {
-        stackTrace.add(StackTraceDetail.exceptionClassName(cause));
-        stackTrace.add(StackTraceDetail.exceptionMessage(cause));
-        for (StackTraceElement el : cause.getStackTrace()) {
-            stackTrace.add(StackTraceDetail.element(el));
-        }
     }
 
 }

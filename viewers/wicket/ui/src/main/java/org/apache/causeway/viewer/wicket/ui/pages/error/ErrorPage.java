@@ -18,14 +18,10 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.error;
 
-import java.util.List;
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
-import org.apache.causeway.viewer.commons.model.error.StackTraceDetail;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
@@ -49,11 +45,6 @@ public class ErrorPage extends PageAbstract {
         var pageClassRegistry = super.getServiceRegistry().lookupServiceElseFail(PageClassRegistry.class);
 
         themeDiv.add(new ExceptionStackTracePanel(pageClassRegistry, ID_EXCEPTION_STACK_TRACE, exceptionModel));
-
-    }
-
-    protected List<String> transform(final List<StackTraceDetail> stackTrace) {
-        return _Lists.map(stackTrace, StackTraceDetail::line);
     }
 
 }
