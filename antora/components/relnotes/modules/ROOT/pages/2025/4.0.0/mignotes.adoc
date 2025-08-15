@@ -89,4 +89,7 @@ causeway:
 in effect all accessors have been renamed, stripping any `get` or `is` prefixes. 
 `CausewayConfiguration` is now immutable.
 
+== ErrorDetails
 
+`ErrorDetails` as used by the `ErrorReportingService` has been converted from a class to a record.
+(In effect all accessors have been renamed, stripping any `get` or `is` prefixes)
