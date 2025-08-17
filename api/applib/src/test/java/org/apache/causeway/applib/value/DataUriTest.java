@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.value;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,9 +36,9 @@ class DataUriTest {
         HALLO_WORLD("text/plain", null, DataUri.Encoding.BASE64, "Hello, World!".getBytes(StandardCharsets.UTF_8),
                 "data:text/plain;base64,SGVsbG8sIFdvcmxkIQ=="),
 
-//        TEXT_OTHER("text/vnd-example+xyz;foo=bar", "base64", "R0lGODdh".getBytes(StandardCharsets.UTF_8),
-//                "data:text/vnd-example+xyz;foo=bar;base64,R0lGODdh"),
-//
+        TEXT_OTHER("text/vnd-example+xyz", List.of("foo=bar"), DataUri.Encoding.BASE64, Base64.getDecoder().decode("R0lGODdh"),
+                "data:text/vnd-example+xyz;foo=bar;base64,R0lGODdh"),
+
         TEXT_ADVANCED("text/plain", List.of("charset=UTF-8", "page=21"), DataUri.Encoding.NONE, "the data:1234,5678".getBytes(StandardCharsets.UTF_8),
                 "data:text/plain;charset=UTF-8;page=21,the%20data%3A1234%2C5678"),
         ;
@@ -53,16 +54,8 @@ class DataUriTest {
     void rundtrip(Scenario scenario) {
         var ref = new DataUri(scenario.mediaType, scenario.parameters, scenario.encoding, scenario.data);
         var parsed = DataUri.parse(scenario.externalForm);
-        switch (scenario) {
-        case TEXT_ADVANCED: {
-            assertEquals(scenario.externalForm, ref.toExternalForm());
-            assertEquals(ref, parsed); // check equality relation
-        }
-        default:
-            assertEquals(scenario.externalForm, ref.toExternalForm());
-            assertEquals(ref, parsed); // check equality relation
-        }
-
+        assertEquals(scenario.externalForm, ref.toExternalForm());
+        assertEquals(ref, parsed); // check equality relation
     }
 
 }

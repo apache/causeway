@@ -74,7 +74,7 @@ public record DataUri(
                 : Encoding.NONE
             : Encoding.NONE;
 
-        var parameters = IntStream.range(1, metadataParts.length - (encoding == Encoding.BASE64 ? 2 : 1))
+        var parameters = IntStream.range(1, metadataParts.length - (encoding == Encoding.BASE64 ? 1 : 0))
             .mapToObj(i->metadataParts[i])
             .toList();
 
@@ -127,6 +127,7 @@ public record DataUri(
         if(this == o) return true;
         return o instanceof DataUri other
             ? Objects.equals(this.mediaType, other.mediaType)
+                    && Objects.equals(this.parameters, other.parameters)
                     && Objects.equals(this.encoding, other.encoding)
                     && Arrays.equals(this.data, other.data)
             : false;
