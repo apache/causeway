@@ -37,6 +37,7 @@ import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
@@ -54,7 +55,7 @@ implements ImageResourceCache {
     public static final String LOGICAL_TYPE_NAME =
             CausewayModuleViewerWicketViewer.NAMESPACE + ".ImageResourceCacheClassPath";
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     public static class AutoConfiguration {
         @Bean
         @Named(LOGICAL_TYPE_NAME)
@@ -67,7 +68,7 @@ implements ImageResourceCache {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public ResourceReference resourceReferenceForObjectIcon(final ObjectIcon objectIcon) {
+    public ResourceReference resourceReferenceForObjectIcon(final ObjectIconUrlBased objectIcon) {
         return new ObjectIconResourceReference(objectIcon);
     }
 
@@ -80,8 +81,8 @@ implements ImageResourceCache {
 
         private final @NonNull ObjectIconResource objectIconResource;
 
-        public ObjectIconResourceReference(final ObjectIcon objectIcon) {
-            super(new Key(Application.class.getName(), objectIcon.identifier(), null, null, null));
+        public ObjectIconResourceReference(final ObjectIconUrlBased objectIcon) {
+            super(new Key(Application.class.getName(), objectIcon.cacheId(), null, null, null));
             this.objectIconResource = new ObjectIconResource(objectIcon);
         }
 
@@ -103,14 +104,14 @@ implements ImageResourceCache {
         @Override
         protected ResourceResponse newResourceResponse(final Attributes attributes) {
 
-            var imageDataBytes = objectIcon.asBytes();
+            var imageDataBytes = objectIcon.iconData();
             final long size = imageDataBytes.length;
-            ResourceResponse resourceResponse = new ResourceResponse();
-            resourceResponse.setContentType(objectIcon.mimeType().baseType());
+            var resourceResponse = new ResourceResponse();
+            resourceResponse.setContentType(objectIcon.mediaType());
             resourceResponse.setAcceptRange(ContentRangeType.BYTES);
             resourceResponse.setContentLength(size);
             resourceResponse.setFileName(objectIcon.shortName());
-            RequestCycle cycle = RequestCycle.get();
+            var cycle = RequestCycle.get();
             Long startbyte = cycle.getMetaData(CONTENT_RANGE_STARTBYTE);
             Long endbyte = cycle.getMetaData(CONTENT_RANGE_ENDBYTE);
             resourceResponse.setWriteCallback(

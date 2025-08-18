@@ -52,7 +52,7 @@ class ExcelModuleDemoUploadService_IntegTest extends ExcelModuleIntegTestAbstrac
     public void uploadSpreadsheet() throws Exception{
 
         // Given
-        final URL excelResource = _Resources.getResourceUrl(getClass(), "ToDoItemsWithMultipleSheets.xlsx");
+        final URL excelResource = _Resources.lookupResourceUrl(getClass(), "ToDoItemsWithMultipleSheets.xlsx").orElse(null);
         final Blob blob = new ExcelFileBlobConverter().toBlob("unused", excelResource);
 
         // When

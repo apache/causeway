@@ -28,6 +28,8 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
@@ -112,8 +114,15 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             linkedDomainObject.eitherIconOrFaLayers()
             .accept(
                     objectIcon->{
-                        Wkt.imageAddCachable(link, ID_OBJECT_ICON,
-                                getImageResourceCache().resourceReferenceForObjectIcon(objectIcon));
+                        if(objectIcon instanceof ObjectIconEmbedded iconEmbedded) {
+                            Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
+                        } else if(objectIcon instanceof ObjectIconUrlBased iconUrlBased) {
+                            Wkt.imageAddCachable(link, ID_OBJECT_ICON,
+                                    getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased));
+                        } else {
+                            throw new IllegalArgumentException("Unexpected value: " + objectIcon);
+                        }
+
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                     },

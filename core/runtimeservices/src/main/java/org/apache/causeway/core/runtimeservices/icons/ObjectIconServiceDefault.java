@@ -33,6 +33,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -41,6 +42,7 @@ import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
+import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -82,9 +84,16 @@ implements ObjectIconService {
             final @Nullable String iconNameModifier) {
 
         var domainClass = spec.getCorrespondingClass();
-        var iconResourceKey = _Strings.isNotEmpty(iconNameModifier)
-                ? domainClass.getName() + "-" + iconNameModifier
-                : domainClass.getName();
+
+        var suffix = "";
+        if(StringUtils.hasLength(iconNameModifier)) {
+            suffix = "-" + iconNameModifier;
+            if(iconNameModifier.startsWith("data:")) {
+                return ObjectIcon.embedded(domainClass.getSimpleName(), DataUri.parse(iconNameModifier));
+            }
+        }
+
+        var iconResourceKey = domainClass.getName() + suffix;
 
         // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
 
@@ -105,9 +114,10 @@ implements ObjectIconService {
     private ObjectIcon getObjectFallbackIcon() {
         return fallbackIcon.orElseSet(()->ObjectIcon.eager(
                 "ObjectIconFallback",
-                _Resources.getResourceUrl(
+                _Resources.lookupResourceUrl(
                         ObjectIconServiceDefault.class,
-                        "ObjectIconFallback.png"),
+                        "ObjectIconFallback.png")
+                .orElse(null),
                 CommonMimeType.PNG));
     }
 
@@ -195,8 +205,7 @@ implements ObjectIconService {
             throw _Exceptions
                 .illegalArgument("invalid relative resourceName %s", relativeResourceName);
         }
-        var resourceUrl = _Resources.getResourceUrl(contextClass, relativeResourceName);
-        return Optional.ofNullable(resourceUrl);
+        return _Resources.lookupResourceUrl(contextClass, relativeResourceName);
     }
 
 }

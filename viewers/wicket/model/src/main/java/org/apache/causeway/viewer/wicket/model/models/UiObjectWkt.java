@@ -21,12 +21,13 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -40,6 +41,8 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -55,7 +58,6 @@ import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.Setter;
 import lombok.Synchronized;
 import lombok.extern.slf4j.Slf4j;
@@ -188,10 +190,25 @@ implements
         return getManagedObject().eitherIconOrFaLayers();
     }
 
-    public Either<ResourceReference, FontAwesomeLayers> getIconAsResourceReference() {
-        return getIcon()
-                .mapLeft(objectIcon->
-                    imageResourceCache().resourceReferenceForObjectIcon(objectIcon));
+    public void visitIconVariantOrElse(
+            Consumer<ResourceReference> a,
+            Consumer<ObjectIconEmbedded> b,
+            Consumer<FontAwesomeLayers> c,
+            Runnable onNoMatch) {
+        getIcon().accept(
+            objectIcon->{
+                if(objectIcon instanceof ObjectIconUrlBased urlBased){
+                    var rref = imageResourceCache().resourceReferenceForObjectIcon(urlBased);
+                    if(rref!=null) {
+                        a.accept(rref);
+                    } else {
+                        onNoMatch.run();
+                    }
+                } else if(objectIcon instanceof ObjectIconEmbedded embedded){
+                    b.accept(embedded);
+                }
+            },
+            fontAwesomeLayers->c.accept(fontAwesomeLayers));
     }
 
     @Override

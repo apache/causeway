@@ -42,7 +42,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
         this(null);
     }
 
-    public DemoToDoItem_create_usingExcelFixture(String ownedBy) {
+    public DemoToDoItem_create_usingExcelFixture(final String ownedBy) {
         this.user = ownedBy;
     }
 
@@ -50,7 +50,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
     private List<ExcelDemoToDoItem> todoItems = _Lists.newArrayList();
 
     @Override
-    public void execute(ExecutionContext executionContext) {
+    public void execute(final ExecutionContext executionContext) {
 
         final String ownedBy = this.user != null ? this.user : userService.currentUserNameElseNobody();
 
@@ -59,7 +59,7 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
         transactionService.flushTransaction();
     }
 
-    private void installFor(String user, ExecutionContext ec) {
+    private void installFor(final String user, final ExecutionContext ec) {
 
         ec.setParameter("user", user);
 
@@ -73,12 +73,12 @@ public class DemoToDoItem_create_usingExcelFixture extends FixtureScript {
             final ExecutionContext executionContext,
             final String resourceName) {
 
-        final URL excelResource = _Resources.getResourceUrl(getClass(), resourceName);
+        final URL excelResource = _Resources.lookupResourceUrl(getClass(), resourceName).orElse(null);
         final ExcelFixture excelFixture = new ExcelFixture(excelResource, DemoToDoItemRowHandler.class);
         excelFixture.setExcelResourceName(resourceName);
         executionContext.executeChild(this, excelFixture);
 
-        return (List<ExcelDemoToDoItem>) excelFixture.getObjects();
+        return excelFixture.getObjects();
     }
 
     @Inject UserService userService;

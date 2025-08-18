@@ -16,16 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.model.models;
+package org.apache.causeway.core.metamodel.facets.object.icon;
 
-import java.io.Serializable;
+import org.apache.causeway.commons.net.DataUri;
 
-import org.apache.wicket.request.resource.ResourceReference;
+/**
+ * Icon image based on {@link DataUri}
+ *
+ * @see ObjectIconService
+ * @since 4.0
+ */
+public record ObjectIconEmbedded(
+        String shortName,
+        DataUri dataUri
+        ) implements ObjectIcon {
 
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
+    @Override
+    public String mediaType() {
+        return dataUri.mediaType();
+    }
 
-public interface ImageResourceCache extends Serializable {
-
-    ResourceReference resourceReferenceForObjectIcon(final ObjectIconUrlBased objectIcon);
+    @Override
+    public byte[] iconData() {
+        return dataUri.data();
+    }
 
 }

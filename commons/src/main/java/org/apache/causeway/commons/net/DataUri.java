@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.net;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -44,7 +45,7 @@ public record DataUri(
         String mediaType,
         List<String> parameters,
         Encoding encoding,
-        byte[] data) {
+        byte[] data) implements Serializable {
 
     public enum Encoding {
         NONE,

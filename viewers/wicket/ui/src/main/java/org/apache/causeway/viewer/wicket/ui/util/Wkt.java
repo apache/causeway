@@ -110,6 +110,7 @@ import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableFunction;
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
+import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
@@ -827,8 +828,24 @@ public class Wkt {
         };
     }
 
+    public Image imageEmbedded(final String id, final DataUri dataUri) {
+        return new Image(id, "embedded") {
+            private static final long serialVersionUID = 1L;
+            @Override protected boolean shouldAddAntiCacheParameter() { return false; }
+
+            @Override
+            protected String buildSrcAttribute(ComponentTag tag) {
+                return dataUri.toExternalForm();
+            }
+        };
+    }
+
     public Image imageAddCachable(final MarkupContainer container, final String id, final ResourceReference imageResource) {
         return add(container, imageCachable(id, imageResource));
+    }
+
+    public Image imageAddEmbedded(final MarkupContainer container, final String id, final DataUri imageResource) {
+        return add(container, imageEmbedded(id, imageResource));
     }
 
     // -- LABEL

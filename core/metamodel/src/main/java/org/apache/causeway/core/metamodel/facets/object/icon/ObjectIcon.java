@@ -18,30 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
-import java.util.Objects;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal._Constants;
-import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._StableValue;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.net.DataUri;
 
 /**
  * Icon image data class-path resource reference.
  *
  * @see ObjectIconService
- * @since 2.0
+ * @since 2.0 revised for 4.0
  */
-public record ObjectIcon(
-        String shortName,
-        URL url,
-        CommonMimeType mimeType,
-        String identifier,
-        _StableValue<byte[]> iconData
-        ) implements Serializable {
+public sealed interface ObjectIcon extends Serializable
+permits ObjectIconEmbedded, ObjectIconUrlBased {
 
     // -- FACTORIES
 
@@ -53,9 +44,8 @@ public record ObjectIcon(
             final String shortName,
             final URL url,
             final CommonMimeType mimeType) {
-        var id = _Strings.base64UrlEncode(url.getPath());
-        var objectIcon = new ObjectIcon(shortName, url, mimeType, id, new _StableValue<>());
-        objectIcon.asBytes(); // memoize
+        var objectIcon = lazy(shortName, url, mimeType);
+        ((ObjectIconUrlBased) objectIcon).iconData(); // memoize
         return objectIcon;
     }
 
@@ -67,31 +57,17 @@ public record ObjectIcon(
             final String shortName,
             final URL url,
             final CommonMimeType mimeType) {
-        var id = _Strings.base64UrlEncode(url.getPath());
-        return new ObjectIcon(shortName, url, mimeType, id, new _StableValue<>());
+        return new ObjectIconUrlBased(shortName, url, mimeType, new _StableValue<>());
     }
 
-    // -- EQUALITY
-
-    @Override
-    public final boolean equals(Object o) {
-        if(this == o) return true;
-        return o instanceof ObjectIcon other
-            ? Objects.equals(this.shortName, other.shortName)
-                    && Objects.equals(this.url, other.url)
-                    && Objects.equals(this.mimeType, other.mimeType)
-                    && Objects.equals(this.identifier, other.identifier)
-            : false;
+    public static ObjectIcon embedded(String shortName, DataUri dataUri) {
+        return new ObjectIconEmbedded(shortName, dataUri);
     }
 
-    public byte[] asBytes() {
-        return iconData.orElseSet(()->{
-            try(final InputStream is = url.openStream()){
-                return _Bytes.of(is);
-            } catch (Exception e) {
-                return _Constants.emptyBytes;
-            }
-        });
-    }
+    // --
+
+    String shortName();
+    String mediaType();
+    byte[] iconData();
 
 }

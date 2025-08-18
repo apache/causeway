@@ -19,7 +19,6 @@
 package org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages;
 
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.inject.Inject;
 
@@ -35,6 +34,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -138,17 +138,23 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                                 bookmarkNode.getPageParameters(),
                                 pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT)));
 
-                bookmarkNode.eitherIconOrFaClass()
-                .accept(
+                bookmarkNode.visitIconVariantOrElse(
                         iconResourceRef->{
-                            Optional.ofNullable(iconResourceRef)
-                            .ifPresent(icon->
-                                Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, icon));
+                            Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, iconResourceRef);
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
+                        },
+                        embedded->{
+                            Wkt.markupAdd(link, ID_BOOKMARKED_PAGE_ICON, Markup.embeddedImage(embedded.dataUri()).html());
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
                         },
                         faLayers->{
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
                             Wkt.faIconLayersAdd(link, ID_BOOKMARKED_PAGE_ICON_FA, faLayers);
+                        },
+                        ()->{
+                            // on no match: hide all
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
+                            WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
                         });
 
                 Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());

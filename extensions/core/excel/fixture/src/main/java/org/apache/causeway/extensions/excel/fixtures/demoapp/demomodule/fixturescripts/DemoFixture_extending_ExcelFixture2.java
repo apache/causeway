@@ -47,7 +47,7 @@ public class DemoFixture_extending_ExcelFixture2 extends ExcelFixture2 {
     @Override
     protected void execute(final ExecutionContext executionContext) {
 
-        setExcelResource(_Resources.getResourceUrl(getClass(), getResourceName()));
+        setExcelResource(_Resources.lookupResourceUrl(getClass(), getResourceName()).orElse(null));
 
         setMatcher(sheetName -> {
 

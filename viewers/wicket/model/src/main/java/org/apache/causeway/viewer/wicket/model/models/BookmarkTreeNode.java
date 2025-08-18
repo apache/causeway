@@ -22,19 +22,20 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.function.Consumer;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Functions;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public class BookmarkTreeNode
 implements
@@ -49,12 +50,9 @@ implements
 
     @Getter private String title;
 
-    /** its either a iconResourceReference or a iconFaClass or neither (decomposed for easy serialization) */
     private ResourceReference iconResourceReference;
-    /** its either a iconResourceReference or a FontAwesomeLayers or neither (decomposed for easy serialization) */
     private FontAwesomeLayers faLayers;
-
-    //private final Set<Bookmark> propertyBookmarks; ... in support of parents referencing their child
+    private ObjectIconEmbedded embedded;
 
     // -- FACTORIES
 
@@ -73,30 +71,27 @@ implements
 
         this.pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
         this.bookmark = bookmark;
-//        this.propertyBookmarks = bookmarkableModel.streamPropertyBookmarks()
-//                .collect(Collectors.toCollection(HashSet::new));
-
         this.title = bookmarkableModel.getTitle();
 
         _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
-        .map(UiObjectWkt::getIconAsResourceReference)
-        .ifPresent(either->either.accept(
-                iconResourceReference->
-                    this.iconResourceReference = iconResourceReference,
-                faLayers->
-                    this.faLayers = faLayers
-                )
-        );
+        .ifPresent(x->x.visitIconVariantOrElse(
+                rref->{this.iconResourceReference = rref;},
+                embedded->{this.embedded = embedded;},
+                faLayers->{this.faLayers = faLayers;},
+                ()->{}));
 
         this.depth = depth;
     }
 
-    // -- ICON
-
-    public Either<ResourceReference, FontAwesomeLayers> eitherIconOrFaClass() {
-        return faLayers==null
-                ? Either.left(iconResourceReference)
-                : Either.right(faLayers);
+    public void visitIconVariantOrElse(
+            Consumer<ResourceReference> a,
+            Consumer<ObjectIconEmbedded> b,
+            Consumer<FontAwesomeLayers> c,
+            Runnable onNoMatch) {
+        if(this.iconResourceReference!=null) a.accept(iconResourceReference);
+        else if(this.embedded!=null) b.accept(embedded);
+        else if(this.faLayers!=null) c.accept(faLayers);
+        else onNoMatch.run();
     }
 
     // -- COMPARATOR
@@ -184,37 +179,6 @@ implements
         return inGraph;
     }
 
-//    /**
-//     * Whether or not the provided {@link ActionModelImpl} matches that contained
-//     * within this node (taking into account the action's arguments).
-//     *
-//     * If it does match, then the matched node's title is updated to that of the provided
-//     * {@link ActionModelImpl}.
-//     * <p>
-//     *
-//     * @return - whether the provided candidate is found or was added to this node's tree.
-//     */
-//    private boolean matchFor(final ActionModelImpl candidateActionModel) {
-//
-//        var candidateBookmark = candidateActionModel.toBookmark().orElse(null);
-//
-//        // check if target object of the action is the same
-//        if(!Objects.equals(getBookmark(), candidateBookmark)) {
-//            return false;
-//        }
-//
-//        // check if args same
-//        List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
-//        PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
-//        List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
-//        if(!Objects.equals(thisArgs, candidateArgs)) {
-//            return false;
-//        }
-//
-//        // ok, a match
-//        return true;
-//    }
-
     /**
      * For given candidate model look into its properties and see whether one matches this node's bookmark.
      * If so, we found a parent/child relation for the tree to populate
@@ -231,19 +195,7 @@ implements
             }
         });
 
-        if(addedCount.longValue()>0L) {
-            return true;
-        }
-
-//        /* also check the other way around, that is,
-//         * whether the child is referenced from one of the parent's properties
-//         */
-//        if(candidateBookmarkableModel.toBookmark()
-//                .map(propertyBookmarks::contains)
-//                .orElse(false)) {
-//            return this.addChild(candidateBookmarkableModel).isPresent();
-//        }
-        return false;
+        return addedCount.longValue()>0L;
     }
 
 }
