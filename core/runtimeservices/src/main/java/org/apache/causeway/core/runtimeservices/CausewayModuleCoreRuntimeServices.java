@@ -37,7 +37,6 @@ import org.apache.causeway.core.runtimeservices.factory.FactoryServiceDefault;
 import org.apache.causeway.core.runtimeservices.homepage.HomePageResolverServiceDefault;
 import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePo;
 import org.apache.causeway.core.runtimeservices.i18n.po.TranslationServicePoMenu;
-import org.apache.causeway.core.runtimeservices.icons.ObjectIconServiceDefault;
 import org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault;
 import org.apache.causeway.core.runtimeservices.jaxb.JaxbServiceDefault;
 import org.apache.causeway.core.runtimeservices.locale.LanguageProviderDefault;
@@ -71,7 +70,7 @@ import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleCoreRuntime.class,
@@ -103,7 +102,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         MenuBarsMarshallerServiceBootstrap.class,
         MenuBarsServiceBootstrap.class,
         MessageServiceDefault.class,
-        ObjectIconServiceDefault.class,
+//        ObjectIconServiceDefault.class, // no longer public, but discovered anyway
         ObjectLifecyclePublisherDefault.class,
         PlaceholderRenderServiceDefault.class,
         LifecycleCallbackNotifier.class,

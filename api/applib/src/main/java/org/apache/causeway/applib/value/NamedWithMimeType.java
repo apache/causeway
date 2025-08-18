@@ -31,6 +31,8 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * @since 1.x {@index}
@@ -62,12 +64,27 @@ permits Blob, Clob {
                     : null);
     }
 
+    @RequiredArgsConstructor
+    @Getter @Accessors(fluent=true)
+    public enum ImageType {
+        BMP(CommonMimeType.BMP),
+        GIF(CommonMimeType.GIF),
+        ICO(CommonMimeType.ICO),
+        JPEG(CommonMimeType.JPEG),
+        PNG(CommonMimeType.PNG),
+        SVG(CommonMimeType.SVG),
+        TIFF(CommonMimeType.TIFF),
+        WEBP(CommonMimeType.WEBP);
+        @Getter @Accessors(fluent=true)
+        final CommonMimeType mimeType;
+    }
+
     /**
      * Subset of MimeTypes most commonly used.
      *
      * @since 2.0
      */
-    public static enum CommonMimeType {
+    public enum CommonMimeType {
 
         // see
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types

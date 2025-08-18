@@ -21,21 +21,27 @@ package org.apache.causeway.core.runtimeservices.icons;
 import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.applib.value.NamedWithMimeType.ImageType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
@@ -43,8 +49,6 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
@@ -55,29 +59,23 @@ import lombok.SneakyThrows;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".ObjectIconServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class ObjectIconServiceDefault
+record ObjectIconServiceDefault(
+        ResourceLoader resourceLoader,
+        Map<String, ObjectIcon> iconByKey,
+        _StableValue<ObjectIcon> fallbackIcon)
 implements ObjectIconService {
 
     private static final String DEFAULT_IMAGE_RESOURCE_PATH = "classpath:images";
     private static final Can<CommonMimeType> IMAGE_TYPES =
-            Can.of(
-                CommonMimeType.PNG,
-                CommonMimeType.GIF,
-                CommonMimeType.JPEG,
-                CommonMimeType.SVG);
+            Stream.of(NamedWithMimeType.ImageType.values())
+                .map(ImageType::mimeType)
+                .collect(Can.toCan());
 
-    private final ResourceLoader resourceLoader;
-
-    private final Map<String, ObjectIcon> iconByKey = _Maps.newConcurrentHashMap();
-
-    private final ObjectIcon fallbackIcon =
-            ObjectIcon.eager(
-                    "ObjectIconFallback",
-                    _Resources.getResourceUrl(
-                            ObjectIconServiceDefault.class,
-                            "ObjectIconFallback.png"),
-                    CommonMimeType.PNG);
+    // non-canonical constructor
+    @Inject
+    public ObjectIconServiceDefault(ResourceLoader resourceLoader) {
+        this(resourceLoader, new ConcurrentHashMap<>(), new _StableValue<>());
+    }
 
     @Override
     public ObjectIcon getObjectIcon(
@@ -109,7 +107,12 @@ implements ObjectIconService {
 
     //@Override
     private ObjectIcon getObjectFallbackIcon() {
-        return fallbackIcon;
+        return fallbackIcon.orElseSet(()->ObjectIcon.eager(
+                "ObjectIconFallback",
+                _Resources.getResourceUrl(
+                        ObjectIconServiceDefault.class,
+                        "ObjectIconFallback.png"),
+                CommonMimeType.PNG));
     }
 
     // -- HELPER

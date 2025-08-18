@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.value;
+package org.apache.causeway.commons.net;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -26,6 +26,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.commons.net.DataUri;
 
 import lombok.RequiredArgsConstructor;
 

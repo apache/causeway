@@ -21,17 +21,23 @@ package org.apache.causeway.applib.value;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
+import org.apache.causeway.applib.value.NamedWithMimeType.ImageType;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
 import org.apache.causeway.commons.io.TextUtils;
+import org.apache.causeway.commons.net.DataUri;
+import org.apache.causeway.commons.net.DataUri.Encoding;
 
 /**
  * Intended to be used as a read-only property, to render plain HTML.
@@ -43,9 +49,25 @@ import org.apache.causeway.commons.io.TextUtils;
 @XmlJavaTypeAdapter(Markup.JaxbToStringAdapter.class)   // for JAXB view model support
 public record Markup(String html) implements Serializable {
 
-    public static Markup valueOf(final String html) {
+    // -- FACTORIES
+
+    public static Markup valueOf(final @Nullable String html) {
         return new Markup(html);
     }
+
+    public static Markup embeddedImage(final @Nullable DataUri dataUri) {
+        return dataUri!=null
+                ? new Markup("<img src=\"" + dataUri.toExternalForm() + "\"/>")
+                : new Markup(null);
+    }
+
+    public static Markup embeddedImage(final ImageType imageType, byte[] imageData) {
+        Objects.requireNonNull(imageType);
+        Objects.requireNonNull(imageData);
+        return embeddedImage(new DataUri(imageType.mimeType().getBaseType(), null, Encoding.BASE64, imageData));
+    }
+
+    // -- CONSTRUCTION
 
     public Markup() {
         this(null);

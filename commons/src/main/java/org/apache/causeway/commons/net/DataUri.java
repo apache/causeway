@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.value;
+package org.apache.causeway.commons.net;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -51,6 +51,8 @@ public record DataUri(
         BASE64
     }
 
+    // -- FACTORIES
+
     @SneakyThrows
     public static DataUri parse(String dataURI) {
         var uri = new URI(dataURI);
@@ -80,6 +82,8 @@ public record DataUri(
 
         return new DataUri(mediaType, parameters, encoding, decodeData(encoding, dataPart));
     }
+
+    // -- CONSTRUCTION
 
     // canonical constructor
     @SneakyThrows
