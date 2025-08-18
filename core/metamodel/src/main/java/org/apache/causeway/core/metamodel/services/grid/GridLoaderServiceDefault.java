@@ -30,8 +30,10 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -51,7 +53,6 @@ import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
@@ -212,7 +213,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final @NonNull Class<?> domainClass,
             final @Nullable String layoutIfAny,
             final @NonNull CommonMimeType format) {
-        return format.getProposedFileExtensions().stream()
+        return format.proposedFileExtensions().stream()
                 .flatMap(fileExtension->streamResourceNameCandidatesFor(domainClass, layoutIfAny, fileExtension));
     }
 

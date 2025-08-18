@@ -38,6 +38,7 @@ import jakarta.inject.Named;
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -47,7 +48,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.DataSource;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
@@ -97,8 +97,8 @@ public record Clob(
      * @return new {@link Clob}
      */
     public static Clob of(final String name, final CommonMimeType mimeType, final CharSequence content) {
-        var fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
-        return new Clob(fileName, mimeType.getMimeType(), content);
+        var fileName = _Strings.asFileNameWithExtension(name, mimeType.proposedFileExtensions());
+        return new Clob(fileName, mimeType.mimeType(), content);
     }
 
     /**

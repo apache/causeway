@@ -21,18 +21,13 @@ package org.apache.causeway.core.metamodel.facets.object.icon;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Objects;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
-
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Synchronized;
-import lombok.ToString;
 
 /**
  * Icon image data class-path resource reference.
@@ -40,13 +35,15 @@ import lombok.ToString;
  * @see ObjectIconService
  * @since 2.0
  */
-@RequiredArgsConstructor
-@ToString
-@EqualsAndHashCode
-public class ObjectIcon
-implements Serializable {
+public record ObjectIcon(
+        String shortName,
+        URL url,
+        CommonMimeType mimeType,
+        String identifier,
+        _StableValue<byte[]> iconData
+        ) implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    // -- FACTORIES
 
     /**
      * Create an ObjectIcon and eagerly read in image data from
@@ -57,7 +54,7 @@ implements Serializable {
             final URL url,
             final CommonMimeType mimeType) {
         var id = _Strings.base64UrlEncode(url.getPath());
-        var objectIcon = new ObjectIcon(shortName, url, mimeType, id);
+        var objectIcon = new ObjectIcon(shortName, url, mimeType, id, new _StableValue<>());
         objectIcon.asBytes(); // memoize
         return objectIcon;
     }
@@ -71,30 +68,30 @@ implements Serializable {
             final URL url,
             final CommonMimeType mimeType) {
         var id = _Strings.base64UrlEncode(url.getPath());
-        return new ObjectIcon(shortName, url, mimeType, id);
+        return new ObjectIcon(shortName, url, mimeType, id, new _StableValue<>());
     }
 
-    @Getter private @NonNull String shortName;
-    @Getter private @NonNull URL url;
-    @Getter private @NonNull CommonMimeType mimeType;
-    @Getter private @NonNull String identifier;
+    // -- EQUALITY
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private transient byte[] iconData;
+    @Override
+    public final boolean equals(Object o) {
+        if(this == o) return true;
+        return o instanceof ObjectIcon other
+            ? Objects.equals(this.shortName, other.shortName)
+                    && Objects.equals(this.url, other.url)
+                    && Objects.equals(this.mimeType, other.mimeType)
+                    && Objects.equals(this.identifier, other.identifier)
+            : false;
+    }
 
-    @Synchronized
     public byte[] asBytes() {
-
-        if(iconData==null) {
+        return iconData.orElseSet(()->{
             try(final InputStream is = url.openStream()){
-                iconData = _Bytes.of(is);
+                return _Bytes.of(is);
             } catch (Exception e) {
-                iconData = _Constants.emptyBytes;
+                return _Constants.emptyBytes;
             }
-        }
-
-        return iconData;
+        });
     }
 
 }

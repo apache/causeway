@@ -25,6 +25,7 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -100,7 +101,7 @@ implements
     private Blob toBlob(final BufferedImage img) {
         return img!=null
                 // arbitrary name and mimetype - not used when recovering the image
-                ? new Blob("image", CommonMimeType.PNG.getBaseType(), _Images.toBytes(img))
+                ? new Blob("image", CommonMimeType.PNG.baseType(), _Images.toBytes(img))
                 : null;
     }
 

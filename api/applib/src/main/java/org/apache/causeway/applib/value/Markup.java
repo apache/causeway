@@ -64,7 +64,7 @@ public record Markup(String html) implements Serializable {
     public static Markup embeddedImage(final ImageType imageType, byte[] imageData) {
         Objects.requireNonNull(imageType);
         Objects.requireNonNull(imageData);
-        return embeddedImage(new DataUri(imageType.mimeType().getBaseType(), null, Encoding.BASE64, imageData));
+        return embeddedImage(new DataUri(imageType.mimeType().baseType(), null, Encoding.BASE64, imageData));
     }
 
     // -- CONSTRUCTION

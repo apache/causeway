@@ -97,7 +97,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.danekja.java.util.function.serializable.SerializableBiConsumer;
 import org.danekja.java.util.function.serializable.SerializableBooleanSupplier;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -125,7 +125,6 @@ import org.apache.causeway.viewer.wicket.ui.components.widgets.links.AjaxLinkNoP
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.BootstrapConstants.ButtonSemantics;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameAppender;
@@ -696,7 +695,7 @@ public class Wkt {
                 new org.apache.wicket.util.file.File(file)) {
             private static final long serialVersionUID = 1L;
             @Override public String getContentType() {
-                return mime.getBaseType();
+                return mime.baseType();
             }
         };
     }

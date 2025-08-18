@@ -69,7 +69,7 @@ implements CollectionContentsAsFactory {
     public Component createComponent(final String id, final IModel<?> model) {
         var collectionModel = (CollectionModel) model;
         var mimeType = tabularExporter.getMimeType();
-        var ext = mimeType.getProposedFileExtensions().getFirstElseFail();
+        var ext = mimeType.proposedFileExtensions().getFirstElseFail();
         var fileName = collectionModel.getName().replaceAll(" ", "") + "." + ext;
 
         var link = new FileDownloadLink(id,

@@ -22,7 +22,6 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -36,9 +35,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.applib.value.NamedWithMimeType.ImageType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -66,10 +63,12 @@ record ObjectIconServiceDefault(
 implements ObjectIconService {
 
     private static final String DEFAULT_IMAGE_RESOURCE_PATH = "classpath:images";
-    private static final Can<CommonMimeType> IMAGE_TYPES =
-            Stream.of(NamedWithMimeType.ImageType.values())
-                .map(ImageType::mimeType)
-                .collect(Can.toCan());
+    /* this is only a subset of NamedWithMimeType.ImageType */
+    private static final Can<CommonMimeType> IMAGE_TYPES = Can.of(
+                CommonMimeType.PNG,
+                CommonMimeType.GIF,
+                CommonMimeType.JPEG,
+                CommonMimeType.SVG);
 
     // non-canonical constructor
     @Inject
@@ -90,19 +89,16 @@ implements ObjectIconService {
         // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
 
         var cachedIcon = iconByKey.get(iconResourceKey);
-        if(cachedIcon!=null) {
-            return cachedIcon;
-        }
+        if(cachedIcon!=null) return cachedIcon;
 
         var icon = findIcon(spec, iconNameModifier);
 
+        //NOTE: cannot use computeIfAbsent, as it does not support recursive update
+        // return iconByKey.computeIfAbsent(iconResourceKey, key->
+        //     findIcon(spec, iconNameModifier));
         iconByKey.put(iconResourceKey, icon);
 
         return icon;
-
-        //XXX cannot use computeIfAbsent, as it does not support recursive update
-        // return iconByKey.computeIfAbsent(iconResourceKey, key->
-        //     findIcon(spec, iconNameModifier));
     }
 
     //@Override
@@ -131,7 +127,7 @@ implements ObjectIconService {
         for(var imageType : IMAGE_TYPES) {
 
             var objectIcon = imageType
-                .getProposedFileExtensions()
+                .proposedFileExtensions()
                 .stream()
                 .map(suffix->iconResourceNameNoExt + "." + suffix)
                 .map(iconResourceName->
@@ -144,10 +140,7 @@ implements ObjectIconService {
                 .map(Optional::get)
                 .findFirst();
 
-            if(objectIcon.isPresent()) {
-                return objectIcon.get(); // short-circuit if found
-            }
-
+            if(objectIcon.isPresent()) return objectIcon.get(); // short-circuit if found
         }
 
         // also search the default image resource path
@@ -155,7 +148,7 @@ implements ObjectIconService {
         for(var imageType : IMAGE_TYPES) {
 
             var objectIcon = imageType
-                    .getProposedFileExtensions()
+                    .proposedFileExtensions()
                     .stream()
                     .map(suffix->DEFAULT_IMAGE_RESOURCE_PATH + "/" + iconResourceNameNoExt + "." + suffix)
                     .map(iconResourcePath->
@@ -168,19 +161,16 @@ implements ObjectIconService {
                     .map(Optional::get)
                     .findFirst();
 
-            if(objectIcon.isPresent()) {
-                return objectIcon.get(); // short-circuit if found
-            }
-
+            if(objectIcon.isPresent()) return objectIcon.get(); // short-circuit if found
         }
 
         return spec.superclass()!=null
-                // continue search in super spec
-                ? getObjectIcon(spec.superclass(), iconNameModifier) // memoizes as a side-effect
-                : _Strings.isNotEmpty(iconNameModifier)
-                        // also do a more generic search, skipping the modifier
-                        ? getObjectIcon(spec, null) // memoizes as a side-effect
-                        : getObjectFallbackIcon();
+            // continue search in super spec
+            ? getObjectIcon(spec.superclass(), iconNameModifier) // memoizes as a side-effect
+            : _Strings.isNotEmpty(iconNameModifier)
+                // also do a more generic search, skipping the modifier
+                ? getObjectIcon(spec, null) // memoizes as a side-effect
+                : getObjectFallbackIcon();
     }
 
     // -- HELPER
@@ -190,12 +180,12 @@ implements ObjectIconService {
             final @NonNull String absoluteResourceName) {
         if(!absoluteResourceName.startsWith("classpath:")) {
             throw _Exceptions
-            .illegalArgument("invalid absolute resourceName %s", absoluteResourceName);
+                .illegalArgument("invalid absolute resourceName %s", absoluteResourceName);
         }
         var resource = resourceLoader.getResource(absoluteResourceName);
         return resource.exists()
-                ? Optional.ofNullable(resource.getURL())
-                : Optional.empty();
+            ? Optional.ofNullable(resource.getURL())
+            : Optional.empty();
     }
 
     private static Optional<URL> classPathResource(
@@ -203,7 +193,7 @@ implements ObjectIconService {
             final @NonNull String relativeResourceName) {
         if(relativeResourceName.startsWith("/")) {
             throw _Exceptions
-            .illegalArgument("invalid relative resourceName %s", relativeResourceName);
+                .illegalArgument("invalid relative resourceName %s", relativeResourceName);
         }
         var resourceUrl = _Resources.getResourceUrl(contextClass, relativeResourceName);
         return Optional.ofNullable(resourceUrl);

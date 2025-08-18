@@ -25,8 +25,9 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -141,7 +142,7 @@ public class LayoutServiceDefault implements LayoutService {
         final String fqn = objectSpec.getFullIdentifier();
         return fqn.replace(".", File.separator)
                 + ".layout."
-                + format.getProposedFileExtensions().getFirstElseFail();
+                + format.proposedFileExtensions().getFirstElseFail();
     }
 
 }

@@ -223,7 +223,7 @@ implements DomainObjectResource {
         return _EndpointLogging.response(log, "GET /objects/{}/{}/object-icon", domainType, instanceId,
             responseFactory.ok(
                         objectIcon.asBytes(),
-                        MediaType.parseMediaType(objectIcon.getMimeType().getBaseType())));
+                        MediaType.parseMediaType(objectIcon.mimeType().baseType())));
     }
 
     @Override

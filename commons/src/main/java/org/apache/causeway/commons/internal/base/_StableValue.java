@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -35,8 +36,11 @@ import java.util.function.Supplier;
  * @param <T> the type of the value to be held
  * @since 4.0
  */
-public class _StableValue<T> {
-    private final AtomicReference<T> ref = new AtomicReference<>();
+public record _StableValue<T>(AtomicReference<T> ref) implements Serializable {
+
+    public _StableValue() {
+        this(new AtomicReference<>());
+    }
 
     /**
      * Returns the current value if already set, or sets it using the provided supplier
@@ -82,4 +86,5 @@ public class _StableValue<T> {
         }
         return value;
     }
+
 }

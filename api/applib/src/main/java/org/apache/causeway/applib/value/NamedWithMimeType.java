@@ -201,11 +201,11 @@ permits Blob, Clob {
                         : Can.ofSingleton(name().toLowerCase()); // default
         }
 
-        @Getter final MimeType mimeType;
-        @Getter final Can<String> proposedFileExtensions;
+        @Getter @Accessors(fluent=true) final MimeType mimeType;
+        @Getter @Accessors(fluent=true) final Can<String> proposedFileExtensions;
 
-        public String getBaseType() {
-            return getMimeType().getBaseType();
+        public String baseType() {
+            return mimeType().getBaseType();
         }
 
         static MimeType newMimeType(final String primaryType, final String subtype) {
@@ -237,7 +237,7 @@ permits Blob, Clob {
             }
             var fileExtLower = fileExt.toLowerCase();
             return Stream.of(CommonMimeType.values())
-                    .filter(mime->mime.getProposedFileExtensions().contains(fileExtLower))
+                    .filter(mime->mime.proposedFileExtensions().contains(fileExtLower))
                     .findFirst();
         }
 

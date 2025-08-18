@@ -104,8 +104,8 @@ public record Blob(
      * @return new {@link Blob}
      */
     public static Blob of(final String name, final CommonMimeType mimeType, final byte[] content) {
-        var fileName = _Strings.asFileNameWithExtension(name, mimeType.getProposedFileExtensions());
-        return new Blob(fileName, mimeType.getMimeType(), content);
+        var fileName = _Strings.asFileNameWithExtension(name, mimeType.proposedFileExtensions());
+        return new Blob(fileName, mimeType.baseType(), content);
     }
 
     /**

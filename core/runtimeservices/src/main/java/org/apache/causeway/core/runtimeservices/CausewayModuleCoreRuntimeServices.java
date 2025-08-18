@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
@@ -102,7 +103,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         MenuBarsMarshallerServiceBootstrap.class,
         MenuBarsServiceBootstrap.class,
         MessageServiceDefault.class,
-//        ObjectIconServiceDefault.class, // no longer public, but discovered anyway
+//        ObjectIconServiceDefault.class, // no longer public, added to ComponentScan below
         ObjectLifecyclePublisherDefault.class,
         PlaceholderRenderServiceDefault.class,
         LifecycleCallbackNotifier.class,
@@ -129,6 +130,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         ExceptionRecognizerForDataAccessException.class,
 
 })
+@ComponentScan(basePackages = "org.apache.causeway.core.runtimeservices.icons")
 public class CausewayModuleCoreRuntimeServices {
 
     public static final String NAMESPACE = "causeway.runtimeservices";

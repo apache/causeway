@@ -28,6 +28,7 @@ import org.apache.wicket.request.resource.AbstractResource;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.PartWriterCallback;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +40,6 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -81,7 +81,7 @@ implements ImageResourceCache {
         private final @NonNull ObjectIconResource objectIconResource;
 
         public ObjectIconResourceReference(final ObjectIcon objectIcon) {
-            super(new Key(Application.class.getName(), objectIcon.getIdentifier(), null, null, null));
+            super(new Key(Application.class.getName(), objectIcon.identifier(), null, null, null));
             this.objectIconResource = new ObjectIconResource(objectIcon);
         }
 
@@ -106,10 +106,10 @@ implements ImageResourceCache {
             var imageDataBytes = objectIcon.asBytes();
             final long size = imageDataBytes.length;
             ResourceResponse resourceResponse = new ResourceResponse();
-            resourceResponse.setContentType(objectIcon.getMimeType().getBaseType());
+            resourceResponse.setContentType(objectIcon.mimeType().baseType());
             resourceResponse.setAcceptRange(ContentRangeType.BYTES);
             resourceResponse.setContentLength(size);
-            resourceResponse.setFileName(objectIcon.getShortName());
+            resourceResponse.setFileName(objectIcon.shortName());
             RequestCycle cycle = RequestCycle.get();
             Long startbyte = cycle.getMetaData(CONTENT_RANGE_STARTBYTE);
             Long endbyte = cycle.getMetaData(CONTENT_RANGE_ENDBYTE);
