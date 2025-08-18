@@ -115,6 +115,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             .accept(
                     objectIcon->{
                         if(objectIcon instanceof ObjectIconEmbedded iconEmbedded) {
+                            //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3889] for embedded images we me might want to have a different CSS class
+                            //e.g. don't constrain image sizes, as these should be driven by embedded data
                             Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
                         } else if(objectIcon instanceof ObjectIconUrlBased iconUrlBased) {
                             Wkt.imageAddCachable(link, ID_OBJECT_ICON,

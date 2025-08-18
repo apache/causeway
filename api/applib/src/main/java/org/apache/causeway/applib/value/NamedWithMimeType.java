@@ -64,6 +64,9 @@ permits Blob, Clob {
                     : null);
     }
 
+    //TODO[causeway-applib-CAUSEWAY-3889] perhaps remove!
+    // we need something similar for constructing DataUri instances for embedded images
+    @Deprecated
     @RequiredArgsConstructor
     @Getter @Accessors(fluent=true)
     public enum ImageType {

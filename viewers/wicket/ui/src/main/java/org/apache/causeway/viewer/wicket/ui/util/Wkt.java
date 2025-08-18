@@ -832,9 +832,7 @@ public class Wkt {
         return new Image(id, "embedded") {
             private static final long serialVersionUID = 1L;
             @Override protected boolean shouldAddAntiCacheParameter() { return false; }
-
-            @Override
-            protected String buildSrcAttribute(ComponentTag tag) {
+            @Override protected String buildSrcAttribute(ComponentTag tag) {
                 return dataUri.toExternalForm();
             }
         };

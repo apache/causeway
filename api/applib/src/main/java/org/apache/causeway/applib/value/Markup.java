@@ -61,6 +61,9 @@ public record Markup(String html) implements Serializable {
                 : new Markup(null);
     }
 
+    //TODO[causeway-applib-CAUSEWAY-3889] perhaps remove!
+    // instead lets have image specific factory methods for DataUri
+    @Deprecated
     public static Markup embeddedImage(final ImageType imageType, byte[] imageData) {
         Objects.requireNonNull(imageType);
         Objects.requireNonNull(imageData);
