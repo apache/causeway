@@ -78,7 +78,7 @@ public class TitleServiceDefault implements TitleService {
 
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
             ? "unspecified"
-            : objectAdapter.objSpec().getIconName(objectAdapter);
+            : objectAdapter.objSpec().getIconName(objectAdapter).orElse(null);
     }
 
     //-- HELPER

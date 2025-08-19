@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
-import org.jspecify.annotations.Nullable;
+import java.util.Optional;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Creates {@link ObjectIcon}(s), which are class-path resource references.
@@ -42,11 +41,12 @@ public interface ObjectIconService {
 
     /**
      * {@link ObjectIcon} for given {@link ObjectSpecification}
-     * and iconNameSuffix.
+     * and iconNameSuffix or font-awesome layers.
      * @return non-null
      */
     ObjectIcon getObjectIcon(
-            @NonNull ObjectSpecification specification,
-            @Nullable String iconNameSuffixIfAny);
+            ObjectSpecification specification,
+            Optional<String> iconNameSuffix,
+            Optional<FontAwesomeLayers> faLayers);
 
 }

@@ -28,14 +28,13 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
@@ -44,7 +43,10 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
@@ -80,17 +82,21 @@ implements ObjectIconService {
 
     @Override
     public ObjectIcon getObjectIcon(
-            final @NonNull ObjectSpecification spec,
-            final @Nullable String iconNameModifier) {
+            final ObjectSpecification spec,
+            final Optional<String> iconName,
+            final Optional<FontAwesomeLayers> faLayers) {
 
         var domainClass = spec.getCorrespondingClass();
+        var iconNameSuffixIfAny = iconName.orElse(null);
 
         var suffix = "";
-        if(StringUtils.hasLength(iconNameModifier)) {
-            suffix = "-" + iconNameModifier;
-            if(iconNameModifier.startsWith("data:")) {
-                return ObjectIcon.embedded(domainClass.getSimpleName(), DataUri.parse(iconNameModifier));
+        if(StringUtils.hasLength(iconNameSuffixIfAny)) {
+            if(iconNameSuffixIfAny.startsWith("data:")) {
+                return new ObjectIconEmbedded(domainClass.getSimpleName(), DataUri.parse(iconNameSuffixIfAny));
             }
+            suffix = "-" + iconNameSuffixIfAny;
+        } else if(faLayers.isPresent()) {
+            return new ObjectIconFa(domainClass.getSimpleName(), faLayers.get());
         }
 
         var iconResourceKey = domainClass.getName() + suffix;
@@ -100,7 +106,7 @@ implements ObjectIconService {
         var cachedIcon = iconByKey.get(iconResourceKey);
         if(cachedIcon!=null) return cachedIcon;
 
-        var icon = findIcon(spec, iconNameModifier);
+        var icon = findIcon(spec, iconName);
 
         //NOTE: cannot use computeIfAbsent, as it does not support recursive update
         // return iconByKey.computeIfAbsent(iconResourceKey, key->
@@ -110,9 +116,10 @@ implements ObjectIconService {
         return icon;
     }
 
-    //@Override
+    // -- HELPER
+
     private ObjectIcon getObjectFallbackIcon() {
-        return fallbackIcon.orElseSet(()->ObjectIcon.eager(
+        return fallbackIcon.orElseSet(()->ObjectIconUrlBased.eager(
                 "ObjectIconFallback",
                 _Resources.lookupResourceUrl(
                         ObjectIconServiceDefault.class,
@@ -121,15 +128,14 @@ implements ObjectIconService {
                 CommonMimeType.PNG));
     }
 
-    // -- HELPER
-
     private ObjectIcon findIcon(
-            final @NonNull ObjectSpecification spec,
-            final @Nullable String iconNameModifier) {
+            final ObjectSpecification spec,
+            final Optional<String> iconName) {
 
         var domainClass = spec.getCorrespondingClass();
-        var iconResourceNameNoExt = _Strings.isNotEmpty(iconNameModifier)
-                ? domainClass.getSimpleName() + "-" + iconNameModifier
+        var iconNameSuffixIfAny = iconName.orElse(null);
+        var iconResourceNameNoExt = _Strings.isNotEmpty(iconNameSuffixIfAny)
+                ? domainClass.getSimpleName() + "-" + iconNameSuffixIfAny
                 : domainClass.getSimpleName();
 
         // search for image in corresponding class'es resource path
@@ -142,7 +148,7 @@ implements ObjectIconService {
                 .map(suffix->iconResourceNameNoExt + "." + suffix)
                 .map(iconResourceName->
                         classPathResource(domainClass, iconResourceName)
-                        .map(url->ObjectIcon.lazy(
+                        .map(url->ObjectIconUrlBased.lazy(
                                 iconResourceNameNoExt,
                                 url,
                                 imageType)))
@@ -163,7 +169,7 @@ implements ObjectIconService {
                     .map(suffix->DEFAULT_IMAGE_RESOURCE_PATH + "/" + iconResourceNameNoExt + "." + suffix)
                     .map(iconResourcePath->
                             classPathResource(iconResourcePath)
-                            .map(url->ObjectIcon.lazy(
+                            .map(url->ObjectIconUrlBased.lazy(
                                     iconResourceNameNoExt,
                                     url,
                                     imageType)))
@@ -176,10 +182,10 @@ implements ObjectIconService {
 
         return spec.superclass()!=null
             // continue search in super spec
-            ? getObjectIcon(spec.superclass(), iconNameModifier) // memoizes as a side-effect
-            : _Strings.isNotEmpty(iconNameModifier)
+            ? getObjectIcon(spec.superclass(), iconName, Optional.empty()) // memoizes as a side-effect
+            : _Strings.isNotEmpty(iconNameSuffixIfAny)
                 // also do a more generic search, skipping the modifier
-                ? getObjectIcon(spec, null) // memoizes as a side-effect
+                ? getObjectIcon(spec, Optional.empty(), Optional.empty()) // memoizes as a side-effect
                 : getObjectFallbackIcon();
     }
 

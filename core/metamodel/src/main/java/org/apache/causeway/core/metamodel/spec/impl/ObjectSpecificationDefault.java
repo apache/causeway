@@ -29,7 +29,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
@@ -113,7 +115,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -767,19 +768,18 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public String getIconName(final ManagedObject domainObject) {
+    public Optional<String> getIconName(final ManagedObject domainObject) {
         if(ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.objSpec(), this);
         }
-        return iconFacet != null
-                ? iconFacet.iconName(domainObject)
-                : null;
+        return Optional.ofNullable(iconFacet)
+                .flatMap(facet->facet.iconName(domainObject));
     }
 
     @Override
     public ObjectIcon getIcon(final ManagedObject domainObject) {
-        var iconNameModifier = getIconName(domainObject);
-        return getObjectIconService().getObjectIcon(this, iconNameModifier);
+        return getObjectIconService()
+            .getObjectIcon(this, getIconName(domainObject), getFaLayers(domainObject));
     }
 
     @Override

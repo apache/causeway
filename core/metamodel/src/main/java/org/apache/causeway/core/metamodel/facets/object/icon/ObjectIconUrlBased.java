@@ -31,8 +31,9 @@ import org.apache.causeway.commons.internal.base._Strings;
 /**
  * Icon image data class-path resource reference.
  *
+ * @see ObjectIcon
  * @see ObjectIconService
- * @since 2.0
+ * @since 4.0
  */
 public record ObjectIconUrlBased(
         String shortName,
@@ -41,10 +42,39 @@ public record ObjectIconUrlBased(
         _StableValue<byte[]> iconDataRef
         ) implements ObjectIcon {
 
+    // -- FACTORIES
+
+    /**
+     * Create an ObjectIcon and eagerly read in image data from
+     * class-path resources.
+     */
+    public static ObjectIcon eager(
+            final String shortName,
+            final URL url,
+            final CommonMimeType mimeType) {
+        var objectIcon = lazy(shortName, url, mimeType);
+        ((ObjectIconUrlBased) objectIcon).iconData(); // memoize
+        return objectIcon;
+    }
+
+    /**
+     * Create an ObjectIcon and not yet read in image data from
+     * class-path resources.
+     */
+    public static ObjectIcon lazy(
+            final String shortName,
+            final URL url,
+            final CommonMimeType mimeType) {
+        return new ObjectIconUrlBased(shortName, url, mimeType, new _StableValue<>());
+    }
+
+    // --
+
     public String cacheId() {
         return _Strings.base64UrlEncode(url.getPath());
     }
 
+    @Override
     public byte[] iconData() {
         return iconDataRef.orElseSet(()->{
             try(final InputStream is = url.openStream()){

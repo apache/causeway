@@ -69,7 +69,7 @@ class IconFacetMethodTest {
     @Test
     void iconNameThrowsException() {
         //assertThrows(Exception.class, ()->facet.iconName(mockOwningAdapter));
-        final String iconName = facet.iconName(mockOwningAdapter);
+        final String iconName = facet.iconName(mockOwningAdapter).orElse(null);
         assertThat(iconName, is(nullValue()));
     }
 

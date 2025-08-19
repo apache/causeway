@@ -25,6 +25,7 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
@@ -68,10 +69,10 @@ extends IconFacetAbstract {
     }
 
     @Override
-    public String iconName(final ManagedObject owningAdapter) {
+    public Optional<String> iconName(final ManagedObject owningAdapter) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
-            return null;
+            return Optional.empty();
         }
 
         final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
@@ -92,7 +93,7 @@ extends IconFacetAbstract {
             }
         }
 
-        return iconName; // could be null
+        return _Strings.nonEmpty(iconName);
     }
 
     private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter) {

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
+import java.util.Optional;
+
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -39,5 +41,5 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  */
 public interface IconFacet extends Facet {
 
-    public String iconName(final ManagedObject object);
+    public Optional<String> iconName(final ManagedObject object);
 }

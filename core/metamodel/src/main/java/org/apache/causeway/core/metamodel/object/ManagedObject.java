@@ -24,7 +24,6 @@ import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
@@ -33,6 +32,7 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -382,31 +382,19 @@ permits
     // -- SHORTCUT - ICON
 
     /**
-     * Returns the name of an icon to use for this object.
-     * <p>
-     * May return <code>null</code> if no icon is specified.
+     * Optionally returns the name-suffix (or embedded image data) of an icon to use for this object.
+     * @see ObjectIconService
      */
-    default String getIconName() {
+    default Optional<String> getIconName() {
         return objSpec().getIconName(this);
-    }
-
-    default ObjectIcon getIcon() {
-        return objSpec().getIcon(this);
     }
 
     /**
      * Domain Objects may either have an icon corresponding to an icon resource,
      * or they use a font awesome icon.
      */
-    default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
-        var iconName = getIconName();
-        var faLayers = objSpec().getFaLayers(this).orElse(null);
-        if (iconName != null
-                || faLayers == null) {
-            return Either.left(getIcon());
-        } else {
-            return Either.right(faLayers);
-        }
+    default ObjectIcon getIcon() {
+        return objSpec().getIcon(this);
     }
 
     default Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark() {

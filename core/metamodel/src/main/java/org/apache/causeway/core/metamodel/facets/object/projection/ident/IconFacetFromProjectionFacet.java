@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.projection.ident;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -41,7 +42,7 @@ extends IconFacetAbstract {
     }
 
     @Override
-    public String iconName(final ManagedObject targetAdapter) {
+    public Optional<String> iconName(final ManagedObject targetAdapter) {
         var projectedAdapter = projectionFacet.projected(targetAdapter);
         return projectedAdapter.objSpec().getIconName(projectedAdapter);
     }
@@ -55,9 +56,9 @@ extends IconFacetAbstract {
     @Override
     public boolean semanticEquals(final @NonNull Facet other) {
         return other instanceof IconFacetFromProjectionFacet
-                ? this.projectionFacet
-                        .semanticEquals(((IconFacetFromProjectionFacet)other).projectionFacet)
-                : false;
+            ? this.projectionFacet
+                    .semanticEquals(((IconFacetFromProjectionFacet)other).projectionFacet)
+            : false;
     }
 
 }

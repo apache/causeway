@@ -59,6 +59,7 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet.Contributing;
@@ -222,7 +223,6 @@ extends
 
     /**
      * Returns the description, if any, of the specification.
-     *
      * <p>
      * Corresponds to the {@link HasStaticText#translated() value} of
      * {@link ObjectDescribedFacet}; is not necessarily immutable.
@@ -231,7 +231,6 @@ extends
 
     /**
      * Returns a help string or lookup reference, if any, of the specification.
-     *
      * <p>
      * Corresponds to the {@link HelpFacet#value() value} of {@link HelpFacet};
      * is not necessarily immutable.
@@ -241,20 +240,19 @@ extends
     /**
      * Returns the title to display of target adapter, rendered within the context
      * of some other adapter (if any).
-     *
      * <p>
      * @see TitleFacet#title(TitleRenderRequest)
      */
     String getTitle(TitleRenderRequest titleRenderRequest);
 
     /**
-     * Returns the name of an icon to use for the specified object.
-     *
+     * Optionally returns the name-suffix (or embedded image data) of an icon to use for the specified object.
      * <p>
      * Corresponds to the {@link IconFacet#iconName(ManagedObject) icon name}
      * returned by the {@link IconFacet}; is not necessarily immutable.
+     * @see ObjectIconService
      */
-    String getIconName(ManagedObject object);
+    Optional<String> getIconName(ManagedObject object);
 
     ObjectIcon getIcon(ManagedObject object);
 
@@ -267,7 +265,6 @@ extends
 
     /**
      * Returns the CSS class name to use for the specified object.
-     *
      * <p>
      * Corresponds to the {@link CssClassFacet#cssClass(ManagedObject)} value}
      * returned by the {@link CssClassFacet}.

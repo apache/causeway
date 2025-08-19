@@ -297,7 +297,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
             var domainObject = ManagedObject.adaptSingular(spec, instance);
             assertEquals("inherited title", domainObject.getTitle());
-            assertEquals("inherited icon", iconFacet.iconName(domainObject));
+            assertEquals("inherited icon", iconFacet.iconName(domainObject).orElse(null));
         }
     }
 

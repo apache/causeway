@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
@@ -59,8 +60,8 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public String iconName(final ManagedObject domainObject) {
-        return imperativeAspect.eval(domainObject, (String)null);
+    public Optional<String> iconName(final ManagedObject domainObject) {
+        return _Strings.nonEmpty(imperativeAspect.eval(domainObject, (String)null));
     }
 
     @Override

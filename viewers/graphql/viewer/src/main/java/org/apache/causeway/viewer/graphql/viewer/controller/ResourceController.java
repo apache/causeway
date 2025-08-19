@@ -177,9 +177,9 @@ public class ResourceController {
                 .map(ManagedObject::getIcon)
                 .filter(Objects::nonNull)
                 .map(objectIcon -> {
-                    var bytes = objectIcon.asBytes();
+                    var bytes = objectIcon.iconData();
                     var bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.parseMediaType(objectIcon.getMimeType().getMimeType().toString()));
+                            .contentType(MediaType.parseMediaType(objectIcon.mediaType()));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder
                                 .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(logicalTypeName + ".png").build().toString())

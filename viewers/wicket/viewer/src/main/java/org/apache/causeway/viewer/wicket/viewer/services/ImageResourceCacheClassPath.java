@@ -36,7 +36,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
@@ -99,11 +98,10 @@ implements ImageResourceCache {
 
         private static final long serialVersionUID = 1L;
 
-        private final @NonNull ObjectIcon objectIcon;
+        private final @NonNull ObjectIconUrlBased objectIcon;
 
         @Override
         protected ResourceResponse newResourceResponse(final Attributes attributes) {
-
             var imageDataBytes = objectIcon.iconData();
             final long size = imageDataBytes.length;
             var resourceResponse = new ResourceResponse();

@@ -18,13 +18,35 @@
  */
 package org.apache.causeway.viewer.commons.model.mixin;
 
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
-import org.apache.causeway.commons.functional.Either;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 
 @FunctionalInterface
 public interface HasIcon {
 
-    Either<ObjectIcon, FontAwesomeLayers> getIcon();
+    ObjectIcon getIcon();
+
+    default void visitIconVariant(
+        Consumer<ObjectIconUrlBased> a,
+        Consumer<ObjectIconEmbedded> b,
+        Consumer<ObjectIconFa> c) {
+
+        var objectIcon = Objects.requireNonNull(getIcon());
+        if(objectIcon instanceof ObjectIconUrlBased urlBased){
+            a.accept(urlBased);
+        } else if(objectIcon instanceof ObjectIconEmbedded embedded){
+            b.accept(embedded);
+        } else if(objectIcon instanceof ObjectIconFa fa){
+            c.accept(fa);
+        } else {
+            throw _Exceptions.unmatchedCase(objectIcon);
+        }
+    }
 
 }

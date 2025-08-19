@@ -23,6 +23,7 @@ import org.apache.causeway.commons.net.DataUri;
 /**
  * Icon image based on {@link DataUri}
  *
+ * @see ObjectIcon
  * @see ObjectIconService
  * @since 4.0
  */

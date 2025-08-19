@@ -18,30 +18,30 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
-import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 
 /**
- * Icon image data class-path resource reference.
+ * Icon image based on {@link FontAwesomeLayers}
  *
+ * @see ObjectIcon
  * @see ObjectIconService
- * @since 2.0 revised for 4.0
+ * @since 4.0
  */
-public sealed interface ObjectIcon extends Serializable
-permits ObjectIconFa, ObjectIconEmbedded, ObjectIconUrlBased {
+public record ObjectIconFa(
+        String shortName,
+        FontAwesomeLayers fontAwesomeLayers
+        ) implements ObjectIcon {
 
-    /**
-     * Name for the image, usually corresponds to the domain object's class simple name.
-     */
-    String shortName();
+    @Override
+    public String mediaType() {
+        return "text/css";
+    }
 
-    /**
-     * The image media type, e.g. {@code image/pdf} or {@code text/css} for font-awesome icons.
-     */
-    String mediaType();
-
-    /**
-     * Image data as bytes (plain, no encoding) or 'quick-notation' in support of font awesome layers.
-     */
-    byte[] iconData();
+    @Override
+    public byte[] iconData() {
+        return fontAwesomeLayers.toQuickNotation().getBytes(StandardCharsets.UTF_8);
+    }
 
 }

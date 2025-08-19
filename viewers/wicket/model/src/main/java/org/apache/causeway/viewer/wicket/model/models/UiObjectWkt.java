@@ -35,14 +35,12 @@ import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundExcepti
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
-import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -186,8 +184,8 @@ implements
     }
 
     @Override
-    public Either<ObjectIcon, FontAwesomeLayers> getIcon() {
-        return getManagedObject().eitherIconOrFaLayers();
+    public ObjectIcon getIcon() {
+        return getManagedObject().getIcon();
     }
 
     public void visitIconVariantOrElse(
@@ -195,20 +193,17 @@ implements
             Consumer<ObjectIconEmbedded> b,
             Consumer<FontAwesomeLayers> c,
             Runnable onNoMatch) {
-        getIcon().accept(
-            objectIcon->{
-                if(objectIcon instanceof ObjectIconUrlBased urlBased){
-                    var rref = imageResourceCache().resourceReferenceForObjectIcon(urlBased);
-                    if(rref!=null) {
-                        a.accept(rref);
-                    } else {
-                        onNoMatch.run();
-                    }
-                } else if(objectIcon instanceof ObjectIconEmbedded embedded){
-                    b.accept(embedded);
+        visitIconVariant(
+            urlBased->{
+                var rref = imageResourceCache().resourceReferenceForObjectIcon(urlBased);
+                if(rref!=null) {
+                    a.accept(rref);
+                } else {
+                    onNoMatch.run();
                 }
             },
-            fontAwesomeLayers->c.accept(fontAwesomeLayers));
+            embedded->b.accept(embedded),
+            fa->c.accept(fa.fontAwesomeLayers()));
     }
 
     @Override

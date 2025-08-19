@@ -229,7 +229,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                     super.objectSpecification.getTitleService().iconNameOf(vm.getPojo()));
             assertEquals(expectedResult,
                     super.objectSpecification.lookupFacet(IconFacet.class)
-                    .map(iconFacet->iconFacet.iconName(vm))
+                    .flatMap(iconFacet->iconFacet.iconName(vm))
                     .orElse(null));
         }
 

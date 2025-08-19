@@ -28,11 +28,11 @@ import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
+import org.apache.causeway.viewer.commons.model.mixin.HasIcon;
 import org.apache.causeway.viewer.wicket.model.models.ObjectAdapterModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -50,7 +50,7 @@ import lombok.Builder;
  * as per the provided {@link UiObjectWkt}.
  */
 class ObjectIconAndTitlePanel
-extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
+extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
 
     private static final long serialVersionUID = 1L;
 
@@ -77,6 +77,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
     protected void onBeforeRender() {
         buildGui();
         super.onBeforeRender();
+    }
+
+    @Override
+    public ObjectIcon getIcon() {
+        return linkedDomainObject().getIcon();
     }
 
     /**
@@ -110,34 +115,31 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> {
             WktComponents.permanentlyHide(link, ID_OBJECT_ICON);
             Wkt.labelAdd(link, ID_OBJECT_TITLE, titleAbbreviated("(no object)"));
         } else {
-
-            linkedDomainObject.eitherIconOrFaLayers()
-            .accept(
-                    objectIcon->{
-                        if(objectIcon instanceof ObjectIconEmbedded iconEmbedded) {
-                            //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3889] for embedded images we me might want to have a different CSS class
-                            //e.g. don't constrain image sizes, as these should be driven by embedded data
-                            Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
-                        } else if(objectIcon instanceof ObjectIconUrlBased iconUrlBased) {
-                            Wkt.imageAddCachable(link, ID_OBJECT_ICON,
-                                    getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased));
-                        } else {
-                            throw new IllegalArgumentException("Unexpected value: " + objectIcon);
-                        }
-
-                        WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
+            HasIcon.super.visitIconVariant(
+                iconUrlBased->{
+                    Wkt.imageAddCachable(link, ID_OBJECT_ICON,
+                        getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased));
+                    WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
+                    WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
+                },
+                iconEmbedded->{
+                    //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3889] for embedded images we me might want to have a different CSS class
+                    //e.g. don't constrain image sizes, as these should be driven by embedded data
+                    Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
+                    WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
+                    WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
+                },
+                iconFa->{
+                    var faLayers = iconFa.fontAwesomeLayers();
+                    WktComponents.permanentlyHide(link, ID_OBJECT_ICON);
+                    if(CssClassFaPosition.isLeftOrUnspecified(faLayers.position())) {
+                        Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_LEFT, faLayers);
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
-                    },
-                    faLayers->{
-                        WktComponents.permanentlyHide(link, ID_OBJECT_ICON);
-                        if(CssClassFaPosition.isLeftOrUnspecified(faLayers.position())) {
-                            Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_LEFT, faLayers);
-                            WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
-                        } else {
-                            WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
-                            Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_RIGHT, faLayers);
-                        }
-                    });
+                    } else {
+                        WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
+                        Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_RIGHT, faLayers);
+                    }
+                });
 
             final TitleRecord title = determineTitle(linkedDomainObject);
             Wkt.labelAdd(link, ID_OBJECT_TITLE, title.abbreviatedTitle());
