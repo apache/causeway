@@ -31,7 +31,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -62,24 +61,6 @@ permits Blob, Clob {
                 o!=null
                     ? o.mimeType().getBaseType()
                     : null);
-    }
-
-    //TODO[causeway-applib-CAUSEWAY-3889] perhaps remove!
-    // we need something similar for constructing DataUri instances for embedded images
-    @Deprecated
-    @RequiredArgsConstructor
-    @Getter @Accessors(fluent=true)
-    public enum ImageType {
-        BMP(CommonMimeType.BMP),
-        GIF(CommonMimeType.GIF),
-        ICO(CommonMimeType.ICO),
-        JPEG(CommonMimeType.JPEG),
-        PNG(CommonMimeType.PNG),
-        SVG(CommonMimeType.SVG),
-        TIFF(CommonMimeType.TIFF),
-        WEBP(CommonMimeType.WEBP);
-        @Getter @Accessors(fluent=true)
-        final CommonMimeType mimeType;
     }
 
     /**

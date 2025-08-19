@@ -173,7 +173,7 @@ footer > .navbar {
 
 /* from ActionPromptHeaderPanel */
 
-.objectIconAndTitlePanel img {
+.objectIconAndTitlePanel img.objectIcon {
     width: 24px;
     height: 24px;
 }

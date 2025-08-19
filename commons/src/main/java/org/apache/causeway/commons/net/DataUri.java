@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -50,6 +51,20 @@ public record DataUri(
     public enum Encoding {
         NONE,
         BASE64
+    }
+
+    public enum ImageType {
+        BMP,
+        GIF,
+        ICO,
+        JPEG,
+        PNG,
+        SVG,
+        TIFF,
+        WEBP;
+        public String mediaType() {
+            return "image/" + name().toLowerCase(Locale.ROOT);
+        }
     }
 
     // -- FACTORIES
@@ -82,6 +97,12 @@ public record DataUri(
             .toList();
 
         return new DataUri(mediaType, parameters, encoding, decodeData(encoding, dataPart));
+    }
+
+    public static DataUri embeddedImage(final ImageType imageType, byte[] imageData) {
+        Objects.requireNonNull(imageType);
+        Objects.requireNonNull(imageData);
+        return new DataUri(imageType.mediaType(), null, Encoding.BASE64, imageData);
     }
 
     // -- CONSTRUCTION

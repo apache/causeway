@@ -123,9 +123,10 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                 },
                 iconEmbedded->{
-                    //TODO[causeway-viewer-wicket-ui-CAUSEWAY-3889] for embedded images we me might want to have a different CSS class
-                    //e.g. don't constrain image sizes, as these should be driven by embedded data
-                    Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
+                    // for embedded images we replace the default CSS class 'objectImage' w/ 'objectImageEmbedded'
+                    // which allows to render them differently e.g. don't constrain image sizes, as these should be driven by embedded data
+                    var img = Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
+                    Wkt.attributeReplace(img, "class", "objectImageEmbedded");
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                 },
