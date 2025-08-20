@@ -52,9 +52,7 @@ permits Blob, Clob {
                 o!=null
                     ? o.name()
                     : null);
-        if(c!=0) {
-            return c;
-        }
+        if(c!=0) return c;
 
         return _Strings.compareNullsFirst(
                 this.mimeType().getBaseType(),
@@ -213,12 +211,21 @@ permits Blob, Clob {
         }
 
         /**
+         * Tries to match mimeType with any {@link CommonMimeType}.
+         */
+        public static Optional<CommonMimeType> valueOf(final @Nullable MimeType mimeType) {
+            if(mimeType==null) return Optional.empty();
+            return Stream.of(CommonMimeType.values())
+                    .filter(mime->mime.matches(mimeType))
+                    .findFirst();
+        }
+
+        /**
          * Tries to match fileExt with any {@link CommonMimeType}.
          */
         public static Optional<CommonMimeType> valueOfFileExtension(final @Nullable String fileExt) {
-            if(_Strings.isNullOrEmpty(fileExt)) {
-                return Optional.empty();
-            }
+            if(_Strings.isNullOrEmpty(fileExt)) return Optional.empty();
+
             var fileExtLower = fileExt.toLowerCase();
             return Stream.of(CommonMimeType.values())
                     .filter(mime->mime.proposedFileExtensions().contains(fileExtLower))
@@ -229,17 +236,14 @@ permits Blob, Clob {
          * Parses fileName for its extension and tries to match with any {@link CommonMimeType}.
          */
         public static Optional<CommonMimeType> valueOfFileName(final @Nullable String fileName) {
-            if(_Strings.isNullOrEmpty(fileName)) {
-                return Optional.empty();
-            }
+            if(_Strings.isNullOrEmpty(fileName)) return Optional.empty();
+
             final int p = fileName.lastIndexOf('.');
-            if(p<0) {
-                return Optional.empty();
-            }
+            if(p<0) return Optional.empty();
+
             final int beginIndex = p + 1;
-            if ((fileName.length() - beginIndex) < 0) {
-                return Optional.empty();
-            }
+            if ((fileName.length() - beginIndex) < 0) return Optional.empty();
+
             return valueOfFileExtension(fileName.substring(beginIndex));
         }
 
