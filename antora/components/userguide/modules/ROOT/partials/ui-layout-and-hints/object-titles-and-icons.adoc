@@ -216,6 +216,27 @@ public class Order {
 In this case, if the `Order` has shipped then the framework will look for an icon image named "Order-shipped.png" (in the same package as the class).
 Otherwise it will just use "Order.png", as normal.
 
+=== Image Embedding
+
+Since version `4.0.0`, when _iconName_ starts with `data:`, 
+it is interpreted as a _Data URI_ and rendered as an embedded image.
+
+For example:
+
+[source,java]
+----
+import org.apache.causeway.commons.net.DataUri;
+
+class Order {
+    public String iconName() {
+        BufferedImage icon = ...
+        return DataUri.embeddedImage(DataUri.ImageType.PNG, icon)
+            .toExternalForm();
+    }
+    // ...
+}
+----
+
 === Using a UI subscriber
 
 As for title, the determination of which image file to use for the icon can be externalized into a UI event subscriber.

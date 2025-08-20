@@ -53,7 +53,7 @@ Because the _EventObject_ superclass prohibits a null source, a dummy value is t
 [#getIconName_]
 === getIconName()
 
-The icon name as provided by a subscriber using _#setIconName(String)_ .
+The icon name as provided by a subscriber using _#setIconName(String)_.
 
 [#setIconName_String]
 === setIconName(String)
