@@ -62,8 +62,14 @@ public record DataUri(
         SVG,
         TIFF,
         WEBP;
+        /**
+         * The informal name of the format like 'pdf' or 'jpeg' etc.
+         */
+        public String formatName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
         public String mediaType() {
-            return "image/" + name().toLowerCase(Locale.ROOT);
+            return "image/" + formatName();
         }
     }
 
