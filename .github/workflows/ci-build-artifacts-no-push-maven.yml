@@ -58,7 +58,7 @@ jobs:
 
     - name: Set up JDK (zulu 24)
       if: matrix.language == 'java'
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         distribution: 'zulu'
         java-version: 24
