@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.specloader;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -37,8 +38,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailures;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Builds the meta-model, utilizing an instance of {@link ProgrammingModel}
@@ -123,12 +122,6 @@ public interface SpecificationLoader {
                         logicalTypeName)
         );
     }
-
-    /**
-     * queue {@code objectSpec} for later validation
-     * @param objectSpec
-     */
-    void validateLater(ObjectSpecification objectSpec);
 
     // -- LOOKUP API
 

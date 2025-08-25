@@ -19,9 +19,11 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.id.LogicalType;
@@ -31,15 +33,13 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import org.jspecify.annotations.NonNull;
-
 interface SpecificationLoaderInternal extends SpecificationLoader {
+
     /**
      * Return the specification for the specified class of object.
-     *
      * <p>
      * It is possible for this method to return <tt>null</tt>, for example if
      * any of the configured {@link ClassSubstitutor}s has filtered out the class.
@@ -47,8 +47,8 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
      * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
      */
     @Nullable
-    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, @NonNull IntrospectionState upTo);
-    
+    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, @NonNull IntrospectionRequest request);
+
     // -- SUPPORT FOR LOOKUP BY LOGICAL TYPE NAME
 
     /**
@@ -59,25 +59,27 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     @Nullable
     default ObjectSpecification loadSpecification(
             final @Nullable String logicalTypeName,
-            final @NonNull  IntrospectionState introspectionState) {
+            final @NonNull IntrospectionRequest request) {
 
         if(_Strings.isNullOrEmpty(logicalTypeName)) {
             return null;
         }
         return lookupLogicalType(logicalTypeName)
             .map(logicalType->
-                    loadSpecification(logicalType.correspondingClass(), introspectionState))
+                    loadSpecification(logicalType.correspondingClass(), request))
             .orElse(null);
     }
-    
+
     // -- SHORTCUTS - 1
 
+    @Override
     default Optional<ObjectSpecification> specForLogicalTypeName(
             final @Nullable String logicalTypeName) {
         return Optional.ofNullable(
-                loadSpecification(logicalTypeName, IntrospectionState.FULLY_INTROSPECTED));
+                loadSpecification(logicalTypeName, IntrospectionRequest.FULL));
     }
 
+    @Override
     default Optional<ObjectSpecification> specForLogicalType(
             final @Nullable LogicalType logicalType) {
         return Optional.ofNullable(logicalType)
@@ -85,12 +87,14 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
                 .flatMap(this::specForType);
     }
 
+    @Override
     default Optional<ObjectSpecification> specForType(
             final @Nullable Class<?> domainType) {
         return Optional.ofNullable(
-                loadSpecification(domainType, IntrospectionState.FULLY_INTROSPECTED));
+                loadSpecification(domainType, IntrospectionRequest.FULL));
     }
 
+    @Override
     default Optional<ObjectSpecification> specForBookmark(
             final @Nullable Bookmark bookmark) {
         return Optional.ofNullable(bookmark)
@@ -100,6 +104,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
 
     // -- SHORTCUTS - 2
 
+    @Override
     default ObjectSpecification specForLogicalTypeNameElseFail(
             final @Nullable String logicalTypeName) {
         return specForLogicalTypeName(logicalTypeName)
@@ -108,6 +113,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
                         _Strings.nullToEmpty(logicalTypeName)));
     }
 
+    @Override
     default ObjectSpecification specForLogicalTypeElseFail(
             final @Nullable LogicalType logicalType) {
         return specForLogicalType(logicalType)
@@ -116,6 +122,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
                         logicalType));
     }
 
+    @Override
     default ObjectSpecification specForTypeElseFail(
             final @Nullable Class<?> domainType) {
         return specForType(domainType)
@@ -124,6 +131,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
                         domainType));
     }
 
+    @Override
     default ObjectSpecification specForBookmarkElseFail(
             final @Nullable Bookmark bookmark) {
         return specForBookmark(bookmark)
@@ -134,17 +142,26 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
 
     // -- CAUTION! (use only during meta-model initialization)
 
+    @Override
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
+        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY);
     }
-    
+
     @Override
     default Optional<BeanSort> lookupBeanSort(final @Nullable LogicalType logicalType) {
         if(logicalType==null) return Optional.empty();
-        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionState.NOT_INTROSPECTED);
-        return spec != null 
+        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER);
+        return spec != null
                 ? Optional.of(spec.getBeanSort())
                 : Optional.empty();
     }
+
+    /**
+     * queue {@code objectSpec} for later validation
+     * @param objectSpec
+     * @param introspectionContextProvider
+     */
+    void validateLater(ObjectSpecification objectSpec, Supplier<String> introspectionContextProvider);
+
 }

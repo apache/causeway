@@ -54,7 +54,7 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
 import lombok.Getter;
@@ -195,7 +195,7 @@ implements
         // Ensure all return types are known
         TypeExtractor.streamMethodReturn(associationCandidateMethods)
             .filter(typeToLoad->typeToLoad!=introspectedClass)
-            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED));
+            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY));
 
         // now create FacetedMethods for collections and for properties
         var associationFacetedMethods = new ArrayList<FacetedMethod>();
@@ -376,7 +376,7 @@ implements
 
         // ensure we can load returned element type; otherwise ignore method
         var anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
-        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionState.TYPE_INTROSPECTED))
+        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY))
         .anyMatch(Objects::isNull);
         if (anyLoadedAsNull) {
             return false;
@@ -431,7 +431,7 @@ implements
                 .orElse(null);
         if(mixinFacet==null) return false;
 
-        if(inspectedTypeSpec.isLessThan(IntrospectionState.FULLY_INTROSPECTED)) {
+        if(!inspectedTypeSpec.isFullyIntrospected()) {
             // members are not introspected yet, so make a guess
             return mixinFacet.isCandidateForMain(method);
         }

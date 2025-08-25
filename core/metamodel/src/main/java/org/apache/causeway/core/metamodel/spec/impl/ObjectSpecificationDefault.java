@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,7 +56,6 @@ import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.collections._Streams;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -114,6 +114,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -315,7 +316,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             final ImmutableEnumSet<ActionScope> actionScopes,
             final MixedIn mixedIn) {
 
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"getDeclaredAction %s on %s".formatted(id, this.getFeatureIdentifier()));
 
         return _Strings.isEmpty(id)
             ? Optional.empty()
@@ -329,7 +331,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Optional<? extends ObjectMember> getMember(final ResolvedMethod method) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"getMember %s on %s".formatted(method.name(), this.getFeatureIdentifier()));
 
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
@@ -555,60 +558,85 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public void introspectUpTo(final IntrospectionState upTo) {
-
-        if(!isLessThan(upTo)) {
-            return; // optimization
+    public void introspect(IntrospectionRequest request) {
+        switch (request) {
+            case REGISTER -> introspectUpTo(IntrospectionState.NOT_INTROSPECTED,
+                ()->"introspect(%s)".formatted(request));
+            case TYPE_ONLY -> introspectUpTo(IntrospectionState.TYPE_INTROSPECTED,
+                ()->"introspect(%s)".formatted(request));
+            case FULL -> introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"introspect(%s)".formatted(request));
         }
+    }
+
+    enum IntrospectionState {
+        /**
+         * At this stage, {@link LogicalType} only.
+         */
+        NOT_INTROSPECTED,
+        /**
+         * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_INTROSPECTED}
+         */
+        TYPE_BEING_INTROSPECTED,
+        /**
+         * Type has been introspected (but not its members).
+         */
+        TYPE_INTROSPECTED,
+        /**
+         * Interim stage, to avoid infinite loops while on way to being {@link #FULLY_INTROSPECTED}
+         */
+        MEMBERS_BEING_INTROSPECTED,
+        /**
+         * Fully introspected... class and also its members.
+         */
+        FULLY_INTROSPECTED
+    }
+
+    /**
+     * keeps track of the causal chain of introspection requests
+     */
+    @AllArgsConstructor
+    private final static class IntrospectionContext {
+        final String info;
+        final IntrospectionContext cause;
+        @Override
+        public String toString() {
+            return cause!=null
+                    ? info + "caused by " + cause.toString()
+                    : info;
+        }
+    }
+
+    private void introspectUpTo(final IntrospectionState upTo, Supplier<String> introspectionContextProvider) {
+        if(!isLessThan(upTo)) return; // optimization
 
         if(log.isDebugEnabled()) {
             log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
         }
 
-        boolean revalidate = false;
-
         switch (introspectionState) {
-        case NOT_INTROSPECTED:
-            if(isLessThan(upTo)) {
-                introspectType();
+            case NOT_INTROSPECTED->{
+                if(isLessThan(upTo)) {
+                    introspectType();
+                }
+                if(isLessThan(upTo)) {
+                    introspectFully();
+                    specLoaderInternal().validateLater(this, introspectionContextProvider);
+                }
             }
-            if(isLessThan(upTo)) {
-                introspectFully();
-                revalidate = true;
+            case TYPE_BEING_INTROSPECTED->{} // nothing to do (interim state during introspectType)
+            case TYPE_INTROSPECTED->{
+                if(isLessThan(upTo)) {
+                    introspectFully();
+                    specLoaderInternal().validateLater(this, introspectionContextProvider);
+                }
             }
-            // set to avoid infinite loops
-            break;
-
-        case TYPE_BEING_INTROSPECTED:
-            // nothing to do (interim state during introspectType)
-            break;
-
-        case TYPE_INTROSPECTED:
-            if(isLessThan(upTo)) {
-                introspectFully();
-                revalidate = true;
-            }
-            break;
-
-        case MEMBERS_BEING_INTROSPECTED:
-            // nothing to do (interim state during introspectully)
-            break;
-
-        case FULLY_INTROSPECTED:
-            // nothing to do ... all done
-            break;
-
-        default:
-            throw _Exceptions.unexpectedCodeReach();
-        }
-
-        if(revalidate) {
-            getSpecificationLoader().validateLater(this);
+            case MEMBERS_BEING_INTROSPECTED->{}// nothing to do (interim state during introspect fully)
+            case FULLY_INTROSPECTED->{}// nothing to do ... all done
         }
     }
 
     private void introspectType() {
-
         // set to avoid infinite loops
         this.introspectionState = IntrospectionState.TYPE_BEING_INTROSPECTED;
         introspectTypeHierarchy();
@@ -627,7 +655,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         Facets.gridPreload(this, null);
     }
 
-    boolean isLessThan(final IntrospectionState upTo) {
+    private boolean isLessThan(final IntrospectionState upTo) {
         return this.introspectionState.compareTo(upTo) < 0;
     }
 
@@ -988,7 +1016,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Stream<ObjectAssociation> streamDeclaredAssociations(final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"streamDeclaredAssociations of %s".formatted(this.getFeatureIdentifier()));
 
         mixedInAssociationAdder.trigger(this::createMixedInAssociationsAndResort); // only if not already
 
@@ -1000,30 +1029,26 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Optional<? extends ObjectMember> getMember(final String memberId) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"getMember %s of %s".formatted(memberId, this.getFeatureIdentifier()));
 
-        if(_Strings.isEmpty(memberId)) {
-            return Optional.empty();
-        }
+        if(_Strings.isEmpty(memberId)) return Optional.empty();
 
         var objectAction = getAction(memberId);
-        if(objectAction.isPresent()) {
-            return objectAction;
-        }
+        if(objectAction.isPresent()) return objectAction;
+
         var association = getAssociation(memberId);
-        if(association.isPresent()) {
-            return association;
-        }
+        if(association.isPresent()) return association;
+
         return Optional.empty();
     }
 
     @Override
     public Optional<ObjectAssociation> getDeclaredAssociation(final String id, final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"getDeclaredAssociation %s of %s".formatted(id, this.getFeatureIdentifier()));
 
-        if(_Strings.isEmpty(id)) {
-            return Optional.empty();
-        }
+        if(_Strings.isEmpty(id)) return Optional.empty();
 
         return streamDeclaredAssociations(mixedIn)
                 .filter(objectAssociation->objectAssociation.getId().equals(id))
@@ -1040,7 +1065,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     public Stream<ObjectAction> streamDeclaredActions(
             final ImmutableEnumSet<ActionScope> actionScopes,
             final MixedIn mixedIn) {
-        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED);
+        introspectUpTo(IntrospectionState.FULLY_INTROSPECTED,
+                ()->"streamDeclaredActions of %s".formatted(this.getFeatureIdentifier()));
 
         mixedInActionAdder.trigger(this::createMixedInActionsAndResort);
 
@@ -1062,9 +1088,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
-
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
-                IntrospectionState.FULLY_INTROSPECTED);
+                IntrospectionRequest.FULL);
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
@@ -1098,7 +1123,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
-                IntrospectionState.FULLY_INTROSPECTED);
+                IntrospectionRequest.FULL);
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
@@ -1249,5 +1274,9 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     @Getter(lazy = true)
     private final Can<EntityTitleSubscriber> titleSubscribers =
         getServiceRegistry().select(EntityTitleSubscriber.class);
+
+    boolean isFullyIntrospected() {
+        return this.introspectionState == IntrospectionState.FULLY_INTROSPECTED;
+    }
 
 }

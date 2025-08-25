@@ -18,43 +18,25 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
-import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 interface ObjectSpecificationMutable extends ObjectSpecification {
-    
-    public enum IntrospectionState implements Comparable<IntrospectionState> {
-        /**
-         * At this stage, {@link LogicalType} only.
-         */
-        NOT_INTROSPECTED,
 
+    enum IntrospectionRequest {
         /**
-         * Interim stage, to avoid infinite loops while on way to being {@link #TYPE_INTROSPECTED}
+         * No introspection, just register the type, that is, create an initial yet empty {@link ObjectSpecification}.
          */
-        TYPE_BEING_INTROSPECTED,
-
+        REGISTER,
         /**
-         * Type has been introspected (but not its members).
+         * Partial introspection, that only includes type-hierarchy but not members.
          */
-        TYPE_INTROSPECTED,
-
+        TYPE_ONLY,
         /**
-         * Interim stage, to avoid infinite loops while on way to being {@link #FULLY_INTROSPECTED}
+         * Full introspection, that includes type-hierarchy and members.
          */
-        MEMBERS_BEING_INTROSPECTED,
-
-        /**
-         * Fully introspected... class and also its members.
-         */
-        FULLY_INTROSPECTED
-
+        FULL
     }
-    
-    /**
-     * Introspecting up to the level required.
-     * @since 2.0
-     */
-    void introspectUpTo(IntrospectionState upTo);
-    
+
+    void introspect(IntrospectionRequest request);
+
 }

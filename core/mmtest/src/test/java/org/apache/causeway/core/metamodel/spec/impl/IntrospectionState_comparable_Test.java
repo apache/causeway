@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionState;
+import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.IntrospectionState;
 
 public class IntrospectionState_comparable_Test {
 
