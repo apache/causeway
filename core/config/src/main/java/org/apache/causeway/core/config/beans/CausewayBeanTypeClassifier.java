@@ -24,6 +24,8 @@ import java.util.function.Supplier;
 
 import jakarta.persistence.Entity;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
@@ -40,8 +42,6 @@ import org.apache.causeway.core.config.beans.CausewayBeanMetaData.DiscoveredBy;
 import org.apache.causeway.core.config.beans.CausewayBeanMetaData.PersistenceStack;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeProgrammaticMarker;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.TypeVetoMarker;
-
-import org.jspecify.annotations.NonNull;
 
 @Programmatic
 public record CausewayBeanTypeClassifier(
@@ -175,9 +175,9 @@ public record CausewayBeanTypeClassifier(
             return CausewayBeanMetaData.unspecified(logicalType, discoveredBy, BeanSort.MANAGED_BEAN_NOT_CONTRIBUTING);
         }
 
-        // unless explicitly declared otherwise, map records to viewmodels
+        // unless explicitly declared otherwise, map records to unknown
         if(type.isRecord()) {
-            return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.VIEW_MODEL);
+            return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
         }
 
         if(Serializable.class.isAssignableFrom(type)) {

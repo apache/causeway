@@ -48,7 +48,7 @@ type Mutation {
   causeway_testing_fixtures_FixtureResult__key(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__object(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): rich__causeway_testing_fixtures_FixtureResult
   org_apache_causeway_core_metamodel_inspect_model_MMNode__details(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
-  org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input, details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): String
+  org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input, details: String!): String
   org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName(_target: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input, friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu__actionWithDisabledParam(firstParam: String!, secondParam: String!, thirdParameter: String!): String
@@ -102,7 +102,6 @@ type RICHSchema {
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
@@ -145,7 +144,6 @@ type SIMPLESchema {
   java_util_stream_Stream(object: simple__java_util_stream_Stream__gqlv_input): simple__java_util_stream_Stream
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
@@ -198,7 +196,6 @@ type ScenarioStep {
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
@@ -1392,31 +1389,6 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode {
   streamChildNodes: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes__gqlv_action
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details {
-  "Object metadata"
-  _meta: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta
-  "Map"
-  map: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__map__gqlv_collection
-}
-
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__map__gqlv_collection {
-  datatype: String
-  disabled: String
-  get: [String]
-  hidden: Boolean
-}
-
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__details__gqlv_action {
   disabled: String
   hidden: Boolean
@@ -1442,7 +1414,7 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__details__gqlv_action_parameter {
   datatype: String
-  disabled(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): String
+  disabled(details: String): String
   hidden: Boolean
   validity: String
 }
@@ -1450,14 +1422,14 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke
+  invokeNonIdempotent(details: String!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke
   "Parameters of this action"
   params: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_params
-  validate(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): String
+  validate(details: String): String
 }
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_args {
-  details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
+  details: String
 }
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke {
@@ -1690,12 +1662,6 @@ type rich__university_calc_Calculator {
   jdk8OffsetPlusHoursAndMinutes: rich__university_calc_Calculator__jdk8OffsetPlusHoursAndMinutes__gqlv_action
   "Jdk 8 Zoned Plus Days And Hours And Minutes"
   jdk8ZonedPlusDaysAndHoursAndMinutes: rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action
-  "Joda Local Plus Days"
-  jodaLocalPlusDays: rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action
-  "Joda Local Plus Hours And Minutes"
-  jodaLocalPlusHoursAndMinutes: rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action
-  "Joda Plus Days And Hours And Minutes"
-  jodaPlusDaysAndHoursAndMinutes: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action
   "Next Month"
   nextMonth: rich__university_calc_Calculator__nextMonth__gqlv_action
   "Not"
@@ -2568,162 +2534,6 @@ type rich__university_calc_Calculator__jdk8ZonedPlusDaysAndHoursAndMinutes__numM
   validity: String
 }
 
-type rich__university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter {
-  datatype: String
-  disabled(date: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(date: String!, numDays: Int!): rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params
-  validate(date: String, numDays: Int): String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args {
-  date: String
-  numDays: Int
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_args
-  results: String
-  target: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusDays__gqlv_action_params {
-  "Date"
-  date: rich__university_calc_Calculator__jodaLocalPlusDays__date__gqlv_action_parameter
-  "Num Days"
-  numDays: rich__university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusDays__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(date: String, numDays: Int): String
-  hidden(date: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params
-  validate(numHours: Int, numMinutes: Int, time: String): String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args {
-  numHours: Int
-  numMinutes: Int
-  time: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_args
-  results: String
-  target: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
-  "Num Hours"
-  numHours: rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
-  "Num Minutes"
-  numMinutes: rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
-  "Time"
-  time: rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(numHours: Int, time: String): String
-  hidden(time: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(numHours: Int, numMinutes: Int, time: String): String
-  hidden(numHours: Int, time: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter {
-  datatype: String
-  disabled(time: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
-  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args {
-  dateTime: String
-  numDays: Int
-  numHours: Int
-  numMinutes: Int
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args
-  results: String
-  target: String
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
-  "Date Time"
-  dateTime: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
-  "Num Days"
-  numDays: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
-  "Num Hours"
-  numHours: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
-  "Num Minutes"
-  numMinutes: rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int): String
-  hidden(dateTime: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int): String
-  hidden(dateTime: String, numDays: Int): Boolean
-  validity: String
-}
-
-type rich__university_calc_Calculator__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
-  validity: String
-}
-
 type rich__university_calc_Calculator__nextMonth__gqlv_action {
   disabled: String
   hidden: Boolean
@@ -2943,26 +2753,20 @@ type rich__university_calc_calculatorHyphenated {
   and: rich__university_calc_calculatorHyphenated__and__gqlv_action
   "Concat"
   concat: rich__university_calc_calculatorHyphenated__concat__gqlv_action
-  "Jdk 8 Local Plus Days"
-  jdk8LocalPlusDays: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action
-  "Jdk 8 Local Plus Hours And Minutes"
-  jdk8LocalPlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action
-  "Jdk 8 Offset Plus Days And Hours And Minutes"
-  jdk8OffsetPlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action
-  "Jdk 8 Offset Plus Hours And Minutes"
-  jdk8OffsetPlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action
-  "Jdk 8 Zoned Plus Days And Hours And Minutes"
-  jdk8ZonedPlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action
-  "Joda Local Plus Days"
-  jodaLocalPlusDays: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action
-  "Joda Local Plus Hours And Minutes"
-  jodaLocalPlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action
-  "Joda Plus Days And Hours And Minutes"
-  jodaPlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action
+  "Local Date Plus Days"
+  localDatePlusDays: rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action
+  "Local Date Time Plus Days And Hours And Minutes"
+  localDateTimePlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action
+  "Local Time Plus Hours And Minutes"
+  localTimePlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action
   "Next Month"
   nextMonth: rich__university_calc_calculatorHyphenated__nextMonth__gqlv_action
   "Not"
   not: rich__university_calc_calculatorHyphenated__not__gqlv_action
+  "Offset Date Time Plus Days And Hours And Minutes"
+  offsetDateTimePlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action
+  "Offset Time Plus Hours And Minutes"
+  offsetTimePlusHoursAndMinutes: rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action
   "Or"
   or: rich__university_calc_calculatorHyphenated__or__gqlv_action
   "Some Locale"
@@ -2971,6 +2775,8 @@ type rich__university_calc_calculatorHyphenated {
   someUrl: rich__university_calc_calculatorHyphenated__someUrl__gqlv_action
   "Some Uuid"
   someUuid: rich__university_calc_calculatorHyphenated__someUuid__gqlv_action
+  "Zoned Date Time Plus Days And Hours And Minutes"
+  zonedDateTimePlusDaysAndHoursAndMinutes: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action
 }
 
 type rich__university_calc_calculatorHyphenated__addBigDecimals__gqlv_action {
@@ -3561,429 +3367,159 @@ type rich__university_calc_calculatorHyphenated__concat__suffix__gqlv_action_par
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__date__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localDatePlusDays__date__gqlv_action_parameter {
   datatype: String
   disabled(date: String): String
   hidden: Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action {
+type rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(date: String!, numDays: Int!): rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_invoke
+  invoke(date: String!, numDays: Int!): rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action_invoke
   "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_params
+  params: rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action_params
   validate(date: String, numDays: Int): String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_args {
+type rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action_args {
   date: String
   numDays: Int
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_invoke {
+type rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action_invoke {
   "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_args
+  args: rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action_args
   results: String
   target: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__gqlv_action_params {
+type rich__university_calc_calculatorHyphenated__localDatePlusDays__gqlv_action_params {
   "Date"
-  date: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__date__gqlv_action_parameter
+  date: rich__university_calc_calculatorHyphenated__localDatePlusDays__date__gqlv_action_parameter
   "Num Days"
-  numDays: rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__numDays__gqlv_action_parameter
+  numDays: rich__university_calc_calculatorHyphenated__localDatePlusDays__numDays__gqlv_action_parameter
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusDays__numDays__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localDatePlusDays__numDays__gqlv_action_parameter {
   datatype: String
   disabled(date: String, numDays: Int): String
   hidden(date: String): Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_params
-  validate(numHours: Int, numMinutes: Int, time: String): String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_args {
-  numHours: Int
-  numMinutes: Int
-  time: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_args
-  results: String
-  target: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__gqlv_action_params {
-  "Num Hours"
-  numHours: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
-  "Num Minutes"
-  numMinutes: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
-  "Time"
-  time: rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(numHours: Int, time: String): String
-  hidden(time: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(numHours: Int, numMinutes: Int, time: String): String
-  hidden(numHours: Int, time: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8LocalPlusHoursAndMinutes__time__gqlv_action_parameter {
-  datatype: String
-  disabled(time: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: DateTime): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params
-  validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args {
-  dateTime: DateTime
-  numDays: Int
-  numHours: Int
-  numMinutes: Int
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_args
-  results: DateTime
-  target: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__gqlv_action_params {
-  "Date Time"
-  dateTime: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
-  "Num Days"
-  numDays: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
-  "Num Hours"
-  numHours: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
-  "Num Minutes"
-  numMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: DateTime, numDays: Int): String
-  hidden(dateTime: DateTime): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
-  hidden(dateTime: DateTime, numDays: Int): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
-  hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: Time!): rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params
-  validate(numHours: Int, numMinutes: Int, time: Time): String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args {
-  numHours: Int
-  numMinutes: Int
-  time: Time
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_args
-  results: Time
-  target: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__gqlv_action_params {
-  "Num Hours"
-  numHours: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter
-  "Num Minutes"
-  numMinutes: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
-  "Time"
-  time: rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(numHours: Int, time: Time): String
-  hidden(time: Time): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(numHours: Int, numMinutes: Int, time: Time): String
-  hidden(numHours: Int, time: Time): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8OffsetPlusHoursAndMinutes__time__gqlv_action_parameter {
-  datatype: String
-  disabled(time: Time): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String): String
   hidden: Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action_invoke
   "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params
+  params: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action_params
   validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action_args {
   dateTime: String
   numDays: Int
   numHours: Int
   numMinutes: Int
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action_invoke {
   "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_args
+  args: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action_args
   results: String
   target: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__gqlv_action_params {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__gqlv_action_params {
   "Date Time"
-  dateTime: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  dateTime: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
   "Num Days"
-  numDays: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  numDays: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
   "Num Hours"
-  numHours: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  numHours: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
   "Num Minutes"
-  numMinutes: rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+  numMinutes: rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int): String
   hidden(dateTime: String): Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int): String
   hidden(dateTime: String, numDays: Int): Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jdk8ZonedPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localDateTimePlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
   hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__date__gqlv_action_parameter {
-  datatype: String
-  disabled(date: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action {
   disabled: String
   hidden: Boolean
-  invoke(date: String!, numDays: Int!): rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_invoke
+  invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_invoke
   "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_params
-  validate(date: String, numDays: Int): String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_args {
-  date: String
-  numDays: Int
-}
-
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_args
-  results: String
-  target: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__gqlv_action_params {
-  "Date"
-  date: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__date__gqlv_action_parameter
-  "Num Days"
-  numDays: rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__numDays__gqlv_action_parameter
-}
-
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusDays__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(date: String, numDays: Int): String
-  hidden(date: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(numHours: Int!, numMinutes: Int!, time: String!): rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_params
+  params: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_params
   validate(numHours: Int, numMinutes: Int, time: String): String
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_args {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_args {
   numHours: Int
   numMinutes: Int
   time: String
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_invoke {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_invoke {
   "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_args
+  args: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_args
   results: String
   target: String
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__gqlv_action_params {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__gqlv_action_params {
   "Num Hours"
-  numHours: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter
+  numHours: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__numHours__gqlv_action_parameter
   "Num Minutes"
-  numMinutes: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  numMinutes: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__numMinutes__gqlv_action_parameter
   "Time"
-  time: rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter
+  time: rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__time__gqlv_action_parameter
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numHours__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__numHours__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, time: String): String
   hidden(time: String): Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
   datatype: String
   disabled(numHours: Int, numMinutes: Int, time: String): String
   hidden(numHours: Int, time: String): Boolean
   validity: String
 }
 
-type rich__university_calc_calculatorHyphenated__jodaLocalPlusHoursAndMinutes__time__gqlv_action_parameter {
+type rich__university_calc_calculatorHyphenated__localTimePlusHoursAndMinutes__time__gqlv_action_parameter {
   datatype: String
   disabled(time: String): String
   hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String): String
-  hidden: Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action {
-  disabled: String
-  hidden: Boolean
-  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke
-  "Parameters of this action"
-  params: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params
-  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args {
-  dateTime: String
-  numDays: Int
-  numHours: Int
-  numMinutes: Int
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_invoke {
-  "Arguments used to invoke this action"
-  args: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_args
-  results: String
-  target: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__gqlv_action_params {
-  "Date Time"
-  dateTime: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
-  "Num Days"
-  numDays: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
-  "Num Hours"
-  numHours: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
-  "Num Minutes"
-  numMinutes: rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int): String
-  hidden(dateTime: String): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int): String
-  hidden(dateTime: String, numDays: Int): Boolean
-  validity: String
-}
-
-type rich__university_calc_calculatorHyphenated__jodaPlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
-  datatype: String
-  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
-  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
   validity: String
 }
 
@@ -4048,6 +3584,120 @@ type rich__university_calc_calculatorHyphenated__not__gqlv_action_params {
 type rich__university_calc_calculatorHyphenated__not__x__gqlv_action_parameter {
   datatype: String
   disabled(x: Boolean): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: DateTime
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: DateTime
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int): String
+  hidden(dateTime: DateTime): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int): String
+  hidden(dateTime: DateTime, numDays: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetDateTimePlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: DateTime, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: DateTime, numDays: Int, numHours: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(numHours: Int!, numMinutes: Int!, time: Time!): rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action_params
+  validate(numHours: Int, numMinutes: Int, time: Time): String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action_args {
+  numHours: Int
+  numMinutes: Int
+  time: Time
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action_args
+  results: Time
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__gqlv_action_params {
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__numMinutes__gqlv_action_parameter
+  "Time"
+  time: rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__time__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, time: Time): String
+  hidden(time: Time): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(numHours: Int, numMinutes: Int, time: Time): String
+  hidden(numHours: Int, time: Time): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__offsetTimePlusHoursAndMinutes__time__gqlv_action_parameter {
+  datatype: String
+  disabled(time: Time): String
   hidden: Boolean
   validity: String
 }
@@ -4128,6 +3778,68 @@ type rich__university_calc_calculatorHyphenated__someUuid__gqlv_action {
 type rich__university_calc_calculatorHyphenated__someUuid__gqlv_action_invoke {
   results: UUID
   target: String
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String): String
+  hidden: Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invoke(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action_params
+  validate(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action_args {
+  dateTime: String
+  numDays: Int
+  numHours: Int
+  numMinutes: Int
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action_args
+  results: String
+  target: String
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__gqlv_action_params {
+  "Date Time"
+  dateTime: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__dateTime__gqlv_action_parameter
+  "Num Days"
+  numDays: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter
+  "Num Hours"
+  numHours: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter
+  "Num Minutes"
+  numMinutes: rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__numDays__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int): String
+  hidden(dateTime: String): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__numHours__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int): String
+  hidden(dateTime: String, numDays: Int): Boolean
+  validity: String
+}
+
+type rich__university_calc_calculatorHyphenated__zonedDateTimePlusDaysAndHoursAndMinutes__numMinutes__gqlv_action_parameter {
+  datatype: String
+  disabled(dateTime: String, numDays: Int, numHours: Int, numMinutes: Int): String
+  hidden(dateTime: String, numDays: Int, numHours: Int): Boolean
+  validity: String
 }
 
 "University department specializing in a field of study"
@@ -5338,27 +5050,9 @@ type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode {
   "Details"
   details: String
   "Put Details"
-  putDetails(details: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): String
+  putDetails(details: String!): String
   "Stream Child Nodes"
   streamChildNodes: simple__java_util_stream_Stream
-}
-
-type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details {
-  "Object metadata"
-  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta
-  "Map"
-  map: [String]
-}
-
-type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
 }
 
 type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
@@ -5440,12 +5134,6 @@ type simple__university_calc_Calculator {
   jdk8OffsetPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: Time!): Time
   "Jdk 8 Zoned Plus Days And Hours And Minutes"
   jdk8ZonedPlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
-  "Joda Local Plus Days"
-  jodaLocalPlusDays(date: String!, numDays: Int!): String
-  "Joda Local Plus Hours And Minutes"
-  jodaLocalPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: String!): String
-  "Joda Plus Days And Hours And Minutes"
-  jodaPlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
   "Next Month"
   nextMonth(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
   "Not"
@@ -5494,26 +5182,20 @@ type simple__university_calc_calculatorHyphenated {
   and(x: Boolean!, y: Boolean!): Boolean
   "Concat"
   concat(prefix: String!, suffix: String): String
-  "Jdk 8 Local Plus Days"
-  jdk8LocalPlusDays(date: String!, numDays: Int!): String
-  "Jdk 8 Local Plus Hours And Minutes"
-  jdk8LocalPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: String!): String
-  "Jdk 8 Offset Plus Days And Hours And Minutes"
-  jdk8OffsetPlusDaysAndHoursAndMinutes(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): DateTime
-  "Jdk 8 Offset Plus Hours And Minutes"
-  jdk8OffsetPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: Time!): Time
-  "Jdk 8 Zoned Plus Days And Hours And Minutes"
-  jdk8ZonedPlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
-  "Joda Local Plus Days"
-  jodaLocalPlusDays(date: String!, numDays: Int!): String
-  "Joda Local Plus Hours And Minutes"
-  jodaLocalPlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: String!): String
-  "Joda Plus Days And Hours And Minutes"
-  jodaPlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  "Local Date Plus Days"
+  localDatePlusDays(date: String!, numDays: Int!): String
+  "Local Date Time Plus Days And Hours And Minutes"
+  localDateTimePlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
+  "Local Time Plus Hours And Minutes"
+  localTimePlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: String!): String
   "Next Month"
   nextMonth(month: rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum!): rich__org_apache_causeway_viewer_graphql_viewer_test_domain_calc_Month__gqlv_enum
   "Not"
   not(x: Boolean!): Boolean
+  "Offset Date Time Plus Days And Hours And Minutes"
+  offsetDateTimePlusDaysAndHoursAndMinutes(dateTime: DateTime!, numDays: Int!, numHours: Int!, numMinutes: Int!): DateTime
+  "Offset Time Plus Hours And Minutes"
+  offsetTimePlusHoursAndMinutes(numHours: Int!, numMinutes: Int!, time: Time!): Time
   "Or"
   or(x: Boolean!, y: Boolean!): Boolean
   "Some Locale"
@@ -5522,6 +5204,8 @@ type simple__university_calc_calculatorHyphenated {
   someUrl: String
   "Some Uuid"
   someUuid: UUID
+  "Zoned Date Time Plus Days And Hours And Minutes"
+  zonedDateTimePlusDaysAndHoursAndMinutes(dateTime: String!, numDays: Int!, numHours: Int!, numMinutes: Int!): String
 }
 
 "University department specializing in a field of study"
@@ -5691,8 +5375,6 @@ enum logicalTypeNames__gqlv_enum {
   causeway_testing_fixtures_FixtureResult
   "org.apache.causeway.applib.graph.tree.MasterDetailTreeView"
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView
-  "org.apache.causeway.core.metamodel.inspect.model.MMNode.Details"
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   "university.dept.Department"
   university_dept_Department
   "university.dept.DeptHead"
@@ -5952,15 +5634,6 @@ input rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_inp
   ref: String
 }
 
-input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -6205,15 +5878,6 @@ input simple__java_util_stream_Stream__gqlv_input {
 }
 
 input simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"

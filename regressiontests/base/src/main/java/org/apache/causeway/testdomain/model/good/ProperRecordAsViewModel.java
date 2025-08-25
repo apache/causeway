@@ -19,9 +19,10 @@
 package org.apache.causeway.testdomain.model.good;
 
 /**
- * @since 3.0.0
+ * @since 3.0.0 no longer supported in 4.0.0
  */
 //@DomainObject(nature = Nature.VIEW_MODEL)
+@Deprecated
 public record ProperRecordAsViewModel(
         //@Property
         String arbitraryString,

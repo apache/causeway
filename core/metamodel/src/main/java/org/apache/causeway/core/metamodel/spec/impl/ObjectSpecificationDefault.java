@@ -114,7 +114,6 @@ import org.apache.causeway.core.metamodel.util.Facets;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -525,8 +524,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Getter(onMethod_ = {@Override}) private FacetHolder facetHolder;
 
-
-
     // -- Stuff immediately derivable from class
     @Override
     public final FeatureType getFeatureType() {
@@ -593,20 +590,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     /**
-     * keeps track of the causal chain of introspection requests
+     * @param introspectionContextProvider keeps track of the causal chain of introspection requests
      */
-    @AllArgsConstructor
-    private final static class IntrospectionContext {
-        final String info;
-        final IntrospectionContext cause;
-        @Override
-        public String toString() {
-            return cause!=null
-                    ? info + "caused by " + cause.toString()
-                    : info;
-        }
-    }
-
     private void introspectUpTo(final IntrospectionState upTo, Supplier<String> introspectionContextProvider) {
         if(!isLessThan(upTo)) return; // optimization
 

@@ -63,11 +63,14 @@ import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.ConstructorBinding;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.boot.convert.DurationUnit;
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
@@ -87,6 +90,8 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.context._Context;
+import org.apache.causeway.core.config.CausewayConfiguration.Core;
+import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
@@ -100,10 +105,6 @@ import org.apache.causeway.core.config.viewer.web.TextMode;
 import org.apache.causeway.schema.cmd.v2.ActionDto;
 import org.apache.causeway.schema.cmd.v2.ParamDto;
 
-import org.springframework.boot.context.properties.bind.ConstructorBinding;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.boot.convert.DurationUnit;
-
 /**
  * Configuration 'beans' with meta-data (IDE-support).
  *
@@ -111,7 +112,7 @@ import org.springframework.boot.convert.DurationUnit;
  *
  * @since 2.0
  */
-@Component
+@Configuration(proxyBeanMethods = false)
 public record CausewayConfiguration(
     @Autowired
     ConfigurableEnvironment environment,
