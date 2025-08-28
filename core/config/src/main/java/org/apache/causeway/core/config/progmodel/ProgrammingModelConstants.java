@@ -296,6 +296,7 @@ public final class ProgrammingModelConstants {
         CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
 
         ICON(ReturnTypeCategory.ICON_RESOURCE, "icon"),
+        ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
 
         LAYOUT(ReturnTypeCategory.STRING, "layout"),
 

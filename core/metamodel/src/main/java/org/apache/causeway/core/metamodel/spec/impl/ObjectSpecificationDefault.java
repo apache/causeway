@@ -40,6 +40,7 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
@@ -79,6 +80,8 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -805,7 +808,18 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             _Assert.assertEquals(domainObject.objSpec(), this);
         }
         return Optional.ofNullable(iconFacet)
-            .flatMap(facet->facet.icon(domainObject, iconWhere));
+            .flatMap(facet->facet.icon(domainObject, iconWhere))
+            .or(()->faLayers(domainObject)
+                .map(ObjectSupport.FontAwesomeIconResource::new));
+    }
+
+    private Optional<FontAwesomeLayers> faLayers(final ManagedObject domainObject){
+        return lookupFacet(FaFacet.class)
+            .map(FaFacet::getSpecialization)
+            .map(either->either.fold(
+                faStaticFacet->(FaLayersProvider)faStaticFacet,
+                faImperativeFacet->faImperativeFacet.getFaLayersProvider(domainObject)))
+            .map(FaLayersProvider::getLayers);
     }
 
     // -- HIERARCHICAL

@@ -29,7 +29,6 @@ import lombok.Getter;
 /**
  * One of two bases for the {@link FaFacet}.
  *
- * @see FaImperativeFacetAbstract
  * @since 2.0
  */
 public abstract class FaStaticFacetAbstract

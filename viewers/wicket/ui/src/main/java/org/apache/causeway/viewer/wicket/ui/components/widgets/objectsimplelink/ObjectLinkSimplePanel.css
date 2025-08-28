@@ -26,5 +26,5 @@ div.objectSimpleLinkPanel > div {
 
 .objectSimpleLinkPanel .objectImage {
 	width: 16px;
-	height: 16px;
+	max-height: 16px;
 }
