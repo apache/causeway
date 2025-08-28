@@ -186,7 +186,7 @@ public record ExcelFileWriter(@Nullable Options options) {
             if(!isLarge) {
                 autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
             } else if(writtenCount%1000==0) {
-                log.info("rows written %dk of %dk%n", writtenCount/1000, (dataRows.size()+500)/1000);
+                log.info("rows written {}k of {}k", writtenCount/1000, (dataRows.size()+500)/1000);
             }
         }
 
