@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.prism;
 
+import java.util.ArrayList;
 import java.util.function.UnaryOperator;
 
 import org.jsoup.Jsoup;
@@ -26,8 +27,7 @@ import org.jsoup.nodes.Node;
 
 import lombok.extern.log4j.Log4j2;
 @Log4j2
-public record PrismHighlighter(
-        ) implements UnaryOperator<String> {
+public record PrismHighlighter() implements UnaryOperator<String> {
 
     /**
      * Returns the highlighted HTML.
@@ -39,6 +39,8 @@ public record PrismHighlighter(
         var doc = Jsoup.parseBodyFragment(htmlContent);
 
         //var tt = org.apache.causeway.commons.internal.base._Timing.now();
+
+        var replacements = new ArrayList<NodeReplacement>();
 
         doc.traverse((final Node node, final int depth)->{
             if(node instanceof Element element
@@ -62,13 +64,23 @@ public record PrismHighlighter(
                 //<pre class="highlight language-%s">
                 node.parent().attr("class", "highlight language-%s".formatted(prismLanguage.languageId()));
 
-                node.replaceWith(newNode);
+                replacements.add(new NodeReplacement(element, newNode));
             }
         });
+
+        replacements.forEach(NodeReplacement::apply);
 
         //tt.stop();System.err.printf("context took %s%n", tt);
 
         return doc.body().html();
+    }
+
+    private record NodeReplacement(
+            Element oldNode,
+            Element newNode) {
+        void apply() {
+            oldNode.replaceWith(newNode);
+        }
     }
 
 }

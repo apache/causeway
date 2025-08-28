@@ -67,7 +67,7 @@ class PrismUtils {
 
     @SneakyThrows
     Context createPrismContext() {
-        var context = Context.newBuilder().engine(ENGINE.get()). build();
+        var context = Context.newBuilder().engine(ENGINE.get()).build();
         context.eval(PRISM_SOURCE.get());
         return context;
     }
