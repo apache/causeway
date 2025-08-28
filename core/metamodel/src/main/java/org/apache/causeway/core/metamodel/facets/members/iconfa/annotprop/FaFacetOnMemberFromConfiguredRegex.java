@@ -39,7 +39,6 @@ import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFace
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.postprocessors.all.CssOnActionFromConfiguredRegexPostProcessor;
@@ -67,7 +66,7 @@ public record FaFacetOnMemberFromConfiguredRegex(
 ) implements FaImperativeFacet {
 
     @Override public FacetHolder getFacetHolder() { return facetHolder; }
-    @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
+    @Override public Class<? extends Facet> facetType() { return FaFacet.class; }
     @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
 
     @Override
