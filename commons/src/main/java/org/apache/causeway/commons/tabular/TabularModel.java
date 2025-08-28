@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.springframework.lang.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -72,7 +71,7 @@ public record TabularModel(
              * E.g. a TabularCell can decide to provide a label instead of a pojo,
              * even though cardinality is 1.
              */
-            @NonNull Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
+            Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
 
         // -- FACTORIES
 
@@ -84,7 +83,7 @@ public record TabularModel(
                     ? EMPTY
                     : new TabularCell(1, Either.left(value));
         }
-        public static TabularCell labeled(final int cardinality, final @NonNull Supplier<Stream<String>> labelSupplier) {
+        public static TabularCell labeled(final int cardinality, final Supplier<Stream<String>> labelSupplier) {
             Objects.requireNonNull(labelSupplier);
             return new TabularCell(cardinality, Either.right(labelSupplier));
         }
@@ -93,7 +92,7 @@ public record TabularModel(
 
         public TabularCell(
                 final int cardinality,
-                final @NonNull Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
+                final Either<Object, Supplier<Stream<String>>> eitherValueOrLabelSupplier) {
             Objects.requireNonNull(eitherValueOrLabelSupplier);
             if(cardinality<0) throw _Exceptions.illegalArgument("cardinality cannot be negative: %d", cardinality);
             if(cardinality==0) {

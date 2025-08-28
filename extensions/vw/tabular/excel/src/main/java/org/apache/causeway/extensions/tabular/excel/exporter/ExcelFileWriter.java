@@ -45,10 +45,12 @@ import org.apache.causeway.commons.tabular.TabularModel.TabularRow;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Utility to write a {@link TabularModel} to file.
  */
+@Slf4j
 public record ExcelFileWriter(@Nullable Options options) {
 
     @Builder
@@ -122,13 +124,13 @@ public record ExcelFileWriter(@Nullable Options options) {
         var sheetName = tabularSheet.sheetName();
 
         Row row;
-        
+
         var sheet = wb.createSheet(sheetName);
         if(sheet instanceof SXSSFSheet sxssfSheet) {
             sxssfSheet.trackAllColumnsForAutoSizing();
         }
         var cellWriter = new ExcelCellWriter(5, new ExcelImageHandler(sheet));
-        
+
         var cellStyleProvider = CellStyleProvider.create(wb, options);
         var rowFactory = new RowFactory(sheet);
 
@@ -160,6 +162,9 @@ public record ExcelFileWriter(@Nullable Options options) {
 
         var dataRows = tabularSheet.rows();
 
+        var isLarge = dataRows.size()>=10000;
+        int writtenCount = 0;
+
         // detail rows
         for (var dataRow : dataRows) {
             row = rowFactory.newRow();
@@ -176,11 +181,19 @@ public record ExcelFileWriter(@Nullable Options options) {
                 maxLinesInRow.accept(linesWritten);
             }
             cellStyleProvider.applyCustomStyle(dataRow, row);
-            autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
+            ++writtenCount;
+
+            if(!isLarge) {
+                autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
+            } else if(writtenCount%1000==0) {
+                log.info("rows written %dk of %dk%n", writtenCount/1000, (dataRows.size()+500)/1000);
+            }
         }
 
-        // column auto-size
-        autoSizeColumns(sheet, dataColumns.size());
+        if(!isLarge) {
+            // column auto-size
+            autoSizeColumns(sheet, dataColumns.size());
+        }
 
         // freeze panes
         sheet.createFreezePane(0, 2);
