@@ -27,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -218,7 +219,7 @@ implements DomainObjectResource {
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "GET /objects/{}/{}/object-icon", domainType, instanceId, roEx));
-        var objectIcon = objectAdapter.getIcon();
+        var objectIcon = objectAdapter.getIcon(IconWhere.OBJECT_HEADER);
 
         return _EndpointLogging.response(log, "GET /objects/{}/{}/object-icon", domainType, instanceId,
             responseFactory.ok(

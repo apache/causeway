@@ -21,12 +21,13 @@ package org.apache.causeway.core.metamodel.facets.object.icon;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.services.title.TitleService;
 
 /**
  * Icon image based on {@link FontAwesomeLayers}
  *
  * @see ObjectIcon
- * @see ObjectIconService
+ * @see TitleService
  * @since 4.0
  */
 public record ObjectIconFa(

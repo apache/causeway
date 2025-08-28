@@ -39,7 +39,7 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.collections.Can;
@@ -79,11 +79,8 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.introspection.IntrospectionPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.AliasedFacet;
@@ -771,28 +768,12 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private void notifySubscribersIfEntity(
             final TitleRenderRequest titleRenderRequest,
             final String titleString) {
-        if (!isEntity()) {
-            return;
-        }
+        if (!isEntity()) return;
+
         var managedObject = titleRenderRequest.object();
         managedObject.getBookmark().ifPresent(bookmark -> {
             getTitleSubscribers().stream().forEach(x -> x.entityTitleIs(bookmark, titleString));
         });
-    }
-
-    @Override
-    public Optional<String> getIconName(final ManagedObject domainObject) {
-        if(ManagedObjects.isSpecified(domainObject)) {
-            _Assert.assertEquals(domainObject.objSpec(), this);
-        }
-        return Optional.ofNullable(iconFacet)
-                .flatMap(facet->facet.iconName(domainObject));
-    }
-
-    @Override
-    public ObjectIcon getIcon(final ManagedObject domainObject) {
-        return getObjectIconService()
-            .getObjectIcon(this, getIconName(domainObject), getFaLayers(domainObject));
     }
 
     @Override
@@ -810,20 +791,21 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public Optional<FontAwesomeLayers> getFaLayers(final ManagedObject reference){
-        return lookupFacet(FaFacet.class)
-                .map(FaFacet::getSpecialization)
-                .map(either->either.fold(
-                        faStaticFacet->(FaLayersProvider)faStaticFacet,
-                        faImperativeFacet->faImperativeFacet.getFaLayersProvider(reference)))
-                .map(FaLayersProvider::getLayers);
-    }
-
-    @Override
     public Can<LogicalType> getAliases() {
         return aliasedFacet != null
                 ? aliasedFacet.getAliases()
                 : Can.empty();
+    }
+
+    // -- ICON
+
+    @Override
+    public Optional<ObjectSupport.IconResource> getIcon(final ManagedObject domainObject, ObjectSupport.IconWhere iconWhere) {
+        if(ManagedObjects.isSpecified(domainObject)) {
+            _Assert.assertEquals(domainObject.objSpec(), this);
+        }
+        return Optional.ofNullable(iconFacet)
+            .flatMap(facet->facet.icon(domainObject, iconWhere));
     }
 
     // -- HIERARCHICAL

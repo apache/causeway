@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.object.icontitle;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -92,16 +93,17 @@ public class ObjectIconAndTitlePanelFactory extends ComponentFactoryAbstract {
             throw _Exceptions.unexpectedCodeReach();
         }
 
-        return new ObjectIconAndTitlePanel(id, objectAdapterModel);
+        return new ObjectIconAndTitlePanel(id, IconWhere.TABLE_ROW, objectAdapterModel);
     }
 
     /**
      * refactoring hint: go through proper ComponentFactory channels instead
      */
+    @Deprecated
     public static Component entityIconAndTitlePanel(
             final String componentId,
             final ObjectAdapterModel objectAdapterModel) {
-        return new ObjectIconAndTitlePanel(componentId, objectAdapterModel);
+        return new ObjectIconAndTitlePanel(componentId, IconWhere.TABLE_ROW, objectAdapterModel);
     }
 
 }

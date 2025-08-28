@@ -31,6 +31,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -184,16 +185,18 @@ implements
     }
 
     @Override
-    public ObjectIcon getIcon() {
-        return getManagedObject().getIcon();
+    public ObjectIcon getIcon(IconWhere iconWhere) {
+        return getManagedObject().getIcon(iconWhere);
     }
 
     public void visitIconVariantOrElse(
+            IconWhere iconWhere,
             Consumer<ResourceReference> a,
             Consumer<ObjectIconEmbedded> b,
             Consumer<FontAwesomeLayers> c,
             Runnable onNoMatch) {
         visitIconVariant(
+            iconWhere,
             urlBased->{
                 var rref = imageResourceCache().resourceReferenceForObjectIcon(urlBased);
                 if(rref!=null) {

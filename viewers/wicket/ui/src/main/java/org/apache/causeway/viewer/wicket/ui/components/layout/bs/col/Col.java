@@ -98,11 +98,10 @@ implements HasDynamicallyVisibleContent {
         final String actionIdToUse;
         final String actionIdToHide;
         if(domainObject != null) {
-            final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer(ID_OBJECT_HEADER_PANEL);
+            var entityHeaderPanel = new WebMarkupContainer(ID_OBJECT_HEADER_PANEL);
             div.add(entityHeaderPanel);
-            final ComponentFactory componentFactory =
-                    getComponentFactoryRegistry().findComponentFactory(UiComponentType.OBJECT_ICON_TITLE_AND_COPYLINK, getModel());
-            final Component component = componentFactory.createComponent(getModel());
+            final Component component = getComponentFactoryRegistry()
+                .createComponent(UiComponentType.OBJECT_ICON_TITLE_AND_COPYLINK, getModel());
             entityHeaderPanel.addOrReplace(component);
 
             actionOwner = entityHeaderPanel;

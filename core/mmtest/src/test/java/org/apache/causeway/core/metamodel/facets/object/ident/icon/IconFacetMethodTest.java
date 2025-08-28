@@ -27,22 +27,24 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Mocking;
-import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
+import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 class IconFacetMethodTest {
 
     private Mocking mocking = new Mocking();
-    private IconFacetViaIconNameMethod facet;
+    private IconFacetViaIconMethod facet;
     private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInIconNameMethod pojo;
 
     public static class DomainObjectWithProblemInIconNameMethod {
-        public String iconName() {
+        @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
             throw new NullPointerException("for testing purposes");
         }
     }
@@ -51,11 +53,11 @@ class IconFacetMethodTest {
     public void setUp() throws Exception {
 
         pojo = new DomainObjectWithProblemInIconNameMethod();
-        var iconNameMethod = _GenericResolver.testing
-                .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "iconName");
+        var iconMethod = _GenericResolver.testing
+                .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "icon", ObjectSupport.IconWhere.class);
 
-        facet = (IconFacetViaIconNameMethod) IconFacetViaIconNameMethod
-                .create(iconNameMethod, Mockito.mock(FacetHolder.class))
+        facet = (IconFacetViaIconMethod) IconFacetViaIconMethod
+                .create(iconMethod, Mockito.mock(FacetHolder.class))
                 .orElse(null);
 
         mockOwningAdapter = mocking.asViewmodel(pojo);
@@ -67,10 +69,9 @@ class IconFacetMethodTest {
     }
 
     @Test
-    void iconNameThrowsException() {
-        //assertThrows(Exception.class, ()->facet.iconName(mockOwningAdapter));
-        final String iconName = facet.iconName(mockOwningAdapter).orElse(null);
-        assertThat(iconName, is(nullValue()));
+    void iconIsNull() {
+        var icon = facet.icon(mockOwningAdapter, IconWhere.OBJECT_HEADER).orElse(null);
+        assertThat(icon, is(nullValue()));
     }
 
 }

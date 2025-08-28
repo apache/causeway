@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 
 @DomainObject(nature = Nature.VIEW_MODEL)
 public class ProperFullyImpl
@@ -33,8 +34,8 @@ extends ProperFullyAbstract {
     }
 
     @Override
-    public String iconName() {
-        return "icon";
+    public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+        return new ObjectSupport.ClassPathIconResource("icon");
     }
 
     @Override

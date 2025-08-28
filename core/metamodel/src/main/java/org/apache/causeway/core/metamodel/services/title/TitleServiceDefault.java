@@ -19,12 +19,12 @@
 package org.apache.causeway.core.metamodel.services.title;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -33,8 +33,6 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * Default implementation of {@link TitleService}.
@@ -45,17 +43,13 @@ import lombok.RequiredArgsConstructor;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".TitleServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-public class TitleServiceDefault implements TitleService {
-
-    private final WrapperFactory wrapperFactory;
-    private final ObjectManager objectManager;
+public record TitleServiceDefault(
+    ObjectManager objectManager,
+    WrapperFactory wrapperFactory)
+implements TitleService {
 
     @Override
     public String titleOf(final Object domainObject) {
-
-        if(objectManager == null) return "" + domainObject; // simplified JUnit test support
-
         var pojo = unwrapped(domainObject);
         var objectAdapter = objectManager.adapt(pojo);
 
@@ -68,17 +62,14 @@ public class TitleServiceDefault implements TitleService {
     }
 
     @Override
-    public String iconNameOf(final Object domainObject) {
-
-        if(objectManager == null)  // simplified JUnit test support
-            return domainObject!=null ? domainObject.getClass().getSimpleName() : "null";
-
+    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconWhere iconWhere) {
         var pojo = unwrapped(domainObject);
         var objectAdapter = objectManager.adapt(pojo);
 
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
-            ? "unspecified"
-            : objectAdapter.objSpec().getIconName(objectAdapter).orElse(null);
+            ? null
+            : objectAdapter.objSpec().getIcon(objectAdapter, iconWhere)
+                .orElse(null);
     }
 
     //-- HELPER

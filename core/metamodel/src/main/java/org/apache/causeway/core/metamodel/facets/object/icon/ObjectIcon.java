@@ -20,11 +20,13 @@ package org.apache.causeway.core.metamodel.facets.object.icon;
 
 import java.io.Serializable;
 
+import org.apache.causeway.applib.services.title.TitleService;
+
 /**
  * Icon image data class-path resource reference.
  *
- * @see ObjectIconService
- * @since 2.0 revised for 4.0
+ * @see TitleService
+ * @since 2.0 revised for 4.0 {@index}
  */
 public sealed interface ObjectIcon extends Serializable
 permits ObjectIconFa, ObjectIconEmbedded, ObjectIconUrlBased {

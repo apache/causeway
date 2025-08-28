@@ -20,12 +20,13 @@ package org.apache.causeway.viewer.wicket.ui.components.object.icontitle;
 
 import org.apache.wicket.MarkupContainer;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 
 /**
  * An extension of {@link org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanel}
- * that additionally has a link allowing to copy the url to the shown entity
+ * that additionally has a link allowing to copy the URL to the shown entity
  */
 class ObjectIconTitleAndCopyLinkPanel extends ObjectIconAndTitlePanel {
 
@@ -33,8 +34,8 @@ class ObjectIconTitleAndCopyLinkPanel extends ObjectIconAndTitlePanel {
 
     private static final String ID_COPY_LINK = "copyLink";
 
-    public ObjectIconTitleAndCopyLinkPanel(final String id, final UiObjectWkt objectModel) {
-        super(id, objectModel);
+    public ObjectIconTitleAndCopyLinkPanel(final String id, final IconWhere iconWhere, final UiObjectWkt objectModel) {
+        super(id, iconWhere, objectModel);
     }
 
     @Override

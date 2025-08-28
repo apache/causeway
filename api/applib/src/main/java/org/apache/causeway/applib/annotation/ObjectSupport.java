@@ -24,6 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.commons.net.DataUri;
+
 /**
  * Indicates that a method is a supporting-method that provides UI hints (title, iconName, layout, cssClass)
  * to its <i>Object</i>.
@@ -46,5 +49,32 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Domain.Include // meta annotation, in support of meta-model validation
 public @interface ObjectSupport {
+
+    /**
+     * Rendering context for object icons.
+     * An object's icon is either rendered within the object detail page header (along its title)
+     * or within a table row.
+     */
+    public enum IconWhere {
+        OBJECT_HEADER,
+        TABLE_ROW //TODO also TREE_NODE and SELECT_DROPDOWN
+    }
+
+    public sealed interface IconResource
+    permits ClassPathIconResource, FontAwesomeIconResource, EmbeddedIconResource {
+
+    }
+
+    public record ClassPathIconResource(
+        String suffix) implements IconResource {
+    }
+
+    public record FontAwesomeIconResource(
+        FontAwesomeLayers faLayers) implements IconResource {
+    }
+
+    public record EmbeddedIconResource(
+        DataUri dataUri) implements IconResource {
+    }
 
 }

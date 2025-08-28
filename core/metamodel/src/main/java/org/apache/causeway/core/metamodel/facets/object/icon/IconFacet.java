@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.object.icon;
 
 import java.util.Optional;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -35,11 +37,13 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * pending approval, approved, rejected).
  *
  * <p>
- * In the standard Apache Causeway Programming Model, typically corresponds to a method named {@code iconName}.
+ * In the Apache Causeway Programming Model, corresponds to either a method named {@code iconName}
+ * or {@code iconData}.
  *
  * @see TitleFacet
  */
 public interface IconFacet extends Facet {
 
-    public Optional<String> iconName(final ManagedObject object);
+    Optional<ObjectSupport.IconResource> icon(ManagedObject object, IconWhere iconWhere);
+
 }

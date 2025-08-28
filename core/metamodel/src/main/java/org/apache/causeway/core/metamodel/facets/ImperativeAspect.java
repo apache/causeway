@@ -54,9 +54,28 @@ public record ImperativeAspect(
         return returnValue;
     }
 
+    public Object invokeSingleMethod(final ManagedObject domainObject, final Object arg0) {
+        var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular, as the factories only creates regular
+        final Object returnValue = MmInvokeUtils.invokeWithSingleArgPojo(method.method(), domainObject, arg0);
+        return returnValue;
+    }
+
     public <T> T eval(
             final ManagedObject domainObject,
             final T fallback) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return fallback;
+
+        try {
+            return _Casts.uncheckedCast(invokeSingleMethod(domainObject));
+        } catch (final RuntimeException ex) {
+            return fallback;
+        }
+    }
+
+    public <T> T eval(
+            final ManagedObject domainObject,
+            final T fallback,
+            final Object arg0) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return fallback;
 
         try {

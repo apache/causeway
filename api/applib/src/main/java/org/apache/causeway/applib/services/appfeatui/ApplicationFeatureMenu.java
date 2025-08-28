@@ -63,10 +63,10 @@ public class ApplicationFeatureMenu {
     public static abstract class ActionDomainEvent
     extends CausewayModuleApplib.ActionDomainEvent<ApplicationFeatureMenu> {}
 
-    // -- ICON NAME
+    // -- ICON
 
-    @ObjectSupport public String iconName() {
-        return "applicationFeature";
+    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+        return new ObjectSupport.ClassPathIconResource("applicationFeature");
     }
 
     // -- ALL PACKAGES

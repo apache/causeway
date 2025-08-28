@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.commons.model.mixin;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
@@ -30,14 +31,15 @@ import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 @FunctionalInterface
 public interface HasIcon {
 
-    ObjectIcon getIcon();
+    ObjectIcon getIcon(IconWhere iconWhere);
 
     default void visitIconVariant(
+        IconWhere iconWhere,
         Consumer<ObjectIconUrlBased> a,
         Consumer<ObjectIconEmbedded> b,
         Consumer<ObjectIconFa> c) {
 
-        var objectIcon = Objects.requireNonNull(getIcon());
+        var objectIcon = Objects.requireNonNull(getIcon(iconWhere));
         if(objectIcon instanceof ObjectIconUrlBased urlBased){
             a.accept(urlBased);
         } else if(objectIcon instanceof ObjectIconEmbedded embedded){

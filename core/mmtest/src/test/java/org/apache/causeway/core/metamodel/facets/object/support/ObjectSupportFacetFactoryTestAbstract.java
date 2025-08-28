@@ -56,14 +56,15 @@ extends FacetFactoryTestAbstract {
             final FacetFactory facetFactory,
             final Class<?> type,
             final ProgrammingModelConstants.ObjectSupportMethod supportMethodEnum,
-            final Class<? extends Facet> facetType) {
+            final Class<? extends Facet> facetType,
+            final Class<?> ...paramTypes) {
 
         objectScenario(type, (processClassContext, facetHolder) -> {
             //when
             facetFactory.process(processClassContext);
             //then
             var supportMethods = supportMethodEnum.getMethodNames()
-                    .map(methodName->findMethodExactOrFail(type, methodName))
+                    .map(methodName->findMethodExactOrFail(type, methodName, paramTypes))
                     .map(_MethodFacades::regular)
                     .map(MethodFacade::asMethodElseFail);
 

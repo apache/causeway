@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.ident.icon;
 
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
@@ -29,12 +30,12 @@ extends ObjectSupportFacetFactoryTestAbstract {
 
     @Test
     void iconNameMethodPickedUpOnClassAndMethodRemoved() {
-        @SuppressWarnings("unused")
         class Customer {
-            public String iconName() { return null; }
-
+            @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+                return null;
+            }
         }
-        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON_NAME, IconFacet.class);
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON, IconFacet.class, ObjectSupport.IconWhere.class);
     }
 
 }
