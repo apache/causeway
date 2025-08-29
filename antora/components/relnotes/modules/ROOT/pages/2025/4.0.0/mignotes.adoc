@@ -104,3 +104,4 @@ With `TitleService` method
 `String iconNameOf(final Object domainObject)` was replaced by 
     `IconResource iconOf(Object domainObject, IconWhere iconWhere)`. 
 
+Likewise `IconUiEvent` was updated to reflect the new programming model.
