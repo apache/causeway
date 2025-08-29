@@ -51,20 +51,11 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
      * <p>Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
      */
     protected IconUiEvent() {
-        this(null, null);
+        super(null);
     }
 
-    public IconUiEvent(ObjectSupport.IconWhere iconWhere) {
-        this(null, iconWhere);
-    }
-
-    public IconUiEvent(final S source, ObjectSupport.IconWhere iconWhere) {
-        super(source);
-        this.iconWhere = iconWhere;
-    }
-
-    @Getter @Accessors(fluent = true)
-    private final ObjectSupport.IconWhere iconWhere;
+    @Getter @Setter @Accessors(fluent = true)
+    private ObjectSupport.IconWhere iconWhere;
 
     /**
      * Icon resource for corresponding domain object,

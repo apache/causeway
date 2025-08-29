@@ -96,9 +96,9 @@ implements IconFacet {
     }
 
     private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, ObjectSupport.IconWhere iconWhere) {
-        return EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo,
-            ObjectSupport.IconWhere.class, iconWhere)
+        var iconUiEvent = EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo)
             .orElseThrow();
+        return iconUiEvent.iconWhere(iconWhere);
     }
 
     private Optional<IconFacet> underlyingIconFacet() {

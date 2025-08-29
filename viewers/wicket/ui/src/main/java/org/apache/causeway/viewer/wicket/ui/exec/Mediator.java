@@ -134,31 +134,26 @@ record Mediator(
                     // non-Ajax request => just stream the Lob to the browser
                     // or if this is a no-arg action, there also will be no parent for the component
                     requestCycle.scheduleRequestHandlerAfterCurrent(handler());
+                    return;
+                }
+                // otherwise,
+                // Ajax request => respond with a redirect to be able to stream the Lob to the client
+                final IRequestHandler requestHandler = handler();
+                if(requestHandler instanceof ResourceStreamRequestHandler scheduledHandler) {
+                    var streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
+                    ajaxTarget.getPage().add(streamingBehavior);
+                    scheduleJs(ajaxTarget, javascriptFor_sameWindow(streamingBehavior.getCallbackUrl()), 100);
+                } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy redirectHandler) {
+                    var fullUrl = expanded(requestCycle, redirectHandler.getRedirectUrl());
+                    var js = redirectHandler.getOpenUrlStrategy().isNewWindow()
+                        ? javascriptFor_newWindow(fullUrl)
+                        : javascriptFor_sameWindow(fullUrl);
+
+                    scheduleJs(ajaxTarget, js, 100);
                 } else {
-                    // otherwise,
-                    // Ajax request => respond with a redirect to be able to stream the Lob to the client
-                    final IRequestHandler requestHandler = handler();
-                    if(requestHandler instanceof ResourceStreamRequestHandler scheduledHandler) {
-                        var streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
-                        var page = ajaxTarget.getPage();
-                        page.add(streamingBehavior);
-                        CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
-                        scheduleJs(ajaxTarget, javascriptFor_sameWindow(callbackUrl), 10);
-                    } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy redirectHandler) {
-
-                        final String url = redirectHandler.getRedirectUrl();
-                        final String fullUrl = expanded(requestCycle, url);
-
-                        if(redirectHandler.getOpenUrlStrategy().isNewWindow()) {
-                            scheduleJs(ajaxTarget, javascriptFor_newWindow(fullUrl), 100);
-                        } else {
-                            scheduleJs(ajaxTarget, javascriptFor_sameWindow(fullUrl), 100);
-                        }
-                    } else {
-                        throw _Exceptions.unrecoverable(
-                                "no logic implemented to handle IRequestHandler of type %s",
-                                requestHandler.getClass().getName());
-                    }
+                    throw _Exceptions.unrecoverable(
+                            "no logic implemented to handle IRequestHandler of type %s",
+                            requestHandler.getClass().getName());
                 }
             }
         }
@@ -195,7 +190,7 @@ record Mediator(
 
     private static void scheduleJs(final AjaxRequestTarget target, final String js, final int millis) {
         // the timeout is needed to let Wicket release the channel
-        target.appendJavaScript(String.format("setTimeout(%s, %d);", js, millis));
+        target.appendJavaScript("setTimeout(%s, %d);".formatted(js, millis));
     }
 
     /**
