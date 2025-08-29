@@ -37,8 +37,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * pending approval, approved, rejected).
  *
  * <p>
- * In the Apache Causeway Programming Model, corresponds to either a method named {@code iconName}
- * or {@code iconData}.
+ * In the Apache Causeway Programming Model, corresponds to either a method named {@code icon}
+ * (or {@code iconName} for backward compatibility).
  *
  * @see TitleFacet
  */

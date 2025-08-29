@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.events;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -39,8 +40,8 @@ public abstract class EventObjectBase<T> {
     /**
      * Optionally returns a new event instance,
      * based on whether the eventType has a public no-arg constructor.
-     * <p>
-     * Initializes the event's source with given {@code source}.
+     *
+     * <p>Initializes the event's source with given {@code source}.
      */
     public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSource(
             final Class<E> eventType, final @Nullable T source) {
@@ -50,8 +51,8 @@ public abstract class EventObjectBase<T> {
     /**
      * Optionally returns a new event instance,
      * based on whether the eventType has a public no-arg constructor.
-     * <p>
-     * Initializes the event's source lazily, that is using given {@code eventSourceSupplier}.
+     *
+     * <p>Initializes the event's source lazily, that is using given {@code eventSourceSupplier}.
      */
     public static <T, E extends EventObjectBase<T>> Optional<E> getInstanceWithSourceSupplier(
             final Class<E> eventType, final @Nullable Supplier<T> eventSourceSupplier) {
@@ -62,6 +63,29 @@ public abstract class EventObjectBase<T> {
             .flatMap(Try::getValue)
             .map(evnt->{
                 final E event = _Casts.uncheckedCast(evnt);
+                event.sourceSupplier = eventSourceSupplier;
+                return event;
+            });
+    }
+
+    /**
+     * Variant with additional constructor argument
+     */
+    public static <T, E extends EventObjectBase<T>, A> Optional<E> getInstanceWithSourceSupplier(
+            final Class<E> eventType, final @Nullable Supplier<T> eventSourceSupplier,
+            final Class<A> constructorArgType,
+            final A constructorArg) {
+
+        var parameterTypes = new Class[] {constructorArgType};
+
+        return _Reflect.getPublicConstructors(eventType)
+            .filter(paramCount(1))
+            .filter(constructor->Arrays.equals(constructor.getParameterTypes(), parameterTypes))
+            .getFirst()
+            .map(constructor->_Reflect.invokeConstructor(constructor, constructorArg))
+            .flatMap(Try::getValue)
+            .map(evnt->_Casts.<E>uncheckedCast(evnt))
+            .map((E event)->{
                 event.sourceSupplier = eventSourceSupplier;
                 return event;
             });

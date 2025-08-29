@@ -82,15 +82,15 @@ public class DomainObjectList {
     public static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".DomainObjectList";
 
     // -- ui event classes
-    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<DomainObjectList>{  }
-    public static class IconUiEvent extends CausewayModuleApplib.IconUiEvent<DomainObjectList>{  }
-    public static class CssClassUiEvent extends CausewayModuleApplib.CssClassUiEvent<DomainObjectList>{  }
-    public static class LayoutUiEvent extends CausewayModuleApplib.LayoutUiEvent<DomainObjectList>{  }
+    public static class TitleUiEvent extends CausewayModuleApplib.TitleUiEvent<DomainObjectList>{}
+    public static class IconUiEvent extends CausewayModuleApplib.IconUiEvent<DomainObjectList>{}
+    public static class CssClassUiEvent extends CausewayModuleApplib.CssClassUiEvent<DomainObjectList>{}
+    public static class LayoutUiEvent extends CausewayModuleApplib.LayoutUiEvent<DomainObjectList>{}
 
     // -- domain event classes
-    public static abstract class PropertyDomainEvent<T> extends CausewayModuleApplib.PropertyDomainEvent<DomainObjectList, T> {  }
-    public static abstract class CollectionDomainEvent<T> extends CausewayModuleApplib.CollectionDomainEvent<DomainObjectList, T> {  }
-    public static abstract class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<DomainObjectList> {  }
+    public static abstract class PropertyDomainEvent<T> extends CausewayModuleApplib.PropertyDomainEvent<DomainObjectList, T> {}
+    public static abstract class CollectionDomainEvent<T> extends CausewayModuleApplib.CollectionDomainEvent<DomainObjectList, T> {}
+    public static abstract class ActionDomainEvent extends CausewayModuleApplib.ActionDomainEvent<DomainObjectList> {}
 
     // -- constructors
     public DomainObjectList() {

@@ -28,7 +28,6 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.IconUiEvent;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -69,32 +68,24 @@ implements IconFacet {
 
     @Override
     public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, ObjectSupport.IconWhere iconWhere) {
-        return iconName(domainObject, iconWhere)
-            .map(ObjectSupport.ClassPathIconResource::new);
-    }
-
-    private Optional<String> iconName(final ManagedObject domainObject, ObjectSupport.IconWhere iconWhere) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return Optional.empty();
 
-        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(domainObject);
+        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(domainObject, iconWhere);
 
         metamodelEventService.fireIconUiEvent(iconUiEvent);
 
-        var iconName = iconUiEvent.getIconName();
+        var icon = iconUiEvent.getIcon();
 
-        if(iconName == null) {
+        if(icon == null) {
             // ie no subscribers out there...
 
-            var icon = underlyingIconFacet()
+            icon = underlyingIconFacet()
                 .flatMap(underlyingIconFacet->underlyingIconFacet.icon(domainObject, iconWhere))
                 .orElse(null);
-
-            if(icon instanceof ObjectSupport.ClassPathIconResource cpIconResource)
-                iconName = cpIconResource.suffix();
         }
 
-        return _Strings.nonEmpty(iconName);
+        return Optional.ofNullable(icon);
     }
 
     @Override
@@ -104,8 +95,10 @@ implements IconFacet {
         visitor.accept("iconUiEventClass", iconUiEventClass);
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter) {
-        return EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo).orElseThrow();
+    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, ObjectSupport.IconWhere iconWhere) {
+        return EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo,
+            ObjectSupport.IconWhere.class, iconWhere)
+            .orElseThrow();
     }
 
     private Optional<IconFacet> underlyingIconFacet() {
