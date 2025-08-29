@@ -18,21 +18,17 @@
  */
 package org.apache.causeway.viewer.wicket.ui.exec;
 
-import java.time.Duration;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
-import org.apache.wicket.request.resource.ContentDisposition;
-import org.apache.wicket.util.resource.IResourceStream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.OpenUrlStrategy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
@@ -129,20 +125,24 @@ record Mediator(
             case SCHEDULE_HANDLER -> {
                 var requestCycle = RequestCycle.get();
                 var ajaxTarget = requestCycle.find(AjaxRequestTarget.class).orElse(null);
+                final IRequestHandler requestHandler = handler();
 
                 if (ajaxTarget == null) {
                     // non-Ajax request => just stream the Lob to the browser
                     // or if this is a no-arg action, there also will be no parent for the component
-                    requestCycle.scheduleRequestHandlerAfterCurrent(handler());
+                    requestCycle.scheduleRequestHandlerAfterCurrent(requestHandler);
                     return;
                 }
                 // otherwise,
                 // Ajax request => respond with a redirect to be able to stream the Lob to the client
-                final IRequestHandler requestHandler = handler();
-                if(requestHandler instanceof ResourceStreamRequestHandler scheduledHandler) {
-                    var streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
+                if(requestHandler instanceof LobRequestHandler lobRequestHandler) {
+                    var streamingBehavior = new StreamAfterAjaxResponseBehavior(lobRequestHandler);
                     ajaxTarget.getPage().add(streamingBehavior);
-                    scheduleJs(ajaxTarget, javascriptFor_sameWindow(streamingBehavior.getCallbackUrl()), 100);
+
+                    var relativeDownloadPageUri = TextUtils.cutter(streamingBehavior.getCallbackUrl().toString())
+                        .keepAfterLast("/")
+                        .getValue();
+                    scheduleJs(ajaxTarget, javascriptFor_sameWindow(relativeDownloadPageUri), 10);
                 } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy redirectHandler) {
                     var fullUrl = expanded(requestCycle, redirectHandler.getRedirectUrl());
                     var js = redirectHandler.getOpenUrlStrategy().isNewWindow()
@@ -200,22 +200,15 @@ record Mediator(
     private static class StreamAfterAjaxResponseBehavior extends AbstractAjaxBehavior {
         private static final long serialVersionUID = 1L;
 
-        private final String fileName;
-        private final IResourceStream resourceStream;
-        private final Duration cacheDuration;
+        private final LobRequestHandler lobRequestHandler;
 
-        public StreamAfterAjaxResponseBehavior(final ResourceStreamRequestHandler scheduledHandler) {
-            this.fileName = scheduledHandler.getFileName();
-            this.resourceStream = scheduledHandler.getResourceStream();
-            this.cacheDuration = scheduledHandler.getCacheDuration();
+        StreamAfterAjaxResponseBehavior(final LobRequestHandler lobRequestHandler) {
+            this.lobRequestHandler = lobRequestHandler;
         }
 
         @Override public void onRequest() {
-            var handler = new ResourceStreamRequestHandler(resourceStream, fileName);
-            handler.setCacheDuration(cacheDuration);
-            handler.setContentDisposition(ContentDisposition.ATTACHMENT);
             var page = getComponent();
-            page.getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+            page.getRequestCycle().scheduleRequestHandlerAfterCurrent(lobRequestHandler);
             page.remove(this);
         }
     }

@@ -21,8 +21,10 @@ package org.apache.causeway.viewer.wicket.ui.exec;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.time.Duration;
 
+import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
@@ -30,32 +32,50 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.resource.StringResourceStream;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
-import lombok.experimental.UtilityClass;
+public record LobRequestHandler(
+    NamedWithMimeType lob,
+    /**
+     * Duration for which the resource will be cached by the browser.
+     * Set to Duration.ZERO to disable browser caching.
+     */
+    @Nullable Duration cacheDuration) implements IRequestHandler, Serializable {
 
-@UtilityClass
-final class DownloadHandlerFactory {
-
-    public IRequestHandler downloadHandler(
+    public static LobRequestHandler downloadHandler(
             final ObjectAction action,
             final Object value) {
-        if(value instanceof Clob clob) {
-            return handlerFor(action, resourceStreamFor(clob), clob);
-        }
-        if(value instanceof Blob blob) {
-            return handlerFor(action, resourceStreamFor(blob), blob);
+        if(value instanceof NamedWithMimeType lob) {
+            return new LobRequestHandler(lob, action.getSemantics().isIdempotentOrCachable()
+                   ? null
+                   : Duration.ZERO);
         }
         return null;
     }
 
+    @Override
+    public void respond(IRequestCycle requestCycle) {
+        var handler = new ResourceStreamRequestHandler(
+            lob instanceof Blob blob
+                ? resourceStream(blob)
+                : lob instanceof Clob clob
+                    ? resourceStream(clob)
+                    : resourceStreamUnmatched(),
+            lob.name());
+        handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+        handler.setCacheDuration(cacheDuration);
+        handler.respond(requestCycle);
+    }
+
     // -- HELPER
 
-    private IResourceStream resourceStreamFor(final Blob blob) {
+    private IResourceStream resourceStream(Blob blob) {
         final IResourceStream resourceStream = new AbstractResourceStream() {
             private static final long serialVersionUID = 1L;
             @Override public InputStream getInputStream() throws ResourceStreamNotFoundException {
@@ -70,35 +90,12 @@ final class DownloadHandlerFactory {
         return resourceStream;
     }
 
-    private IResourceStream resourceStreamFor(final Clob clob) {
+    private IResourceStream resourceStream(Clob clob) {
         return new StringResourceStream(clob.chars(), clob.mimeType().toString());
     }
 
-    private IRequestHandler handlerFor(
-            final ObjectAction action,
-            final IResourceStream resourceStream,
-            final NamedWithMimeType namedWithMimeType) {
-        var handler =
-                new ResourceStreamRequestHandler(resourceStream, namedWithMimeType.name());
-        handler.setContentDisposition(ContentDisposition.ATTACHMENT);
-
-        //CAUSEWAY-1619, prevent clients from caching the response content
-        return action.getSemantics().isIdempotentOrCachable()
-                ? handler
-                : enforceNoCacheOnClientSide(handler);
-    }
-
-    // -- CLIENT SIDE CACHING ASPECTS ...
-
-    private static IRequestHandler enforceNoCacheOnClientSide(final IRequestHandler downloadHandler){
-        if(downloadHandler==null) {
-            return downloadHandler;
-        }
-        if(downloadHandler instanceof ResourceStreamRequestHandler)
-            ((ResourceStreamRequestHandler) downloadHandler)
-            .setCacheDuration(Duration.ZERO);
-
-        return downloadHandler;
+    private IResourceStream resourceStreamUnmatched() {
+        throw _Exceptions.unmatchedCase(lob);
     }
 
 }

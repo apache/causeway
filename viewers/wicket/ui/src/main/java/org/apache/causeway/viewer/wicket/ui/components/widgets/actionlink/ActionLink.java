@@ -232,8 +232,9 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
         castTo(ActionPromptWithExtraContent.class, actionPrompt)
         .ifPresent(promptWithExtraContent->{
-            BSGridPanelFactory.extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
-            .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
+            BSGridPanelFactory
+                .extraContentForMixin(promptWithExtraContent.getExtraContentId(), actionModel)
+                .ifPresent(gridPanel->promptWithExtraContent.setExtraContentPanel(gridPanel, target));
         });
     }
 

@@ -135,16 +135,10 @@ class MediatorFactory {
             var pageRedirectRequest = PageRedirectRequest.forPage(ValuePage.class, valuePage);
             return Mediator.toPage(pageRedirectRequest);
         }
-        case VALUE_BLOB: {
-            final Object value = resultAdapter.getPojo();
-            IRequestHandler handler =
-                    DownloadHandlerFactory.downloadHandler(actionModel.getAction(), value);
-            return Mediator.withHandler(handler);
-        }
+        case VALUE_BLOB:
         case VALUE_CLOB: {
             final Object value = resultAdapter.getPojo();
-            IRequestHandler handler =
-                    DownloadHandlerFactory.downloadHandler(actionModel.getAction(), value);
+            IRequestHandler handler = LobRequestHandler.downloadHandler(actionModel.getAction(), value);
             return Mediator.withHandler(handler);
         }
         case VALUE_LOCALRESPATH_AJAX: {
