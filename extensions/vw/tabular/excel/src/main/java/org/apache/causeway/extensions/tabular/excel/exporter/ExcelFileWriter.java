@@ -162,7 +162,6 @@ public record ExcelFileWriter(@Nullable Options options) {
 
         var dataRows = tabularSheet.rows();
 
-        var isLarge = dataRows.size()>=10000;
         int writtenCount = 0;
 
         // detail rows
@@ -181,19 +180,17 @@ public record ExcelFileWriter(@Nullable Options options) {
                 maxLinesInRow.accept(linesWritten);
             }
             cellStyleProvider.applyCustomStyle(dataRow, row);
-            ++writtenCount;
 
-            if(!isLarge) {
-                autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
-            } else if(writtenCount%1000==0) {
+            autoSizeRow(row, maxLinesInRow.getResult().orElse(1), null);
+
+            ++writtenCount;
+            if(writtenCount%1000==0) {
                 log.info("rows written {}k of {}k", writtenCount/1000, (dataRows.size()+500)/1000);
             }
         }
 
-        if(!isLarge) {
-            // column auto-size
-            autoSizeColumns(sheet, dataColumns.size());
-        }
+        // column auto-size
+        autoSizeColumns(sheet, dataColumns.size());
 
         // freeze panes
         sheet.createFreezePane(0, 2);
