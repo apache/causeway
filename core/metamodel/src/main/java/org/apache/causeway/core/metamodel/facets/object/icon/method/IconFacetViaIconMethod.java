@@ -16,65 +16,55 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.iconfa.method;
+package org.apache.causeway.core.metamodel.facets.object.icon.method;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.springframework.util.ClassUtils;
+
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaImperativeFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
+import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+public record IconFacetViaIconMethod(
+    ImperativeAspect imperativeAspect,
+    FacetHolder facetHolder)
+implements IconFacet, HasImperativeAspect {
 
-public class FaFacetViaIconFaLayersMethod
-extends FaImperativeFacetAbstract
-implements HasImperativeAspect {
-
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
-
-    public static Optional<FaFacet> create(
+    public static Optional<IconFacet> create(
             final @Nullable ResolvedMethod methodIfAny,
             final FacetHolder holder) {
-
         return Optional.ofNullable(methodIfAny)
-        .map(method->
-            new FaFacetViaIconFaLayersMethod(
-                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
-                    holder));
+            .map(method->
+                new IconFacetViaIconMethod(
+                        ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
+                        holder));
     }
 
-    private FaFacetViaIconFaLayersMethod(
-            final ImperativeAspect imperativeAspect,
-            final FacetHolder holder) {
-        super(holder, Precedence.IMPERATIVE);
-        this.imperativeAspect = imperativeAspect;
-    }
+    @Override public FacetHolder getFacetHolder() { return facetHolder; }
+    @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
+    @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
+    @Override public ImperativeAspect getImperativeAspect() { return imperativeAspect; }
 
     @Override
-    public FaLayersProvider getFaLayersProvider(final ManagedObject domainObject) {
-        return () -> evalLayers(domainObject);
+    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, IconWhere iconWhere) {
+        return Optional.ofNullable(imperativeAspect.eval(domainObject, (ObjectSupport.IconResource)null, iconWhere));
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+        visitor.accept("facet", ClassUtils.getShortName(getClass()));
+        visitor.accept("precedence", getPrecedence().name());
         imperativeAspect.visitAttributes(visitor);
-    }
-
-    // -- HELPER
-
-    FontAwesomeLayers evalLayers(final ManagedObject domainObject) {
-        return imperativeAspect.eval(domainObject, (FontAwesomeLayers)null);
     }
 
 }

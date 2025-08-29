@@ -20,96 +20,85 @@ package org.apache.causeway.applib.events.ui;
 
 import java.util.EventObject;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 /**
  * Emitted for subscribers to provide a cssClass hint (equivalent to the
- * <tt>iconName()</tt> supporting method).
+ * <tt>icon(..)</tt> supporting method).
  *
- * <p>
- * If the domain object defines its own xref:refguide:applib-methods:ui-hints.adoc[iconName()] supporting method, or if it has the
- * xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()] attribute, then these will take precedence.
- * </p>
- * 
- * <p>
- * The class has a number of responsibilities:
- * </p>
+ * <p>If the domain object defines its own xref:refguide:applib-methods:ui-hints.adoc[iconName()] supporting method,
+ * or if it has the xref:refguide:applib:index/annotation/DomainObjectLayout.adoc#cssClassFa[@DomainObjectLayout#cssClassFa()]
+ * attribute, then these will take precedence.
  *
+ * <p>The class has a number of responsibilities:
  * <ul>
- *     <li>
- *       capture the target object being interacted with
- *     </li>
- *     <li>
- *      capture the icon (name), if any, as specified to one of the subscribers
- *     </li>
+ * <li>capture the target object being interacted with</li>
+ * <li>capture the icon (name), if any, as specified to one of the subscribers</li>
  * </ul>
  *
- * <p>
- * The class itself is instantiated automatically by the framework.
- * </p>
+ * <p> The class itself is instantiated automatically by the framework.
  *
- *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
 public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
 
     /**
      * If used then the framework will set state via (non-API) setters.
      *
-     * <p>
-     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
-     * </p>
+     * <p>Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
      */
-    public IconUiEvent() {
-        this(null);
+    protected IconUiEvent() {
+        this(null, null);
     }
 
-    public IconUiEvent(final S source) {
-        super(source);
+    public IconUiEvent(ObjectSupport.IconWhere iconWhere) {
+        this(null, iconWhere);
     }
+
+    public IconUiEvent(final S source, ObjectSupport.IconWhere iconWhere) {
+        super(source);
+        this.iconWhere = iconWhere;
+    }
+
+    @Getter @Accessors(fluent = true)
+    private final ObjectSupport.IconWhere iconWhere;
+
+    /**
+     * Icon resource for corresponding domain object,
+     * which subscribers may set, based on {@link #iconWhere()}.
+     */
+    @Getter @Setter
+    private ObjectSupport.IconResource icon;
 
     /**
      * This class is the default for the
      * {@link org.apache.causeway.applib.annotation.DomainObjectLayout#iconUiEvent()}
      * annotation element.
      *
-     * <p>
-     * Whether this raises an event or not depends upon the
+     * <p>Whether this raises an event or not depends upon the
      * <tt>causeway.applib.annotation.domain-object-layout.icon-ui-event.post-for-default</tt>
      * configuration property.
-     * </p>
      */
-    public static class Default extends IconUiEvent<Object> { }
+    public static class Default extends IconUiEvent<Object> {
+    }
 
     /**
      * Convenience class to use indicating that an event should <i>not</i> be
      * posted (irrespective of the configuration property setting for the
      * {@link Default} event.
      */
-    public static class Noop extends IconUiEvent<Object> { }
-
-    // -- Doop class
+    public static class Noop extends IconUiEvent<Object> {
+    }
 
     /**
      * Convenience class meaning that an event <i>should</i> be posted
      * (irrespective of the configuration property setting for the
      * {@link Default} event..
      */
-    public static class Doop extends IconUiEvent<Object> { }
-
-    // -- iconName
-    private String iconName;
-
-    /**
-     * The icon name as provided by a subscriber using {@link #setIconName(String)}.
-     */
-    public String getIconName() {
-        return iconName;
-    }
-
-    /**
-     * For subscribers to call to provide an icon name for this object.
-     */
-    public void setIconName(final String iconName) {
-        this.iconName = iconName;
+    public static class Doop extends IconUiEvent<Object> {
     }
 
 }

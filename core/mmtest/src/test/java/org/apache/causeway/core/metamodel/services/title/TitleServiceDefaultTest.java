@@ -34,7 +34,7 @@ class TitleServiceDefaultTest {
 
         var mmc = MetaModelContext_forTesting.buildDefault();
 
-        titleService = new TitleServiceDefault(null, mmc.getObjectManager());
+        titleService = new TitleServiceDefault(mmc.getObjectManager(), null);
     }
 
     // -- FEATURED
@@ -60,7 +60,6 @@ class TitleServiceDefaultTest {
 
         var title = titleService.titleOf(domainObject);
         assertEquals("first", title);
-
     }
 
     // -- PLAIN
@@ -77,7 +76,6 @@ class TitleServiceDefaultTest {
 
         var title = titleService.titleOf(domainObject);
         assertEquals("First", title);
-
     }
 
 }

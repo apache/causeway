@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
 
+import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal._Constants;
 import org.apache.causeway.commons.internal.base._Bytes;
@@ -32,7 +33,7 @@ import org.apache.causeway.commons.internal.base._Strings;
  * Icon image data class-path resource reference.
  *
  * @see ObjectIcon
- * @see ObjectIconService
+ * @see TitleService
  * @since 4.0
  */
 public record ObjectIconUrlBased(

@@ -24,6 +24,7 @@ import java.util.Objects;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -61,10 +62,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
     private static final String ID_OBJECT_TITLE = "objectTitle";
     private static final String ID_OBJECT_ICON = "objectImage";
 
+    private IconWhere iconWhere;
+
     public ObjectIconAndTitlePanel(
             final String id,
+            final IconWhere iconWhere,
             final ObjectAdapterModel objectAdapterModel) {
         super(id, objectAdapterModel);
+        this.iconWhere = iconWhere;
         guardAgainstNonEmptyAbstractSingular(objectAdapterModel);
     }
 
@@ -75,13 +80,13 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
 
     @Override
     protected void onBeforeRender() {
-        buildGui();
+        buildGui(iconWhere);
         super.onBeforeRender();
     }
 
     @Override
-    public ObjectIcon getIcon() {
-        return linkedDomainObject().getIcon();
+    public ObjectIcon getIcon(IconWhere iconWhere) {
+        return linkedDomainObject().getIcon(iconWhere);
     }
 
     /**
@@ -91,19 +96,19 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
 
     // -- HELPER
 
-    private void buildGui() {
-        addLinkWrapper();
+    private void buildGui(IconWhere iconWhere) {
+        addLinkWrapper(iconWhere);
         setOutputMarkupId(true);
     }
 
-    private void addLinkWrapper() {
+    private void addLinkWrapper(IconWhere iconWhere) {
         var linkWrapper = Wkt.container(ID_OBJECT_LINK_WRAPPER);
-        linkWrapper.addOrReplace(createLinkWithIconAndTitle());
+        linkWrapper.addOrReplace(createLinkWithIconAndTitle(iconWhere));
         addOrReplace(linkWrapper);
         onLinkWrapperCreated(linkWrapper);
     }
 
-    private AbstractLink createLinkWithIconAndTitle() {
+    private AbstractLink createLinkWithIconAndTitle(IconWhere iconWhere) {
         final ManagedObject linkedDomainObject = linkedDomainObject();
         final AbstractLink link = createDynamicallyVisibleLink(linkedDomainObject);
 
@@ -116,6 +121,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
             Wkt.labelAdd(link, ID_OBJECT_TITLE, titleAbbreviated("(no object)"));
         } else {
             HasIcon.super.visitIconVariant(
+                iconWhere,
                 iconUrlBased->{
                     Wkt.imageAddCachable(link, ID_OBJECT_ICON,
                         getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased));

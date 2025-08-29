@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.repository.EntityState;
 import org.apache.causeway.commons.collections.Can;
@@ -32,7 +33,6 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.spec.HasObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -382,19 +382,12 @@ permits
     // -- SHORTCUT - ICON
 
     /**
-     * Optionally returns the name-suffix (or embedded image data) of an icon to use for this object.
-     * @see ObjectIconService
-     */
-    default Optional<String> getIconName() {
-        return objSpec().getIconName(this);
-    }
-
-    /**
      * Domain Objects may either have an icon corresponding to an icon resource,
      * or they use a font awesome icon.
+     * @param iconWhere
      */
-    default ObjectIcon getIcon() {
-        return objSpec().getIcon(this);
+    default ObjectIcon getIcon(IconWhere iconWhere) {
+        return getObjectIconService().getObjectIcon(this, iconWhere);
     }
 
     default Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark() {

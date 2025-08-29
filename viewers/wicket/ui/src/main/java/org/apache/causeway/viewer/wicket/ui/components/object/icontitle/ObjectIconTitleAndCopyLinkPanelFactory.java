@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.components.object.icontitle;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.object.ObjectComponentFactoryAbstract;
@@ -38,6 +39,6 @@ public class ObjectIconTitleAndCopyLinkPanelFactory extends ObjectComponentFacto
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
-        return new ObjectIconTitleAndCopyLinkPanel(id, objectModel);
+        return new ObjectIconTitleAndCopyLinkPanel(id, IconWhere.OBJECT_HEADER, objectModel);
     }
 }

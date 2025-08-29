@@ -433,8 +433,8 @@ implements HasMetaModelContext {
 
     // -- UTILITY
 
-    protected static ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
-        return _Utils.findMethodExactOrFail(type, methodName, methodTypes);
+    protected static ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName, final Class<?>[] paramTypes) {
+        return _Utils.findMethodExactOrFail(type, methodName, paramTypes);
     }
 
     protected static ResolvedMethod findMethodExactOrFail(final Class<?> type, final String methodName) {

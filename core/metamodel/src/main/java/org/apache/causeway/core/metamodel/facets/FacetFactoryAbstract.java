@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -87,5 +88,6 @@ implements FacetFactory, HasMetaModelContext {
 
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
+    protected static final Class<?>[] ICON_WHERE_ARG = new Class<?>[] {ObjectSupport.IconWhere.class};
 
 }

@@ -96,7 +96,6 @@ import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServ
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
-import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
 import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
@@ -203,7 +202,7 @@ implements MetaModelContext {
     private AuthenticationManager authenticationManager;
 
     @Builder.Default @Getter
-    private TitleService titleService = new TitleServiceDefault(null, null);
+    private TitleService titleService = new TitleServiceForTesting();
 
     @Getter
     private ObjectIconService objectIconService;

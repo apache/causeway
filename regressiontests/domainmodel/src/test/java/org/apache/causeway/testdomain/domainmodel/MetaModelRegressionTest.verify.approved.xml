@@ -9229,10 +9229,10 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod">
-                <mml:attr name="facet" value="IconFacetViaIconNameMethod"/>
-                <mml:attr name="intent.iconName" value="UI_HINT"/>
-                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperFullyImpl.iconName()"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod">
+                <mml:attr name="facet" value="IconFacetViaIconMethod"/>
+                <mml:attr name="intent.icon" value="UI_HINT"/>
+                <mml:attr name="methods" value="public org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperFullyImpl.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconWhere)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod">
@@ -13567,10 +13567,10 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod">
-                <mml:attr name="facet" value="IconFacetViaIconNameMethod"/>
-                <mml:attr name="intent.iconName" value="UI_HINT"/>
-                <mml:attr name="methods" value="public java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.iconName()"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod">
+                <mml:attr name="facet" value="IconFacetViaIconMethod"/>
+                <mml:attr name="intent.icon" value="UI_HINT"/>
+                <mml:attr name="methods" value="public org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconWhere)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod">
@@ -14915,10 +14915,10 @@
                 <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
                 <mml:attr name="precedence" value="HIGH"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod">
-                <mml:attr name="facet" value="IconFacetViaIconNameMethod"/>
-                <mml:attr name="intent.iconName" value="UI_HINT"/>
-                <mml:attr name="methods" value="public default java.lang.String org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface.iconName()"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod">
+                <mml:attr name="facet" value="IconFacetViaIconMethod"/>
+                <mml:attr name="intent.icon" value="UI_HINT"/>
+                <mml:attr name="methods" value="public default org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconWhere)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">

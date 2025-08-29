@@ -28,25 +28,31 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.EmbeddedIconResource;
+import org.apache.causeway.applib.annotation.ObjectSupport.FontAwesomeIconResource;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.ClassPathIconResource;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
@@ -63,7 +69,7 @@ import lombok.SneakyThrows;
 record ObjectIconServiceDefault(
         ResourceLoader resourceLoader,
         Map<String, ObjectIcon> iconByKey,
-        _StableValue<ObjectIcon> fallbackIcon)
+        _StableValue<ObjectIcon> fallbackIconRef)
 implements ObjectIconService {
 
     private static final String DEFAULT_IMAGE_RESOURCE_PATH = "classpath:images";
@@ -81,53 +87,58 @@ implements ObjectIconService {
     }
 
     @Override
-    public ObjectIcon getObjectIcon(
-            final ObjectSpecification spec,
-            final Optional<String> iconName,
-            final Optional<FontAwesomeLayers> faLayers) {
+    public ObjectIcon getObjectIcon(ManagedObject managedObject, IconWhere iconWhere) {
 
-        var domainClass = spec.getCorrespondingClass();
-        var iconNameSuffixIfAny = iconName.orElse(null);
+        var spec = managedObject.objSpec();
 
-        var suffix = "";
-        if(StringUtils.hasLength(iconNameSuffixIfAny)) {
-            if(iconNameSuffixIfAny.startsWith("data:")) {
-                return new ObjectIconEmbedded(domainClass.getSimpleName(), DataUri.parse(iconNameSuffixIfAny));
-            }
-            suffix = "-" + iconNameSuffixIfAny;
-        } else if(faLayers.isPresent()) {
-            return new ObjectIconFa(domainClass.getSimpleName(), faLayers.get());
-        }
-
-        var iconResourceKey = domainClass.getName() + suffix;
-
-        // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
-
-        var cachedIcon = iconByKey.get(iconResourceKey);
-        if(cachedIcon!=null) return cachedIcon;
-
-        var icon = findIcon(spec, iconName);
-
-        //NOTE: cannot use computeIfAbsent, as it does not support recursive update
-        // return iconByKey.computeIfAbsent(iconResourceKey, key->
-        //     findIcon(spec, iconNameModifier));
-        iconByKey.put(iconResourceKey, icon);
-
-        return icon;
+        return spec.getIcon(managedObject, iconWhere)
+            .map(iconResource->{
+                if(iconResource instanceof ObjectSupport.EmbeddedIconResource embedded)
+                    return embedded(spec, embedded);
+                if(iconResource instanceof ObjectSupport.FontAwesomeIconResource fa)
+                    return fa(spec, fa);
+                if(iconResource instanceof ObjectSupport.ClassPathIconResource suffixed)
+                    return suffixed(spec, suffixed);
+                throw _Exceptions.unmatchedCase(iconResource);
+            })
+            .orElseGet(this::fallbackIcon);
     }
 
     // -- HELPER
 
-    private ObjectIcon getObjectFallbackIcon() {
-        return fallbackIcon.orElseSet(()->ObjectIconUrlBased.eager(
+    private ObjectIcon embedded(ObjectSpecification objSpec, EmbeddedIconResource embeddedIconResource) {
+        return new ObjectIconEmbedded(objSpec.getCorrespondingClass().getSimpleName(), embeddedIconResource.dataUri());
+    }
+
+    private ObjectIcon fa(ObjectSpecification objSpec, FontAwesomeIconResource faIconResource) {
+        return new ObjectIconFa(objSpec.getCorrespondingClass().getSimpleName(), faIconResource.faLayers());
+    }
+
+    private ObjectIcon suffixed(ObjectSpecification objSpec, ClassPathIconResource cpIconResource) {
+        var domainClass = objSpec.getCorrespondingClass();
+        var iconResourceKey = StringUtils.hasLength(cpIconResource.suffix())
+            ? domainClass.getName() + "-" + cpIconResource.suffix()
+            : domainClass.getName();
+        // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
+        var cachedIcon = iconByKey.get(iconResourceKey);
+        if(cachedIcon!=null) return cachedIcon;
+
+        var icon = findIcon(objSpec, _Strings.nonEmpty(cpIconResource.suffix()));
+        iconByKey.put(iconResourceKey, icon);
+        return icon;
+    }
+
+    private ObjectIcon fallbackIcon() {
+        return fallbackIconRef.orElseSet(()->ObjectIconUrlBased.eager(
                 "ObjectIconFallback",
                 _Resources.lookupResourceUrl(
                         ObjectIconServiceDefault.class,
                         "ObjectIconFallback.png")
-                .orElse(null),
+                    .orElse(null),
                 CommonMimeType.PNG));
     }
 
+    @Nullable
     private ObjectIcon findIcon(
             final ObjectSpecification spec,
             final Optional<String> iconName) {
@@ -145,7 +156,7 @@ implements ObjectIconService {
             var objectIcon = imageType
                 .proposedFileExtensions()
                 .stream()
-                .map(suffix->iconResourceNameNoExt + "." + suffix)
+                .map(ext->iconResourceNameNoExt + "." + ext)
                 .map(iconResourceName->
                         classPathResource(domainClass, iconResourceName)
                         .map(url->ObjectIconUrlBased.lazy(
@@ -182,14 +193,13 @@ implements ObjectIconService {
 
         return spec.superclass()!=null
             // continue search in super spec
-            ? getObjectIcon(spec.superclass(), iconName, Optional.empty()) // memoizes as a side-effect
+            ? findIcon(spec.superclass(), iconName) // memoizes as a side-effect
             : _Strings.isNotEmpty(iconNameSuffixIfAny)
                 // also do a more generic search, skipping the modifier
-                ? getObjectIcon(spec, Optional.empty(), Optional.empty()) // memoizes as a side-effect
-                : getObjectFallbackIcon();
+                ? findIcon(spec, Optional.empty()) // memoizes as a side-effect
+                : null;
     }
 
-    // -- HELPER
 
     @SneakyThrows
     private Optional<URL> classPathResource(

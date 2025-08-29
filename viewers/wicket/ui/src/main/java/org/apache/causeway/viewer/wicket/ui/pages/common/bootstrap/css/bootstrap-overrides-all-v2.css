@@ -331,9 +331,10 @@ div.objectHeaderPanel .objectActions .cssMenuPanel .cssMenuItems:first-child {
     margin-left: 20px;
 }
 
+.treeAttributePanel .objectImage,
 .objectHeaderPanel .objectImage {
     width: 32px;
-    height: 32px;
+    max-height: 32px;
     vertical-align:text-bottom;
 }
 
@@ -702,7 +703,7 @@ div.referencePanel.scalarNameAndValueComponentType {
 
 .referencePanel .objectLinkSelect2Panel .objectImage {
     width: 20px;
-    height: 20px;
+    max-height: 20px;
 }
 
 .referencePanel .form-group.label-left .scalarName.col-form-label {
@@ -988,7 +989,7 @@ div.scalarValueInlinePromptLink {
 
 .referencePanel .inlinePrompt .objectIconAndTitlePanel .objectImage {
     width: 1.3em;
-	height: 1.3em;
+	max-height: 1.3em;
 }
 
 .objectTitle {

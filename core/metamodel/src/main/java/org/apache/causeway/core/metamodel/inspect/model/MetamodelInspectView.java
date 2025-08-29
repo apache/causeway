@@ -44,13 +44,13 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 public class MetamodelInspectView extends MasterDetailTreeView<MMNode, MetamodelInspectView> {
 
     // -- FACTORY
-    
+
     public static MetamodelInspectView root(final ObjectSpecification spec) {
         return new MetamodelInspectView(new TypeNode(spec.logicalTypeName()), TreePath.root());
     }
 
     // -- CONSTRUCTION
-    
+
     private final Memento memento;
 
     public MetamodelInspectView(final String mementoString) {
@@ -66,7 +66,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
         super(MMNode.class, rootNode, activeTreePath);
         this.memento = new Memento(rootNode.logicalName(), activeTreePath);
     }
-    
+
     // -- UI
 
     @ObjectSupport
@@ -75,13 +75,14 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     }
 
     @ObjectSupport
-    public String iconName() {
-        return activeNode().getClass().getSimpleName()
+    public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+        return new ObjectSupport.ClassPathIconResource(
+            activeNode().getClass().getSimpleName()
             + _Strings.nonEmpty(activeNode().iconName())
-                .map(suffix-> "-" + suffix)
-                .orElse("");
+            .map(suffix-> "-" + suffix)
+            .orElse(""));
     }
-    
+
     @Property(editingDisabledReason = "readonly by design")
     @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "detail", sequence = "1")
     public Markup getDetails() {
@@ -89,7 +90,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     }
 
     // -- IMPLEMENTATION DETAILS
-    
+
     @Override
     public String viewModelMemento() {
         return memento.stringify();
@@ -109,7 +110,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     }
 
     // -- HELPER
-    
+
     private record Memento (
         String logicalName,
         TreePath treePath) {

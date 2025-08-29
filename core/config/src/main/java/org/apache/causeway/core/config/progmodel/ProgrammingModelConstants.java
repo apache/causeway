@@ -35,8 +35,10 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.stream.Stream;
 
-import org.springframework.context.annotation.Configuration;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 
 import org.apache.causeway.applib.Identifier;
@@ -44,7 +46,7 @@ import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectLifecycle;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconResource;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -65,7 +67,6 @@ import static org.apache.causeway.commons.internal.reflection._Reflect.predicate
 import static org.apache.causeway.commons.internal.reflection._Reflect.predicates.paramCount;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 public final class ProgrammingModelConstants {
@@ -249,7 +250,8 @@ public final class ProgrammingModelConstants {
         BOOLEAN(boolean.class),
         STRING(String.class),
         TRANSLATABLE(String.class, TranslatableString.class),
-        FONTAWESOME_LAYERS(FontAwesomeLayers.class);
+        ICON_RESOURCE(IconResource.class),
+        ;
         ReturnTypeCategory(final Class<?> ...returnTypes) {
             this.returnTypes = Can.of(returnTypes);
         }
@@ -292,8 +294,10 @@ public final class ProgrammingModelConstants {
 
         TITLE(ReturnTypeCategory.TRANSLATABLE, "title"),
         CSS_CLASS(ReturnTypeCategory.STRING, "cssClass"),
+
+        ICON(ReturnTypeCategory.ICON_RESOURCE, "icon"),
         ICON_NAME(ReturnTypeCategory.STRING, "iconName"),
-        ICON_FA_LAYERS(ReturnTypeCategory.FONTAWESOME_LAYERS, "iconFaLayers"),
+
         LAYOUT(ReturnTypeCategory.STRING, "layout"),
 
         /** as a fallback in the absence of other title providers */

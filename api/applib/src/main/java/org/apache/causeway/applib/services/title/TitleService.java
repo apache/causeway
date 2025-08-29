@@ -18,11 +18,14 @@
  */
 package org.apache.causeway.applib.services.title;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconResource;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+
 /**
  * Provides methods to programmatically obtain the title and icon of a domain
  * object.
  *
- * @since 1.x {@index}
+ * @since 1.x {@index} revised for 4.0
  */
 public interface TitleService {
 
@@ -30,12 +33,12 @@ public interface TitleService {
      * Returns the title of the object (as rendered in the UI by the
      * framework's viewers).
      */
-    String titleOf(final Object domainObject);
+    String titleOf(Object domainObject);
 
     /**
-     * Returns the icon name of the object (as rendered in the UI by the
+     * Returns the icon of the object (as rendered in the UI by the
      * framework's viewers).
      */
-    String iconNameOf(final Object domainObject);
+    IconResource iconOf(Object domainObject, IconWhere iconWhere);
 
 }

@@ -71,7 +71,7 @@ public @interface DomainObjectLayout {
      * The <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class that
      * is used as icon for the annotated domain object.
      * <p>
-     * Use the {@code FontAwesomeLayers iconFaLayers()} object support method for more advanced icons.
+     * Use the {@code icon(..)} object support method for more advanced icons.
      * @see ActionLayout#cssClassFa()
      */
     String cssClassFa()

@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
+import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.commons.net.DataUri;
 
 /**
  * Icon image based on {@link DataUri}
  *
  * @see ObjectIcon
- * @see ObjectIconService
+ * @see TitleService
  * @since 4.0
  */
 public record ObjectIconEmbedded(

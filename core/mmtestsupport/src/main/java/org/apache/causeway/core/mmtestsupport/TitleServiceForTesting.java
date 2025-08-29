@@ -16,26 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.icon;
+package org.apache.causeway.core.mmtestsupport;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.ClassPathIconResource;
+import org.apache.causeway.applib.services.title.TitleService;
 
-public abstract class IconFacetAbstract
-extends FacetAbstract
-implements IconFacet {
+public record TitleServiceForTesting()
+implements TitleService {
 
-    private static final Class<? extends Facet> type() {
-        return IconFacet.class;
+    @Override
+    public String titleOf(final Object domainObject) {
+        return "" + domainObject; // simplified JUnit test support
     }
 
-    public IconFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    public IconFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
+    @Override
+    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconWhere iconWhere) {
+        return domainObject!=null ? new ClassPathIconResource("") : null;
     }
 
 }

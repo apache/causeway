@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.id.LogicalType;
@@ -177,7 +178,11 @@ public record CausewayBeanTypeClassifier(
 
         // unless explicitly declared otherwise, map records to unknown
         if(type.isRecord()) {
-            return CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
+            var aDomainObjectLayout = typeHead.annotation(DomainObjectLayout.class).orElse(null);
+            // with presence of @DomainObjectLayout annotation, assume Viewmodel
+            return aDomainObjectLayout!=null
+                ? CausewayBeanMetaData.viewModel(named.get(), discoveredBy)
+                : CausewayBeanMetaData.unspecified(named.get(), discoveredBy, BeanSort.UNKNOWN);
         }
 
         if(Serializable.class.isAssignableFrom(type)) {

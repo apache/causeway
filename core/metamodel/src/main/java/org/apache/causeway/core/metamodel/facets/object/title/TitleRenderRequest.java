@@ -29,8 +29,8 @@ public record TitleRenderRequest(
     @NonNull ManagedObject object,
     /**
      * Provide a title for the target object, possibly abbreviated (according to supplied predicate)
-     * <p>
-     * One reason why the title might be abbreviated is if it is being evaluated in the context
+     *
+     * <p>One reason why the title might be abbreviated is if it is being evaluated in the context
      * of another object.
      * For example as a child object of a parented collection of some parent object.
      * In such a context, the title might be shortened so that it does not needlessly incorporate

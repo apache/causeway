@@ -39,8 +39,8 @@ import org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectF
 import org.apache.causeway.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
+import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FaFacetViaIconFaLayersMethod;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetFromToStringMethod;
 import org.apache.causeway.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
@@ -70,9 +70,9 @@ extends MethodPrefixBasedFacetFactoryAbstract {
     public ObjectSupportFacetFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS, OrphanValidation.VALIDATE,
                 Stream.of(ObjectSupportMethod.values())
-                .map(ObjectSupportMethod::getMethodNames)
-                .flatMap(Can::stream)
-                .collect(Can.toCan()));
+                    .map(ObjectSupportMethod::getMethodNames)
+                    .flatMap(Can::stream)
+                    .collect(Can.toCan()));
     }
 
     @Override
@@ -81,13 +81,14 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // priming 'toString()' into Precedence.INFERRED rank
         inferTitleFromToString(processClassContext);
 
-        processObjectSupport(processClassContext, ObjectSupportMethod.HIDDEN, HiddenObjectFacetViaMethod::create);
-        processObjectSupport(processClassContext, ObjectSupportMethod.DISABLED, DisabledObjectFacetViaMethod::create);
-        processObjectSupport(processClassContext, ObjectSupportMethod.TITLE, TitleFacetViaTitleMethod::create);
-        processObjectSupport(processClassContext, ObjectSupportMethod.LAYOUT, LayoutPrefixFacetViaMethod::create);
-        processObjectSupport(processClassContext, ObjectSupportMethod.ICON_NAME, IconFacetViaIconNameMethod::create);
-        processObjectSupport(processClassContext, ObjectSupportMethod.ICON_FA_LAYERS, FaFacetViaIconFaLayersMethod::create);
-        processObjectSupport(processClassContext, ObjectSupportMethod.CSS_CLASS, CssClassFacetViaCssClassMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.HIDDEN, NO_ARG, HiddenObjectFacetViaMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.DISABLED, NO_ARG, DisabledObjectFacetViaMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.TITLE, NO_ARG, TitleFacetViaTitleMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.LAYOUT, NO_ARG, LayoutPrefixFacetViaMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.ICON, ICON_WHERE_ARG, IconFacetViaIconMethod::create);
+        // superseded by icon(..) method, however kept for backward compatibility
+        processObjectSupport(processClassContext, ObjectSupportMethod.ICON_NAME, NO_ARG, IconFacetViaIconNameMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.CSS_CLASS, NO_ARG, CssClassFacetViaCssClassMethod::create);
     }
 
     @Override
@@ -112,35 +113,36 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         var toString = ObjectSupportMethod.TO_STRING;
 
         MethodFinder
-        .publicOnly(
-                processClassContext.getCls(),
-                toString.getMethodNames())
-        .withReturnTypeAnyOf(toString.getReturnTypeCategory().getReturnTypes())
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processClassContext::removeMethod)
-        .forEach(method->{
-            addFacetIfPresent(TitleFacetFromToStringMethod
-                    .create(method, processClassContext.getFacetHolder()));
-        });
+            .publicOnly(
+                    processClassContext.getCls(),
+                    toString.getMethodNames())
+            .withReturnTypeAnyOf(toString.getReturnTypeCategory().getReturnTypes())
+            .streamMethodsMatchingSignature(NO_ARG)
+            .peek(processClassContext::removeMethod)
+            .forEach(method->{
+                addFacetIfPresent(TitleFacetFromToStringMethod
+                        .create(method, processClassContext.getFacetHolder()));
+            });
     }
 
     private void processObjectSupport(
             final ProcessClassContext processClassContext,
             final ObjectSupportMethod objectSupportMethodEnum,
+            final Class<?>[] methodSignature,
             final BiFunction<ResolvedMethod, FacetHolder, Optional<? extends Facet>> objectSupportFacetConstructor) {
-
         MethodFinder
-        .objectSupport(
-                processClassContext.getCls(),
-                objectSupportMethodEnum.getMethodNames(),
-                processClassContext.getIntrospectionPolicy())
-        .withReturnTypeAnyOf(objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes())
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processClassContext::removeMethod)
-        .forEach(method->{
-            addFacetIfPresent(objectSupportFacetConstructor
-                    .apply(method, processClassContext.getFacetHolder()));
-        });
+            .objectSupport(
+                    processClassContext.getCls(),
+                    objectSupportMethodEnum.getMethodNames(),
+                    processClassContext.getIntrospectionPolicy())
+            .withReturnTypeAnyOf(objectSupportMethodEnum.getReturnTypeCategory().getReturnTypes())
+            .streamMethodsMatchingSignature(methodSignature)
+            .peek(processClassContext::removeMethod)
+            .forEach(method->{
+                addFacetIfPresent(objectSupportFacetConstructor
+                        .apply(method, processClassContext.getFacetHolder()))
+                .orElse(null);
+            });
     }
 
 }

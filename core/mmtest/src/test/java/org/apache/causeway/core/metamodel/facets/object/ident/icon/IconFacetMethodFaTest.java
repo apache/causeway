@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.ident.iconfa;
+package org.apache.causeway.core.metamodel.facets.object.ident.icon;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,21 +29,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
-import org.apache.causeway.core.metamodel.facets.object.iconfa.method.FaFacetViaIconFaLayersMethod;
+import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactory;
 
-class FontAwesomeLayersFacetMethodTest
+class IconFacetMethodFaTest
 extends FacetFactoryTestAbstract {
 
     static final FontAwesomeLayers FONTAWESOME_LAYERS_SAMPLE = FontAwesomeLayers.singleIcon("fa-solid fa-bookmark");
 
     @DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
-    static class DomainObjectWithFontAwesomeLayersMethod {
-        @ObjectSupport public FontAwesomeLayers iconFaLayers() {
-            return FONTAWESOME_LAYERS_SAMPLE;
+    static class DomainObjectWithFontAwesomeIconViaMethod {
+        @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+            return new ObjectSupport.FontAwesomeIconResource(FONTAWESOME_LAYERS_SAMPLE);
         }
     }
 
@@ -61,19 +62,23 @@ extends FacetFactoryTestAbstract {
     }
 
     @Test
-    void fontAwesomeLayersFacetViaIconFaLayersMethod() {
-        var domainObject = getObjectManager().adapt(new DomainObjectWithFontAwesomeLayersMethod());
+    void fontAwesomeLayersViaIconMethod() {
+        var domainObject = getObjectManager().adapt(new DomainObjectWithFontAwesomeIconViaMethod());
 
-        objectScenario(DomainObjectWithFontAwesomeLayersMethod.class, (processClassContext, facetHolder) -> {
+        objectScenario(DomainObjectWithFontAwesomeIconViaMethod.class, (processClassContext, facetHolder) -> {
             //when
             facetFactory.process(processClassContext);
             //then
-            var fontAwesomeLayersFacet = facetHolder.getFacet(FaFacet.class);
-            assertNotNull(fontAwesomeLayersFacet, ()->"FaFacet required");
-            assertTrue(fontAwesomeLayersFacet instanceof FaFacetViaIconFaLayersMethod);
-            var imperativeCssClassFacet = (FaFacetViaIconFaLayersMethod)fontAwesomeLayersFacet;
+            var iconFacet = facetHolder.getFacet(IconFacet.class);
+            assertNotNull(iconFacet, ()->"IconFacet required");
+            assertTrue(iconFacet instanceof IconFacetViaIconMethod);
+            var imperativeFacet = (IconFacetViaIconMethod)iconFacet;
 
-            var actual = imperativeCssClassFacet.getFaLayersProvider(domainObject).getLayers();
+            var actual = imperativeFacet.icon(domainObject, IconWhere.OBJECT_HEADER)
+                .filter(ObjectSupport.FontAwesomeIconResource.class::isInstance)
+                .map(ObjectSupport.FontAwesomeIconResource.class::cast)
+                .map(ObjectSupport.FontAwesomeIconResource::faLayers)
+                .orElse(null);
             assertEquals(FONTAWESOME_LAYERS_SAMPLE, actual);
             assertEquals(
                     FontAwesomeLayers.normalizeCssClasses("fa-solid fa-bookmark", "fa"),

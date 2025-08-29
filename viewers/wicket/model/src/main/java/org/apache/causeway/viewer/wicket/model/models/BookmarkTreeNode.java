@@ -28,6 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -75,6 +76,7 @@ implements
 
         _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
         .ifPresent(x->x.visitIconVariantOrElse(
+                IconWhere.TABLE_ROW,
                 rref->{this.iconResourceReference = rref;},
                 embedded->{this.embedded = embedded;},
                 faLayers->{this.faLayers = faLayers;},

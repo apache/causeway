@@ -21,35 +21,36 @@ package org.apache.causeway.core.metamodel.facets.object.projection.ident;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.util.ClassUtils;
+
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import org.jspecify.annotations.NonNull;
+public record IconFacetFromProjectionFacet(
+    ProjectionFacet projectionFacet,
+    FacetHolder facetHolder)
+implements IconFacet {
 
-public class IconFacetFromProjectionFacet
-extends IconFacetAbstract {
-
-    private final @NonNull ProjectionFacet projectionFacet;
-
-    public IconFacetFromProjectionFacet(
-            final ProjectionFacet projectionFacet,
-            final FacetHolder holder) {
-        super(holder);
-        this.projectionFacet = projectionFacet;
-    }
+    @Override public FacetHolder getFacetHolder() { return facetHolder; }
+    @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
+    @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
 
     @Override
-    public Optional<String> iconName(final ManagedObject targetAdapter) {
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject targetAdapter, final ObjectSupport.IconWhere iconWhere) {
         var projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.objSpec().getIconName(projectedAdapter);
+        return projectedAdapter.objSpec().getIcon(projectedAdapter, iconWhere);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+        visitor.accept("facet", ClassUtils.getShortName(getClass()));
+        visitor.accept("precedence", getPrecedence().name());
         visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
 

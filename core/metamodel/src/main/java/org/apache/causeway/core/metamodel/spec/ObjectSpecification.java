@@ -31,8 +31,8 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
+import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.exceptions.UnrecoverableException;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -57,8 +57,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.entity.EntityFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
@@ -240,21 +238,19 @@ extends
     /**
      * Returns the title to display of target adapter, rendered within the context
      * of some other adapter (if any).
-     * <p>
+     *
      * @see TitleFacet#title(TitleRenderRequest)
      */
     String getTitle(TitleRenderRequest titleRenderRequest);
 
     /**
-     * Optionally returns the name-suffix (or embedded image data) of an icon to use for the specified object.
-     * <p>
-     * Corresponds to the {@link IconFacet#iconName(ManagedObject) icon name}
-     * returned by the {@link IconFacet}; is not necessarily immutable.
+     * Optionally returns the resource definition of an icon to use for the specified object.
+     *
+     * <p>Corresponds to the icon(...) object support method.
      * @see ObjectIconService
+     * @since 4.0
      */
-    Optional<String> getIconName(ManagedObject object);
-
-    ObjectIcon getIcon(ManagedObject object);
+    Optional<ObjectSupport.IconResource> getIcon(ManagedObject object, ObjectSupport.IconWhere iconWhere);
 
     /**
      * Returns this object's navigable parent, if any.
@@ -272,8 +268,6 @@ extends
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
     String getCssClass(ManagedObject domainObject);
-
-    Optional<FontAwesomeLayers> getFaLayers(ManagedObject domainObject);
 
     /**
      * @return optionally the element type spec based on presence of the TypeOfFacet
@@ -293,9 +287,7 @@ extends
      */
     Optional<Contributing> contributing();
 
-    // //////////////////////////////////////////////////////////////
-    // TitleContext
-    // //////////////////////////////////////////////////////////////
+    // -- TITLE CONTEXT
 
     /**
      * Create an {@link InteractionContext} representing an attempt to read the
@@ -305,9 +297,7 @@ extends
             ManagedObject targetObjectAdapter,
             InteractionInitiatedBy invocationMethod);
 
-    // //////////////////////////////////////////////////////////////
-    // ValidityContext, Validity
-    // //////////////////////////////////////////////////////////////
+    // -- VALIDITY
 
     // internal API
     ObjectValidityContext createValidityInteractionContext(
@@ -330,9 +320,7 @@ extends
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
-    // //////////////////////////////////////////////////////////////
-    // Facets
-    // //////////////////////////////////////////////////////////////
+    // -- FACETS
 
     /**
      * Determines if the object represents an value or object.
