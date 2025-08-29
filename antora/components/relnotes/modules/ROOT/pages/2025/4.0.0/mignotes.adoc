@@ -93,3 +93,15 @@ in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 
 `ErrorDetails` as used by the `ErrorReportingService` has been converted from a class to a record.
 (In effect all accessors have been renamed, stripping any `get` or `is` prefixes)
+
+== Object Icon Support
+
+Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconWhere iconWhere)`,
+which also supports image data embedding and supersedes `String iconName()`. 
+However, the latter is still supported for backward compatibility.
+
+With `TitleService` method
+`String iconNameOf(final Object domainObject)` was replaced by 
+    `IconResource iconOf(Object domainObject, IconWhere iconWhere)`. 
+
+Likewise `IconUiEvent` was updated to reflect the new programming model.
