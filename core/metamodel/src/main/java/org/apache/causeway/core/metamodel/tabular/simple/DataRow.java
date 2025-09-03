@@ -45,14 +45,18 @@ public record DataRow(
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
-                        property.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                    interactionInitiatedBy.isPassThrough()
+                        || property.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
                                 ? property.get(rowElement(), interactionInitiatedBy)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                        collection.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                    interactionInitiatedBy.isPassThrough()
+                        || collection.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
                                 ? collection.get(rowElement(), interactionInitiatedBy)
                                 : null
                 ));
     }
+
+
 
 }
