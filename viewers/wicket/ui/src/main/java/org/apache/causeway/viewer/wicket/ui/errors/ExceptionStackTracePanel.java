@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.errors;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.wicket.AttributeModifier;
@@ -32,10 +33,13 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
+import org.springframework.util.StringUtils;
+
 import org.apache.causeway.applib.services.error.ErrorReportingService;
 import org.apache.causeway.applib.services.error.Ticket;
 import org.apache.causeway.commons.functional.IndexedConsumer;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
@@ -148,25 +152,33 @@ extends PanelBase<ExceptionModel> {
 
     private static String convertToHtml(ExceptionModel exceptionModel) {
         var html = new StringBuilder();
-        exceptionModel.causalChain().forEach(IndexedConsumer.zeroBased((i, cause)->{
-            if(i>0) html.append("<hr>");
-            html.append("<div>%s<b>%s</b>: %s</div>".formatted(
-                i>0 ? "Caused by: " : "",
-                cause.getClass().getName(),
-                org.springframework.web.util.HtmlUtils.htmlEscape(cause.getMessage())));
+        _NullSafe.stream(exceptionModel.causalChain())
+            .filter(Objects::nonNull)
+            .forEach(IndexedConsumer.zeroBased((i, cause)->{
+                if(i>0) html.append("<hr>");
+                html.append("<div>%s<b>%s</b>: %s</div>".formatted(
+                    i>0 ? "Caused by: " : "",
+                    cause.getClass().getName(),
+                    convertMessageToHtml(cause)));
 
-            Stream.of(cause.getStackTrace()).forEach(el->{
-                html.append("""
-                    <div style="margin-left: 1rem">at %s#%s(%s:%d)</div>"""
-                    .formatted(
-                        el.getClassName(),
-                        el.getMethodName(),
-                        el.getFileName(),
-                        el.getLineNumber()));
-            });
+                Stream.of(cause.getStackTrace()).forEach(el->{
+                    html.append("""
+                        <div style="margin-left: 1rem">at %s#%s(%s:%d)</div>"""
+                        .formatted(
+                            el.getClassName(),
+                            el.getMethodName(),
+                            el.getFileName(),
+                            el.getLineNumber()));
+                });
 
-        }));
+            }));
         return html.toString();
+    }
+
+    private static String convertMessageToHtml(Throwable cause) {
+        return StringUtils.hasLength(cause.getMessage())
+            ? org.springframework.web.util.HtmlUtils.htmlEscape(cause.getMessage().replace("\n", "<br>"))
+            : "";
     }
 
 }
