@@ -79,7 +79,7 @@ public record ImperativeAspect(
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return fallback;
 
         try {
-            return _Casts.uncheckedCast(invokeSingleMethod(domainObject));
+            return _Casts.uncheckedCast(invokeSingleMethod(domainObject, arg0));
         } catch (final RuntimeException ex) {
             return fallback;
         }
