@@ -28,7 +28,7 @@ public enum PdfJsVersion {
     V2_X("v2x3x", "pdfjs-dist/2.16.105", JavaScriptReferenceType.TEXT_JAVASCRIPT),
     V3_X("v2x3x", "pdfjs-dist/3.11.174", JavaScriptReferenceType.TEXT_JAVASCRIPT),
     V4_X("v4x5x", "pdfjs-dist/4.10.38", JavaScriptReferenceType.MODULE),
-    V5_X("v4x5x", "pdfjs-dist/5.4.54", JavaScriptReferenceType.MODULE)
+    V5_X("v4x5x", "pdfjs-dist/5.4.149", JavaScriptReferenceType.MODULE)
     ;
     @Getter private final String integrationScriptSuffix;
     @Getter private final String webjarPath;
