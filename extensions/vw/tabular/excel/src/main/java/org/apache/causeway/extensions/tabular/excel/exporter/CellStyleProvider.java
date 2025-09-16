@@ -19,6 +19,8 @@
 package org.apache.causeway.extensions.tabular.excel.exporter;
 
 import java.awt.Color;
+import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -28,26 +30,37 @@ import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.DefaultIndexedColorMap;
 import org.apache.poi.xssf.usermodel.XSSFColor;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.tabular.TabularModel.TabularRow;
 import org.apache.causeway.extensions.tabular.excel.exporter.ExcelFileWriter.Options.CustomCellStyle;
 
-import org.jspecify.annotations.NonNull;
-
 record CellStyleProvider(
-        @NonNull Workbook workbook,
-        @NonNull CellStyle primaryHeaderStyle,
-        @NonNull CellStyle secondaryHeaderStyle,
-        @NonNull CellStyle dateStyle,
-        @NonNull CellStyle multilineStyle,
-        @NonNull CellStyle[] blueStyles,
-        @NonNull CellStyle[] greenStyles,
-        @NonNull CellStyle[] indigoStyles,
-        @NonNull CellStyle[] warningStyles,
-        @NonNull CellStyle[] dangerStyles,
-        ExcelFileWriter.@NonNull Options options) {
+        Workbook workbook,
+        CellStyle primaryHeaderStyle,
+        CellStyle secondaryHeaderStyle,
+        CellStyle dateStyle,
+        CellStyle multilineStyle,
+        ColorPalette colorPalette,
+        ExcelFileWriter.Options options) {
+
+    private record ColorPalette(
+        List<CellStyle[]> listOfStyles) {
+
+        static ColorPalette create(final Workbook wb, final StyleIndexList styleIndexList) {
+            return new ColorPalette(Stream.of(CustomCellStyle.values())
+                .skip(1) // skip DEFAULT style
+                .mapToInt(style->style.rgb)
+                .mapToObj(Color::new)
+                .map(color->createColoredStyles(wb, styleIndexList, color))
+                .toList());
+        }
+
+        CellStyle[] styles(final CustomCellStyle customCellStyle) {
+            return listOfStyles.get(customCellStyle.ordinal() - 1); // skip DEFAULT style
+        }
+
+    }
 
     static CellStyleProvider create(final Workbook wb, final ExcelFileWriter.@Nullable Options options) {
         var styleIndexList = new StyleIndexList();
@@ -56,11 +69,7 @@ record CellStyleProvider(
             createSecondaryHeaderRowStyle(wb),
             createDateFormatCellStyle(wb, styleIndexList, "yyyy-mm-dd"),
             createMultilineCellStyle(wb, styleIndexList),
-            createColoredStyles(wb, styleIndexList, new Color(0x6ea8fe)), // blue-300 (6ea8fe)
-            createColoredStyles(wb, styleIndexList, new Color(0x75b798)), // green-300 (75b798)
-            createColoredStyles(wb, styleIndexList, new Color(0xa370f7)), // indigo-300 (a370f7)
-            createColoredStyles(wb, styleIndexList, new Color(0xffcd39)), // warning yellow-400 (ffcd39)
-            createColoredStyles(wb, styleIndexList, new Color(0xe35d6a)), // danger red-400 (e35d6a)
+            ColorPalette.create(wb, styleIndexList),
             options!=null
                 ? options
                 : ExcelFileWriter.Options.builder().build());
@@ -130,17 +139,8 @@ record CellStyleProvider(
         if(customCellStyle==null
                 || customCellStyle.isDefault()) return;
 
-        final int ordinal = valueKindOf(cell).ordinal();
-
-        cell.setCellStyle(
-            switch (customCellStyle) {
-                case BLUE -> blueStyles()[ordinal];
-                case GREEN -> greenStyles()[ordinal];
-                case INDIGO -> indigoStyles()[ordinal];
-                case WARNING -> warningStyles()[ordinal];
-                case DANGER -> dangerStyles()[ordinal];
-                case DEFAULT -> throw new UnsupportedOperationException("unexpected code reach");
-            });
+        cell.setCellStyle(colorPalette
+                .styles(customCellStyle)[valueKindOf(cell).ordinal()]);
     }
 
     private enum ValueKind {

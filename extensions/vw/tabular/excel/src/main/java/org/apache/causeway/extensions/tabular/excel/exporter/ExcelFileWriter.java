@@ -67,13 +67,18 @@ public record ExcelFileWriter(@Nullable Options options) {
              */
             @Nullable Function<TabularRow, CustomCellStyle> rowStyleFunction) {
 
+        @RequiredArgsConstructor
         public enum CustomCellStyle {
-            DEFAULT,
-            BLUE,
-            GREEN,
-            INDIGO,
-            WARNING,
-            DANGER;
+            DEFAULT(-1),
+            BLUE(0xa0c4ff), // light-blue
+            GREEN(0x75b798), // green-300
+            INDIGO(0xa370f7), // indigo-300
+            MINT(0xb2e0d9), // pale-mint
+            PINK(0xffb2d1), // light-pink
+            GRAY(0xe0e0e0), // light-gray
+            WARNING(0xffcd39), // warning yellow-400
+            DANGER(0xe35d6a); // danger red-400
+            public final int rgb;
             public boolean isDefault() { return this == CustomCellStyle.DEFAULT; }
             static CustomCellStyle nullToDefault(final @Nullable CustomCellStyle customCellStyle) {
                 return customCellStyle!=null
@@ -81,7 +86,6 @@ public record ExcelFileWriter(@Nullable Options options) {
                         : DEFAULT;
             }
         }
-
     }
 
     @SneakyThrows
