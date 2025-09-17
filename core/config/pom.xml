@@ -17,7 +17,9 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -47,7 +49,8 @@
                     <annotationProcessorPaths>
                         <path>
                             <!--
-                            as per https://github.com/spring-projects/spring-boot/issues/30986, must be before the spring-boot-configuration-processor
+                            as per https://github.com/spring-projects/spring-boot/issues/30986, must be
+                            before the spring-boot-configuration-processor
                             https://docs.spring.io/spring-boot/docs/2.7.6/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor
                             -->
                             <groupId>org.projectlombok</groupId>
@@ -61,29 +64,37 @@
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.ow2.asm</groupId>
+                        <artifactId>asm</artifactId>
+                        <version>9.8</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
 
     <dependencies>
 
-		<dependency>
+        <dependency>
             <groupId>org.apache.causeway.commons</groupId>
-			<artifactId>causeway-commons</artifactId>
+            <artifactId>causeway-commons</artifactId>
         </dependency>
 
-    	<dependency>
+        <dependency>
             <groupId>org.apache.causeway.core</groupId>
             <artifactId>causeway-applib</artifactId>
         </dependency>
 
         <dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-		</dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
 
         <!--
-        as per https://github.com/spring-projects/spring-boot/issues/30986, must be before the spring-boot-configuration-processor
+        as per https://github.com/spring-projects/spring-boot/issues/30986, must be
+        before the spring-boot-configuration-processor
         https://docs.spring.io/spring-boot/docs/2.7.6/reference/html/configuration-metadata.html#appendix.configuration-metadata.annotation-processor
         -->
         <dependency>
@@ -93,11 +104,11 @@
         </dependency>
 
         <!-- IDE support (optional) -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-configuration-processor</artifactId>
-			<optional>true</optional>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- TESTING -->
 
