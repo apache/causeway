@@ -51,6 +51,7 @@
         from github actions/setup-java@v3 -->
         <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
         <maven.compiler.release>17</maven.compiler.release>
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
@@ -66,7 +67,7 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-release-plugin.version>3.1.1</maven-release-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-surefire-report-plugin.version>3.5.4</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.15.1</maven.plugin.tools.version>
