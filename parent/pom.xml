@@ -51,7 +51,6 @@
         from github actions/setup-java@v3 -->
         <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
         <maven.compiler.release>17</maven.compiler.release>
-        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
 
         <!--  for m-plugin-p and maven-plugin-annotations  -->
         <assembly.tarLongFileMode>posix</assembly.tarLongFileMode>
