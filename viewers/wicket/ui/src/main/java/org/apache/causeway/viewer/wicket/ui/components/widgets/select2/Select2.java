@@ -100,4 +100,14 @@ public interface Select2 extends Serializable {
         component().setEnabled(mutability);
     }
 
+    /**
+     * The number of milliseconds to wait for the user to stop typing before
+     * issuing the ajax request.
+     * @param millis
+     */
+    default void setDelay(final int millis) {
+        var ajaxSettings = component().getSettings().getAjax(true);
+        ajaxSettings.setDelay(millis);
+    }
+
 }

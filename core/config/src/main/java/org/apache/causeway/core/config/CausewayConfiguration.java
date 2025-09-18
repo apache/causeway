@@ -90,8 +90,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
@@ -2930,6 +2928,14 @@ public record CausewayConfiguration(
             boolean preventDoubleClickForNoArgAction,
 
             /**
+             * With select2 choice provider widget,
+             * the time to wait for the user to stop typing before issuing the ajax request.
+             */
+            @DurationUnit(ChronoUnit.MILLIS)
+            @DefaultValue("250")
+            Duration select2AjaxDelay,
+
+            /**
              * Whether to show the footer menu bar.
              *
              * <p>This is enabled by default.
@@ -3246,9 +3252,7 @@ public record CausewayConfiguration(
                 /**
                  * How long the info popup should display before disappearing.
                  *
-                 * <p>
-                 *     A value of 0 means do not disappear automatically.
-                 *
+                 * <p>A value of 0 means do not disappear automatically.
                  */
                 @DurationUnit(ChronoUnit.MILLIS)
                 @DefaultValue("3500")
