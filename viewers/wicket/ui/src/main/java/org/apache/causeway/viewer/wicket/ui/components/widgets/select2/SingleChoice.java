@@ -35,8 +35,6 @@ implements Select2, HasMetaModelContext {
             final UiAttributeWkt attributeModel,
             final ChoiceProvider choiceProvider) {
         this(new Select2Choice<>(id, model, choiceProvider.toSelect2ChoiceProvider()));
-        setDelay(Math.toIntExact(getConfiguration().viewer().wicket().select2AjaxDelay().toMillis()));
-        component().setRequired(attributeModel.isRequired());
     }
 
     @Override

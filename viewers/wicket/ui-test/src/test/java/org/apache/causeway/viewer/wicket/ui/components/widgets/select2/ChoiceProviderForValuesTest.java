@@ -68,7 +68,7 @@ extends ChoiceProviderTestAbstract {
 //            System.err.printf("displayValue: %s%n", choiceProvider.getDisplayValue(memento));
 //        });
 
-        var asIds = mementos.map(choiceProvider::getIdValue);
+        var asIds = mementos.map(choiceProvider.toSelect2ChoiceProvider()::getIdValue);
 
         var recoveredMementos = Can.ofCollection(choiceProvider.toChoices(asIds.toList()));
 

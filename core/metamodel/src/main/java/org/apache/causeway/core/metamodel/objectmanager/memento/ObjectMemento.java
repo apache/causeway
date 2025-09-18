@@ -19,22 +19,31 @@
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.util.StringUtils;
+
+import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.resources._Serializables;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
+import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
+import org.apache.causeway.core.metamodel.object.MmHintUtils;
+import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 
 /**
  * @since 2.0
@@ -43,41 +52,59 @@ public sealed interface ObjectMemento
 extends Serializable
 permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
 
-    /** arbitrary/random string */
-    static final String NULL_ID = "VGN6r6zKTiLhUsA0WkdQ17LvMU1IYdb0";
-
     LogicalType logicalType();
     Bookmark bookmark();
 
     /**
      * The object's title for rendering (before translation).
      * Corresponds to {@link ManagedObject#getTitle()}.
-     * <p>
-     * Directly support choice rendering, without the need to (re-)fetch entire object graphs.
-     * (TODO translated or not?)
+     *
+     * <p>Directly support choice rendering, without the need to (re-)fetch entire object graphs.
+     * (pre-translated)
      */
     String title();
 
     // -- FACTORIES
 
     static ObjectMemento empty(final LogicalType logicalType) {
-        return new ObjectMementoEmpty(logicalType);
+        return new ObjectMementoEmpty(
+            logicalType,
+            PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION));
     }
-    static Optional<ObjectMemento> singular(final @Nullable ManagedObject adapter) {
-        return ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                ? Optional.empty()
-                : Optional.of(ObjectMementoSingular.create(adapter));
+
+    static Optional<ObjectMemento> singular(
+            final @Nullable ManagedObject adapter) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter))
+            return Optional.empty();
+
+        var spec = adapter.objSpec();
+
+        _Assert.assertTrue(spec.isIdentifiable()
+                || spec.isParented()
+                || spec.isValue(), ()->"Don't know how to create an ObjectMemento for a type "
+                        + "with ObjectSpecification %s. "
+                        + "All other strategies failed. Type is neither "
+                        + "identifiable (isManagedBean() || isViewModel() || isEntity()), "
+                        + "nor is a 'parented' Collection, "
+                        + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
+                        .formatted(spec));
+
+        return Optional.ofNullable(new ObjectMementoSingular(
+                adapter.logicalType(),
+                MmHintUtils.bookmarkElseFail(adapter),
+                adapter.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(adapter)),
+                iconToHtml(adapter.getIcon(IconWhere.TABLE_ROW))));
     }
     /**
      * returns null for null
      */
-    @Nullable static ObjectMemento singularOrEmpty(final @Nullable ManagedObject adapter) {
+    @Nullable static ObjectMemento singularOrEmpty(
+            final @Nullable ManagedObject adapter) {
         MmAssertionUtils.assertPojoIsScalar(adapter);
-        return !ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                ? ObjectMementoSingular.create(adapter)
-                : ManagedObjects.isSpecified(adapter)
+        return singular(adapter)
+            .orElseGet(()->ManagedObjects.isSpecified(adapter)
                     ? ObjectMemento.empty(adapter.logicalType())
-                    : null;
+                    : null);
     }
     static ObjectMemento packed(
             final LogicalType logicalType,
@@ -93,36 +120,51 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                 ? orig
                 : _Lists.newArrayList(container);
         return new ObjectMementoPacked(logicalType, arrayList);
-
     }
 
     // -- UTILITY
 
-    @Nullable
-    static String enstringToUrlBase64(final @Nullable ObjectMemento memento) {
-        var base64UrlEncodedMemento = memento!=null
-                ? _Strings.ofBytes(
-                    _Bytes.asUrlBase64.apply(
-                            _Serializables.write(memento)),
-                    StandardCharsets.US_ASCII)
-                : null;
-        return base64UrlEncodedMemento;
+    private static String iconToHtml(@Nullable ObjectIcon objectIcon) {
+        //if(true) return "<i class=\"%s\"></i>".formatted("fa-solid fa-thumbs-up");
+
+        //TODO not supported yet as requires resource caching from wicket
+//        if(objectIcon instanceof ObjectIconUrlBased urlBased)
+//            return "<img src=\"" + urlBased.url().toExternalForm() + "\"/>";
+        if(objectIcon instanceof ObjectIconEmbedded embedded)
+            return "<img src=\"" + embedded.dataUri().toExternalForm() + "\"/>";
+        if(objectIcon instanceof ObjectIconFa fa)
+            return fa.fontAwesomeLayers().toHtml();
+
+        return null;
     }
 
-    @Nullable
-    static ObjectMemento destringFromUrlBase64(final @Nullable String base64UrlEncodedMemento) {
+    static ObjectMemento fromDto(final ObjectDisplayDto dto) {
+        var bookmark = Bookmark.parse(dto.bookmark()).orElseThrow();
+        var logicalType = new LogicalType(bookmark.logicalTypeName(), dto.correspondingClass());
+        return bookmark.isEmpty()
+            ? new ObjectMementoEmpty(logicalType, dto.title())
+            : new ObjectMementoSingular(logicalType, bookmark, dto.title(), dto.iconHtml());
+    }
+
+    static String enstringToBase64(final ObjectMemento memento) {
+        if(memento instanceof ObjectMementoEmpty objectMementoEmpty)
+            return objectMementoEmpty.toDto().toJsonBase64();
+        if(memento instanceof ObjectMementoSingular objectMementoSingular)
+            return objectMementoSingular.toDto().toJsonBase64();
+
+        throw _Exceptions.unexpectedCodeReach();
+    }
+
+    static ObjectMemento destringFromBase64(final String base64EncodedDto) {
+        if(!StringUtils.hasLength(base64EncodedDto))
+            throw _Exceptions.unexpectedCodeReach();
+
         try {
-            return _Strings.isNotEmpty(base64UrlEncodedMemento)
-                    && !NULL_ID.equals(base64UrlEncodedMemento)
-                    ? _Serializables.read(
-                            ObjectMemento.class,
-                            _Bytes.ofUrlBase64.apply(
-                                    base64UrlEncodedMemento.getBytes(StandardCharsets.US_ASCII)))
-                    : null;
+            return fromDto(ObjectDisplayDto.fromJsonBase64(base64EncodedDto));
         } catch (Exception e) {
+            e.printStackTrace();
             return null; // map to null if anything goes wrong
         }
-
     }
 
     default boolean isEmpty() {

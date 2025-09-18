@@ -34,7 +34,8 @@ import org.apache.causeway.viewer.wicket.model.models.SingleChoiceModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeModelChangeDispatcher;
 
-public interface Select2 extends Serializable {
+public sealed interface Select2 extends Serializable
+permits SingleChoice, MultiChoice {
 
     static Select2 create(
         final String id,
@@ -56,6 +57,23 @@ public interface Select2 extends Serializable {
         settings.setDropdownAutoWidth(true);
         settings.setWidth("100%");
         settings.setPlaceholder(attributeModel.getFriendlyName());
+        // the id string is url-safe base64 encoded JSON coming from ObjectDisplayDto
+        var template = """
+            function(opt) {
+                if(!opt) return "undefined";
+                if(!opt.id) return "undefined";
+                var base64 = opt.id.replace(/-/g, '+').replace(/_/g, '/')
+                var dto = JSON.parse(atob(base64));
+                if(!dto) return "undefined";
+                if(!dto.title) return "undefined";
+                if(dto.iconHtml) {
+                    return $('<span>' + dto.iconHtml + ' ' + dto.title + '</span>');
+                }
+                return dto.title;
+            }""";
+
+        settings.setTemplateResult(template);
+        settings.setTemplateSelection(template);
 
         switch(attributeModel.getChoiceProviderSort()) {
             case AUTO_COMPLETE->settings.setMinimumInputLength(attributeModel.getAutoCompleteMinLength());
@@ -63,6 +81,11 @@ public interface Select2 extends Serializable {
                 .ifPresent(settings::setMinimumInputLength);
             case CHOICES, NO_CHOICES->{}
         }
+
+        component.setRequired(attributeModel.isRequired());
+        // time to wait for the user to stop typing before issuing the ajax request.
+        component.getSettings().getAjax(true)
+            .setDelay(Math.toIntExact(attributeModel.getConfiguration().viewer().wicket().select2AjaxDelay().toMillis()));
 
         component.setOutputMarkupPlaceholderTag(true);
         component.setLabel(Model.of(attributeModel.getFriendlyName()));
@@ -98,16 +121,6 @@ public interface Select2 extends Serializable {
 
     default void setMutable(final boolean mutability) {
         component().setEnabled(mutability);
-    }
-
-    /**
-     * The number of milliseconds to wait for the user to stop typing before
-     * issuing the ajax request.
-     * @param millis
-     */
-    default void setDelay(final int millis) {
-        var ajaxSettings = component().getSettings().getAjax(true);
-        ajaxSettings.setDelay(millis);
     }
 
 }

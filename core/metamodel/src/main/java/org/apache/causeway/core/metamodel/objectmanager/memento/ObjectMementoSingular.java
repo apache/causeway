@@ -18,43 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.objectmanager.memento;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.object.MmHintUtils;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.MmTitleUtils;
-
-import org.jspecify.annotations.NonNull;
 
 record ObjectMementoSingular(
-        @NonNull LogicalType logicalType,
-        @NonNull Bookmark bookmark,
-        String title)
+        LogicalType logicalType,
+        Bookmark bookmark,
+        String title,
+        @Nullable String iconHtml)
 implements ObjectMemento {
 
-    // -- FACTORIES
-
-    static ObjectMementoSingular create(final @NonNull ManagedObject adapter) {
-        var spec = adapter.objSpec();
-
-        _Assert.assertTrue(spec.isIdentifiable()
-                || spec.isParented()
-                || spec.isValue(), ()->"Don't know how to create an ObjectMemento for a type "
-                        + "with ObjectSpecification %s. "
-                        + "All other strategies failed. Type is neither "
-                        + "identifiable (isManagedBean() || isViewModel() || isEntity()), "
-                        + "nor is a 'parented' Collection, "
-                        + "nor has 'encodable' semantics, nor is (Serializable || Externalizable)"
-                        .formatted(spec));
-
-        return new ObjectMementoSingular(
-                adapter.logicalType(),
-                MmHintUtils.bookmarkElseFail(adapter),
-                MmTitleUtils.titleOf(adapter));
+    public ObjectDisplayDto toDto() {
+        return new ObjectDisplayDto(logicalType.correspondingClass(), bookmark.stringify(), title, iconHtml);
     }
 
     @Override public int hashCode() { return bookmark.hashCode(); }
+
     @Override public boolean equals(final Object o) {
         return (o instanceof ObjectMementoSingular other)
                 ? this.bookmark.equals(other.bookmark)

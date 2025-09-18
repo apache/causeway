@@ -111,7 +111,7 @@ class OnSelectBehavior extends AbstractAjaxBehavior {
             Event.valueOf(pair)
             .ifPresent(event->{
                 if(getComponent() instanceof Select2MultiChoice select2MultiChoice) {
-                    var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    var objectMementoFromEvent = ObjectMemento.destringFromBase64(pair.getValue());
                     if(objectMementoFromEvent==null) return; // add or remove nothing is a no-op
 
                     var component = _Casts.<Select2MultiChoice<ObjectMemento>>uncheckedCast(select2MultiChoice);
@@ -141,7 +141,7 @@ class OnSelectBehavior extends AbstractAjaxBehavior {
                     var component = _Casts.<Select2Choice<ObjectMemento>>uncheckedCast(select2Choice);
                     switch(event) {
                     case SELECT:
-                        var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                        var objectMementoFromEvent = ObjectMemento.destringFromBase64(pair.getValue());
                         if(objectMementoFromEvent==null) {
                             // select nothing is rather a CLEAR operation
                             component.clearInput();
@@ -161,7 +161,7 @@ class OnSelectBehavior extends AbstractAjaxBehavior {
                 } else return;
 
                 if(XrayUi.isXrayEnabled()) {
-                    var objectMementoFromEvent = ObjectMemento.destringFromUrlBase64(pair.getValue());
+                    var objectMementoFromEvent = ObjectMemento.destringFromBase64(pair.getValue());
                     if(objectMementoFromEvent!=null) {
                         _XrayEvent.event("Select2 event: %s %s", event, objectMementoFromEvent.bookmark());
                     } else {

@@ -26,8 +26,6 @@ import org.apache.wicket.util.string.Strings;
 import org.jspecify.annotations.Nullable;
 import org.wicketstuff.select2.Response;
 
-import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
@@ -49,31 +47,6 @@ implements HasMetaModelContext, Serializable {
     }
 
     /**
-     * Get the value for displaying to an end user.
-     */
-    public String getDisplayValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null
-                || choiceMemento.isEmpty()) {
-            return getPlaceholderRenderService().asText(PlaceholderLiteral.NULL_REPRESENTATION);
-        }
-        return translate(choiceMemento.title());
-    }
-
-    /**
-     * This method is called to get the id value of an object (used as the value attribute of a
-     * choice element) The id can be extracted from the object like a primary key, or if the list is
-     * stable you could just return a toString of the index.
-     * <p>
-     * Note that the given index can be {@code -1} if the object in question is not contained in the
-     * available choices.
-     */
-    public String getIdValue(final ObjectMemento choiceMemento) {
-        if (choiceMemento == null) return ObjectMemento.NULL_ID;
-
-        return ObjectMemento.enstringToUrlBase64(choiceMemento);
-    }
-
-    /**
      * Queries application for choices that match the search {@code term} and adds them to the
      * {@code response}
      */
@@ -91,7 +64,7 @@ implements HasMetaModelContext, Serializable {
 
         // else, if not mandatory, prepend null
         var mementosIncludingNull = mementosFiltered.toArrayList();
-        mementosIncludingNull.add(0, null);
+        mementosIncludingNull.add(0, ObjectMemento.empty(attributeModel.getElementType().logicalType()));
 
         response.addAll(mementosIncludingNull);
     }
@@ -103,7 +76,7 @@ implements HasMetaModelContext, Serializable {
      */
     public Collection<ObjectMemento> toChoices(final Collection<String> ids) {
         return _NullSafe.stream(ids)
-                .map(this::mementoFromIdWithNullHandling)
+                .map(this::mementoFromId)
                 .collect(Collectors.toList());
     }
 
@@ -122,10 +95,10 @@ implements HasMetaModelContext, Serializable {
                 delegate.query(term, page, response);
             }
             @Override public String getIdValue(final ObjectMemento object) {
-                return delegate.getIdValue(object);
+                return ObjectMemento.enstringToBase64(object);
             }
             @Override public String getDisplayValue(final ObjectMemento object) {
-                return delegate.getDisplayValue(object);
+                return null; // not needed, already encoded into the 'id'
             }
         };
     }
@@ -177,12 +150,6 @@ implements HasMetaModelContext, Serializable {
        return pendingArgsList;
     }
 
-    private @Nullable ObjectMemento mementoFromIdWithNullHandling(final String id) {
-        if(ObjectMemento.NULL_ID.equals(id)) return null;
-
-        return mementoFromId(id);
-    }
-
     /**
      * Whether to not prepend <code>null</code> as choice candidate.
      */
@@ -216,18 +183,14 @@ implements HasMetaModelContext, Serializable {
 
         if (Strings.isEmpty(term)) return choiceMementos;
 
-        var translationContext = TranslationContext.empty();
-        var translator = getTranslationService();
         var termLower = term.toLowerCase();
 
-        return choiceMementos.filter((final ObjectMemento candidateMemento)->{
-            var title = translator.translate(translationContext, candidateMemento.title());
-            return title.toLowerCase().contains(termLower);
-        });
+        return choiceMementos.filter((final ObjectMemento candidateMemento)->
+            candidateMemento.title().toLowerCase().contains(termLower));
     }
 
     private @Nullable ObjectMemento mementoFromId(final @Nullable String id) {
-        return ObjectMemento.destringFromUrlBase64(id);
+        return ObjectMemento.destringFromBase64(id);
     }
 
 }

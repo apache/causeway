@@ -20,23 +20,19 @@ package org.apache.causeway.core.metamodel.objectmanager.memento;
 
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
-
-import org.jspecify.annotations.NonNull;
 
 record ObjectMementoEmpty(
-        @NonNull LogicalType logicalType)
+        LogicalType logicalType,
+        String title)
 implements ObjectMemento {
-
-    @Override
-    public String title() {
-        return PlaceholderRenderService.fallback().asText(PlaceholderLiteral.NULL_REPRESENTATION);
-    }
 
     @Override
     public Bookmark bookmark() {
         return Bookmark.empty(logicalType);
+    }
+
+    public ObjectDisplayDto toDto() {
+        return new ObjectDisplayDto(logicalType.correspondingClass(), bookmark().stringify(), title, null);
     }
 
 }

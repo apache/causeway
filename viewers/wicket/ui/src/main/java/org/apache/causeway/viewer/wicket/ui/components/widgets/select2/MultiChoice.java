@@ -63,8 +63,6 @@ implements Select2, HasMetaModelContext {
                 // --
 
             });
-        setDelay(Math.toIntExact(getConfiguration().viewer().wicket().select2AjaxDelay().toMillis()));
-        component().setRequired(attributeModel.isRequired());
     }
 
     @Override

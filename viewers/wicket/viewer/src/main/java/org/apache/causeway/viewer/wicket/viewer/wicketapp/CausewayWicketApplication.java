@@ -56,7 +56,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
@@ -69,7 +68,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
-import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapterMemento;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
@@ -373,7 +371,6 @@ implements
     protected IConverterLocator newConverterLocator() {
         final ConverterLocator converterLocator = new ConverterLocator();
         converterLocator.set(ManagedObject.class, new ConverterForObjectAdapter());
-        converterLocator.set(ObjectMemento.class, new ConverterForObjectAdapterMemento());
         return converterLocator;
     }
 

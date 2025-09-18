@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.annotation;
 
+import java.io.Serializable;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -60,7 +61,7 @@ public @interface ObjectSupport {
         TABLE_ROW //TODO also TREE_NODE and SELECT_DROPDOWN
     }
 
-    public sealed interface IconResource
+    public sealed interface IconResource extends Serializable
     permits ClassPathIconResource, FontAwesomeIconResource, EmbeddedIconResource {
 
     }
