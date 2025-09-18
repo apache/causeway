@@ -121,12 +121,14 @@ implements ObjectIconService {
         var iconResourceKey = StringUtils.hasLength(cpIconResource.suffix())
             ? domainClass.getName() + "-" + cpIconResource.suffix()
             : domainClass.getName();
-        // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
         var cachedIcon = iconByKey.get(iconResourceKey);
         if(cachedIcon!=null) return cachedIcon;
 
         var icon = findIcon(objSpec, _Strings.nonEmpty(cpIconResource.suffix()));
-        iconByKey.put(iconResourceKey, icon);
+        // also memoize unsuccessful icon lookups (as fallback), so we don't search repeatedly
+        iconByKey.put(iconResourceKey, icon!=null
+            ? icon
+            : fallbackIcon());
         return icon;
     }
 
