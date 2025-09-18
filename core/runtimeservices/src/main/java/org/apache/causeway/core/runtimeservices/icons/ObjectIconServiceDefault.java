@@ -101,6 +101,8 @@ implements ObjectIconService {
                     return suffixed(spec, suffixed);
                 throw _Exceptions.unmatchedCase(iconResource);
             })
+            // also handle the empty suffix case
+            .or(()->Optional.ofNullable(suffixed(spec, ClassPathIconResource.emptySuffix())))
             .orElseGet(this::fallbackIcon);
     }
 

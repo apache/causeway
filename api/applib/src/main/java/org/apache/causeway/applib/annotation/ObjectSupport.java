@@ -67,6 +67,9 @@ public @interface ObjectSupport {
 
     public record ClassPathIconResource(
         String suffix) implements IconResource {
+        public static ClassPathIconResource emptySuffix() {
+            return new ClassPathIconResource("");
+        }
     }
 
     public record FontAwesomeIconResource(
