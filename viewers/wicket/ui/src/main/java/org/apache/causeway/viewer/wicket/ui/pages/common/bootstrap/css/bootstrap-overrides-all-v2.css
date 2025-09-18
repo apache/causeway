@@ -171,18 +171,23 @@ footer > .navbar {
     margin: 0;
 }
 
-/* from ActionPromptHeaderPanel */
+/* from ObjectIconAndTitlePanel */
 
-.objectIconAndTitlePanel img.objectIcon {
-    width: 24px;
-    height: 24px;
+.objectIconAndTitlePanel img.objectIcon-object_header {
+    max-width: 2rem;
+    max-height: 2rem;
 }
+.objectIconAndTitlePanel img.objectIcon-table_row {
+    max-width: 1.5rem;
+    max-height: 1.5rem;
+}
+
+/* from ActionPromptHeaderPanel */
 
 .objectIconAndTitlePanel span.actionName {
     font-size: 20px;
     font-weight: bolder;
 }
-
 
 /* from SimpleClipboardPanel */
 

@@ -46,6 +46,8 @@ import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
 
 import lombok.Builder;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.CssClassNameModifier;
+
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
  * as per the provided {@link UiObjectWkt}.
@@ -60,7 +62,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
     private static final String ID_OBJECT_FONT_AWESOME_RIGHT = "objectIconFaRight";
     private static final String ID_OBJECT_LINK = "objectLink";
     private static final String ID_OBJECT_TITLE = "objectTitle";
-    private static final String ID_OBJECT_ICON = "objectImage";
+    private static final String ID_OBJECT_ICON = "objectIcon";
 
     private IconWhere iconWhere;
 
@@ -124,15 +126,16 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
                 iconWhere,
                 iconUrlBased->{
                     Wkt.imageAddCachable(link, ID_OBJECT_ICON,
-                        getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased));
+                        getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased))
+                        .add(cssClassNameModifier("objectIcon", iconWhere));
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                 },
                 iconEmbedded->{
-                    // for embedded images we replace the default CSS class 'objectImage' w/ 'objectImageEmbedded'
+                    // for embedded images we use CSS class 'objectIconEmbedded' (instead of 'objectIcon')
                     // which allows to render them differently e.g. don't constrain image sizes, as these should be driven by embedded data
-                    var img = Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri());
-                    Wkt.attributeReplace(img, "class", "objectImageEmbedded");
+                    Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri())
+                        .add(cssClassNameModifier("objectIconEmbedded", iconWhere));
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                 },
@@ -140,11 +143,13 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
                     var faLayers = iconFa.fontAwesomeLayers();
                     WktComponents.permanentlyHide(link, ID_OBJECT_ICON);
                     if(CssClassFaPosition.isLeftOrUnspecified(faLayers.position())) {
-                        Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_LEFT, faLayers);
+                        Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_LEFT, faLayers)
+                            .add(cssClassNameModifier("objectIconFa", iconWhere));
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                     } else {
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
-                        Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_RIGHT, faLayers);
+                        Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_RIGHT, faLayers)
+                            .add(cssClassNameModifier("objectIconFa", iconWhere));
                     }
                 });
 
@@ -164,6 +169,10 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
         }
 
         return link;
+    }
+
+    private CssClassNameModifier cssClassNameModifier(String primaryCssClass, IconWhere iconWhere) {
+        return new CssClassNameModifier(primaryCssClass, primaryCssClass + "-" + iconWhere.name().toLowerCase());
     }
 
     private boolean isTitleSuppressed() {
