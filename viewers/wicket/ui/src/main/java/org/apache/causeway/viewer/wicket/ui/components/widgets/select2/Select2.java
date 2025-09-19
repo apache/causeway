@@ -57,13 +57,18 @@ permits SingleChoice, MultiChoice {
         settings.setDropdownAutoWidth(true);
         settings.setWidth("100%");
         settings.setPlaceholder(attributeModel.getFriendlyName());
-        // the id string is url-safe base64 encoded JSON coming from ObjectDisplayDto
+        // the id string is url-safe base64 encoded JSON coming from ChoiceProvider using ObjectDisplayDto as JSON
+        // for UTF8 formatted JSON decoding see https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
+        // TODO perhaps declare this JS else where, then just reference to it
         var template = """
             function(opt) {
                 if(!opt) return "undefined";
                 if(!opt.id) return "undefined";
                 var base64 = opt.id.replace(/-/g, '+').replace(/_/g, '/')
-                var dto = JSON.parse(atob(base64));
+                var json = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                var dto = JSON.parse(json);
                 if(!dto) return "undefined";
                 if(!dto.title) return "undefined";
                 if(dto.iconHtml) {
