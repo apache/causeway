@@ -19,35 +19,42 @@
   ~
   -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.valuetypes</groupId>
-		<artifactId>causeway-valuetypes-markdown</artifactId>
-		<version>${revision}</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway.valuetypes</groupId>
+        <artifactId>causeway-valuetypes-markdown</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
-	<name>Apache Causeway Val - Markdown (persistence JPA)</name>
+    <artifactId>causeway-valuetypes-markdown-persistence-jpa</artifactId>
+    <name>Apache Causeway Val - Markdown (persistence JPA)</name>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.valuetypes.markdown.persistence.jpa</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/valuetypes/markdown/persistence-jpa</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>
+            org.apache.causeway.valuetypes.markdown.persistence.jpa</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>
+            org/apache/causeway/valuetypes/markdown/persistence-jpa</git-plugin.propertiesDir>
+    </properties>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>org.apache.causeway.valuetypes</groupId>
-			<artifactId>causeway-valuetypes-markdown-applib</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.valuetypes</groupId>
+            <artifactId>causeway-valuetypes-markdown-applib</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-metamodel</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-metamodel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jpa-applib</artifactId>
+        </dependency>
 
     </dependencies>
 

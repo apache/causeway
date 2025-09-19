@@ -42,6 +42,7 @@ module org.apache.causeway.persistence.jpa.integration {
     requires org.slf4j;
     requires org.eclipse.persistence.core;
     requires spring.boot.autoconfigure;
+    requires spring.boot.persistence;
     requires spring.context;
     requires spring.core;
     requires spring.data.jpa;

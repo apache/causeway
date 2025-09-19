@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.extensions.executionoutbox.jpa;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 

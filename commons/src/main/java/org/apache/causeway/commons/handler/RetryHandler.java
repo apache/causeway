@@ -91,7 +91,7 @@ public record RetryHandler(
         }
 
         // last attempt failed
-        return Try.failure(new RetryException(onInvalidMessage.get()));
+        return Try.failure(new RuntimeException(onInvalidMessage.get()));
     }
 
 }

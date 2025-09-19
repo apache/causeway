@@ -24,5 +24,6 @@ module org.apache.causeway.valuetypes.vega.persistence.jpa {
     requires org.apache.causeway.core.config;
     requires org.apache.causeway.valuetypes.vega.applib;
     requires spring.boot.autoconfigure;
+    requires spring.boot.persistence;
     requires spring.context;
 }

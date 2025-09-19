@@ -21,13 +21,15 @@ package org.apache.causeway.persistence.jpa.integration;
 import java.util.Set;
 
 import jakarta.persistence.EntityManager;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.data.jpa.repository.support.DefaultJpaContext;
+
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jpa.integration.entity.JpaEntityIntegration;

@@ -17,63 +17,73 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.persistence</groupId>
-		<artifactId>causeway-persistence-jpa</artifactId>
-		<version>${revision}</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway.persistence</groupId>
+        <artifactId>causeway-persistence-jpa</artifactId>
+        <version>${revision}</version>
+    </parent>
 
-	<artifactId>causeway-persistence-jpa-integration</artifactId>
+    <artifactId>causeway-persistence-jpa-integration</artifactId>
 
-	<name>Apache Causeway Persistence - JPA (integration)</name>
-	<description>
+    <name>Apache Causeway Persistence - JPA (integration)</name>
+    <description>
         JPA integration (facets, jpa-context)
     </description>
 
-	<properties>
-		<jar-plugin.automaticModuleName>org.apache.causeway.persistence.jpa.integration</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/persistence/jpa/integration</git-plugin.propertiesDir>
-	</properties>
+    <properties>
+        <jar-plugin.automaticModuleName>
+            org.apache.causeway.persistence.jpa.integration</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>
+            org/apache/causeway/persistence/jpa/integration</git-plugin.propertiesDir>
+    </properties>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>org.apache.causeway.core</groupId>
-			<artifactId>causeway-core-runtime</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.core</groupId>
+            <artifactId>causeway-core-runtime</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.causeway.persistence</groupId>
             <artifactId>causeway-persistence-commons</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jpa-metamodel</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jpa-metamodel</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<exclusions>
-				<!-- at the moment unavailable -->
-				<exclusion>
-				    <groupId>org.springframework.roo</groupId>
-				    <artifactId>org.springframework.roo.annotations</artifactId>
-				</exclusion>
-				<!--  version clash -->
-				<exclusion>
-					<groupId>com.google.code.findbugs</groupId>
-				    <artifactId>annotations</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <!-- provides EntityScan annotation-->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-persistence</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
 
-		<!-- TESTING -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <exclusions>
+                <!-- at the moment unavailable -->
+                <exclusion>
+                    <groupId>org.springframework.roo</groupId>
+                    <artifactId>org.springframework.roo.annotations</artifactId>
+                </exclusion>
+                <!--  version clash -->
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>annotations</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- TESTING -->
 
         <dependency>
             <groupId>org.apache.causeway.core</groupId>

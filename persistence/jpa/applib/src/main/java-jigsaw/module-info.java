@@ -33,6 +33,7 @@ module org.apache.causeway.persistence.jpa.applib {
     requires org.slf4j;
     requires org.eclipse.persistence.core;
     requires spring.context;
+    requires transitive spring.boot.persistence;
     requires java.compiler;
     requires com.querydsl.core;
 }
