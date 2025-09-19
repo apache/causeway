@@ -38,7 +38,11 @@ import org.springframework.util.StringUtils;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport.EmbeddedIconResource;
 import org.apache.causeway.applib.annotation.ObjectSupport.FontAwesomeIconResource;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.services.render.ObjectIcon;
+import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
+import org.apache.causeway.applib.services.render.ObjectIconFa;
+import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 import org.apache.causeway.applib.annotation.ObjectSupport.ClassPathIconResource;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -47,11 +51,7 @@ import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
 import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconService;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -87,11 +87,11 @@ implements ObjectIconService {
     }
 
     @Override
-    public ObjectIcon getObjectIcon(ManagedObject managedObject, IconWhere iconWhere) {
+    public ObjectIcon getObjectIcon(ManagedObject managedObject, IconSize iconSize) {
 
         var spec = managedObject.objSpec();
 
-        return spec.getIcon(managedObject, iconWhere)
+        return spec.getIcon(managedObject, iconSize)
             .map(iconResource->{
                 if(iconResource instanceof ObjectSupport.EmbeddedIconResource embedded)
                     return embedded(spec, embedded);

@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
@@ -43,7 +43,7 @@ extends FacetFactoryTestAbstract {
 
     @DomainObject(introspection = Introspection.ENCAPSULATION_ENABLED)
     static class DomainObjectWithFontAwesomeIconViaMethod {
-        @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+        @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
             return new ObjectSupport.FontAwesomeIconResource(FONTAWESOME_LAYERS_SAMPLE);
         }
     }
@@ -74,7 +74,7 @@ extends FacetFactoryTestAbstract {
             assertTrue(iconFacet instanceof IconFacetViaIconMethod);
             var imperativeFacet = (IconFacetViaIconMethod)iconFacet;
 
-            var actual = imperativeFacet.icon(domainObject, IconWhere.OBJECT_HEADER)
+            var actual = imperativeFacet.icon(domainObject, IconSize.LARGE)
                 .filter(ObjectSupport.FontAwesomeIconResource.class::isInstance)
                 .map(ObjectSupport.FontAwesomeIconResource.class::cast)
                 .map(ObjectSupport.FontAwesomeIconResource::faLayers)

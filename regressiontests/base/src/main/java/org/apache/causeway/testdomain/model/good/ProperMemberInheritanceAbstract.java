@@ -37,7 +37,7 @@ abstract class ProperMemberInheritanceAbstract {
         return "inherited title";
     }
 
-    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
         return new ObjectSupport.ClassPathIconResource("inherited icon");
     }
 

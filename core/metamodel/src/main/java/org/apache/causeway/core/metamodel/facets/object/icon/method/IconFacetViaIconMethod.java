@@ -26,7 +26,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -56,8 +56,8 @@ implements IconFacet, HasImperativeAspect {
     @Override public ImperativeAspect getImperativeAspect() { return imperativeAspect; }
 
     @Override
-    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, IconWhere iconWhere) {
-        return Optional.ofNullable(imperativeAspect.eval(domainObject, (ObjectSupport.IconResource)null, iconWhere));
+    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, IconSize iconSize) {
+        return Optional.ofNullable(imperativeAspect.eval(domainObject, (ObjectSupport.IconResource)null, iconSize));
     }
 
     @Override

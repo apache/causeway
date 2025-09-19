@@ -34,7 +34,7 @@ extends ProperFullyAbstract {
     }
 
     @Override
-    public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+    public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
         return new ObjectSupport.ClassPathIconResource("icon");
     }
 

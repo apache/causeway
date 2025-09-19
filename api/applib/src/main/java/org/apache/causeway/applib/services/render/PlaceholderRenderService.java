@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.placeholder;
+package org.apache.causeway.applib.services.render;
 
 import java.util.Map;
 

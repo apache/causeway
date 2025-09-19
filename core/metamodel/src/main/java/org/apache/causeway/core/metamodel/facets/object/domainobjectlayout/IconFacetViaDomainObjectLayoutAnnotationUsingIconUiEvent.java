@@ -67,11 +67,11 @@ implements IconFacet {
 
 
     @Override
-    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, ObjectSupport.IconWhere iconWhere) {
+    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, ObjectSupport.IconSize iconSize) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return Optional.empty();
 
-        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(domainObject, iconWhere);
+        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(domainObject, iconSize);
 
         metamodelEventService.fireIconUiEvent(iconUiEvent);
 
@@ -81,7 +81,7 @@ implements IconFacet {
             // ie no subscribers out there...
 
             icon = underlyingIconFacet()
-                .flatMap(underlyingIconFacet->underlyingIconFacet.icon(domainObject, iconWhere))
+                .flatMap(underlyingIconFacet->underlyingIconFacet.icon(domainObject, iconSize))
                 .orElse(null);
         }
 
@@ -95,10 +95,10 @@ implements IconFacet {
         visitor.accept("iconUiEventClass", iconUiEventClass);
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, ObjectSupport.IconWhere iconWhere) {
+    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, ObjectSupport.IconSize iconSize) {
         var iconUiEvent = EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo)
             .orElseThrow();
-        return iconUiEvent.iconWhere(iconWhere);
+        return iconUiEvent.iconSize(iconSize);
     }
 
     private Optional<IconFacet> underlyingIconFacet() {

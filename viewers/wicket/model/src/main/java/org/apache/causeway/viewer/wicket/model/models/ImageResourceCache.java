@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
+import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 
 public interface ImageResourceCache extends Serializable {
 

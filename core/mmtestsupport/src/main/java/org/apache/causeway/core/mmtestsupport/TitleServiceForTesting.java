@@ -31,7 +31,7 @@ implements TitleService {
     }
 
     @Override
-    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconWhere iconWhere) {
+    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconSize iconSize) {
         return domainObject!=null ? new ClassPathIconResource("") : null;
     }
 

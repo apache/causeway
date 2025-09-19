@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.causeway.applib.exceptions.recoverable.TextEntryParseException;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.valuesemantics.BooleanValueSemantics;
 
 class BooleanValueSemanticsProviderTest

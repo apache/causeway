@@ -31,8 +31,9 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.render.ObjectRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -114,6 +115,11 @@ class MetaModelContext_usingSpring implements MetaModelContext {
     @Getter(lazy=true)
     private final ObjectIconService objectIconService =
     getSingletonElseFail(ObjectIconService.class);
+
+    @Getter(lazy=true)
+    private final ObjectRenderService objectRenderService =
+            getDefault(ObjectRenderService.class)
+            .orElseGet(ObjectRenderService::fallback);
 
     @Getter(lazy=true)
     private final PlaceholderRenderService placeholderRenderService =

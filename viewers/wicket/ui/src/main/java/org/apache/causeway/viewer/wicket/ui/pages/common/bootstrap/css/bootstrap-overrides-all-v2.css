@@ -171,15 +171,19 @@ footer > .navbar {
     margin: 0;
 }
 
-/* from ObjectIconAndTitlePanel */
+/* objetc icon  */
 
-.objectIconAndTitlePanel img.objectIcon-object_header {
+img.objectIcon-large {
     max-width: 2rem;
     max-height: 2rem;
 }
-.objectIconAndTitlePanel img.objectIcon-table_row {
+img.objectIcon-medium {
     max-width: 1.5rem;
     max-height: 1.5rem;
+}
+img.objectIcon-small {
+    max-width: 1.0rem;
+    max-height: 1.0rem;
 }
 
 /* from ActionPromptHeaderPanel */
@@ -198,7 +202,7 @@ footer > .navbar {
 
 .simpleClipboardPanel div.inner {
     margin: 20px;
-    width:640px;
+    width: 640px;
 }
 
 .simpleClipboardPanel div.inner p.scalarName {

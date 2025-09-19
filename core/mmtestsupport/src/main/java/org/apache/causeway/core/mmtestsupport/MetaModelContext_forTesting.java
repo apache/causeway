@@ -47,8 +47,9 @@ import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.render.ObjectRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -226,6 +227,9 @@ implements MetaModelContext {
 
     @Builder.Default @Getter
     private PlaceholderRenderService placeholderRenderService = PlaceholderRenderService.fallback();
+
+    @Builder.Default @Getter
+    private ObjectRenderService objectRenderService = ObjectRenderService.fallback();
 
     @Singular @Getter
     private List<Object> singletons;

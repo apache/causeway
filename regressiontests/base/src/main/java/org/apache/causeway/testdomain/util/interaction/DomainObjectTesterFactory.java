@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.applib.id.LogicalType;
@@ -229,10 +229,10 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         public void assertIcon(final @Nullable String expectedResult) {
             var expectedIcon = new ObjectSupport.ClassPathIconResource(expectedResult);
             assertEquals(expectedIcon,
-                    super.objectSpecification.getTitleService().iconOf(vm.getPojo(), IconWhere.OBJECT_HEADER));
+                    super.objectSpecification.getTitleService().iconOf(vm.getPojo(), IconSize.LARGE));
             assertEquals(expectedIcon,
                     super.objectSpecification.lookupFacet(IconFacet.class)
-                    .flatMap(iconFacet->iconFacet.icon(vm, IconWhere.OBJECT_HEADER))
+                    .flatMap(iconFacet->iconFacet.icon(vm, IconSize.LARGE))
                     .orElse(null));
         }
 

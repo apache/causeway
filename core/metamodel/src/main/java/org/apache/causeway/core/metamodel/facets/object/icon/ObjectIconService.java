@@ -19,7 +19,8 @@
 package org.apache.causeway.core.metamodel.facets.object.icon;
 
 import org.apache.causeway.applib.annotation.ObjectSupport.IconResource;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
@@ -27,17 +28,17 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
  * Resolves instances of {@link IconResource} to instances of {@link ObjectIcon}.
  *
  * <p>Clients should not use this service directly. Either use
- * {@link ManagedObject#getIcon(IconWhere)} or
- * {@link ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject, IconWhere)}.
+ * {@link ManagedObject#getIcon(IconSize)} or
+ * {@link ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject, IconSize)}.
  *
  * @apiNote internal service, used by the metamodel
  *
- * @see ManagedObject#getIcon(IconWhere)
- * @see ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject, IconWhere)
+ * @see ManagedObject#getIcon(IconSize)
+ * @see ObjectSpecification#getIcon(org.apache.causeway.core.metamodel.object.ManagedObject, IconSize)
  * @since 2.0 revised for 4.0
  */
 public interface ObjectIconService {
 
-    ObjectIcon getObjectIcon(ManagedObject managedObject, IconWhere iconWhere);
+    ObjectIcon getObjectIcon(ManagedObject managedObject, IconSize iconSize);
 
 }

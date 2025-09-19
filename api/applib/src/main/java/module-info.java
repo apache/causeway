@@ -89,11 +89,11 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.metamodel;
     exports org.apache.causeway.applib.services.metamodel.objgraph;
     exports org.apache.causeway.applib.services.metrics;
-    exports org.apache.causeway.applib.services.placeholder;
     exports org.apache.causeway.applib.services.publishing.log;
     exports org.apache.causeway.applib.services.publishing.spi;
     exports org.apache.causeway.applib.services.queryresultscache;
     exports org.apache.causeway.applib.services.registry;
+    exports org.apache.causeway.applib.services.render;
     exports org.apache.causeway.applib.services.repository;
     exports org.apache.causeway.applib.services.routing;
     exports org.apache.causeway.applib.services.scratchpad;

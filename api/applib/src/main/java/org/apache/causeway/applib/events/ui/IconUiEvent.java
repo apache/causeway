@@ -55,11 +55,11 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     }
 
     @Getter @Setter @Accessors(fluent = true)
-    private ObjectSupport.IconWhere iconWhere;
+    private ObjectSupport.IconSize iconSize;
 
     /**
      * Icon resource for corresponding domain object,
-     * which subscribers may set, based on {@link #iconWhere()}.
+     * which subscribers may set, based on {@link #iconSize()}.
      */
     @Getter @Setter
     private ObjectSupport.IconResource icon;

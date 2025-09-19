@@ -31,7 +31,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 abstract class ProperFullyAbstract {
 
     @ObjectSupport public abstract String title();
-    @ObjectSupport public abstract ObjectSupport.IconResource icon(ObjectSupport.IconWhere iconWhere);
+    @ObjectSupport public abstract ObjectSupport.IconResource icon(ObjectSupport.IconSize iconSize);
     @ObjectSupport public abstract String cssClass();
     @ObjectSupport public abstract String layout();
 

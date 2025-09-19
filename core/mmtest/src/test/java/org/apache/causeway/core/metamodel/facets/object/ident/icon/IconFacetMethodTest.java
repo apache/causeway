@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Mocking;
@@ -44,7 +44,7 @@ class IconFacetMethodTest {
     private DomainObjectWithProblemInIconNameMethod pojo;
 
     public static class DomainObjectWithProblemInIconNameMethod {
-        @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+        @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
             throw new NullPointerException("for testing purposes");
         }
     }
@@ -54,7 +54,7 @@ class IconFacetMethodTest {
 
         pojo = new DomainObjectWithProblemInIconNameMethod();
         var iconMethod = _GenericResolver.testing
-                .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "icon", ObjectSupport.IconWhere.class);
+                .resolveMethod(DomainObjectWithProblemInIconNameMethod.class, "icon", ObjectSupport.IconSize.class);
 
         facet = (IconFacetViaIconMethod) IconFacetViaIconMethod
                 .create(iconMethod, Mockito.mock(FacetHolder.class))
@@ -70,7 +70,7 @@ class IconFacetMethodTest {
 
     @Test
     void iconIsNull() {
-        var icon = facet.icon(mockOwningAdapter, IconWhere.OBJECT_HEADER).orElse(null);
+        var icon = facet.icon(mockOwningAdapter, IconSize.LARGE).orElse(null);
         assertThat(icon, is(nullValue()));
     }
 

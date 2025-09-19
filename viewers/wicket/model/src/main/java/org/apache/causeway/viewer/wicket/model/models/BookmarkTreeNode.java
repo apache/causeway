@@ -28,13 +28,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
 
 import lombok.Getter;
 
@@ -76,7 +76,7 @@ implements
 
         _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
         .ifPresent(x->x.visitIconVariantOrElse(
-                IconWhere.TABLE_ROW,
+                IconSize.MEDIUM,
                 rref->{this.iconResourceReference = rref;},
                 embedded->{this.embedded = embedded;},
                 faLayers->{this.faLayers = faLayers;},

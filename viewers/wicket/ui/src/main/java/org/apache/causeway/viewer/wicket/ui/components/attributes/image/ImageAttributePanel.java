@@ -27,7 +27,7 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.models.FileUploadModels;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;

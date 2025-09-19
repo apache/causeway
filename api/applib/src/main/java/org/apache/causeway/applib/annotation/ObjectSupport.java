@@ -53,12 +53,24 @@ public @interface ObjectSupport {
 
     /**
      * Rendering context for object icons.
-     * An object's icon is either rendered within the object detail page header (along its title)
-     * or within a table row.
+     * An object's icon is rendered within the object detail page header along its title {@link IconSize#LARGE},
+     * within a table row {@link IconSize#MEDIUM}, as property {@link IconSize#MEDIUM}, as tree node {@link IconSize#MEDIUM}
+     * or as choice {@link IconSize#SMALL}.
+     * @since 4.0
      */
-    public enum IconWhere {
-        OBJECT_HEADER,
-        TABLE_ROW //TODO also TREE_NODE and SELECT_DROPDOWN
+    public enum IconSize {
+        /**
+         * as used for the object detail page header (along the object's title)
+         */
+        LARGE,
+        /**
+         * as used for table data, properties and tree nodes
+         */
+        MEDIUM,
+        /**
+         * as used for choice drop downs (single- and multi-choice)
+         */
+        SMALL
     }
 
     public sealed interface IconResource extends Serializable

@@ -38,7 +38,7 @@ abstract class ChoiceProviderTestAbstract {
     protected void setUp() {
         mmc = MetaModelContext_forTesting.builder()
                 .memberExecutor(mock(MemberExecutorService.class))
-                .objectIconService((managedObject, iconWhere) -> null)
+                .objectIconService((managedObject, iconSize) -> null)
                 .build()
                 .withValueSemantics(new BigDecimalValueSemantics())
                 .withValueSemantics(new IntValueSemantics())

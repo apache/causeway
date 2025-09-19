@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.placeholder;
+package org.apache.causeway.core.runtimeservices.render;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.commons.internal.html._BootstrapBadge;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 

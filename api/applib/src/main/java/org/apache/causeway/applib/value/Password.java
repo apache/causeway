@@ -27,8 +27,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 
 /**
  * Represents a password that will not displayed to the UI but can be persisted.

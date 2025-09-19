@@ -88,6 +88,6 @@ implements FacetFactory, HasMetaModelContext {
 
     protected static final Class<?>[] NO_ARG = new Class<?>[0];
     protected static final Class<?>[] STRING_ARG = new Class<?>[] {String.class};
-    protected static final Class<?>[] ICON_WHERE_ARG = new Class<?>[] {ObjectSupport.IconWhere.class};
+    protected static final Class<?>[] ICON_WHERE_ARG = new Class<?>[] {ObjectSupport.IconSize.class};
 
 }

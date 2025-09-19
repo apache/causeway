@@ -31,17 +31,17 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
+import org.apache.causeway.applib.services.render.ObjectIcon;
+import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -185,18 +185,18 @@ implements
     }
 
     @Override
-    public ObjectIcon getIcon(IconWhere iconWhere) {
-        return getManagedObject().getIcon(iconWhere);
+    public ObjectIcon getIcon(IconSize iconSize) {
+        return getManagedObject().getIcon(iconSize);
     }
 
     public void visitIconVariantOrElse(
-            IconWhere iconWhere,
+            IconSize iconSize,
             Consumer<ResourceReference> a,
             Consumer<ObjectIconEmbedded> b,
             Consumer<FontAwesomeLayers> c,
             Runnable onNoMatch) {
         visitIconVariant(
-            iconWhere,
+            iconSize,
             urlBased->{
                 var rref = imageResourceCache().resourceReferenceForObjectIcon(urlBased);
                 if(rref!=null) {

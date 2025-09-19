@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.icon;
 import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -44,6 +44,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  */
 public interface IconFacet extends Facet {
 
-    Optional<ObjectSupport.IconResource> icon(ManagedObject object, IconWhere iconWhere);
+    Optional<ObjectSupport.IconResource> icon(ManagedObject object, IconSize iconSize);
 
 }

@@ -45,7 +45,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.apache.causeway.applib.annotation.Introspection.EncapsulationPolicy;
 import org.apache.causeway.applib.annotation.Introspection.MemberAnnotationPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
@@ -296,13 +296,13 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             assertEquals("inherited title", titleService.titleOf(instance));
             assertEquals(
                 new ObjectSupport.ClassPathIconResource("inherited icon"),
-                titleService.iconOf(instance, IconWhere.OBJECT_HEADER));
+                titleService.iconOf(instance, IconSize.LARGE));
 
             var domainObject = ManagedObject.adaptSingular(spec, instance);
             assertEquals("inherited title", domainObject.getTitle());
             assertEquals(
                 new ObjectSupport.ClassPathIconResource("inherited icon"),
-                iconFacet.icon(domainObject, IconWhere.OBJECT_HEADER).orElse(null));
+                iconFacet.icon(domainObject, IconSize.LARGE).orElse(null));
         }
     }
 

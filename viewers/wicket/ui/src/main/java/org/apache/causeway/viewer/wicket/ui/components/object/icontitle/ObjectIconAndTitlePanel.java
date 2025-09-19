@@ -24,12 +24,12 @@ import java.util.Objects;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.link.AbstractLink;
 
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
+import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
@@ -64,14 +64,14 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
     private static final String ID_OBJECT_TITLE = "objectTitle";
     private static final String ID_OBJECT_ICON = "objectIcon";
 
-    private IconWhere iconWhere;
+    private IconSize iconSize;
 
     public ObjectIconAndTitlePanel(
             final String id,
-            final IconWhere iconWhere,
+            final IconSize iconSize,
             final ObjectAdapterModel objectAdapterModel) {
         super(id, objectAdapterModel);
-        this.iconWhere = iconWhere;
+        this.iconSize = iconSize;
         guardAgainstNonEmptyAbstractSingular(objectAdapterModel);
     }
 
@@ -82,13 +82,13 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
 
     @Override
     protected void onBeforeRender() {
-        buildGui(iconWhere);
+        buildGui(iconSize);
         super.onBeforeRender();
     }
 
     @Override
-    public ObjectIcon getIcon(IconWhere iconWhere) {
-        return linkedDomainObject().getIcon(iconWhere);
+    public ObjectIcon getIcon(IconSize iconSize) {
+        return linkedDomainObject().getIcon(iconSize);
     }
 
     /**
@@ -98,19 +98,19 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
 
     // -- HELPER
 
-    private void buildGui(IconWhere iconWhere) {
-        addLinkWrapper(iconWhere);
+    private void buildGui(IconSize iconSize) {
+        addLinkWrapper(iconSize);
         setOutputMarkupId(true);
     }
 
-    private void addLinkWrapper(IconWhere iconWhere) {
+    private void addLinkWrapper(IconSize iconSize) {
         var linkWrapper = Wkt.container(ID_OBJECT_LINK_WRAPPER);
-        linkWrapper.addOrReplace(createLinkWithIconAndTitle(iconWhere));
+        linkWrapper.addOrReplace(createLinkWithIconAndTitle(iconSize));
         addOrReplace(linkWrapper);
         onLinkWrapperCreated(linkWrapper);
     }
 
-    private AbstractLink createLinkWithIconAndTitle(IconWhere iconWhere) {
+    private AbstractLink createLinkWithIconAndTitle(IconSize iconSize) {
         final ManagedObject linkedDomainObject = linkedDomainObject();
         final AbstractLink link = createDynamicallyVisibleLink(linkedDomainObject);
 
@@ -123,11 +123,11 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
             Wkt.labelAdd(link, ID_OBJECT_TITLE, titleAbbreviated("(no object)"));
         } else {
             HasIcon.super.visitIconVariant(
-                iconWhere,
+                iconSize,
                 iconUrlBased->{
                     Wkt.imageAddCachable(link, ID_OBJECT_ICON,
                         getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased))
-                        .add(cssClassNameModifier("objectIcon", iconWhere));
+                        .add(cssClassNameModifier("objectIcon", iconSize));
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                 },
@@ -135,7 +135,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
                     // for embedded images we use CSS class 'objectIconEmbedded' (instead of 'objectIcon')
                     // which allows to render them differently e.g. don't constrain image sizes, as these should be driven by embedded data
                     Wkt.imageAddEmbedded(link, ID_OBJECT_ICON, iconEmbedded.dataUri())
-                        .add(cssClassNameModifier("objectIconEmbedded", iconWhere));
+                        .add(cssClassNameModifier("objectIconEmbedded", iconSize));
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                 },
@@ -144,12 +144,12 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
                     WktComponents.permanentlyHide(link, ID_OBJECT_ICON);
                     if(CssClassFaPosition.isLeftOrUnspecified(faLayers.position())) {
                         Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_LEFT, faLayers)
-                            .add(cssClassNameModifier("objectIconFa", iconWhere));
+                            .add(cssClassNameModifier("objectIconFa", iconSize));
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);
                     } else {
                         WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                         Wkt.faIconLayersAdd(link, ID_OBJECT_FONT_AWESOME_RIGHT, faLayers)
-                            .add(cssClassNameModifier("objectIconFa", iconWhere));
+                            .add(cssClassNameModifier("objectIconFa", iconSize));
                     }
                 });
 
@@ -171,8 +171,8 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
         return link;
     }
 
-    private CssClassNameModifier cssClassNameModifier(String primaryCssClass, IconWhere iconWhere) {
-        return new CssClassNameModifier(primaryCssClass, primaryCssClass + "-" + iconWhere.name().toLowerCase());
+    private CssClassNameModifier cssClassNameModifier(String primaryCssClass, IconSize iconSize) {
+        return new CssClassNameModifier(primaryCssClass, primaryCssClass + "-" + iconSize.name().toLowerCase());
     }
 
     private boolean isTitleSuppressed() {

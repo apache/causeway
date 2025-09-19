@@ -42,9 +42,9 @@ implements IconFacet {
     @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
 
     @Override
-    public Optional<ObjectSupport.IconResource> icon(final ManagedObject targetAdapter, final ObjectSupport.IconWhere iconWhere) {
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject targetAdapter, final ObjectSupport.IconSize iconSize) {
         var projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.objSpec().getIcon(projectedAdapter, iconWhere);
+        return projectedAdapter.objSpec().getIcon(projectedAdapter, iconSize);
     }
 
     @Override

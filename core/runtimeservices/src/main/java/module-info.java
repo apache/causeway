@@ -32,7 +32,7 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.locale;
     exports org.apache.causeway.core.runtimeservices.menubars.bootstrap;
     exports org.apache.causeway.core.runtimeservices.message;
-    exports org.apache.causeway.core.runtimeservices.placeholder;
+    exports org.apache.causeway.core.runtimeservices.render;
     exports org.apache.causeway.core.runtimeservices.publish;
     exports org.apache.causeway.core.runtimeservices.recognizer;
     exports org.apache.causeway.core.runtimeservices.recognizer.dae;

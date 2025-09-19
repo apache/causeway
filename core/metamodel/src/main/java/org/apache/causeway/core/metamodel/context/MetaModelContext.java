@@ -30,8 +30,9 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
+import org.apache.causeway.applib.services.render.ObjectRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -102,6 +103,7 @@ public interface MetaModelContext extends MetaModelContextShortcuts {
     RepositoryService getRepositoryService();
     ManagedObject getHomePageAdapter();
     TransactionService getTransactionService();
+    ObjectRenderService getObjectRenderService();
     ObjectIconService getObjectIconService();
     MessageService getMessageService();
     ObjectManager getObjectManager();

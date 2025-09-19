@@ -62,13 +62,13 @@ implements TitleService {
     }
 
     @Override
-    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconWhere iconWhere) {
+    public ObjectSupport.IconResource iconOf(final Object domainObject, final ObjectSupport.IconSize iconSize) {
         var pojo = unwrapped(domainObject);
         var objectAdapter = objectManager.adapt(pojo);
 
         return ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
             ? null
-            : objectAdapter.objSpec().getIcon(objectAdapter, iconWhere)
+            : objectAdapter.objSpec().getIcon(objectAdapter, iconSize)
                 .orElse(null);
     }
 

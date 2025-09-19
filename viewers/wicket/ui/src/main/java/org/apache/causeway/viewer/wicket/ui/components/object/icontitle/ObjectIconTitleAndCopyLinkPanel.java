@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.object.icontitle;
 
 import org.apache.wicket.MarkupContainer;
 
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.zclip.ZeroClipboardPanel;
 
@@ -34,8 +34,8 @@ class ObjectIconTitleAndCopyLinkPanel extends ObjectIconAndTitlePanel {
 
     private static final String ID_COPY_LINK = "copyLink";
 
-    public ObjectIconTitleAndCopyLinkPanel(final String id, final IconWhere iconWhere, final UiObjectWkt objectModel) {
-        super(id, iconWhere, objectModel);
+    public ObjectIconTitleAndCopyLinkPanel(final String id, final IconSize iconSize, final UiObjectWkt objectModel) {
+        super(id, iconSize, objectModel);
     }
 
     @Override

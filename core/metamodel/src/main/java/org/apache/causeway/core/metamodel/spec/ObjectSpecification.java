@@ -250,7 +250,7 @@ extends
      * @see ObjectIconService
      * @since 4.0
      */
-    Optional<ObjectSupport.IconResource> getIcon(ManagedObject object, ObjectSupport.IconWhere iconWhere);
+    Optional<ObjectSupport.IconResource> getIcon(ManagedObject object, ObjectSupport.IconSize iconSize);
 
     /**
      * Returns this object's navigable parent, if any.

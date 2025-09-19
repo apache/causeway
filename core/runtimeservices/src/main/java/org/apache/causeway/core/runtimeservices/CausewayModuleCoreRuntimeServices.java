@@ -46,7 +46,6 @@ import org.apache.causeway.core.runtimeservices.menubars.MenuBarsLoaderServiceDe
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsMarshallerServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.menubars.bootstrap.MenuBarsServiceBootstrap;
 import org.apache.causeway.core.runtimeservices.message.MessageServiceDefault;
-import org.apache.causeway.core.runtimeservices.placeholder.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.publish.CommandPublisherDefault;
 import org.apache.causeway.core.runtimeservices.publish.EntityChangesPublisherDefault;
 import org.apache.causeway.core.runtimeservices.publish.EntityPropertyChangePublisherDefault;
@@ -55,6 +54,7 @@ import org.apache.causeway.core.runtimeservices.publish.LifecycleCallbackNotifie
 import org.apache.causeway.core.runtimeservices.publish.ObjectLifecyclePublisherDefault;
 import org.apache.causeway.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.causeway.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
+import org.apache.causeway.core.runtimeservices.render.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.causeway.core.runtimeservices.serializing.SerializingAdapterDefault;

@@ -27,18 +27,15 @@ import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.StringUtils;
 
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
-import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService;
+import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
@@ -93,7 +90,7 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
                 adapter.logicalType(),
                 MmHintUtils.bookmarkElseFail(adapter),
                 adapter.getTranslationService().translate(TranslationContext.empty(), MmTitleUtils.titleOf(adapter)),
-                iconToHtml(adapter.getIcon(IconWhere.TABLE_ROW))));
+                adapter.getObjectRenderService().iconToHtml(adapter.getIcon(IconSize.SMALL), IconSize.SMALL)));
     }
     /**
      * returns null for null
@@ -123,20 +120,6 @@ permits ObjectMementoEmpty, ObjectMementoSingular, ObjectMementoPacked {
     }
 
     // -- UTILITY
-
-    private static String iconToHtml(@Nullable ObjectIcon objectIcon) {
-        //if(true) return "<i class=\"%s\"></i>".formatted("fa-solid fa-thumbs-up");
-
-        //TODO not supported yet as requires resource caching from wicket
-//        if(objectIcon instanceof ObjectIconUrlBased urlBased)
-//            return "<img src=\"" + urlBased.url().toExternalForm() + "\"/>";
-        if(objectIcon instanceof ObjectIconEmbedded embedded)
-            return "<img src=\"" + embedded.dataUri().toExternalForm() + "\"/>";
-        if(objectIcon instanceof ObjectIconFa fa)
-            return fa.fontAwesomeLayers().toHtml();
-
-        return null;
-    }
 
     static ObjectMemento fromDto(final ObjectDisplayDto dto) {
         var bookmark = Bookmark.parse(dto.bookmark()).orElseThrow();

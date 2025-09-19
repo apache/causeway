@@ -21,25 +21,25 @@ package org.apache.causeway.viewer.commons.model.mixin;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.services.render.ObjectIcon;
+import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
+import org.apache.causeway.applib.services.render.ObjectIconFa;
+import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconEmbedded;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconFa;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIconUrlBased;
 
 @FunctionalInterface
 public interface HasIcon {
 
-    ObjectIcon getIcon(IconWhere iconWhere);
+    ObjectIcon getIcon(IconSize iconSize);
 
     default void visitIconVariant(
-        IconWhere iconWhere,
+        IconSize iconSize,
         Consumer<ObjectIconUrlBased> a,
         Consumer<ObjectIconEmbedded> b,
         Consumer<ObjectIconFa> c) {
 
-        var objectIcon = Objects.requireNonNull(getIcon(iconWhere));
+        var objectIcon = Objects.requireNonNull(getIcon(iconSize));
         if(objectIcon instanceof ObjectIconUrlBased urlBased){
             a.accept(urlBased);
         } else if(objectIcon instanceof ObjectIconEmbedded embedded){

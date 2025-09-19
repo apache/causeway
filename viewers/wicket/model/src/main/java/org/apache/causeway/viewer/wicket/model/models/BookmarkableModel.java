@@ -24,9 +24,9 @@ import java.util.stream.Stream;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.core.metamodel.facets.object.icon.ObjectIcon;
+import org.apache.causeway.applib.services.render.ObjectIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasIcon;
 import org.apache.causeway.viewer.commons.model.mixin.HasTitle;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
@@ -66,7 +66,7 @@ extends HasTitle, HasIcon {
      * I believe actions only support the former. Hence the asymmetry here.
      */
     @Override
-    default ObjectIcon getIcon(IconWhere iconWhere) {
+    default ObjectIcon getIcon(IconSize iconSize) {
         return null; // overwritten for domain objects
     }
 

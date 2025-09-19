@@ -31,11 +31,11 @@ extends ObjectSupportFacetFactoryTestAbstract {
     @Test
     void iconNameMethodPickedUpOnClassAndMethodRemoved() {
         class Customer {
-            @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+            @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
                 return null;
             }
         }
-        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON, IconFacet.class, ObjectSupport.IconWhere.class);
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.ICON, IconFacet.class, ObjectSupport.IconSize.class);
     }
 
 }

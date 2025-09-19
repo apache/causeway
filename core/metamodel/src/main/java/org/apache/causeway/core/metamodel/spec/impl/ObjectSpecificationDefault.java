@@ -803,12 +803,12 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     // -- ICON
 
     @Override
-    public Optional<ObjectSupport.IconResource> getIcon(final ManagedObject domainObject, ObjectSupport.IconWhere iconWhere) {
+    public Optional<ObjectSupport.IconResource> getIcon(final ManagedObject domainObject, ObjectSupport.IconSize iconSize) {
         if(ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.objSpec(), this);
         }
         return Optional.ofNullable(iconFacet)
-            .flatMap(facet->facet.icon(domainObject, iconWhere))
+            .flatMap(facet->facet.icon(domainObject, iconSize))
             .or(()->faLayers(domainObject)
                 .map(ObjectSupport.FontAwesomeIconResource::new));
     }

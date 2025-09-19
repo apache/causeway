@@ -30,6 +30,7 @@ import org.apache.causeway.viewer.wicket.viewer.services.BookmarkUiServiceWicket
 import org.apache.causeway.viewer.wicket.viewer.services.DeepLinkServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
 import org.apache.causeway.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
+import org.apache.causeway.viewer.wicket.viewer.services.ObjectRenderServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.DatatablesNetInitWkt;
@@ -60,6 +61,7 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         // @Service's
         BookmarkUiServiceWicket.class,
         DeepLinkServiceWicket.class,
+        ObjectRenderServiceWicket.class,
         WebModuleWicket.class,
 
         PageClassListDefault.AutoConfiguration.class,

@@ -75,7 +75,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     }
 
     @ObjectSupport
-    public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+    public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
         return new ObjectSupport.ClassPathIconResource(
             activeNode().getClass().getSimpleName()
             + _Strings.nonEmpty(activeNode().iconName())

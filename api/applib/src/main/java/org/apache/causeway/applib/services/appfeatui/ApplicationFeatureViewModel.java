@@ -143,7 +143,7 @@ public abstract class ApplicationFeatureViewModel implements ViewModel {
     @ObjectSupport public String title() {
         return getFullyQualifiedName();
     }
-    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+    @ObjectSupport public ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
         return new ObjectSupport.ClassPathIconResource("applicationFeature");
     }
 

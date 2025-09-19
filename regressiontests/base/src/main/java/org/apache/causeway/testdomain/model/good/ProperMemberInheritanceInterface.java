@@ -35,7 +35,7 @@ public interface ProperMemberInheritanceInterface {
         return "inherited title";
     }
 
-    @ObjectSupport default ObjectSupport.IconResource icon(final ObjectSupport.IconWhere iconWhere) {
+    @ObjectSupport default ObjectSupport.IconResource icon(final ObjectSupport.IconSize iconSize) {
         return new ObjectSupport.ClassPathIconResource("inherited icon");
     }
 
