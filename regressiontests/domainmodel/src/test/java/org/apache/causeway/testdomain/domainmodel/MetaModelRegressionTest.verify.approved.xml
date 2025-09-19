@@ -9232,7 +9232,7 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod">
                 <mml:attr name="facet" value="IconFacetViaIconMethod"/>
                 <mml:attr name="intent.icon" value="UI_HINT"/>
-                <mml:attr name="methods" value="public org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperFullyImpl.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconWhere)"/>
+                <mml:attr name="methods" value="public org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperFullyImpl.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconSize)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod">
@@ -13570,7 +13570,7 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod">
                 <mml:attr name="facet" value="IconFacetViaIconMethod"/>
                 <mml:attr name="intent.icon" value="UI_HINT"/>
-                <mml:attr name="methods" value="public org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconWhere)"/>
+                <mml:attr name="methods" value="public org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconSize)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod">
@@ -14918,7 +14918,7 @@
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.icon.IconFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod">
                 <mml:attr name="facet" value="IconFacetViaIconMethod"/>
                 <mml:attr name="intent.icon" value="UI_HINT"/>
-                <mml:attr name="methods" value="public default org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconWhere)"/>
+                <mml:attr name="methods" value="public default org.apache.causeway.applib.annotation.ObjectSupport$IconResource org.apache.causeway.testdomain.model.good.ProperMemberInheritanceInterface.icon(org.apache.causeway.applib.annotation.ObjectSupport$IconSize)"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
