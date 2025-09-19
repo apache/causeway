@@ -330,9 +330,7 @@ implements ActionPromptProvider {
         getComponentFactoryRegistry().addOrReplaceComponent(container, uiComponentType, model);
     }
 
-    ////////////////////////////////////////////////////////////////
-    // bookmarked pages
-    ////////////////////////////////////////////////////////////////
+    // -- BOOKMARKED PAGES
 
     /**
      * Convenience for subclasses
@@ -391,9 +389,7 @@ implements ActionPromptProvider {
                 : Optional.empty();
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // ActionPromptModalWindowProvider
-    // ///////////////////////////////////////////////////////////////////
+    // -- ACTION PROMPT MODAL WINDOW PROVIDER
 
     private ActionPromptModalWindow actionPromptModalWindow;
     private ActionPromptSidebar actionPromptSidebar;
@@ -441,9 +437,7 @@ implements ActionPromptProvider {
         parent.addOrReplace(actionPromptSidebar);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // UI Hint
-    // ///////////////////////////////////////////////////////////////////
+    // -- UI HINT
 
     /**
      * Propagates all {@link org.apache.causeway.viewer.wicket.model.hints.CausewayEventLetterAbstract letter} events down to
@@ -456,7 +450,6 @@ implements ActionPromptProvider {
             send(PageAbstract.this, Broadcast.BREADTH, new CausewayEnvelopeEvent(letter)));
     }
 
-    // -- getComponentFactoryRegistry (Convenience)
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
         final HasComponentFactoryRegistry cfra = (HasComponentFactoryRegistry) getApplication();
         return cfra.getComponentFactoryRegistry();

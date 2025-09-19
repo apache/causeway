@@ -18,19 +18,29 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 /**
  * Model providing welcome text.
  */
-public record AboutModel(CausewayConfiguration.Viewer.Common.Application applicationSettings)
-implements IModel<CausewayConfiguration.Viewer.Common.Application> {
+public class AboutModel
+extends LoadableDetachableModel<CausewayConfiguration.Viewer.Common.Application> {
+    private static final long serialVersionUID = 1L;
+
+    public AboutModel(CausewayConfiguration.Viewer.Common.Application value) {
+        super(value);
+    }
 
     @Override
-    public CausewayConfiguration.Viewer.Common.Application getObject() {
-        return applicationSettings();
+    public CausewayConfiguration.Viewer.Common.Application load() {
+        return MetaModelContext.instanceElseFail().getConfiguration().viewer().common().application();
     }
+
+    public String name() { return getObject().name(); }
+    public String version() { return getObject().version(); }
+    public String about() { return getObject().about(); }
 
 }

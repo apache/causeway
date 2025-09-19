@@ -42,6 +42,10 @@ public record _StableValue<T>(AtomicReference<T> ref) implements Serializable {
         this(new AtomicReference<>());
     }
 
+    public _StableValue(T t) {
+        this(new AtomicReference<>(t));
+    }
+
     /**
      * Returns the current value if already set, or sets it using the provided supplier
      * and returns the result. This ensures the supplier is only executed once, even
