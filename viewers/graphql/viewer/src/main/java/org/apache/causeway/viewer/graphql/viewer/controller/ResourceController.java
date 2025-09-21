@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.apache.causeway.applib.annotation.ObjectSupport.IconWhere;
+import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
@@ -175,7 +175,7 @@ public class ResourceController {
         }
 
         return lookup(logicalTypeName, id)
-                .map(mo->mo.getIcon(IconWhere.OBJECT_HEADER))
+                .map(mo->mo.getIcon(IconSize.MEDIUM))
                 .filter(Objects::nonNull)
                 .map(objectIcon -> {
                     var bytes = objectIcon.iconData();
