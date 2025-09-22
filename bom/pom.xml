@@ -98,7 +98,7 @@ identified
         <asciidoctorj.version>3.0.0</asciidoctorj.version>
         <asm.version>9.8</asm.version> <!-- keep in sync with
         org.eclipse.persistence:org.eclipse.persistence.asm -->
-        <approvaltests.version>25.0.23</approvaltests.version>
+        <approvaltests.version>25.4.3</approvaltests.version>
 
         <assertj-guava.version>3.27.4</assertj-guava.version>
 
