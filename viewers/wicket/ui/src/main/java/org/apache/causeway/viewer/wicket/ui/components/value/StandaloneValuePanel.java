@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.value;
 
+import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.UUID;
 
@@ -66,6 +67,7 @@ extends PanelAbstract<ManagedObject, ValueModel> {
         var cls = valueSpec.getCorrespondingClass();
 
         return PredefinedSerializables.isPredefinedSerializable(cls)
+                || BufferedImage.class.equals(cls)
                 || UUID.class.equals(cls)
                 || URL.class.equals(cls)
                 || LocalResourcePath.class.equals(cls);

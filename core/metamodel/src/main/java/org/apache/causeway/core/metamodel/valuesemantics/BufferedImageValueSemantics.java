@@ -32,10 +32,13 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.applib.value.semantics.OrderRelation;
+import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.image._Images;
+import org.apache.causeway.commons.net.DataUri;
+import org.apache.causeway.commons.net.DataUri.ImageType;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.schema.common.v2.BlobDto;
@@ -124,6 +127,23 @@ implements
 //        return _Images.fromBase64(base64ImageData);
 //        /*sonar-ignore-off*/
 //    }
+
+    // -- RENDERER
+
+    @Override
+    public Renderer<BufferedImage> getRenderer() {
+        return new Renderer<>() {
+            @Override public String titlePresentation(Context context, BufferedImage img) {
+                if (img == null) return "no image";
+                return "Image %dx%d".formatted(img.getWidth(), img.getHeight());
+            }
+            @Override public String htmlPresentation(Context context, BufferedImage img) {
+                return "<img src=\"%s\"/>".formatted(
+                        DataUri.embeddedImage(ImageType.PNG, _Images.toBytes(img))
+                        .toExternalForm());
+            }
+        };
+    }
 
     // -- FACET
 
