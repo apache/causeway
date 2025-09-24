@@ -138,6 +138,7 @@ implements
                 return "Image %dx%d".formatted(img.getWidth(), img.getHeight());
             }
             @Override public String htmlPresentation(Context context, BufferedImage img) {
+                if (img == null) return "no image";
                 return "<img src=\"%s\"/>".formatted(
                         DataUri.embeddedImage(ImageType.PNG, _Images.toBytes(img))
                         .toExternalForm());

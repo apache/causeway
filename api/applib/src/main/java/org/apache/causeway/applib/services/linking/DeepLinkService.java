@@ -24,17 +24,13 @@ import java.net.URI;
  * A service that returns a web link (`java.net.URI`) to any domain object in
  * one of the framework's viewers.
  *
- * <p>
- *     A typical use case is to generate a clickable link for rendering in an
- *     email, PDF, tweet or other communication.
- * </p>
+ * <p>A typical use case is to generate a clickable link for rendering in an
+ * email, PDF, tweet or other communication.
  *
- * <p>
- *     Note that the implementation is specific to the viewer(s).  At the time
- *     of writing only one implementation is available, for the Wicket viewer.
- * </p>
+ * <p>Note that the implementation is specific to the viewer(s).  At the time
+ * of writing only one implementation is available, for the Wicket viewer.
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.x {@index}
  */
 public interface DeepLinkService {
 

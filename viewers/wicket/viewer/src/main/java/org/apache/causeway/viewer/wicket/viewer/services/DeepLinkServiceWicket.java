@@ -22,16 +22,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -44,8 +43,6 @@ import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * An implementation of {@link org.apache.causeway.applib.services.linking.DeepLinkService}
  * for Wicket Viewer.
@@ -56,12 +53,10 @@ import lombok.RequiredArgsConstructor;
 @Named("causeway.viewer.wicket.DeepLinkServiceWicket")
 @jakarta.annotation.Priority(PriorityPrecedence.EARLY)
 @Qualifier("Wicket")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
-public class DeepLinkServiceWicket implements DeepLinkService {
-
-    private final PageClassRegistry pageClassRegistry;
-    private final SpecificationLoader specificationLoader;
-    private final HomePageResolverService homePageResolverService;
+public record DeepLinkServiceWicket(
+        PageClassRegistry pageClassRegistry,
+        SpecificationLoader specificationLoader,
+        HomePageResolverService homePageResolverService) implements DeepLinkService {
 
     // also supports ManagedObject and Bookmark
     @Override
