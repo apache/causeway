@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
@@ -26,12 +29,16 @@ import java.util.function.Supplier;
  * <h1>- internal use only -</h1>
  * <p><b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
- * <p>
- * A thread-safe, lazily initialized holder that can be set at most once.
- * <p>
- * This class mimics the behavior of the StableValue API introduced in JDK 25 preview.
+ *
+ * <p>A thread-safe, lazily initialized holder that can be set at most once.
+ *
+ * <p>This class mimics the behavior of the StableValue API introduced in JDK 25 preview.
  * It ensures that a value is set only once, using a supplier, and subsequent calls return the same value.
  * Useful for caching expensive computations or initializing resources lazily and safely.
+ *
+ * <p>_StableValue is serializable, but such that we don't marshall the contained value, if any.
+ *
+ * <p>Equality: 2 _StableValue(s) are equal iff their contained values are equal.
  *
  * @param <T> the type of the value to be held
  * @since 4.0
@@ -42,7 +49,7 @@ public record _StableValue<T>(AtomicReference<T> ref) implements Serializable {
         this(new AtomicReference<>());
     }
 
-    public _StableValue(T t) {
+    public _StableValue(final T t) {
         this(new AtomicReference<>(t));
     }
 
@@ -54,7 +61,7 @@ public record _StableValue<T>(AtomicReference<T> ref) implements Serializable {
      * @param supplier the supplier to initialize the value
      * @return the stored value
      */
-    public T orElseSet(Supplier<T> supplier) {
+    public T orElseSet(final Supplier<T> supplier) {
         T value = ref.get();
         if (value == null) {
             T newValue = supplier.get();
@@ -89,6 +96,33 @@ public record _StableValue<T>(AtomicReference<T> ref) implements Serializable {
             throw new IllegalStateException("Value not set");
         }
         return value;
+    }
+
+    // -- CONTRACT
+
+    @Override
+    public final boolean equals(final Object arg0) {
+        return arg0 instanceof _StableValue other
+            ? Objects.equals(this.ref.get(), other.ref.get())
+            : false;
+    }
+
+    // -- SERIALIZATION PROXY
+
+    private final static class StableValueProxy implements Serializable {
+        private static final long serialVersionUID = 1L;
+        StableValueProxy() {}
+        private Object readResolve() {
+            return new _StableValue<>();
+        }
+    }
+
+    private Object writeReplace() {
+        return new StableValueProxy();
+    }
+
+    private void readObject(final ObjectInputStream stream) throws InvalidObjectException {
+        throw new InvalidObjectException("Proxy required");
     }
 
 }
