@@ -96,7 +96,7 @@ public record BookmarkedPagesModel(
 
     public void remove(final UiObjectWkt objectModel) {
         var bookmark = objectModel.getOwnerBookmark();
-        rootNodes.removeIf(node->node.getBookmark().equals(bookmark));
+        rootNodes.removeIf(node->node.bookmark().equals(bookmark));
         depthFirstGraph.clear();
     }
 

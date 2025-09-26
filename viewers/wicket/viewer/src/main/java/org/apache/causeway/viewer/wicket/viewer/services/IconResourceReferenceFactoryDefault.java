@@ -30,41 +30,18 @@ import org.apache.wicket.request.resource.PartWriterCallback;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.jspecify.annotations.NonNull;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
-import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.causeway.viewer.wicket.model.models.IconResourceReferenceFactory;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * Caches images loaded either from the same package as the specified object,
- * or from the <tt>images</tt> package otherwise.
- * <p>
- * Searches for a fixed set of suffixes: <code>png, gif, jpeg, jpg, svg</code>.
- */
-public class ImageResourceCacheClassPath
-implements ImageResourceCache {
-
-    public static final String LOGICAL_TYPE_NAME =
-            CausewayModuleViewerWicketViewer.NAMESPACE + ".ImageResourceCacheClassPath";
-
-    @Configuration(proxyBeanMethods = false)
-    public static class AutoConfiguration {
-        @Bean
-        @Named(LOGICAL_TYPE_NAME)
-        @Order(PriorityPrecedence.MIDPOINT)
-        @Qualifier("ClassPath")
-        public ImageResourceCacheClassPath imageResourceCacheClassPath() {
-            return new ImageResourceCacheClassPath();
-        }
-    }
-    private static final long serialVersionUID = 1L;
+@Service
+@Named(CausewayModuleViewerWicketViewer.NAMESPACE + ".IconResourceReferenceFactoryDefault")
+public record IconResourceReferenceFactoryDefault()
+implements IconResourceReferenceFactory {
 
     @Override
     public ResourceReference resourceReferenceForObjectIcon(final ObjectIconUrlBased objectIcon) {

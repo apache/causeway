@@ -18,14 +18,12 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import java.io.Serializable;
-
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 
-public interface ImageResourceCache extends Serializable {
+public interface IconResourceReferenceFactory {
 
-    ResourceReference resourceReferenceForObjectIcon(final ObjectIconUrlBased objectIcon);
+    ResourceReference resourceReferenceForObjectIcon(ObjectIconUrlBased objectIcon);
 
 }

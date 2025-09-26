@@ -126,7 +126,7 @@ extends PanelAbstract<ManagedObject, ObjectAdapterModel> implements HasIcon {
                 iconSize,
                 iconUrlBased->{
                     Wkt.imageAddCachable(link, ID_OBJECT_ICON,
-                        getImageResourceCache().resourceReferenceForObjectIcon(iconUrlBased))
+                        getIconResourceReferenceFactory().resourceReferenceForObjectIcon(iconUrlBased))
                         .add(cssClassNameModifier("objectIcon", iconSize));
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_LEFT);
                     WktComponents.permanentlyHide(link, ID_OBJECT_FONT_AWESOME_RIGHT);

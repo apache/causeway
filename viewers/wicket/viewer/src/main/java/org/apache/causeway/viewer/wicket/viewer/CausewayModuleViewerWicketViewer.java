@@ -29,7 +29,7 @@ import org.apache.causeway.viewer.wicket.viewer.registries.pages.PageNavigationS
 import org.apache.causeway.viewer.wicket.viewer.services.BookmarkUiServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.services.DeepLinkServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.services.HintStoreUsingWicketSession;
-import org.apache.causeway.viewer.wicket.viewer.services.ImageResourceCacheClassPath;
+import org.apache.causeway.viewer.wicket.viewer.services.IconResourceReferenceFactoryDefault;
 import org.apache.causeway.viewer.wicket.viewer.services.ObjectRenderServiceWicket;
 import org.apache.causeway.viewer.wicket.viewer.webmodule.WebModuleWicket;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.BootstrapInitWkt;
@@ -62,14 +62,13 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         BookmarkUiServiceWicket.class,
         DeepLinkServiceWicket.class,
         ObjectRenderServiceWicket.class,
+        IconResourceReferenceFactoryDefault.class,
         WebModuleWicket.class,
 
         PageClassListDefault.AutoConfiguration.class,
         PageClassRegistryDefault.AutoConfiguration.class,
         PageNavigationServiceDefault.AutoConfiguration.class,
-
         HintStoreUsingWicketSession.AutoConfiguration.class,
-        ImageResourceCacheClassPath.AutoConfiguration.class,
 
 })
 public class CausewayModuleViewerWicketViewer {

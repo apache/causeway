@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.bookmarkedpages;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import jakarta.inject.Inject;
 
@@ -31,9 +32,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
+import org.apache.causeway.applib.services.render.ObjectIconFa;
+import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkTreeNode;
 import org.apache.causeway.viewer.wicket.model.models.BookmarkedPagesModel;
@@ -63,8 +69,7 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
 
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
-    @Inject
-    private PageClassRegistry pageClassRegistry;
+    @Inject private PageClassRegistry pageClassRegistry;
 
     public BookmarkedPagesPanel(final String id, final BookmarkedPagesModel bookmarkedPagesModel) {
         super(id, bookmarkedPagesModel);
@@ -128,17 +133,17 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                     target.add(container, clearAllBookmarksLink);
                 });
 
-                if(bookmarkNode.getDepth() == 0) {
+                if(bookmarkNode.depth() == 0) {
                     Wkt.cssAppend(clearBookmarkLink, "clearBookmark");
                 } else {
                     clearBookmarkLink.setEnabled(true);
                 }
 
                 var link = Wkt.add(item, WktLinks.newBookmarkablePageLink(ID_BOOKMARKED_PAGE_LINK,
-                                bookmarkNode.getPageParameters(),
+                                bookmarkNode.pageParameters(),
                                 pageClassRegistry.getPageClass(PageType.DOMAIN_OBJECT)));
 
-                bookmarkNode.visitIconVariantOrElse(
+                visitIconVariantOrElse(bookmarkNode,
                         iconResourceRef->{
                             Wkt.imageAddCachable(link, ID_BOOKMARKED_PAGE_ICON, iconResourceRef);
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON_FA);
@@ -157,14 +162,14 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                             WktComponents.permanentlyHide(link, ID_BOOKMARKED_PAGE_ICON);
                         });
 
-                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.getTitle());
+                Wkt.labelAdd(link, ID_BOOKMARKED_PAGE_TITLE, bookmarkNode.title());
 
 //XXX seems broken when there is only one bookmark entry;
 // an alternative idea would be to render the item differently eg. bold, but don't disable it
 //                    if(bookmarkedPagesModel.isCurrent(pageParameters)) {
 //                        item.add(new CssClassAppender("disabled"));
 //                    }
-                Wkt.cssAppend(item, "bookmarkDepth" + bookmarkNode.getDepth());
+                Wkt.cssAppend(item, "bookmarkDepth" + bookmarkNode.depth());
             } catch(ObjectNotFoundException ex) {
                 // ignore
                 // this is a partial fix for an infinite redirect loop.
@@ -184,6 +189,32 @@ extends PanelAbstract<List<BookmarkTreeNode>, BookmarkedPagesModel> {
                 this.setOutputMarkupPlaceholderTag(true);
             }
         };
+    }
+
+    // -- HELPER
+
+    private void visitIconVariantOrElse(
+            BookmarkTreeNode treeNode,
+            Consumer<ResourceReference> a,
+            Consumer<ObjectIconEmbedded> b,
+            Consumer<FontAwesomeLayers> c,
+            Runnable onNoMatch) {
+
+        var objectIcon = treeNode.objectIcon();
+        if(objectIcon instanceof ObjectIconUrlBased urlBased) {
+            var rref = getIconResourceReferenceFactory().resourceReferenceForObjectIcon(urlBased);
+            if(rref!=null) {
+                a.accept(rref);
+            } else {
+                onNoMatch.run();
+            }
+        } else if(objectIcon instanceof ObjectIconEmbedded embedded) {
+            b.accept(embedded);
+        } else if(objectIcon instanceof ObjectIconFa fa) {
+            c.accept(fa.fontAwesomeLayers());
+        } else {
+            onNoMatch.run();
+        }
     }
 
 }

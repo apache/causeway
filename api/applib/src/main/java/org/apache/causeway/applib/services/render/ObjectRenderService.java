@@ -25,6 +25,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 /**
  * <h1>Experimental</h1>
  * Service that renders various aspects of a domain object, enum or value, as presented with the UI.
+ * Currently handling icons only, but could be extended in the future.
  * <ul>
  * <li>icon</li>
  * <li>title</li>

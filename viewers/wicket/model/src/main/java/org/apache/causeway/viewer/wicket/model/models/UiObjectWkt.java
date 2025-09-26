@@ -21,23 +21,19 @@ package org.apache.causeway.viewer.wicket.model.models;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.applib.exceptions.unrecoverable.ObjectNotFoundException;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.hint.HintStore;
 import org.apache.causeway.applib.services.render.ObjectIcon;
-import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
@@ -189,26 +185,6 @@ implements
         return getManagedObject().getIcon(iconSize);
     }
 
-    public void visitIconVariantOrElse(
-            IconSize iconSize,
-            Consumer<ResourceReference> a,
-            Consumer<ObjectIconEmbedded> b,
-            Consumer<FontAwesomeLayers> c,
-            Runnable onNoMatch) {
-        visitIconVariant(
-            iconSize,
-            urlBased->{
-                var rref = imageResourceCache().resourceReferenceForObjectIcon(urlBased);
-                if(rref!=null) {
-                    a.accept(rref);
-                } else {
-                    onNoMatch.run();
-                }
-            },
-            embedded->b.accept(embedded),
-            fa->c.accept(fa.fontAwesomeLayers()));
-    }
-
     @Override
     public ManagedObject getManagedObject() {
         return getObject();
@@ -327,11 +303,6 @@ implements
     private transient HintStore hintStore;
     private HintStore hintStore() {
         return hintStore = getMetaModelContext().loadServiceIfAbsent(HintStore.class, hintStore);
-    }
-
-    private transient ImageResourceCache imageResourceCache;
-    private ImageResourceCache imageResourceCache() {
-        return imageResourceCache = getMetaModelContext().loadServiceIfAbsent(ImageResourceCache.class, imageResourceCache);
     }
 
 }

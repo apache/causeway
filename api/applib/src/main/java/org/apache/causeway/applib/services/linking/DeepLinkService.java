@@ -30,7 +30,7 @@ import java.net.URI;
  * <p>Note that the implementation is specific to the viewer(s).  At the time
  * of writing only one implementation is available, for the Wicket viewer.
  *
- * @since 1.x revised for 4.x {@index}
+ * @since 1.x {@index}
  */
 public interface DeepLinkService {
 
@@ -39,5 +39,4 @@ public interface DeepLinkService {
      * Causeway viewers.
      */
     URI deepLinkFor(Object domainObject);
-
 }

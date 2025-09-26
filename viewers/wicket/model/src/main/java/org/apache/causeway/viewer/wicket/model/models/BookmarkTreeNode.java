@@ -19,41 +19,36 @@
 package org.apache.causeway.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
-import java.util.function.Consumer;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
-import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
+import org.apache.causeway.applib.services.render.ObjectIcon;
+import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.functions._Functions;
+import org.apache.causeway.viewer.commons.model.mixin.HasIcon;
 
-import lombok.Getter;
-
-public class BookmarkTreeNode
+public record BookmarkTreeNode(
+    Bookmark bookmark,
+    PageParameters pageParameters,
+    AtomicReference<String> titleRef,
+    /**
+     * @implNote While {@link ObjectIcon} is serializable,
+     * with the {@link ObjectIconUrlBased} case we don't want to include image data (just the URL)
+     */
+    ObjectIcon objectIcon,
+    int depth, // starting at root with depth = 0
+    List<BookmarkTreeNode> children)
 implements
     Comparable<BookmarkTreeNode>, Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Getter private final List<BookmarkTreeNode> children = _Lists.newArrayList();
-    @Getter private final int depth; // starting at root with depth = 0
-    @Getter private final @NonNull Bookmark bookmark;
-    @Getter private final @NonNull PageParameters pageParameters;
-
-    @Getter private String title;
-
-    private ResourceReference iconResourceReference;
-    private FontAwesomeLayers faLayers;
-    private ObjectIconEmbedded embedded;
 
     // -- FACTORIES
 
@@ -70,30 +65,16 @@ implements
             final @NonNull BookmarkableModel bookmarkableModel,
             final int depth) {
 
-        this.pageParameters = bookmarkableModel.getPageParametersWithoutUiHints();
-        this.bookmark = bookmark;
-        this.title = bookmarkableModel.getTitle();
-
-        _Casts.castTo(UiObjectWkt.class, bookmarkableModel)
-        .ifPresent(x->x.visitIconVariantOrElse(
-                IconSize.MEDIUM,
-                rref->{this.iconResourceReference = rref;},
-                embedded->{this.embedded = embedded;},
-                faLayers->{this.faLayers = faLayers;},
-                ()->{}));
-
-        this.depth = depth;
+        this(bookmark, bookmarkableModel.getPageParametersWithoutUiHints(),
+            new AtomicReference<>(bookmarkableModel.getTitle()),
+            _Casts.castTo(HasIcon.class, bookmarkableModel)
+                .map(x->x.getIcon(IconSize.MEDIUM))
+                .orElse(null),
+            depth, new ArrayList<>());
     }
 
-    public void visitIconVariantOrElse(
-            Consumer<ResourceReference> a,
-            Consumer<ObjectIconEmbedded> b,
-            Consumer<FontAwesomeLayers> c,
-            Runnable onNoMatch) {
-        if(this.iconResourceReference!=null) a.accept(iconResourceReference);
-        else if(this.embedded!=null) b.accept(embedded);
-        else if(this.faLayers!=null) c.accept(faLayers);
-        else onNoMatch.run();
+    public String title() {
+        return titleRef.get();
     }
 
     // -- COMPARATOR
@@ -104,15 +85,15 @@ implements
         var o1 = this;
 
         // sort by entity type
-        var typeName1 = o1.getBookmark().logicalTypeName();
-        var typeName2 = o2.getBookmark().logicalTypeName();
+        var typeName1 = o1.bookmark().logicalTypeName();
+        var typeName2 = o2.bookmark().logicalTypeName();
 
         final int typeNameComparison = typeName1.compareTo(typeName2);
         if(typeNameComparison != 0) {
             return typeNameComparison;
         }
 
-        return o1.getTitle().compareTo(o2.getTitle());
+        return o1.title().compareTo(o2.title());
     }
 
     /**
@@ -163,14 +144,14 @@ implements
      */
     private boolean matchAndUpdateTitleFor(final UiObjectWkt candidateEntityModel) {
         var candidateBookmark = candidateEntityModel.toBookmark().orElse(null);
-        boolean inGraph = getBookmark().equals(candidateBookmark);
+        boolean inGraph = bookmark().equals(candidateBookmark);
         if(inGraph) {
-            this.title = candidateEntityModel.getTitle();
+            this.titleRef.set(candidateEntityModel.getTitle());
         }
 
         // and also match recursively down to all children and grand-children.
         if(candidateEntityModel.getBookmarkPolicy().isChild()) {
-            for(BookmarkTreeNode childNode: this.getChildren()) {
+            for(BookmarkTreeNode childNode: this.children()) {
                 inGraph = childNode.matches(candidateEntityModel) || inGraph; // evaluate each
             }
 
@@ -190,7 +171,7 @@ implements
         var addedCount = new LongAdder();
 
         candidateBookmarkableModel.streamPropertyBookmarks()
-        .filter(getBookmark()::equals)
+        .filter(bookmark()::equals)
         .forEach(propBookmark->{
             if(this.addChild(candidateBookmarkableModel).isPresent()) {
                 addedCount.increment();

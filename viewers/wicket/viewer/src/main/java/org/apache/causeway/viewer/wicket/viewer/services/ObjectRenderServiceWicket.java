@@ -36,7 +36,7 @@ import org.apache.causeway.applib.services.render.ObjectIconEmbedded;
 import org.apache.causeway.applib.services.render.ObjectIconFa;
 import org.apache.causeway.applib.services.render.ObjectIconUrlBased;
 import org.apache.causeway.applib.services.render.ObjectRenderService;
-import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.causeway.viewer.wicket.model.models.IconResourceReferenceFactory;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 @Service
@@ -45,12 +45,12 @@ import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer
 @Qualifier("Wicket")
 public class ObjectRenderServiceWicket implements ObjectRenderService {
 
-    @Inject private ImageResourceCache imageResourceCache;
+    @Inject private IconResourceReferenceFactory iconResourceReferenceFactory;
 
     @Override
     public String iconToHtml(@Nullable final ObjectIcon objectIcon, final IconSize iconSize) {
         if(objectIcon instanceof ObjectIconUrlBased urlBased) {
-            ResourceReference resourceReference = imageResourceCache.resourceReferenceForObjectIcon(urlBased);
+            ResourceReference resourceReference = iconResourceReferenceFactory.resourceReferenceForObjectIcon(urlBased);
             // Get the URL for the ResourceReference
             String iconUrl = RequestCycle.get().urlFor(resourceReference, null).toString();
             String fullUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(iconUrl));

@@ -30,7 +30,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.causeway.viewer.wicket.model.models.IconResourceReferenceFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
@@ -62,9 +62,9 @@ implements HasMetaModelContext {
         return pageClassRegistry = computeIfAbsent(PageClassRegistry.class, pageClassRegistry);
     }
 
-    private transient ImageResourceCache imageCache;
-    public ImageResourceCache getImageResourceCache() {
-        return imageCache = computeIfAbsent(ImageResourceCache.class, imageCache);
+    private transient IconResourceReferenceFactory iconResourceReferenceFactory;
+    public IconResourceReferenceFactory getIconResourceReferenceFactory() {
+        return iconResourceReferenceFactory = computeIfAbsent(IconResourceReferenceFactory.class, iconResourceReferenceFactory);
     }
 
     private transient LanguageProvider localeProvider;
