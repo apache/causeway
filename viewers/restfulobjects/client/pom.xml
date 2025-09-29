@@ -65,7 +65,7 @@
 		<dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-client</artifactId>
-            <version>6.2.12.Final</version>
+            <version>7.0.0.Final</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
