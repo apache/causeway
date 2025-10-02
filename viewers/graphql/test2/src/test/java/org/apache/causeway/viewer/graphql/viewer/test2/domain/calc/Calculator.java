@@ -110,27 +110,27 @@ public class Calculator {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalDate localDatePlusDays(final LocalDate date, final int numDays) {
+    public LocalDate jdk8LocalPlusDays(final LocalDate date, final int numDays) {
         return date.plusDays(numDays);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public OffsetDateTime offsetDateTimePlusDaysAndHoursAndMinutes(final OffsetDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
+    public OffsetDateTime jdk8OffsetPlusDaysAndHoursAndMinutes(final OffsetDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public ZonedDateTime zonedDateTimePlusDaysAndHoursAndMinutes(final ZonedDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
+    public ZonedDateTime jdk8ZonedPlusDaysAndHoursAndMinutes(final ZonedDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public OffsetTime offsetTimePlusHoursAndMinutes(final OffsetTime time, final int numHours, final int numMinutes) {
+    public OffsetTime jdk8OffsetPlusHoursAndMinutes(final OffsetTime time, final int numHours, final int numMinutes) {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalTime localTimePlusHoursAndMinutes(final LocalTime time, final int numHours, final int numMinutes) {
+    public LocalTime jdk8LocalPlusHoursAndMinutes(final LocalTime time, final int numHours, final int numMinutes) {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 

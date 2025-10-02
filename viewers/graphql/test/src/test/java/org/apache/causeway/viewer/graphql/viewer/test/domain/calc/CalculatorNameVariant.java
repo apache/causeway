@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
@@ -111,27 +110,27 @@ public class CalculatorNameVariant {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalDate localDatePlusDays(final LocalDate date, final int numDays) {
+    public LocalDate jdk8LocalPlusDays(final LocalDate date, final int numDays) {
         return date.plusDays(numDays);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public LocalDateTime localDateTimePlusDaysAndHoursAndMinutes(final LocalDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
+    public OffsetDateTime jdk8OffsetPlusDaysAndHoursAndMinutes(final OffsetDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public OffsetDateTime offsetDateTimePlusDaysAndHoursAndMinutes(final OffsetDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
+    public ZonedDateTime jdk8ZonedPlusDaysAndHoursAndMinutes(final ZonedDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
         return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public ZonedDateTime zonedDateTimePlusDaysAndHoursAndMinutes(final ZonedDateTime dateTime, final int numDays, final int numHours, final int numMinutes) {
-        return dateTime.plusDays(numDays).plusHours(numHours).plusMinutes(numMinutes);
+    public OffsetTime jdk8OffsetPlusHoursAndMinutes(final OffsetTime time, final int numHours, final int numMinutes) {
+        return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    public OffsetTime offsetTimePlusHoursAndMinutes(final OffsetTime time, final int numHours, final int numMinutes) {
+    public LocalTime jdk8LocalPlusHoursAndMinutes(final LocalTime time, final int numHours, final int numMinutes) {
         return time.plusHours(numHours).plusMinutes(numMinutes);
     }
 
