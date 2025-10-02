@@ -82,11 +82,10 @@
 			<artifactId>causeway-core-runtimeservices</artifactId>
 		</dependency>
 
-<!-- opinionated, whether to add or not-->
-<!--		<dependency>-->
-<!--			<groupId>org.apache.causeway.viewer</groupId>-->
-<!--			<artifactId>causeway-viewer-graphql-viewer</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.apache.causeway.viewer</groupId>
+			<artifactId>causeway-viewer-graphql-viewer</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.causeway.viewer</groupId>
