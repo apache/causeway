@@ -402,6 +402,9 @@
                     <artifactId>apache-rat-plugin</artifactId>
                     <version>0.16.1</version>
                     <configuration>
+                        <reportFile>target/rat.xml</reportFile>
+                        <consoleOutput>true</consoleOutput>
+                        <reportStyle>xml</reportStyle>
                         <addDefaultLicenseMatchers>true</addDefaultLicenseMatchers>
                         <excludeSubProjects>true</excludeSubProjects>
                         <excludes>
@@ -434,8 +437,7 @@
                             <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/META-INF/services/**</exclude>
 
-                            <exclude>
-                                **/src/main/resources/supplemental-models.xml</exclude>
+                            <exclude>**/src/main/resources/supplemental-models.xml</exclude>
 
                             <exclude>**/webpack.config.js</exclude>
                             <exclude>**/webpack.generated.js</exclude>
@@ -459,8 +461,7 @@
                             <exclude>**/*.drawio.svg</exclude>
                             <exclude>**/META-INF/spring.factories</exclude>
 
-                            <exclude>
-                                **/incubator/clients/kroviz/package.json.d/project.info</exclude>
+                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
                             <exclude>**/supplemental-ui/**</exclude>
                             <exclude>**/_nav.adoc</exclude>
                             <exclude>**/module-nav.adoc</exclude>

@@ -72,24 +72,27 @@ To run the RAT tool, use:
 [source,bash,subs="attributes+"]
 .find unapproved/missing licenses
 ----
-pushd bom
 mvnd -Dapache-release clean
 mvnd -Dapache-release org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=1000     # <.>
-popd
 
-for a in `/usr/bin/find . -name rat.txt -print`; do grep '!???' $a; done > /tmp/rat-qn.txt            # <.>
-for a in `/usr/bin/find . -name rat.txt -print`; do grep '!AL' $a; done > /tmp/rat-al.txt            # <2>
+/usr/bin/find . -name rat.xml -exec sh -c '
+  for f do
+    xmlstarlet sel -t \
+      -m "//resource[license-approval[@name=\"false\"]]" \
+      -v "@name" -n "$f"
+  done
+' sh {} + >/tmp/rat-errors.txt  # <.>
 
-cat /tmp/rat-qn.txt
-cat /tmp/rat-al.txt
+cat /tmp/rat-errors.txt
 ----
 
-<.> The command writes out a `target\rat.txt` for each submodule. missing license notes are indicated using the key `!???`.
+<.> The command writes out a `target\rat.xml` for each submodule.
+Invalida licenses are flagged.
 
 <.> Collates all the errors.
 
 
-Inspect the contents of the two `/tmp/rat-*.txt` files and fix any reported violations, typically by either:
+Inspect the contents of `/tmp/rat-errors.txt` files and fix any reported violations, typically by either:
 
 * adding genuinely missing license headers from Java (or other) source files, or
 * updating the `<excludes>` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
