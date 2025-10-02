@@ -296,7 +296,7 @@ git commit -m "$CAUSEWAYJIRA: bumps version to $CAUSEWAYREL"
 Perform one last sanity check on the codebase.
 Delete all Causeway artifacts from your local Maven repo, then build using the `-o` offline flag.
 
-Still in the `bom` directory:
+In the top-level directory:
 
 [source,bash,subs="attributes+"]
 ----
