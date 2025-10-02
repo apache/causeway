@@ -182,8 +182,7 @@ identified
             [1] https://github.com/twbs/bootstrap/blob/master/LICENSE
             [2] https://github.com/mouse0270/bootstrap-growl/blob/master/LICENSE
             [3] https://github.com/l0rdn1kk0n/wicket-bootstrap
-            [4]
-            https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
+            [4] https://github.com/Eonasdan/bootstrap-datetimepicker/blob/master/LICENSE
             [5] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
     </properties>
     <dependencyManagement>
@@ -1351,37 +1350,6 @@ identified
             <dependency>
                 <groupId>org.apache.causeway.valuetypes</groupId>
                 <artifactId>causeway-valuetypes-vega-persistence-jpa</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-
-
-            <!-- org.apache.causeway.incubator.viewer -->
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-applib</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-model</artifactId>
-                <version>${project.version}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.causeway.incubator.viewer</groupId>
-                <artifactId>causeway-viewer-graphql-viewer</artifactId>
                 <version>${project.version}</version>
                 <type>jar</type>
                 <scope>compile</scope>
