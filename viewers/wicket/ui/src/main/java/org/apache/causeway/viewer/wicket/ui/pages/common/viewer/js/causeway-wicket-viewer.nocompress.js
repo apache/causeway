@@ -16,6 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+/**
+ * Decodes UTF8 formatted JSON that was then base64 URL-safe encoded.
+ * see https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings 
+ */
+function decodeBase64ToJson(input) {
+    if(!input) return null;
+    var base64 = input.replace(/-/g, '+').replace(/_/g, '/')
+    var json = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    return JSON.parse(json);
+}
+
 $(function() {
 
     'use strict';
@@ -280,7 +294,6 @@ $(function() {
     })
 
 });
-
 
 /**
  * enables 'maxlength' to work as an attribute on 'textarea'
