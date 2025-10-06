@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>io.cucumber</groupId>
 			<artifactId>messages</artifactId>
-			<version>29.0.1</version>
+			<version>30.0.0</version>
 		</dependency>
 
 		<!-- convenience -->
