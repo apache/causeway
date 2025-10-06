@@ -43,7 +43,6 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-
 import org.jspecify.annotations.NonNull;
 
 /**
@@ -114,6 +113,48 @@ public class _Multimaps {
                             .unrecoverable("underlying map is not an instance of NavigableMap"));
         }
 
+        public ListMultimap<K, V> asUnmodifiable();
+
+    }
+
+    private record ListMultimapWrapper<K, V>(
+        Map<K, List<V>> delegate,
+        Supplier<List<V>> elementCollectionFactory) implements ListMultimap<K, V> {
+
+            @Override public int size() { return delegate.size(); }
+            @Override public boolean isEmpty() { return delegate.isEmpty(); }
+            @Override public boolean containsKey(final Object key) { return delegate.containsKey(key); }
+            @Override public boolean containsValue(final Object value) { return delegate.containsValue(value); }
+            @Override public List<V> get(final Object key) { return delegate.get(key); }
+            @Override public List<V> put(final K key, final List<V> value) { return delegate.put(key, value); }
+            @Override public List<V> remove(final Object key) { return delegate.remove(key); }
+            @Override public void putAll(final Map<? extends K, ? extends List<V>> m) { delegate.putAll(m); }
+            @Override public void clear() { delegate.clear(); }
+            @Override public Set<K> keySet() { return delegate.keySet(); }
+            @Override public Collection<List<V>> values() { return delegate.values();   }
+            @Override public Set<Entry<K, List<V>>> entrySet() { return delegate.entrySet(); }
+
+            @Override
+            public void putElement(final K key, final V value) {
+                getOrElseNew(key).add(value);
+            }
+
+            @Override
+            public List<V> getOrElseNew(final K key) {
+                var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
+                return collection;
+            }
+
+            @Override
+            public Optional<NavigableMap<K, List<V>>> asNavigableMap() {
+                return delegate instanceof NavigableMap
+                        ? Optional.of(_Casts.uncheckedCast(delegate))
+                        : Optional.empty();
+            }
+            @Override
+            public ListMultimap<K, V> asUnmodifiable() {
+                return new ListMultimapWrapper<>(Collections.unmodifiableMap(delegate), elementCollectionFactory);
+            }
     }
 
     /**
@@ -152,6 +193,42 @@ public class _Multimaps {
             return values().stream()
                     .flatMap(Collection::stream);
         }
+
+        public SetMultimap<K, V> asUnmodifiable();
+    }
+
+    private record SetMultimapWrapper<K, V>(
+        Map<K, Set<V>> delegate,
+        Supplier<? extends Set<V>> elementCollectionFactory) implements SetMultimap<K, V> {
+
+            @Override public int size() { return delegate.size(); }
+            @Override public boolean isEmpty() { return delegate.isEmpty(); }
+            @Override public boolean containsKey(final Object key) { return delegate.containsKey(key); }
+            @Override public boolean containsValue(final Object value) { return delegate.containsValue(value); }
+            @Override public Set<V> get(final Object key) { return delegate.get(key); }
+            @Override public Set<V> put(final K key, final Set<V> value) { return delegate.put(key, value); }
+            @Override public Set<V> remove(final Object key) { return delegate.remove(key); }
+            @Override public void putAll(final Map<? extends K, ? extends Set<V>> m) {  delegate.putAll(m); }
+            @Override public void clear() { delegate.clear(); }
+            @Override public Set<K> keySet() { return delegate.keySet(); }
+            @Override public Collection<Set<V>> values() { return delegate.values();    }
+            @Override public Set<Entry<K, Set<V>>> entrySet() { return delegate.entrySet(); }
+
+            @Override
+            public void putElement(final K key, final V value) {
+                getOrElseNew(key).add(value);
+            }
+
+            @Override
+            public Set<V> getOrElseNew(final K key) {
+                var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
+                return collection;
+            }
+
+            @Override
+            public SetMultimap<K, V> asUnmodifiable() {
+                return new SetMultimapWrapper<>(Collections.unmodifiableMap(delegate), elementCollectionFactory);
+            }
     }
 
     /**
@@ -207,78 +284,15 @@ public class _Multimaps {
     public static <K, V> ListMultimap<K, V> newListMultimap(
             final @NonNull Supplier<Map<K, List<V>>> mapFactory,
             final @NonNull Supplier<List<V>> elementCollectionFactory){
-
-        return new ListMultimap<K, V>() {
-
-            final Map<K, List<V>> delegate = mapFactory.get();
-
-            @Override public int size() { return delegate.size(); }
-            @Override public boolean isEmpty() { return delegate.isEmpty();	}
-            @Override public boolean containsKey(final Object key) { return delegate.containsKey(key); }
-            @Override public boolean containsValue(final Object value) { return delegate.containsValue(value); }
-            @Override public List<V> get(final Object key) { return delegate.get(key); }
-            @Override public List<V> put(final K key, final List<V> value) { return delegate.put(key, value); }
-            @Override public List<V> remove(final Object key) { return delegate.remove(key); }
-            @Override public void putAll(final Map<? extends K, ? extends List<V>> m) {	delegate.putAll(m);	}
-            @Override public void clear() {	delegate.clear(); }
-            @Override public Set<K> keySet() { return delegate.keySet(); }
-            @Override public Collection<List<V>> values() { return delegate.values();	}
-            @Override public Set<Entry<K, List<V>>> entrySet() { return delegate.entrySet(); }
-
-            @Override
-            public void putElement(final K key, final V value) {
-                getOrElseNew(key).add(value);
-            }
-
-            @Override
-            public List<V> getOrElseNew(final K key) {
-                var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
-                return collection;
-            }
-
-            @Override
-            public Optional<NavigableMap<K, List<V>>> asNavigableMap() {
-                return delegate instanceof NavigableMap
-                        ? Optional.of(_Casts.uncheckedCast(delegate))
-                        : Optional.empty();
-            }
-
-        };
+        return new ListMultimapWrapper<>(mapFactory.get(), elementCollectionFactory);
     }
 
+
     public static <K, V, S extends Set<V>> SetMultimap<K, V> newSetMultimap(
-            final @NonNull Supplier<? extends Map<K, S>> mapFactory,
-            final @NonNull Supplier<S> elementCollectionFactory){
-
-        return new SetMultimap<K, V>() {
-
-            final Map<K, Set<V>> delegate = _Casts.uncheckedCast(mapFactory.get());
-
-            @Override public int size() { return delegate.size(); }
-            @Override public boolean isEmpty() { return delegate.isEmpty();	}
-            @Override public boolean containsKey(final Object key) { return delegate.containsKey(key); }
-            @Override public boolean containsValue(final Object value) { return delegate.containsValue(value); }
-            @Override public Set<V> get(final Object key) { return delegate.get(key); }
-            @Override public Set<V> put(final K key, final Set<V> value) { return delegate.put(key, value); }
-            @Override public Set<V> remove(final Object key) { return delegate.remove(key); }
-            @Override public void putAll(final Map<? extends K, ? extends Set<V>> m) {	delegate.putAll(m);	}
-            @Override public void clear() {	delegate.clear(); }
-            @Override public Set<K> keySet() { return delegate.keySet(); }
-            @Override public Collection<Set<V>> values() { return delegate.values();	}
-            @Override public Set<Entry<K, Set<V>>> entrySet() { return delegate.entrySet(); }
-
-            @Override
-            public void putElement(final K key, final V value) {
-                getOrElseNew(key).add(value);
-            }
-
-            @Override
-            public Set<V> getOrElseNew(final K key) {
-                var collection = delegate.computeIfAbsent(key, __->elementCollectionFactory.get());
-                return collection;
-            }
-
-        };
+        final @NonNull Supplier<? extends Map<K, S>> mapFactory,
+        final @NonNull Supplier<S> elementCollectionFactory){
+        final Map<K, Set<V>> delegate = _Casts.uncheckedCast(mapFactory.get());
+        return new SetMultimapWrapper<K, V>(delegate, elementCollectionFactory);
     }
 
     public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(
