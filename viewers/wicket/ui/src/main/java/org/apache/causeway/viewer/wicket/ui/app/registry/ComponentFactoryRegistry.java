@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.app.registry;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,13 +27,11 @@ import java.util.stream.Stream;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.IModel;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.commons.internal.base._Text;
-import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
@@ -45,23 +42,27 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * API for finding registered {@link ComponentFactory}s.
- * <p>
- * Ultimately all requests to locate {@link ComponentFactory}s are routed
- * through to an object implementing this interface.
+ *
+ * <p>Ultimately all requests to locate {@link ComponentFactory}s are routed
+ * through this registry.
  */
 @Slf4j
-public final class ComponentFactoryRegistry {
-
-    private final ListMultimap<UiComponentType, ComponentFactory> componentFactoriesByComponentType =
-            _Multimaps.newListMultimap();
-    private final Map<Class<? extends ComponentFactory>, ComponentFactory> componentFactoriesByType =
-            new HashMap<>();
+public record ComponentFactoryRegistry(
+    ListMultimap<UiComponentType, ComponentFactory> factoriesByComponentType,
+    Map<Class<? extends ComponentFactory>, ComponentFactory> factoriesByType
+    ) {
 
     public ComponentFactoryRegistry(
             final ComponentFactoryList factoryList,
             final MetaModelContext mmc) {
-        super();
-        factoryList.forEach(compFactory->this.registerComponentFactory(mmc, compFactory));
+        this(factoryList.asFactoriesByComponentType(), factoryList.asFactoriesByType());
+        factoryList.forEach(compFactory->{
+            // handle dependency injection for factories
+            mmc.getServiceInjector().injectServicesInto(compFactory);
+            if(compFactory instanceof ComponentFactoryAbstract) {
+                ((ComponentFactoryAbstract)compFactory).setMetaModelContext(mmc);
+            }
+        });
         ensureAllComponentTypesRegistered();
     }
 
@@ -147,7 +148,7 @@ public final class ComponentFactoryRegistry {
 
         var exclusiveIfAny = _Refs.<ComponentFactory>objectRef(null);
 
-        var allThatApply = componentFactoriesByComponentType.streamElements(uiComponentType)
+        var allThatApply = factoriesByComponentType.streamElements(uiComponentType)
                 .filter(componentFactory->{
                     var advice = componentFactory.appliesTo(uiComponentType, model);
                     if(advice.appliesExclusively()) {
@@ -175,7 +176,7 @@ public final class ComponentFactoryRegistry {
 
     @SuppressWarnings("unchecked")
     public <T extends ComponentFactory> Optional<T> lookupFactory(final Class<T> factoryClass) {
-        return Optional.ofNullable((T)componentFactoriesByType.get(factoryClass));
+        return Optional.ofNullable((T)factoriesByType.get(factoryClass));
     }
 
     public <T extends ComponentFactory> T lookupFactoryElseFail(final Class<T> factoryClass) {
@@ -186,20 +187,6 @@ public final class ComponentFactoryRegistry {
 
     // -- HELPER
 
-    private void registerComponentFactory(
-            final MetaModelContext commonContext,
-            final ComponentFactory componentFactory) {
-        componentFactoriesByType.put(componentFactory.getClass(), componentFactory);
-
-        // handle dependency injection for factories
-        commonContext.getServiceInjector().injectServicesInto(componentFactory);
-        if(componentFactory instanceof ComponentFactoryAbstract) {
-            ((ComponentFactoryAbstract)componentFactory).setMetaModelContext(commonContext);
-        }
-
-        componentFactoriesByComponentType.putElement(componentFactory.getComponentType(), componentFactory);
-    }
-
     private void ensureAllComponentTypesRegistered() {
         for (var componentType : UiComponentType.values()) {
 
@@ -207,7 +194,7 @@ public final class ComponentFactoryRegistry {
                 continue;
             }
 
-            if (componentFactoriesByComponentType.getOrElseEmpty(componentType).isEmpty()) {
+            if (factoriesByComponentType.getOrElseEmpty(componentType).isEmpty()) {
                 throw new IllegalStateException("No component factories registered for " + componentType);
             }
         }

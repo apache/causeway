@@ -18,23 +18,27 @@
  */
 package org.apache.causeway.viewer.wicket.ui.app.registry;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
+import org.apache.causeway.commons.internal.collections._Multimaps;
+import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 
 public record ComponentFactoryList(
-        List<ComponentFactory> componentFactories) implements Iterable<ComponentFactory> {
+        Set<ComponentFactory> componentFactories) implements Iterable<ComponentFactory> {
 
     public ComponentFactoryList() {
-        this(new ArrayList<>());
+        this(new LinkedHashSet<>());
     }
 
     public void add(final ComponentFactory componentFactory) {
-        if(componentFactories.contains(componentFactory)) return;
-
         componentFactories.add(componentFactory);
     }
 
@@ -52,4 +56,17 @@ public record ComponentFactoryList(
                 .filter(requiredClass::isInstance)
                 .map(requiredClass::cast);
     }
+
+    public ListMultimap<UiComponentType, ComponentFactory> asFactoriesByComponentType() {
+        var map = _Multimaps.<UiComponentType, ComponentFactory>newListMultimap();
+        stream().forEach(cf->map.putElement(cf.getComponentType(), cf));
+        return map.asUnmodifiable();
+    }
+
+    public Map<Class<? extends ComponentFactory>, ComponentFactory> asFactoriesByType() {
+        var map = new HashMap<Class<? extends ComponentFactory>, ComponentFactory>();
+        stream().forEach(cf->map.put(cf.getClass(), cf));
+        return Collections.unmodifiableMap(map);
+    }
+
 }
