@@ -328,39 +328,6 @@
                             </gpgArguments>
                         </configuration>
                     </plugin>
-                    <plugin>
-                        <groupId>net.nicoulaj.maven.plugins</groupId>
-                        <artifactId>checksum-maven-plugin</artifactId>
-                        <version>1.11</version>
-                        <executions>
-                            <execution>
-                                <id>source-release-checksum</id>
-                                <goals>
-                                    <goal>files</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <algorithms>
-                                <algorithm>SHA-512</algorithm>
-                            </algorithms>
-                            <csvSummary>false</csvSummary>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>
-                                            ${project.artifactId}-${project.version}-source-release.zip</include>
-                                        <include>
-                                            ${project.artifactId}-${project.version}-source-release.tar*</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <failIfNoFiles>false</failIfNoFiles><!-- usually, no
-                            file to do checksum:
-								don't consider error -->
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
