@@ -2145,4 +2145,204 @@ identified
         </developer>
     </developers>
 
+    <profiles>
+        <!--  START SNIPPET: release-profile  -->
+        <profile>
+            <id>apache-release</id>
+            <activation>
+                <property>
+                    <name>apache-release</name>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>apache.releases.https</id>
+                    <name>Apache Release Distribution Repository</name>
+                    <url>
+                        https://repository.apache.org/service/local/staging/deploy/maven2</url>
+                </repository>
+                <snapshotRepository>
+                    <id>apache.snapshots.https</id>
+                    <name>${distMgmtSnapshotsName}</name>
+                    <url>${distMgmtSnapshotsUrl}</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>dev.pcms</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>
+                        <version>1.18.36.2</version>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            <outputDirectory>${delombok.output}</outputDirectory>
+                            <addOutputDirectory>false</addOutputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>delombok</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-toolchains-plugin</artifactId>
+                        <version>3.2.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>toolchain</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <toolchains>
+                                <jdk>
+                                    <version>17</version>
+                                    <vendor>openjdk</vendor>
+                                </jdk>
+                            </toolchains>
+                        </configuration>
+                    </plugin>
+
+                    <!--  Create a source-release artifact that contains the
+                    fully buildable
+                                   project directory source structure. This is the artifact which is
+                                   the official subject of any release vote.  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.apache.resources</groupId>
+                                <artifactId>
+                                    apache-source-release-assembly-descriptor</artifactId>
+                                <version>1.7</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>source-release-assembly</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <archiveBaseDirectory>..</archiveBaseDirectory>
+                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
+                                    <descriptorRefs>
+                                        <descriptorRef>
+                                            ${sourceReleaseAssemblyDescriptor}</descriptorRef>
+                                    </descriptorRefs>
+                                    <tarLongFileMode>posix</tarLongFileMode>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--  We want to deploy the artifact to a staging location
+                    for perusal  -->
+                    <plugin>
+                        <inherited>true</inherited>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <configuration>
+                            <!-- invalid config
+                            <updateReleaseInfo>true</updateReleaseInfo> -->
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <notimestamp>true</notimestamp>
+                                    <sourcepath>${delombok.output}</sourcepath>
+                                    <doclint>none</doclint>
+                                    <failOnError>false</failOnError>
+
+                                    <debug>true</debug>
+                                    <minmemory>128m</minmemory>
+                                    <maxmemory>1024m</maxmemory>
+                                    <quiet>true</quiet>
+                                    <doctitle>${project.name} ${project.version}</doctitle>
+                                    <windowtitle>${project.name}
+                                        ${project.version}</windowtitle>
+                                    <splitindex>true</splitindex>
+                                    <encoding>${project.build.sourceEncoding}</encoding>
+                                    <links>
+                                        <link>
+                                            https://docs.oracle.com/en/java/javase/17/docs/api/</link>
+                                    </links>
+                                    <linksource>true</linksource>
+                                    <detectOfflineLinks>false</detectOfflineLinks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--  calculate checksums of source release for Apache dist
+                    area  -->
+                    <plugin>
+                        <groupId>net.nicoulaj.maven.plugins</groupId>
+                        <artifactId>checksum-maven-plugin</artifactId>
+                        <version>1.11</version>
+                        <executions>
+                            <execution>
+                                <id>source-release-checksum</id>
+                                <goals>
+                                    <goal>artifacts</goal>
+                                </goals>
+                                <!--  execute prior to maven-gpg-plugin:sign due
+                                to
+                                https://github.com/nicoulaj/checksum-maven-plugin/issues/112  -->
+                                <phase>post-integration-test</phase>
+                                <configuration>
+                                    <algorithms>
+                                        <algorithm>SHA-512</algorithm>
+                                    </algorithms>
+                                    <!--
+                                    https://maven.apache.org/apache-resource-bundles/#source-release-assembly-descriptor  -->
+                                    <includeClassifiers>source-release</includeClassifiers>
+                                    <excludeMainArtifact>true</excludeMainArtifact>
+                                    <csvSummary>false</csvSummary>
+                                    <!--  attach SHA-512 checksum as well to
+                                    upload to Maven Staging Repo,
+                                                           as this eases uploading from stage to dist and doesn't do harm in Maven Central  -->
+                                    <attachChecksums>true</attachChecksums>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!--  We want to sign the artifact, the POM, and all attached
+                    artifacts (except for SHA-512 checksum)  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+
+        </profile>
+        <!--  END SNIPPET: release-profile  -->
+    </profiles>
+
 </project>
