@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.causeway.extensions</groupId>
         <artifactId>causeway-extensions-sessionlog</artifactId>
-        <version>${revision}</version>
+        <version>4.0.0-M1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

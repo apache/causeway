@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.apache.causeway.regressiontests</groupId>
         <artifactId>causeway-regressiontests-cmdexecauditsess</artifactId>
-        <version>${revision}</version>
+        <version>4.0.0-M1</version>
     </parent>
 
     <artifactId>causeway-regressiontests-cmdexecauditsess-persistence-jpa</artifactId>
