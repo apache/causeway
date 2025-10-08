@@ -111,10 +111,9 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 
 [source,bash,subs="attributes+"]
 ----
-pushd bom
 mvnd -Dgithub clean install -T1C -DskipTests # <.>
 mvnd -Dgithub license:download-licenses      # <.>
-popd
+
 groovy scripts/checkmissinglicenses.groovy  # <.>
 ----
 <.> builds the framework.
