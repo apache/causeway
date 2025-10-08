@@ -26,7 +26,7 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 [IMPORTANT]
 ====
-The release process should be performed on Java 17.
+The release process should be performed on Java 21.
 ====
 
 [IMPORTANT]
@@ -112,9 +112,10 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 [source,bash,subs="attributes+"]
 ----
 mvnd -Dgithub clean install -T1C -DskipTests # <.>
-mvnd -Dgithub license:download-licenses      # <.>
+mvnd -Dgithub license:download-licenses \
+     -Dlicense.connectTimeout=500            # <.>
 
-groovy scripts/checkmissinglicenses.groovy  # <.>
+groovy scripts/checkmissinglicenses.groovy   # <.>
 ----
 <.> builds the framework.
 +
