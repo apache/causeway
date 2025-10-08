@@ -1359,12 +1359,6 @@ identified
             <!-- other dependencies -->
 
             <dependency>
-                <groupId>org.apache.maven.plugin-tools</groupId>
-                <artifactId>maven-plugin-annotations</artifactId>
-                <version>${maven.plugin.tools.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.fasterxml.woodstox</groupId>
                 <artifactId>woodstox-core</artifactId>
                 <version>7.1.1</version>
