@@ -526,9 +526,9 @@ Therefore:
 [source,bash,subs="attributes+"]
 ----
 mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
-mvnd install -DskipTests -o -T1C -Dgithub
+mvnd install -DskipTests -o -Dgithub
 
-pushd ../starters
+pushd bom
 mvnd versions:set -DnewVersion={page-causewaysnapshotversion}
 mvnd install -DskipTests -o
 popd
