@@ -10,7 +10,7 @@ The release process consists of:
 * Members of the Apache Causeway PMC xref:comguide:ROOT:verifying-releases.adoc[verifying] and voting on the release
 * the release manager performing post-release tasks, for either a xref:comguide:ROOT:post-release-successful.adoc[successful] or an xref:comguide:ROOT:post-release-unsuccessful.adoc[unsuccessful] vote.
 
-Apache Causeway itself is released in one go, everything is ultimately a child of `bom/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
+Apache Causeway itself is released in one go, everything is ultimately a child of `parent/pom.xml` (relative to the link:https://github.com/apache/causeway[source code root]).
 This section details the process for formally releasing this module.
 
 The subsequent sections describe how other committers can xref:comguide:ROOT:verifying-releases.adoc[verify a release] and how the release manager can then perform xref:comguide:ROOT:post-release-successful.adoc[post-release] activities and set up for the next development iteration.
@@ -147,9 +147,9 @@ licenses to remove from supplemental-models.xml (are spurious):
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
 
-=== Reconcile causeway-bom pom
+=== Reconcile causeway-parent pom
 
-The `bom/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
+The `parent/pom.xml` is a customisation of the `org.apache:apache` pom, with each section of customisation clearly identified.
 
 Check to see if there has been a new version of `org.apache:apache`; if so, merge in the changes.
 
@@ -417,7 +417,7 @@ gpg (GnuPG) 2.0.30 (Gpg4win 2.3.4)
 
 The build creates a zip of the directory, so before executing the release we remove any other files.
 
-Still in the `bom` directory, we deploy (upload the artifacts) using:
+Deploy (upload the artifacts) using:
 
 [source,bash,subs="attributes+"]
 ----
@@ -489,7 +489,7 @@ See xref:comguide:ROOT:key-generation.adoc[Key Generation] for more details.
 At the <<bump-code-to-causewayrel,beginning>> of the release process we bumped the version to the release version, ie `$CAUSEWAYREL`.
 With the release now deployed we now need to reset the revision back down to the base snapshot, ie `{page-causewaysnapshotversion}`.
 
-Therefore, still in the `bom` directory:
+Therefore:
 
 [source,bash,subs="attributes+"]
 ----
