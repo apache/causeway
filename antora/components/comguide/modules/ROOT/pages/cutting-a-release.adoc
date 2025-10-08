@@ -263,11 +263,11 @@ mvnd install -o -DskipTests -T1C -Dgithub
 +
 The `-Dgithub` property activates the "github" profile that references all modules to be released.
 
-* next we also update the starters (as used by applications built using the framework):
+* next we also update the bom (as used by applications built using the framework):
 +
 [source,bash,subs="attributes+"]
 ----
-pushd ../starters
+pushd bom
 mvnd versions:set -DnewVersion=$CAUSEWAYREL
 mvnd install -DskipTests -o
 popd
