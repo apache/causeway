@@ -239,24 +239,13 @@ git push origin $CAUSEWAYBRANCH -u
 
 For link:https://maven.apache.org/guides/mini/guide-reproducible-builds.html[reproducibility], the `project.build.outputTimestamp` property must be updated to a hard-coded value.
 
-Locate this property in `bom/pom.xml` and update to the current date/time.
+Locate this property in `parent/pom.xml` and update to the current date/time.
 
-
-=== Switch to the `bom` directory
-
-The remainder of the release process is performed from the context of the `bom` directory:
-
-[source,bash,subs="attributes+"]
-----
-cd bom
-----
 
 === Bump projects to `$CAUSEWAYREL`
 
 We use `mvnd versions:set` to manually bump the release version.
 (After release, there is a xref:comguide:ROOT:cutting-a-release.adoc#reset-revision-property[similar step at the end] to reset back to a `-SNAPSHOT` version).
-
-(Still in the `bom` directory), the steps are:
 
 * First we bump the framework's `pom.xml` files:
 +
