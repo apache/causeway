@@ -24,15 +24,47 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 == Preparation
 
-[IMPORTANT]
-====
-The release process should be performed on Java 21.
-====
 
 [IMPORTANT]
 ====
 The deploy process has been tested only with `gpg` 2.0.x ; you may need to adjust if using a later version.
 ====
+
+=== Configure JDK Toolchain
+
+The release process should be performed on Java 21, but using Java 17 toolchain.
+
+For example, if using sdkman:
+
+:dot: .
+[source,xml]
+.{dot}m2/toolchains.xml
+----
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+  <toolchain>
+    <type>jdk</type>
+    <provides>
+      <version>17</version>
+      <vendor>openjdk</vendor>
+    </provides>
+    <configuration>
+      <jdkHome>/Users/YOUR_USERNAME/.sdkman/candidates/java/17.0.10-tem</jdkHome>
+    </configuration>
+  </toolchain>
+
+  <toolchain>
+    <type>jdk</type>
+    <provides>
+      <version>21</version>
+      <vendor>openjdk</vendor>
+    </provides>
+    <configuration>
+      <jdkHome>/Users/YOUR_USERNAME/.sdkman/candidates/java/21.0.2-tem</jdkHome>
+    </configuration>
+  </toolchain>
+</toolchains>
+----
 
 === Obtain Consensus
 
