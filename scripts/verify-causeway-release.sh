@@ -24,15 +24,15 @@
 # where nexus_repo_number, causeway_version and [RC_number] are as advised in
 # releese candidate vote message.
 #
-#    eg: ./verify_causeway_release.sh 1033 3.4.0 RC1
+#    eg: ./verify_causeway_release.sh 1033 4.0.0-M1 RC1
 #
 #
 # prereqs:
 #    curl
 #    gpg
 #    unzip
-#    jdk 11+ (make sure you have the 'jar' command!)
-#    mvn 3.9.10+
+#    jdk 17+ (make sure you have the 'jar' command!)
+#    mvn 3.9.11+
 #
 
 ## uncomment for single line step through debugging
@@ -153,32 +153,22 @@ _download
 _verify
 _unpack
 _build
-_download_app helloworld jdo
 _download_app helloworld jpa
-_download_app simpleapp jdo
 _download_app simpleapp jpa
 
 # print instructions for final testing
 clear
 cat <<EOF
 
-# Test out helloworld (jdo) using:
-pushd causeway-app-helloworld-jdo
-mvn spring-boot:run
-popd
-
 # Test out helloworld (jpa) using:
 pushd causeway-app-helloworld-jpa
+mvnd clean install
 mvn spring-boot:run
-popd
-
-# Test out simpleapp (jdo) using:
-pushd causeway-app-simpleapp-jdo
-mvn -pl webapp spring-boot:run
 popd
 
 # Test out simpleapp (jpa) using:
 pushd causeway-app-simpleapp-jpa
+mvnd clean install
 mvn -pl webapp spring-boot:run
 popd
 
