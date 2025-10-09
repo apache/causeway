@@ -66,7 +66,6 @@ public final class Table {
         return new Table(yStart, opts, currentPage);
     }
 
-
     private final PDDocument document;
     private float margin;
 

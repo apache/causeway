@@ -75,7 +75,6 @@ class JaxbUtilsTest {
         a.setNested(b);
     }
 
-
     /**
      * Works for arbitrary {@link XmlRootElement#name()} combinations,
      * except you cannot use the same {@code name="root"} say on both {@link A} and {@link B}.

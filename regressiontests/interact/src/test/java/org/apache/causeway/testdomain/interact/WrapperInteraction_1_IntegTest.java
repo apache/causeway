@@ -144,5 +144,4 @@ extends InteractionTestAbstract {
         assertEquals(3, wrapper.wrapMixin(InteractionDemo_biArgEnabled.class, new InteractionDemo()).act(1, 2));
     }
 
-
 }

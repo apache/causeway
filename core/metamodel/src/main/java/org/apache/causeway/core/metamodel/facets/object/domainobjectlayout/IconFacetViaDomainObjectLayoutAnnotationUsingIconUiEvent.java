@@ -65,7 +65,6 @@ implements IconFacet {
     @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
     @Override public Precedence getPrecedence() { return Precedence.EVENT; }
 
-
     @Override
     public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, ObjectSupport.IconSize iconSize) {
 
@@ -105,6 +104,5 @@ implements IconFacet {
         return getSharedFacetRanking()
             .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class));
     }
-
 
 }

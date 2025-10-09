@@ -132,5 +132,4 @@ extends InteractionTestAbstract {
         Assertions.assertThat(calculator2.getTotal()).isEqualTo(24);
     }
 
-
 }

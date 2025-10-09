@@ -62,6 +62,4 @@ final class ActionNode extends MemberNode {
         return action;
     }
     
-
 }
-

@@ -47,7 +47,6 @@ public record InteractionVeto(
         public boolean isHidden() { return this == HIDDEN;}
     }
 
-
     public static InteractionVeto notFound(
             final Identifier.@NonNull Type memberType,
             final @Nullable String memberId) {

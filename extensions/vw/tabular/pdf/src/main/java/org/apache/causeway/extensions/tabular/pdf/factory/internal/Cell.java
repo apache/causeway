@@ -346,7 +346,6 @@ public class Cell {
 		}
 	}
 
-
 	public WrappingFunction getWrappingFunction() {
 		return getParagraph().getWrappingFunction();
 	}

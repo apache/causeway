@@ -287,7 +287,6 @@ public class _Multimaps {
         return new ListMultimapWrapper<>(mapFactory.get(), elementCollectionFactory);
     }
 
-
     public static <K, V, S extends Set<V>> SetMultimap<K, V> newSetMultimap(
         final @NonNull Supplier<? extends Map<K, S>> mapFactory,
         final @NonNull Supplier<S> elementCollectionFactory){

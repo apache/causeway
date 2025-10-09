@@ -212,7 +212,6 @@ public @interface PropertyLayout {
     String navigableSubtree()
         default "";
 
-
     /**
      * How the properties of this domain object are be edited, either {@link PromptStyle#DIALOG dialog} or {@link PromptStyle#INLINE inline}.
      */

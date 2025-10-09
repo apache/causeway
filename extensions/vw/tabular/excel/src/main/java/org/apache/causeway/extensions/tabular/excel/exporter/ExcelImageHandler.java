@@ -30,7 +30,6 @@ import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 
 import org.apache.causeway.commons.internal.image._Images;
 
-
 /**
  * @see <a href="https://www.baeldung.com/java-add-image-excel">baeldung</a>
  */

@@ -81,5 +81,4 @@ public record TransactionId(
     @Override public UUID getInteractionId() { return interactionId; }
     @Override public int getSequence() { return sequence; }
 
-
 }

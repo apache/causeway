@@ -134,7 +134,6 @@ public final class RestfulRequest {
 
     @Getter private final Map<RequestParameter<?>, Object> args = new LinkedHashMap<>();
 
-
     public <Q> RestfulRequest withArg(final RestfulRequest.RequestParameter<Q> queryParam, final String argStrFormat, final Object... args) {
         final String argStr = String.format(argStrFormat, args);
         final Q arg = queryParam.getParser().valueOf(argStr);

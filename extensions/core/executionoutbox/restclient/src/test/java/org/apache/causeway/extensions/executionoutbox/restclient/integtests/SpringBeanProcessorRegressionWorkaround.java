@@ -47,8 +47,6 @@ package org.apache.causeway.extensions.executionoutbox.restclient.integtests;
 //import org.springframework.core.type.filter.AnnotationTypeFilter;
 //import org.springframework.util.ClassUtils;
 
-
-
 /**
  * RESTEASY013015: could not find the type for bean named jpaSharedEM_entityManagerFactory
  * <p>

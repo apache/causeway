@@ -122,5 +122,4 @@ public record InteractionHead(
         return onType.logicalTypeName() + "#" + memberId;
     }
 
-    
 }

@@ -70,7 +70,6 @@ class WrapperFactory_async_IntegTest extends CoreWrapperFactory_IntegTestAbstrac
         assertThat(counter.getNum()).isNull();
     }
 
-
     @SneakyThrows
     @ParameterizedTest(name = "executorService[{index}]: {0}")
     @MethodSource("executorServices")

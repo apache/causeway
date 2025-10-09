@@ -81,7 +81,6 @@ class InteractionResultTest {
         builder.addAdvise(vetoReason, forTesting);
     }
 
-
     static Consent.VetoReason vetoReason(final String reasonString) {
         return Consent.VetoReason.explicit(reasonString);
     }

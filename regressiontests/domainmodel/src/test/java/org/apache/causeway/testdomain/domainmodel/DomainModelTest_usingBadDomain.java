@@ -422,7 +422,6 @@ class DomainModelTest_usingBadDomain {
             ValidationFailureUtils.formatMemberInvalidAnnotation(origin, Collection.class));
     }
 
-
     // -- ELEMENT-TYPE
 
     @ParameterizedTest

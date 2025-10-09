@@ -204,7 +204,6 @@ implements ObjectIconService {
                 : null;
     }
 
-
     @SneakyThrows
     private Optional<URL> classPathResource(
             final @NonNull String absoluteResourceName) {

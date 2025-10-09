@@ -66,5 +66,4 @@ public interface DataRow {
      */
     Can<ManagedObject> getCellElementsForColumn(@NonNull String columnId);
 
-
 }

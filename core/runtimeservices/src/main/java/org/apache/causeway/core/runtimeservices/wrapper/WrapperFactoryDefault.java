@@ -291,7 +291,6 @@ implements WrapperFactory, HasMetaModelContext {
         }
     }
 
-
     // -- HELPER - SETUP
 
     private <T extends InteractionEvent> void putDispatcher(

@@ -40,7 +40,6 @@ class JavaCollectionFacetTest {
     private MetaModelContext metaModelContext;
     private Mocking mocking = new Mocking();
 
-
     @BeforeEach
     void setUp() throws Exception {
         metaModelContext = MetaModelContext_forTesting.buildDefault();

@@ -45,7 +45,6 @@ public class ExcelDemoToDoItem_tearDown2 extends FixtureScript {
 
         var em = jpaSupport.getEntityManagerElseFail(ExcelFixture.class);
 
-
 //FIXME
 //        jdoSupport.executeUpdate(String.format(
 //                "delete "

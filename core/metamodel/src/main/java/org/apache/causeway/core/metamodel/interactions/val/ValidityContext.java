@@ -40,5 +40,4 @@ permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, Prop
         return Where.NOT_SPECIFIED;
     }
 
-
 }

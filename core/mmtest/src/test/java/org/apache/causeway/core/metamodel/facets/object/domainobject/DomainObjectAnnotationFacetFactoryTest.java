@@ -433,8 +433,6 @@ extends FacetFactoryTestAbstract {
                 });
             }
 
-
-
             @Test
             public void configured_value_set_to_defaults() {
                 ignoringConfiguration();

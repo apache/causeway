@@ -80,7 +80,6 @@ public record Clob(
     CharSequence chars
     ) implements NamedWithMimeType {
 
-
     // -- FACTORIES
 
     /**

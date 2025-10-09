@@ -48,7 +48,6 @@ record _ObjectGraphFactory(
         Map<LogicalType, ObjectGraph.Object> objectByLogicalType,
         Map<String, ObjectGraph.Object> objectById) implements ObjectGraph.Factory {
 
-
     public _ObjectGraphFactory(final List<? extends ObjectSpecification> objectSpecs) {
         this(objectSpecs, new ObjectGraph(), _Multimaps.newListMultimap(), new HashMap<>(), new HashMap<>());
     }

@@ -149,7 +149,6 @@ public record CausewayConfiguration(
 
     public static final String ROOT_PREFIX = "causeway";
 
-
     //@Builder // for testing
     //     @Autowired
     //     public CausewayConfiguration(final ConfigurableEnvironment environment, final Optional<BuildProperties> buildProperties) {
@@ -1672,7 +1671,6 @@ public record CausewayConfiguration(
                  */
                 @DefaultValue("ANNOTATION_OPTIONAL")
                 IntrospectionPolicy policy,
-
 
                 /**
                  * Whether to perform metamodel introspection in parallel, intended to speed up bootstrapping.
@@ -3568,7 +3566,6 @@ public record CausewayConfiguration(
         }
     }
 
-
     @Valid
     public record Extensions(
         @DefaultValue
@@ -3893,7 +3890,6 @@ public record CausewayConfiguration(
                 public boolean isEnabled() { return this == ENABLED; }
                 public boolean isDisabled() { return this == DISABLED; }
             }
-
 
         }
 

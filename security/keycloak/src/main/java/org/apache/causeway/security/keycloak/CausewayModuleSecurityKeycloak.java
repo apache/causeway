@@ -107,7 +107,6 @@ public class CausewayModuleSecurityKeycloak {
                     .loginPage(loginPage))
                 .build();
 
-
 // Spring 6 Legacy
 //        var httpSecurityLogoutConfigurer =
 //            http

@@ -168,6 +168,4 @@ record ExcelCellWriter(
         cellStyleProvider.applyDateStyle(cell);
     }
     
-
-
 }

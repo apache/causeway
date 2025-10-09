@@ -76,5 +76,4 @@ public interface ProxyFactoryService {
             int modifiers) {
     }
 
-
 }

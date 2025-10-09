@@ -135,8 +135,6 @@ class Parsers {
 //        }
     }
 
-
-
     record CacheControlParser() implements Parser<CacheControl> {
         @Override public CacheControl valueOf(String str) {
             //Cache-Control: no-cache, no-store, max-age=3600

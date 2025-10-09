@@ -66,7 +66,6 @@ class DataTableSerializationTest implements HasMetaModelContext {
         @Override public String viewModelMemento() { return memento; }
     }
 
-
     @ParameterizedTest
     @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
     void roundtripOnEmptyTable(Class<? extends ViewModel> viewmodelClass) {

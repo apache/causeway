@@ -64,7 +64,6 @@ public interface ObjectFeature extends Specification {
         return getFriendlyName(()->domainObject);
     }
 
-
     /**
      * Optionally returns the (translated friendly) name for this member -
      * the field or action, based on whether the name is provided statically

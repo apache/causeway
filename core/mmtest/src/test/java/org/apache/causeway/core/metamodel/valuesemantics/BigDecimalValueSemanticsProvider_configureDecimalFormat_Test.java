@@ -80,7 +80,6 @@ class BigDecimalValueSemanticsProvider_configureDecimalFormat_Test {
         Mockito.lenient().when(mockObjectFeature.lookupFacet(MinFractionalDigitsFacet.class))
                .thenReturn(Optional.of(new MinFractionalDigitsFacetAbstract(minScale, mockObjectFeature) {}));
 
-
         new ConfigurationTester(TestPropertyValues.of("causeway.valueTypes.bigDecimal.display.minScale="))
             .test(causewayConfiguration->{
                 valueSemantics.setCausewayConfiguration(causewayConfiguration);

@@ -36,7 +36,6 @@ class MixedInMemberNamingStrategyTest {
         class placeOrder {}
     }
     
-    
     @RequiredArgsConstructor
     enum Scenario {
         SINGLE_UNDERSCORE(Customer_placeOrder.class, "placeOrder", "Place Order"),

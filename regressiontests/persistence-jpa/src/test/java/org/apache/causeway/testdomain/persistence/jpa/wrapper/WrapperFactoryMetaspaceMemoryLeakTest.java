@@ -115,5 +115,3 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
         }
     }
 }
-
-

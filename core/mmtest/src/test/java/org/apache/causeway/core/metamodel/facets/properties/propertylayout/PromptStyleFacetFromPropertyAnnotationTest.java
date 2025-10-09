@@ -127,7 +127,6 @@ class PromptStyleFacetFromPropertyAnnotationTest {
                         Optional.of(mockPropertyLayout), conf, mockFacetHolder)
                     .orElse(null);
 
-
             assertThat(facet, is(anInstanceOf(PromptStyleFacet.class)));
             assertThat(facet.origin(), is("Configuration"));
             assertThat(facet.value(), is(PromptStyle.INLINE));
