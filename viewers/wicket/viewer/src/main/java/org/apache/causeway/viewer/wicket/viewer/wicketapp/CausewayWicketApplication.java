@@ -18,9 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -47,7 +44,6 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.serialize.java.JavaSerializer;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
@@ -56,7 +52,6 @@ import org.springframework.stereotype.Component;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -76,7 +71,6 @@ import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAd
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -168,35 +162,6 @@ implements
         @Inject ServiceInjector serviceInjector;
     }
 
-    static class MyObjectOutputStream extends ObjectOutputStream {
-
-        MyObjectOutputStream(final OutputStream outputStream) throws IOException {
-            super(outputStream);
-            //enableOverride(true);
-        }
-
-        @Override
-        protected final void writeObjectOverride(final Object obj) throws java.io.IOException {
-            if(obj instanceof String str) {
-                System.err.printf(">> \"%s\"%n", str);
-            } else {
-                System.err.printf(">> %s(%s)%n", obj.getClass().getSimpleName(), Integer.toHexString(System.identityHashCode(obj)));
-            }
-            superWriteObject0(obj, false);
-        }
-
-        // requires --add-opens java.base/java.io=ALL-UNNAMED
-        @SneakyThrows
-        private void enableOverride(final boolean ena) {
-            _Reflect.setFieldOn(ObjectOutputStream.class.getDeclaredField("enableOverride"), this, ena);
-        }
-        @SneakyThrows
-        private void superWriteObject0(final Object... args) {
-            _Reflect.invokeMethodOn(ObjectOutputStream.class.getDeclaredMethod("writeObject0", new Class[] {Object.class, boolean.class}), this, args);
-        }
-
-    }
-
     /**
      * Initializes the application; in particular, bootstrapping the Causeway
      * backend, and initializing the {@link ComponentFactoryRegistry} to be used
@@ -236,27 +201,6 @@ implements
                 // unfortunately must run on same thread that provides Application.get()
                 .submit(_ConcurrentContext.sequential())
                 .await();
-
-            getFrameworkSettings().setSerializer(new JavaSerializer(getApplicationKey()) {
-                @Override
-                public byte[] serialize(final Object object) {
-//                    var watch = _Timing.now();
-//                    var bytes = super.serialize(object);
-//                    watch.stop();
-//                    System.err.printf("> %s (%d kB %s)%n", object.getClass().getSimpleName(), bytes.length/1000, watch);
-                    return new byte[0];
-                }
-                @Override
-                public Object deserialize(final byte[] data) {
-                    var obj = super.deserialize(data);
-                    System.err.printf("< %s%n", obj.getClass().getSimpleName());
-                    return obj;
-                }
-                @Override
-                protected final java.io.ObjectOutputStream newObjectOutputStream(final java.io.OutputStream out) throws java.io.IOException {
-                    return new MyObjectOutputStream(out);
-                }
-            });
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
