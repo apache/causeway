@@ -2170,6 +2170,24 @@ identified
                     <url>${distMgmtSnapshotsUrl}</url>
                 </snapshotRepository>
             </distributionManagement>
+            <build>
+                <plugins>
+                    <!--  We want to sign the artifact, the POM, and all attached
+artifacts (except for SHA-512 checksum)  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <!--  END SNIPPET: release-profile  -->
     </profiles>
