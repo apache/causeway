@@ -75,7 +75,7 @@ class _LoggingJavaSerializer extends JavaSerializer {
         var bytes = super.serialize(object);
         watch.stop();
         System.err.printf("> %s (%d kB %s)%n", object.getClass().getSimpleName(), bytes.length/1000, watch);
-        return new byte[0];
+        return bytes;
     }
 
     @Override
