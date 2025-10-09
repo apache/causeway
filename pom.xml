@@ -42,8 +42,6 @@
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the
-        aggregator -->
 
         <maven-timeline.version>2.0.3</maven-timeline.version>
     </properties>
