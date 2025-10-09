@@ -2145,4 +2145,33 @@ identified
         </developer>
     </developers>
 
+    <profiles>
+        <!--  START SNIPPET: release-profile  -->
+        <profile>
+            <id>apache-release</id>
+            <activation>
+                <property>
+                    <name>apache-release</name>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>apache.releases.https</id>
+                    <name>Apache Release Distribution Repository</name>
+                    <url>
+                        https://repository.apache.org/service/local/staging/deploy/maven2</url>
+                </repository>
+                <snapshotRepository>
+                    <id>apache.snapshots.https</id>
+                    <name>${distMgmtSnapshotsName}</name>
+                    <url>${distMgmtSnapshotsUrl}</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <!--  END SNIPPET: release-profile  -->
+    </profiles>
+
 </project>
