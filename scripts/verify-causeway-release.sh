@@ -93,7 +93,7 @@ _build(){
     echo 'Building'
 
     # previously there were multiple directories, now just the one.
-    pushd causeway*/bom
+    pushd causeway*
     _execmustpass mvn clean install -DskipTests -T1C -Dgithub
     popd
 }
@@ -145,7 +145,7 @@ if [[ -z "$NEXUSREPONUM" || -z "$VERSION" || -z "$RC" ]]; then
 fi
 
 cat <<EOF >/tmp/url.txt
-https://repository.apache.org/service/local/repositories/orgapachecauseway-$NEXUSREPONUM/content/org/apache/causeway/causeway-bom/$VERSION/causeway-bom-$VERSION-source-release.zip
+https://repository.apache.org/service/local/repositories/orgapachecauseway-$NEXUSREPONUM/content/org/apache/causeway/causeway-all/$VERSION/causeway-all-$VERSION-source-release.zip
 EOF
 
 # The work starts here
