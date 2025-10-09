@@ -154,21 +154,6 @@
             <properties>
                 <skipTests>true</skipTests>
             </properties>
-<!--
-            <distributionManagement>
-                <repository>
-                    <id>apache.releases.https</id>
-                    <name>Apache Release Distribution Repository</name>
-                    <url>
-                        https://repository.apache.org/service/local/staging/deploy/maven2</url>
-                </repository>
-                <snapshotRepository>
-                    <id>apache.snapshots.https</id>
-                    <name>${distMgmtSnapshotsName}</name>
-                    <url>${distMgmtSnapshotsUrl}</url>
-                </snapshotRepository>
-            </distributionManagement>
--->
             <build>
                 <plugins>
                     <plugin>
@@ -207,6 +192,14 @@
                                     <vendor>openjdk</vendor>
                                 </jdk>
                             </toolchains>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <attach>true</attach>
                         </configuration>
                     </plugin>
 
