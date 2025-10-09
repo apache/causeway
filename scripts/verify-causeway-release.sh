@@ -93,7 +93,7 @@ _build(){
     echo 'Building'
 
     # previously there were multiple directories, now just the one.
-    pushd causeway*
+    pushd causeway-all-$VERSION
     _execmustpass mvn clean install -DskipTests -T1C -Dgithub
     popd
 }
