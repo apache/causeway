@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # to be shared among all steps of this job
-      BASELINE: 3.5.0-SNAPSHOT
+      BASELINE: 4.0.0-SNAPSHOT
       PROJECT_ROOT_PATH: ${{ github.workspace }}
       CI_SCRIPTS_PATH: ${{ github.workspace }}/scripts/ci
       ANTORA_PLAYBOOKS_PATH: ${{ github.workspace }}/antora/playbooks
@@ -32,11 +32,11 @@ jobs:
     steps:
     - uses: actions/checkout@v5
 
-    - name: Set up JDK 24
+    - name: Set up JDK 25
       uses: actions/setup-java@v5
       with:
         distribution: 'zulu'
-        java-version: 24
+        java-version: 25
 
     - name: Setup Script Environment
       shell: bash
