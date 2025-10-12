@@ -22,7 +22,7 @@ Post the results to the `dev@causeway.a.o` mailing list:
 
 [source,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Causeway Core release {page-causewayreleaseversion}
+[RESULT] [VOTE] Apache Causeway release {page-causewayreleaseversion}
 ----
 
 using the body (alter last line as appropriate):
