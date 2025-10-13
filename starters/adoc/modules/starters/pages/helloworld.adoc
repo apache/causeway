@@ -50,12 +50,6 @@ Create a new directory, and `cd` into that directory.
 
 To build the app from the latest stable release:
 
-* if using JDO as the ORM:
-+
-include::helloworld-script-jdo.adoc[]
-
-* if using JPA as the ORM:
-+
 include::helloworld-script-jpa.adoc[]
 
 
