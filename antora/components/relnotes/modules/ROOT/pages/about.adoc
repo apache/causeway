@@ -16,6 +16,16 @@ This table summarises all releases of Apache Causeway to date.
 | Bugs
 | Detail
 
+| 13th Oct 2025
+| 4.0.0-M1
+a| Apache Causeway 4.0.0-M1
+| 7
+| 7
+| 0
+|
+* xref:relnotes:ROOT:2025/4.0.0-M1/relnotes.adoc[Release Notes]
+* xref:relnotes:ROOT:2025/4.0.0-M1/mignotes.adoc[Migration Notes]
+
 | 8th Jul 2025
 | 3.4.0
 a| Apache Causeway 3.4.0

@@ -214,7 +214,7 @@ if [ $# -lt 1 ]; then
 fi
 
 # constants
-fullname="causeway-bom"
+fullname="causeway-all"
 repo_root=https://repository.apache.org/content/repositories/releases/org/apache/causeway
 
 # file suffices
