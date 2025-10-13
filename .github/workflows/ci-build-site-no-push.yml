@@ -67,7 +67,7 @@ jobs:
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
       # we install the 'node' modules into the project root under 'node_modules',
       # because we have no privileges to install them globally with -g option
-      run: npm i @antora/cli@^3.1.10 @antora/site-generator-default@^3.1.10  asciidoctor-kroki
+      run: npm i @antora/cli@^3.1.14 @antora/site-generator-default@^3.1.14  asciidoctor-kroki
 
     - name: List Versions of installed NPM Packages
       shell: bash
@@ -88,7 +88,7 @@ jobs:
     - name: Build Apache Causeway Site
       shell: bash
       working-directory: ${{ env.PROJECT_ROOT_PATH }}
-      run: bash -x $CI_SCRIPTS_PATH/_build-site.sh $ANTORA_PLAYBOOKS_PATH/site.yml
+      run: bash -x $CI_SCRIPTS_PATH/_build-site.sh $ANTORA_PLAYBOOKS_PATH/site-verify.yml
       env:
         REVISION: ${{ steps.revision.outputs.revision }}
         SKIP_PROJDOC_GENERATION: true
