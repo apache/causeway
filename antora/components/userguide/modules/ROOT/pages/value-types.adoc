@@ -596,10 +596,8 @@ Compared to scalar types, note that the `ValueSemanticsProvider` does not need t
 Also, it is not possible to use a custom value type as part of the object's id, and so no implementation of `getIdStringifier()` is required either.
 
 
-If using within the database then you will also need to map the custom type to the database:
-
-* if mapping to xref:pjpa::about.adoc[JPA/EclipseLink], use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
-* If mapping to xref:pjdo::about.adoc[JDO/DataNucleus], use `@Embedded` and `@PersistenceCapable(embeddedOnly="true")`; see https://www.datanucleus.org/products/accessplatform_6_0/jdo/mapping.html#embedded[Datanucleus documentation].
+If using within the database then you will also need to map the custom type to the database.
+If mapping to xref:pjpa::about.adoc[JPA/EclipseLink], use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
 
 
 

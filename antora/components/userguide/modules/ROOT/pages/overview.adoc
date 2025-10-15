@@ -30,7 +30,7 @@ Apache Causeway defines its own set of annotations, and
 you can generally recognize an Apache Causeway domain class because it will be probably be annotated using xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] and xref:refguide:applib:index/annotation/DomainService.adoc[@DomainService].
 There are though configuration options that allow you to control to what extent (some) annotations can be inferred implicitly rather than  specified explicitly.
 
-The framework also recognises some annotations from the ORM layer (ie xref:pjpa::about.adoc[JPA/EclipseLink] or xref:pjdo::about.adoc[JDO/DataNucleus]) and infers domain semantics from these annotations.
+The framework also recognises some annotations from the ORM layer (ie xref:pjpa::about.adoc[JPA/EclipseLink]) and infers domain semantics from these annotations.
 Similarly, JAXB annotations are often used for xref:view-models.adoc[view models].
 
 The framework also defines supplementary annotations, notably xref:refguide:applib:index/annotation/DomainObjectLayout.adoc[@DomainObjectLayout] and xref:refguide:applib:index/annotation/DomainServiceLayout.adoc[@DomainServiceLayout].

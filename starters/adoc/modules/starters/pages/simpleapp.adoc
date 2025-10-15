@@ -557,25 +557,23 @@ The `SimpleModuleIntegTestAbstract` is the superclass of all integration tests i
 .SimpleModuleIntegTestAbstract.java
 ----
 @SpringBootTest(
-        classes = SimpleModuleIntegTestAbstract.TestApp.class   // <.>
+        classes = SimpleModuleIntegTestAbstract.TestApp.class             // <.>
 )
 @ActiveProfiles("test") // <.>
 public abstract class SimpleModuleIntegTestAbstract
-        extends CausewayIntegrationTestAbstractWithFixtures {       // <.>
+        extends CausewayIntegrationTestAbstractWithFixtures {             // <.>
 
     @Configuration
     @Import({
-        CausewayModuleCoreRuntimeServices.class,                    // <.>
-        CausewayModuleSecurityBypass.class,                         // <.>
-        CausewayModuleJdoDataNucleus5.class,                        // <.>
-        CausewayModuleTestingFixturesApplib.class,                  // <.>
+        CausewayModuleCoreRuntimeServices.class,                          // <.>
+        CausewayModuleSecurityBypass.class,                               // <.>
+        CausewayModuleJpaEclipseLink.class,                               // <.>
+        CausewayModuleTestingFixturesApplib.class,                        // <.>
 
-        SimpleModule.class                                      // <.>
+        SimpleModule.class                                                // <.>
     })
     @PropertySources({
-            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),     // <.>
-            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate), // <.>
-            @PropertySource(CausewayPresets.UseLog4j2Test),                   // <.>
+        @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),     // <.>
     })
     public static class TestApp {
     }
@@ -590,14 +588,12 @@ public abstract class SimpleModuleIntegTestAbstract
 In this case, the test inherits from the `CausewayIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
 <.> Specifies the modules that make up Apache Causeway framework itself.
-These include core, security set to the bypass implementation (effectively is ignored) and JDO/DataNucleus for persistence.
+These include core, security set to the bypass implementation (effectively is ignored) and xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.
 Note that no viewers are bootstrapped because the tests are run through Spring's integration testing framework, rather than (say) as Selenium tests.
 
 <.> Disables security checks.
 
-<.> Configures JDO as the ORM.
-+
-If using JPA, this would be `CausewayModuleJpaEclipseLink.class` instead.
+<.> Configures JPA as the ORM.
 
 <.> Brings in support for running fixtures.
 +
@@ -607,11 +603,6 @@ You can learn more about testing in the xref:testing:ROOT:about.adoc[Testing Gui
 
 <.> Runs the tests in memory using H2.
 A unique schema allows tests to potentially be run in parallel
-
-<.> Ensures that JDO/DataNucleus is configured to create the database schema first.
-This may be required because the application might otherwise be configured to use the xref:userguide:flyway:about.adoc[Flyway integration].
-
-<.> Sets up logging to use the configuration defined in the `log4j2-test.xml` file
 
 
 
