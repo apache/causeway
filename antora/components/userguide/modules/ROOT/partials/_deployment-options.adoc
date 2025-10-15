@@ -23,10 +23,7 @@ The principal implementation is the xref:vw:ROOT:about.adoc[Web UI (Wicket viewe
 The framework provides a xref:extensions:ROOT:about.adoc[number of these].
 
 Deploying on Apache Causeway means that the framework also manages object persistence.
-Again this is pluggable.
-There are two implementations, either xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)] or xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)].
-These are normally used with an RDBMS, though in principle could be used with NoSQL databases.
-JDO/DataNucleus historically has link:https://www.datanucleus.org/products/accessplatform/datastores/datastores.html[extensive support] for NoSQL, though JPA/EclipseLink also has link:https://wiki.eclipse.org/EclipseLink/FAQ/NoSQL[some support] also.
+Again this is pluggable, currently only the  xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)] implementation is supported.
 
 
 [#deploy-with-custom-controllers]
@@ -67,7 +64,7 @@ At the time of writing there are a couple being developed, link:https://github.c
 Another framework that implements the RO spec is the link:https://github.com/NakedObjectsGroup/NakedObjectsFramework[Naked Objects Framework] (on .NET).
 It provides a complete generic UI tested against its own RO implementation.
 
-As for the human-usable generic UI discussed  xref:#deploy-with-a-generic-ui[above], the framework manages object persistence, for example using the JDO/DataNucleus objectstore.
+As for the human-usable generic UI discussed  xref:#deploy-with-a-generic-ui[above], the framework manages object persistence, for example using the JPA/EclipseLink objectstore.
 It is perfectly possible to deploy the RESTful API alongside an auto-generated webapp; both work from the same domain object model.
 
 

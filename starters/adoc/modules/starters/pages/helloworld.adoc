@@ -334,38 +334,45 @@ The helloworld starter app doesn't provide any examples of these.
 ==== AppManifest
 
 The "app manifest" is the top-level Spring `@Configuration`.
-In the case of the helloworld starter app *for the `jdo` branch* the `AppManifest` looks like this:
+In the case of the helloworld starter app the `AppManifest` looks like this:
 
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
+        CausewayModuleApplibMixins.class,                       // <.>
+        CausewayModuleApplibChangeAndExecutionLoggers.class,    // <1>
+
         CausewayModuleCoreRuntimeServices.class,                // <.>
-        CausewayModuleSecurityShiro.class,                      // <.>
-        CausewayModuleJdoDataNucleus5.class,                    // <.>
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class, // <.>
+        CausewayModuleSecuritySimple.class,                     // <.>
+        CausewayModulePersistenceJpaEclipselink.class,          // <.>
+        CausewayModuleViewerRestfulObjectsViewer.class,         // <.>
+        CausewayModuleViewerGraphqlViewer.class,                // <.>
+        CausewayModuleViewerWicketApplibMixins.class,           // <.>
         CausewayModuleViewerWicketViewer.class,                 // <.>
 
         CausewayModuleTestingH2ConsoleUi.class,                 // <.>
-
-        HelloWorldModule.class                              // <.>
+        HelloWorldModule.class                                  // <.>
 })
 @PropertySource(CausewayPresets.NoTranslations)                 // <.>
 public class AppManifest {
 }
 ----
-
+<.> Provides various optional framework-provided mixins in the UI, such as the `objectIdentifier` and `logicalTypeName` properties
 <.> Mandatory - specifies the core of the Apache Causeway framework
 
-<.> Enables the Shiro security mechanism.
+<.> Enables the Simple security mechanism.
 There are several security implementations, precisely one must be selected
 
-<.> Enables JDO/DataNucleus for persistence.
+<.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.
 Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view models] may be used, with hand-rolled persistence).
 
-<.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
+<.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]
 
+<.> Enables the xref:gqlv:ROOT:about.adoc[GraphQL API (GraphQL viewer])
+
+<.> Enables various optional mixins provided by the xref:vw:ROOT:about.adoc[Wicket viewer], for example the `clearHints()` action.
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
 
 <.> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
@@ -375,15 +382,6 @@ Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view 
 <.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
 This particular one disables the framework's i18n support using the `CausewayPresets` convenience class.
 
-For the `jpa` branch the `AppManifest` is almost identical, just replacing:
-
-* `CausewayModuleJdoDataNucleus5.class,`
-
-with:
-
-* `CausewayModuleJpaEclipseLink.class,`
-
-This bootstraps the JPA as the ORM instead of JDO.
 
 [#helloworldapp]
 ==== HelloWorldApp

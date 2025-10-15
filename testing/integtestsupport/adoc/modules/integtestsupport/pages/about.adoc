@@ -145,7 +145,7 @@ public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTe
     @Configuration
     @Import({
         CausewayModuleCoreRuntimeServices.class,
-        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleJpaEclipseLink.class,
         CausewayModuleSecurityBypass.class,
         CausewayModuleTestingFixturesApplib.class,
         ApplicationModule.class                 //<1>
@@ -158,7 +158,7 @@ public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTe
 
 You can see that these are very similar, what's different is the module referenced.
 
-They both also force an in-memory database, with JDO/DataNucleus ORM configured to autocreate the database schema.
+They both also force an in-memory database, with the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] ORM configured to autocreate the database schema.
 
 === Faster bootstrapping
 
@@ -629,14 +629,3 @@ Thus, the setup fixture runs the setup for the "inner-most" "leaf-level" modules
 
 
 
-== Hints-n-Tips
-
-[TIP]
-.Using JDO/DataNucleus
-====
-When running integration tests through the IDE, and if using the JDO/DataNucleus ORM, then make sure the module(s) with entities have been enhanced first.
-
-If using IntelliJ, we recommend creating a run Maven configuration that runs `datanucleus:enhance`, and then pinning the configuration once run as a tab in the "Debug" window for easy access.
-
-image::pin-enhance-run-configuration.png[width="400px"]
-====

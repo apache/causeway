@@ -69,7 +69,7 @@ image::040-other-settings-compiler/020-annotation-processor.png[width="1000px"]
 
 [TIP]
 ====
-If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this setting enables the generation of the `Q*` classes for DataNucleus type-safe queries.
+If using QueryDSL, this setting enables the generation of the `Q*` classes for type-safe queries.
 
 It is also required for frameworks such as link:https://projectlombok.org[Lombok].
 ====
@@ -115,9 +115,7 @@ Let's see how to run both the app and the tests.
 
 We run the application by creating a Run configuration, using `Run > Edit Configurations`.
 
-There is one complication, which is the ORM.
-If the app uses xref:pjpa:ROOT:about.adoc[JPA], then dynamic class weaving should be configured.
-If the app uses xref:pjdo:ROOT:about.adoc[JDO], then Datanucleus enhancer should be configured.
+We also configure dynamic class weaving for the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] ORM.
 
 
 === Running the App (JPA)

@@ -271,7 +271,7 @@ If you consistently hit problems, then the final recourse is to disable the auto
 //
 //In the context of Apache Causeway, this is very useful for contributed actions and mixins and also view models; you should then be able to write these actions and have them be picked up without restarting the application.
 //
-//Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.
+//Changing persisting domain entities is more problematic becaue at runtime the JPA persistence mechanism would need to rebuild its own metamodel.
 //You may find that adding actions will work, but adding new properties or collections is much less likely to.
 //
 //For details of setting up DCEVM, see the xref:setupguide:intellij:hints-and-tips.adoc#setting-up-dcevm[corresponding section] in the IntelliJ documentation.

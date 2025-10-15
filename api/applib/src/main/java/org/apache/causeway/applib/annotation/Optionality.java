@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.annotation;
 
+import jakarta.persistence.Column;
+
 /**
  * Whether the property or parameter is optional or is required (aka mandatory).
  * @since 1.x {@index}
@@ -40,15 +42,14 @@ public enum Optionality {
     OPTIONAL,
 
     /**
-     * Indicates that the property is required (even if the JDO <code>javax.jdo.annotations.Column</code> annotation
+     * Indicates that the property is required (even if the JPA {@link jakarta.persistence.Column} annotation
      * says otherwise).
      *
      * <p>
-     * When using the JDO/DataNucleus objectstore, it is sometimes necessary to annotate a property as optional
-     * (using <code>javax.jdo.annotations.Column#allowsNull()</code> set to <code>true</code>), even if the property is
+     * When using the JPA/EclipseLink objectstore, it is sometimes necessary to annotate a property as optional
+     * (using {@link Column#nullable()} set to <code>true</code>), even if the property is
      * logically mandatory.  For example, this can occur when the property is in a subtype class that has been
-     * "rolled up" to the superclass table using <code>javax.jdo.annotations.Inheritance</code>> with the
-     * <code>javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE</code> superclass strategy.
+     * "rolled up" to the superclass table using {@link jakarta.persistence.Inheritance} strategy of {@link jakarta.persistence.InheritanceType#SINGLE_TABLE}
      * </p>
      *
      * <p>

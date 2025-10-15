@@ -199,10 +199,9 @@ If a user is not permitted to view/edit an object, then it is only the viewer co
 
 You may therefore wish to implement multi-tenancy at a "deeper" level, at the persistence layer).
 This would prevent the object from being retrieved into memory in the first place, almost certainly more performant and obviously also secure because the viewer cannot render an object that hasn't been retrieved.
-One implementation (for multi-tenancy at the persistence layer) is to use capabilities of the ORM.
 
-* xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] supports link:link:https://www.datanucleus.org/products/accessplatform/jdo/persistence.html#multitenancy[multi-tenancy] through the link:https://www.datanucleus.org/products/accessplatform_5_1/jdo/annotations.html#MultiTenant_Class[@MultiTenant] annotation and `datanucleus.tenantId` or `datanucleus.tenantProvider` configuration properties.
-* xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] supports 3 different types of multi-tenancy, described in the documentation for the link https://www.eclipse.org/eclipselink/documentation/2.4/jpa/extensions/a_multitenant.htm[@Multitenant] annotation.
+One implementation (for multi-tenancy at the persistence layer) is to use capabilities of the ORM.
+xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] supports 3 different types of multi-tenancy, described in the documentation for the link https://www.eclipse.org/eclipselink/documentation/2.4/jpa/extensions/a_multitenant.htm[@Multitenant] annotation.
 
 Another alternative is to move the responsibility for managing tenancy into the relational database itself.
 This will obviously vary by vendor.
@@ -234,8 +233,8 @@ SecMan consists of a number of Maven submodules:
 * the API module (`causeway-extensions-secman-api`) defines a set of interfaces for the xref:refguide:extensions:index/secman/applib/user/dom/ApplicationUser.adoc[ApplicationUser], xref:refguide:extensions:index/secman/applib/role/dom/ApplicationRole.adoc[ApplicationRole],
 xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermission.adoc[ApplicationPermission] and xref:refguide:extensions:index/secman/applib/tenancy/dom/ApplicationTenancy.adoc[ApplicationTenancy] entities.
 
-* the two persistence modules (`causeway-extensions-secman-persistence-jpa` and `causeway-extensions-secman-persistence-jdo`) provide concrete implementations of the APIs for JPA and JDO respectively.
-As you might expect, they are intended for use with xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] and xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] persistence mechanisms respectively; use one or the other.
+* the persistence module `causeway-extensions-secman-persistence-jpa` provides a concrete implementations of the APIs for JPA.
+As you might expect, they are intended for use with xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism.
 
 * the Model module (`causeway-extensions-secman-model`) defines view models to represent the feature application features, and also contains business logic as mixins to the API (and therefore contributed to the appropriate concrete entity).
 

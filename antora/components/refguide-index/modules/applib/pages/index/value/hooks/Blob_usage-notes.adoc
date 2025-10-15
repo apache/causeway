@@ -4,20 +4,24 @@
 
 == Usage Notes
 
-If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], `Blob` properties can be mapped using:
+If using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], `Blob` properties can be mapped using the xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[]:
 
 [source,java]
 ----
-@javax.jdo.annotations.Persistent(defaultFetchGroup="false")
-    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-            @javax.jdo.annotations.Column(name = "attachment_name"),
-            @javax.jdo.annotations.Column(name = "attachment_mimetype"),
-            @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
-    })
-@Property(optionality = Optionality.OPTIONAL)
-@Getter @Setter
-private Blob attachment;
+@AttributeOverrides({
+    @AttributeOverride(name="name",    column=@Column(name="attachment_name")),
+    @AttributeOverride(name="mimeType",column=@Column(name="attachment_mimeType")),
+    @AttributeOverride(name="bytes",   column=@Column(name="attachment_bytes"))
+})
+@Embedded
+private BlobJpaEmbeddable attachment;
+
+@Property()
+@PropertyLayout()
+public Blob getPdf() {
+  return BlobJpaEmbeddable.toBlob(pdf);
+}
+public void setPdf(final Blob pdf) {
+  this.pdf = BlobJpaEmbeddable.fromBlob(pdf);
+}
 ----
-
-If the property is mandatory, add `allowsNull = "false` for each of the ``@Column``s.
-

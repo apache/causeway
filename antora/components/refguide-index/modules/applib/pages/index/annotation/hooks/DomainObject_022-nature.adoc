@@ -24,7 +24,7 @@ Specifically, the nature must be one of:
 
 * `ENTITY`
 +
-indicates that the domain object is an entity whose persistence is managed internally by Apache Causeway, using the JDO/DataNucleus objectstore.
+indicates that the domain object is an entity whose persistence is managed internally by Apache Causeway, using the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] objectstore.
 
 * `MIXIN`
 +

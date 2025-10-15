@@ -194,7 +194,7 @@ public Order invoice(
     return this;
 }
 
-@Column(allowsNull="true")                                     // <.>
+@Column(nullable=true)                                      // <.>
 @Property
 @Getter @Setter
 private LocalDate shipBy;
@@ -202,7 +202,7 @@ private LocalDate shipBy;
 <.> Specifies the parameter is optional.
 <.> Specifies the corresponding property is optional.
 +
-Note that this uses an ORM-specific mechanism to specify the same semantics (in this case, using JDO/DataNucleus' `@Column#allowsNull()`.)
+Note that this uses an ORM-specific mechanism to specify the same semantics (in this case, using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink]' `@Column#nullable()`.)
 
 See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[properties vs parameters].
 
@@ -214,7 +214,7 @@ For example:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 

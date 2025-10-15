@@ -139,7 +139,7 @@ Similarly, the `Bulk.InteractionContext` domain service is replaced with the lin
 |
 |Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[@Property#optionality()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[@Parameter#optionality()].
 
-For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[@Column#allowsNull()]
+For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[@Column#nullable()]
 Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[@Nullable] for either properties or parameters.
 
 |`@Mask`
@@ -172,7 +172,7 @@ For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guid
 |
 |Either link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Property_optionality[@Property#optionality()] or link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Parameter_optionality[@Parameter#optionality()].
 
-For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[@Column#allowsNull()]
+For properties, can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Column_allowsNull[@Column#nullable()]
 Can also use link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#_rgant_Nullable[@Nullable] for either properties or parameters.
 
 |`@Named`

@@ -46,18 +46,6 @@ _A run-through of the main features of the http://github.com/apache/causeway-app
 
 
 
-|Setting up Eclipse +
-
-_How to import an Apache Causeway maven-based application into Eclipse and configure to use with JDO/DataNucleus_ +
-
-NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
-
-Learn more xref:setupguide:eclipse:about.adoc[here]
-
-|video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
-
-
-
 |Setting up IntelliJ +
 
 _How to import an Apache Causeway maven-based application into IntelliJ and run the app._ +

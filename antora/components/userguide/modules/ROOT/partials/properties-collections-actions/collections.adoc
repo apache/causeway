@@ -18,9 +18,9 @@ And collections properties will also have a number of annotations:
 * Apache Causeway defines its own xref xref:refguide:applib:index/annotation/Collection.adoc[@Collection] annotation for capturing domain semantics.
 It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@CollectionLayout] for UI hints (though the information in this annotation may instead be provided by a supplementary xref:userguide:ROOT:ui-layout-and-hints.adoc#object-layout[.layout.xml] file)
 
-* the collections of domain entities are often annotated with ORM annotation(s).
-In the case of JDO/DataNucleus annotations this is most notably `javax.jdo.annotations.Persistent`.
-Other annotations can be used to specify if the association is bidirectional, and whether to define a link table or not to hold foreign key columns.
+* the collections of domain entities will typically be annotated with ORM annotation(s).
+In the case of xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], this is most notably `jakarta.persistence.Entity`.
+The collection itself will likely have its own ORM-specific annotations, to specify for example if the association is bidirectional, supports cascading deletes, or whether to define a link table or not to hold foreign key columns.
 
 * for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[@javax.xml.bind.annotation.XmlElementWrapper] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[@javax.xml.bind.annotation.XmlElement] will be present
 
@@ -96,8 +96,8 @@ public class ChildObject
 <.> mandatory; every child must reference its parent
 <.> cannot be edited directly
 
-Generally speaking you should use `SortedSet` for collection types (as opposed to `Set`, `List` or `Collection`).
-JDO/Datanucleus does support the mapping of these other types, but RDBMS are set-oriented, so using this type introduces the least friction.
+Generally speaking you should use `Set` for collection types (as opposed to `List` or `Collection`).
+
 
 == Maps
 

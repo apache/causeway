@@ -8,11 +8,11 @@ By default, Apache Causeway assumes that all properties of an domain object or v
 The xref:applib:index/annotation/Property.adoc#optionality[optionality()] attribute allows this to be relaxed.
 The attribute is also supported for xref:refguide:applib:index/annotation/Parameter.adoc#optionality[parameters].
 
-That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:refguide:applib-ant:Column.adoc[@Column] should be specified.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JPA xref:refguide:applib-ant:Column.adoc[@Column] should be specified.
 Apache Causeway can infer the maxLength directly from the equivalent @Column#length() annotation.
 
-That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:refguide:applib-ant:Column.adoc[@Column] will in any case need to be specified.
-Apache Causeway can infer the `optionality` semantic directly from the equivalent `@Column#allowsNull()` annotation/attribute.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JPA xref:refguide:applib-ant:Column.adoc[@Column] will in any case need to be specified.
+Apache Causeway can infer the `optionality` semantic directly from the equivalent `@Column#nullable()` annotation/attribute.
 
 For example:
 
@@ -35,16 +35,16 @@ In this case there is no need for the `@Property#optionality` attribute.
 
 == Mismatched defaults
 
-If the `@Column#allowsNull` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Causeway' defaults and JDO's defaults differ.
+If the `@Column#nullable` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Causeway' defaults and JDO's defaults differ.
 Specifically, Causeway always assumes properties are mandatory, whereas JDO specifies that primitives are mandatory, but all reference types are optional.
 
 When Apache Causeway initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.
-The fix is usually to add the `@Column#allowsNull()` annotation/attribute.
+The fix is usually to add the `@Column#nullable()` annotation/attribute.
 
 == Superclass inheritance type
 
-There is one case (at least) it may be necessary to annotate the property with both `@Column#allowsNull` and also `@Property#optionality()`.
-If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE`), then JDO requires that the property is annotated as `@Column#allowsNull="true"`: its value will be not defined for other subclasses.
+There is one case (at least) it may be necessary to annotate the property with both `@Column#nullable` and also `@Property#optionality()`.
+If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE`), then JDO requires that the property is annotated as `@Column#nullable=true`: its value will be not defined for other subclasses.
 
 In this case we therefore require both annotations.
 

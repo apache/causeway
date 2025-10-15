@@ -89,7 +89,6 @@ _Viewers_
 _Persistence_
 
 * xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
-* xref:pjdo:ROOT:about.adoc[JDO (DataNucleus)]
 
 
 |

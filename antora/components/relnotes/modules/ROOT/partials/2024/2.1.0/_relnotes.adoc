@@ -51,7 +51,7 @@
 | DataNucleus
 | 6.0.7
 | 6.0.7
-| xref:pjdo::about.adoc[]
+| JDO
 
 | Shiro
 | 1.13.0

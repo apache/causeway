@@ -50,7 +50,7 @@
 | DataNucleus
 | 6.0.7
 | 6.0.7
-| xref:pjdo::about.adoc[]
+| JDO
 
 |===
 
@@ -59,12 +59,11 @@ Other highlights
 
 * xref:pjpa:ROOT:about.adoc[Persistence using JPA] has been added through an integration of EclipseLink.
 +
-xref:pjdo::about.adoc[Persistence using JDO] continues to be supported through the integration with DataNucleus.
+Persistence using JDO continues to be supported through the integration with DataNucleus.
 +
 [NOTE]
 ====
-We use EclipseLink rather than Hibernate because the latter is licensed using LGPL, which is incompatible with ASF licensing.
-In addition, EclipseLink is the reference implementation for JPA.
+We use EclipseLink rather than Hibernate because historically the latter was licensed using LGPL, which is incompatible with ASF licensing.
 ====
 
 +

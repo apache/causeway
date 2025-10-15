@@ -87,7 +87,7 @@ public class Customer {
 You may also need to `@Import` the module that contains the service into your application's `AppManifest` (though all of the services in core will be available automatically).
 
 
-For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JDO/DataNucleus.
+For objects that are already persisted, the service is automatically injected just after the object is rehydrated by JPA/EclipseLink.
 
 For transient objects (instantiated programmatically), the xref:refguide:applib:index/services/factory/FactoryService.adoc[FactoryService#viewModel(...)] or the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService#detachedEntity(...)]'s will automatically inject the services.
 

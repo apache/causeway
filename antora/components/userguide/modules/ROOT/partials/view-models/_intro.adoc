@@ -75,7 +75,7 @@ Because such entities are responsible for their own state management, they can b
 === Externally-managed entities
 
 Sometimes the entities that make up your application are persisted not in the local database but reside in some other system, for example accessible only through a SOAP web service.
-Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity if only because JDO/DataNucleus doesn't know about the entity nor how to retrieve or update it.
+Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity since JPA/EclipseLink doesn't know about the entity nor how to retrieve or update it.
 
 There are a couple of ways around this: we could either replicate the data somehow from the external system into the Causeway-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
 This proxy would hold the reference to the externally-managed domain entity (eg an external id), as well as the "smarts" to know how to interact with that entity (by making SOAP web service calls etc).

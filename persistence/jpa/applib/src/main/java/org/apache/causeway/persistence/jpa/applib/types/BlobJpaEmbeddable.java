@@ -54,6 +54,11 @@ import lombok.Setter;
  *    Example usage:
  *
  *     <pre>
+ *     &#064;AttributeOverrides({
+ *         &#064;AttributeOverride(name="name",    column=&#064;Column(name="attachment_name")),
+ *         &#064;AttributeOverride(name="mimeType",column=&#064;Column(name="attachment_mimeType")),
+ *         &#064;AttributeOverride(name="bytes",   column=&#064;Column(name="attachment_bytes"))
+ *     })
  *     &#064;Embedded
  *     private BlobJpaEmbeddable pdf;
  *
@@ -69,8 +74,8 @@ import lombok.Setter;
  * </p>
  *
  * <p>
- *     Lastly; note that {@link jakarta.persistence.AttributeOverrides} and {@link jakarta.persistence.AttributeOverride}
- *     provide a standardised way of fine-tuning the column definitions.
+ *     The {@link jakarta.persistence.AttributeOverrides} and {@link jakarta.persistence.AttributeOverride} attributes
+ *     allow the column definitions to be fine-tuned.
  * </p>
  * @since 2.x {@index}
  */
