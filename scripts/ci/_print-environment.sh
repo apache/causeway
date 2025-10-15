@@ -20,6 +20,7 @@ echo ""
 
 echo "===========  CAUSEWAY CI SCRIPT [$1]  ================="
 echo "\$REVISION                  = ${REVISION}"
+echo "\$URL                       = ${URL}"
 echo "\$PROJECT_ROOT_PATH         = ${PROJECT_ROOT_PATH}"
 echo "\$MVN_STAGES                = ${MVN_STAGES}"
 echo "\$MVN_ADDITIONAL_OPTS       = ${MVN_ADDITIONAL_OPTS}"
