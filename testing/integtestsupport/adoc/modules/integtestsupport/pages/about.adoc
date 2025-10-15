@@ -116,15 +116,15 @@ public abstract class SimpleModuleIntegTestAbstract extends CausewayIntegrationT
     @Import({
         CausewayModuleCoreRuntimeServices.class,
         CausewayModuleSecurityBypass.class,
-        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleJpaEclipseLink.class,
         CausewayModuleTestingFixturesApplib.class,
-        SimpleModule.class                      //<1>
+        SimpleModule.class                          // <.>
     })
     public static class AppManifest {
     }
 }
 ----
-<1> references just the `SimpleModule`
+<.> references just the `SimpleModule`
 
 while in the `webapp` module we have:
 
@@ -136,8 +136,6 @@ while in the `webapp` module we have:
 )
 @TestPropertySource({
         CausewayPresets.H2InMemory_withUniqueSchema,
-        CausewayPresets.DataNucleusAutoCreate,
-        CausewayPresets.UseLog4j2Test,
 })
 @ContextConfiguration
 public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTestAbstract {
@@ -145,16 +143,16 @@ public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTe
     @Configuration
     @Import({
         CausewayModuleCoreRuntimeServices.class,
-        CausewayModuleJpaEclipseLink.class,
         CausewayModuleSecurityBypass.class,
+        CausewayModuleJpaEclipseLink.class,
         CausewayModuleTestingFixturesApplib.class,
-        ApplicationModule.class                 //<1>
+        ApplicationModule.class                     // <.>
     })
     public static class AppManifest {
     }
 }
 ----
-<1> references the top-level `ApplicationModule`
+<.> references the top-level `ApplicationModule`
 
 You can see that these are very similar, what's different is the module referenced.
 

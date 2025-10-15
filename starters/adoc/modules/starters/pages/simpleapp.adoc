@@ -699,57 +699,47 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        CausewayModuleCoreRuntimeServices.class,                    // <.>
-        CausewayModuleSecurityShiro.class,                          // <.>
-        CausewayModuleJpaEclipseLink.class,                         // <.>
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
-        CausewayModuleViewerWicketViewer.class,                     // <.>
+        CausewayModuleCoreRuntimeServices.class,            // <.>
+        CausewayModuleSecurityShiro.class,                  // <.>
+        CausewayModuleJpaEclipseLink.class,                 // <.>
+        CausewayModuleViewerRestfulObjectsViewer.class,     // <.>
+        CausewayModuleViewerGraphqlViewer.class,            // <.>
+        CausewayModuleViewerWicketViewer.class,             // <.>
 
-        CausewayModuleTestingH2ConsoleUi.class,                     // <.>
-        CausewayModuleTestingFixturesApplib.class,                  // <.>
+        CausewayModuleTestingH2ConsoleUi.class,             // <.>
+        CausewayModuleTestingFixturesApplib.class,          // <.>
 
-        CausewayModuleExtFlywayImpl.class,                          // <.>
+        CausewayModuleExtFlywayImpl.class,                  // <.>
 
-        ApplicationModule.class,                                // <.>
-        CustomModule.class,                                     // <9>
-        QuartzModule.class,                                     // <9>
+        ApplicationModule.class,                            // <.>
+        CustomModule.class,                                 // <9>
+        QuartzModule.class,                                 // <9>
 
-        DomainAppDemo.class                                     // <.>
+        DomainAppDemo.class                                 // <.>
 })
 @PropertySources({
-        @PropertySource(CausewayPresets.DebugDiscovery),            // <.>
+        @PropertySource(CausewayPresets.DebugDiscovery),    // <.>
 })
 public class AppManifest {
 }
 ----
 
 <.> Mandatory - specifies the core of the Apache Causeway framework
-
 <.> Enables the Shiro security mechanism.
 There are several security implementations, precisely one must be selected
-
 <.> Enables JPA/Eclipselink for persistence.
-+
-If using JDO as the ORM, replace with `CausewayModuleJdoDataNucleus5`.
-
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
-
+<.> Enables the xref:gqlv:ROOT:about.adoc[GraphQL API (GraphQL viewer)].
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
-
 <.> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
-
 <.> Brings in support to run xref:testing:fixtures:about.adoc[fixtures] within the application, eg for prototyping.
-
 <.> Enables the xref:userguide:flyway:about.adoc[Flyway] integration.
-
 <.> References the application's module(s), in this case `ApplicationModule` , `CustomModule` and `QuartzModule`.
 +
 `ApplicationModule` is discussed below.
 
 <.> Makes the fixture scenario classes available for discovery.
-
-<.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
-These two both use the `CausewayPresets` convenience class, to disable i18n support and for additional debugging log statements.
+<.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly, for example using the `CausewayPresets` convenience class.
 
 
 ==== SimpleApp

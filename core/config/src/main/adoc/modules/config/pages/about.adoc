@@ -130,13 +130,14 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        CausewayModuleCoreRuntimeServices.class,                    // <.>
-        CausewayModuleSecurityShiro.class,                          // <.>
-        CausewayModuleJpaEclipselink.class,                         // <.>
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
-        CausewayModuleViewerWicketViewer.class,                     // <.>
+        CausewayModuleCoreRuntimeServices.class,        // <.>
+        CausewayModuleSecurityShiro.class,              // <.>
+        CausewayModuleJpaEclipselink.class,             // <.>
+        CausewayModuleViewerRestfulObjectsViewer.class, // <.>
+        CausewayModuleViewerGraphqlViewer.class,        // <.>
+        CausewayModuleViewerWicketViewer.class,         // <.>
         ...
-        ApplicationModule.class,                                // <.>
+        ApplicationModule.class,                        // <.>
         ...
 })
 public class AppManifest {
@@ -151,6 +152,7 @@ There are several security implementations, precisely one must be selected
 Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view models] may be used, with hand-rolled persistence).
 
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+<.> Enables the xref:gqlv:ROOT:about.adoc[GraphQL API (GraphQL viewer)].
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
 <.> References the application's module(s), in this case just the one, `ApplicationModule`. +
 
