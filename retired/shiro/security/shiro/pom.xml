@@ -92,6 +92,12 @@
             <artifactId>shiro-web</artifactId>
             <classifier>jakarta</classifier>
             <version>2.0.2</version>
+            <exclusions>
+            	<exclusion>
+            		<groupId>org.apache.shiro</groupId>
+            		<artifactId>shiro-core</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 
         <!-- TESTING -->
