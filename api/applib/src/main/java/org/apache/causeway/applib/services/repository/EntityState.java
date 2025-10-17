@@ -62,7 +62,7 @@ public enum EntityState {
      */
     DETACHED(true),
     /**
-     * <h1>JDO specific</h1>
+     * This entity state is not<h1>JDO specific</h1>
      * Object with this state is an entity that no longer attached to a
      * persistence session and cannot be re-attached.
      * In other words: changes to the entity will <i>not</i>
@@ -76,6 +76,7 @@ public enum EntityState {
      *
      * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
      */
+    @Deprecated // JDO specific
     HOLLOW(true),
     /**
      * Object with this state is an entity that is transient
@@ -87,6 +88,7 @@ public enum EntityState {
      * <h1>JDO specific</h1>
      * Not supported by JPA. (Cannot distinguish between TRANSIENT and REMOVED.)
      */
+    @Deprecated // JDO specific
     REMOVED(false)
     ;
 
@@ -105,12 +107,14 @@ public enum EntityState {
     /** @see #DETACHED */
     public boolean isDetached() { return this == DETACHED; }
     /** @see #HOLLOW */
+    @Deprecated // JDO specific
     public boolean isHollow() { return this == HOLLOW; }
     /** @see #TRANSIENT_OR_REMOVED
      *  @see #REMOVED */
     public boolean isTransientOrRemoved() { return this == TRANSIENT_OR_REMOVED
             || this == REMOVED; }
     /** @see #REMOVED */
+    @Deprecated // JDO specific
     public boolean isRemoved() { return this == REMOVED; }
 
     // -- SPECIAL STATES
