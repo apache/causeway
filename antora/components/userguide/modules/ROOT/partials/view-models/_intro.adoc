@@ -145,6 +145,6 @@ Or, rather than marshalling state, the view model could hold a reference to the 
 
 A third option is to define an RDBMS view, and then map a "non-durable" entity to that view.
 The RDBMS view then becomes the public API that must be preserved.
-ORMs such as DataNucleus link:http://www.datanucleus.org:15080/products/accessplatform_5_1/jdo/mapping.html#schema_rdbms_views[support this].
+ORMs such as xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] support this.
 
 

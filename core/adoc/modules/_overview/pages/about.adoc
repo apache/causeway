@@ -44,7 +44,7 @@ rectangle "App\n<size:10>[Software System]</size>" <<App>> {
 .Projects/Modules (App)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Starter Parent
 [source,yaml]
@@ -107,7 +107,7 @@ Mavendeps.ApacheCausewayMavenDeps .[#707070,thickness=2].> Mavendeps.ApacheCause
 .Projects/Modules (Mavendeps)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Maven Deps
 [source,yaml]
@@ -331,7 +331,7 @@ Testing.ApacheCausewayTstUnitTestSupportparent .[#707070,thickness=2].> Testing.
 .Projects/Modules (Testing)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Testing
 [source,yaml]
@@ -369,7 +369,6 @@ org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jdo-integration:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-integration:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
 org.springframework:spring-test:jar:<managed> +
 org.springframework.boot:spring-boot-starter-test:jar:<managed> +
@@ -444,7 +443,6 @@ Directory: /testing/fakedata/integtests
 ----
 |.Dependencies
 ****
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fakedata-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fakedata-fixtures:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
@@ -652,7 +650,6 @@ jakarta.xml.ws:jakarta.xml.ws-api:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-codegen-bytebuddy:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
 org.jmock:jmock:jar:<managed> +
 org.jmock:jmock-junit5:jar:<managed> +
 org.picocontainer:picocontainer:jar:<managed> +
@@ -733,7 +730,7 @@ Root.ApacheCausewayAggregator .[#707070,thickness=2].> Root.ApacheCauseway : "<c
 .Projects/Modules (Root)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway (Aggregator)
 [source,yaml]
@@ -824,7 +821,7 @@ rectangle "Commons\n<size:10>[Software System]</size>" <<Commons>> {
 .Projects/Modules (Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Commons
 [source,yaml]
@@ -1013,7 +1010,7 @@ Core.ApacheCausewayCore .[#707070,thickness=2].> Core.ApacheCausewayApiSchemas :
 .Projects/Modules (Core)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Core
 [source,yaml]
@@ -1175,7 +1172,6 @@ Directory: /core/internaltestsupport
 net.bytebuddy:byte-buddy-agent:jar:<managed> +
 org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-core-codegen-bytebuddy:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
 org.hamcrest:hamcrest-library:jar:<managed> +
 org.junit.jupiter:junit-jupiter-api:jar:<managed> +
 org.junit.jupiter:junit-jupiter-engine:jar:<managed> +
@@ -1588,7 +1584,7 @@ Persistence.ApacheCausewayPersistenceQueryDSL .[#707070,thickness=2].> Persisten
 .Projects/Modules (Persistence)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Persistence - JDBC
 [source,yaml]
@@ -1639,7 +1635,6 @@ org.apache.causeway.commons:causeway-commons:jar:<managed> +
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -1815,7 +1810,7 @@ rectangle "Persistence Commons\n<size:10>[Software System]</size>" <<Persistence
 .Projects/Modules (Persistence Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Persistence - Commons
 [source,yaml]
@@ -1848,281 +1843,6 @@ org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 .Document Index Entries
 ****
 xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[EntityChangeTrackerDefault], xref:refguide:persistence:index/commons/integration/repository/RepositoryServiceDefault.adoc[RepositoryServiceDefault]
-****
-|===
-
-=== JDO
-
-[plantuml,JDO,svg]
-----
-@startuml
-set separator none
-title JDO - Containers
-
-left to right direction
-
-skinparam {
-  arrowFontSize 10
-  defaultTextAlignment center
-  wrapWidth 200
-  maxMessageSize 100
-}
-
-hide stereotype
-
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDO>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDOSpring>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDOapplib>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDOintegration>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDOmetamodel>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDOprovider>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO.ApacheCausewayPersistenceJDOProviderDataNucleus>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
-skinparam rectangle<<JDO>> {
-  BorderColor #9a9a9a
-  FontColor #9a9a9a
-  shadowing false
-}
-
-rectangle "JDO\n<size:10>[Software System]</size>" <<JDO>> {
-  rectangle "==Apache Causeway Persistence - JDO\n<size:10>[Container: packaging: pom]</size>" <<JDO.ApacheCausewayPersistenceJDO>> as JDO.ApacheCausewayPersistenceJDO
-  rectangle "==Apache Causeway Persistence - JDO (applib)\n<size:10>[Container: packaging: jar]</size>" <<JDO.ApacheCausewayPersistenceJDOapplib>> as JDO.ApacheCausewayPersistenceJDOapplib
-  rectangle "==Apache Causeway Persistence - JDO Provider (DataNucleus)\n<size:10>[Container: packaging: jar]</size>" <<JDO.ApacheCausewayPersistenceJDOProviderDataNucleus>> as JDO.ApacheCausewayPersistenceJDOProviderDataNucleus
-  rectangle "==Apache Causeway Persistence - JDO (integration)\n<size:10>[Container: packaging: jar]</size>" <<JDO.ApacheCausewayPersistenceJDOintegration>> as JDO.ApacheCausewayPersistenceJDOintegration
-  rectangle "==Apache Causeway Persistence - JDO (metamodel)\n<size:10>[Container: packaging: jar]</size>" <<JDO.ApacheCausewayPersistenceJDOmetamodel>> as JDO.ApacheCausewayPersistenceJDOmetamodel
-  rectangle "==Apache Causeway Persistence - JDO (provider)\n<size:10>[Container: packaging: jar]</size>" <<JDO.ApacheCausewayPersistenceJDOprovider>> as JDO.ApacheCausewayPersistenceJDOprovider
-  rectangle "==Apache Causeway Persistence - JDO (Spring)\n<size:10>[Container: packaging: jar]</size>" <<JDO.ApacheCausewayPersistenceJDOSpring>> as JDO.ApacheCausewayPersistenceJDOSpring
-}
-
-JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPersistenceJDOProviderDataNucleus : "<color:#707070>"
-JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPersistenceJDOintegration : "<color:#707070>"
-JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPersistenceJDOmetamodel : "<color:#707070>"
-JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPersistenceJDOprovider : "<color:#707070>"
-JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPersistenceJDOSpring : "<color:#707070>"
-JDO.ApacheCausewayPersistenceJDO .[#707070,thickness=2].> JDO.ApacheCausewayPersistenceJDOapplib : "<color:#707070>"
-@enduml
-----
-
-.Projects/Modules (JDO)
-[cols="3a,5a", options="header"]
-|===
-|Coordinates |Description 
-
-|Apache Causeway Persistence - JDO
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo
-Type: pom
-Directory: /persistence/jdo
-----
-|Supplementary applib for JDO persistence
-
-|Apache Causeway Persistence - JDO (applib)
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo-applib
-Type: jar
-Directory: /persistence/jdo/applib
-----
-|Supplementary applib for JDO persistence
-
-.Dependencies
-****
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.datanucleus:datanucleus-rdbms:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:persistence:index/jdo/applib/CausewayModulePersistenceJdoApplib.adoc[CausewayModulePersistenceJdoApplib], xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService], xref:refguide:persistence:index/jdo/applib/types/AddressLine.adoc[AddressLine], xref:refguide:persistence:index/jdo/applib/types/Description.adoc[Description], xref:refguide:persistence:index/jdo/applib/types/Email.adoc[Email], xref:refguide:persistence:index/jdo/applib/types/Fqcn.adoc[Fqcn], xref:refguide:persistence:index/jdo/applib/types/LogicalTypeName.adoc[LogicalTypeName], xref:refguide:persistence:index/jdo/applib/types/Money.adoc[Money], xref:refguide:persistence:index/jdo/applib/types/Name.adoc[Name], xref:refguide:persistence:index/jdo/applib/types/Notes.adoc[Notes], xref:refguide:persistence:index/jdo/applib/types/ObjectIdentifier.adoc[ObjectIdentifier], xref:refguide:persistence:index/jdo/applib/types/Percentage.adoc[Percentage], xref:refguide:persistence:index/jdo/applib/types/PhoneNumber.adoc[PhoneNumber], xref:refguide:persistence:index/jdo/applib/types/PostalCode.adoc[PostalCode], xref:refguide:persistence:index/jdo/applib/types/ProperName.adoc[ProperName], xref:refguide:persistence:index/jdo/applib/types/Reference.adoc[Reference], xref:refguide:persistence:index/jdo/applib/types/Title.adoc[Title], xref:refguide:persistence:index/jdo/applib/types/UrlTemplate.adoc[UrlTemplate], xref:refguide:persistence:index/jdo/applib/types/Username.adoc[Username]
-****
-
-|Apache Causeway Persistence - JDO Provider (DataNucleus)
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo-datanucleus
-Type: jar
-Directory: /persistence/jdo/datanucleus
-----
-|JDO Implementation (powered by DataNucleus)
-
-.Components
-****
-o.a.i.persistence.jdo.datanucleus.changetracking.PreAndPostValueEvaluatorServiceJdo +
-o.a.i.persistence.jdo.datanucleus.entities.DnEntityStateProvider +
-o.a.i.persistence.jdo.datanucleus.exrecog.JdoObjectNotFoundRecognizer +
-o.a.i.persistence.jdo.datanucleus.jdosupport.JdoSupportServiceDefault +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnByteIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnCharIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreIdImplValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnDatastoreUniqueLongIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnIntIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnLongIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnObjectIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnScoidValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnShortIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.DnStringIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoByteIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoCharIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoDatastoreIdValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoIntIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoLongIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoObjectIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoShortIdentityValueSemantics +
-o.a.i.persistence.jdo.datanucleus.valuetypes.JdoStringIdentityValueSemantics +
-****
-
-.Dependencies
-****
-com.h2database:h2:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-integration:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-provider:jar:<managed> +
-org.datanucleus:datanucleus-api-jdo:jar:<managed> +
-org.datanucleus:datanucleus-core:jar:<managed> +
-org.datanucleus:datanucleus-jdo-query:jar:<managed> +
-org.datanucleus:datanucleus-jodatime:jar:<managed> +
-org.datanucleus:datanucleus-rdbms:jar:<managed> +
-org.springframework.boot:spring-boot-starter-jdbc:jar:<managed> +
-****
-
-.Document Index Entries
-****
-xref:refguide:persistence:index/jdo/datanucleus/CausewayModulePersistenceJdoDatanucleus.adoc[CausewayModulePersistenceJdoDatanucleus], xref:refguide:persistence:index/jdo/datanucleus/CausewayModulePersistenceJdoDatanucleusMixins.adoc[CausewayModulePersistenceJdoDatanucleusMixins], xref:refguide:persistence:index/jdo/datanucleus/changetracking/JdoLifecycleListener.adoc[JdoLifecycleListener], xref:refguide:persistence:index/jdo/datanucleus/dialect/DnJdoDialect.adoc[DnJdoDialect], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionLong.adoc[Persistable_datanucleusVersionLong], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_datanucleusVersionTimestamp.adoc[Persistable_datanucleusVersionTimestamp], xref:refguide:persistence:index/jdo/datanucleus/mixins/Persistable_downloadJdoMetadata.adoc[Persistable_downloadJdoMetadata], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/CausewayBookmarkConverter.adoc[CausewayBookmarkConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/CausewayLocalResourcePathConverter.adoc[CausewayLocalResourcePathConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/CausewayMarkupConverter.adoc[CausewayMarkupConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/applib/CausewayPasswordConverter.adoc[CausewayPasswordConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/image/JavaAwtBufferedImageByteArrayConverter.adoc[JavaAwtBufferedImageByteArrayConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/CausewayChangesDtoConverter.adoc[CausewayChangesDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/CausewayCommandDtoConverter.adoc[CausewayCommandDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/CausewayInteractionDtoConverter.adoc[CausewayInteractionDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/schema/v2/CausewayOidDtoConverter.adoc[CausewayOidDtoConverter], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/OffsetDateTimeConverterForJdo.adoc[OffsetDateTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/OffsetTimeConverterForJdo.adoc[OffsetTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/typeconverters/time/ZonedDateTimeConverterForJdo.adoc[ZonedDateTimeConverterForJdo], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/ByteArrayBlobRdbmsMapping.adoc[ByteArrayBlobRdbmsMapping], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/CausewayBlobMapping.adoc[CausewayBlobMapping], xref:refguide:persistence:index/jdo/datanucleus/valuemappings/CausewayClobMapping.adoc[CausewayClobMapping]
-****
-
-|Apache Causeway Persistence - JDO (integration)
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo-integration
-Type: jar
-Directory: /persistence/jdo/integration
-----
-|JDO Integration (powered by DataNucleus)
-
-.Dependencies
-****
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-metamodel:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-spring:jar:<managed> +
-****
-
-|Apache Causeway Persistence - JDO (metamodel)
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo-metamodel
-Type: jar
-Directory: /persistence/jdo/metamodel
-----
-|JDO Metamodel Facets / Programming Model
-
-.Components
-****
-o.a.i.persistence.jdo.metamodel.JdoProgrammingModel +
-****
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-provider:jar:<managed> +
-****
-
-|Apache Causeway Persistence - JDO (provider)
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo-provider
-Type: jar
-Directory: /persistence/jdo/provider
-----
-|JDO Provider to be implemented by any actual JDO provider eg. DataNucleus.
-
-.Dependencies
-****
-org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
-org.datanucleus:datanucleus-rdbms:jar:<managed> +
-****
-
-|Apache Causeway Persistence - JDO (Spring)
-[source,yaml]
-----
-Group: org.apache.causeway.persistence
-Artifact: causeway-persistence-jdo-spring
-Type: jar
-Directory: /persistence/jdo/spring
-----
-|JDO Spring integration.
-
-This is a fork of the Spring ORM JDO sources at github,
-for which support had been dropped back in 2016 [1].
-
-Credits to the original authors. See also docs [2].
-
-[1] https://github.com/spring-projects/spring-framework/issues/18702
-[2] https://docs.spring.io/spring-framework/docs/3.0.0.RC2/reference/html/ch13s04.html
-
-.Dependencies
-****
-jakarta.servlet:jakarta.servlet-api:jar:<managed> +
-org.apache.causeway.commons:causeway-commons:jar:<managed> +
-org.apache.causeway.core:causeway-applib:jar:<managed> +
-org.apache.causeway.core:causeway-core-config:jar:<managed> +
-org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-applib:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-provider:jar:<managed> +
-org.springframework:spring-jdbc:jar:<managed> +
-org.springframework:spring-web:jar:<managed> +
 ****
 |===
 
@@ -2199,7 +1919,7 @@ JPA.ApacheCausewayPersistenceJPA .[#707070,thickness=2].> JPA.ApacheCausewayPers
 .Projects/Modules (JPA)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Persistence - JPA
 [source,yaml]
@@ -2360,7 +2080,7 @@ rectangle "Security\n<size:10>[Software System]</size>" <<Security>> {
 .Projects/Modules (Security)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Simple
 [source,yaml]
@@ -2431,7 +2151,7 @@ rectangle "Bypass\n<size:10>[Software System]</size>" <<Bypass>> {
 .Projects/Modules (Bypass)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Bypass
 [source,yaml]
@@ -2499,7 +2219,7 @@ rectangle "Keycloak\n<size:10>[Software System]</size>" <<Keycloak>> {
 .Projects/Modules (Keycloak)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Keycloak
 [source,yaml]
@@ -2576,7 +2296,7 @@ rectangle "Shiro\n<size:10>[Software System]</size>" <<Shiro>> {
 .Projects/Modules (Shiro)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Shiro
 [source,yaml]
@@ -2652,7 +2372,7 @@ rectangle "Spring\n<size:10>[Software System]</size>" <<Spring>> {
 .Projects/Modules (Spring)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Security - Spring
 [source,yaml]
@@ -2762,7 +2482,7 @@ ViewerCommons.ApacheCausewayViewerCommons .[#707070,thickness=2].> ViewerCommons
 .Projects/Modules (Viewer Commons)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - Commons
 [source,yaml]
@@ -2944,7 +2664,7 @@ GraphQL.ApacheCausewayViewerGraphQL .[#707070,thickness=2].> GraphQL.ApacheCause
 .Projects/Modules (GraphQL)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - GraphQL
 [source,yaml]
@@ -3165,12 +2885,6 @@ skinparam rectangle<<RestfulObjects.ApacheCausewayViewerROClient>> {
   BorderColor #2e6295
   shadowing false
 }
-skinparam rectangle<<RestfulObjects.ApacheCausewayViewerROJAXRSResteasy>> {
-  BackgroundColor #438dd5
-  FontColor #fffffe
-  BorderColor #2e6295
-  shadowing false
-}
 skinparam rectangle<<RestfulObjects.ApacheCausewayViewerRORendering>> {
   BackgroundColor #438dd5
   FontColor #fffffe
@@ -3205,7 +2919,6 @@ rectangle "Restful Objects\n<size:10>[Software System]</size>" <<RestfulObjects>
   rectangle "==Apache Causeway Viewer - RO\n<size:10>[Container: packaging: pom]</size>" <<RestfulObjects.ApacheCausewayViewerRO>> as RestfulObjects.ApacheCausewayViewerRO
   rectangle "==Apache Causeway Viewer - RO (AppLib)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROAppLib>> as RestfulObjects.ApacheCausewayViewerROAppLib
   rectangle "==Apache Causeway Viewer - RO (Client)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROClient>> as RestfulObjects.ApacheCausewayViewerROClient
-  rectangle "==Apache Causeway Viewer - RO (JAX-RS Resteasy)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROJAXRSResteasy>> as RestfulObjects.ApacheCausewayViewerROJAXRSResteasy
   rectangle "==Apache Causeway Viewer - RO (Rendering)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerRORendering>> as RestfulObjects.ApacheCausewayViewerRORendering
   rectangle "==Apache Causeway Viewer - RO (Test)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROTest>> as RestfulObjects.ApacheCausewayViewerROTest
   rectangle "==Apache Causeway Viewer - RO (Testing)\n<size:10>[Container: packaging: jar]</size>" <<RestfulObjects.ApacheCausewayViewerROTesting>> as RestfulObjects.ApacheCausewayViewerROTesting
@@ -3214,7 +2927,6 @@ rectangle "Restful Objects\n<size:10>[Software System]</size>" <<RestfulObjects>
 
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROAppLib : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROClient : "<color:#707070>"
-RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROJAXRSResteasy : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerRORendering : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROTest : "<color:#707070>"
 RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.ApacheCausewayViewerROTesting : "<color:#707070>"
@@ -3225,7 +2937,7 @@ RestfulObjects.ApacheCausewayViewerRO .[#707070,thickness=2].> RestfulObjects.Ap
 .Projects/Modules (Restful Objects)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - RO
 [source,yaml]
@@ -3281,39 +2993,26 @@ org.springframework:spring-context:jar:<managed> +
 xref:refguide:viewer:index/restfulobjects/client/ActionParameterListBuilder.adoc[ActionParameterListBuilder], xref:refguide:viewer:index/restfulobjects/client/RestfulClient.adoc[RestfulClient], xref:refguide:viewer:index/restfulobjects/client/RestfulClientConfig.adoc[RestfulClientConfig], xref:refguide:viewer:index/restfulobjects/client/auth/AuthFilter.adoc[AuthFilter], xref:refguide:viewer:index/restfulobjects/client/log/ClientConversationFilter.adoc[ClientConversationFilter], xref:refguide:viewer:index/restfulobjects/client/log/ClientConversationLogger.adoc[ClientConversationLogger]
 ****
 
-|Apache Causeway Viewer - RO (JAX-RS Resteasy)
+|Apache Causeway Viewer - RO
 [source,yaml]
 ----
 Group: org.apache.causeway.viewer
-Artifact: causeway-viewer-restfulobjects-jaxrsresteasy
+Artifact: causeway-viewer-restfulobjects-viewer
 Type: jar
-Directory: /viewers/restfulobjects/jaxrs-resteasy
+Directory: /viewers/restfulobjects/viewer
 ----
-|JAX-RS plugin using jboss resteasy.
+|JAX-RS plugin using Spring REST API.
 
-.Components
-****
-o.a.i.viewer.restfulobjects.jaxrsresteasy.conneg.RestfulObjectsJaxbWriterForXml +
-o.a.i.viewer.restfulobjects.jaxrsresteasy.webmodule.WebModuleJaxrsResteasy +
-****
 
 .Dependencies
 ****
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-testing:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
-org.jboss.resteasy:resteasy-client:jar:${resteasy.version} +
-org.jboss.resteasy:resteasy-jackson2-provider:jar:${resteasy.version} +
-org.jboss.resteasy:resteasy-jaxb-provider:jar:<managed> +
-org.jboss.resteasy:resteasy-servlet-initializer:jar:${resteasy.version} +
-org.jboss.resteasy:resteasy-spring-boot-starter:jar:<managed> +
-org.jboss.resteasy.spring:resteasy-spring:jar:<managed> +
 ****
 
 .Document Index Entries
 ****
-xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/CausewayModuleViewerRestfulObjectsJaxrsResteasy.adoc[CausewayModuleViewerRestfulObjectsJaxrsResteasy], xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/conneg/RestfulObjectsJaxbWriterForXml.adoc[RestfulObjectsJaxbWriterForXml], xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/webmodule/WebModuleJaxrsResteasy.adoc[WebModuleJaxrsResteasy]
 ****
 
 |Apache Causeway Viewer - RO (Rendering)
@@ -3378,7 +3077,6 @@ org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-services:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-rendering:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-viewer:jar:<managed> +
 org.glassfish.jersey.core:jersey-client:jar:<managed> +
@@ -3522,7 +3220,7 @@ Wicket.ApacheCausewayViewerWicket .[#707070,thickness=2].> Wicket.ApacheCauseway
 .Projects/Modules (Wicket)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Viewer - Wicket
 [source,yaml]
@@ -3606,7 +3304,6 @@ org.apache.wicket:wicket-auth-roles:jar:<managed> +
 org.apache.wicket:wicket-devutils:jar:<managed> +
 org.apache.wicket:wicket-extensions:jar:<managed> +
 org.apache.wicket:wicket-spring:jar:<managed> +
-org.datanucleus:javax.jdo:jar:<managed> +
 org.ow2.asm:asm-util:jar:<managed> +
 org.slf4j:slf4j-api:jar:<managed> +
 org.webjars:datatables:jar:<managed> +
@@ -3740,7 +3437,7 @@ Valuetypes.ApacheCausewayValJodaTimeparent .[#707070,thickness=2].> Valuetypes.A
 .Projects/Modules (Valuetypes)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Value types
 [source,yaml]
@@ -3914,7 +3611,7 @@ Asciidoc.ApacheCausewayValAsciidoctorui .[#707070,thickness=2].> Asciidoc.Apache
 .Projects/Modules (Asciidoc)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Val - Asciidoctor (parent)
 [source,yaml]
@@ -4011,7 +3708,6 @@ Directory: /valuetypes/asciidoc/persistence-jdo
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-applib:jar:<managed> +
-org.datanucleus:datanucleus-core:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -4172,7 +3868,7 @@ Markdown.ApacheCausewayValMarkdownparent .[#707070,thickness=2].> Markdown.Apach
 .Projects/Modules (Markdown)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Val - Markdown (parent)
 [source,yaml]
@@ -4240,7 +3936,6 @@ Directory: /valuetypes/markdown/persistence-jdo
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-applib:jar:<managed> +
-org.datanucleus:datanucleus-core:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -4398,7 +4093,7 @@ Vega.ApacheCausewayValVegaparent .[#707070,thickness=2].> Vega.ApacheCausewayVal
 .Projects/Modules (Vega)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Val - Vega (parent)
 [source,yaml]
@@ -4465,7 +4160,6 @@ Directory: /valuetypes/vega/persistence-jdo
 ****
 org.apache.causeway.core:causeway-core-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-applib:jar:<managed> +
-org.datanucleus:datanucleus-core:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -4892,7 +4586,7 @@ Extensions.ApacheCausewayExtTitleCache .[#707070,thickness=2].> Extensions.Apach
 .Projects/Modules (Extensions)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Extensions
 [source,yaml]
@@ -4961,7 +4655,6 @@ o.a.i.extensions.audittrail.jdo.dom.AuditTrailEntryRepository +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-audittrail-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
@@ -5460,7 +5153,6 @@ o.a.i.extensions.secman.jdo.util.RegexReplacer +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-applib:test-jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-secman-integration:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
@@ -5558,7 +5250,6 @@ o.a.i.extensions.sessionlog.jdo.dom.SessionLogEntryRepository +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 ****
@@ -5825,7 +5516,7 @@ ApplibExcel.ApacheCausewayExtExcelparent .[#707070,thickness=2].> ApplibExcel.Ap
 .Projects/Modules (Applib: Excel)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Excel (parent)
 [source,yaml]
@@ -5879,7 +5570,6 @@ Directory: /extensions/core/excel/fixture
 org.apache.causeway.core:causeway-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-excel-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-excel-testing:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 ****
 
@@ -5894,7 +5584,6 @@ Directory: /extensions/core/excel/integtests
 |.Dependencies
 ****
 org.apache.causeway.extensions:causeway-extensions-excel-fixtures:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fakedata-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -5988,7 +5677,7 @@ CoreCommandLog.ApacheCausewayExtCommandLog .[#707070,thickness=2].> CoreCommandL
 .Projects/Modules (Core: Command Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Command Log
 [source,yaml]
@@ -6052,7 +5741,6 @@ o.a.i.extensions.commandlog.jdo.dom.CommandLogEntryRepository +
 ****
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
 ****
@@ -6141,7 +5829,7 @@ CoreDocGen.ApacheCausewayExtDocgen .[#707070,thickness=2].> CoreDocGen.ApacheCau
 .Projects/Modules (Core: DocGen)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Docgen
 [source,yaml]
@@ -6250,7 +5938,7 @@ CoreExecutionLog.ApacheCausewayExtExecutionLog .[#707070,thickness=2].> CoreExec
 .Projects/Modules (Core: Execution Log)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Execution Log
 [source,yaml]
@@ -6309,7 +5997,6 @@ o.a.i.extensions.executionlog.jdo.dom.ExecutionLogEntryRepository +
 ****
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionlog-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
 ****
@@ -6421,7 +6108,7 @@ CoreExecutionOutbox.ApacheCausewayExtExecutionOutbox .[#707070,thickness=2].> Co
 .Projects/Modules (Core: Execution Outbox)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Execution Outbox
 [source,yaml]
@@ -6481,7 +6168,6 @@ o.a.i.extensions.executionoutbox.jdo.dom.ExecutionOutboxEntryRepository +
 ****
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-applib:test-jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-unittestsupport-applib:jar:<managed> +
 ****
@@ -6540,7 +6226,6 @@ org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -6598,7 +6283,7 @@ CoreExecutionRepublisher.ApacheCausewayExtExecutionRepublisher .[#707070,thickne
 .Projects/Modules (Core: Execution Republisher)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Execution Republisher
 [source,yaml]
@@ -6682,7 +6367,7 @@ CoreFlyway.ApacheCausewayExtFlyway .[#707070,thickness=2].> CoreFlyway.ApacheCau
 .Projects/Modules (Core: Flyway)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Flyway
 [source,yaml]
@@ -6777,7 +6462,7 @@ CoreTabular.ApacheCausewayExtTabularparent .[#707070,thickness=2].> CoreTabular.
 .Projects/Modules (Core: Tabular)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Ext - Tabular (parent)
 [source,yaml]
@@ -7111,7 +6796,7 @@ RegressionTests.ApacheCausewayRegressionTestsCmdExecAuditSession .[#707070,thick
 .Projects/Modules (Regression Tests)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Regression Tests
 [source,yaml]
@@ -7147,14 +6832,12 @@ org.apache.causeway.extensions:causeway-extensions-secman-integration:jar:<manag
 org.apache.causeway.extensions:causeway-extensions-sse-metamodel:jar:<managed> +
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.persistence:causeway-persistence-commons:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-asciidoc-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-markdown-metamodel:jar:<managed> +
 org.apache.causeway.valuetypes:causeway-valuetypes-vega-metamodel:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 org.apache.wicket:wicket-tester:jar:<managed> +
 ****
@@ -7173,7 +6856,6 @@ org.apache.causeway.extensions:causeway-extensions-secman-persistence-jdo:jar:<m
 org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 ****
 
@@ -7193,7 +6875,6 @@ org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<manage
 org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-viewer:jar:<managed> +
 ****
 
@@ -7256,7 +6937,6 @@ org.apache.causeway.extensions:causeway-extensions-commandlog-persistence-jdo:ja
 org.apache.causeway.extensions:causeway-extensions-executionlog-persistence-jdo:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-executionoutbox-persistence-jdo:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-sessionlog-persistence-jdo:jar:<managed> +
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-cmdexecauditsess-generic:jar:<managed> +
 org.apache.causeway.security:causeway-security-bypass:jar:<managed> +
 ****
@@ -7306,7 +6986,6 @@ Directory: /regressiontests/core-wrapperfactory
 ----
 |.Dependencies
 ****
-org.apache.causeway.persistence:causeway-persistence-jdo-datanucleus:jar:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 ****
@@ -7456,7 +7135,6 @@ org.apache.causeway.mavendeps:causeway-mavendeps-webapp:pom:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-base-jdo:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 ****
 
 |Apache Causeway Regression Tests - Rest JPA
@@ -7475,7 +7153,6 @@ org.apache.causeway.persistence:causeway-persistence-jpa-eclipselink:jar:<manage
 org.apache.causeway.regressiontests:causeway-regressiontests-base-jpa:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 ****
 
 |Apache Causeway Regression Tests - Value Types
@@ -7582,7 +7259,7 @@ rectangle "Kroviz Client\n<size:10>[Software System]</size>" <<KrovizClient>> {
 .Projects/Modules (Kroviz Client)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Incubator - Client kroViz
 [source,yaml]
@@ -7652,7 +7329,7 @@ CommandReplay.ApacheCausewayIncCoreCommandReplay .[#707070,thickness=2].> Comman
 .Projects/Modules (Command Replay)
 [cols="3a,5a", options="header"]
 |===
-|Coordinates |Description 
+|Coordinates |Description
 
 |Apache Causeway Inc - Core Command Replay
 [source,yaml]
@@ -7708,7 +7385,6 @@ org.apache.causeway.core:causeway-schema:jar:<managed> +
 org.apache.causeway.extensions:causeway-extensions-commandlog-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-restfulobjects-client:jar:<managed> +
-org.apache.causeway.viewer:causeway-viewer-restfulobjects-jaxrsresteasy:jar:<managed> +
 org.glassfish.jersey.ext:jersey-spring6:jar:<managed> +
 org.springframework.boot:spring-boot-starter-quartz:jar:<managed> +
 ****

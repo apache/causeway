@@ -32,9 +32,8 @@ public final class CausewayPresets  {
     public static final String IntrospectLazily = "classpath:/org/apache/causeway/core/config/presets/IntrospectLazily.properties";
     public static final String IntrospectFully = "classpath:/org/apache/causeway/core/config/presets/IntrospectFully.properties";
 
-    public static final String DebugPersistence = "classpath:/org/apache/causeway/core/config/presets/DebugPersistence.properties";
-    public static final String DebugRequestScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugRequestScopedServices.properties";
     public static final String DebugTransactionScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugTransactionScopedServices.properties";
+    public static final String DebugInteractionScopedServices = "classpath:/org/apache/causeway/core/config/presets/DebugInteractionScopedServices.properties";
 
     public static final String DebugDiscovery = "classpath:/org/apache/causeway/core/config/presets/DebugDiscovery.properties";
 

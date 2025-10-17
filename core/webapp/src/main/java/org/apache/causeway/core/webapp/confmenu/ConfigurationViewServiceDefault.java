@@ -133,10 +133,8 @@ implements
         var env = loadEnvironment();
         var primary = loadPrimary(List.of(
                 "causeway.",
-                "resteasy.",
-                "datanucleus.",
                 "eclipselink."));
-        // we dont't want any duplicates to appear in secondary
+        // we don't want any duplicates to appear in secondary
         var secondary = loadSecondary(Stream.concat(env.keySet().stream(), primary.keySet().stream())
                 .distinct()
                 .collect(Collectors.toSet()));

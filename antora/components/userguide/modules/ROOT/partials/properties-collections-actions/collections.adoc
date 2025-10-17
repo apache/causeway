@@ -32,7 +32,6 @@ For example, a `placeOrder(...)` action will likely add an `Order` to the `Custo
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
 
-TIP: see the DataNucleus http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html[Mapping Guide] for more in-depth coverage of this topic.
 
 == Mapping bidir 1:m
 

@@ -184,21 +184,8 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "datanucleus"
-    name = "DataNucleus Configuration"
-    properties: []
-    searchOrder = 100
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "eclipselink"
     name = "Eclipselink Configuration"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "resteasy"
-    name = "RestEasy Configuration"
     searchOrder = 501
 }}
 
