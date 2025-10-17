@@ -91,10 +91,17 @@ For example:
 
 [source,java]
 ----
+import jakarta.persistence.Column;
+import lombok.*;
+
 public class Customer {
-    @javax.jdo.annotations.Column(length=10, scale=2)
-    public BigDecimal getTotalOrdersToDate() { /* ... */ }
-    public void setTotalOrdersToDate(BigDecimal totalOrdersToDate) { /* ... */ }
+
+    @Column(length=10, scale=2)
+    @Getter @Setter
+    private BigDecimal totalOrdersToDate;
+
+    //...
+}
 ----
 
 For ``BigDecimal``s it is also possible to specify the xref:refguide:applib-ant:Digits.adoc[@Digits] annotation, whose form is `@Digits(integer, fraction)`.

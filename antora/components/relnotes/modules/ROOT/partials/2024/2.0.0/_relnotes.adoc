@@ -64,6 +64,7 @@ Persistence using JDO continues to be supported through the integration with Dat
 [NOTE]
 ====
 We use EclipseLink rather than Hibernate because historically the latter was licensed using LGPL, which is incompatible with ASF licensing.
+(Hibernate v7 is licensed under Apache License, however, so this opens up the possibility of providing a JPA/Hibernate object store in the future).
 ====
 
 +

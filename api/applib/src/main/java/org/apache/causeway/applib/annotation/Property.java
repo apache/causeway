@@ -213,8 +213,8 @@ public @interface Property {
      * Indicates whether the property should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation
-     *     <code>javax.jdo.annotations.NotPersistent</code>
+     *     To ensure that the property is actually not persisted in the JPA object store, also annotate with
+     *     {@link jakarta.persistence.Transient}.
      * </p>
      */
     Snapshot snapshot()

@@ -84,16 +84,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import lombok.*;
 
 @Entity
 @Inheritance(type = InheritanceType.SINGLE_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
+    @Getter @Setter
     private String cardNumber;
-
-    public String getCardNumber() { return this.cardNumber; }
-    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
 
     // ...
 }

@@ -30,7 +30,7 @@ Indicates that the property or parameter is not required.
 <.> xref:#MANDATORY[MANDATORY]
 +
 --
-Indicates that the property is required (even if the JDO `javax.jdo.annotations.Column` annotation says otherwise).
+Indicates that the property is required (even if the JPA `jakarta.persistence.Column` annotation says otherwise).
 --
 <.> xref:#NOT_SPECIFIED[NOT_SPECIFIED]
 +

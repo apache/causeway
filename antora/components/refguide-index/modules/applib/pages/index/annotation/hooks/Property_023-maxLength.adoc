@@ -15,12 +15,13 @@ For example:
 
 [source,java]
 ----
-import lombok.Getter;
+import jakarta.persistence.Column;
+import lombok.*;
 import lombok.Setter;
 
 public class Customer {
 
-    @javax.jdo.annotations.Column(length=30)
+    @Column(length=30)
     @Getter @Setter
     private String firstName;
 

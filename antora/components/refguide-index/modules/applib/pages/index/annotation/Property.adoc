@@ -199,7 +199,7 @@ NOTE: this will usually be supplemented by a JDO or JPA-specific annotation to i
 
 Indicates whether the property should be included or excluded from mementos.
 
-To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation `javax.jdo.annotations.NotPersistent` 
+To ensure that the property is actually not persisted in the objectstore, also annotate with the JPA annotation `jakarta.persistence.Transient`
 
 [#mustSatisfy]
 === mustSatisfy

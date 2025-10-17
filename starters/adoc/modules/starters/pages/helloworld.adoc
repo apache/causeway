@@ -317,8 +317,7 @@ The `jpa` branch also has the `HelloWorldRepository` Spring Data service.
 
 * all entities.
 +
-These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with the ORM-specific annotation.
-For `jdo` branch, this is `@javax.jdo.annotations.PersistenceCapable`; for the `jpa` branch this is `@javax.persistence.Entity`).
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with the JPA `@jakarta.persistence.Entity` annotation.
 +
 In the helloworld starter app, the only entity is `HelloWorldObject`.
 

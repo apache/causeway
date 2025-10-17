@@ -61,13 +61,8 @@ import lombok.Setter;
 
 @Entity
 @Table(
-        //FIXME identityType=IdentityType.DATASTORE,
         schema = "libFakeDataFixture"
 )
-//FIXME
-//@javax.jdo.annotations.Version(
-//        strategy=VersionStrategy.VERSION_NUMBER,
-//        column="version")
 @DomainObject(editing = Editing.DISABLED)
 @DomainObjectLayout(bookmarking = BookmarkPolicy.AS_ROOT)
 @NoArgsConstructor
@@ -150,28 +145,15 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @Column(nullable = true)
     private String someString;
 
-    //FIXME @javax.jdo.annotations.Persistent()
     @Column(nullable = true)
     @Getter @Setter
     @Property(optionality=Optionality.OPTIONAL)
     private Password somePassword;
 
-  //FIXME
-//    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-//            @javax.jdo.annotations.Column(name = "someBlob_name"),
-//            @javax.jdo.annotations.Column(name = "someBlob_mimetype"),
-//            @javax.jdo.annotations.Column(name = "someBlob_bytes", jdbcType = "BLOB", sqlType = "LONGVARBINARY")
-//    })
     @Getter @Setter
     @Property(optionality = Optionality.OPTIONAL)
     private Blob someBlob;
 
-//FIXME
-//    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-//            @javax.jdo.annotations.Column(name = "someClob_name"),
-//            @javax.jdo.annotations.Column(name = "someClob_mimetype"),
-//            @javax.jdo.annotations.Column(name = "someClob_chars", jdbcType = "CLOB", sqlType = "LONGVARCHAR")
-//    })
     @Getter @Setter
     @Property(optionality=Optionality.OPTIONAL)
     private Clob someClob;
@@ -185,12 +167,10 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     private java.sql.Date someJavaSqlDate;
 
     @Column(nullable = true)
-    //FIXME @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     @Getter @Setter
     private LocalDate someLocalDate;
 
     @Column(nullable = true)
-    //FIXME @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     @Getter @Setter
     private ZonedDateTime someZonedDateTime;
 
@@ -213,14 +193,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
     @Column(nullable = true)
     @Getter @Setter
     private java.util.UUID someUuid;
-
-//    @javax.jdo.annotations.Persistent(defaultFetchGroup="true", columns = {
-//            @javax.jdo.annotations.Column(name = "someMoneyOptional_amount"),
-//            @javax.jdo.annotations.Column(name = "someMoneyOptional_currency")
-//    })
-//    @Property(optionality = Optionality.OPTIONAL)
-//    @Getter @Setter
-//    private Money someMoney;
 
     @Column(nullable = true)
     @Getter @Setter
@@ -518,7 +490,6 @@ public class FakeDataDemoObjectWithAll implements Comparable<FakeDataDemoObjectW
         return this;
     }
 
-    //FIXME @javax.jdo.annotations.Persistent(defaultFetchGroup="true")
     @Column(nullable = true)
     @Getter @Setter
     private LocalDateTime someLocalDateTime;
