@@ -62,19 +62,7 @@ public enum EntityState {
      */
     DETACHED(true),
     /**
-     * This entity state is not<h1>JDO specific</h1>
-     * Object with this state is an entity that no longer attached to a
-     * persistence session and cannot be re-attached.
-     * In other words: changes to the entity will <i>not</i>
-     * be tracked nor flushed back to the database.
-     * <p>
-     * JDO distinguishes between DETACHED and HOLLOW,
-     * by virtue of {@code javax.jdo.option.detachAllOnCommit=false}.
-     * <p>
-     * (Unfortunately, we have not found a way to recover _OIDs_ from _hollow_ entities, as used for serialization post commit.
-     * We have instead implemented a workaround using the <code>DnStateManagerForHollow</code> class).
-     *
-     * @see "https://www.datanucleus.org/products/accessplatform_6_0/jdo/persistence.html#lifecycle"
+     * @deprecated - This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
      */
     @Deprecated // JDO specific
     HOLLOW(true),
@@ -85,8 +73,7 @@ public enum EntityState {
      */
     TRANSIENT_OR_REMOVED(false),
     /**
-     * <h1>JDO specific</h1>
-     * Not supported by JPA. (Cannot distinguish between TRANSIENT and REMOVED.)
+     * @deprecated - This entity state is no longer in use; was specific to JDO/DataNucleus object store, now retired.
      */
     @Deprecated // JDO specific
     REMOVED(false)

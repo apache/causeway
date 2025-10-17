@@ -39,7 +39,7 @@ You might also want to read Richard's link:{attachmentsdir}/core-concepts/Pawson
 == Object Interface Mapping
 
 Another -- more technical -- way to think about the naked objects pattern is as an _object interface mapper_, or `OIM`.
-Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http://hibernate.org[Hibernate]) maps domain entities to a database, you can think of the naked objects pattern as representing the concept of mapping domain objects to a user interface.
+Just as an ORM (such as link:http://www.eclipse.dev/eclipselink.org[EclipseLink] or link:http://hibernate.org[Hibernate]) maps domain entities to a database, you can think of the naked objects pattern as representing the concept of mapping domain objects to a user interface.
 We sometimes use this idea to explain naked objects to a developer audience.
 
 

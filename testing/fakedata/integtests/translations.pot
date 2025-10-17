@@ -246,9 +246,7 @@ msgid "HSQL DB Manager"
 msgstr ""
 
 
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#prop()
 #: org.causewayaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll
-#: org.causewayaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#datanucleusIdLong()
 msgid "Id"
 msgstr ""
 
@@ -295,13 +293,6 @@ msgstr ""
 
 #: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetAction
 msgid "Member"
-msgstr ""
-
-
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
-msgid "Metadata"
 msgstr ""
 
 
@@ -788,14 +779,6 @@ msgid "Value"
 msgstr ""
 
 
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#prop()
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#prop()
-#: org.causewayaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#datanucleusVersionLong()
-#: org.causewayaddons.module.fakedata.fixture.demoapp.demomodule.dom.FakeDataDemoObjectWithAll#datanucleusVersionTimestamp()
-msgid "Version"
-msgstr ""
-
-
 #: org.causewayaddons.module.fakedata.fixture.demoapp.demomodule.dom.EnumOf3#VISA
 msgid "Visa"
 msgstr ""
@@ -808,14 +791,6 @@ msgstr ""
 
 #: org.apache.causeway.applib.services.swagger.SwaggerService$Format#YAML
 msgid "Yaml"
-msgstr ""
-
-
-#: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml
-#: org.apache.causeway.applib.services.layout.Object_openRestApi
-#: org.apache.causeway.applib.services.layout.Object_rebuildMetamodel
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
-msgid "datanucleusIdLong"
 msgstr ""
 
 

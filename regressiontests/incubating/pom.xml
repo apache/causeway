@@ -59,12 +59,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jdo-datanucleus</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.causeway.testing</groupId>
 			<artifactId>causeway-testing-fixtures-applib</artifactId>
 			<scope>test</scope>

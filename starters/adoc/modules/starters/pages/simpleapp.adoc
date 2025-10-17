@@ -1045,8 +1045,6 @@ spring.datasource.password=simpleapp
 #causeway.persistence.schema.create-schema-sql-template=   (use flyway instead)
 causeway.persistence.schema.auto-create-schemas=
 
-# DataNucleus, and must use camelCase rather than kebab-case
-datanucleus.schema.autoCreateAll=false
 ----
 
 Flyway in turn reads the migration scripts under `db.migration` package (in `src/main/resources` of the `webapp` module).
