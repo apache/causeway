@@ -72,7 +72,6 @@ public class ElSettings {
 
         // setup defaults
         jpaProps.put(PersistenceUnitProperties.WEAVING, "false");
-        //jpaProps.put(PersistenceUnitProperties.LOGGING_LEVEL, SessionLog.FINER_LABEL); //debug logging
         jpaProps.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_OR_EXTEND);
         jpaProps.put(PersistenceUnitProperties.CDI_BEANMANAGER, new BeanManagerForEntityListeners(serviceInjectorProvider));
 

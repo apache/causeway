@@ -16,7 +16,7 @@ The table below lists the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] annotations
 |Applies to
 
 
-|xref:refguide:applib-ant:Entity.adoc[@javax.persistence. +
+|xref:refguide:applib-ant:Entity.adoc[@jakarta.persistence. +
 Entity]
 |Flags that the class is an entity, creating an abstraction layer through which the Causeway framework interacts with the underlying persistent domain object.
 
@@ -40,13 +40,13 @@ Causeway also parses the following JPA annotations, but the metadata is currentl
 |Applies to
 
 
-|`@javax.persistence. +
+|`@jakarta.persistence. +
 Transient`
 |Unused
 |Persistence
 |Property
 
-|`@javax.persistence. +
+|`@jakarta.persistence. +
 Table`
 |Unused
 |Persistence

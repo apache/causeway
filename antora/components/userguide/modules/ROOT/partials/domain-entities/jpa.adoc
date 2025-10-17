@@ -12,28 +12,30 @@ See the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink object store] documentation fo
 
 == Class definition
 
-For the domain class itself, this will be the `@javax.persistence.Entity` annotation and probably the `@javax.persistence.Table` annotation, as well as others to define indices and queries.
+For the domain class itself, this will be the `@jakarta.persistence.Entity` annotation and probably the `@jakarta.persistence.Table` annotation, as well as others to define indices and queries.
 
 
 [source,java]
 ----
-@javax.persistence.Entity                                               // <.>
-@javax.persistence.Table(
-    schema= "simple"                                                    // <.>
+import jakarta.persistence.*;
+
+@Entity                                                         // <.>
+@Table(
+    schema= "simple"                                            // <.>
     // ...
 )
-@EntityListeners(CausewayEntityListener.class)                          // <.>
-@Named("simple.SimpleObject")                                           // <.>
-@DomainObject                                                           // <.>
+@EntityListeners(CausewayEntityListener.class)                  // <.>
+@Named("simple.SimpleObject")                                   // <.>
+@DomainObject                                                   // <.>
 public class SimpleObject {
 
-    @javax.persistence.Id                                               // <.>
-    @javax.persistence.GeneratedValue(strategy = GenerationType.AUTO)   // <3>
-    @javax.persistence.Column(name = "id", nullable = false)            // <.>
+    @Id                                                         // <.>
+    @GeneratedValue(strategy = GenerationType.AUTO)             // <3>
+    @Column(name = "id", nullable = false)                      // <.>
     private Long id;
 
-    @javax.persistence.Version                                          // <.>
-    @javax.persistence.Column(name = "version", nullable = false)       // <5>
+    @Version                                                    // <.>
+    @Column(name = "version", nullable = false)                 // <5>
     @PropertyLayout(fieldSetId = "metadata", sequence = "999")
     @Getter @Setter
     private long version;

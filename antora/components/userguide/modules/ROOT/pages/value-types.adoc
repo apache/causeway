@@ -377,7 +377,7 @@ As we can see, this is not the simplest of APIs, but the simplification it bring
 We're not quite finished with the glue code, unfortunately.
 Chances are that you will want to persist the new value to the database, which means that the object store also requires its own SPI to be implemented.
 
-For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store, implement the `javax.persistence.AttributeConverter` SPI.
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store, implement the `jakarta.persistence.AttributeConverter` SPI.
 For example:
 
 [source,java]

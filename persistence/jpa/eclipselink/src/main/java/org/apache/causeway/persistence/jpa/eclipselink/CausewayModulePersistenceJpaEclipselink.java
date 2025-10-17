@@ -179,7 +179,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                     if(translatedEx!=null) return translatedEx;
                 }
 
-                /* (null-able) converts javax.persistence exceptions to Spring's hierarchy
+                /* (null-able) converts jakarta.persistence exceptions to Spring's hierarchy
                  * However, don't let
                  * org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(RuntimeException)
                  * translate those 2 generic ones ... */

@@ -168,22 +168,24 @@ public interface UserRepository extends Repository<User, Long> {
 and Spring Data will create an implementation based on naming conventions.
 See the link:https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference[Spring Data] documentation for further details.
 
-It is also possible to declare JPQL queries , either on the repository method (using `javax.persistence.Query`) or on the entity (using `javax.persistence.NamedQuery`).
+It is also possible to declare JPQL queries , either on the repository method (using `jakarta.persistence.Query`) or on the entity (using `jakarta.persistence.NamedQuery`).
 
 On the entity, declare a named query, eg:
 
 [source,java]
 ----
-@javax.persistence.Entity
-@javax.persistence.NamedQueries({
-    @javax.persistence.NamedQuery(          // <.>
+import jakarta.persistence.*;
+
+@Entity
+@NamedQueries({
+    @NamedQuery(                            // <.>
         name = "Customer.findByNameLike",   // <.>
         query = "SELECT c " +               // <.>
                 "FROM Customer c " +        // <.>
                 "WHERE c.name LIKE :name"   // <.>
     )
     })
-...
+// ...
 public class Customer {
     // ...
 }
