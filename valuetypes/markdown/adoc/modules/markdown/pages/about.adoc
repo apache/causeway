@@ -99,7 +99,7 @@ And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest]
 @Import({
         CausewayModuleValMarkdownUiWkt.class,
 		CausewayModuleValMarkdownMetaModel.class,
-        
+
         ...
 })
 public class AppManifest {
@@ -124,18 +124,6 @@ If declared in an entity, then it should most likely be mapped to a CLOB:
 private Markdown helpText;
 ----
 <.> maps to a (c)lob
-
-* if declared in an xref:pjdo::[JDO] entity:
-+
-[source,java]
-----
-@Property
-@PropertyLayout
-@Column(allowsNull = "false", jdbcType = "CLOB")        // <.>
-@Getter @Setter
-private Markdown helpText;
-----
-<.> maps to a CLOB
 
 * if declared in a JAXB view model:
 +

@@ -30,8 +30,8 @@ public enum Optionality {
      * Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
      *
      * <p>
-     * For properties, will be false unless JDO <code>javax.jdo.annotations.Column</code> has also specified with
-     * <code>javax.jdo.annotations.Column#allowsNull()</code> set to <code>true</code>.
+     * For properties, will be false unless JPA {@link Column} has also specified with
+     * {@link Column#nullable()} set to <code>true</code>.
      * </p>
      */
     DEFAULT,

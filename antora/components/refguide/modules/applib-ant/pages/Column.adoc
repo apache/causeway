@@ -19,17 +19,23 @@ This section identifies which attributes of `@Column` are recognized and used by
 
 [#nullability]
 == Nullability
-ñ
-The `allowsNull` attribute is used to specify if a property is mandatory or is optional.
+
+The `nullable` attribute is used to specify if a property is mandatory or is optional.
 
 For example:
 
 [source,java]
 ----
+import jakarta.persistence.Column;
+
 public class Customer {
-    @jakarta.persistence.Column(nullable=true˜)
-    public String getMiddleInitial() { /* ... */ }
-    public void setMiddleInitial(String middleInitial) { /* ... */ }
+
+    @Column(nullable=true)
+    @Getter @Setter
+    private String middleInitial;
+
+    // ...
+}
 ----
 
 Causeway also provides xref:refguide:applib:index/annotation/Property.adoc#optionality[@Property#optionality] attribute.
@@ -52,17 +58,26 @@ For example:
 
 [source,java]
 ----
+import jakarta.persistence.Column;
+
 public class Customer {
-    @javax.jdo.annotations.Column(length=20)
-    public String getFirstName() { /* ... */ }
-    public void setFirstName(String firstName) { /* ... */ }
-    @javax.jdo.annotations.Column(allowsNull="true", length=1)
-    public String getMiddleInitial() { /* ... */ }
-    public void setMiddleInitial(String middleInitial) { /* ... */ }
-    @javax.jdo.annotations.Column(length=30)
-    public String getLastName() { /* ... */ }
-    public void setLastName(String lastName) { /* ... */ }
+
+    @Column(length=20)
+    @Getter @Setter
+    private String firstName;
+
+    @Column(length=1, nullable=true)
+    @Getter @Setter
+    private String middleInitial;
+
+    @Column(length=30)
+    @Getter @Setter
+    private String lastName;
+
+    // ...
+}
 ----
+
 
 Apache Causeway also provides xref:refguide:applib:index/annotation/Property.adoc#maxLength[@Property#maxLength] attribute.
 If both are specified, Apache Causeway will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
@@ -97,60 +112,72 @@ Unlike the sections above, the attributes specified in these hints and tips aren
 
 The `name` attribute can be used to override the name of the column.
 References to other objects are generally mapped as foreign key columns.
-If there are multiple references to a given type, then you will want to override the name that JDO/DataNucleus would otherwise default.
+If there are multiple references to a given type, then you will want to override the name that xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] would otherwise default.
 
 For example:
 
 [source,java]
 ----
+import jakarta.persistence.Column;
+
 public class PartyRelationship {
-    @Column(name = "fromPartyId", allowsNull = "false")
-    public Party getFrom() { /* ... */ }
-    public void setFrom(Party from) { /* ... */ }
-    @Column(name = "toPartyId", allowsNull = "false")
-    public Party getTo() { /* ... */ }
-    public void setTo(Party to) { /* ... */ }
-    ...
+
+    @Column(name = "fromPartyId", nullable = false)
+    @Getter @Setter
+    private Party from;
+
+    @Column(name = "toPartyId", nullable = false)
+    @Getter @Setter
+    private Party to;
+
+    // ...
 }
 ----
 
 === Mapping ``Blob``s and ``Clob``s
 
-Causeway provides custom value types for xref:refguide:applib:index/value/Blob.adoc[Blob]s and xref:refguide:applib:index/value/Clob.adoc[Clob]s.
-These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.
-Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
+Causeway provides utility classes to help map xref:refguide:applib:index/value/Blob.adoc[Blob]s and xref:refguide:applib:index/value/Clob.adoc[Clob]s.
 
 For example, here's how to map a `Blob`:
 
 [source,java]
 ----
-private Blob attachment;
-@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-        @javax.jdo.annotations.Column(name = "attachment_name"),
-        @javax.jdo.annotations.Column(name = "attachment_mimetype"),
-        @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "LONGVARBINARY")
+@AttributeOverrides({
+    @AttributeOverride(name="name",    column=@Column(name="attachment_name")),
+    @AttributeOverride(name="mimeType",column=@Column(name="attachment_mimeType")),
+    @AttributeOverride(name="bytes",   column=@Column(name="attachment_bytes"))
 })
-@Property(
-        domainEvent = AttachmentDomainEvent.class,
-        optionality = Optionality.OPTIONAL
-)
-public Blob getAttachment() { /* ... */ }
-public void setAttachment(Blob attachment) { /* ... */ }
+@Embedded
+private BlobJpaEmbeddable attachment;
+
+@Property()
+@PropertyLayout()
+public Blob getPdf() {
+  return BlobJpaEmbeddable.toBlob(pdf);
+}
+public void setPdf(final Blob pdf) {
+  this.pdf = BlobJpaEmbeddable.fromBlob(pdf);
+}
 ----
 
-And here's how to map a `Clob` (also taken from the todoapp):
+And here's how to map a `Clob`:
 
 [source,java]
 ----
-private Clob doc;
-@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
-        @javax.jdo.annotations.Column(name = "doc_name"),
-        @javax.jdo.annotations.Column(name = "doc_mimetype"),
-        @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "LONGVARCHAR")
+@AttributeOverrides({
+    @AttributeOverride(name="name",    column=@Column(name="doc_name")),
+    @AttributeOverride(name="mimeType",column=@Column(name="doc_mimeType")),
+    @AttributeOverride(name="bytes",   column=@Column(name="doc_bytes"))
 })
-@Property(
-        optionality = Optionality.OPTIONAL
-)
-public Clob getDoc() { /* ... */ }
-public void setDoc(final Clob doc) { /* ... */ }
+@Getter @Setter
+private ClobJpaEmbeddable doc;
+
+@Property()
+@PropertyLayout()
+public Clob getDoc() {
+  return ClobJpaEmbeddable.toClob(doc);
+}
+public void setDoc(final Clob doc) {
+  this.doc = ClobJpaEmbeddable.fromClob(doc);
+}
 ----

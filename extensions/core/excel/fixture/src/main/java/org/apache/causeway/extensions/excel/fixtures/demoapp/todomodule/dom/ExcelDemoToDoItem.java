@@ -167,9 +167,6 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Getter @Setter
     private String description;
 
-    //FIXME
-    //@javax.jdo.annotations.Persistent(defaultFetchGroup="true")
-    //@javax.jdo.annotations.Column(allowsNull="true")
     @Getter @Setter
     private LocalDate dueBy;
 
@@ -190,15 +187,11 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     private boolean complete;
 
     @Column(nullable=true, scale=2)
-    //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
-    //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
     @Property(editing = Editing.DISABLED, editingDisabledReason = "Update using action")
     @Getter @Setter
     private BigDecimal cost;
 
     @Column(nullable=true, scale=2)
-    //XXX breaks build, as of JDOQueryProcessor generated source, that cannot be compiled
-    //@jakarta.validation.constraints.Digits(integer=10, fraction=2)
     @Property(
             editing = Editing.DISABLED,
             editingDisabledReason = "Update using action"
@@ -209,20 +202,12 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     @Getter @Setter
     @Column(nullable=true, length=400)
     @Property(editing = Editing.ENABLED)
-    // @SummernoteEditor(height = 100, maxHeight = 300)
     private String notes;
 
     @Getter @Setter
-    //FIXME
-    //@javax.jdo.annotations.Persistent(defaultFetchGroup="false")
-    //@javax.jdo.annotations.Column(allowsNull="true", jdbcType="BLOB", sqlType="LONGBINARY")
     private Blob attachment;
 
     @Getter @Setter
-    //FIXME
-//    @javax.jdo.annotations.Persistent(table="ExcelDemoToDoItemDependencies")
-//    @javax.jdo.annotations.Join(column="dependingId")
-//    @javax.jdo.annotations.Element(column="dependentId")
     @CollectionLayout(sortedBy = DependenciesComparator.class)
     private SortedSet<ExcelDemoToDoItem> dependencies = new TreeSet<>();
 

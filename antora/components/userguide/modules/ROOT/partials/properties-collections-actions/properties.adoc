@@ -93,11 +93,11 @@ For example, you can write:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
-@Column(allowsNull="true")
+@Column(nullable=true)
 @Property
 @Getter @Setter
 private LocalDate date;
@@ -107,11 +107,11 @@ rather than the more verbose:
 
 [source,java]
 ----
-import javax.jdo.annotations.Column;
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
-@Column(allowsNull="true")
+@Column(nullable=true)
 @Property(optionality=Optionality.OPTIONAL)
 @Getter @Setter
 private LocalDate date;

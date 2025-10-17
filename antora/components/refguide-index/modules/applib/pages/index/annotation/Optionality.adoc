@@ -45,7 +45,7 @@ Ignore the value provided by this annotation (meaning that the framework will ke
 
 Default, usually meaning mandatory for properties and always meaning mandatory for parameters.
 
-For properties, will be false unless JDO `javax.jdo.annotations.Column` has also specified with `javax.jdo.annotations.Column#allowsNull()` set to `true` .
+For properties, will be false unless JPA `jakarta.persistence.Column#nullable()` is set to `true` .
 
 [#OPTIONAL]
 === OPTIONAL

@@ -65,30 +65,27 @@ This is often used in database unique indices, and in the `toString()` implement
 
 [source,java]
 ----
-import javax.persistence.Column;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.ToString.Include;
+import jakarta.persistence.*;
+import lombok.*;
 
-@javax.persistence.Table(
+@Table(
     schema= SimpleModule.SCHEMA,
     uniqueConstraints = {
         @UniqueConstraint(name = "SimpleObject__name__UNQ",
-                          columnNames = {"name"})                   // <.>
+                          columnNames = {"name"})               // <.>
     }
 )
 public class SimpleObject
-             implements Comparable<SimpleObject> {                  // <.>
+             implements Comparable<SimpleObject> {              // <.>
 
     // ...
     public SimpleObject(String name) {
         setName(name);
     }
 
-    @Column(allowsNull="false", length=50)                          // <.>
-    @Getter @Setter                                                 // <.>
-    @ToString.Include                                               // <.>
+    @Column(nullable=false, length=50)                          // <.>
+    @Getter @Setter                                             // <.>
+    @ToString.Include                                           // <.>
     private String name;
 
     private final static Comparator<SimpleObject> comparator =
@@ -96,7 +93,7 @@ public class SimpleObject
 
     @Override
     public int compareTo(final SimpleObject other) {
-        return comparator.compare(this, other);                     // <.>
+        return comparator.compare(this, other);                 // <.>
     }
 }
 ----

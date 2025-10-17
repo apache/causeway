@@ -18,12 +18,13 @@ For example:
 
 [source,java]
 ----
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Customer {
 
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @Getter @Setter
     private String middleInitial;
 
@@ -41,30 +42,37 @@ Specifically, Causeway always assumes properties are mandatory, whereas JDO spec
 When Apache Causeway initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.
 The fix is usually to add the `@Column#nullable()` annotation/attribute.
 
-== Superclass inheritance type
+== 'Single table' inheritance type
 
 There is one case (at least) it may be necessary to annotate the property with both `@Column#nullable` and also `@Property#optionality()`.
-If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `javax.jdo.annotations.InheritanceStrategy#SUPERCLASS_TABLE`), then JDO requires that the property is annotated as `@Column#nullable=true`: its value will be not defined for other subclasses.
+If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `jakarta.persistence.InheritanceType#SINGLE_TABLE`), then JDO requires that the property is annotated as `@Column#nullable=true`: its value will be not defined for other subclasses.
 
 In this case we therefore require both annotations.
 
 [source,java]
 ----
-@javax.jdo.annotations.PersistenceCapable
-@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.NEW_TABLE)
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
+@Entity
+@Inheritance(type = InheritanceType.SINGLE_TABLE)
 public abstract class PaymentMethod {
     ...
 }
-@javax.jdo.annotations.PersistenceCapable
-@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
+
+@Entity
+@Inheritance(type = InheritanceType.SINGLE_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
 
     private String cardNumber;
-    @javax.jdo.annotations.Column(allowsNull="true")
+    @Column(nullable=true)
     @Property(optionality=Optionality.MANDATORY)
-    public String getCardNumber() { return this.cardNumber; }
-    public void setCardNumber(String cardNumber) { this.cardNumber = cardNumber; }
-    ...
+    @Getter @Setter
+    private String cardNumber;
+
+    // ...
 }
 ----
 
@@ -72,8 +80,13 @@ Alternatively, you could rely on the fact that Apache Causeway never looks at fi
 
 [source,java]
 ----
-@javax.jdo.annotations.PersistenceCapable
-@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPERCLASS_TABLE)
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
+@Entity
+@Inheritance(type = InheritanceType.SINGLE_TABLE)
 public class CreditCardPaymentMethod extends PaymentMethod {
 
     @javax.jdo.annotations.Column(allowsNull="true")
