@@ -9,4 +9,4 @@ Many of the services defined (as interfaces) in the applib are actually implemen
 
 Although it's a simplification, you can think of the xref:core:metamodel:about.adoc[] module as handling domain types (cf `java.lang.Class`), while the xref:core:runtime:about.adoc[], xref:core:runtimeservices:about.adoc[] and xref:transaction:about.adoc[] modules handle domain object instances (cf `java.lang.Object`).
 
-That said, Spring Boot is responsible for instantiating domain service instances, while the persistence mechanisms (xref:pjpa:ROOT:about.adoc[JPA] and xref:pjdo:ROOT:about.adoc[JDO]) -- which are not part of the `core` modules -- handle the lifecycle of entity instances.
+That said, Spring Boot is responsible for instantiating domain service instances, while the xref:pjpa:ROOT:about.adoc[JPA] object store -- which is not part of the `core` modules -- handle the lifecycle of entity instances.

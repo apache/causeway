@@ -176,7 +176,7 @@ None of these rules take any arguments, so simply include (as a static field) th
 
 == Entity Checks
 
-Entity rule checks are provided for both xref:pjpa::about.adoc[] and xref:pjdo::about.adoc[], in `ArchitectureJpaRules` and `ArchitectureJdoRules` respectively:
+Entity rule checks are provided for xref:pjpa::about.adoc[JPA/EclipseLink] in the `ArchitectureJpaRules` class:
 
 * Strongly Recommended
 
@@ -191,20 +191,12 @@ Required in almost all cases:
 Required to allow JAXB view models to transparently reference entities:
 
 *** `every_jpa_Entity_must_be_annotated_with_XmlJavaAdapter_of_PersistentEntityAdapter()`
-*** `every_jdo_PersistenceCapable_must_be_annotated_as_XmlJavaAdapter_PersistentEntityAdapter()`
 
 ** ensure JPA entity defines a surrogate key:
 +
 Enforces a very common convention for JPA entities:
 
 *** `every_jpa_Entity_must_have_an_id_field()`
-
-** ensure JDO entity's logicalTypeName matches its discriminator (if any)
-+
-Both the logical type name and the `@Discriminator` for subclasses are a unique identifier of a type; this rule says they should be the same value.
-
-*** `every_logicalTypeName_and_jdo_discriminator_must_be_same()`
-
 
 * Recommended
 
@@ -213,7 +205,6 @@ Both the logical type name and the `@Discriminator` for subclasses are a unique 
 for teams adopting a "(micro) service-oriented" mindset:
 
 *** `every_jpa_Entity_must_be_annotated_as_Table_with_schema()`
-*** `every_jdo_PersistenceCapable_must_have_schema()`
 
 
 ** ensure JPA enum fields are persisted as strings:
@@ -228,14 +219,12 @@ For teams that prefer to query the database with enum values persisted as string
 For teams that like to use `SortedSet` for parented collections, and rely on the entity to render itself in a "sensible" order:
 
 *** `every_jpa_Entity_must_implement_Comparable()`
-*** `every_jdo_PersistenceCapable_must_implement_Comparable()`
 
 ** ensure entities have a unique business key:
 +
 For teams that insist on business keys in addition to surrogate keys
 
 *** `every_jpa_Entity_must_be_annotated_as_Table_with_uniqueConstraints()`
-*** `every_jdo_PersistenceCapable_must_be_annotated_as_Uniques_or_Unique()`
 
 * Optional
 
@@ -244,27 +233,18 @@ For teams that insist on business keys in addition to surrogate keys
 For teams that like to emphasise entities vs view models:
 
 *** `every_jpa_Entity_must_be_annotated_with_DomainObject_nature_of_ENTITY()`
-*** `every_jdo_PersistenceCapable_must_be_annotated_with_DomainObject_nature_of_ENTITY`
-
-** ensure if JDO entity has a surrogate key then its annotations are consistent:
-+
-For teams that like to be explicit about the use of surrogate keys:
-
-*** `every_jdo_PersistenceCapable_with_DATASTORE_identityType_must_be_annotated_as_DataStoreIdentity()`
 
 ** enable injected fields in entities:
 +
 For teams that use type-safe queries (and want to ensure that services do not appear superfluously as fields in the "QXxx" classes):
 
 *** `every_injected_field_of_jpa_Entity_must_be_annotated_with_Transient()`
-*** `every_injected_field_of_jdo_PersistenceCapable_must_be_annotated_with_NotPersistent()`
 
 ** encourage optimistic locking:
 +
 For teams that prefer optimistic locking as a standard everywhere:
 
 *** `every_jpa_Entity_must_have_a_version_field()`
-*** `every_jdo_PersistenceCapable_must_be_annotated_with_Version()`
 
 ** encourage static factory methods for entities:
 +

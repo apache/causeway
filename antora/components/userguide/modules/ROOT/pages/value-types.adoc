@@ -375,10 +375,11 @@ The string returned must be URL safe.
 As we can see, this is not the simplest of APIs, but the simplification it brings to your entities and view models that can now _consume_ your new value type means that it may be worth the effort.
 
 We're not quite finished with the glue code, unfortunately.
-Chances are that you will want to persist the new value to the database, which means that the ORM also requires its own SPI to be implemented (but they are almost identical).
+Chances are that you will want to persist the new value to the database, which means that the object store also requires its own SPI to be implemented.
 
-* if using xref:pjpa::about.adoc[JPA], then implement the `javax.persistence.AttributeConverter` SPI:
-+
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store, implement the `javax.persistence.AttributeConverter` SPI.
+For example:
+
 [source,java]
 .EmailAddressConverter.java
 ----
@@ -401,29 +402,6 @@ public class EmailAddressConverter implements AttributeConverter<EmailAddress, S
 }
 ----
 
-* if using xref:pjdo::about.adoc[JDO], then implement the `org.datanucleus.store.types.converters.TypeConverter` SPI:
-+
-[source,java]
-----
-public class EmailAddressConverter implements TypeConverter<EmailAddress, String>{
-
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public String toDatastoreType(final EmailAddress memberValue) {
-        return memberValue != null
-                ? memberValue.getEmailAddress()
-                : null;
-    }
-
-    @Override
-    public EmailAddress toMemberType(final String datastoreValue) {
-        return datastoreValue != null
-                ? EmailAddress.of(datastoreValue)
-                : null;
-    }
-}
-----
 
 === Composite value types
 
@@ -597,7 +575,7 @@ Also, it is not possible to use a custom value type as part of the object's id, 
 
 
 If using within the database then you will also need to map the custom type to the database.
-If mapping to xref:pjpa::about.adoc[JPA/EclipseLink], use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
+If using the xref:pjpa::about.adoc[JPA/EclipseLink] object store, use `@Embedded` and `@Embeddable`; see for example link:https://www.baeldung.com/jpa-embedded-embeddable[this baeldung post] on the topic.
 
 
 

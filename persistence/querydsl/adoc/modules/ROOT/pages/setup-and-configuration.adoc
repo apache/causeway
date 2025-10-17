@@ -22,17 +22,6 @@ This section describes the required changes to use QueryDSL if using xref:pjpa::
 include::partial$setup-and-configuration-for-persistence-mechanism.adoc[]
 
 
-== JDO
-
-This section describes the required changes to use QueryDSL if using xref:pjdo::about.adoc[JDO] as your persistence mechanism.
-
-:querydsl-implementation: jdo
-:querydsl-implementation-capitalized: Jdo
-:querydsl-annotation-processor: com.querydsl.apt.jdo.JDOAnnotationProcessor
-
-
-include::partial$setup-and-configuration-for-persistence-mechanism.adoc[]
-
 
 == Configuration Properties
 

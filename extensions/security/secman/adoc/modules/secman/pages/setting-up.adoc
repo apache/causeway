@@ -35,7 +35,7 @@ In addition, add an entry for _SecMan_'s own BOM:
 == Dependencies
 
 In the webapp module of your application, add the implementation modules of the extension.
-The exact modules to use will depend upon the persistence mechanism in use:
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism, use:
 
 [source,xml]
 .pom.xml
@@ -43,7 +43,7 @@ The exact modules to use will depend upon the persistence mechanism in use:
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-secman-persistence-XXX</artifactId>    <!--.-->
+        <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
     </dependency>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
@@ -51,14 +51,9 @@ The exact modules to use will depend upon the persistence mechanism in use:
     </dependency>
 </dependencies>
 ----
-<.> either:
-** `causeway-extensions-secman-persistence-jpa` (xref:pjpa::about.adoc[]) or
-** `causeway-extensions-secman-persistence-jdo` (xref:pjdo::about.adoc[])
 <.> provides an implementation of `PasswordEncoder`, so that passwords are only persisted in encrypted form.
 
-
 In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the corresponding _SecMan_ modules.
-Again, the exact modules to use will depend upon the persistence mechanism in use.
 You will also need to import the fixture module; SecMan uses fixture scripts to seed its entities:
 
 [source,java]
@@ -66,19 +61,14 @@ You will also need to import the fixture module; SecMan uses fixture scripts to 
 ----
 @Configuration
 @Import({
-        ...
-        CausewayModuleExtSecmanPersistenceXxx.class,        // <.>
+        CausewayModuleExtSecmanPersistenceJpa.class,
         CausewayModuleExtSecmanEncryptionJbcrypt.class,     // <.>
-
         CausewayModuleTestingFixturesApplib.class,          // <.>
-        ...
+        // ...
 })
 public class AppManifest {
 }
 ----
-<.> either
-** `CausewayModuleExtSecmanPersistenceJpa` (xref:pjpa::about.adoc[]) or
-** `CausewayModuleExtSecmanPersistenceJdo` (xref:pjdo::about.adoc[])
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 

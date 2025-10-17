@@ -41,7 +41,7 @@ Add an entry for the _Command Log_ module's own BOM:
 [#dependencies]
 === Dependencies / Imports
 
-In the webapp module of your application, add the following dependency:
+In the webapp module of your application, add the following dependency for the xref:pjpa::about.adoc[] object store:
 
 [source,xml]
 .pom.xml
@@ -49,33 +49,26 @@ In the webapp module of your application, add the following dependency:
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-commandlog-persistence-XXX</artifactId>    <!--.-->
+        <artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
     </dependency>
 </dependencies>
 ----
-<.> either:
-** `causeway-extensions-commandlog-persistence-jpa` (xref:pjpa::about.adoc[]), or
-** `causeway-extensions-commandlog-persistence-jdo` (xref:pjdo::about.adoc[]).
 
 
 In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the CommandLog modules.
-The exact modules to use will depend upon the persistence mechanism in use:
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism, use:
 
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
-        ...
-        CausewayModuleExtCommandLogPersistenceXxx.class,        // <.>
-        ...
+        CausewayModuleExtCommandLogPersistenceJpa.class,
+        // ...
 })
 public class AppManifest {
 }
 ----
-<.> either
-** `CausewayModuleExtCommandLogPersistenceJpa` (xref:pjpa::about.adoc[]),or
-** `CausewayModuleExtCommandLogPersistenceJdo`, (xref:pjdo::about.adoc[])
 
 If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
 
