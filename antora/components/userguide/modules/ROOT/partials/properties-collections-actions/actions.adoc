@@ -253,33 +253,30 @@ See also xref:userguide:ROOT:meta-annotations.adoc#properties-vs-parameters[prop
 
 == ``BigDecimal``s (Precision)
 
-The xref:refguide:applib-ant:Digits.adoc[@javax.validation.constraints.Digits#fraction] annotation/attribute is used to specify the scale/precision of decimals.
+The xref:refguide:applib-ant:Digits.adoc[@jakarta.validation.constraints.Digits#fraction] annotation/attribute is used to specify the scale/precision of decimals.
 
 For example:
 
 [source,java]
 ----
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.Digits;
 import lombok.Getter;
 import lombok.Setter;
 
 public Order updateDiscount(
-                @javax.validation.constraints.Digits(fraction=2)    // <.>
+                @Digits(fraction=2)                         // <.>
                 @ParameterLayout(named="Discount rate")
                 String discountRate) {
     setDiscountRate(discountRate);
     return this;
 }
 
-@Column(scale=2)                                                    // <.>
+@Column(scale=2)                                            // <.>
 @Getter @Setter
 private BigDecimal discountRate;
 ----
 <.> Specifies the parameter precision using xref:refguide:applib-ant:Digits.adoc[@Digits#fraction].
-<.> Specifies the corresponding property precision.
-+
-Note that this uses an ORM-specific annotation (in this case,  xref:refguide:applib-ant:Column.adoc#lengthscale-for-bigdecimals[@Column#scale]
-
-
+<.> Specifies the corresponding property precision for the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store.
 
 
