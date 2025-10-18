@@ -8,7 +8,6 @@
 ** xref:refguide:config:sections/causeway.persistence.schema.adoc[Core Persistence Schema]
 ** xref:refguide:config:sections/causeway.persistence.commons.adoc[Core Persistence Commons]
 ** xref:refguide:config:sections/causeway.prototyping.adoc[Prototyping]
-** xref:refguide:config:sections/causeway.security.shiro.adoc[Shiro Security Implementation]
 ** xref:refguide:config:sections/causeway.security.keycloak.adoc[Keycloak Security Implementation]
 ** xref:refguide:config:sections/causeway.security.spring.adoc[Spring Security Implementation]
 ** xref:refguide:config:sections/causeway.viewer.common.adoc[Common Config for Viewers]

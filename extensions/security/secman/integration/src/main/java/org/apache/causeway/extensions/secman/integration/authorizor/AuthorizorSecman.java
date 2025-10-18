@@ -50,17 +50,6 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepo
 import org.jspecify.annotations.NonNull;
 
 /**
- * <p>
- * Note that this service has an earlier precedence than <code>AuthorizorShiro</code>.
- * Conversely, <code>AuthenticatorShiro</code> overrides
- * {@link org.apache.causeway.extensions.secman.integration.authenticator.AuthenticatorSecman}.
- * </p>
- *
- * <p>
- * Therefore if both shiro and secman are configured, then shiro will be used for authentication, while secman will be
- * used for authorization.
- * </p>
- *
  * @since 2.0 {@index}
  */
 @Service

@@ -40,7 +40,7 @@ commands:
       Security: org.apache.causeway.security
       Bypass: "org.apache.causeway.security:causeway-security-bypass.*"
       Keycloak: "org.apache.causeway.security:causeway-security-keycloak.*"
-      Shiro: "org.apache.causeway.security:causeway-security-shiro.*"
+      Simple: "org.apache.causeway.security:causeway-security-simple.*"
       Spring: "org.apache.causeway.security:causeway-security-spring.*"
 
       Viewer: org.apache.causeway.viewer

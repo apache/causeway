@@ -26,7 +26,6 @@ There are several implementations of these SPIs to choose from; these make up th
 
 include::security:bypass:partial$module-nav.adoc[]
 include::security:simple:partial$module-nav.adoc[]
-include::security:shiro:partial$module-nav.adoc[]
 include::security:keycloak:partial$module-nav.adoc[]
 include::security:spring:partial$module-nav.adoc[]
 

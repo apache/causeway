@@ -63,7 +63,7 @@ In those modules where there are domain objects that use the `Vega` value type:
     CausewayModuleValVegaApplib.class,
     // ...
 })
-public class MyModule { ... }
+public class MyModule {  }
 ----
 
 In addition, in the webapp module of your application, add the following dependencies:

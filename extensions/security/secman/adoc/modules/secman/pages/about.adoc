@@ -17,7 +17,6 @@ Permissions can be defined at different scopes, and can either allow or veto acc
 The set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
 
 SecMan can be used just for authorization, or it can be used in conjunction with any of the other xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] implementations, for example xref:security:spring:about.adoc[Spring] or xref:security:keycloak:about.adoc[Keycloak].
-This integration is discussed in more detail <<shiro-integration,below>>.
 
 
 == Users, Roles and Permissions
@@ -218,7 +217,6 @@ Secman leverages Spring's `org.springframework.security.crypto.password.Password
 The `encryption-jbcrypt` module provides an implementation using the link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt] library.
 
 
-[#shiro-integration]
 == Using other Authenticators
 
 While SecMan does provide an implementation of the xref:refguide:core:index/security/authentication/Authenticator.adoc[] SPI, it's also possible to use an alternative `Authenticator` implementation; for example as provided by:
@@ -230,7 +228,6 @@ for more details, see xref:setting-up-with-spring-oauth2.adoc[]
 * xref:security:keycloak:about.adoc[Keycloak].
 +
 for more details, see xref:setting-up-with-keycloak.adoc[]
-
 
 Secman is still responsible for authorization.
 
@@ -245,8 +242,6 @@ xref:refguide:extensions:index/secman/applib/permission/dom/ApplicationPermissio
 As you might expect, they are intended for use with xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism.
 
 * the Model module (`causeway-extensions-secman-model`) defines view models to represent the feature application features, and also contains business logic as mixins to the API (and therefore contributed to the appropriate concrete entity).
-
-* the Shiro realm module (`causeway-extensions-secman-shiro-realm`) provides the Shiro realm interface that delegates to the Secman database (see discussion <<shiro-integration,above>>)
 
 * the jbcrypt encryption module (`causeway-extensions-secman-encryption-jbcrypt`) provides an implementation of Spring's `org.springframework.security.crypto.password.PasswordEncoder` SPI so that passwords are persisted securely using link:https://www.mindrot.org/projects/jBCrypt/[jBCrypt].
 

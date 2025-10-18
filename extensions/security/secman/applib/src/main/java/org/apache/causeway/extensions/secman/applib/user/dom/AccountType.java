@@ -21,14 +21,20 @@ package org.apache.causeway.extensions.secman.applib.user.dom;
 import org.apache.causeway.commons.internal.base._Strings;
 
 /**
- * Whether the user's account is local enabled (user/password) or
- * delegated (eg LDAP), as per
- * {@code org.apache.causeway.extensions.secman.shiro.CausewayModuleExtSecmanShiroRealm#setDelegateAuthenticationRealm(org.apache.shiro.realm.AuthenticatingRealm)}.
+ * Whether the user's account is defined by locally (Secman itself is the authenticator) or instead if there's a
+ * different security module that has responsibility for authentication (for example Spring Security with OAuth2).
+ * This is the delegate model.
  *
  * @since 2.0 {@index}
  */
 public enum AccountType {
+    /**
+     * Secman itself is the authenticator.
+     */
     LOCAL,
+    /**
+     * Another security module performs the primary authentication, for example Spring Security with OAuth2.
+     */
     DELEGATED;
 
     public boolean isLocal() {

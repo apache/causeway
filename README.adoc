@@ -25,8 +25,10 @@ Apache Causeway automatically generates the UI from the domain classes.
 
 === Sign-in
 
-Apache Causeway integrates with http://shiro.apache.org[Apache Shiro] as well as link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak].
-When using Shiro, the core framework supports file-based realms, while the __SecMan__ extension provides a well-featured subdomain of users, roles and permissions against features derived from the Apache Causeway metamodel.
+Apache Causeway integrates with link:https://spring.io/projects/spring-security[Spring Security] and link:https://www.keycloak.org/[Keycloak] for authentication concerns, typically in combination with OAuth2.
+These are usually combined with the __SecMan__ module, which provides a set of domain entities that model an authenticaiton model: users, roles and permissions against features derived from the Apache Causeway metamodel.
+The SecMan user is mapped to the authentical principle provided by Spring or Keycloak.
+Alternatively, SecMan can perform its own local authentication.
 
 image::https://raw.githubusercontent.com/apache/causeway/main/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/010-login.png[link="https://raw.githubusercontent.com/apache/causeway/main/antora/components/docs/modules/ROOT/images/what-is-apache-causeway/causeway-in-pictures/010-login.png"]
 

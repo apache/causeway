@@ -19,20 +19,12 @@ The `@jakarta.annotation.Priority` annotation is used to ensure that the request
 |Notes
 
 |WebModule +
-Shiro
-|FIRST + 100
-|Yes
-|/*
-|
-|Either this or spring
-
-|WebModule +
 SpringSecurity
 |FIRST + 100
 |Yes
 |/*
 |
-|Either this or shiro
+|
 
 |WebModule +
 LogOnExceptionLogger

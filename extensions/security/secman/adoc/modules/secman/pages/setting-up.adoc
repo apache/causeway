@@ -79,13 +79,6 @@ public class AppManifest {
 <.> use Jbcrypt to encrypt passwords
 <.> fixture script support
 
-In addition, you will probably want to *remove* the `CausewayModuleSecurityShiro.class` dependency so that SecMan can take care of both authentication _and_ authorisation.
-
-[NOTE]
-====
-It also possible to use SecMan in conjunction with Shiro, as described xref:setting-up-with-shiro.adoc[here].
-The primary use case is to support delegated users that Shiro authenticates externally using LDAP, for example.
-====
 
 [#configure-properties]
 == Configuration Properties
@@ -368,7 +361,7 @@ public class UserToRole__bob_allRoles extends AbstractUserAndRolesFixtureScript 
 The password is encrypted, not stored in plain text.
 <.> email address
 <.> application tenancy
-<.> local account (rather than delegated, see xref:setting-up-with-shiro.adoc[])
+<.> local account (rather than delegated, see xref:setting-up-with-spring-oauth2.adoc[] or xref:setting-up-with-keycloak.adoc[]).
 <.> application-specific roles
 <.> regular user access (always required).
 *Note* that this expects that the default regular user role has been left as its default value.

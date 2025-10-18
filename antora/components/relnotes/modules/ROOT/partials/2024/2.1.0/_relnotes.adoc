@@ -56,7 +56,7 @@
 | Shiro
 | 1.13.0
 a| (dropped)
-| xref:security:shiro:about.adoc[]
+|
 
 |===
 

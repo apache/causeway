@@ -59,7 +59,7 @@ Other highlights
 
 * xref:pjpa:ROOT:about.adoc[Persistence using JPA] has been added through an integration of EclipseLink.
 +
-Persistence using JDO continues to be supported through the integration with DataNucleus.
+Persistence using JDO continues to be supported through the integration with _DataNucleus_.
 +
 [NOTE]
 ====
@@ -85,8 +85,13 @@ In particular, "encapsulated" mode mean that the properties and collections of e
 
 ** supported custom scalar value types and composite types
 +
-This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc], xref:valuetypes:markdown:about.adoc[Markdown], xref:valuetypes:jodatime:about.adoc[Jodatime] and xref:valuetypes:vega:about.adoc[Vega]
-(link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
+This includes xref:valuetypes:asciidoc:about.adoc[AsciiDoc]
+, xref:valuetypes:markdown:about.adoc[Markdown],
+_Jodatime_ and _Vega_
+////
+xref:valuetypes:vega:about.adoc[Vega]
+////
+ (link:https://vega.github.io/vega-lite/[Vega-lite], "a grammar of interactive graphics").
 
 
 ** mixin classes annotated as `@Action`, `@Property` or `@Collection`

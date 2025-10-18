@@ -139,13 +139,6 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "causeway.security.shiro"
-    name = "Shiro Security Implementation"
-    properties: []
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "causeway.security.keycloak"
     name = "Keycloak Security Implementation"
     properties: []
