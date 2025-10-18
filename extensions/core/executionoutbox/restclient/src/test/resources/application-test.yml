@@ -19,6 +19,9 @@ causeway:
     schema:
       auto-create-schemas: "CAUSEWAYEXTEXECUTIONOUTBOX"
 
+  viewer:
+    restfulobjects:
+      basePath: "/restful"
   extensions:
     session-log:
       auto-logout-on-restart: false
@@ -27,8 +30,3 @@ spring:
   jpa:
     show-sql: true
 
-resteasy:
-  jaxrs:
-    app:
-      registration: beans
-    defaultPath: "/restful"

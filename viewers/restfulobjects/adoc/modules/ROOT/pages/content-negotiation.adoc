@@ -36,7 +36,7 @@ The Apache Causeway framework provides three implementations of `ContentNegotiat
 One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:refguide:applib:index/services/conmap/ContentMappingService.adoc[ContentMappingService] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header.
 +
 A typical implementation of `ContentMappingService` will convert the domain object into some sort of DTO (data transfer object) as specified by the "x-ro-domaintype".
-If this DTO is annotated with JAXB or Jackson mappings, then the RO viewer (courtesy of the underlying link:http://resteasy.jboss.org/[RestEasy] framework) can serialize these directly.
+If this DTO is annotated with JAXB or Jackson mappings, then the RO viewer can serialize these directly.
 +
 What all that means is that, if the underlying entities change, we are required to update the mappings in the `ContentMappingService` to map to the same DTOs.
 

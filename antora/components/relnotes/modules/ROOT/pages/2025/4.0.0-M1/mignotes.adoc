@@ -36,52 +36,83 @@ Some presets for the _Spring Configuration_ have been removed
 
 == RestEasy Integration Removed
 
+The Restful Objects viewer no longer has a dependency on JBoss RestEasy, instead using Spring REST APIs.
+As a consequence, the name of the Maven artifact and Spring configuration module have changed, as well as some configurations.
+
+* In your Maven `pom.xml`
++
+remove:
++
 [source,xml]
 .Maven
 ----
-<!-- REMOVED
 <dependency>
     <groupId>org.apache.causeway.viewer</groupId>
     <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
 </dependency>
--->
-
-<!-- USE INSTEAD -->
+----
++
+and use instead:
++
+[source,xml]
+.Maven
+----
 <dependency>
     <groupId>org.apache.causeway.viewer</groupId>
     <artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
 </dependency>
 ----
 
+* in your `AppManifest` (`@Import` staatements):
++
+replace:
++
 [source,java]
 .Spring bean import
 ----
 @Import({
     //..
-
-    // REST
-
-    // CausewayModuleViewerRestfulObjectsJaxrsResteasy.class <-- REMOVED
-    CausewayModuleViewerRestfulObjectsViewer.class, // <-- USE INSTEAD
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
+    // ...
+})
+----
++
+instead with:
++
+[source,java]
+.Spring bean import
+----
+@Import({
+    //..
+    CausewayModuleViewerRestfulObjectsViewer.class,
+    // ...
 })
 ----
 
+* in your `application.yaml` configuration properties, change the config properties that configures the servlet-context relative path prefix for the _Restful Objects Viewer_
++
+replace:
++
 [source,yaml]
 .application.yaml (Spring configuration properties)
 ----
-#configures the servlet-context relative path prefix for the _Restful Objects Viewer_
-
-# removed ..
-#resteasy:
-#  jaxrs:
-#    defaultPath: /restful
-#
-
+resteasy:
+  jaxrs:
+    defaultPath: /restful
+----
++
+replace with:
++
+[source,yaml]
+.application.yaml (Spring configuration properties)
+----
 causeway:
   viewer:
     restfulobjects:
       basePath: /restful
 ----
++
+
 
 == Immutable Configuration
 

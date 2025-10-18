@@ -247,7 +247,9 @@ To setup the message processor:
 === Usage
 
 To instantiate the `OutboxClient`, specify the URL, user and password.
-The URL will be something like: `http://localhost:8080/restful/`, where the last part is the default path obtainable from the `resteasy.jaxrs.defaultPath` configuration property of the Causeway app.
+The URL will be something like: `http://localhost:8080/restful/`, where the last part is the default path obtainable from the `causeway.viewer.restfulobjects.basePath` configuration property of the Causeway app.
+
+
 
 The `OutboxClient` API consists of three methods:
 

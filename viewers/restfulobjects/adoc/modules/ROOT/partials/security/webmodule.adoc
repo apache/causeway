@@ -5,7 +5,7 @@
 
 The xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] does *not* provide a login page.
 Instead it defines the authentication strategy SPI, delegated to by a filter.
-(For more detail on how this is wired together, see the implementation of the xref:refguide:viewer:index/restfulobjects/jaxrsresteasy/webmodule/WebModuleJaxrsResteasy.adoc[WebModuleJaxrsResteasy] web module service).
+(For more detail on how this is wired together, see the implementation of the xref:refguide:viewer:index/restfulobjects/viewer/webmodule/WebModuleRestfulObjects.adoc[WebModuleRestfulObjects] web module service).
 
 The SPI is:
 
