@@ -33,7 +33,7 @@ for example `myapp.customer.CustomerAddress#zipCode`
 * next up is an object feature representing an entire type, described using its logical type name.
 +
 for example `myapp.customer.CustomerAddress`.
-This is usually specified using the `@javax.inject.Named` annotation.
+This is usually specified using the `@jakarta.inject.Named` annotation.
 
 * most general is an object feature representing a namespace
 +
