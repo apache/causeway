@@ -36,8 +36,8 @@ In this case there is no need for the `@Property#optionality` attribute.
 
 == Mismatched defaults
 
-If the `@Column#nullable` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Causeway' defaults and JDO's defaults differ.
-Specifically, Causeway always assumes properties are mandatory, whereas JDO specifies that primitives are mandatory, but all reference types are optional.
+If the `@Column#nullable` attribute is omitted and the `@Property#optionality() attribute is also omitted, then note that Causeway' defaults and xref:pjpa:ROOT:about.adoc[JPA/Eclipselink]'s defaults differ.
+Specifically, Causeway always assumes properties are mandatory, whereas JPA assumes instead that properties (both primitivess and reference types) are optional.
 
 When Apache Causeway initializes it checks for these mismatches during its metamodel validation phase, and will fail to boot ("fail-fast") if there is a mismatch.
 The fix is usually to add the `@Column#nullable()` annotation/attribute.
@@ -45,7 +45,7 @@ The fix is usually to add the `@Column#nullable()` annotation/attribute.
 == 'Single table' inheritance type
 
 There is one case (at least) it may be necessary to annotate the property with both `@Column#nullable` and also `@Property#optionality()`.
-If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `jakarta.persistence.InheritanceType#SINGLE_TABLE`), then JDO requires that the property is annotated as `@Column#nullable=true`: its value will be not defined for other subclasses.
+If the property is logically mandatory and is in a subclass, but the mapping of the class hierarchy is to store both the superclass and subclass(es) into a single table (ie a "roll-up" mapping using `jakarta.persistence.InheritanceType#SINGLE_TABLE`), then xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] requires that the property is annotated as `@Column#nullable=true`: its value will be not defined for other subclasses.
 
 In this case we therefore require both annotations.
 
@@ -76,30 +76,6 @@ public class CreditCardPaymentMethod extends PaymentMethod {
 }
 ----
 
-Alternatively, you could rely on the fact that Apache Causeway never looks at fields (whereas JDO does) and move the JDO annotation to the field:
-
-[source,java]
-----
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import lombok.*;
-
-@Entity
-@Inheritance(type = InheritanceType.SINGLE_TABLE)
-public class CreditCardPaymentMethod extends PaymentMethod {
-
-    @Column(nullable=true)
-    @Getter @Setter
-    private String cardNumber;
-
-    // ...
-}
-----
-
-However this at first glance this might be read as meaning that the property is optional whereas Apache Causeway' default (required) applies.
-
 == Non-persistent properties
 
 Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).
@@ -109,9 +85,11 @@ For example:
 
 [source,java]
 ----
+import jakarta.persistence.Transient;
+
 public class Customer {
 
-    @javax.jdo.annotation.NotPersistent             // <.>
+    @Transient                                      // <.>
     @Property(optionality=Optionality.OPTIONAL)
     public String getFullName() {                   // <.>
         // ...
@@ -123,9 +101,9 @@ public class Customer {
     // ...
 }
 ----
-<.> a non persisted (derived) property
-<.> implementation would most likely derive full name from constituent parts (eg first name, middle initial, last name)
-<.> implementation would most likely parse the input and update the constituent parts
+<.> indicates that this property is not persisted
+<.> implementation would most likely derive full name from other persisted properties (eg first name, middle initial, last name)
+<.> if supported, implementation would most likely parse the input and update the underlying persisted properties
 
 [TIP]
 ====
