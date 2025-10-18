@@ -10,7 +10,7 @@ In many cases, such initialization can be performed within the constructor.
 If the initialization has dependencies, then these can be injected using standard link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-spring-beans-and-dependency-injection[constructor injection].
 
 Alternatively, initialization can be moved into a `@PostConstruct` link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-postconstruct-and-predestroy-annotations[lifecycle callback].
-Shutdown is similar; the framework will call any method annotated with `javax.annotation.PreDestroy`.
+Shutdown is similar; the framework will call any method annotated with `jakarta.annotation.PreDestroy`.
 
 If a domain service needs to wait until the framework is fully initialized though, it should register for the `MetamodelEvent` that is emitted by the framework itself.
 One example is if the service is to seed some reference data:

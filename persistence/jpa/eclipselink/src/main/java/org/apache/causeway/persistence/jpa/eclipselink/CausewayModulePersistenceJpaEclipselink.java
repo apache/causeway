@@ -72,6 +72,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
 
     @Inject private ElSettings elSettings;
 
+    @Inject
     protected CausewayModulePersistenceJpaEclipselink(
             final CausewayConfiguration causewayConfiguration,
             final DataSource dataSource,

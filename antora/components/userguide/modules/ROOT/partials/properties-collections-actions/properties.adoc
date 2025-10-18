@@ -84,7 +84,7 @@ However, it _isn't_ valid for a domain entity to hold a reference to view model,
 To override optionality, use the `@Basic(optional="...")` annotation.
 
 Apache Causeway on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.
-These defaults can also be overridden using Apache Causeway' own annotations, specifically `@Property(optionality=...)`, or (because it's much less verbose) using `@javax.annotation.Nullable`.
+These defaults can also be overridden using Apache Causeway' own annotations, specifically `@Property(optionality=...)`, or (because it's much less verbose) using either `@jakarta.annotation.Nullable` or `@org.jspecify.annotations.Nullable`.
 
 These different defaults can lead to incompatibilities between the two frameworks.
 To counteract that, Apache Causeway also recognizes and honours JPA's `@Column(nullable=...)`.

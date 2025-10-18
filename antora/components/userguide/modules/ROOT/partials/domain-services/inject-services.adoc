@@ -162,7 +162,7 @@ public class DocumentService {
 }
 ----
 
-These will be in the order as defined by the `@javax.annotation.Priority` annotation.
+These will be in the order as defined by the `@jakarta.annotation.Priority` annotation.
 
 This pattern can be useful when implementing the link:https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern[chain of responsibility] design pattern, that is, looking for the first implementation that can handle a request.
 

@@ -5,7 +5,7 @@
 
 
 The `WebModule` interface allows modules to dynamically configure ``Filter``s, ``Servlet``s and ``ServletContextListener``s.
-The `@javax.annotation.Priority` annotation is used to ensure that the request chain is sequenced correctly.
+The `@jakarta.annotation.Priority` annotation is used to ensure that the request chain is sequenced correctly.
 
 .WebModules (priority determines filter sequence, earliest first)
 [cols="6m,^4a,^2a,^3m,^3m,8a", options="header"]
