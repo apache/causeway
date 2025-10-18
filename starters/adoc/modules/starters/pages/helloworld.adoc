@@ -4,9 +4,7 @@
 
 
 The quickest way to start learning about Apache Causeway is to use the `helloworld` starter app.
-
-There are two variations of the application (and so two branches in the git repo).
-One variation uses JDO as the ORM, the other uses JPA, so you can focus on whichever ORM you prefer.
+It uses the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store for persistence.
 
 The application is also built nightly as a docker image, so you can quickly try it out:
 
@@ -14,8 +12,6 @@ The application is also built nightly as a docker image, so you can quickly try 
 ----
 docker run -d -p 8080:8080 apache/causeway-app-helloworld:v{fwk-version}-jpa-SNAPSHOT
 ----
-
-Replace "v{fwk-version}-jpa" with "v{fwk-version}-jdo" if using the JDO ORM.
 
 
 Using the instructions <<Downloading & Running,below>>, you can download a minimal Apache Causeway app, consisting of a single domain entity (`HelloWorldObject`) with supporting domain services.
@@ -36,12 +32,8 @@ Apache Causeway is a Java based framework, so in terms of prerequisites, you'll 
 +
 Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the helloworld app itself is currently configured for Java {jdk-version}.
 
-* link:http://maven.apache.org[Apache Maven] 3.9.7+
+* link:http://maven.apache.org[Apache Maven] 3.9.11+
 
-If using JDO as the ORM, you'll also need to run the Datanucleus enhancer (this post-processes the byte code of the entities).
-The xref:setupguide:ROOT:about.adoc[Setup Guide] explains how to do this for either IntelliJ and Eclipse.
-
-If using JPA as the ORM, the equivalent process to enhancement is performed at run-time, so there are no special setup considerations.
 
 
 == Downloading & Running
@@ -68,8 +60,9 @@ Choose the generic Wicket UI, and navigate to the login page:
 
 image::helloworld/using/020-login-to-wicket-viewer.png[width="600px"]
 
-The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `shiro.ini` config file.
-You can login with:
+
+The app itself is configured to run using xref:security:simple:about.adoc[Simple security module], with the `SimpleRealm` bean defining the users and roles.
+You can log in with:
 
 * username: _sven_
 * password: _pass_
@@ -236,8 +229,6 @@ src/main/java/
     webapp/
       AppManifest.java                          <!--.-->
       HelloWorldApp.java                        <!--.-->
-  META-INF        /
-    persistence.xml                             <!--.-->
 ----
 
 <.> For simplicity, all the Java source files reside in a `domainapp` top-level package.
@@ -252,7 +243,7 @@ Modules may have other packages, common ones include ``types`` (as below), also 
 <.> Holds classes for the `hwo` ("hello world object") entity/aggregate, consisting of the entity definition itself (`HelloWorldObject`) and a corresponding repository (`HelloWorldObjects`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
 
-<.> For the `jpa` branch only, uses Spring Data JPA to automatically provide the query implementation.
+<.> Uses Spring Data JPA to automatically provide the query implementations.
 
 <.> The `types` package contains meta-annotations to describe the usage of common value types such as ``String``s.
 
@@ -266,7 +257,6 @@ This is discussed in more detail xref:#appmanifest[below].
 It's pretty much boilerplate - the important piece is that it references `AppManifest`. +
 This is discussed in more detail xref:#helloworldapp[below].
 
-<.> For the `jdo` branch only, the `persistence.xml` file is required boilerplate.
 
 
 [#helloworldmodule]
@@ -298,9 +288,9 @@ If there were, these would be expressed in terms of module classes (each being a
 
 <.> specifies this class' package as a root to scan for Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Component.html[@Component]s.
 
-<.> for `jpa` branch only, enables Spring Data JPA repositories
+<.> enables Spring Data JPA repositories
 
-<.> for `jpa` branch only, to automatically discover JPA entities
+<.> automatically discovers JPA entities
 
 The scanning mechanism is also leveraged by Apache Causeway to pick up three types of classes:
 
@@ -313,7 +303,7 @@ Depending on their nature, domain services are used to build up the menu, or are
 +
 In the helloworld starter app, the main domain services is `HelloWorldObjects`.
 This appears in the menu, and also acts as a repository for the `HelloWorldObject` entity.
-The `jpa` branch also has the `HelloWorldRepository` Spring Data service.
+It also has the `HelloWorldRepository` repository interface for which Spring Data provides the query implementations.
 
 * all entities.
 +
@@ -361,11 +351,10 @@ public class AppManifest {
 <.> Provides various optional framework-provided mixins in the UI, such as the `objectIdentifier` and `logicalTypeName` properties
 <.> Mandatory - specifies the core of the Apache Causeway framework
 
-<.> Enables the Simple security mechanism.
+<.> Enables the xref:security:simple:about.adoc[Simple] security mechanism.
 There are several security implementations, precisely one must be selected
 
 <.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.
-Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view models] may be used, with hand-rolled persistence).
 
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)]
 
@@ -431,7 +420,6 @@ src/main/resources
   banner.txt                    <!--.-->
   log4j2-spring.xml             <!--.-->
   menubars.layout.xml           <!--.-->
-  shiro.ini                     <!--.-->
 ----
 
 <.> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
@@ -445,16 +433,10 @@ Typically this just holds JDBC connection strings, etc.
 
 <.> The `banner.txt` is shown when bootstrapping.
 
-<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Causeway)
+<.> The `log4j2-spring.xml` configures log4j2
 
 <.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
 
-<.> The `shiro.ini` file configures Shiro security integration (see the `CausewayModuleSecurityShiro` module imported in the `AppManifest`, above).
-+
-[TIP]
-====
-The xref:security:shiro:about.adoc[Shiro security] integration is much more flexible than simple file-based authentication.
-====
 
 To call out some of the files under `static`:
 
@@ -481,7 +463,7 @@ You will find tests in the xref:docs:starters:simpleapp.adoc[SimpleApp starter a
 
 === pom.xml
 
-Finally, at the root directory we of course have the `pom.xml`.
+Finally, at the root directory is the top-level `pom.xml`.
 This inherits from `causeway-app-starter-parent`:
 
 [source,xml]
@@ -494,7 +476,7 @@ This inherits from `causeway-app-starter-parent`:
 </parent>
 ----
 
-\... which builds upon Spring Boot's own `org.springframework.boot:spring-boot-starter-parent`.
+\... which in turn depends upon Spring Boot's own `org.springframework.boot:spring-boot-starter-parent`.
 This means:
 
 * the set of third party dependencies declared have been validated as compatible by Spring Boot team
@@ -512,11 +494,6 @@ Basically, though, it amounts to running the `main()` method in the `HelloWorldA
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::helloworld/helloworld.png[width="600px"]
-
-If using JDO as the ORM (rather than JPA), then the DataNucleus enhancer must be run beforehand.
-With IntelliJ this can be done by setting up a different _Run Configuration_ to be executed beforehand:
-
-image::helloworld/helloworld-before-launch.png[width="600px"]
 
 
 
