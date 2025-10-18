@@ -273,7 +273,7 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 === ``Blob``s
 
-Apache Causeway provides the xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[] utility class to allow properties of type `org.apache.causeway.applib.value.Blob` to be persisted.
+Apache Causeway provides the xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[BlobJpaEmbeddable] utility class to allow properties of type `org.apache.causeway.applib.value.Blob` to be persisted.
 
 This is used as follows:
 
@@ -299,7 +299,7 @@ public void setPdf(final Blob pdf) {
 
 === ``Clob``s
 
-Mapping ``Clob``s works in a very similar way to ``Blob``s, using the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[] utility class:
+Mapping ``Clob``s works in a very similar way to ``Blob``s, using the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable] utility class:
 
 [source,java]
 ----

@@ -4,7 +4,7 @@
 
 == Usage Notes
 
-If using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], `Blob` properties can be mapped using the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[]:
+If using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], `Blob` properties can be mapped using the xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[ClobJpaEmbeddable]:
 
 [source,java]
 ----
