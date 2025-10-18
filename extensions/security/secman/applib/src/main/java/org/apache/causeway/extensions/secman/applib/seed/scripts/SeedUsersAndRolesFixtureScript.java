@@ -50,7 +50,6 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutL
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanAdminRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanRegularUserRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSessionLogRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenceJdoMetaModelRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewaySudoImpersonateRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayViewerRestfulObjectsSwaggerRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.seed.SeedSecurityModuleService;

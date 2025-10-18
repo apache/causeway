@@ -914,7 +914,7 @@ If you run into issues, please don't hesitate to ask for help on the users maili
 The application is configured by default uses H2 as an inmemory database, with <<fixtures,fixtures>> used to populate the database with representative data.
 
 To deploy to production though of course will require a persistent database, and the schema of the tables will be explicitly managed.
-Although both JDO and JPA can automatically create the database schema, many development teams choose to manage the schema externally to the ORM.
+Although xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] can automatically create the database schema, many development teams choose to manage the schema externally to the ORM.
 
 A popular tool to do this is link:https://flywaydb.org/[Flyway], and Spring Boot provides automatic support for it using link:https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-data-migration[these configuration properties].
 

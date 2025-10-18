@@ -16,16 +16,15 @@ include::../section-hooks/causeway.persistence.schema~pre.adoc[]
 causeway.persistence.schema. +
 additional-orm-files
 
-| 
-| Does lookup additional "mapping-files" in META-INF/orm-_name_.xml (equivalent to "mapping-file" entries in persistence.xml) and adds these to those that are already configured the _Spring Data_ way (if any). NOTE: not implemented for JDO
-
+|
+| Does lookup additional "mapping-files" in META-INF/orm-_name_.xml (equivalent to "mapping-file" entries in persistence.xml) and adds these to those that are already configured the _Spring Data_ way (if any).
 
 |
 [[causeway.persistence.schema.auto-create-schemas]]
 causeway.persistence.schema. +
 auto-create-schemas
 
-| 
+|
 | List of additional schemas to be auto-created.
 
 Explicitly creates given list of schemas by using the specified `#getCreateSchemaSqlTemplate()` to generate the actual SQL statement against the configured data-source.

@@ -35,7 +35,6 @@ commands:
 
       Persistence: org.apache.causeway.persistence
       "Persistence Commons": "org.apache.causeway.persistence:causeway-persistence-commons.*"
-      JDO: "org.apache.causeway.persistence:causeway-persistence-jdo.*"
       JPA: "org.apache.causeway.persistence:causeway-persistence-jpa.*"
 
       Security: org.apache.causeway.security
