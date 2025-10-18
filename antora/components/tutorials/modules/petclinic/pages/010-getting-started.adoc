@@ -131,7 +131,7 @@ Map these onto the fields of the "simple object" entity, and the action buttons 
 
 It's common for each entity (or more precisely, aggregate root) to have a corresponding domain service, acting as its repository.
 This abstraction hides the details of interacting with the persistence data store.
-Domain services are automatically injected wherever they are required, using `@javax.inject.Inject`.
+Domain services are automatically injected wherever they are required, using `@jakarta.inject.Inject`.
 
 Apache Causeway applications therefore generally follow the _hexagonal architecture_ (aka the _ports and adapters_ architecture).
 

@@ -25,12 +25,12 @@ public class MyService {
 }
 ----
 
-Unlike application-scoped services, these request-scoped services must be injected using a slightly different idiom (borrowed from CDI), using a `javax.inject.Provider`.
+Unlike application-scoped services, these request-scoped services must be injected using a slightly different idiom (borrowed from CDI), using a `jakarta.inject.Provider`.
 For example:
 
 [source,java]
 ----
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 
 public class SomeClient {
     ...
@@ -50,8 +50,8 @@ To use that service, the idiom would be:
 
 [source,java]
 ----
-import javax.inject.Inject;
-import javax.inject.Provider;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 public class Customer {
     ...

@@ -82,7 +82,7 @@ public List<Product> autoComplete0AddToBasket(              // <.>
     String searchTerm) {
     return productRepository.find(searchTerm);              // <.>
 }
-@javax.inject.Inject
+@jakarta.inject.Inject
 ProductRepository productRepository;
 ----
 

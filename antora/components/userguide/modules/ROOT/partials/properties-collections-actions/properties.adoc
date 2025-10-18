@@ -157,7 +157,7 @@ For example:
 
 [source,java]
 ----
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Transient;
 import lombok.Getter;

@@ -11,7 +11,7 @@ Since this is a core capability of Spring, it's worth checking out Spring's link
 
 [TIP]
 ====
-Injection is requested using the JEE link:https://docs.oracle.com/javaee/7/api/javax/inject/Inject.html[@javax.inject.Inject] annotation.
+Injection is requested using the JEE `@jakarta.inject.Inject` annotation.
 This is described in Spring's documentation, link:https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-standard-annotations[using JSR330 standard annotations].
 
 It is also possible to use Spring's own link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html[@Autowired] annotation.
@@ -93,7 +93,7 @@ For example, setter injection is:
 
 [source,java]
 ----
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class Customer {
     ...
@@ -113,7 +113,7 @@ Some of the boilerplate can be removed using Project Lombok:
 
 [source,java]
 ----
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import lombok.Setter;
 
 public class Customer {
@@ -128,7 +128,7 @@ If you want to use field injection, then this is simply:
 
 [source,java]
 ----
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class Customer {
     ...
@@ -154,7 +154,7 @@ It's also possible to inject a list of services:
 
 [source,java]
 ----
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class DocumentService {
     ...
