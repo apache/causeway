@@ -5,10 +5,17 @@
 
 This section describes how to setup and configure _SecMan_ for use in your Apache Causeway application, for both authentication (`Authenticator` SPI) and authorization (`Authorizor` SPI).
 
-It is also possible to use _SecMan_ in conjunction with the framework's xref:security:shiro:about.adoc[integration with Shiro], where Shiro takes primary responsibility for authentication, while still using Secman for authorization.
-This mode allows a separate authentication mechanism such as LDAP to be used.
-For more details, see xref:setting-up-with-shiro.adoc[setting up with Shiro].
+It is also possible to use _SecMan_ in conjunction to use an alternative implementaiton of `Authenticator`, using either:
 
+* xref:security:spring:about.adoc[Spring]
++
+for more details, see xref:setting-up-with-spring-oauth2.adoc[]
+
+* xref:security:keycloak:about.adoc[Keycloak].
++
+for more details, see xref:setting-up-with-keycloak.adoc[]
+
+Secman is still responsible for authorization.
 
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]

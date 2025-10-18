@@ -16,7 +16,7 @@ Authorization is supported by associating users to roles, where each role has a 
 Permissions can be defined at different scopes, and can either allow or veto access to the underlying feature.
 The set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".
 
-SecMan can be used just for authorization, or it can be used in conjunction with any of the other xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] implementations, for example xref:security:shiro:about.adoc[Shiro], xref:security:spring:about.adoc[Spring] or xref:security:keycloak:about.adoc[Keycloak].
+SecMan can be used just for authorization, or it can be used in conjunction with any of the other xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] implementations, for example xref:security:spring:about.adoc[Spring] or xref:security:keycloak:about.adoc[Keycloak].
 This integration is discussed in more detail <<shiro-integration,below>>.
 
 
@@ -221,10 +221,18 @@ The `encryption-jbcrypt` module provides an implementation using the link:https:
 [#shiro-integration]
 == Using other Authenticators
 
-While SecMan does provide an implementation of the xref:refguide:core:index/security/authentication/Authenticator.adoc[] SPI, it's also possible to use an alternative `Authenticator` implementation, for example as provided by xref:security:shiro:about.adoc[Apache Shiro], xref:security:spring:about.adoc[Spring] or xref:security:keycloak:about.adoc[Keycloak].
+While SecMan does provide an implementation of the xref:refguide:core:index/security/authentication/Authenticator.adoc[] SPI, it's also possible to use an alternative `Authenticator` implementation; for example as provided by:
 
-For more details, see xref:security:secman:setting-up-with-shiro.adoc[], xref:setting-up-with-spring-oauth2.adoc[] and xref:setting-up-with-keycloak.adoc[].
+* xref:security:spring:about.adoc[Spring]
++
+for more details, see xref:setting-up-with-spring-oauth2.adoc[]
 
+* xref:security:keycloak:about.adoc[Keycloak].
++
+for more details, see xref:setting-up-with-keycloak.adoc[]
+
+
+Secman is still responsible for authorization.
 
 == SecMan's structure
 
