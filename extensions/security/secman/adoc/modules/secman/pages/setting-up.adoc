@@ -224,20 +224,6 @@ Access the configuration properties (from the tertiary menu))
 +
 Browse the application features + permissions (from the "Prototyping" menu).
 
-** `CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME`
-+
-Download the JDO metamodel (from the "Prototyping" menu).
-
-// moved to the incubator for the time being
-//** `CausewayExtCommandReplayPrimaryRoleAndPermissions.ROLE_NAME`
-//+
-//Access to the command replay primary menu
-//
-//** `CausewayExtCommandReplaySecondaryRoleAndPermissions.ROLE_NAME`
-//+
-//Access to the command replay secondary menu
-//
-
 ** `CausewayExtH2ConsoleRoleAndPermissions.ROLE_NAME`
 +
 Access the h2 console (from the "Prototyping" menu)

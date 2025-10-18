@@ -113,8 +113,6 @@ extends PublishingTestAbstract {
     @SneakyThrows
     private Class<?> bookClass() {
         switch(getPersistenceStandard()) {
-        case JDO:
-            return _Context.loadClass("org.apache.causeway.testdomain.jdo.entities.JdoBook");
         case JPA:
             return _Context.loadClass("org.apache.causeway.testdomain.jpa.entities.JpaBook");
         default:

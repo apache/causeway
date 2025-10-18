@@ -3,7 +3,6 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 The `causeway-mavendeps-webapp` aggregates the main runtime dependencies of a production webapp.
-Note that it does _not_ include the runtime dependencies for either JDO or JPA; these must be included separately.
 
 To use, add the following :
 
@@ -31,7 +30,7 @@ However, it does _not_ include a security implementation, a viewer implementatio
 
 * for persistence, add xref:pjpa:ROOT:about.adoc[JPA/Eclipselink].
 
-* viewer, you will almost certainly want to add xref:vw:ROOT:about.adoc[Wicket] and you might also add xref:vro:ROOT:about.adoc[Restful Objects].
+* viewer, you will almost certainly want to add xref:vw:ROOT:about.adoc[Wicket] and you might also add xref:vro:ROOT:about.adoc[Restful Objects] and/or the xref:gqlv:ROOT:about.adoc[].
 
 Also, remember that adding the class onto the classpath does _not_ make that functionality available (Apache Causeway does not currently leverage Spring Boot's link:https://docs.spring.io/spring-boot/docs/current/reference/html/using-spring-boot.html#using-boot-auto-configuration[auto configuration] capabilities).
 You must therefore also add in the appropriate `CausewayModuleXxx` to your application's top-level link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] (aka "app manifest").

@@ -592,10 +592,10 @@
 docker run -p 8080:8080 apache/causeway-app-helloworld:latest</pre>
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source (JPA or JDO) using:
+                    Build from source using:
                 <pre id="helloworld-jpa-text">
 APP=causeway-app-helloworld
-VARIANT="3-jpa"   # or: "3-jdo"
+VARIANT="3-jpa"
 curl https://codeload.github.com/apache/$APP/zip/v$VARIANT | jar xv
 cd $APP-$VARIANT
 
@@ -613,10 +613,10 @@ mvn spring-boot:run</pre>
 docker run -p 8080:8080 apache/causeway-app-simpleapp:latest</pre>
                 <p>
                 <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source (JPA or JDO) using:
+                    Build from source using:
               <pre id="simpleapp-jpa-text">
 APP=causeway-app-simpleapp
-VARIANT="3-jpa"   # or: "3-jdo"
+VARIANT="3-jpa"
 curl https://codeload.github.com/apache/$APP/zip/v$VARIANT | jar xv
 cd $APP-$VARIANT
 
@@ -634,7 +634,7 @@ mvn -pl webapp spring-boot:run</pre>
                   <br/>
                   <p class="cta-text text-left" style="margin-block-end: 0; ">
                   <pre id="demoapp-docker-text"  style="margin-top: 5px">
-docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest    # or: ...-jdo:latest</pre>
+docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest</pre>
                   <br/>
                 <p>
               </div>
@@ -748,19 +748,6 @@ docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest    # or: ...-jdo:lat
 <script src="_/js/home/lib/sticky/sticky.js"></script>
 
 <script>
-    document.querySelector('#helloworld-jdo-copy').addEventListener('click', async event => {
-        if (!navigator.clipboard) {
-            document.querySelector('#helloworld-jdo-copy').remove();
-            return
-        }
-        const text = document.querySelector('#helloworld-jdo-text').innerHTML;
-        try {
-            await navigator.clipboard.writeText(text);
-            event.target.textContent = 'Copied to clipboard';
-        } catch (err) {
-            alert("Failed to copy :-(", err)
-        }
-    });
     document.querySelector('#helloworld-jpa-copy').addEventListener('click', async event => {
         if (!navigator.clipboard) {
             document.querySelector('#helloworld-jpa-copy').remove();
@@ -774,19 +761,6 @@ docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest    # or: ...-jdo:lat
             alert("Failed to copy :-(", err)
         }
     });
-    document.querySelector('#simpleapp-jdo-copy').addEventListener('click', async event => {
-        if (!navigator.clipboard) {
-            document.querySelector('#simpleapp-jdo-copy').remove();
-            return
-        }
-        const text = document.querySelector('#simpleapp-jdo-text').innerHTML;
-        try {
-            await navigator.clipboard.writeText(text);
-            event.target.textContent = 'Copied to clipboard';
-        } catch (err) {
-            alert("Failed to copy :-(", err)
-        }
-    })
     document.querySelector('#simpleapp-jpa-copy').addEventListener('click', async event => {
         if (!navigator.clipboard) {
             document.querySelector('#simpleapp-jpa-copy').remove();

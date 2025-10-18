@@ -220,7 +220,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
              * Template method for extracting a SQL String from the given exception.
              * <p>Default implementation always returns {@code null}. Can be overridden in
              * subclasses to extract SQL Strings for vendor-specific exception classes.
-             * @param ex the JDOException, containing a SQLException
+             * @param ex the throwable to be processed, typically containing some sort of SQL Exception
              * @return the SQL String, or {@code null} if none found
              */
             private String extractSqlStringFromException(final Throwable ex) {

@@ -1,9 +1,7 @@
 [#jakarta-persistence-Column]
-= @Column (jpa)
+= @Column (jakarta.persistence)
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-
-// TODO: 3866 - to update, this mostly refers to JDO.
 
 The JPA `@jakarta.persistence.Column` provides metadata describing how JPA should persist the property to a database RDBMS table column (or equivalent concept for other persistence stores).
 
@@ -12,7 +10,7 @@ Apache Causeway also parses and interprets this annotation in order to build up 
 [NOTE]
 ====
 Apache Causeway parses the `@Column` annotation from the Java source code; it does not query the JPA metamodel.
-This means that it the `@Column` annotation must be used rather than XML metadata..
+This means that it the `@Column` annotation must be used rather than XML metadata.
 ====
 
 This section identifies which attributes of `@Column` are recognized and used by Apache Causeway.
@@ -41,10 +39,10 @@ public class Customer {
 Causeway also provides xref:refguide:applib:index/annotation/Property.adoc#optionality[@Property#optionality] attribute.
 If both are specified, Apache Causeway will check when it initializes for any contradictions, and will fail-fast with an appropriate error message in the log if there are.
 
-You should also be aware that in the lack of either the `@Column#nullable` or the `@Property#optionality` attributes, that the JDO and Apache Causeway defaults differ.
+You should also be aware that in the lack of either the `@Column#nullable` or the `@Property#optionality` attributes, that the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] and Apache Causeway defaults differ.
 Apache Causeway rule is straight-forward: properties are assumed to be required.
-JDO on the other hand specifies that only primitive types are mandatory; everything else is assumed to be optional.
-Therefore a lack of either annotation can also trigger the fail-fast validation check.
+xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] on the other hand properties are assumed to be optional.
+A lack of either annotation may result in a metamodel validation error.
 
 In the vast majority of cases you should be fine just to add the `@Column#nullable` attribute to the getter.
 But see the documentation for xref:refguide:applib:index/annotation/Property.adoc#optionality[@Property#optionality] attribute for discussion on one or two minor edge cases.

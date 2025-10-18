@@ -653,8 +653,7 @@ public record CausewayConfiguration(
                      *
                      *
                      * <p>
-                     *     Note: There is no corresponding <code>removed</code> callback, because (for the JDO persistence store at least)
-                     *     it is not possible to interact with a domain entity once it has been deleted.
+                     *     Note: There is no corresponding <code>removed</code> callback, because it is not possible to interact with a domain entity once it has been deleted.
                      *
                      */
                     @DefaultValue("true")
@@ -2026,13 +2025,13 @@ public record CausewayConfiguration(
                  * <p>
                  *     However, this auto-flush behaviour can be troublesome if the query occurs as a side-effect of the evaluation of a derived property,
                  *     whose value in turn is enlisted by an implementation of a subscriber (in particular {@link EntityPropertyChangeSubscriber}) which
-                 *     captures the value of all properties (both persisted and derived).  However, this behaviour can (at least under JDO), result in a {@link java.util.ConcurrentModificationException}.
-                 *
+                 *     captures the value of all properties (both persisted and derived).  However, this behaviour may result in a {@link java.util.ConcurrentModificationException}.
+                 * </p>
                  *
                  * <p>
                  *     By default, {@link EntityChangeTracker} will therefore temporarily suppress any auto-flushing while this is ongoing.  The purpose
                  *     of this configuration property is to never suppress, ie always autoflush.
-                 *
+                 * </p>
                  */
                 @DefaultValue("true")
                 boolean suppressAutoFlush,
@@ -2041,6 +2040,7 @@ public record CausewayConfiguration(
                  *
                  * <p>
                  *     By default this service is enabled (if added to the classpath as a module).
+                 * </p>
                  *
                  */
                 @DefaultValue("true")
@@ -2066,7 +2066,6 @@ public record CausewayConfiguration(
              * Does lookup additional "mapping-files" in META-INF/orm-<i>name</i>.xml
              * (equivalent to "mapping-file" entries in persistence.xml) and adds these
              * to those that are already configured the <i>Spring Data</i> way (if any).
-             * @implNote not implemented for JDO
              */
             @DefaultValue
             List<String> additionalOrmFiles,
@@ -3336,20 +3335,26 @@ public record CausewayConfiguration(
             /**
              * Indicates how to derive the min fractional facet (the minimum number of digits after the decimal point).
              *
-             * <p>If this flag is set, then the {@link Digits#fraction()} annotation or ORM equivalent (the JDO
-             * <code>@Column#scale</code> or the JPA {@link Column#scale()}) should be used for the
+             * <p>If this flag is set, then the {@link Digits#fraction()} annotation or the JPA equivalent {@link Column#scale()}) should be used for the
              * <code>MinFractionalFacet</code> as well as the <code>MaxFractionalFacet</code>.
+             * </p>
              *
-             * <p>What this means in practice is that a numeric values will be rendered to the same number of fractional
+             * <p>
+             * What this means in practice is that a numeric values will be rendered to the same number of fractional
              * digits, irrespective of whether they are whole numbers or fractional.  For example, with a scale of 2,
              * then '123.4532' will be rendered as '123.45', while '123' will be rendered
              * as '123.00'.
+             * </p>
              *
-             * <p>If this flag is NOT set, or if it is set but there is no annotation, then the {@link Display#minScale} config
+             * <p>
+             *If this flag is NOT set, or if it is set but there is no annotation, then the {@link Display#minScale} config
              * property is used as a fallback.
+             * </p>
              *
-             * <p>If there is no fallback, then it means that a big decimal such as '123.00' will be presented as
+             * <p>
+             * If there is no fallback, then it means that a big decimal such as '123.00' will be presented as
              * just '123' (that is, the shortest possible textual representation).
+             * </p>
              */
             @DefaultValue("true")
             boolean useScaleForMinFractionalFacet,
@@ -3366,17 +3371,25 @@ public record CausewayConfiguration(
                  * ',' (comma) is the grouping (thousands) separator while the '.' (period) acts as a
                  * decimal point, but in others (eg France, Italy) it is the other way around.
                  *
-                 * <p>Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
+                 * <p>
+                 * Surprisingly perhaps, a string such as "123,99", when parsed ((by {@link java.text.DecimalFormat})
                  * in an English locale, is not rejected but instead is evaluated as the value 12399L.  That's almost
                  * certainly not what the end-user would have expected, and results in a money value 100x too large.
+                 * </p>
                  *
-                 * <p>The purpose of this configuration property is to remove the confusion by simply disallowing the
+                 * <p>
+                 * The purpose of this configuration property is to remove the confusion by simply disallowing the
                  * thousands separator from being part of the input string.
+                 * </p>
                  *
-                 * <p>For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
+                 * <p>
+                 * For maximum safety, allowing the grouping separator is disallowed, but the alternate (original)
                  * behaviour can be reinstated by setting this config property back to <code>true</code>.
+                 * </p>
                  *
-                 * <p>The same configuration property is also used for rendering the value.
+                 * <p>
+                 * The same configuration property is also used for rendering the value.
+                 * </p>
                  *
                  * @see Display#isUseGroupingSeparator()
                  */
@@ -3394,8 +3407,10 @@ public record CausewayConfiguration(
                 /**
                  * The minimum scale to use for all {@link java.math.BigDecimal}s.
                  *
-                 * <p> Is only used if the minimum scale has not been specified explicitly by some other means, typically
+                 * <p>
+                 * Is only used if the minimum scale has not been specified explicitly by some other means, typically
                  * either {@link Digits#fraction()} or an ORM semantic such as the (JPA) {@link Column#scale()}.
+                 * </p>
                  */
                 Integer minScale,
 
@@ -3415,7 +3430,9 @@ public record CausewayConfiguration(
             /**
              * If set, adds plantuml support to the AsciiDoc value type.
              *
-             * <p>Eg. via docker instance like {@literal yuzutech/kroki}.
+             * <p>
+             * Eg. via docker instance like {@literal yuzutech/kroki}.
+             * </p>
              */
             URL backendUrl,
 

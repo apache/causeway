@@ -213,14 +213,7 @@ implements
         return lock;
     }
 
-    /** XXX sporadically seeing errors like
-     * ----
-     * Error: (bad sql grammar exception): Column "INVENTORY_ID_EID" not found; SQL statement:
-     * INSERT INTO "testdomain"."JdoProduct"
-     * ("id","description","name","price","author","isbn","publisher","DISCRIMINATOR","INVENTORY_ID_EID")
-     * VALUES (?,?,?,?,?,?,?,?,?) [42122-214]
-     * ----
-     * This is an attempt to force the JDO schema to properly initialize. */
+    /** To force the schema to properly initialize. */
     protected void initSchema() {}
 
     @SneakyThrows

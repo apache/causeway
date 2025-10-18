@@ -566,7 +566,7 @@ implements
                 public void validateObjectEnter(final ObjectSpecification objSpec) {
 
                     // @DomainObject(logicalTypeName=...) must be unique among non-abstract types
-                    // Eg. having an ApplicationUser interface and a concrete ApplicationUser (JDO)
+                    // Eg. having an ApplicationUser interface and a concrete ApplicationUser
                     // that have the same @DomainObject(logicalTypeName=...) should be allowed.
                     // A hard constraint that applies, is that there cannot be multiple bookmark-able
                     // types that share the same @DomainObject(logicalTypeName=...).

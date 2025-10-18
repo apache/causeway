@@ -138,7 +138,7 @@ public class SimpleObject { /* ... */ }
 ----
 <.> There may be several `@NamedQuery` annotations, nested within a `@NamedQueries` annotation) defines queries using JPAQL.
 <.> Defines the name of the query.
-<.> The definition of the query, using JPAQL syntax.
+<.> The definition of the query, using JPQL syntax.
 
 To actually use the above definition, the framework provides the xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService].
 This is a generic repository for any domain class.
@@ -148,10 +148,10 @@ The corresponding repository method for the above query is:
 [source,java]
 ----
 public List<SimpleObject> findByName(String name) {
-    return repositoryService.allMatches(            // <.>
-            Query.named(SimpleObject.class,         // <.>
-                        "findByNameLike")           // <.>
-                   .withParameter("name", name)     // <.>
+    return repositoryService.allMatches(                // <.>
+            Query.named(SimpleObject.class,             // <.>
+                        "SimpleObject.findByNameLike")  // <.>
+                   .withParameter("name", name)         // <.>
             );
 }
 
@@ -160,7 +160,7 @@ public List<SimpleObject> findByName(String name) {
 <.> find all instances that match the query
 <.> Specifies the class that is annotated with `@NamedQuery`
 <.> Corresponds to the `@NamedQuery#name` attribute
-<.> Corresponds to the `:name` parameter in the query JDOQL string
+<.> Corresponds to the `:name` parameter in the query JPQL string
 
 
 

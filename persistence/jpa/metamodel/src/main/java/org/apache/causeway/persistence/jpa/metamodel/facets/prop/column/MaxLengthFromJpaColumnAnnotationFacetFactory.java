@@ -40,9 +40,6 @@ implements MetaModelRefiner {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        // only applies to JDO entities; ignore any view models
-        final Class<?> cls = processMethodContext.getCls();
-
         if(String.class != processMethodContext.getMethod().getReturnType()) {
             return;
         }

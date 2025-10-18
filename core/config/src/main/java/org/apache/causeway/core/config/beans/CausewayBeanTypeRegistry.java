@@ -45,14 +45,14 @@ public class CausewayBeanTypeRegistry {
     public static CausewayBeanTypeRegistry empty() {
         return new CausewayBeanTypeRegistry(Can.empty());
     }
-    
+
     /**
      * (immutable) scan result, as used by the SpecificationLoader for introspection
      */
     private final Can<CausewayBeanMetaData> scannedTypes;
     private final Can<CausewayBeanMetaData> entities;
     private final PersistenceStack persistenceStack;
-    
+
     private final Map<Class<?>, CausewayBeanMetaData> scannedTypesByClass = new HashMap<>();
 
     // -- DISTINCT CATEGORIES OF BEAN SORTS
@@ -68,7 +68,7 @@ public class CausewayBeanTypeRegistry {
         this.scannedTypes = scannedTypes;
 
         var entityTypes = new HashMap<Class<?>, CausewayBeanMetaData>();
-        
+
         scannedTypes.forEach(typeMeta->{
 
             var cls = typeMeta.getCorrespondingClass();
@@ -103,7 +103,7 @@ public class CausewayBeanTypeRegistry {
                 return;
             }
         });
-        
+
         this.entities = Can.ofCollection(entityTypes.values());
         this.persistenceStack = entities.stream()
                 .map(CausewayBeanMetaData::persistenceStack)
@@ -115,14 +115,14 @@ public class CausewayBeanTypeRegistry {
     // -- FIELDS
 
     /**
-     * Returns 'JDO' or 'JPA' based on metadata found during {@link CausewayBeanTypeClassifier type-classification}.
+     * Returns the object store in use for this application, based on metadata found during {@link CausewayBeanTypeClassifier type-classification}.
      * If no (concrete) entity type is found, returns 'UNSPECIFIED'.
      * @implNote assumes that there can be only one persistence stack
      */
     public PersistenceStack persistenceStack() {
-        return persistenceStack; 
+        return persistenceStack;
     }
-    
+
     // -- STREAMS
 
     public Stream<CausewayBeanMetaData> streamScannedTypes() { return scannedTypes.stream(); }
@@ -136,7 +136,7 @@ public class CausewayBeanTypeRegistry {
                 .filter(typeMeta->typeMeta.persistenceStack()==selectedStack)
                 .<Class<?>>map(CausewayBeanMetaData::getCorrespondingClass);
     }
-    
+
     // -- LOOKUP
 
     public Optional<String> lookupDomainServiceNameForType(final Class<?> type) {
@@ -147,7 +147,7 @@ public class CausewayBeanTypeRegistry {
     public boolean containsManagedBeansContributing(final @NonNull Class<?> type) {
         return domainServices.containsKey(type);
     }
-    
+
     public Optional<CausewayBeanMetaData> lookupScannedType(final Class<?> type) {
         return Optional.ofNullable(scannedTypesByClass.get(type));
     }

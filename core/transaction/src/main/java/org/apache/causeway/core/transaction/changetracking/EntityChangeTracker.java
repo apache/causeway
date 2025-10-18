@@ -51,11 +51,11 @@ public interface EntityChangeTracker extends DisposableBean {
      *
      * <p>
      * The post-modification values are captured when the transaction commits.
+     * </p>
      *
      * <p>
-     * Overload as an optimization for ORMs (specifically, JPA) where already have access to the changed records by
-     * accessing the ORM-specific data structures (<code>EntityManager</code>'s unit-of-work).
-     *
+     * Overload is an optimization for the JPA object store where we already have access to the changed records by
+     * accessing the ORM-specific data structures ({@link jakarta.persistence.EntityManager}'s &quot;unit-of-work&quot;).
      * </p>
      *
      * @param entity

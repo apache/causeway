@@ -20,7 +20,6 @@ The xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationTestA
 
 Integration tests can also simulate multiple interactions (HTTP requests) within a single test using xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc#nextInteraction_[InteractionService#nextInteraction].
 When called, any state changes made in the previous `Interaction` will be committed, and any references to entities should be either discarded or else be re-retrieved in the next `Interaction`.
-(In the case of the JDO ORM, any entities from the previous `Interaction` will be reset to null when that `Interaction` completes).
 
 [#executions]
 === Executions

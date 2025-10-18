@@ -57,8 +57,6 @@ public enum EntityState {
     ATTACHED_NO_OID(false),
     /**
      * Is detached, hence (per definition) has an OID.
-     * <p>
-     * Supported by both JDO and JPA. However, historically never used by the framework for JDO.
      */
     DETACHED(true),
     /**

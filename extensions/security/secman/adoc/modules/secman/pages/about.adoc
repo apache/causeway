@@ -4,7 +4,7 @@
 
 
 SecMan provides an implementation of both the xref:refguide:core:index/security/authentication/Authenticator.adoc[Authenticator] and xref:refguide:core:index/security/authorization/Authorizor.adoc[Authorizor] SPIs, storing user, roles and permissions information as domain entities (persisted to relational database).
-It can be used with both the JDO or JPA persistence mechanisms.
+It is supported by the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store.
 
 Because these features are implemented using domain entities, it means that this security information can be administered from within your Apache Causeway application.
 The domain model is explained in more detail <<domain-model,below>>.

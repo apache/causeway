@@ -92,7 +92,8 @@ public interface FactoryService {
     /**
      * Creates a new detached entity instance, with injection points resolved.
      * <p>
-     * The entity will not yet be persisted, in other words: its not yet known to the persistence layer.
+     * The entity will not yet be persisted, in other words: it is not yet known to the persistence layer.
+     * </p>
      *
      * @param <T>
      * @param entity - most likely just new-ed up, without injection points resolved
@@ -164,10 +165,10 @@ public interface FactoryService {
      * @since 2.0
      */
     <T> T create(@NonNull Class<T> domainClass);
-    
+
     /**
-     * In support of built-in tree semantics, as inferred from 
-     * {@link PropertyLayout#navigableSubtree()} or 
+     * In support of built-in tree semantics, as inferred from
+     * {@link PropertyLayout#navigableSubtree()} or
      * {@link CollectionLayout#navigableSubtree()} annotations.
      * @since 3.2
      */

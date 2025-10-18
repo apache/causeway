@@ -383,14 +383,14 @@ implements
         //
         // we check if the transaction is already completed (rolled back/committed).  This isn't meant to be the case,
         // but the suspicion is that if a background command execution encounters a deadlock then (in
-        // CommandExecutorServiceDefault) then it might be resulting in top-level xactn will end up being rolled back.
+        // CommandExecutorServiceDefault) then it might be resulting in a top-level xactn that ends up being rolled back.
         //
         // The relevant code is in TransactionService#callWithinCurrentTransactionElseCreateNew(...), used by
         // CommandExecutorServiceDefault but also used quite heavily elsewhere.  In normal circumstances I suspect
-        // everything works out fine, but if there's a deadlock then perhaps we get this different flow
+        // everything works out fine, but if there's a deadlock then perhaps we get this different flow.
         //
-        // the consequences of an incorrect design can be SEVERE.  In previous versions of the code base we've seen
-        // additional changes being made in a new/implicit (?) xactn which furthermore are never committed; we end up
+        // The consequences of an incorrect design can be SEVERE.  In previous versions of the code base we've seen
+        // additional changes being made in a new/implicit (?) xactn which furthermore is never committed; we end up
         // with a connection back in Hikari's conn pool with open locks, blocking the entire system as those locks are
         // on CommandLogEntry.  Or, another problem found was seemingly polluting the threadLocals, resulting in an
         // nio-http-exec thread always failing with an error of: "No JDO PersistenceManager bound to thread, and

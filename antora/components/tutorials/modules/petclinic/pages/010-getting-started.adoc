@@ -34,9 +34,6 @@ For this tutorial, also make sure that your IDE is configured to support Lombok.
 Apache Causeway provides two starter apps, xref:docs:starters:helloworld.adoc[HelloWorld] and xref:docs:starters:simpleapp.adoc[SimpleApp].
 These are identical in terms of functionality, but the simpleapp provides more structure and includes example tests.
 
-NOTE: there are JPA and JDO variants of the starter apps.
-This tutorial uses JPA as it is the more commonly used persistence mechanism.
-
 We start the tutorial simply with a copy of xref:docs:starters:simpleapp.adoc[SimpleApp]; in subsequent exercises we'll refactor and build upon it to morph it into the petclinic domain.
 
 * Clone the repo:

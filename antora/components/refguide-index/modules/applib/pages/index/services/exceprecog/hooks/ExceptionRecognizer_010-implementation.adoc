@@ -5,7 +5,7 @@
 
 == Implementation
 
-The framework provides a number of default implementations for JPA and JDO, to recognise:
+The framework provides a number of default implementations for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], to recognise:
 
 * data already exists (uniqueness constraints)
 * object not found
@@ -32,7 +32,7 @@ The following configuration property is relevant:
 (`false`)
 |whether any `DataAccessException` exceptions should be recognized.+
 
-If Spring encounters a data access problem (either JPA or JDO) then it will throw a subclass of `DataAccessException`.
+If Spring encounters a data access problem then it will throw a subclass of `DataAccessException`.
 
 This recogniser catches this exception class and throws a suitable recognition based on the subtype.
 

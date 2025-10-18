@@ -26,7 +26,7 @@ legend top
 endlegend
 
 together {
-    rectangle "<$database_cube><$at>\n<<Annotation>>\nORM (JPA/JDO)" as PERS
+    rectangle "<$database_cube><$at>\n<<Annotation>>\nORM (JPA)" as PERS
     rectangle "<$envira><$at>\n<<Annotation>>\nSpring" as SPRING
     rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-65x48.png><$at>\n<<Annotation>>\nApache Causeway" as FW
     rectangle "<img:https://causeway.apache.org/_/img/home/causeway-logo-65x48.png><$java>\n<<Supporting Methods>>\nApache Causeway" as SM
@@ -174,8 +174,7 @@ Thus:
 * *_Viewmodels_* and *_Entities_* are specializations of *_Domain Objects_*.
 
 ** _View Models_ are (lifecycle-) managed by _Apache Causeway_
-** _Entities_ are managed by the configured persistence layer
-(either JDO or JPA).
+** _Entities_ are managed by the configured persistence mechanism.
 
 * *_Services_* in general are (lifecycle-) managed by _Spring_.
 +

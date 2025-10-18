@@ -39,7 +39,7 @@ Note that this settings has no effect if the programming model has been configur
 causeway.core.meta-model.validator. +
 allow-logical-type-name-as-alias
 
-| 
+|
 | Allows logical type name in `Named` also be included in the list of `DomainObject#aliased()` or `DomainService#aliased()`.
 
 It is _highly advisable_ to leave this disabled. This option is meant as a practical way to enable to transition from old names to new logical type names. Especially when you have a large number of files that have to migrated and you want to do the migration in incremental steps.
@@ -50,7 +50,7 @@ It is _highly advisable_ to leave this disabled. This option is meant as a pract
 causeway.core.meta-model.validator. +
 explicit-logical-type-names
 
-| 
+|
 | Whether to ensure that the logical-type-name of all objects must be specified explicitly, using either `Named`.
 
 It is _highly advisable_ to leave this set as enabled (the default). These logical-type-names should also (of course) be unique - among non-abstract types.
@@ -71,7 +71,7 @@ date-time-type-adapter
 causeway.core.meta-model.validator. +
 jaxb-view-model.no-arg-constructor
 
-| 
+|
 | If set, then ensures that all JAXB-style view models have a no-arg constructor.
 
 
@@ -102,23 +102,6 @@ reference-type-adapter
 |  true
 | If set, then ensures that for all properties of JAXB-style view models where the property's type is an entity, then that entity's type has been correctly annotated with @`XmlJavaTypeAdapter` (so that the property's value can be converted into a serializable form).
 
-
-|
-[[causeway.core.meta-model.validator.jdoql.from-clause]]
-causeway.core.meta-model.validator. +
-jdoql.from-clause
-
-|  true
-| If set, then ensures that the 'FROM' clause within any JDOQL `@Query`s annotations relates to a known entity type, and moreover that that type is compatible with the type on which the annotation appears: meaning its either a supertype of or the same type as the annotated type.
-
-
-|
-[[causeway.core.meta-model.validator.jdoql.variables-clause]]
-causeway.core.meta-model.validator. +
-jdoql.variables-clause
-
-|  true
-| If set, then ensures that the 'VARIABLES' clause within any JDOQL `@Query`s relates to a known entity type.
 
 
 |

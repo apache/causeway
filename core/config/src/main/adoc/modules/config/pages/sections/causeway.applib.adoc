@@ -112,7 +112,7 @@ causeway.applib.annotation. +
 action-layout.css-class-fa. +
 patterns-as-map
 
-| 
+|
 | null
 
 
@@ -146,7 +146,7 @@ causeway.applib.annotation. +
 action-layout.css-class. +
 patterns-as-map
 
-| 
+|
 | null
 
 
@@ -219,7 +219,7 @@ causeway.applib.annotation. +
 collection-layout. +
 sequence-policy-if-unreferenced
 
-| 
+|
 | How `CollectionLayout#sequence()` should be handled when calculating the slot-in order for unreferenced _Collections_. ++{++@code AS++_++PER++_++SEQUENCE} will use Dewey order based on available 'sequence' attributes, whereas ++{++@code ALPHABETICALLY} will use alphabetical order based on member names.
 
 default: ++{++@code AS++_++PER++_++SEQUENCE}
@@ -230,7 +230,7 @@ default: ++{++@code AS++_++PER++_++SEQUENCE}
 causeway.applib.annotation. +
 collection-layout.table-decorator
 
-| 
+|
 | Defines whether the table representation of a collection should be decorated using a client-side Javascript library, eg for client-side paging and filtering.
 
 
@@ -259,7 +259,7 @@ domain-object-layout. +
 css-class-ui-event. +
 post-for-default
 
-| 
+|
 | Influences whether an `CssClassUiEvent` should be published (on the internal `EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `CssClassUiEvent#setCssClass(String)` change) the CSS classes that are used.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the `DomainObjectLayout#cssClassUiEvent()` @DomainObjectLayout(cssClassEvent=...)} for the domain object in question.
@@ -277,7 +277,7 @@ causeway.applib.annotation. +
 domain-object-layout.icon-ui-event. +
 post-for-default
 
-| 
+|
 | Influences whether an `IconUiEvent` should be published (on the internal `EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `IconUiEvent#setIconName(String)` change) the icon that is used.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the `DomainObjectLayout#iconUiEvent()` @DomainObjectLayout(iconEvent=...)} for the domain object in question.
@@ -295,7 +295,7 @@ causeway.applib.annotation. +
 domain-object-layout. +
 layout-ui-event.post-for-default
 
-| 
+|
 | Influences whether an `LayoutUiEvent` should be published (on the internal `EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `LayoutUiEvent#setLayout(String)` change) the layout that is used.
 
 If a different layout value has been set, then a layout in the form `xml` use used (where `zzz` is the name of the layout).
@@ -326,7 +326,7 @@ causeway.applib.annotation. +
 domain-object-layout. +
 table-decorator
 
-| 
+|
 | Defines whether the table representation of a standalone collection of this domain class should be decorated using a client-side Javascript library, eg for client-side paging and filtering.
 
 
@@ -336,7 +336,7 @@ causeway.applib.annotation. +
 domain-object-layout. +
 title-ui-event.post-for-default
 
-| 
+|
 | Influences whether an `TitleUiEvent` should be published (on the internal `EventBusService`) whenever a domain object is about to be rendered in the UI - thereby allowing subscribers to optionally `TitleUiEvent#setTitle(String)` change) the title that is used.
 
 The algorithm for determining whether (and what type of) an event is sent depends on the value of the `DomainObjectLayout#titleUiEvent()` @DomainObjectLayout(titleEvent=...)} for the domain object in question.
@@ -465,7 +465,7 @@ The algorithm for determining whether (and what type of) an event is sent depend
 
 Note: this applies only to domain entities, not to view models.
 
-Note: There is no corresponding `removed` callback, because (for the JDO persistence store at least) it is not possible to interact with a domain entity once it has been deleted.
+Note: There is no corresponding `removed` callback, because it is not possible to interact with a domain entity once it has been deleted.
 
 
 |
@@ -550,7 +550,7 @@ causeway.applib.annotation. +
 property-layout. +
 sequence-policy-if-unreferenced
 
-| 
+|
 | How `PropertyLayout#sequence()` should be handled when calculating the slot-in order for unreferenced _Properties_. ++{++@code AS++_++PER++_++SEQUENCE} will use Dewey order based on available 'sequence' attributes, whereas ++{++@code ALPHABETICALLY} will use alphabetical order based on member names.
 
 default: ++{++@code AS++_++PER++_++SEQUENCE}
@@ -671,7 +671,7 @@ causeway.applib.annotation. +
 view-model.validation. +
 semantic-checking.enable
 
-| 
+|
 | Whether to check for inconsistencies between the usage of `DomainObject` and `DomainObjectLayout`.
 
 

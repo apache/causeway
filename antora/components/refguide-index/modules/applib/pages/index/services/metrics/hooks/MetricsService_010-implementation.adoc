@@ -6,4 +6,4 @@
 == Implementation
 
 The common persistence module provides a default of this service, namely xref:refguide:persistence:index/commons/integration/changetracking/EntityChangeTrackerDefault.adoc[].
-This supports both JDO and JPA persistence mechanisms.
+This is support by the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism.

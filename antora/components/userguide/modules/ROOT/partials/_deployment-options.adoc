@@ -79,11 +79,8 @@ It's therefore relatively easy to take a domain object prototyped and/or tested 
 
 If you are interested in taking this approach, then you will need to provide your own implementations of any framework-provided services used by your code.
 
-If your own application framework is based on link:https://spring.io/projects/spring-boot[Spring Boot] and with JPA or JDO, then there is another option.
+If your own application framework is based on link:https://spring.io/projects/spring-boot[Spring Boot] and using JPA as its ORM, then there is another option.
 As noted above, Apache Causeway itself runs on top of Spring Boot.
 You could therefore develop a complete custom UI using one of the regular Spring technologies and run that alongside Apache Causeway - in effect the option described <<deploy-with-custom-controllers,earlier>> but for every use case, not just selected ones.
 Apache Causeway continues to manage the object lifecycle and persistence as a thin layer on top of Spring, but your custom UI renders the domain objects exactly as you require.
-
-
-
 
