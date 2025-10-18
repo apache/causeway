@@ -193,7 +193,7 @@ To get Apache Causeway to ignore a property (exclude it from its metamodel), ann
 Similarly, for the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] ORM, ignore a property using the `@jakarta.persistence.Transient` annotation.
 This is independent of Apache Causeway; in other words that property will still be rendered in the UI (unless also annotated with `@Programmatic`).
 
-For view models, you can tell JAXB to ignore a property using the `@javax.xml.bind.annotation.XmlTransient` annotation.
+For view models, you can tell JAXB to ignore a property using the `@jakarta.xml.bind.annotation.XmlTransient` annotation.
 Again, this is independent of Apache Causeway.
 
 You can also suppress a property from the UI using xref:refguide:applib:index/annotation/Property.adoc#hidden[@Property#hidden()] or indeed xref:refguide:applib:index/annotation/PropertyLayout.adoc#hidden[@PropertyLayout#hidden()].

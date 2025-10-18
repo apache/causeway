@@ -13,13 +13,13 @@
 |Layer
 
 
-|xref:refguide:applib-ant:XmlRootElement.adoc[`javax.xml.bind` +
+|xref:refguide:applib-ant:XmlRootElement.adoc[`jakarta.xml.bind` +
 `.annotation` +
 `XmlRootElement`]
 |JAXB annotation indicating the XML root element when serialized to XML; also used by the framework for view models (whose memento is the XML), often also acting as a DTO.
 |Application
 
-|xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[`javax.xml.bind` +
+|xref:refguide:applib-ant:XmlJavaTypeAdapter.adoc[`jakarta.xml.bind` +
 `.annotation` +
 `XmlJavaTypeAdapter`]
 |JAXB annotation defining how to serialize an entity.  Used in conjunction with the (framework provided) `PersistentEntityAdapter` class to serialize persistent entities into a canonical OID (equivalent to the `Bookmark` provided by the xref:refguide:applib:index/services/bookmark/BookmarkService.adoc[BookmarkService]).

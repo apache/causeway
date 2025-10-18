@@ -22,7 +22,7 @@ It also provides a xref:refguide:applib:index/annotation/CollectionLayout.adoc[@
  `jakarta.persistence.Entity`.
 The collection itself will likely have its own ORM-specific annotations, to specify for example if the association is bidirectional, supports cascading deletes, or whether to define a link table or not to hold foreign key columns.
 
-* for the collections of view models, then JAXB annotations such as link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElementWrapper.html[@javax.xml.bind.annotation.XmlElementWrapper] and link:https://docs.oracle.com/javase/7/docs/api/javax/xml/bind/annotation/XmlElement.html[@javax.xml.bind.annotation.XmlElement] will be present
+* for the collections of view models, then JAXB annotations such as `@jakarta.xml.bind.annotation.XmlElementWrapper` and `@jakarta.xml.bind.annotation.XmlElement` will be present
 
 Apache Causeway may recognise some of these annotations from the persistence layer infers some domain semantics from them.
 
