@@ -43,9 +43,9 @@ class _ClassCacheUtil {
         if(!_Strings.isEmpty(named)) return named;
 
         for(var annot : mergedAnnotations) {
+            //noinspection SwitchStatementWithTooFewBranches
             switch (annot.getType().getName()) {
-                case "jakarta.persistence.Table":
-                case "javax.jdo.annotations.PersistenceCapable": {
+                case "jakarta.persistence.Table": {
                     var schema = annot.getString("schema");
                     if(_Strings.isEmpty(schema)) continue;
 
@@ -56,29 +56,6 @@ class _ClassCacheUtil {
             }
         }
         return null;
-    }
-
-    boolean isJdoPersistenceCapable(final MergedAnnotations mergedAnnotations) {
-        for(var annot : mergedAnnotations) {
-            switch (annot.getType().getName()) {
-                case "javax.jdo.annotations.PersistenceCapable":
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    boolean isJdoEmbeddedOnly(final MergedAnnotations mergedAnnotations) {
-        for(var annot : mergedAnnotations) {
-            switch (annot.getType().getName()) {
-                case "javax.jdo.annotations.PersistenceCapable":
-                    if("true".equals(annot.getString("embeddedOnly"))) return true;
-                    break;
-                case "javax.jdo.annotations.EmbeddedOnly":
-                    return true;
-            }
-        }
-        return false;
     }
 
     @Nullable

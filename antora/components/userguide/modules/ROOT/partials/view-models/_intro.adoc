@@ -68,30 +68,18 @@ It is not a persisted entity, instead it belongs to the application layer.
 
 == Self-persisting Domain entities
 
-Sometimes we may have domain entities whose persistence is _not_ managed by JDO or JPA mechanism, in other words they take responsibility for their own persistence.
-Because such entities are responsible for their own state management, they can be implemented as view models.
+Sometimes we may have domain objects that conceptually are entities - long-lived persistent and shared instances - but where the state is not stored in an accessible RDBMS.
 
+For example:
 
-=== Externally-managed entities
+* The entity might be externally-managed, and reside in some other system, for example accessible only through a SOAP web service.
 
-Sometimes the entities that make up your application are persisted not in the local database but reside in some other system, for example accessible only through a SOAP web service.
-Logically that data might still be considered a domain entity and we might want to associate behaviour with it, however it cannot be modelled as a domain entity if only because JDO/DataNucleus doesn't know about the entity nor how to retrieve or update it.
+* The entity's state might reside in a datastore not supported by xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], such as a graph database like neo4j.
 
-There are a couple of ways around this: we could either replicate the data somehow from the external system into the Causeway-managed database (in which case it is once again just another domain entity), or we could set up a stub/proxy for the externally managed entity.
-This proxy would hold the reference to the externally-managed domain entity (eg an external id), as well as the "smarts" to know how to interact with that entity (by making SOAP web service calls etc).
+* the entity's state might be held only in-memory, for example read-only configuration data that is read from a config file (eg log4j appender definitions).
 
-The stub/proxy is a type of view model: a view -- if you like -- onto the domain entity managed by the external system.
+Because such entities are responsible for their own state management, they should be implemented within Causeway as view models, for example by implementing the xref:refguide:applib:index/ViewModel.adoc[] interface.
 
-
-=== Internal entities
-
-Alternatively, perhaps your application has an entity that is best persisted not in a relational database but instead in a custom datastore, for example a graph database such as neo4j.
-
-=== In-memory entities
-
-As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose state is not actually persisted anywhere, merely held in-memory (eg in a hash).
-
-A simple example is read-only configuration data that is read from a config file (eg log4j appender definitions) but thereafter is presented in the UI just like any other entity.
 
 == DTOs
 
@@ -145,6 +133,6 @@ Or, rather than marshalling state, the view model could hold a reference to the 
 
 A third option is to define an RDBMS view, and then map a "non-durable" entity to that view.
 The RDBMS view then becomes the public API that must be preserved.
-ORMs such as DataNucleus link:http://www.datanucleus.org:15080/products/accessplatform_5_1/jdo/mapping.html#schema_rdbms_views[support this].
+ORMs such as xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] support this.
 
 

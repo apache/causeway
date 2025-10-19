@@ -23,6 +23,8 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenceJpaMetaModelRoleAndPermissions;
+
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureId;
@@ -48,7 +50,6 @@ import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtLayoutL
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanAdminRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSecmanRegularUserRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayExtSessionLogRoleAndPermissions;
-import org.apache.causeway.extensions.secman.applib.role.seed.CausewayPersistenceJdoMetaModelRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewaySudoImpersonateRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.role.seed.CausewayViewerRestfulObjectsSwaggerRoleAndPermissions;
 import org.apache.causeway.extensions.secman.applib.seed.SeedSecurityModuleService;
@@ -115,9 +116,9 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         // modules
         executionContext.executeChildren(this,
                 new CausewayAppFeatureRoleAndPermissions(),
-                persistenceStack == PersistenceStack.JDO
-                    ? new CausewayPersistenceJdoMetaModelRoleAndPermissions()
-                    : null, // skip if non-JDO deployment
+                persistenceStack == PersistenceStack.JPA
+                    ? new CausewayPersistenceJpaMetaModelRoleAndPermissions()
+                    : null, // skip if non-JPA deployment
                 new CausewayExtAuditTrailRoleAndPermissions(),
                 new CausewayExtCommandLogRoleAndPermissions(),
                 new CausewayExtDocgenRoleAndPermissions(),
@@ -137,9 +138,9 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 new CausewayExtSecmanRegularUserRoleAndPermissions(secmanConfig),
                 new CausewayExtSecmanAdminUser(secmanConfig,
                         CausewayAppFeatureRoleAndPermissions.ROLE_NAME,
-                        persistenceStack == PersistenceStack.JDO
-                            ? CausewayPersistenceJdoMetaModelRoleAndPermissions.ROLE_NAME
-                            : null, // skip if non-JDO deployment
+                        persistenceStack == PersistenceStack.JPA
+                            ? CausewayPersistenceJpaMetaModelRoleAndPermissions.ROLE_NAME
+                            : null, // skip if non-JPA deployment
                         CausewayExtAuditTrailRoleAndPermissions.ROLE_NAME,
                         CausewayExtCommandLogRoleAndPermissions.ROLE_NAME,
                         CausewayExtDocgenRoleAndPermissions.ROLE_NAME,

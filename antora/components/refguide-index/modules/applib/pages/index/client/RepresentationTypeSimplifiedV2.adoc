@@ -23,7 +23,7 @@ final String typeLiteral;
   boolean isValue()
   boolean isValues()
   boolean isVoid()
-  String getContentTypeHeaderValue(String profileName)
+  MediaType getResponseContentType(String profileName)
   Optional<RepresentationTypeSimplifiedV2> parse(String typeLiteral)
   Optional<RepresentationTypeSimplifiedV2> parseContentTypeHeaderString(String contentTypeHeaderString)
 }

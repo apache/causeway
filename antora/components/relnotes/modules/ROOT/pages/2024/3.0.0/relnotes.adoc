@@ -5,26 +5,26 @@
 :page-partial:
 
 
-After almost six years effort (!), v2.0.0 and v3.0.0 are the first official releases of Apache Causeway, now re-platformed to run on Spring Boot.
-The two versions are being released at the same time.
-
-
-The v3.0.0 release is broadly equivalent to the v2.0.0 release.
-As such, see the xref:2024/2.0.0/relnotes.adoc[2.0.0] release notes for full details of the features available in this release.
-
-However, 3.0.0:
-
-* targets Spring Boot 3.x (instead of Spring Boot 2.x)
-* targets Java 17 (instead of Java 11)
-
-It also uses the `jakarta` namespace rather than `javax`.
-
-
-There is one functional change, namely that support for xref:security:shiro:about.adoc[Shiro security] module has been dropped (for now).
-See the xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc#simple-security-replacement-for-shiro[migration notes] for options.
-
-
-include::partial$2024/2.0.0/_relnotes.adoc[]
+// After almost six years effort (!), v2.0.0 and v3.0.0 are the first official releases of Apache Causeway, now re-platformed to run on Spring Boot.
+// The two versions are being released at the same time.
+//
+//
+// The v3.0.0 release is broadly equivalent to the v2.0.0 release.
+// As such, see the xref:2024/2.0.0/relnotes.adoc[2.0.0] release notes for full details of the features available in this release.
+//
+// However, 3.0.0:
+//
+// * targets Spring Boot 3.x (instead of Spring Boot 2.x)
+// * targets Java 17 (instead of Java 11)
+//
+// It also uses the `jakarta` namespace rather than `javax`.
+//
+//
+// There is one functional change, namely that support for _Shiro security_ module has been dropped.
+// See the xref:relnotes:ROOT:2024/3.0.0/mignotes.adoc#simple-security-replacement-for-shiro[migration notes] for options.
+//
+//
+// include::partial$2024/2.0.0/_relnotes.adoc[]
 
 
 

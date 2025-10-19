@@ -9,9 +9,7 @@
 interface Oid {
   String SEPARATOR;
   String logicalTypeName()     // <.>
-  String getLogicalTypeName()     // <.>
   String identifier()     // <.>
-  String getIdentifier()     // <.>
   String stringify()     // <.>
 }
 ----
@@ -21,20 +19,10 @@ interface Oid {
 --
 Logical-type-name of the domain object this Oid is representing. (aka. object-type)
 --
-<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
-+
---
-use _#logicalTypeName()_ instead
---
 <.> xref:#identifier_[identifier()]
 +
 --
 Stringified version of the ID of the domain object instance this Oid is representing.
---
-<.> xref:#getIdentifier_[getIdentifier()]
-+
---
-use _#identifier()_ instead
 --
 <.> xref:#stringify_[stringify()]
 +
@@ -49,20 +37,10 @@ The canonical form of the xref:refguide:applib:index/services/bookmark/Bookmark.
 
 Logical-type-name of the domain object this Oid is representing. (aka. object-type)
 
-[#getLogicalTypeName_]
-=== getLogicalTypeName()
-
-use _#logicalTypeName()_ instead
-
 [#identifier_]
 === identifier()
 
 Stringified version of the ID of the domain object instance this Oid is representing.
-
-[#getIdentifier_]
-=== getIdentifier()
-
-use _#identifier()_ instead
 
 [#stringify_]
 === stringify()

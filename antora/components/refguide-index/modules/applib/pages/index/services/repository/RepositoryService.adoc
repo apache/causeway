@@ -42,7 +42,7 @@ Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[Enti
 <.> xref:#detachedEntity_T[detachedEntity(T)]
 +
 --
-Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
+Creates a new detached entity instance, with injection points resolved.
 --
 <.> xref:#execInBulk_Callable[execInBulk(Callable)]
 +
@@ -145,9 +145,9 @@ Returns the xref:refguide:applib:index/services/repository/EntityState.adoc[Enti
 [#detachedEntity_T]
 === detachedEntity(T)
 
-Usually called as a precursor to persisting a domain entity, this method verifies that the object is an entity and injects domain services into it.
+Creates a new detached entity instance, with injection points resolved.
 
-This approach allows the domain entity to have regular constructor (with parameters) to set up the initial state of the domain object. This is preferred over _#detachedEntity(Class)_ , which also instantiates the class and then injects into it - but requires that the domain object has a no-arg constructor to do so.
+The entity will not yet be persisted, in other words: it is not yet known to the persistence layer.
 
 This is the same functionality as exposed by _org.apache.causeway.applib.services.factory.FactoryService#detachedEntity(Object)_ . It is provided in this service as a convenience because instantiating and _#persist(Object) persisting_ an object are often done together.
 
@@ -239,7 +239,7 @@ If the optional range parameters are used, the dataset considered (before filter
 
 Returns all the instances that match the given xref:refguide:applib:index/query/Query.adoc[Query] .
 
-This is the main API for server-side (performant) queries returning multiple instances, where a _org.apache.causeway.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.causeway.applib.query.NamedQuery_ can optionally specify a _org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
+This is the main API for server-side (performant) queries returning multiple instances, where a _org.apache.causeway.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. A _org.apache.causeway.applib.query.NamedQuery_ can optionally specify a _org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
 
 It is also possible to specify an _org.apache.causeway.applib.query.AllInstancesQuery_ . This is equivalent to using _#allInstances(Class, long, long)_ ; a range can also be specified.
 
@@ -257,7 +257,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] .
 
-This is the main API for server-side (performant) queries returning no more than one instance, where a _org.apache.causeway.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.causeway.applib.query.NamedQuery_ can optionally specify a _org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
+This is the main API for server-side (performant) queries returning no more than one instance, where a _org.apache.causeway.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. A _org.apache.causeway.applib.query.NamedQuery_ can optionally specify a _org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances a run-time exception will be thrown.
 
@@ -275,7 +275,7 @@ If no instance is found then _Optional#empty()_ will be return, while if there i
 
 Find the only instance that matches the provided xref:refguide:applib:index/query/Query.adoc[Query] , if any.
 
-This is the main API for server-side (performant) queries returning the first matching instance, where a _org.apache.causeway.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. The mechanism by which this is defined depends on the ORM (JDO or JPA). A _org.apache.causeway.applib.query.NamedQuery_ can optionally specify a _org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
+This is the main API for server-side (performant) queries returning the first matching instance, where a _org.apache.causeway.applib.query.NamedQuery_ can be passed in that ultimately describes a SELECT query with WHERE predicates. A _org.apache.causeway.applib.query.NamedQuery_ can optionally specify a _org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range_ of instances to be returned.
 
 If no instance is found then _Optional#empty()_ will be return, while if there is more that one instances then the first will be returned.
 

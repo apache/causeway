@@ -9,29 +9,29 @@ Returns representations according to theRestful Objectsspec.
 .ContentNegotiationServiceForRestfulObjectsV1_0.java
 ----
 class ContentNegotiationServiceForRestfulObjectsV1_0 {
-  ContentNegotiationServiceForRestfulObjectsV1_0(CausewayConfiguration configuration, SpecificationLoader specificationLoader)
-  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)
-  ResponseBuilder buildResponseTo(IResourceContext resourceContext, ManagedObject objectAdapter, JsonRepresentation representationIfAnyRequired, JsonRepresentation rootRepresentation)     // <.>
-  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)
-  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)
-  ResponseBuilder buildResponseTo(IResourceContext resourceContext, ManagedCollection objectAndCollection, JsonRepresentation representation, JsonRepresentation rootRepresentation)     // <.>
-  ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)
-  ResponseBuilder buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)
-  ResponseBuilder buildResponseTo(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation, JsonRepresentation representation, JsonRepresentation rootRepresentation)     // <.>
+  ContentNegotiationServiceForRestfulObjectsV1_0(CausewayConfiguration configuration, SpecificationLoader specificationLoader, ResponseFactory responseFactory)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)
+  ResponseEntity<Object> buildResponseTo(IResourceContext resourceContext, ManagedObject objectAdapter, JsonRepresentation representationIfAnyRequired, JsonRepresentation rootRepresentation, MediaType mediaTypeOverride)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)
+  ResponseEntity<Object> buildResponseTo(IResourceContext resourceContext, ManagedCollection objectAndCollection, JsonRepresentation representation, JsonRepresentation rootRepresentation, MediaType mediaTypeOverride)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)
+  ResponseEntity<Object> buildResponseTo(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation, JsonRepresentation representation, JsonRepresentation rootRepresentation, MediaType mediaTypeOverride)     // <.>
 }
 ----
 
-<.> xref:#buildResponseTo_IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)]
+<.> xref:#buildResponseTo_IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation_MediaType[buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation, MediaType)]
 +
 --
 Not API
 --
-<.> xref:#buildResponseTo_IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)]
+<.> xref:#buildResponseTo_IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation_MediaType[buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation, MediaType)]
 +
 --
 Not API
 --
-<.> xref:#buildResponseTo_IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation[buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)]
+<.> xref:#buildResponseTo_IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation_MediaType[buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation, MediaType)]
 +
 --
 Not API
@@ -39,18 +39,18 @@ Not API
 
 == Members
 
-[#buildResponseTo_IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation]
-=== buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation)
+[#buildResponseTo_IResourceContext_ManagedObject_JsonRepresentation_JsonRepresentation_MediaType]
+=== buildResponseTo(IResourceContext, ManagedObject, JsonRepresentation, JsonRepresentation, MediaType)
 
 Not API
 
-[#buildResponseTo_IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation]
-=== buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation)
+[#buildResponseTo_IResourceContext_ManagedCollection_JsonRepresentation_JsonRepresentation_MediaType]
+=== buildResponseTo(IResourceContext, ManagedCollection, JsonRepresentation, JsonRepresentation, MediaType)
 
 Not API
 
-[#buildResponseTo_IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation]
-=== buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation)
+[#buildResponseTo_IResourceContext_ObjectAndActionInvocation_JsonRepresentation_JsonRepresentation_MediaType]
+=== buildResponseTo(IResourceContext, ObjectAndActionInvocation, JsonRepresentation, JsonRepresentation, MediaType)
 
 Not API
 

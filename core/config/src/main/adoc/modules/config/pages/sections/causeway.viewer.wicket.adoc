@@ -17,7 +17,7 @@ causeway.viewer.wicket. +
 action-column-enabled
 
 |  true
-| Whether actions, that have explicit `hidden = Where` semantics to enable them in tables, should be gathered into an action column. That is, collections of domain objects are presented in the UI as tables, where corresponding domain object actions are gathered into an additional (typically trailing) column (labeled 'action-column').
+| null
 
 
 |
@@ -27,9 +27,7 @@ action-indication-when-bound-to- +
 dialog
 
 |  true
-| Whether actions, that on click will show a dialog, should be indicated by a trailing ellipsis on the action's label.
-
-Applies to both, action buttons and action menu items.
+| null
 
 
 |
@@ -38,7 +36,7 @@ causeway.viewer.wicket. +
 ajax-debug-mode
 
 | 
-| Whether the Ajax debug should be shown, by default this is disabled.
+| null
 
 
 |
@@ -48,9 +46,7 @@ causeway.viewer.wicket.app
 |  org.apache.causeway.viewer.wicket. +
 viewer.wicketapp. +
 CausewayWicketApplication
-| Specifies the subclass of `CausewayWicketApplication` that is used to bootstrap Wicket.
-
-There is usually very little reason to change this from its default.
+| null
 
 
 |
@@ -58,7 +54,7 @@ There is usually very little reason to change this from its default.
 causeway.viewer.wicket.base-path
 
 |  /wicket/
-| The base path at which the Wicket viewer is mounted.
+| null
 
 
 |
@@ -67,9 +63,7 @@ causeway.viewer.wicket. +
 bookmarked-pages.max-size
 
 |  15
-| Specifies the maximum number of bookmarks to show.
-
-These are aged out on an MRU-LRU basis.
+| null
 
 
 |
@@ -78,7 +72,7 @@ causeway.viewer.wicket. +
 bookmarked-pages.show-chooser
 
 |  true
-| Whether the panel providing linsk to previously visited object should be accessible from the top-left of the header.
+| null
 
 
 |
@@ -88,7 +82,7 @@ bookmarked-pages. +
 show-drop-down-on-footer
 
 |  true
-| Whether the drop-down list of previously visited objects should be shown in the footer.
+| null
 
 
 |
@@ -97,7 +91,7 @@ causeway.viewer.wicket.breadcrumbs. +
 enabled
 
 |  true
-| Whether to enable the 'where am i' feature, in other words the breadcrumbs.
+| null
 
 
 |
@@ -115,9 +109,7 @@ causeway.viewer.wicket. +
 clear-field-button-enabled
 
 |  true
-| Whether the clear-field-button, that allows to clear a null-able (optional) field (a property or a dialog argument) is enabled for rendering or not.
-
-The default is to enable (show) the clear-field-button.
+| null
 
 
 |
@@ -126,9 +118,7 @@ causeway.viewer.wicket. +
 clear-original-destination
 
 | 
-| If the end user uses a deep link to access the Wicket viewer, but is not authenticated, then this configuration property determines whether to continue through to that original destination once authenticated, or simply to go to the home page.
-
-The default behaviour is to honour the original destination requested.
+| null
 
 
 |
@@ -136,9 +126,7 @@ The default behaviour is to honour the original destination requested.
 causeway.viewer.wicket.css
 
 | 
-| URL of file to read any custom CSS, relative to `static` package on the class path.
-
-A typical value is `css`. This will result in this file being read from the `static/css` directory (because static resources such as CSS are mounted by Spring by default under `static` package).
+| null
 
 
 |
@@ -147,11 +135,7 @@ causeway.viewer.wicket.date-picker. +
 max-date
 
 |  2100-01-01T00:00:00.000Z
-| Defines the first date available in the date picker.
-
-As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-
-Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
+| null
 
 
 |
@@ -160,11 +144,7 @@ causeway.viewer.wicket.date-picker. +
 min-date
 
 |  1900-01-01T00:00:00.000Z
-| Defines the first date available in the date picker.
-
-As per http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate, in ISO format (per https://github.com/moment/moment/issues/1407).
-
-Use time zone 'Z', as the date/time picker UI component is not wired up to support time-zones.
+| null
 
 
 |
@@ -173,11 +153,7 @@ causeway.viewer.wicket.date-picker. +
 popup-on-focus
 
 | 
-| Whether the date picker should automatically be shown when the field gains focus.
-
-The default is to show the picker when the user clicks into the field.
-
-Corresponds to the `allowInputToggle` config property of the underlying library, (TempusDominus).
+| null
 
 
 |
@@ -186,19 +162,15 @@ causeway.viewer.wicket. +
 development-utilities.enable
 
 | 
-| Determines whether debug bar and other stuff influenced by `DebugSettings#isDevelopmentUtilitiesEnabled()` is enabled or not.
-
-By default, depends on the mode (prototyping = enabled, server = disabled). This property acts as an override.
+| null
 
 
 |
 [[causeway.viewer.wicket.dialog-mode]]
 causeway.viewer.wicket.dialog-mode
 
-|  sidebar
-| Whether the dialog mode rendered when invoking actions on domain objects should be to use the sidebar (the default) or to use a modal dialog.
-
-This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()`.
+|  SIDEBAR
+| null
 
 
 |
@@ -206,10 +178,8 @@ This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()
 causeway.viewer.wicket. +
 dialog-mode-for-menu
 
-|  modal
-| Whether the dialog mode rendered when invoking actions on domain services (that is, menus) should be to use a modal dialog (the default) or to use the sidebar panel.
-
-This can be overridden on a case-by-case basis using `ActionLayout#promptStyle()`.
+|  MODAL
+| null
 
 
 |
@@ -219,9 +189,7 @@ disable-reason-explanation-in- +
 prototyping-mode-enabled
 
 |  true
-| In prototyping mode, a text icon is appended to any property that is disabled, with its tool-tip explaining why the property is disabled. This configuration property can be used to suppress the icon, even in prototyping mode, if desired.
-
-The default is to enable (show) the text icon (if in prototyping mode).
+| null
 
 
 |
@@ -229,9 +197,7 @@ The default is to enable (show) the text icon (if in prototyping mode).
 causeway.viewer.wicket.js
 
 | 
-| URL of file to read any custom JavaScript, relative to `static` package on the class path.
-
-A typical value is `js`. This will result in this file being read from the `static/js` directory (because static resources such as CSS are mounted by Spring by default under `static` package).
+| null
 
 
 |
@@ -240,9 +206,7 @@ causeway.viewer.wicket. +
 live-reload-url
 
 | 
-| If specified, then is rendered on each page to enable live reload.
-
-Configuring live reload also requires an appropriate plugin to the web browser (eg see http://livereload.com/[livereload.com] and a mechanism to trigger changes, eg by watching `xml` files.
+| null
 
 
 |
@@ -271,9 +235,7 @@ causeway.viewer.wicket. +
 max-title-length-in-tables
 
 |  12
-| The maximum number of characters to use to render the title of a domain object (alongside the icon) in any table, if not otherwise overridden by either `#getMaxTitleLengthInParentedTables()` or `#getMaxTitleLengthInStandaloneTables()`.
-
-If truncated, then the remainder of the title will be replaced with ellipses (...).
+| null
 
 
 |
@@ -283,9 +245,7 @@ max-title-length-in-tables-not- +
 having-any-property-column
 
 |  80
-| If a table has no property columns, for the title column this value is used, to determine how many characters to render for the table element titles.
-
-Introduced for the case when max-title-length is set to zero for tables in general, that if a table has no property columns an exception to that title suppression can be made.
+| null
 
 
 |
@@ -293,10 +253,8 @@ Introduced for the case when max-title-length is set to zero for tables in gener
 causeway.viewer.wicket. +
 message-popups.error-delay
 
-|  0ms
-| How long the error popup should display before disappearing.
-
-A value of 0 (the default) means do not disappear automatically.
+|  0
+| null
 
 
 |
@@ -304,10 +262,8 @@ A value of 0 (the default) means do not disappear automatically.
 causeway.viewer.wicket. +
 message-popups.info-delay
 
-|  3500ms
-| How long the info popup should display before disappearing.
-
-A value of 0 means do not disappear automatically.
+|  3500
+| null
 
 
 |
@@ -316,7 +272,7 @@ causeway.viewer.wicket. +
 message-popups.offset
 
 |  100
-| How far in from the edge the popup should display
+| null
 
 
 |
@@ -325,10 +281,8 @@ causeway.viewer.wicket. +
 message-popups.placement. +
 horizontal
 
-|  right
-| Whether to display popups aligned ot the left or right of the page.
-
-The default is to show them aligned to the right
+|  RIGHT
+| null
 
 
 |
@@ -336,10 +290,8 @@ The default is to show them aligned to the right
 causeway.viewer.wicket. +
 message-popups.placement.vertical
 
-|  top
-| Whether to display popups at the top or the bottom of the page.
-
-The default is to show them at the top.
+|  TOP
+| null
 
 
 |
@@ -347,10 +299,8 @@ The default is to show them at the top.
 causeway.viewer.wicket. +
 message-popups.warning-delay
 
-|  0ms
-| How long the warning popup should display before disappearing.
-
-A value of 0 (the default) means do not disappear automatically.
+|  0
+| null
 
 
 |
@@ -360,7 +310,7 @@ prevent-double-click-for-form- +
 submit
 
 |  true
-| Whether to disable a form submit button after it has been clicked, to prevent users causing an error if they do a double click. This behaviour is enabled by default, but can be disabled using this flag.
+| null
 
 
 |
@@ -370,9 +320,7 @@ prevent-double-click-for-no-arg- +
 action
 
 |  true
-| Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
-
-This behaviour is enabled by default, but can be disabled using this flag.
+| null
 
 
 |
@@ -380,12 +328,8 @@ This behaviour is enabled by default, but can be disabled using this flag.
 causeway.viewer.wicket. +
 prompt-style
 
-|  inline
-| Whether to use a modal dialog for property edits and for actions associated with properties.
-
-This can be overridden on a case-by-case basis using `@PropertyLayout#promptStyle` and `@ActionLayout#promptStyle`.
-
-This behaviour is disabled by default; the viewer will use an inline prompt in these cases, making for a smoother user experience.
+|  INLINE
+| null
 
 
 |
@@ -394,9 +338,7 @@ causeway.viewer.wicket. +
 redirect-even-if-same-object
 
 | 
-| Whether to redirect to a new page, even if the object being shown (after an action invocation or a property edit) is the same as the previous page.
-
-This behaviour is disabled by default; the viewer will update the existing page if it can, making for a smoother user experience. If enabled then this reinstates the pre-1.15.0 behaviour of redirecting in all cases.
+| null
 
 
 |
@@ -405,7 +347,7 @@ causeway.viewer.wicket.remember-me. +
 cookie-key
 
 |  causewayWicketRememberMe
-| If the "remember me" feature is available, specifies the key to hold the encrypted credentials in the cookie.
+| null
 
 
 |
@@ -414,13 +356,7 @@ causeway.viewer.wicket.remember-me. +
 encryption-key
 
 | 
-| If the "remember me" feature is available, optionally specifies an encryption key (a complex string acting as salt to the encryption algorithm) for computing the encrypted credentials.
-
-If not set, then (in production mode) the Wicket viewer will compute a random key each time it is started. This will mean that any credentials stored between sessions will become invalid.
-
-Conversely, if set then (in production mode) then the same salt will be used each time the app is started, meaning that cached credentials can continue to be used across restarts.
-
-In prototype mode this setting is effectively ignored, because the same key will always be provided (either as set, or a fixed literal otherwise).
+| null
 
 
 |
@@ -429,9 +365,7 @@ causeway.viewer.wicket.remember-me. +
 suppress
 
 | 
-| Whether the sign-in page should have a "remember me" link (the default), or if it should be suppressed.
-
-If "remember me" is available and checked, then the viewer will allow users to login based on encrypted credentials stored in a cookie. An key can optionally be specified.
+| null
 
 
 |
@@ -441,9 +375,16 @@ replace-disabled-tag-with-readonly- +
 tag
 
 |  true
-| In Firefox and more recent versions of Chrome 54{plus}, cannot copy out of disabled fields; instead we use the readonly attribute (https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute)
+| null
 
-This behaviour is enabled by default but can be disabled using this flag
+
+|
+[[causeway.viewer.wicket.select2-ajax-delay]]
+causeway.viewer.wicket. +
+select2-ajax-delay
+
+|  250
+| null
 
 
 |
@@ -451,9 +392,7 @@ This behaviour is enabled by default but can be disabled using this flag
 causeway.viewer.wicket.show-footer
 
 |  true
-| Whether to show the footer menu bar.
-
-This is enabled by default.
+| null
 
 
 |
@@ -462,9 +401,7 @@ causeway.viewer.wicket. +
 strip-wicket-tags
 
 |  true
-| Whether Wicket tags should be stripped from the markup.
-
-By default this is enabled, in other words Wicket tags are stripped. Please be aware that if tags are _not_ stripped, then this may break CSS rules on some browsers.
+| null
 
 
 |
@@ -473,9 +410,7 @@ causeway.viewer.wicket. +
 suppress-password-reset
 
 | 
-| Whether to suppress the password reset link on the sign-in page.
-
-Although this is disabled by default (in other words the 'reset password' link is not suppressed), note that in addition the application must provide an implementation of the `UserRegistrationService` as well as a configured `EmailNotificationService` (same conditions as for the `#isSuppressSignUp()` sign-up link).
+| null
 
 
 |
@@ -484,9 +419,7 @@ causeway.viewer.wicket. +
 suppress-sign-up
 
 | 
-| Whether to suppress the sign-up link on the sign-in page.
-
-Although this is disabled by default (in other words the sign-up link is not suppressed), note that in addition the application must provide an implementation of the `UserRegistrationService` as well as a configured `EmailNotificationService` (same conditions as for the `#isSuppressPasswordReset()` password reset link).
+| null
 
 
 |
@@ -494,8 +427,9 @@ Although this is disabled by default (in other words the sign-up link is not sup
 causeway.viewer.wicket.themes. +
 enabled
 
-| 
-| A comma separated list of enabled theme names, as defined by https://bootswatch.com.
+|  [Cosmo, Flatly, Darkly, Sandstone, +
+ United]
+| null
 
 
 |
@@ -504,9 +438,7 @@ causeway.viewer.wicket.themes. +
 initial
 
 |  Flatly
-| The initial theme to use.
-
-Expected to be in the list of `#getEnabled()` themes.
+| null
 
 
 |
@@ -515,7 +447,7 @@ causeway.viewer.wicket.themes. +
 show-chooser
 
 | 
-| Whether the theme chooser widget should be available in the footer.
+| null
 
 
 |
@@ -523,8 +455,8 @@ show-chooser
 causeway.viewer.wicket. +
 tooltip-text-mode
 
-| 
-| How to interpret tooltip content, e.g. as HTML or TEXT. default = TEXT
+|  TEXT
+| null
 
 
 |
@@ -533,9 +465,7 @@ causeway.viewer.wicket. +
 use-indicator-for-form-submit
 
 |  true
-| Whether to show an indicator for a form submit button that it has been clicked.
-
-This behaviour is enabled by default.
+| null
 
 
 |
@@ -544,9 +474,7 @@ causeway.viewer.wicket. +
 use-indicator-for-no-arg-action
 
 |  true
-| Whether to show an indicator for a no-arg action button that it has been clicked.
-
-This behaviour is enabled by default.
+| null
 
 
 |
@@ -555,9 +483,7 @@ causeway.viewer.wicket. +
 use-indicator-for-sortable-column
 
 | 
-| Whether to show an indicator for a sortable column (that is an up-down arrow icon).
-
-This behaviour is disabled by default.
+| null
 
 
 |
@@ -566,7 +492,7 @@ causeway.viewer.wicket.welcome. +
 text
 
 | 
-| Text to be displayed on the application’s home page, used as a fallback if welcome.file is not specified. If a @HomePage action exists, then that will take precedence.
+| null
 
 
 |
@@ -575,9 +501,7 @@ causeway.viewer.wicket. +
 wicket-source-plugin
 
 | 
-| Whether the Wicket source plugin should be enabled; if so, the markup includes links to the Wicket source.
-
-This behaviour is disabled by default. Please be aware that enabling it can substantially impact performance.
+| null
 
 
 

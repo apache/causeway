@@ -21,32 +21,9 @@ public class Listener {
 .UserCreatedEvent.java
 ----
 record UserCreatedEvent {
-  ApplicationUser getUser()     // <.>
   AccountType getAccountType()
   String getUserName()
   boolean isDelegated()
 }
 ----
 
-<.> xref:#getUser_[getUser()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#user()_ instead
-====
---
-
-== Members
-
-[#getUser_]
-=== getUser()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#user()_ instead
-====

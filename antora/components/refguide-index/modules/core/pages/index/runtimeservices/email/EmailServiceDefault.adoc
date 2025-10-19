@@ -11,23 +11,10 @@ Note that this implementation requires that an implementation of Spring's _JavaM
 .EmailServiceDefault.java
 ----
 class EmailServiceDefault {
-  void init()     // <.>
-  boolean isConfigured()
+  EmailServiceDefault(EmailConfiguration configuration, Provider<JavaMailSender> emailSenderProvider)
   boolean send(List<String> toList, List<String> ccList, List<String> bccList, String subject, String body, DataSource... attachments)
   String[] originalUnlessOverridden(List<String> original, String overrideIfAny)
   boolean notEmpty(String[] addresses)
 }
 ----
 
-<.> xref:#init_[init()]
-+
---
-Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)
---
-
-== Members
-
-[#init_]
-=== init()
-
-Loads responsive email templates borrowed from http://zurb.com/ink/templates.php (Basic)

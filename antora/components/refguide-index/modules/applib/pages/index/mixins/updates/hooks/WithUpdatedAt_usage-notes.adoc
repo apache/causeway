@@ -7,23 +7,29 @@
 
 == Alternative approaches
 
-An alternative way to maintain a timestamp is to use JDO's `@Version` annotation.
-With this approach, it is the JDO/DataNucleus that maintains the version, rather than the framework's `TimestampService`.
+An alternative to using the framework's `TimestampService` is to leverage xref:pjpa:ROOT:about.adoc[JPA/Eclipselink]’s built-in versioning support via the `@jakarta.persistence.Version` annotation.
 
 For example:
 
 [source,java]
 ----
-@javax.jdo.annotations.Version(
-        strategy=VersionStrategy.DATE_TIME,
-        column="version")
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Version;
+
+@Entity
 public class Customer {
-    ...
+
+    @Version
+    @Column(name = "version")
+    private java.sql.Timestamp version;
+
     public java.sql.Timestamp getVersionSequence() {
-        return (java.sql.Timestamp) JDOHelper.getVersion(this);
+        return version;
     }
 }
 ----
+
 
 == See also
 
@@ -32,6 +38,5 @@ public class Customer {
 used to obtain the current time.
 
 * xref:refguide:applib:index/mixins/updates/OnUpdatedBy.adoc[OnUpdatedBy]
-
 * xref:refguide:applib:index/mixins/updates/OnUpdatedByAndAt.adoc[OnUpdatedByAndAt]
 

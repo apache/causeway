@@ -39,4 +39,4 @@ Applicable when the GraphQL API is in use by third-party clients, ie public use 
 
 The generated GraphQL spec is not restricted, includes both _org.apache.causeway.applib.annotation.Nature#ENTITY domain entities_ as well as _org.apache.causeway.applib.annotation.Nature#VIEW_MODEL view model_ s.
 
-This is perfectly acceptable where the team developing the GraphQL client is the same as the team developing the backend service ... the use of the Web API between the client and server is a private implementation detail of the application.
+This is perfectly acceptable where the team developing the GraphQL client is the same as the team developing the backend service ... the use of the Web API between the client and server is a implementation detail of the application.

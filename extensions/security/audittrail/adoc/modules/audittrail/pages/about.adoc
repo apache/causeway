@@ -64,7 +64,7 @@ public class MyModule { ... }
 ----
 
 In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the implementation modules of this extension.
-The exact modules to use will depend upon the persistence mechanism in use:
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism:
 
 * add this dependency to your webapp's `pom.xml`:
 +
@@ -74,13 +74,10 @@ The exact modules to use will depend upon the persistence mechanism in use:
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-audittrail-persistence-xxx</artifactId> <!--.-->
+        <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
     </dependency>
 </dependencies>
 ----
-<.> either:
-** `causeway-extensions-audittrail-persistence-jpa` (xref:pjpa::about.adoc[]) or
-** `causeway-extensions-audittrail-persistence-jdo` (xref:pjdo::about.adoc[])
 
 * and `@Import` this module to your app manifest:
 +
@@ -89,15 +86,11 @@ The exact modules to use will depend upon the persistence mechanism in use:
 ----
 @Configuration
 @Import({
-    CausewayModuleExtAuditTrailPersistenceXxx.class,    // <.>
+    CausewayModuleExtAuditTrailPersistenceJpa.class,
     // ...
 })
 public class MyAppManifest { ... }
 ----
-<.> either
-+
-** `CausewayModuleExtAuditTrailPersistenceJpa` (xref:pjpa::about.adoc[]) or
-** `CausewayModuleExtAuditTrailPersistenceJdo` (xref:pjdo::about.adoc[])
 
 
 [#menubar-layout-xml]

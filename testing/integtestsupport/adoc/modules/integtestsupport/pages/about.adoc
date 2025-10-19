@@ -116,15 +116,15 @@ public abstract class SimpleModuleIntegTestAbstract extends CausewayIntegrationT
     @Import({
         CausewayModuleCoreRuntimeServices.class,
         CausewayModuleSecurityBypass.class,
-        CausewayModuleJdoDataNucleus5.class,
+        CausewayModuleJpaEclipseLink.class,
         CausewayModuleTestingFixturesApplib.class,
-        SimpleModule.class                      //<1>
+        SimpleModule.class                          // <.>
     })
     public static class AppManifest {
     }
 }
 ----
-<1> references just the `SimpleModule`
+<.> references just the `SimpleModule`
 
 while in the `webapp` module we have:
 
@@ -136,8 +136,6 @@ while in the `webapp` module we have:
 )
 @TestPropertySource({
         CausewayPresets.H2InMemory_withUniqueSchema,
-        CausewayPresets.DataNucleusAutoCreate,
-        CausewayPresets.UseLog4j2Test,
 })
 @ContextConfiguration
 public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTestAbstract {
@@ -145,20 +143,20 @@ public abstract class ApplicationIntegTestAbstract extends CausewayIntegrationTe
     @Configuration
     @Import({
         CausewayModuleCoreRuntimeServices.class,
-        CausewayModuleJdoDataNucleus5.class,
         CausewayModuleSecurityBypass.class,
+        CausewayModuleJpaEclipseLink.class,
         CausewayModuleTestingFixturesApplib.class,
-        ApplicationModule.class                 //<1>
+        ApplicationModule.class                     // <.>
     })
     public static class AppManifest {
     }
 }
 ----
-<1> references the top-level `ApplicationModule`
+<.> references the top-level `ApplicationModule`
 
 You can see that these are very similar, what's different is the module referenced.
 
-They both also force an in-memory database, with JDO/DataNucleus ORM configured to autocreate the database schema.
+They both also force an in-memory database, with the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] ORM configured to autocreate the database schema.
 
 === Faster bootstrapping
 
@@ -629,14 +627,3 @@ Thus, the setup fixture runs the setup for the "inner-most" "leaf-level" modules
 
 
 
-== Hints-n-Tips
-
-[TIP]
-.Using JDO/DataNucleus
-====
-When running integration tests through the IDE, and if using the JDO/DataNucleus ORM, then make sure the module(s) with entities have been enhanced first.
-
-If using IntelliJ, we recommend creating a run Maven configuration that runs `datanucleus:enhance`, and then pinning the configuration once run as a tab in the "Debug" window for easy access.
-
-image::pin-enhance-run-configuration.png[width="400px"]
-====

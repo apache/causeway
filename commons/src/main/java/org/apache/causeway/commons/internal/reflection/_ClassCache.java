@@ -287,13 +287,6 @@ public final class _ClassCache implements AutoCloseable {
             return hasAnnotation(XmlRootElement.class);
         }
 
-        /**
-         * whether type is JDO persistable (but NOT embedded only)
-         */
-        public boolean isJdoPersistenceCapable() {
-            return _ClassCacheUtil.isJdoPersistenceCapable(mergedAnnotations)
-                    && !_ClassCacheUtil.isJdoEmbeddedOnly(mergedAnnotations);
-        }
 
         public Can<String> springProfiles() {
             var profileAnnot = mergedAnnotations.get(Profile.class);

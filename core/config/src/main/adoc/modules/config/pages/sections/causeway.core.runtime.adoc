@@ -16,7 +16,7 @@ include::../section-hooks/causeway.core.runtime~pre.adoc[]
 causeway.core.runtime.locale
 
 | 
-| If set, then overrides the application's `Locale#getDefault()`
+| null
 
 
 |
@@ -24,7 +24,7 @@ causeway.core.runtime.locale
 causeway.core.runtime.timezone
 
 | 
-| If set, then override's the application's timezone.
+| null
 
 
 

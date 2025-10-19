@@ -40,36 +40,10 @@ under the License.
 		<Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
 		<Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
 		<logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn"/>
-		
-		<logger name="DataNucleus.Persistence" level="debug"/>
-		<logger name="DataNucleus.Transaction" level="debug"/>
-		<logger name="DataNucleus.Datastore.Schema" level="debug"/>
-		<logger name="DataNucleus.Datastore.Native" level="debug"/>
-		
+
 		<Root level="info">
 			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>
 </Configuration>
 
-<!-- # DataNucleus Logging Categories -->
-<!-- DataNucleus.Persistence - All messages relating to the persistence process -->
-<!-- DataNucleus.Transaction - All messages relating to transactions -->
-<!-- DataNucleus.Connection - All messages relating to Connections. -->
-<!-- DataNucleus.Query - All messages relating to queries -->
-<!-- DataNucleus.Cache - All messages relating to the DataNucleus Cache -->
-<!-- DataNucleus.MetaData - All messages relating to MetaData -->
-<!-- DataNucleus.Datastore - All general datastore messages -->
-<!-- DataNucleus.Datastore.Schema - All schema related datastore log messages -->
-<!-- DataNucleus.Datastore.Persist - All datastore persistence messages -->
-<!-- DataNucleus.Datastore.Retrieve - All datastore retrieval messages -->
-<!-- DataNucleus.Datastore.Native - Log of all 'native' statements sent to the datastore -->
-<!-- DataNucleus.General - All general operational messages -->
-<!-- DataNucleus.Lifecycle - All messages relating to object lifecycle changes -->
-<!-- DataNucleus.ValueGeneration - All messages relating to value generation -->
-<!-- DataNucleus.Enhancer - All messages from the DataNucleus Enhancer. -->
-<!-- DataNucleus.SchemaTool - All messages from DataNucleus SchemaTool -->
-<!-- DataNucleus.JDO - All messages general to JDO -->
-<!-- DataNucleus.JPA - All messages general to JPA -->
-<!-- DataNucleus.JCA - All messages relating to Connector JCA. -->
-<!-- DataNucleus.IDE - Messages from the DataNucleus IDE. -->

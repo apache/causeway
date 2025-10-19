@@ -37,7 +37,6 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
         ignoreApacheCausewayInternals();
         ignoreSpringFramework();
         ignoreJacksonAndGson();
-        skipDataNucleusProxy();
     }
 
     protected void ignoreCglib() {
@@ -64,10 +63,6 @@ public class ClassSubstitutorDefault extends ClassSubstitutorAbstract {
     protected void ignoreJacksonAndGson() {
         ignorePackage("com.fasterxml.jackson.");
         ignorePackage("com.google.gson.");
-    }
-
-    protected void skipDataNucleusProxy() {
-        skipProxyPackage("org.datanucleus.");
     }
 
 }

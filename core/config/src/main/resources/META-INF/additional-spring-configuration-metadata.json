@@ -1,11 +1,6 @@
 {
   "properties": [
     {
-      "name": "datanucleus.identifier.case",
-      "type": "org.apache.causeway.core.config.DatanucleusConfiguration.Identifier.Case",
-      "description": "Which case to use in generated table/column identifier names. See also the Datastore Identifier Guide. RDBMS defaults to UPPERCASE."
-    },
-    {
       "name": "causeway.value-types.temporal.editing.date-pattern",
       "type": "java.lang.String",
       "defaultValue": "yyyy-MM-dd"
@@ -99,7 +94,7 @@
         }
       }]
     },
-    
+
     {
       "name": "causeway.viewer.wicket.themes.provider",
       "providers": [{
@@ -230,23 +225,6 @@
         },
         {
           "value": "None"
-        }
-      ]
-    },
-    {
-      "name": "datanucleus.schema.generate-database.mode",
-      "values": [
-        {
-          "value": "none"
-        },
-        {
-          "value": "create"
-        },
-        {
-          "value": "drop-and-create"
-        },
-        {
-          "value": "drop"
         }
       ]
     }

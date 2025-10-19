@@ -74,11 +74,11 @@ is set to `false`
 +
 is set to `create-or-extend-tables`
 
-* `javax.persistence.bean.manager`
+* "jakarta.persistence.bean.manager"
 +
 is set to an Apache Causeway implementation, to assist with dependency injection into entities.
 
-Generally these should not be changed, though if there is a requirement, then provide a subclasse alternate implementation of `org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings` with an earlier `@Priority` precedence.
+Generally these should not be changed, though if there is a requirement, then provide an alternate implementation of `org.apache.causeway.persistence.jpa.eclipselink.config.ElSettings` with an earlier `@Priority` precedence.
 
 To set other EclipseLink configuration properties, use a subclass of xref:refguide:persistence:index/jpa/eclipselink/CausewayModulePersistenceJpaEclipselink.adoc[] and override `getVendorProperties()`.
 

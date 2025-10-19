@@ -24,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import jakarta.persistence.Column;
+
 import org.springframework.core.annotation.AliasFor;
 
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -199,9 +201,9 @@ public @interface Property {
      * </p>
      *
      * <p>
-     *     NOTE: this will usually be supplemented by a JDO or JPA-specific
-     *     annotation to indicate length of the column in the table to whic
-     *     the entity is mapped.
+     *     NOTE: if using the JPA object store, the field will usually also be annotated using
+     *     {@link Column#length()} to specify the length of the column in the table to which the
+     *     entity is mapped.
      * </p>
      *
      * @see Parameter#maxLength()
@@ -213,8 +215,8 @@ public @interface Property {
      * Indicates whether the property should be included or excluded from mementos.
      *
      * <p>
-     *     To ensure that the property is actually not persisted in the objectstore, also annotate with the JDO annotation
-     *     <code>javax.jdo.annotations.NotPersistent</code>
+     *     To ensure that the property is actually not persisted in the JPA object store, also annotate with
+     *     {@link jakarta.persistence.Transient}.
      * </p>
      */
     Snapshot snapshot()
@@ -236,8 +238,8 @@ public @interface Property {
      * Whether this property is optional or is mandatory (ie required).
      *
      * <p>
-     *     NOTE: this will usually be supplmented by a JDO or JPA-specific
-     *     annotation to specify the nullability of the corresponding column in
+     *     NOTE: if using the JPA object store, the field will usually also be annotated using
+     *     {@link Column#nullable()} to specify the nullability of the corresponding column in
      *     the table to which the owning entity is mapped.
      * </p>
      *
@@ -354,8 +356,8 @@ public @interface Property {
      * </p>
      *
      * <p>
-     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
-     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     *     NOTE: this feature requires that the <code>querydsl-jpa</code> module is included as part of the
+     *     application manifest.  Otherwise, no autocomplete will be generated.
      * </p>
      *
      * <p>

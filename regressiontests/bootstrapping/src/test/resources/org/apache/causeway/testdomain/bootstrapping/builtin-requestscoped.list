@@ -20,6 +20,4 @@ org.apache.causeway.applib.services.iactn.InteractionProvider
 org.apache.causeway.applib.services.queryresultscache.QueryResultsCacheInternal
 org.apache.causeway.applib.services.scratchpad.Scratchpad
 org.apache.causeway.core.runtimeservices.changes.ChangedObjectsServiceInternal
-org.apache.causeway.core.runtimeservices.metrics.MetricsServiceForJdo
 PublisherDispatchServiceDefault
-org.apache.causeway.objectstore.jdo.datanucleus.service.support.TimestampService

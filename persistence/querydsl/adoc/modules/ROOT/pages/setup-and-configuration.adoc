@@ -15,23 +15,109 @@ include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[le
 
 This section describes the required changes to use QueryDSL if using xref:pjpa::about.adoc[JPA] as your persistence mechanism.
 
-:querydsl-implementation: jpa
-:querydsl-implementation-capitalized: Jpa
-:querydsl-annotation-processor: com.querydsl.apt.jpa.JPAAnnotationProcessor
+=== Dependency
 
-include::partial$setup-and-configuration-for-persistence-mechanism.adoc[]
+In the webapp module of your application, add the following dependency:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.causeway.persistence</groupId>
+        <artifactId>causeway-persistence-querydsl-jpa</artifactId>
+    </dependency>
+</dependencies>
+----
+
+=== AppManifest
+
+In your application's `AppManifest` (top-level Spring `@Configuration` used to bootstrap the app), import the appropriate module:
+
+[source,java,subs="attributes+"]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModulePersistenceQueryDslJpa.class,
+        ...
+})
+public class AppManifest {
+}
+----
 
 
-== JDO
+=== Module with entities
 
-This section describes the required changes to use QueryDSL if using xref:pjdo::about.adoc[JDO] as your persistence mechanism.
+In every module that contains entities, it's necessary to generate the "Q" classes that are used in turn to construct the queries.
+This requires several changes to the module's `pom.xml` file.
 
-:querydsl-implementation: jdo
-:querydsl-implementation-capitalized: Jdo
-:querydsl-annotation-processor: com.querydsl.apt.jdo.JDOAnnotationProcessor
+* add the build plugin
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<build>
+    <plugins>
+        ...
+        <plugin>
+            <groupId>com.mysema.maven</groupId>
+            <artifactId>apt-maven-plugin</artifactId>
+            <version>{sema-plugin-version}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>process</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>
+                            target/generated-sources/java
+                        </outputDirectory>
+                        <processor>
+                            com.querydsl.apt.jpa.JPAAnnotationProcessor
+                        </processor>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        ...
+    </plugins>
+</build>
+----
+
+* add a dependency to the `querydsl-apt` annotation processor:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    ...
+    <dependency>
+        <groupId>com.querydsl</groupId>
+        <artifactId>querydsl-apt</artifactId>
+        <scope>provided</scope>
+    </dependency>
+    ...
+</dependencies>
+----
 
 
-include::partial$setup-and-configuration-for-persistence-mechanism.adoc[]
+* (recommended, usually required) add a dependency to the querydsl-applib module:
++
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    ...
+    <dependency>
+        <groupId>org.apache.causeway.persistence</groupId>
+        <artifactId>causeway-persistence-querydsl-applib</artifactId>
+    </dependency>
+    ...
+</dependencies>
+----
+
 
 
 == Configuration Properties

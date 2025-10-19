@@ -51,7 +51,6 @@ msgstr ""
 #: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml#act()
 #: org.apache.causeway.applib.services.layout.Object_openRestApi#act()
 #: org.apache.causeway.applib.services.layout.Object_rebuildMetamodel#act()
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act()
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.contributions.ExcelDemoToDoItem_export#act()
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.contributions.ExcelDemoToDoItem_export2#act()
 msgid "Act"
@@ -98,11 +97,6 @@ msgid "Attachment"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#AUDIT_ENTRY
-msgid "Audit Entry"
-msgstr ""
-
-
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateMenuForDemoToDoItem#bulkUpdateManager()
 msgid "Bulk Update Manager"
 msgstr ""
@@ -138,18 +132,8 @@ msgid "Chores"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetClass
-msgid "Class"
-msgstr ""
-
-
 #: org.apache.causeway.core.runtime.services.i18n.po.TranslationServicePoMenu#resetTranslationCache()
 msgid "Clear translation cache"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#COMMAND
-msgid "Command"
 msgstr ""
 
 
@@ -230,16 +214,6 @@ msgid "Description"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
-msgid "Detail"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
-msgid "Domain Change"
-msgstr ""
-
-
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Category$2#Domestic
 msgid "Domestic"
 msgstr ""
@@ -247,11 +221,6 @@ msgstr ""
 
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.pivot.ExcelPivotByCategoryAndSubcategoryMenu#downloadDemoPivotsheet()
 msgid "Download Demo Pivotsheet"
-msgstr ""
-
-
-#: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#downloadJdoMetadata()
-msgid "Download Jdo Metadata"
 msgstr ""
 
 
@@ -383,7 +352,6 @@ msgstr ""
 #: org.apache.causeway.applib.services.dto.Dto_downloadXsd#act(java.lang.String,org.apache.causeway.applib.services.jaxb.JaxbService$CausewaySchemas)
 #: org.apache.causeway.applib.services.layout.LayoutServiceMenu#downloadMenuBarsLayout(java.lang.String,org.apache.causeway.applib.services.menu.MenuBarsService$Type)
 #: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.causeway.applib.services.layout.LayoutService$Style)
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act(java.lang.String)
 msgid "File name"
 msgstr ""
 
@@ -417,17 +385,6 @@ msgstr ""
 
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.Subcategory#Housework
 msgid "Housework"
-msgstr ""
-
-
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong#prop()
-#: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusIdLong()
-msgid "Id"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
-msgid "Identifiers"
 msgstr ""
 
 
@@ -471,15 +428,7 @@ msgid "Marketing"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetAction
 msgid "Member"
-msgstr ""
-
-
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
-msgid "Metadata"
 msgstr ""
 
 
@@ -504,18 +453,8 @@ msgid "Notes"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetStr
-msgid "Object"
-msgstr ""
-
-
 #: org.apache.causeway.applib.domain.DomainObjectList#objects
 msgid "Objects"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#openTargetObject()
-msgid "Open"
 msgstr ""
 
 
@@ -580,16 +519,6 @@ msgid "Parameters"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#postValue
-msgid "Post Value"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#preValue
-msgid "Pre Value"
-msgstr ""
-
-
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#previousCost
 msgid "Previous Cost"
 msgstr ""
@@ -615,11 +544,6 @@ msgid "Prop"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#propertyId
-msgid "Property Id"
-msgstr ""
-
-
 #: org.apache.causeway.applib.services.fixturespec.FixtureScriptsDefault
 #: org.apache.causeway.applib.services.hsqldb.HsqlDbManagerMenu
 #: org.apache.causeway.applib.services.layout.LayoutServiceMenu
@@ -633,16 +557,6 @@ msgstr ""
 
 #: org.apache.causeway.applib.services.swagger.SwaggerService$Visibility#PUBLIC
 msgid "Public"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_EVENT
-msgid "Published Event"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_INTERACTION
-msgid "Published Interaction"
 msgstr ""
 
 
@@ -760,21 +674,6 @@ msgid "Switch To Writing Translations"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
-msgid "Target"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract
-msgid "TargetStr"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#timestamp
-msgid "Timestamp"
-msgstr ""
-
-
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.demomodule.dom.bulkupdate.BulkUpdateLineItemForDemoToDoItem#toDoItem
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem
 msgid "To Do Item"
@@ -796,16 +695,6 @@ msgid "To Do Items Not Yet Complete"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#transactionId
-msgid "Transaction Id"
-msgstr ""
-
-
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#type
-msgid "Type"
-msgstr ""
-
-
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#updateCosts()
 msgid "Update Costs"
 msgstr ""
@@ -821,22 +710,10 @@ msgid "Upload Spreadsheet"
 msgstr ""
 
 
-#: org.apache.causeway.objectstore.jdo.applib.service.DomainChangeJdoAbstract#user
-msgid "User"
-msgstr ""
-
-
 #: org.apache.causeway.applib.services.config.ConfigurationProperty#value
 msgid "Value"
 msgstr ""
 
-
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong#prop()
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp#prop()
-#: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionLong()
-#: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem#datanucleusVersionTimestamp()
-msgid "Version"
-msgstr ""
 
 
 #: org.apache.causeway.applib.services.swagger.SwaggerService$Format#YAML
@@ -844,12 +721,6 @@ msgid "Yaml"
 msgstr ""
 
 
-#: org.apache.causeway.applib.services.layout.Object_downloadLayoutXml
-#: org.apache.causeway.applib.services.layout.Object_openRestApi
-#: org.apache.causeway.applib.services.layout.Object_rebuildMetamodel
-#: org.apache.causeway.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata
-msgid "datanucleusIdLong"
-msgstr ""
 
 
 #: org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem

@@ -7,30 +7,7 @@
 In Apache Causeway, every interaction (action invocation or property edit) is automatically wrapped in a transaction, and any repository query automatically does a flush before hand.
 
 What that means is that there's no need to explicitly start or commit transactions in Apache Causeway; this will be done for you.
-Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service, then you are likely to confuse the framework and get a stack trace for your trouble.
-
-However, you can complete a given transaction and start a new one.
-This is sometimes useful if writing a xref:testing:fixtures:about.adoc[fixture script] which is going to perform some sort of bulk migration of data from an old system.
-For this use case, use the xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService].
-
-For example:
-
-[source,java]
-----
-public class SomeLongRunningFixtureScript extends FixtureScript {
-
-    protected void execute(final ExecutionContext executionContext) {
-        // do some work
-        transactionService.nextTransaction();
-        // do some work
-        transactionService.nextTransaction();
-        // do yet more work
-    }
-
-    @javax.inject.Inject
-    TransactionService transactionService;
-}
-----
+Indeed, if you do try to manage transactions (eg by reaching into the JPA `EntityManager` exposed by the xref:refguide:persistence:index/jpa/applib/services/JpaSupportService.adoc[JpaSupportService] domain service, then you are likely to confuse the framework and get a stack trace for your trouble.
 
 
 == Raise message in the UI

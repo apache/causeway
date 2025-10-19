@@ -113,17 +113,32 @@ repositoryService.persistAndFlush(customer);
 
 When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle events].
 
-=== Persistence by Reachability (JDO)
+=== Persistence by Reachability (JPA)
 
-If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], it is possible to configure ORM to automatically persist domain entities if they are associated with other already-persistent entities.
-This avoid the need to explicitly call "persist".
+If using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], it is possible to configure ORM to automatically persist domain entities if they are associated with other already-persistent entities.
+This avoids the need to explicitly call "persist".
 
-This is done using xref:refguide:config:sections/datanucleus.adoc#datanucleus.persistence-by-reachability-at-commit[persistence-by-reachability] configuration property:
+This is done by annotating the relationship with a `CascadeType` of `CascadeType.PERSIST` or `CascadeType.ALL`.
+For example:
 
-[source,ini]
-.application.properties
+[source,java]
 ----
-datanucleus.persistence-by-reachability-at-commit=true
+@Entity
+public class Parent {
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Child> children = new ArrayList<>();
+}
+
+@Entity
+public class Child {
+    @ManyToOne
+    private Parent parent;
+}
+
+// Usage:
+Parent p = new Parent();
+p.getChildren().add(new Child());
+em.persist(p);
 ----
 
 One downside is that the code is arguably less easy to debug, and there may be performance implications.
@@ -153,22 +168,24 @@ public interface UserRepository extends Repository<User, Long> {
 and Spring Data will create an implementation based on naming conventions.
 See the link:https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference[Spring Data] documentation for further details.
 
-It is also possible to declare JPQL queries , either on the repository method (using `javax.persistence.Query`) or on the entity (using `javax.persistence.NamedQuery`).
+It is also possible to declare JPQL queries , either on the repository method (using `jakarta.persistence.Query`) or on the entity (using `jakarta.persistence.NamedQuery`).
 
 On the entity, declare a named query, eg:
 
 [source,java]
 ----
-@javax.persistence.Entity
-@javax.persistence.NamedQueries({
-    @javax.persistence.NamedQuery(          // <.>
+import jakarta.persistence.*;
+
+@Entity
+@NamedQueries({
+    @NamedQuery(                            // <.>
         name = "Customer.findByNameLike",   // <.>
         query = "SELECT c " +               // <.>
                 "FROM Customer c " +        // <.>
                 "WHERE c.name LIKE :name"   // <.>
     )
     })
-...
+// ...
 public class Customer {
     // ...
 }
@@ -205,73 +222,9 @@ public class CustomerRepository {
 <.> The `:name` parameter in the query JPQL string, and its corresponding value
 
 
-[[finding-jdo]]
-=== Finding Objects (JDO)
+// TODO: QueryDSL usage.
 
 
-In the case of xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], it typically requires a JDOQL query defined on the domain entity, and a corresponding repository service for that domain entity type.
-This repository calls the framework-provided xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] to actually submit the query.
-
-For example:
-
-[source,java]
-----
-@javax.jdo.annotations.PersistenceCapable
-@javax.jdo.annotations.Queries({
-    @javax.jdo.annotations.Query(                       // <.>
-        name = "findByName",                            // <.>
-        value = "SELECT "                               // <.>
-                + "FROM com.mydomain.myapp.Customer "   // <.>
-                + "WHERE name.indexOf(:name) >= 0 ")    // <.>
-})
-...
-public class Customer {
-    // ...
-}
-----
-<.> There may be several `@Query` annotations, nested within a `@Queries` annotation, defining queries using JDOQL.
-<.> Defines the name of the query.
-<.> The definition of the query, using JDOQL syntax.
-<.> The fully-qualified class name.
-Must correspond to the class on which the annotation is defined (the framework checks this automatically on bootstrapping).
-<.> The predicate, expressed using Java syntax.
-In this particular query, is an implementation of a LIKE "name%" query.
-
-and in the corresponding repository, use xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService]:
-
-[source,java]
-----
-import org.springframework.stereotype.Repository;
-import lombok.RequiredArgsConstructor;
-
-@Repository
-@RequiredArgsConstructor(onConstructor_ = {@Inject} )
-public class CustomerRepository {
-
-    private final RepositoryService repositoryService;
-
-    public List<Customer> findByName(String name) {
-        return repositoryService.allMatches(                // <.>
-                Query.named(Customer.class, "findByName")   // <.>
-                     .withParameter("name", name);          // <.>
-    }
-
-}
-----
-<.> The xref:refguide:applib:index/services/repository/RepositoryService.adoc[RepositoryService] is a generic facade over the ORM API.
-<.> Specifies the class that is annotated with @Query, along with the `@Query#name` attribute
-<.> The `:name` parameter in the query JDOQL string, and its corresponding value
-
-Whenever a query is submitted, the framework will automatically "flush" any pending changes.
-This ensures that the database query runs against an up-to-date table so that all matching instances (with respect to the current transaction) are correctly retrieved.
-
-When an object is loaded from the database the framework will emit `ObjectLoadedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle event].
-
-=== Type-safe queries
-
-DataNucleus also supports type-safe queries; these can be executed using the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] (JDO-specific) domain service.
-
-See xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc#type-safe-jdoql-queries[JdoSupportService] for further details.
 
 [[updating]]
 == Updating Objects
@@ -283,7 +236,7 @@ That said, it is possible to "flush" pending changes:
 
 * xref:refguide:applib:index/services/xactn/TransactionService.adoc[TransactionService] acts at the Apache Causeway layer, and flushes any pending object persistence or object deletions
 
-* (if using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus]), the xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService] domain service can be used reach down to the underlying JDO API, and perform a flush of pending object updates also.
+* (if using xref:pjpa:ROOT:about.adoc[JPA/Eclipselink]), the xref:refguide:persistence:index/jpa/applib/services/JpaSupportService.adoc[JpaSupportService] domain service can be used reach down to the underlying JPA API (`EntityManager`), and perform a flush of pending object updates also.
 
 When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:userguide:ROOT:events.adoc#lifecycle-events[lifecycle events].
 

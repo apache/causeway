@@ -21,11 +21,12 @@ record Blob {
   Blob of(String name, CommonMimeType mimeType, byte[] content)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource)     // <.>
   Try<Blob> tryRead(String name, CommonMimeType mimeType, File file)     // <.>
-  byte[] getBytes()     // <.>
   Clob toClob(Charset charset)     // <.>
+  Clob toClobUtf8()     // <.>
   void writeBytesTo(OutputStream os)     // <.>
   void writeTo(File file)     // <.>
   DataSource asDataSource()     // <.>
+  Blob flatMap(UnaryOperator<Blob> mapper)     // <.>
   Blob zip()     // <.>
   Blob zip(String zipEntryNameIfAny)     // <.>
   Blob unZip(CommonMimeType resultingMimeType)
@@ -55,20 +56,15 @@ Returns a new xref:refguide:applib:index/value/Blob.adoc[Blob] of given _name_ ,
 --
 Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
 --
-<.> xref:#getBytes_[getBytes()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#bytes()_ instead
-====
---
 <.> xref:#toClob_Charset[toClob(Charset)]
 +
 --
 Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using given _Charset_ for the underlying byte[] to String conversion.
+--
+<.> xref:#toClobUtf8_[toClobUtf8()]
++
+--
+Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using UTF-8 for the underlying byte[] to String conversion.
 --
 <.> xref:#writeBytesTo_OutputStream[writeBytesTo(OutputStream)]
 +
@@ -84,6 +80,11 @@ Writes this xref:refguide:applib:index/value/Blob.adoc[Blob] to the file represe
 +
 --
 Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] for underlying byte array.
+--
+<.> xref:#flatMap_UnaryOperator[flatMap(UnaryOperator)]
++
+--
+Allows fluent chaining of xref:refguide:applib:index/value/Blob.adoc[Blob] operators.
 --
 <.> xref:#zip_[zip()]
 +
@@ -122,20 +123,15 @@ For more fine-grained control use one of the xref:refguide:applib:index/value/Bl
 
 Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file))_
 
-[#getBytes_]
-=== getBytes()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#bytes()_ instead
-====
-
 [#toClob_Charset]
 === toClob(Charset)
 
 Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using given _Charset_ for the underlying byte[] to String conversion.
+
+[#toClobUtf8_]
+=== toClobUtf8()
+
+Converts to a xref:refguide:applib:index/value/Clob.adoc[Clob] , using UTF-8 for the underlying byte[] to String conversion.
 
 [#writeBytesTo_OutputStream]
 === writeBytesTo(OutputStream)
@@ -153,6 +149,11 @@ If the file exists but is a directory rather than a regular file, does not exist
 === asDataSource()
 
 Returns a new xref:refguide:commons:index/io/DataSource.adoc[DataSource] for underlying byte array.
+
+[#flatMap_UnaryOperator]
+=== flatMap(UnaryOperator)
+
+Allows fluent chaining of xref:refguide:applib:index/value/Blob.adoc[Blob] operators.
 
 [#zip_]
 === zip()

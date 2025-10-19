@@ -73,13 +73,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.properties.update.modify;
     exports org.apache.causeway.core.metamodel.facets.value.semantics;
 
-    exports org.apache.causeway.core.metamodel.facets.object.parented
-            to org.apache.causeway.persistence.jdo.metamodel;
-    exports org.apache.causeway.core.metamodel.facets.object.ignore.datanucleus
-            to org.apache.causeway.persistence.jdo.metamodel;
-    exports org.apache.causeway.core.metamodel.facets.object.ignore.jdo
-            to org.apache.causeway.persistence.jdo.metamodel;
-
     exports org.apache.causeway.core.metamodel.interactions;
     exports org.apache.causeway.core.metamodel.interactions.acc;
     exports org.apache.causeway.core.metamodel.interactions.managed;

@@ -193,7 +193,7 @@ public class QueryResultsCache implements DisposableBean {
             // (it is possible that the callable just invoked might also have updated the cache, eg if there was
             // some sort of recursion.  However, Map#put(...) is idempotent, so valid to call more than once.
             //
-            // note: there's no need for thread-safety synchronization... remember that QueryResultsCache is @RequestScoped
+            // note: there's no need for thread-safety synchronization... remember that QueryResultsCache is @InteractionScoped
             put(cacheKey, result);
 
             return result;

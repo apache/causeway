@@ -10,15 +10,12 @@ Represents an instance of some element of the meta-model recognized by the frame
 ----
 interface ManagedObject {
   Specialization specialization()     // <.>
-  Specialization getSpecialization()
   Specialization.BookmarkPolicy getBookmarkPolicy()
   ObjectSpecification objSpec()     // <.>
   Object getPojo()     // <.>
   EntityState getEntityState()
   String getTitle()     // <.>
-  String getIconName()     // <.>
-  ObjectIcon getIcon()
-  Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers()     // <.>
+  ObjectIcon getIcon(IconSize iconSize)     // <.>
   Either<ManagedObject, ManagedObject> asEitherWithOrWithoutMemoizedBookmark()
   ManagedObject unspecified()     // <.>
   ManagedObject empty(ObjectSpecification spec)     // <.>
@@ -61,12 +58,7 @@ Returns the adapted domain object, the 'plain old java' object this managed obje
 --
 The (untranslated) title of the wrapped pojo.
 --
-<.> xref:#getIconName_[getIconName()]
-+
---
-Returns the name of an icon to use for this object.
---
-<.> xref:#eitherIconOrFaLayers_[eitherIconOrFaLayers()]
+<.> xref:#getIcon_IconSize[getIcon(IconSize)]
 +
 --
 Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
@@ -154,15 +146,8 @@ Returns the adapted domain object, the 'plain old java' object this managed obje
 
 The (untranslated) title of the wrapped pojo.
 
-[#getIconName_]
-=== getIconName()
-
-Returns the name of an icon to use for this object.
-
-May return `null` if no icon is specified.
-
-[#eitherIconOrFaLayers_]
-=== eitherIconOrFaLayers()
+[#getIcon_IconSize]
+=== getIcon(IconSize)
 
 Domain Objects may either have an icon corresponding to an icon resource, or they use a font awesome icon.
 

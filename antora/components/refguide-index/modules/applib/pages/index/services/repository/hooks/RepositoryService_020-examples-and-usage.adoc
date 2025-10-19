@@ -114,62 +114,50 @@ public void addExcludedProduct() {
 There are two subtypes of the `Query` API, namely `NamedQuery` and `AllInstancesQuery`.
 The former is the more important, as it identifies a named query and a set of parameter/argument tuples, and is executed server-side.
 
-For example, using JDO a `ToDoItem` could be annotated:
+For example, using JPA an entity could be annotated:
 
 [source,java]
 ----
-@javax.jdo.annotations.Queries( {
-    @javax.jdo.annotations.Query(
-        name = "findByAtPathAndComplete", language = "JDOQL",  // <.>
-        value = "SELECT "
-                + "FROM todoapp.dom.module.todoitem.ToDoItem "
-                + "WHERE atPath.indexOf(:atPath) == 0 "        // <.>
-                + "   && complete == :complete"),              // <.>
-    // ...
+@NamedQueries({
+        @NamedQuery(
+                name = "SimpleObject.findByNameLike",       // <.>
+                query = "SELECT so " +
+                        "FROM SimpleObject so " +
+                        "WHERE so.name LIKE :name"          // <.>
+        )
 })
-public class ToDoItem ... {
+})
+public class SimpleObject ... {
     // ...
 }
+----
+<.> name of the query
+<.> defines the `name` parameter
+
+This query definition is then typically used in a corresponding repository service:
+
+[source,java]
+----
+import org.apache.causeway.applib.services.repository.RepositoryService;
+
+public List<SimpleObject> findByNameLike(
+        @Name final String name) {
+    return repositoryService.allMatches(
+            Query.named(SimpleObject.class, "SimpleObject.findByNameLike")  // <.>
+                 .withParameter("name", "%" + name + "%"));                 // <.>
+}
+
+@Inject RepositoryService repositoryService;                                // <.>
 ----
 <1> name of the query
-<2> defines the `atPath` parameter
-<3> defines the `complete` parameter
-
-This JDO query definitions are used in the `ToDoItemRepositoryImplUsingJdoql` service:
-
-[source,java]
-----
-import org.springframework.stereotype.Service;
-
-@Service
-public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl {
-    @Programmatic
-    public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Category category) {
-        return repositoryService.allMatches(
-                Query.named(ToDoItem.class, "findByAtPathAndCategory") // <.>
-                		.withParameter("atPath", atPath)       // <.>
-                		.withParameter("category", category)); // <.>
-    }
-    ...
-    @javax.inject.Inject
-    RepositoryService repositoryService;
-}
-----
-<1> corresponds to the "findByAtPathAndCategory" JDO named query
-<2> provide argument for the `atPath` parameter.
-<3> provide argument for the `category` parameter.
+<2> argument for the `name` parameter.
+<3> generic repository service, provided by Causeway
 
 [TIP]
 ====
-If using JPA, it is also possible to use the Spring Data repositories, using xref:refguide:persistence:index/jpa/applib/services/JpaSupportService.adoc[JpaSupportService].
+It is also possible to use the Spring Data repositories, which automatically generate an implementation based on the method signature.
+Or, you could use the xref:querydsl:ROOT:about.adoc[QueryDSL] integration.
 ====
-
-[TIP]
-====
-If using JDO/DataNucleus, it is also possible to use the DataNucleus type-safe query API, see xref:refguide:persistence:index/jdo/applib/services/JdoSupportService.adoc[JdoSupportService].
-====
-
-
 
 
 == See also

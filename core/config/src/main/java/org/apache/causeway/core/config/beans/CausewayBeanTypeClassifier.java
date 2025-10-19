@@ -142,9 +142,6 @@ public record CausewayBeanTypeClassifier(
         }
 
         // entity support
-        if(typeHead.isJdoPersistenceCapable()){
-            return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.JDO);
-        }
         if(typeHead.hasAnnotation(Entity.class)) {
             return CausewayBeanMetaData.entity(named.get(), discoveredBy, PersistenceStack.JPA);
         }

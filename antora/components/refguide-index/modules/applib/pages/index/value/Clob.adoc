@@ -25,7 +25,7 @@ record Clob {
   Try<Clob> tryRead(String name, CommonMimeType mimeType, DataSource dataSource, Charset charset)     // <.>
   Try<Clob> tryRead(String name, CommonMimeType mimeType, File file, Charset charset)     // <.>
   Try<Clob> tryReadUtf8(String name, CommonMimeType mimeType, File file)     // <.>
-  CharSequence getChars()     // <.>
+  Clob flatMap(UnaryOperator<Clob> mapper)     // <.>
   Blob toBlob(Charset charset)     // <.>
   Blob toBlobUtf8()     // <.>
   void writeCharsTo(Writer wr)
@@ -58,15 +58,10 @@ Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file), charset)_
 --
 Shortcut for _#tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)_ using _StandardCharsets#UTF_8_ .
 --
-<.> xref:#getChars_[getChars()]
+<.> xref:#flatMap_UnaryOperator[flatMap(UnaryOperator)]
 +
 --
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#chars()_ instead
-====
+Allows fluent chaining of xref:refguide:applib:index/value/Clob.adoc[Clob] operators.
 --
 <.> xref:#toBlob_Charset[toBlob(Charset)]
 +
@@ -119,15 +114,10 @@ Shortcut for _tryRead(name, mimeType, DataSource.ofFile(file), charset)_
 
 Shortcut for _#tryRead(String, org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType, File, Charset)_ using _StandardCharsets#UTF_8_ .
 
-[#getChars_]
-=== getChars()
+[#flatMap_UnaryOperator]
+=== flatMap(UnaryOperator)
 
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#chars()_ instead
-====
+Allows fluent chaining of xref:refguide:applib:index/value/Clob.adoc[Clob] operators.
 
 [#toBlob_Charset]
 === toBlob(Charset)

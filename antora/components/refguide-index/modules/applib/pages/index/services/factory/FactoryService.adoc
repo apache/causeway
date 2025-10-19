@@ -99,7 +99,7 @@ The entity will not yet be persisted, in other words: its not yet known to the p
 
 Creates a new detached entity instance, with injection points resolved.
 
-The entity will not yet be persisted, in other words: its not yet known to the persistence layer.
+The entity will not yet be persisted, in other words: it is not yet known to the persistence layer.
 
 [#mixin_Class_Object]
 === mixin(Class, Object)

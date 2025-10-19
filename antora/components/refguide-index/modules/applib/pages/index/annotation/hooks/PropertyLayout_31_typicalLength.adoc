@@ -15,12 +15,13 @@ For example:
 
 [source,java]
 ----
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Customer {
 
-    @javax.jdo.annotations.Column(length=30)
+    @Column(length=30)
     @ParameterLayout(typicalLength=20)
     @Getter @Setter
     private String firstName;

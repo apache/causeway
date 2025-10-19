@@ -3,31 +3,26 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 The quickest way to get started building an application "for real" is to use the `simpleapp` starter app.
-
-There are two variations of the application (and so two branches in the git repo).
-One variation uses JPA as the ORM, the other uses JDO, so you can focus on whichever ORM you prefer.
+It uses the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store for persistence.
 
 The application is also built nightly as a docker image, so you can quickly try it out:
 
 [source,bash,subs="attributes+"]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v{fwk-version}-jpa-SNAPSHOT
+docker run -p 8080:8080 apache/causeway-app-simpleapp:latest
 ----
-
-Replace "v{fwk-version}-jpa" with "v{fwk-version}-jdo" if using the JDO ORM.
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
 
-However, unlike HelloWorld, this app also provides more structure to assist you as your application grows, with business logic placed in a separate Maven module (`simpleapp-...-module-simple`) to the module that bootstraps the webapp (`simpleapp-...-webapp`).
-Replace "..." with either "jpa" or "jdo", as appropriate.
+However, unlike xref:docs:starters:helloworld.adoc[HelloWorld], this app also provides more structure to assist you as your application grows, with business logic placed in a separate Maven module (`simpleapp-jpa-module-simple`) to the module that bootstraps the webapp (`simpleapp-jpa-webapp`).
 
-The idea is that as your application grows in scope that you put each new area of functionality in its own module (copy-n-paste the `simpleapp-...-module-simple` module).
+The idea is that as your application grows in scope that you put each new area of functionality in its own module (copy-n-paste the `simpleapp-jpa-module-simple` module).
 These modules can depend on each other, but Maven will to ensure that dependencies between these areas of functionality are unidirectional.
 In this way your application will be a "modular monolith"; said another way it will prevent your application from degenerating into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud[big ball of mud].
 See also the discussion <<structure-of-the-app,below>>.
 
 The application also includes examples of unit tests and integration tests.
-You'll find these in their own Maven modules (`simpleapp-...-module-simple-tests` and `simpleapp-...-webapp-tests`).
+You'll find these in their own Maven modules (`simpleapp-jpa-module-simple-tests` and `simpleapp-jpa-webapp-tests`).
 Normally we recommend that tests should be in the same Maven module as the code that they exercise.
 The simpleapp doesn't do it this way just to give you the option to exclude them while initially prototyping/exploring a domain.
 You can use them as a reference once your ideas have solidifid and you need to start writing proper "production" code.
@@ -42,26 +37,15 @@ Apache Causeway is a Java based framework, so in terms of prerequisites, you'll 
 +
 Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the simpleapp itself is currently configured for Java {jdk-version}.
 
-* link:http://maven.apache.org[Apache Maven] 3.9.7+
-
-If using JDO as the ORM, you'll also need to run the Datanucleus enhancer (this post-processes the byte code of the entities).
-The xref:setupguide:ROOT:about.adoc[Setup Guide] explains how to do this for either IntelliJ and Eclipse.
-
-If using JPA as the ORM, the equivalent process to enhancement is performed at run-time, so there are no special setup considerations.
+* link:http://maven.apache.org[Apache Maven] 3.9.11+
 
 
 == Downloading & Running
 
 Create a new directory, and `cd` into that directory.
 
-To build the app from the latest stable release:
+To build the app from the latest release:
 
-* if using JDO as the ORM:
-+
-include::simpleapp-script-jdo.adoc[]
-
-* if using JPA as the ORM:
-+
 include::simpleapp-script-jpa.adoc[]
 
 
@@ -80,8 +64,8 @@ Choose the generic Wicket UI, and navigate to the login page:
 
 image::simpleapp/using/020-login-to-wicket-viewer.png[width="600px"]
 
-The app itself is configured to run using xref:security:ROOT:about.adoc[shiro security], as configured in the `shiro.ini` config file.
-You can login with:
+The app itself is configured to run using xref:security:simple:about.adoc[Simple security module], with the `SimpleRealm` bean defining the users and roles.
+You can log in with:
 
 * username: _sven_
 * password: _pass_
@@ -168,8 +152,8 @@ As well as running in fixtures from the UI, you can also specify a configuration
 [source,ini]
 .config/application.properties
 ----
-# causeway.testing.fixtures.initial-script = \
-#    domainapp.webapp.application.fixture.scenarios.DomainAppDemo
+causeway.testing.fixtures.initial-script = \
+    domainapp.webapp.application.fixture.scenarios.DomainAppDemo
 ----
 
 
@@ -311,19 +295,17 @@ The application consists of five modules:
 [plantuml]
 .simpleapp dependencies
 ----
-[webapp-...-tests] <<maven module>> #LightBlue
-[webapp-...] <<maven module>>
-[module-...-simple-tests]  <<maven module>> #LightBlue
-[module-...-simple]  <<maven module>>
+[webapp-jpa-tests] <<maven module>> #LightBlue
+[webapp-jpa] <<maven module>>
+[module-jpa-simple-tests]  <<maven module>> #LightBlue
+[module-jpa-simple]  <<maven module>>
 
-[webapp-...-tests] .l-> [webapp-...]
-[module-...-simple-tests] .l-> [module-...-simple]
-[webapp-...] .u-> [module-...-simple]
+[webapp-jpa-tests] .l-> [webapp-jpa]
+[module-jpa-simple-tests] .l-> [module-jpa-simple]
+[webapp-jpa] .u-> [module-jpa-simple]
 ----
 
-where "..." is either "jdo" or "jpa", depending on the branch.
-
-The main business logic resides in `module-...-simple`, with the `webapp` module acting as an aggregator.
+The main business logic resides in `module-jpa-simple`, with the `webapp` module acting as an aggregator.
 Each of these modules have unit and/or integration tests.
 To allow them to be easily excluded (while prototyping/exploration), they have been placed into their own respective modules.
 
@@ -365,12 +347,10 @@ The link:{attachmentsdir}/simpleapp-modules-dependencies.pptx[diagram] below sho
 .Module Dependencies
 image::simpleapp/simpleapp-modules-dependencies.png[width="800px"]
 
-(For a JPA branch, the `JdoDataNucleus5` dependency is replaced by `JpaEclipseLink`).
-
 Let's now review the contents of each of the modules in the simpleapp starter app.
 
 
-=== module-...-simple's src/main/java
+=== module-jpa-simple's src/main/java
 
 Under `src/main/java` we have:
 
@@ -394,8 +374,6 @@ src/main/java/
           Name.java
           Notes.java
       SimpleModule.java                 <!--.-->
-  META-INF/
-    persistence.xml                     <!--.-->
 ----
 <.> For simplicity, all the Java source files reside in a `domainapp` top-level package.
 Change as required.
@@ -408,7 +386,7 @@ Modules may have other subpackages, common ones include ``types`` and ``fixture`
 <.> Holds classes for the `so` ("simple object") entity/aggregate, consisting of the entity definition itself (`SimpleObject`) and a corresponding domain services (`SimpleObjects` and `SimpleObjectRepository`).
 The associated `.layout.xml` and `.png` are optional but provide metadata/resources for rendering (Maven is configured to also treat `src/main/java` as a resource location).
 
-<.> For the `jpa` branch only, uses Spring Data JPA to automatically provide the query implementation.
+<.> Uses Spring Data JPA to automatically provide the query implementation.
 
 <.> The `fixture` package contains classes to set up the database to an initial state (as described xref:#fixtures[earlier].
 One of the classes is a `FixtureScript` (defines _how_ to set up the data) the other is a persona enum (defines _what_ data to set up).
@@ -418,7 +396,6 @@ One of the classes is a `FixtureScript` (defines _how_ to set up the data) the o
 <.> `SimpleModule` is a Spring link:https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Configuration.html[@Configuration] which allows the domain services and entities of the module to be located. +
 This is discussed in more detail below.
 
-<.> For the `jdo` branch only, the `persistence.xml` file is required boilerplate.
 
 
 ==== SimpleModule
@@ -501,12 +478,12 @@ Depending on their nature, domain services are used to build up the menu, or are
 +
 In the simpleapp starter app, the only domain service  is `SimpleObjects`.
 This appears in the menu, and also acts as a repository for the `SimpleObject` entity.
-The `jpa` branch also has the `SimpleObjectRepository` Spring Data service.
+It also has the `SimpleObjectRepository` repository interface for which Spring Data provides the query implementations.
+
 
 * all entities.
 +
-These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with the ORM-specific annotation.
-For `jdo` branch, this is `@javax.jdo.annotations.PersistenceCapable`; for the `jpa` branch this is `@javax.persistence.Entity`).
+These are entities that are annotated with both xref:refguide:applib:index/annotation/DomainObject.adoc[@DomainObject] annotation and with the JPA `@jakarta.persistence.Entity` annotation.
 +
 In the simpleapp starter app, the only entity is `SimpleObject`.
 
@@ -517,7 +494,7 @@ These are classes that extend from the testing applib's `FixtureScript` class, a
 As already discussed, the `fixture` package provides classes to create sample objects, while the `SimpleModule` provides a fixture script to tear down all data from the module.
 
 
-=== module-...-simple-test's src/test/java
+=== module-jpa-simple-test's src/test/java
 
 Under `src/test/java` we have:
 
@@ -563,25 +540,23 @@ The `SimpleModuleIntegTestAbstract` is the superclass of all integration tests i
 .SimpleModuleIntegTestAbstract.java
 ----
 @SpringBootTest(
-        classes = SimpleModuleIntegTestAbstract.TestApp.class   // <.>
+        classes = SimpleModuleIntegTestAbstract.TestApp.class             // <.>
 )
 @ActiveProfiles("test") // <.>
 public abstract class SimpleModuleIntegTestAbstract
-        extends CausewayIntegrationTestAbstractWithFixtures {       // <.>
+        extends CausewayIntegrationTestAbstractWithFixtures {             // <.>
 
     @Configuration
     @Import({
-        CausewayModuleCoreRuntimeServices.class,                    // <.>
-        CausewayModuleSecurityBypass.class,                         // <.>
-        CausewayModuleJdoDataNucleus5.class,                        // <.>
-        CausewayModuleTestingFixturesApplib.class,                  // <.>
+        CausewayModuleCoreRuntimeServices.class,                          // <.>
+        CausewayModuleSecurityBypass.class,                               // <.>
+        CausewayModuleJpaEclipseLink.class,                               // <.>
+        CausewayModuleTestingFixturesApplib.class,                        // <.>
 
-        SimpleModule.class                                      // <.>
+        SimpleModule.class                                                // <.>
     })
     @PropertySources({
-            @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),     // <.>
-            @PropertySource(CausewayPresets.DatanucleusAutocreateNoValidate), // <.>
-            @PropertySource(CausewayPresets.UseLog4j2Test),                   // <.>
+        @PropertySource(CausewayPresets.H2InMemory_withUniqueSchema),     // <.>
     })
     public static class TestApp {
     }
@@ -596,14 +571,11 @@ public abstract class SimpleModuleIntegTestAbstract
 In this case, the test inherits from the `CausewayIntegrationTestAbstractWithFixtures` subclass which also adds in support for running fixtures.
 
 <.> Specifies the modules that make up Apache Causeway framework itself.
-These include core, security set to the bypass implementation (effectively is ignored) and JDO/DataNucleus for persistence.
 Note that no viewers are bootstrapped because the tests are run through Spring's integration testing framework, rather than (say) as Selenium tests.
 
-<.> Disables security checks.
+<.> Configures the xref:security:bypass:about.adoc[Bypass] implementation which effectively disables security checks.
 
-<.> Configures JDO as the ORM.
-+
-If using JPA, this would be `CausewayModuleJpaEclipseLink.class` instead.
+<.> Configures xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store as the persistence mechanism.
 
 <.> Brings in support for running fixtures.
 +
@@ -613,11 +585,6 @@ You can learn more about testing in the xref:testing:ROOT:about.adoc[Testing Gui
 
 <.> Runs the tests in memory using H2.
 A unique schema allows tests to potentially be run in parallel
-
-<.> Ensures that JDO/DataNucleus is configured to create the database schema first.
-This may be required because the application might otherwise be configured to use the xref:userguide:flyway:about.adoc[Flyway integration].
-
-<.> Sets up logging to use the configuration defined in the `log4j2-test.xml` file
 
 
 
@@ -692,7 +659,8 @@ It's very simple though:
 .ApplicationModule.java
 ----
 package domainapp.webapp.application;
-... imports omitted ...
+//...
+
 @Configuration
 @Import(SimpleModule.class)             // <.>
 @ComponentScan                          // <.>
@@ -714,57 +682,47 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        CausewayModuleCoreRuntimeServices.class,                    // <.>
-        CausewayModuleSecurityShiro.class,                          // <.>
-        CausewayModuleJpaEclipseLink.class,                         // <.>
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
-        CausewayModuleViewerWicketViewer.class,                     // <.>
+        CausewayModuleCoreRuntimeServices.class,            // <.>
+        CausewayModuleSecuritySimple.class,                 // <.>
+        CausewayModuleJpaEclipseLink.class,                 // <.>
+        CausewayModuleViewerRestfulObjectsViewer.class,     // <.>
+        CausewayModuleViewerGraphqlViewer.class,            // <.>
+        CausewayModuleViewerWicketViewer.class,             // <.>
 
-        CausewayModuleTestingH2ConsoleUi.class,                     // <.>
-        CausewayModuleTestingFixturesApplib.class,                  // <.>
+        CausewayModuleTestingH2ConsoleUi.class,             // <.>
+        CausewayModuleTestingFixturesApplib.class,          // <.>
 
-        CausewayModuleExtFlywayImpl.class,                          // <.>
+        CausewayModuleExtFlywayImpl.class,                  // <.>
 
-        ApplicationModule.class,                                // <.>
-        CustomModule.class,                                     // <9>
-        QuartzModule.class,                                     // <9>
+        ApplicationModule.class,                            // <.>
+        CustomModule.class,                                 // <9>
+        QuartzModule.class,                                 // <9>
 
-        DomainAppDemo.class                                     // <.>
+        DomainAppDemo.class                                 // <.>
 })
 @PropertySources({
-        @PropertySource(CausewayPresets.DebugDiscovery),            // <.>
+        @PropertySource(CausewayPresets.DebugDiscovery),    // <.>
 })
 public class AppManifest {
 }
 ----
 
 <.> Mandatory - specifies the core of the Apache Causeway framework
-
-<.> Enables the Shiro security mechanism.
+<.> Enables the xref:security:simple:about.adoc[Simple] security mechanism.
 There are several security implementations, precisely one must be selected
-
-<.> Enables JPA/Eclipselink for persistence.
-+
-If using JDO as the ORM, replace with `CausewayModuleJdoDataNucleus5`.
-
+<.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)] (ie REST API).
-
+<.> Enables the xref:gqlv:ROOT:about.adoc[GraphQL API (GraphQL viewer)].
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
-
 <.> Enables the H2 Console (menu from the "Prototyping" menu), applicable only if running against h2 in-memory database.
-
 <.> Brings in support to run xref:testing:fixtures:about.adoc[fixtures] within the application, eg for prototyping.
-
 <.> Enables the xref:userguide:flyway:about.adoc[Flyway] integration.
-
 <.> References the application's module(s), in this case `ApplicationModule` , `CustomModule` and `QuartzModule`.
 +
 `ApplicationModule` is discussed below.
 
 <.> Makes the fixture scenario classes available for discovery.
-
-<.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly.
-These two both use the `CausewayPresets` convenience class, to disable i18n support and for additional debugging log statements.
+<.> Normally configuration properties are picked up from Spring Boot's `application.properties` or `application.yml` files, but additional properties can be overridden directly, for example using the `CausewayPresets` convenience class.
 
 
 ==== SimpleApp
@@ -816,7 +774,6 @@ src/main/resources
   banner.txt                            <.>
   log4j2-spring.xml                     <.>
   menubars.layout.xml                   <.>
-  shiro.ini                             <.>
 ----
 
 <.> By convention, we use `config/application.properties` to hold configuration properties that change between environments (dev, test, prod).
@@ -835,16 +792,10 @@ This leverages a feature in Spring Boot's Flyway integration which allows differ
 
 <.> The `banner.txt` is shown when bootstrapping.
 
-<.> The `log4j2-spring.xml` configures log4j2 (the logging system used by Apache Causeway)
+<.> The `log4j2-spring.xml` configures log4j2
 
 <.> The `menubars.layout.xml` arranges the actions of the domain services into menus.
 
-<.> The `shiro.ini` file configures Shiro security integration (see the `CausewayModuleSecurityShiro` module imported in the `AppManifest`, above).
-+
-[TIP]
-====
-The xref:security:shiro:about.adoc[Shiro security] integration is much more flexible than simple file-based authentication.
-====
 
 To call out some of the files under `static`:
 
@@ -947,10 +898,6 @@ Here's what the setup looks like in IntelliJ IDEA:
 
 image::simpleapp/simpleapp-webapp.png[width="600px"]
 
-If using JDO as the ORM (rather than JPA), then the DataNucleus enhancer must be run beforehand.
-With IntelliJ this can be done by setting up a different _Run Configuration_ to be executed beforehand:
-
-image::simpleapp/simpleapp-webapp-before-launch.png[width="600px"]
 
 
 
@@ -967,7 +914,7 @@ If you run into issues, please don't hesitate to ask for help on the users maili
 The application is configured by default uses H2 as an inmemory database, with <<fixtures,fixtures>> used to populate the database with representative data.
 
 To deploy to production though of course will require a persistent database, and the schema of the tables will be explicitly managed.
-Although both JDO and JPA can automatically create the database schema, many development teams choose to manage the schema externally to the ORM.
+Although xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] can automatically create the database schema, many development teams choose to manage the schema externally to the ORM.
 
 A popular tool to do this is link:https://flywaydb.org/[Flyway], and Spring Boot provides automatic support for it using link:https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties-data-migration[these configuration properties].
 
@@ -982,11 +929,12 @@ Otherwise, you can easily run up an instance using Docker:
 [source,bash]
 ----
 docker run \
-    --name sqlserver \
+    --platform linux/amd64 \
+    --name sqlserver-simpleapp \
     -e 'ACCEPT_EULA=Y' \
-    -e 'SA_PASSWORD=pa$$w0rd' \
+    -e 'SA_PASSWORD=VeryStrongPassword123!' \
     -p 1433:1433 \
-    -d mcr.microsoft.com/mssql/server:2019-latest
+    -d mcr.microsoft.com/mssql/server:2022-latest
 ----
 
 You can then connect:
@@ -995,12 +943,12 @@ You can then connect:
 +
 [source,bash]
 ----
-docker exec -it sqlserver \
-    /opt/mssql-tools/bin/sqlcmd \
-    -S localhost -U sa -P pa$$w0rd
+docker exec -it sqlserver-simpleapp \
+    /opt/mssql-tools18/bin/sqlcmd \
+    -S localhost -U sa -P VeryStrongPassword123! -C
 ----
 
-* if on Windows, you might instead prefer to use Microsoft's free GUI client, link:https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15[SQL Server Management Studio].
+* if on Windows, you might instead prefer to use Microsoft's free GUI client, link:https://learn.microsoft.com/en-us/ssms/install/install[SQL Server Management Studio].
 
 You then need to create a database and login:
 
@@ -1070,8 +1018,6 @@ spring.datasource.password=simpleapp
 #causeway.persistence.schema.create-schema-sql-template=   (use flyway instead)
 causeway.persistence.schema.auto-create-schemas=
 
-# DataNucleus, and must use camelCase rather than kebab-case
-datanucleus.schema.autoCreateAll=false
 ----
 
 Flyway in turn reads the migration scripts under `db.migration` package (in `src/main/resources` of the `webapp` module).
@@ -1088,6 +1034,6 @@ If you were using Docker to try this out, remember to clean up afterwards:
 
 [source,bash]
 ----
-docker kill sqlserver
-docker rm sqlserver
+docker kill sqlserver-simpleapp
+docker rm sqlserver-simpleapp
 ----

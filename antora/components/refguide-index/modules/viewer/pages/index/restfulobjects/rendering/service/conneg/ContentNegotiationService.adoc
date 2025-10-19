@@ -13,11 +13,11 @@ The principal motivation is to allow more flexible representations to be generat
 .ContentNegotiationService.java
 ----
 interface ContentNegotiationService {
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)     // <.>
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
 }
 ----
 
@@ -54,32 +54,22 @@ Returns a representation of a single action invocation of an object.
 
 Returns a representation of a single object.
 
-By default this representation is as per section 14.4 of the RO spec, v1.0.
-
 [#buildResponse_IResourceContext_ManagedProperty]
 === buildResponse(IResourceContext, ManagedProperty)
 
 Returns a representation of a single property of an object.
-
-By default this representation is as per section 16.4 of the RO spec, v1.0.
 
 [#buildResponse_IResourceContext_ManagedCollection]
 === buildResponse(IResourceContext, ManagedCollection)
 
 Returns a representation of a single collection of an object.
 
-By default this representation is as per section 17.5 of the RO spec, v1.0.
-
 [#buildResponse_IResourceContext_ManagedAction]
 === buildResponse(IResourceContext, ManagedAction)
 
 Returns a representation of a single action (prompt) of an object.
 
-By default this representation is as per section 18.2 of the RO spec, v1.0.
-
 [#buildResponse_IResourceContext_ObjectAndActionInvocation]
 === buildResponse(IResourceContext, ObjectAndActionInvocation)
 
 Returns a representation of a single action invocation of an object.
-
-By default this representation is as per section 19.5 of the RO spec, v1.0.

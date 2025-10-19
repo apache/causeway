@@ -72,6 +72,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
 
     @Inject private ElSettings elSettings;
 
+    @Inject
     protected CausewayModulePersistenceJpaEclipselink(
             final CausewayConfiguration causewayConfiguration,
             final DataSource dataSource,
@@ -179,7 +180,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
                     if(translatedEx!=null) return translatedEx;
                 }
 
-                /* (null-able) converts javax.persistence exceptions to Spring's hierarchy
+                /* (null-able) converts jakarta.persistence exceptions to Spring's hierarchy
                  * However, don't let
                  * org.springframework.orm.jpa.EntityManagerFactoryUtils.convertJpaAccessExceptionIfPossible(RuntimeException)
                  * translate those 2 generic ones ... */
@@ -219,7 +220,7 @@ public class CausewayModulePersistenceJpaEclipselink extends JpaBaseConfiguratio
              * Template method for extracting a SQL String from the given exception.
              * <p>Default implementation always returns {@code null}. Can be overridden in
              * subclasses to extract SQL Strings for vendor-specific exception classes.
-             * @param ex the JDOException, containing a SQLException
+             * @param ex the throwable to be processed, typically containing some sort of SQL Exception
              * @return the SQL String, or {@code null} if none found
              */
             private String extractSqlStringFromException(final Throwable ex) {

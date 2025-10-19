@@ -25,7 +25,6 @@ import java.util.function.Function;
  * SPI to help {@link Exception} root cause finding.
  * <p>
  * Either returns a more specific {@link Throwable} or an {@link Optional#empty()}.
- * @apiNote Specifically introduced to handle JDOException's {@code Throwable[] nested}.
  *
  * @since 2.0 {@index}
  */

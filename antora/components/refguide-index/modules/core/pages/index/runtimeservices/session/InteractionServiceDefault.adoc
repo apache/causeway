@@ -9,7 +9,7 @@ Default implementation of xref:refguide:applib:index/services/iactnlayer/Interac
 .InteractionServiceDefault.java
 ----
 class InteractionServiceDefault {
-  InteractionServiceDefault(MetamodelEventService runtimeEventService, SpecificationLoader specificationLoader, ServiceInjector serviceInjector, TransactionServiceSpring transactionServiceSpring, ClockService clockService, Provider<CommandPublisher> commandPublisherProvider, ConfigurableBeanFactory beanFactory, InteractionIdGenerator interactionIdGenerator)
+  InteractionServiceDefault(MetamodelEventService runtimeEventService, Provider<SpecificationLoader> specificationLoaderProvider, ServiceInjector serviceInjector, TransactionServiceSpring transactionServiceSpring, ClockService clockService, Provider<CommandPublisher> commandPublisherProvider, ConfigurableBeanFactory beanFactory, InteractionIdGenerator interactionIdGenerator)
   void init(ContextRefreshedEvent event)
   int getInteractionLayerCount()
   InteractionLayer openInteraction()

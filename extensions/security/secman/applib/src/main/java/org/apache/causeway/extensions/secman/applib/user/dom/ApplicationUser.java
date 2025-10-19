@@ -633,10 +633,9 @@ public abstract class ApplicationUser
         for (final RoleMemento role : currentUser.roles()) {
             final String roleName = role.name();
             if(adminRoleName.equals(roleName)) return true;
-
-            // format could also be realmName:roleName, eg. with Shiro
-            // since we don't know what the realm's name is (depends on its configuration in shiro.ini),
-            // simply check that the last part matches the role name.
+            // format might also be realmName:roleName
+            // since we don't know what the realm's name,
+            // we simply check that the last part matches the role name.
             if(roleName.endsWith(adminRoleSuffix)) return true;
         }
         return false;

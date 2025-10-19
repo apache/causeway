@@ -5,7 +5,9 @@
 
 
 This guide describes the integration of Spring security's OAuth2 client.
-Authentication is done via OAuth2 and authorization via either Shiro or Secman.
+Authentication is done via OAuth2 and authorization can be done using another implementation, typically using xref:security:secman:about.adoc[Secman security] module (with roles/permissions defined as domain entities).
+But if the roles/permissions are static then using the xref:security:simple:about.adoc[Simple security] module is another alternative.
+We show both integrations on this page.
 
 include::docs:mavendeps:partial$setup-and-configure-dependencyManagement.adoc[leveloffset=+1]
 
@@ -37,7 +39,7 @@ Using this, it provides an implementation of the xref:security:spring:about.adoc
 
 
 [#walk-through-oauth2]
-== Walk-through (Oauth with Github and Shiro authorizor)
+== Walk-through (Oauth with Github and Simple authorizor)
 
 Using Spring Security we can configure your app with various authentication providers.
 In this section we describe how to modify the xref:docs:starters:helloworld.adoc[HelloWorld] starter app to use link:https://github.com[github] as an OAuth2 provider.
@@ -55,32 +57,66 @@ In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], im
 @Import({
         ...
         CausewayModuleExtSpringSecurityOAuth2.class,    // <.>
-        AuthorizorShiro.class,                          // <.>
+        SimpleAuthorizor.class,                         // <.>
         ...
 })
 public class AppManifest {
 }
 ----
 <.> The `CausewayModuleExtSpringSecurityOAuth2` module brings in a transitive dependency on `CausewayModuleSecuritySpring`.
-<.> An implementation of `Authorizor` is also required.
-For the purpose of this walkthrough, we'll use the implementation provided by xref:security:shiro:about.adoc[Shiro], namely `AuthorizorShiro`.
 
-[IMPORTANT]
-====
-Make sure that no other `CausewayModuleSecurityXxx` module is imported, either directly or indirectly.
-====
-
-To use the Shiro authorizor, also add in the corresponding dependency:
+Add in the corresponding Maven dependency:
 
 [source,xml,subs="attributes+"]
 .pom.xml
 ----
 <dependencies>
+    ...
     <dependency>
-        <groupId>org.apache.causeway.security</groupId>
-        <artifactId>causeway-security-shiro</artifactId>
+        <groupId>org.apache.causeway.extensions</groupId>
+        <artifactId>causeway-extensions-spring-security-oauth2</artifactId>
+
         <version>{page-causewayreleaseversion}</version>
     </dependency>
+    ...
+</dependencies>
+----
+
+To use the Simple authorizor, add in a reference to its authorizor:
+
+[source,java]
+.AppManifest.java
+----
+@Configuration
+@Import({
+        ...
+        CausewayModuleExtSpringSecurityOAuth2.class,
+        SimpleAuthorizor.class,                         // <.>
+        ...
+})
+public class AppManifest {
+}
+----
+<.> reference `SimpleAuthorizor` directly.
++
+[IMPORTANT]
+====
+We do _not_ reference all of `CausewayModuleSecuritySimple` module, as that would bring in the `SimpleAuthenticator` service, which we don't require.
+====
+
+We also need to add a dependency in Maven:
+
+[source,xml,subs="attributes+"]
+.pom.xml
+----
+<dependencies>
+    ...
+    <dependency>
+        <groupId>org.apache.causeway.security</groupId>
+        <artifactId>causeway-security-simple</artifactId>
+        <version>{page-causewayreleaseversion}</version>
+    </dependency>
+    ...
 </dependencies>
 ----
 
@@ -135,31 +171,39 @@ Next, add in `LoginController` to the `AppManifest`.
 @Import({
         ...
         CausewayModuleExtSpringSecurityOAuth2.class,
-        AuthorizorShiro.class,
+        SimpleAuthorizor.class,
         LoginController.class,
         ...
 })
 public class AppManifest {
+
 }
 ----
 
-Next configure authenticationStrategy and permissionResolver for realms, and add the userId:
+=== Configure permissions
 
-[source,ini]
-.shiro.ini
+With xref:security:simple:about.adoc[Simple] security module, roles and permissions are provided by a `SimpleRealm` service.
+This can be created for example as a bean within `AppManifest`:
+
+[source,java]
+.AppManifest.java
 ----
-[main]
-authenticationStrategy=org.apache.causeway.extensions.secman.delegated.shiro.realm.AuthenticationStrategyForSecMan
-securityManager.authenticator.authenticationStrategy = $authenticationStrategy
-securityManager.realms = $iniRealm
-permissionResolver = org.apache.causeway.security.shiro.authorization.CausewayPermissionResolver
-iniRealm.permissionResolver = $permissionResolver
-...
-[users]
-...
-your.id = ,admin_role
-...
+// ...
+public class AppManifest {
+
+    @Bean
+    public SimpleRealm realm() {                // <.>
+        String unusedPassword = null;
+        return new SimpleRealm()
+            .addRole("admin_role", id->Grant.CHANGE)
+            .addUser("danhaywood@apache.org", unusedPassword, List.of("admin_role"))
+;
+    }
+}
 ----
+<.> return a realm of required roles and permissions
+
+Consult the xref:security:simple:about.adoc[Simple] security module documentation for further details on creating a `SimpleRealm`.
 
 Lastly (and optionally), the swagger/REST API is not configured for oauth2, so we replace the `index.html` page with one to redirect straight to the xref:vw::about.adoc[Wicket Viewer]:
 
@@ -269,7 +313,7 @@ public class AppManifest {
     // ...
 }
 ----
-<.> Using secman for permissions (rather than Shiro, as was described in the xref:#walk-through-oauth2[github walkthrough] above)
+<.> Using secman for permissions
 <.> We'll use Spring APIs to configure the authentication flows
 
 For the purpose of this walkthrough, we'll use the implementation provided by xref:security:secman:setting-up-with-spring-oauth2.adoc[SecMan].

@@ -60,18 +60,11 @@ public interface RepositoryService {
     EntityState getEntityState(@Nullable Object object);
 
     /**
-     * Usually called as a precursor to persisting a domain entity, this method
-     * verifies that the object is an entity and injects domain services into
-     * it.
+     * Creates a new detached entity instance, with injection points resolved.
      *
      * <p>
-     *     This approach allows the domain entity to have regular constructor
-     *     (with parameters) to set up the initial state of the domain object.
-     *     This is preferred over {@link #detachedEntity(Class)}, which
-     *     also instantiates the class and then injects into it - but requires
-     *     that the domain object has a no-arg constructor to do so.
+     * The entity will not yet be persisted, in other words: it is not yet known to the persistence layer.
      * </p>
-     *
      *
      * <p>
      * This is the same functionality as exposed by
@@ -277,10 +270,9 @@ public interface RepositoryService {
      *     multiple instances, where a
      *     {@link org.apache.causeway.applib.query.NamedQuery} can be passed in
      *     that ultimately describes a SELECT query with WHERE predicates.
-     *     The mechanism by which this is defined depends on the ORM (JDO or
-     *     JPA).  A {@link org.apache.causeway.applib.query.NamedQuery} can
-     *     optionally specify a
-     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range} of instances to be returned.
+     *     A {@link org.apache.causeway.applib.query.NamedQuery} can optionally specify a
+     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range}
+     *     of instances to be returned.
      * </p>
      *
      * <p>
@@ -335,10 +327,9 @@ public interface RepositoryService {
      *     no more than one instance, where a
      *     {@link org.apache.causeway.applib.query.NamedQuery} can be passed in
      *     that ultimately describes a SELECT query with WHERE predicates.
-     *     The mechanism by which this is defined depends on the ORM (JDO or
-     *     JPA).  A {@link org.apache.causeway.applib.query.NamedQuery} can
-     *     optionally specify a
-     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range} of instances to be returned.
+     *     A {@link org.apache.causeway.applib.query.NamedQuery} can optionally specify a
+     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range}
+     *     of instances to be returned.
      * </p>
      *
      * <p>
@@ -386,10 +377,9 @@ public interface RepositoryService {
      *     the first matching instance, where a
      *     {@link org.apache.causeway.applib.query.NamedQuery} can be passed in
      *     that ultimately describes a SELECT query with WHERE predicates.
-     *     The mechanism by which this is defined depends on the ORM (JDO or
-     *     JPA).  A {@link org.apache.causeway.applib.query.NamedQuery} can
-     *     optionally specify a
-     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range} of instances to be returned.
+     *     A {@link org.apache.causeway.applib.query.NamedQuery} can optionally specify a
+     *     {@link org.apache.causeway.applib.query.NamedQuery#withRange(QueryRange) range}
+     *     of instances to be returned.
      * </p>
      *
      * <p>

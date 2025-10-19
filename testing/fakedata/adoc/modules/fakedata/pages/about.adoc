@@ -122,13 +122,11 @@ This provides numerous methods, each for a specific data type, providing an obje
 
 * xref:refguide:testing:index/fakedata/applib/services/JavaSqlDates.adoc[JavaSqlDates]
 * xref:refguide:testing:index/fakedata/applib/services/JavaSqlTimestamps.adoc[JavaSqlTimestamps]
-* xref:refguide:testing:index/fakedata/applib/services/JavaTimeDateTimes.adoc[JavaTimeDateTimes]
-* xref:refguide:testing:index/fakedata/applib/services/JavaTimeLocalDates.adoc[JavaTimeLocalDates]
-* xref:refguide:testing:index/fakedata/applib/services/JavaTimePeriods.adoc[JavaTimePeriods]
+* xref:refguide:testing:index/fakedata/applib/services/LocalDates.adoc[LocalDates] (`java.time`)
+* xref:refguide:testing:index/fakedata/applib/services/ZonedDateTimes.adoc[ZonedDateTimes] (`java.time`)
+* xref:refguide:testing:index/fakedata/applib/services/OffsetDateTimes.adoc[OffsetDateTimes] (`java.time`)
+* xref:refguide:testing:index/fakedata/applib/services/Periods.adoc[Periods] (`java.time`)
 * xref:refguide:testing:index/fakedata/applib/services/JavaUtilDates.adoc[JavaUtilDates]
-* xref:refguide:testing:index/fakedata/applib/services/JodaDateTimes.adoc[JodaDateTimes]
-* xref:refguide:testing:index/fakedata/applib/services/JodaLocalDates.adoc[JodaLocalDates]
-* xref:refguide:testing:index/fakedata/applib/services/JodaPeriods.adoc[JodaPeriods]
 
 
 Note: these require the xref:refguide:applib:index/services/clock/ClockService.adoc[ClockService] to be injected through the constructor):

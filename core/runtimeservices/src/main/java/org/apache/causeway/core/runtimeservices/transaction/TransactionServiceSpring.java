@@ -168,50 +168,6 @@ implements
         }
     }
 
-//    @Override
-//    public void nextTransaction() {
-//
-//        var txManager = singletonTransactionManagerElseFail();
-//
-//        try {
-//
-//            var txTemplate = new TransactionTemplate(txManager);
-//            txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-//
-//            // either reuse existing or create new
-//            var txStatus = txManager.getTransaction(txTemplate);
-//            if(txStatus.isNewTransaction()) {
-//                // we have created a new transaction, so we are done
-//                return;
-//            }
-//            // we are reusing an exiting transaction, so end it and create a new one afterwards
-//            if(txStatus.isRollbackOnly()) {
-//                txManager.rollback(txStatus);
-//            } else {
-//                //XXX we removed the entire method, because of following subtlety
-                  // If the transaction wasn't a new one, omit the commit for proper participation in
-//                // the surrounding transaction. If a previous transaction has been suspended to be
-//                // able to create a new one, resume the previous transaction after committing the new one.
-//                txManager.commit(txStatus);
-//           }
-//
-//            // begin a new transaction
-//            txManager.getTransaction(txTemplate);
-//
-//        } catch (RuntimeException ex) {
-//
-//            var translatedEx = translateExceptionIfPossible(ex, txManager);
-//
-//            if(translatedEx instanceof RuntimeException) {
-//                throw ex;
-//            }
-//
-//            throw new RuntimeException(ex);
-//
-//        }
-//
-//    }
-
     @Override
     public void flushTransaction() {
 

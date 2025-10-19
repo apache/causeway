@@ -12,6 +12,11 @@ This class provides support for an alternative approach, where the Causeway xref
 Example usage:
 
 ----
+    @AttributeOverrides({
+        @AttributeOverride(name="name",    column=@Column(name="attachment_name")),
+        @AttributeOverride(name="mimeType",column=@Column(name="attachment_mimeType")),
+        @AttributeOverride(name="bytes",   column=@Column(name="attachment_bytes"))
+    })
     @Embedded
     private BlobJpaEmbeddable pdf;
 
@@ -25,7 +30,7 @@ Example usage:
     }
 ----
 
-Lastly; note that _jakarta.persistence.AttributeOverrides_ and _jakarta.persistence.AttributeOverride_ provide a standardised way of fine-tuning the column definitions.
+The _jakarta.persistence.AttributeOverrides_ and _jakarta.persistence.AttributeOverride_ attributes allow the column definitions to be fine-tuned.
 
 == API
 

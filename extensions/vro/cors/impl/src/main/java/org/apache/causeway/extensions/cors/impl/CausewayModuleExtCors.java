@@ -54,7 +54,7 @@ public class CausewayModuleExtCors {
         if(!restfulBase.endsWith("/*")) {
             restfulBase = restfulBase + "/*";
         }
-        log.info("Setting up CORS to filter resteasy-base at '{}' with {}",
+        log.info("Setting up CORS to filter RO base path at '{}' with {}",
                 restfulBase,
                 causewayConfiguration.extensions().cors());
 

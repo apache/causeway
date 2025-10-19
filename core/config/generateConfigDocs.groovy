@@ -139,13 +139,6 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "causeway.security.shiro"
-    name = "Shiro Security Implementation"
-    properties: []
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "causeway.security.keycloak"
     name = "Keycloak Security Implementation"
     properties: []
@@ -184,21 +177,8 @@ groups+= new PropertyGroup() {{
 }}
 
 groups+= new PropertyGroup() {{
-    prefix = "datanucleus"
-    name = "DataNucleus Configuration"
-    properties: []
-    searchOrder = 100
-}}
-
-groups+= new PropertyGroup() {{
     prefix = "eclipselink"
     name = "Eclipselink Configuration"
-    searchOrder = 501
-}}
-
-groups+= new PropertyGroup() {{
-    prefix = "resteasy"
-    name = "RestEasy Configuration"
     searchOrder = 501
 }}
 

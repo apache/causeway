@@ -80,11 +80,11 @@ Although integration tests re (necessarily) slower than unit tests, they are not
 Spring Boot will automatically inject dependencies into integration tests and services, and Apache Causeway extends this to also inject services into every domain object (entity or view model).
 This is most useful when writing unit tests; simply mock out the service and inject into the domain object.
 
-There are a number of syntaxes supported, but the simplest is to use `@javax.inject.Inject` annotation; for example:
+There are a number of syntaxes supported, but the simplest is to use `@jakarta.inject.Inject` annotation; for example:
 
 [source,java]
 ----
-@javax.inject.Inject
+@jakarta.inject.Inject
 CustomerRepository customers;
 ----
 

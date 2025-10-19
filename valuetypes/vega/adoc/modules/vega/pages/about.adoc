@@ -63,7 +63,7 @@ In those modules where there are domain objects that use the `Vega` value type:
     CausewayModuleValVegaApplib.class,
     // ...
 })
-public class MyModule { ... }
+public class MyModule {  }
 ----
 
 In addition, in the webapp module of your application, add the following dependencies:
@@ -79,17 +79,16 @@ In addition, in the webapp module of your application, add the following depende
 </dependency>
 ----
 
-* and for persistence:
+* and for persistence, using the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism:
 +
 [source,xml]
 .pom.xml
 ----
 <dependency>
     <groupId>org.apache.causeway.valuetypes</groupId>
-    <artifactId>causeway-valuetypes-vega-xxx</artifactId>   <!--.-->
+    <artifactId>causeway-valuetypes-vega-jpa</artifactId>
 </dependency>
 ----
-<.> where `xxx` is `jpa` (if using xref:pjpa::about.adoc[]) or `jdo` (if using xref:pjdo::about.adoc[]).
 
 And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the extension's implementation module:
 
@@ -99,13 +98,12 @@ And in your application's xref:userguide::modules.adoc#appmanifest[App Manifest]
 @Configuration
 @Import({
         CausewayModuleValVegaUiWkt.class,
-        CausewayModuleValVegaPersistenceXxx.class,  <!--.-->
-        ...
+        CausewayModuleValVegaPersistenceJpa.class,
+        // ...
 })
 public class AppManifest {
 }
 ----
-<.> where `Xxx` is `Jpa` (if using xref:pjpa::about.adoc[]) or `Jdo` (if using xref:pjdo::about.adoc[]).
 
 
 == Usage
@@ -124,18 +122,6 @@ If declared in an entity, then it should most likely be mapped to a CLOB:
 private Vega helpText;
 ----
 <.> maps to a (c)lob
-
-* if declared in an xref:pjdo::[JDO] entity:
-+
-[source,java]
-----
-@Property
-@PropertyLayout
-@Column(allowsNull = "false", jdbcType = "CLOB")        // <.>
-@Getter @Setter
-private Vega helpText;
-----
-<.> maps to a CLOB
 
 * if declared in a JAXB view model:
 +

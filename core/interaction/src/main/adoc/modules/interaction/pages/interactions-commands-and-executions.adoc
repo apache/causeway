@@ -20,7 +20,6 @@ The xref:refguide:testing:index/integtestsupport/applib/CausewayIntegrationTestA
 
 Integration tests can also simulate multiple interactions (HTTP requests) within a single test using xref:refguide:applib:index/services/iactnlayer/InteractionService.adoc#nextInteraction_[InteractionService#nextInteraction].
 When called, any state changes made in the previous `Interaction` will be committed, and any references to entities should be either discarded or else be re-retrieved in the next `Interaction`.
-(In the case of the JDO ORM, any entities from the previous `Interaction` will be reset to null when that `Interaction` completes).
 
 [#executions]
 === Executions
@@ -125,8 +124,7 @@ When the wrapped action is invoked, this will in effect be the top-level action 
 The `WrapperFactory` allows wrapped actions to be invoked synchronously or asynchronously.
 The former is more common, and is the process described above.
 
-If the wrapper is created for asynchronous invocation (using xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap()] or similar), then the framework passes an xref:refguide:applib:index/services/wrapper/callable/AsyncCallable.adoc[] (a subtype of `Callable`) to the configured `ExecutorService`.
-(The default `ExecutorService` is the simple `ForkJoinPool`, though this can be replaced if required).
+If the wrapper is created for asynchronous invocation (using xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap()] or similar), then the framework passes an xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[].
 
 The `AsyncCallable` interface is implemented by an internal framework class (`AsyncTask`).
 It's worth understanding the data that it holds and its behaviour:
@@ -176,11 +174,10 @@ An alternative approach is to use the `WrapperFactory` async API to persist the 
 If any of those commands fail, there is at least a record as to how they might have failed.
 This is the philosophy behind the xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService.adoc[], part of the xref:userguide:commandlog:about.adoc[Command Log] extension.
 
-Under the covers the `BackgroundService` calls `WrapperFactory`, but with a custom `ExecutorService` (the xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService] class) which simply persists the implied command as a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[].
+Under the covers the `BackgroundService` calls `WrapperFactory`, using a custom  xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl.CommandListener] which simply persists the implied command as a xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc[].
 Its xref:refguide:extensions:index/commandlog/applib/dom/CommandLogEntry.adoc#getExecuteIn_[executeIn] field indicates that the command is to be executed "in the background".
 
-The xref:userguide:commandlog:about.adoc[Command Log] extension also provides the xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[], which is a Quartz `Job` implementation.
-Conceptually this is similar to the `AsyncCallable` described xref:asynchronous-commands[previously], but will run (the ``CommandDto``s of) all queued ``CommandLogEntry``s, rather than just a single `CommandDto`.
+The xref:userguide:commandlog:about.adoc[Command Log] extension also provides the xref:refguide:extensions:index/commandlog/applib/job/RunBackgroundCommandsJob.adoc[], which is a Quartz `Job` implementation that runs each of the (``CommandDto``s of all) queued ``CommandLogEntry``s, rather than just a single `CommandDto`.
 
 To use the `RunBackgroundCommandsJob`, we configure Quartz to run it periodically, eg every 10 seconds.
 When run by Quartz, it performs these steps:

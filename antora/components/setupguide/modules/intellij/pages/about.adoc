@@ -45,10 +45,6 @@ image::015-import-project/040-project-structure.png[width="800px"]
 
 == Configuring
 
-//include::partial$UNUSED/file-templates.adoc[leveloffset=+2]
-//include::partial$UNUSED/live-templates.adoc[leveloffset=+2]
-//include::partial$UNUSED/coding-standards.adoc[leveloffset=+2]
-
 === Compiler Settings
 
 There are a number of compiler settings that influence the compiler.
@@ -69,7 +65,7 @@ image::040-other-settings-compiler/020-annotation-processor.png[width="1000px"]
 
 [TIP]
 ====
-If using xref:pjdo:ROOT:about.adoc[JDO/DataNucleus], this setting enables the generation of the `Q*` classes for DataNucleus type-safe queries.
+If using QueryDSL, this setting enables the generation of the `Q*` classes for type-safe queries.
 
 It is also required for frameworks such as link:https://projectlombok.org[Lombok].
 ====
@@ -115,9 +111,7 @@ Let's see how to run both the app and the tests.
 
 We run the application by creating a Run configuration, using `Run > Edit Configurations`.
 
-There is one complication, which is the ORM.
-If the app uses xref:pjpa:ROOT:about.adoc[JPA], then dynamic class weaving should be configured.
-If the app uses xref:pjdo:ROOT:about.adoc[JDO], then Datanucleus enhancer should be configured.
+We also configure dynamic class weaving for the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] ORM.
 
 
 === Running the App (JPA)
@@ -126,8 +120,7 @@ The screenshot below shows a run configuration for JPA:
 
 image::110-running-the-app/012-run-configuration-jpa.png[width=1000]
 
-
-With JPA, the classes need to be "weaved" in order to support lazy loading and (more performant) dirty object tracking.
+With xref:pjpa:ROOT:about.adoc[JPA/Eclipselink], the classes can optionally be "weaved" in order to support lazy loading and (more performant) dirty object tracking.
 This is typically done dynamically at runtime, using a Java agent.
 The xref:docs:starters:simpleapp.adoc[SimpleApp] and xref:docs:starters:helloworld.adoc[HelloWorld] starter apps demonstrate this, bundling the `spring-instrument.jar` file.
 To run, use:
@@ -138,54 +131,6 @@ To run, use:
 ----
 
 as a JVM argument (where the system properties also are located.)
-
-
-=== Running the App (JDO)
-
-DataNucleus requires that all entities are bytecode enhanced.
-When building from the command line using Maven, the `datanucleus:enhance` Maven plugin takes care of this.
-
-We can just have IntelliJ run the enhance as a separate run configuration before the run configuration that runs the app itself.
-
-First, set up the run configuration to do the enhance:
-
-.Run Configuration to enhance the entities
-image::110-running-the-app/005-datanucleus-enhance-run-configuration.png[width="700px"]
-
-TIP: Check "work offline" (in Maven Options) to speed this up slightly.
-
-[WARNING]
-====
-If on Windows you encounter "The command line is too long", then set '-Dfork=false' as a VM option, in Java options:
-
-image::110-running-the-app/006-datanucleus-enhance-run-configuration-fork-false.png[width="400px"]
-====
-
-Then, set up the run configuration for the app:
-
-.Run Configuration to run the app
-image::110-running-the-app/010-run-configuration.png[width="700px"]
-
-Note how it runs the "enhance" configuration first, specified using "Modify options".
-
-Because we are using Maven to enhance the app, build the app at least once from the Maven command line:
-
-[source,bash]
-----
-mvn install -DskipTests -T1C
-----
-
-You should now be able to run the app using `Run > Run Configuration`.
-The same configuration can also be used to debug the app if you so need.
-
-
-.Dynamic Enhancement ?
-[sidebar]
-****
-Rather than statically enhancing the classes, an alternative -- at least in theory -- is to enhance the classes dynamically, at runtime.
-
-There is an link:https://plugins.jetbrains.com/plugin/11119-datanucleus-runtime-enhancement[IntelliJ plugin] (not tested) that purports to support this, but (at time of writing) is out of date and only supports older versions of IntelliJ.
-****
 
 
 === Running the Unit Tests
@@ -210,14 +155,5 @@ image::110-running-the-app/045-running-integ-tests.png[width="800px"]
 There are also tests in the `webapp-tests` module:
 
 image::110-running-the-app/046-running-integ-tests-webapp-tests.png[width=800]
-
-If the app uses JDO, then the tests might fail because the entities won't have been enhanced.
-However, we can then easily update the automatically-created run configuration to run the datanucleus enhancer goal (same as when running the application):
-
-.Integration Tests Run Configuration
-image::110-running-the-app/050-running-integration-tests-run-configuration.png[width="700px"]
-
-// CAUTION: Make sure that the `search for tests` radio button is set to `In single module`.
-// If this radio button is set to one of the other options then you may obtain class loading issues.
 
 

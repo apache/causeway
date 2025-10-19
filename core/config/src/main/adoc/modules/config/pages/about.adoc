@@ -130,13 +130,18 @@ It looks like this:
 ----
 @Configuration
 @Import({
-        CausewayModuleCoreRuntimeServices.class,                    // <.>
-        CausewayModuleSecurityShiro.class,                          // <.>
-        CausewayModuleJpaEclipselink.class,                         // <.>
-        CausewayModuleViewerRestfulObjectsJaxrsResteasy4.class,     // <.>
-        CausewayModuleViewerWicketViewer.class,                     // <.>
+        CausewayModuleCoreRuntimeServices.class,            // <.>
+        CausewayModuleJpaEclipselink.class,                 // <.>
+        CausewayModuleSecuritySpring.class,                 // <.>
+        CausewayModuleExtSpringSecurityOauth2.class,        // <.>
+        CausewayModuleExtSecmanPersistenceJpa.class,        // <.>
+        CausewayModuleExtSecmanEncryptionSpring.class,      // <.>
+        CausewayModuleExtSecmanDelegatedSpringOauth2.class, // <.>
+        CausewayModuleViewerRestfulObjectsViewer.class,     // <.>
+        CausewayModuleViewerGraphqlViewer.class,            // <.>
+        CausewayModuleViewerWicketViewer.class,             // <.>
         ...
-        ApplicationModule.class,                                // <.>
+        ApplicationModule.class,                            // <.>
         ...
 })
 public class AppManifest {
@@ -144,15 +149,14 @@ public class AppManifest {
 ----
 
 <.> Mandatory - specifies the core of the Apache Causeway framework
-<.> Enables the Shiro security mechanism.
-There are several security implementations, precisely one must be selected
-<.> Enables xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] for persistence.
-+
-Alternatively, `CausewayModuleJdoDataNucleus5.class` would be specified in order to use xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] instead.
-+
-Optional (though if omitted then only xref:userguide:ROOT:view-models.adoc[view models] may be used, with hand-rolled persistence).
-
+<.> Enables the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store as the persistence mechanism.
+<.> Enables the xref:security:spring:about.adoc[Spring Security], which configures Spring filters to perform authentication.
+<.> Enables the xref:security:spring-oauth2:about.adoc[] extension, that in particular configures Spring for Oauth2.
+<.> Enables the xref:security:secman:about.adoc[Secman] security module, which provides both authorisation (users, roles, permissions) and authentication (although Spring's authentication takes precedence).
+<.> Configures Secman to use JPA for persistence.
+<.> Configures Secman to auto-create delegated users if authenticated by Spring.
 <.> Enables the xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+<.> Enables the xref:gqlv:ROOT:about.adoc[GraphQL API (GraphQL viewer)].
 <.> Enables the xref:vw:ROOT:about.adoc[Web UI (Wicket viewer)]
 <.> References the application's module(s), in this case just the one, `ApplicationModule`. +
 
@@ -173,7 +177,7 @@ The remainder of this guide lists the various configuration properties available
 === CausewayConfiguration domain service
 
 Applications can discover the current configuration properties for the framework (under the `causeway` top-level key) by injecting the `CausewayConfiguration` domain service.
-There are similar domain services for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`), xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] (`DatanucleusConfiguration`) and RestEasy (`RestEasyConfiguration`), as used by xref:vro:ROOT:about.adoc[REST API (Restful Objects viewer)].
+There is a similar domain service for xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] (`EclipselinkConfiguration`).
 
 Applications can also create their own configuration properties file; the xref:docs:starters:simpleapp.adoc[simpleapp] starter app provides an example.
 

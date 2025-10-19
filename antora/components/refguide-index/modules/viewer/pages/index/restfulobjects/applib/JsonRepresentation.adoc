@@ -9,9 +9,6 @@ A wrapper around _JsonNode_ that provides some additional helper methods.
 .JsonRepresentation.java
 ----
 class JsonRepresentation {
-  public static final DateTimeFormatter yyyyMMdd;
-  public static final DateTimeFormatter yyyyMMddTHHmmssZ;
-  public static final DateTimeFormatter _HHmmss;
   JsonRepresentation(JsonNode jsonNode)
   JsonRepresentation jsonAsMap(String keyValuePairsAsJson)
   JsonRepresentation newMap(String... keyValuePairs)
@@ -35,12 +32,6 @@ class JsonRepresentation {
   Number asNumber()
   boolean isIntegralNumber(String path)     // <.>
   boolean isIntegralNumber()     // <.>
-  java.util.Date getDate(String path)
-  java.util.Date asDate()
-  java.util.Date getDateTime(String path)
-  java.util.Date asDateTime()
-  java.util.Date getTime(String path)
-  java.util.Date asTime()
   boolean isBoolean(String path)
   boolean isBoolean()
   Boolean getBoolean(String path)     // <.>
@@ -92,7 +83,7 @@ class JsonRepresentation {
   JsonRepresentation getNull(String path)     // <.>
   JsonRepresentation asNull()     // <.>
   LinkRepresentation mapValueAsLink()     // <.>
-  InputStream asInputStream()
+  InputStream asInputStream()     // <.>
   T as(Class<T> cls)     // <.>
   String asUrlEncoded()
   JsonRepresentation arrayAdd(Object value)
@@ -314,10 +305,15 @@ Either returns a xref:refguide:viewer:index/restfulobjects/applib/JsonRepresenta
 --
 Convert a representation that contains a single node representing a link into a xref:refguide:viewer:index/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
 --
+<.> xref:#asInputStream_[asInputStream()]
++
+--
+Returns the underlying JSON (UTF-8 String) as _ByteArrayInputStream_ .
+--
 <.> xref:#as_Class[as(Class)]
 +
 --
-Convenience to simply "downcast".
+Convenience to simply 'downcast'.
 --
 <.> xref:#ensureArray_[ensureArray()]
 +
@@ -501,10 +497,15 @@ Use _#isNull()_ to check first, if required.
 
 Convert a representation that contains a single node representing a link into a xref:refguide:viewer:index/restfulobjects/applib/LinkRepresentation.adoc[LinkRepresentation] .
 
+[#asInputStream_]
+=== asInputStream()
+
+Returns the underlying JSON (UTF-8 String) as _ByteArrayInputStream_ .
+
 [#as_Class]
 === as(Class)
 
-Convenience to simply "downcast".
+Convenience to simply 'downcast'.
 
 In fact, the method creates a new instance of the specified type, which shares the underlying _#jsonNode jsonNode_ .
 

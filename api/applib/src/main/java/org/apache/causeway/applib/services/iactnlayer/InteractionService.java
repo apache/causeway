@@ -26,19 +26,18 @@ import org.apache.causeway.commons.functional.Try;
 import org.jspecify.annotations.NonNull;
 
 /**
- * A low-level service to programmatically &quot;connect&quot; (or create a
- * session, or interact with; choose your term) the framework's runtime.
+ * A low-level service to programmatically create a short-lived interaction or session.
+ *
+ * <p>
+ *     You could think of this as analogous to an {@link java.net.http.HttpRequest} or
+ *     a JPA {@link jakarta.persistence.EntityManager} or a Hibernate Session.
+ * </p>
  *
  * <p>
  *     This service is used internally by the framework itself, for example
  *     when a viewer receives a request a new {@link InteractionLayer} is created
  *     for the duration of the users's interaction.  It is also used by integration
  *     tests, to be able to connect to the database.
- * </p>
- *
- * <p>
- *     You could think of this as analogous to an <code>HttpRequest</code>, or
- *     a JPA <code>EntityManager</code> or JDO <code>PersistenceManager</code>.
  * </p>
  *
  * <p>

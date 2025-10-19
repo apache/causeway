@@ -442,8 +442,8 @@ public @interface DomainObject {
      * Fine-tunes how auto-complete queries work, Whether to use the value of this (string) property for auto.
      *
      * <p>
-     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
-     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     *     NOTE: this feature requires that the <code>querydsl-jpa</code> module is included as part of the
+     *     application manifest.  Otherwise, no autocomplete will be generated.
      * </p>
      *
      * <p>
@@ -468,8 +468,8 @@ public @interface DomainObject {
      * </p>
      *
      * <p>
-     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
-     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     *     NOTE: this feature requires that the <code>querydsl-jpa</code> module is included as part of the
+     *     application manifest.  Otherwise, no autocomplete will be generated.
      * </p>
      *
      * @see #queryDslAutoCompleteMinLength()
@@ -492,8 +492,8 @@ public @interface DomainObject {
      * </p>
      *
      * <p>
-     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
-     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     *     NOTE: this feature requires that the <code>querydsl-jpa</code> module is included as part of the
+     *     application manifest.  Otherwise, no autocomplete will be generated.
      * </p>
      *
      * @see #queryDslAutoCompleteAdditionalPredicateMethod()
@@ -509,8 +509,8 @@ public @interface DomainObject {
      * added to the autocomplete (for example to search only for current or active objects).
      *
      * <p>
-     *     NOTE: this feature requires that the <code>querydsl-xxx</code> module (for JDO or JPA as required) is
-     *     included as part of the application manifest.  Otherwise, no autocomplete will be generated.
+     *     NOTE: this feature requires that the <code>querydsl-jpa</code> module is included as part of the
+     *     application manifest.  Otherwise, no autocomplete will be generated.
      * </p>
      *
      * @see #queryDslAutoCompleteMinLength()

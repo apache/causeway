@@ -51,16 +51,15 @@ public interface EntityChangeTracker extends DisposableBean {
      *
      * <p>
      * The post-modification values are captured when the transaction commits.
+     * </p>
      *
      * <p>
-     * Overload as an optimization for ORMs (specifically, JPA) where already have access to the changed records by
-     * accessing the ORM-specific data structures (<code>EntityManager</code>'s unit-of-work).
-     *
+     * Overload is an optimization for the JPA object store where we already have access to the changed records by
+     * accessing the ORM-specific data structures ({@link jakarta.persistence.EntityManager}'s &quot;unit-of-work&quot;).
      * </p>
      *
      * @param entity
-     * @param propertyChangeRecordSupplier - optional parameter (as a performance optimization)
-     *      to provide the pre-computed {@link PropertyChangeRecord}s from the ORM.  JPA does this, JDO does not.
+     * @param propertyChangeRecordSupplier - provide the pre-computed {@link PropertyChangeRecord}s from the ORM; supported by JPA.
      */
     void enlistUpdating(ManagedObject entity, @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier);
 

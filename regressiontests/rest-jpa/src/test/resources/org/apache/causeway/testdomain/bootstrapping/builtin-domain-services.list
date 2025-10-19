@@ -29,7 +29,6 @@ org.apache.causeway.core.runtimeservices.urlencoding.UrlEncodingServiceWithCompr
 org.apache.causeway.extensions.fixtures.fixturescripts.FixtureScripts
 ServiceRegistryDefault
 UserServiceDefault$SudoServiceSpi
-org.apache.causeway.persistence.jdo.datanucleus.metrics.MetricsServiceForJdo
 CommandDtoFactoryDefault
 org.apache.causeway.core.runtimeservices.confmenu.ConfigurationViewServiceDefault
 org.apache.causeway.core.runtimeservices.email.EmailServiceDefault

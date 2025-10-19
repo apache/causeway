@@ -14,13 +14,13 @@ This interface is EXPERIMENTAL and may change in the future.
 ----
 class RepresentationService {
   RepresentationService(List<ContentNegotiationService> contentNegotiationServices)
-  Response objectRepresentation(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
-  Response propertyDetails(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
-  Response collectionDetails(IResourceContext resourceContext, ManagedCollection objectAndCollection)     // <.>
-  Response actionPrompt(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
-  Response actionResult(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
-  void assertContentNegotiationServiceHandled(Response.ResponseBuilder responseBuilder)
-  Response.ResponseBuilder buildResponse(Function<ContentNegotiationService, Response.ResponseBuilder> connegServiceBuildResponse)     // <.>
+  ResponseEntity<Object> objectRepresentation(IResourceContext resourceContext, ManagedObject objectAdapter)     // <.>
+  ResponseEntity<Object> propertyDetails(IResourceContext resourceContext, ManagedProperty objectAndProperty)     // <.>
+  ResponseEntity<Object> collectionDetails(IResourceContext resourceContext, ManagedCollection objectAndCollection)     // <.>
+  ResponseEntity<Object> actionPrompt(IResourceContext resourceContext, ManagedAction objectAndAction)     // <.>
+  ResponseEntity<Object> actionResult(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)     // <.>
+  ResponseEntity<T> assertContentNegotiationServiceHandled(ResponseEntity<T> responseBuilder)
+  ResponseEntity<Object> buildResponse(Function<ContentNegotiationService, ResponseEntity<Object>> connegServiceBuildResponse)     // <.>
 }
 ----
 
@@ -62,35 +62,25 @@ Iterates over all _#contentNegotiationServices injected_ xref:refguide:viewer:in
 
 Returns a representation of a single object.
 
-By default this representation is as per section 14.4 of the RO spec, v1.0.
-
 [#propertyDetails_IResourceContext_ManagedProperty]
 === propertyDetails(IResourceContext, ManagedProperty)
 
 Returns a representation of a single property of an object.
-
-By default this representation is as per section 16.4 of the RO spec, v1.0.
 
 [#collectionDetails_IResourceContext_ManagedCollection]
 === collectionDetails(IResourceContext, ManagedCollection)
 
 Returns a representation of a single collection of an object.
 
-By default this representation is as per section 17.5 of the RO spec, v1.0.
-
 [#actionPrompt_IResourceContext_ManagedAction]
 === actionPrompt(IResourceContext, ManagedAction)
 
 Returns a representation of a single action (prompt) of an object.
 
-By default this representation is as per section 18.2 of the RO spec, v1.0.
-
 [#actionResult_IResourceContext_ObjectAndActionInvocation]
 === actionResult(IResourceContext, ObjectAndActionInvocation)
 
 Returns a representation of a single action invocation of an object.
-
-By default this representation is as per section 19.5 of the RO spec, v1.0.
 
 [#buildResponse_Function]
 === buildResponse(Function)

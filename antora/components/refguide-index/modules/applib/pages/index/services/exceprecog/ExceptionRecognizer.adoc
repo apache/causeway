@@ -5,7 +5,7 @@ Domain service to (attempt) to recognize certain exceptions, and return user-fri
 
 Rather than redirecting to a general-purpose error page, the message (corresponding to the recognized exception) is rendered as a regular validation message.
 
-For example, a set of recognizers are provided for the JPA and JDO persistence mechanisms in order to recognize and handle SQL constraint exceptions such as uniqueness violations. These can then be rendered back to the user as expected errors, rather than fatal stacktraces.
+For example, a set of recognizers are provided for the JPA object store in order to recognize and handle SQL constraint exceptions such as uniqueness violations. These can then be rendered back to the user as expected errors, rather than fatal stacktraces.
 
 More than one implementation of xref:refguide:applib:index/services/exceprecog/ExceptionRecognizer.adoc[ExceptionRecognizer] can be registered; they will all be consulted (in the order as specified by Spring's _org.springframework.core.annotation.Order_ annotation) to determine if they recognize the exception. The message returned by the first service recognizing the exception is used.
 

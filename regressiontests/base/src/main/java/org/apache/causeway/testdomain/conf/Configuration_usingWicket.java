@@ -111,17 +111,6 @@ public class Configuration_usingWicket {
 
         // -- BOOK PAGE
 
-        /** strange asymmetry with JPA, to investigate another day */
-        public static final String BOOK_DELETE_ACTION_JDO = "theme:domainObjectContainer:domainObject:rows:2"
-                + ":rowContents:1"
-                + ":col:rows:1:rowContents:1:col:tabGroups:1"
-                + ":panel:tabPanel"
-                + ":rows:1:rowContents:1"
-                + ":col:fieldSets:1:memberGroup"
-                + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:actionLink";
-
-        /** strange asymmetry with JDO, to investigate another day */
         public static final String BOOK_DELETE_ACTION_JPA = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
                 + ":col:rows:1:rowContents:1:col:tabGroups:1"
@@ -160,12 +149,6 @@ public class Configuration_usingWicket {
                     + ":rowContents:1"
                     + ":col:fieldSets:1"
                     + ":memberGroup:properties:1"
-                    + ":property"),
-            JDO_BOOK_ISBN("theme:domainObjectContainer:domainObject:rows:2"
-                    + ":rowContents:1:col:rows:1:rowContents:1"
-                    + ":col:tabGroups:1:panel:tabPanel:rows:1:rowContents:1:col"
-                    + ":fieldSets:1"
-                    + ":memberGroup:properties:3"
                     + ":property"),
             JPA_BOOK_ISBN("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1:col:rows:1:rowContents:1"

@@ -4,7 +4,7 @@
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-The _Execution Log_ extension provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] or xref:pjdo:ROOT:about.adoc[JDO/DataNucleus] object store.
+The _Execution Log_ extension provides an implementation of xref:refguide:applib:index/services/publishing/spi/ExecutionSubscriber.adoc[ExecutionSubscriber] that persists xref:refguide:applib:index/services/iactn/Execution.adoc[Execution]s using either the xref:pjpa:ROOT:about.adoc[JPA/EclipseLink] object store.
 
 
 One use case is to combine with the xref:security:audittrail:about.adoc[] extension.
@@ -39,7 +39,7 @@ Add an entry for the _Execution Log_ module's own BOM:
 [#dependencies]
 === Dependencies / Imports
 
-In the webapp module of your application, add the following dependency:
+In the webapp module of your application, add the following dependency for the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] object store:
 
 [source,xml]
 .pom.xml
@@ -47,32 +47,25 @@ In the webapp module of your application, add the following dependency:
 <dependencies>
     <dependency>
         <groupId>org.apache.causeway.extensions</groupId>
-        <artifactId>causeway-extensions-executionlog-persistence-XXX</artifactId>    <!--.-->
+        <artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
     </dependency>
 </dependencies>
 ----
-<.> either:
-** `causeway-extensions-executionlog-persistence-jpa` (xref:pjpa::about.adoc[]), or
-** `causeway-extensions-executionlog-persistence-jdo` (xref:pjdo::about.adoc[])
 
 In your application's xref:userguide::modules.adoc#appmanifest[App Manifest], import the _ExecutionLog_ modules.
-The exact modules to use will depend upon the persistence mechanism in use:
+For the xref:pjpa:ROOT:about.adoc[JPA/Eclipselink] persistence mechanism, use:
 
 [source,java]
 .AppManifest.java
 ----
 @Configuration
 @Import({
-        ...
-        CausewayModuleExtExecutionLogPersistenceXxx.class,        // <.>
-        ...
+        CausewayModuleExtExecutionLogPersistenceJpa.class,
+        // ...
 })
 public class AppManifest {
 }
 ----
-<.> either:
-** `CausewayModuleExtExecutionLogPersistenceJdo` (xref:pjpa::about.adoc[]), or
-** `CausewayModuleExtExecutionLogPersistenceJpa` (xref:pjdo::about.adoc[])
 
 If using xref:security:secman:about.adoc[], you will also need to import the xref:testing:fixtures:about.adoc[Fixture] module; SecMan uses fixture scripts to seed its entities.
 

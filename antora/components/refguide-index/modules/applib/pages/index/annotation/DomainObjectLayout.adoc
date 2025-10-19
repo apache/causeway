@@ -102,7 +102,7 @@ Indicates the CSS class that a domain class (type) should have, to allow more ta
 
 TheFont AwesomeCSS class that is used as icon for the annotated domain object.
 
-Use the _FontAwesomeLayers iconFaLayers()_ object support method for more advanced icons.
+Use the _icon(..)_ object support method for more advanced icons.
 
 [#cssClassFaPosition]
 === cssClassFaPosition

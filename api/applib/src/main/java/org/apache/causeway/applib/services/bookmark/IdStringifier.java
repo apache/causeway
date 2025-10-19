@@ -24,8 +24,7 @@ import org.jspecify.annotations.NonNull;
 
 /**
  * SPI to convert the identifier (primary key) of an entity, of a given type (eg Integer) into a string, and
- * to convert back again into the key object used to actually look up the target entity instance;
- * supported by both JDO and JPA persistence mechanisms.
+ * to convert back again into the key object used to actually look up the target entity instance.
  *
  * <p>
  *     This is ultimately used by {@link BookmarkService} where we hold a persistent reference to an entity.  The
@@ -34,9 +33,9 @@ import org.jspecify.annotations.NonNull;
  * </p>
  *
  * <p>
- *     The framework provides default implementations of this SPI for JDO (data store and application identity) and
- *     for JPA. Because this is a SPI, other modules or application code can provide their own implementations.
- *     An example of such is the JPA implementation of the <code>commandlog</code> extension.
+ *     The framework provides default implementations of this SPI for the supported value types.  Modules that define
+ *     application-defined primary keys can provide their own implementations of this SPI, for examples see the
+ *     JPA entities defined in the commandlog-jpa module.
  * </p>
  *
  * @since 2.0 {@index}
@@ -59,9 +58,7 @@ public interface IdStringifier<T> {
      * Convert a string representation of the identifier (as returned by {@link #enstring(Object)}) into an object
      * that can be used to retrieve.
      *
-     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.  For both JDO and JPA,
-     *          we always have this information available, and is needed (at least) by the JDO
-     *          implementations of application primary keys using built-ins, eg <code>LongIdentity</code>.
+     * @param targetEntityClass - the class of the target entity, eg <code>Customer</code>.
      * @param stringified - as returned by {@link #enstring(Object)}
      */
     T destring(@NonNull Class<?> targetEntityClass, @NonNull String stringified);

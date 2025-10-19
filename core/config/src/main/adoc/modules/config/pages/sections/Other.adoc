@@ -16,10 +16,8 @@ include::../section-hooks/Other~pre.adoc[]
 causeway.schema.command. +
 param-identifier-strategy
 
-|  by-id
-| Whether the `ParamDto#getName()` field - which uniquely identifies a parameter within the action's of parameters - is populated with the parameter's formal Id (eg "firstName") or instead using the parameter's friendly name (eg "First Name").
-
-The default is to use the Id, but the name is provided as an alternative for compatibility with v1. Note that the name is potentially translated, so this could also cause issues within integration scenarios.
+|  BY_ID
+| null
 
 
 |
@@ -29,9 +27,7 @@ actions-with-safe-semantics- +
 require-only-viewing-permission
 
 | 
-| If set, allows _Actions_ with SAFE Semantics to be invoked with only VIEWING permissions.
-
-default: false @see org.apache.causeway.applib.annotation.Action#semantics() @see SemanticsOf
+| null
 
 
 

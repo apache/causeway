@@ -25,12 +25,6 @@ record LogicalType {
   boolean isEqualTo(LogicalType other)
   int hashCode()
   int compareTo(LogicalType other)
-  Class<?> getCorrespondingClass()     // <.>
-  String getLogicalTypeName()     // <.>
-  String getClassName()     // <.>
-  String getLogicalTypeSimpleName()     // <.>
-  String getNamespace()     // <.>
-  String getLogicalTypeNameFormatted(String root, String delimiter)     // <.>
 }
 ----
 
@@ -63,66 +57,6 @@ The logical type name consists of 2 parts, the _namespace_ and the _logical simp
 +
 --
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .
---
-<.> xref:#getCorrespondingClass_[getCorrespondingClass()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#correspondingClass()_
-====
---
-<.> xref:#getLogicalTypeName_[getLogicalTypeName()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalName()_
-====
---
-<.> xref:#getClassName_[getClassName()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#className()_
-====
---
-<.> xref:#getLogicalTypeSimpleName_[getLogicalTypeSimpleName()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalSimpleName()_
-====
---
-<.> xref:#getNamespace_[getNamespace()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#namespace()_
-====
---
-<.> xref:#getLogicalTypeNameFormatted_String_String[getLogicalTypeNameFormatted(String, String)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalNameFormatted(String, String)_
-====
 --
 
 == Members
@@ -160,63 +94,3 @@ Returns the _namespace_ part.
 === logicalNameFormatted(String, String)
 
 The logical type name consists of 2 parts, the _namespace_ and the _logical simple name_ . Returns a concatenation of _namespace_ , _delimiter_ and the _logical simple name_ , whereas in the absence of a _namespace_ returns a concatenation of _root_ and the _logical simple name_ .
-
-[#getCorrespondingClass_]
-=== getCorrespondingClass()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#correspondingClass()_
-====
-
-[#getLogicalTypeName_]
-=== getLogicalTypeName()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalName()_
-====
-
-[#getClassName_]
-=== getClassName()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#className()_
-====
-
-[#getLogicalTypeSimpleName_]
-=== getLogicalTypeSimpleName()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalSimpleName()_
-====
-
-[#getNamespace_]
-=== getNamespace()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#namespace()_
-====
-
-[#getLogicalTypeNameFormatted_String_String]
-=== getLogicalTypeNameFormatted(String, String)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#logicalNameFormatted(String, String)_
-====

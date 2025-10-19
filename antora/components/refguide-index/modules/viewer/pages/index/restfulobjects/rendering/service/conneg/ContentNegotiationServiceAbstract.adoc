@@ -7,11 +7,11 @@
 .ContentNegotiationServiceAbstract.java
 ----
 class ContentNegotiationServiceAbstract {
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)
-  Response.ResponseBuilder buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedObject objectAdapter)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedProperty objectAndProperty)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedCollection objectAndCollection)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ManagedAction objectAndAction)
+  ResponseEntity<Object> buildResponse(IResourceContext resourceContext, ObjectAndActionInvocation objectAndActionInvocation)
 }
 ----
 

@@ -17,18 +17,12 @@ interface VirtualClock {
   VirtualClock nowAt(java.time.@NonNull OffsetDateTime virtualNow)
   VirtualClock nowAt(java.time.@NonNull ZonedDateTime virtualNow)
   VirtualClock nowAt(java.util.@NonNull Date virtualNow)
-  VirtualClock nowAt(org.joda.time.@NonNull LocalDate virtualNow)     // <.>
-  VirtualClock nowAt(org.joda.time.@NonNull LocalDateTime virtualNow)     // <.>
-  VirtualClock nowAt(org.joda.time.@NonNull DateTime virtualNow)     // <.>
   VirtualClock frozenAt(Instant frozenAt)     // <.>
   VirtualClock frozenAt(java.time.@NonNull LocalDate frozenAt)
   VirtualClock frozenAt(java.time.@NonNull LocalDateTime frozenAt)
   VirtualClock frozenAt(java.time.@NonNull OffsetDateTime frozenAt)
   VirtualClock frozenAt(java.time.@NonNull ZonedDateTime frozenAt)
   VirtualClock frozenAt(java.util.@NonNull Date frozenAt)
-  VirtualClock frozenAt(org.joda.time.@NonNull LocalDate frozenAt)     // <.>
-  VirtualClock frozenAt(org.joda.time.@NonNull LocalDateTime frozenAt)     // <.>
-  VirtualClock frozenAt(org.joda.time.@NonNull DateTime frozenAt)     // <.>
   VirtualClock frozenTestClock()     // <.>
   ZoneId localTimeZone()     // <.>
   long nowAsEpochMilli()     // <.>
@@ -41,12 +35,6 @@ interface VirtualClock {
   java.util.Date nowAsJavaUtilDate()     // <.>
   java.sql.Timestamp nowAsJavaSqlTimestamp()     // <.>
   XMLGregorianCalendar nowAsXmlGregorianCalendar()     // <.>
-  org.joda.time.DateTime nowAsJodaDateTime(ZoneId zoneId)     // <.>
-  org.joda.time.DateTime nowAsJodaDateTime()     // <.>
-  org.joda.time.LocalDateTime nowAsJodaLocalDateTime(ZoneId zoneId)     // <.>
-  org.joda.time.LocalDateTime nowAsJodaLocalDateTime()     // <.>
-  org.joda.time.LocalDate nowAsJodaLocalDate(ZoneId zoneId)     // <.>
-  org.joda.time.LocalDate nowAsJodaLocalDate()     // <.>
 }
 ----
 
@@ -70,70 +58,10 @@ Returns a ticking clock set to virtual time _Instant_ _virtualNow_
 --
 Returns a ticking clock set to virtual time.
 --
-<.> xref:#nowAt_org_joda_time_LocalDate[nowAt(org_joda_time_LocalDate)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-convert use java.time variant instead (Joda Time is deprecated)
-====
---
-<.> xref:#nowAt_org_joda_time_LocalDateTime[nowAt(org_joda_time_LocalDateTime)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-convert use java.time variant instead (Joda Time is deprecated)
-====
---
-<.> xref:#nowAt_org_joda_time_DateTime[nowAt(org_joda_time_DateTime)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-convert use java.time variant instead (Joda Time is deprecated)
-====
---
 <.> xref:#frozenAt_Instant[frozenAt(Instant)]
 +
 --
 Always returns the time _Instant_ as given by _frozenAt_
---
-<.> xref:#frozenAt_org_joda_time_LocalDate[frozenAt(org_joda_time_LocalDate)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
---
-<.> xref:#frozenAt_org_joda_time_LocalDateTime[frozenAt(org_joda_time_LocalDateTime)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
---
-<.> xref:#frozenAt_org_joda_time_DateTime[frozenAt(org_joda_time_DateTime)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
 --
 <.> xref:#frozenTestClock_[frozenTestClock()]
 +
@@ -195,76 +123,6 @@ Returns the (virtual) time as _java.sql.Timestamp_ .
 --
 Returns the (virtual) time as _XMLGregorianCalendar_ .
 --
-<.> xref:#nowAsJodaDateTime_ZoneId[nowAsJodaDateTime(ZoneId)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _org.joda.time.DateTime_ , using the specified _ZoneId_ timezone.
---
-<.> xref:#nowAsJodaDateTime_[nowAsJodaDateTime()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
---
-<.> xref:#nowAsJodaLocalDateTime_ZoneId[nowAsJodaLocalDateTime(ZoneId)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
---
-<.> xref:#nowAsJodaLocalDateTime_[nowAsJodaLocalDateTime()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _org.joda.time.LocalDateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
---
-<.> xref:#nowAsJodaLocalDate_ZoneId[nowAsJodaLocalDate(ZoneId)]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _DateTime_ , using the specified _ZoneId_ timezone.
---
-<.> xref:#nowAsJodaLocalDate_[nowAsJodaLocalDate()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
---
 
 == Members
 
@@ -288,70 +146,10 @@ Returns a ticking clock set to virtual time _Instant_ _virtualNow_
 
 Returns a ticking clock set to virtual time.
 
-[#nowAt_org_joda_time_LocalDate]
-=== nowAt(org_joda_time_LocalDate)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-convert use java.time variant instead (Joda Time is deprecated)
-====
-
-[#nowAt_org_joda_time_LocalDateTime]
-=== nowAt(org_joda_time_LocalDateTime)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-convert use java.time variant instead (Joda Time is deprecated)
-====
-
-[#nowAt_org_joda_time_DateTime]
-=== nowAt(org_joda_time_DateTime)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-convert use java.time variant instead (Joda Time is deprecated)
-====
-
 [#frozenAt_Instant]
 === frozenAt(Instant)
 
 Always returns the time _Instant_ as given by _frozenAt_
-
-[#frozenAt_org_joda_time_LocalDate]
-=== frozenAt(org_joda_time_LocalDate)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-[#frozenAt_org_joda_time_LocalDateTime]
-=== frozenAt(org_joda_time_LocalDateTime)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-[#frozenAt_org_joda_time_DateTime]
-=== frozenAt(org_joda_time_DateTime)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
 
 [#frozenTestClock_]
 === frozenTestClock()
@@ -414,73 +212,3 @@ Returns the (virtual) time as _java.sql.Timestamp_ .
 === nowAsXmlGregorianCalendar()
 
 Returns the (virtual) time as _XMLGregorianCalendar_ .
-
-[#nowAsJodaDateTime_ZoneId]
-=== nowAsJodaDateTime(ZoneId)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _org.joda.time.DateTime_ , using the specified _ZoneId_ timezone.
-
-[#nowAsJodaDateTime_]
-=== nowAsJodaDateTime()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _org.joda.time.DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
-
-[#nowAsJodaLocalDateTime_ZoneId]
-=== nowAsJodaLocalDateTime(ZoneId)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-[#nowAsJodaLocalDateTime_]
-=== nowAsJodaLocalDateTime()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _org.joda.time.LocalDateTime_ , using the _ZoneId#systemDefault() system default_ timezone.
-
-[#nowAsJodaLocalDate_ZoneId]
-=== nowAsJodaLocalDate(ZoneId)
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _DateTime_ , using the specified _ZoneId_ timezone.
-
-[#nowAsJodaLocalDate_]
-=== nowAsJodaLocalDate()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use java.time variant instead (Joda Time is deprecated)
-====
-
-Returns the time as a Joda _DateTime_ , using the _ZoneId#systemDefault() system default_ timezone.

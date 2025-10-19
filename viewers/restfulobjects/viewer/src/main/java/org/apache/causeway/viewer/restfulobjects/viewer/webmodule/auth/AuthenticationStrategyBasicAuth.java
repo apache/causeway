@@ -49,13 +49,6 @@ public class AuthenticationStrategyBasicAuth extends AuthenticationStrategyAbstr
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse) {
 
-        // Basic auth should never create sessions!
-        // However, telling this Shiro here, is a fragile approach.
-        //TODO[2156] do this somewhere else (more coupled with shiro)
-        httpServletRequest.setAttribute(
-                "org.apache.shiro.subject.support.DefaultSubjectContext.SESSION_CREATION_ENABLED",
-                Boolean.FALSE);
-
         var digest = getBasicAuthDigest(httpServletRequest);
         if (digest == null) {
             return null;
