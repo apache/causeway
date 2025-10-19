@@ -67,30 +67,12 @@ in other words, to confirm that the release was created by an Apache Causeway co
 
 Assuming this completes successfully, you can then test the starter applications:
 
-* Test out helloworld (jdo) using:
-+
-[source,bash]
-----
-pushd causeway-app-helloworld-jdo
-mvn spring-boot:run
-popd
-----
-
 * Test out helloworld (jpa) using:
 +
 [source,bash]
 ----
 pushd causeway-app-helloworld-jpa
 mvn spring-boot:run
-popd
-----
-
-* Test out simpleapp (jdo) using:
-+
-[source,bash]
-----
-pushd causeway-app-simpleapp-jdo
-mvn -pl webapp spring-boot:run
 popd
 ----
 

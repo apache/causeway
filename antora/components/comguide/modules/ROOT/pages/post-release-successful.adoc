@@ -569,31 +569,24 @@ git commit -m "$CAUSEWAYJIRA: bumps BASELINE to latest release version"
 
 == Update starter projects
 
-As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain
-// eight (!)
-four
-branches:
+As explained in xref:cutting-a-release.adoc#update-starter-apps[cutting a release],for each of the two starter apps, we maintain two branches:
 
-// * `{page-causewaycurrmajorversion}-jpa`; `{page-causewaycurrmajorversion}-jdo`; `{page-causewaynextmajorversion}-jpa`; `{page-causewaynextmajorversion}-jdo`
-* `{page-causewaycurrmajorversion}-jpa`; `{page-causewaycurrmajorversion}-jdo`
+* `{page-causewaycurrmajorversion}-jpa`
 +
-These are intended to reference the _most recently released_ version, the first demonstrating persistence using JDO, the second using JPA.
-These are the branches referenced from the home page and getting started pages of the website.
+This branch is intended to reference the _most recently released_ version, and is referenced from the home page and getting started pages of the website.
 
-// * `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`; `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`; `{page-causewaynextmajorversion}-jpa-SNAPSHOT`; `{page-causewaynextmajorversion}-jdo-SNAPSHOT`
-* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`; `{page-causewaycurrmajorversion}-jdo-SNAPSHOT`
+* `{page-causewaycurrmajorversion}-jpa-SNAPSHOT`
 +
-These reference the most current snapshot nightly build.
+This branch is intended to reference the most current snapshot nightly build.
 
-The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT` and similarly moves `vN-jdo` up to `vN-jdo-SNAPSHOT`, bumping to the newly released version of the framework in the process.
-This is done for all current `vN` branches.
+The general idea is that a release will fast-forward `vN-jpa` to `vN-jpa-SNAPSHOT`, bumping to the newly released version of the framework in the process.
 The non-SNAPSHOT builds should always reference the most recently release.
 
-In order that we don't break the starter apps while a release is being voted on, we do the changes in work branches, `$CAUSEWAYBRANCH-jpa` and `$CAUSEWAYBRANCH-jdo`.
+In order that we don't break the starter apps while a release is being voted on, we do the changes in a work branch, `$CAUSEWAYBRANCH-jpa`.
 
 Now that the release is complete, tidy up these branches and then set up the `-SNAPSHOT` branches as required.
 
-IMPORTANT: The `vN-{jpa,jdo}` branches should always work against the most recent release, whereas the `vN-{jpa,jdo}-SNAPSHOT` reference more recent nightly builds if necessary.
+IMPORTANT: The `vN-jpa` branch should always work against the most recent release, whereas the `vN-jpa-SNAPSHOT` reference more recent nightly builds if necessary.
 
 
 == Update the petclinic app
@@ -630,7 +623,7 @@ git reset --hard v3
 PREV_VERSION=...                              # <.>
 ./tagger.sh -p $PREV_VERSION -v {page-causewayreleaseversion}
 ----
-<.> adjust as necessary; should be the immediately previous version, eg `3.3.0` precedes `3.4.0`.
+<.> adjust as necessary; should be the immediately previous version.
 
 * confirm that the last tag builds and runs ok.
 +
