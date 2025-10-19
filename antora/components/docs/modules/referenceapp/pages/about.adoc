@@ -8,7 +8,7 @@ It's also a useful reference to help you develop your own Apache Causeway applic
 
 image::teaser-light.png[]
 
-The application is packaged up as a Docker image (link:https://hub.docker.com/r/apache/causeway-app-demo-jpa[apache/causeway-app-demo-jpa] or link:https://hub.docker.com/r/apache/causeway-app-demo-jdo[apache/causeway-app-demo-jdo]) on Docker Hub, so you can easily run it yourself (as described <<Running the Docker Image,below>>).
+The application is packaged up as a Docker image (link:https://hub.docker.com/r/apache/causeway-app-demo-jpa[apache/causeway-app-demo-jpa]) on Docker Hub, so you can easily run it yourself (as described <<Running the Docker Image,below>>).
 
 
 == Prereqs
@@ -17,8 +17,6 @@ Head over to https://www.docker.com/community-edition[Docker] to install the com
 
 
 == Running the Docker Image
-
-Assuming the `jpa` variant (if using `jdo`, just substitute "jpa" with "jdo" in the commands below):
 
 * Pull and run the Docker Image
 +
@@ -41,7 +39,6 @@ docker stop demo && docker rm demo
 === Customization
 
 The way in which the app is run by Docker be customised in a couple of ways.
-Assuming the `jpa` variant (if using `jdo`, just substitute "jpa" with "jdo" in the commands below):
 
 * Prototyping mode
 +
