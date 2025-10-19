@@ -1,0 +1,81 @@
+[#jakarta-persistence-Embeddable]
+= @Embeddable (jpa)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+The `@jakarta.persistence.Embeddable` is used by JPA to indicate that a class is persisted inline within a containing domain entity.
+
+== Mutability
+
+If the embeddable class is mutable, then the semantics are a dependent entity in 1:1 relationship with its containing domain entity.
+In Apache Causeway, this should be modelled as a view model, and will be rendered in the UI as a reference (hyperlink) to the associated object.
+
+If the embeddable class is immutable, then the semantics are closer to a composite value type.
+In most cases the framework won't be able to render the object directly, but a representation of the object could be derived.
+An example is xref:refguide:persistence:index/jpa/applib/types/BlobJpaEmbeddable.adoc[] and xref:refguide:persistence:index/jpa/applib/types/ClobJpaEmbeddable.adoc[], which persist the state for `Blob` and `Clob` respectively, and which provide convenient helpers to marshal between them.
+Other value types could be represented using xref:refguide:valuetypes:index/asciidoc/applib/value/AsciiDoc.adoc[] or similar.
+
+== Example
+
+For example:
+
+[source,java]
+.PostalAddress.java
+----
+import jakarta.persistence.*;
+
+@Embeddable                                         // <.>
+@AllArgsConstructor
+@Getter @Setter
+public class PostalAddress {
+
+    private String firstLine;
+    private String secondLine;
+    private String city;
+    private String postalCode;
+    private String country;
+
+    public AsciiDoc toAsciiDoc() {                  // <.>
+       // ...
+    }
+
+}
+----
+<.> Indicates that this is an embeddable object
+<.> Returns a renderable representation of this object
+
+This could then be used as so:
+
+[source,java]
+.Customer.java
+----
+import jakarta.persistence.*;
+
+@Entity
+public class Customer {
+
+    @Embedded                                           // <.>
+    private PostalAddress homeAddress;
+
+    public AsciiDoc getHomeAddress() {                  // <.>
+        return Optional.ofNullable(homeAddress)
+                .map(CustomerAddress::toAsciiDoc)
+                .orElse(null);
+    }
+
+    @Action(semantics = IDEMPOTENT)
+    public Customer updateHomeAddress(                      // <.>
+                String firstLine,
+                String secondLine,
+                String city,
+                String postalCode,
+                String country) {
+        this.homeAddress = new PostalAddress(/*...*/);
+        return this;
+     }
+}
+----
+<.> Indicates that the state of the referenced `PostalAddress` should be stored inline within the same table that stores the ``Customer``'s own data
+<.> Renders the address using AsciiDoc
+<.> Allows the state of the embedded object to be updated (or replaced).
+

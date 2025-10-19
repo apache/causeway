@@ -7,7 +7,30 @@
 
 The `@jakarta.persistence.Entity` is used by JPA to indicate that a class is a domain entity to be persisted to the database.
 
-Apache Causeway also checks for this annotation ...
+For example:
+
+[source,java]
+.Customer.java
+----
+import jakarta.persistence.*;
+
+@Entity                                                 // <.>
+public class Customer {
+
+    @Id                                                 // <.>
+    @GeneratedValue(strategy = GenerationType.AUTO)     // <2>
+    @Column(name = "id", nullable = false)              // <2>
+    private Long id;
+
+    // ...
+
+}
+----
+<.> Indicates that this entity is a JPA entity
+<.> JPA entities are required to declare an identifier.
+It's very common for this to be a surrogate identifier, with the value assigned by the database when the object is persisted.
+
+Apache Causeway currently does not infer any other semantics from this annotation.
 
 [NOTE]
 ====
