@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.apache.causeway.testing</groupId>
 		<artifactId>causeway-testing-specsupport</artifactId>
-		<version>${revision}</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-testing-specsupport-applib</artifactId>

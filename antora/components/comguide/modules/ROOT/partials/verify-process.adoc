@@ -1,6 +1,8 @@
 VERSION={page-causewayreleaseversion}
 RC=RC1
-NEXUSREPONUM=11xx
+NEXUSREPONUM=10xx
+
+cd /tmp
 
 curl https://downloads.apache.org/causeway/KEYS | gpg --import
 gpg --list-keys --with-colons --with-fingerprint \

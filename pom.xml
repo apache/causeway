@@ -22,9 +22,16 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>26</version>
+        <relativePath/>
+    </parent>
+
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-all</artifactId>
-    <version>${revision}</version>
+    <version>4.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -39,9 +46,8 @@
     <properties>
         <revision>4.0.0-SNAPSHOT</revision> <!-- can be overidden like mvn
         -Drevision=2.7.8 -->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the
-        aggregator -->
 
         <maven-timeline.version>2.0.3</maven-timeline.version>
     </properties>
@@ -137,6 +143,7 @@
             </modules>
         </profile>
 
+        <!--  START SNIPPET: release-profile  -->
         <profile>
             <id>apache-release</id>
             <activation>
@@ -146,67 +153,61 @@
             </activation>
             <properties>
                 <skipTests>true</skipTests>
-                <altDeploymentRepository>
-                    apache.releases.https::default::https://repository.apache.org/service/local/staging/deploy/maven2</altDeploymentRepository>
             </properties>
             <build>
                 <plugins>
-                    <!-- We want to sign the artifact, the POM, and all attached
-                    artifacts -->
+                    <plugin>
+                        <groupId>dev.pcms</groupId>
+                        <artifactId>lombok-maven-plugin</artifactId>
+                        <version>1.18.36.2</version>
+                        <configuration>
+                            <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            <outputDirectory>${delombok.output}</outputDirectory>
+                            <addOutputDirectory>false</addOutputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>delombok</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.2.8</version>
+                        <artifactId>maven-toolchains-plugin</artifactId>
+                        <version>3.2.0</version>
                         <executions>
                             <execution>
-                                <id>sign-release-artifacts</id>
                                 <goals>
-                                    <goal>sign</goal>
+                                    <goal>toolchain</goal>
                                 </goals>
                             </execution>
                         </executions>
                         <configuration>
-                            <gpgArguments>
-                                <arg>--digest-algo=SHA512</arg>
-                            </gpgArguments>
+                            <toolchains>
+                                <jdk>
+                                    <version>17</version>
+                                    <vendor>openjdk</vendor>
+                                </jdk>
+                            </toolchains>
                         </configuration>
                     </plugin>
+
                     <plugin>
-                        <groupId>net.nicoulaj.maven.plugins</groupId>
-                        <artifactId>checksum-maven-plugin</artifactId>
-                        <version>1.11</version>
-                        <executions>
-                            <execution>
-                                <id>source-release-checksum</id>
-                                <goals>
-                                    <goal>files</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
                         <configuration>
-                            <algorithms>
-                                <algorithm>SHA-512</algorithm>
-                            </algorithms>
-                            <csvSummary>false</csvSummary>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>
-                                            ${project.artifactId}-${project.version}-source-release.zip</include>
-                                        <include>
-                                            ${project.artifactId}-${project.version}-source-release.tar*</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <failIfNoFiles>false</failIfNoFiles><!-- usually, no
-                            file to do checksum:
-								don't consider error -->
+                            <attach>true</attach>
                         </configuration>
                     </plugin>
+
                 </plugins>
             </build>
+
         </profile>
+        <!--  END SNIPPET: release-profile  -->
 
         <profile>
             <id>github</id>
@@ -225,5 +226,6 @@
         </profile>
 
     </profiles>
+
 
 </project>

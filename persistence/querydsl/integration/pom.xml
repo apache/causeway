@@ -24,7 +24,7 @@
 	<parent>
 		<groupId>org.apache.causeway.persistence</groupId>
 		<artifactId>causeway-persistence-querydsl</artifactId>
-		<version>${revision}</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>causeway-persistence-querydsl-integration</artifactId>

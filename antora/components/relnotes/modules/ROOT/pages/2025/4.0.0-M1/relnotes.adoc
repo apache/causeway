@@ -1,0 +1,58 @@
+[[r4.0.0-M1]]
+= 4.0.0-M1
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+
+[[r4.0.0-M1]]
+= 4.0.0-M1
+
+Apache Causeeway v4 is based on Spring Boot v4.
+In this milestone release, much of the porting has been done, now based on Spring Boot 4.0.0-M3.
+
+Significant other changes in this release:
+
+* JDO support has now been removed.
+Instead use JPA (EclipseLink)
+
+* RestEasy has been removed as a dependency, instead Spring's support for REST is used instead.
+
+* logging has moved from log4j2 to slf4j.
+
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3903[CAUSEWAY-3903] - [Wicket Viewer] Configurable Select2 Ajax Delay
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3892[CAUSEWAY-3892] - *New Major Version 4* (Upgrade from Spring Boot 3.x to 4.x)
+** link:https://issues.apache.org/jira/browse/CAUSEWAY-3872[CAUSEWAY-3872] - [simple app] remove JDO variant
+** link:https://issues.apache.org/jira/browse/CAUSEWAY-3871[CAUSEWAY-3871] - [hello world] remove JDO variant
+** link:https://issues.apache.org/jira/browse/CAUSEWAY-3870[CAUSEWAY-3870] - [demo app] remove JDO profile
+** link:https://issues.apache.org/jira/browse/CAUSEWAY-3866[CAUSEWAY-3866] - Removal of JDO Integration
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3849[CAUSEWAY-3849] - Spring Data JDBC Integration (Experimental)
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3906[CAUSEWAY-3906] - Select2 JS Consolidation
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3902[CAUSEWAY-3902] - [Tabular] More Background Colors for XLSX Export
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3901[CAUSEWAY-3901] - Log lines written for large XLSX exports
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3900[CAUSEWAY-3900] - [Config] Immutable CausewayConfiguration
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3897[CAUSEWAY-3897] - [RO] Use Spring RestControllers instead of RestEasy (JBoss)
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3875[CAUSEWAY-3875] - [Logging] Avoid Forcing Logging Implementations
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3869[CAUSEWAY-3869] - Switch to Spring Boot default logging provider (log4j2->logback)
+
+
+== Dependency upgrade
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3890[CAUSEWAY-3890] - JVM 25 Compatibility Forecasting
+
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/CAUSEWAY-3898[CAUSEWAY-3898] - Release activities, 4.0.0-M1
+
+

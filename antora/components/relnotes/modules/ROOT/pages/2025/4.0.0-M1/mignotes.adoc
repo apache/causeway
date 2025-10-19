@@ -1,4 +1,4 @@
-= Migrating from 3.x to 4.0.0 (Draft)
+= Migrating from 3.x to 4.0.0-M1
 
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :page-partial:
@@ -6,12 +6,12 @@
 Upgrade Summary:
 
 . stay at *Java 17* baseline (as _Spring_ does; however, JRuby 10.x as used for AsciiDoc extensions requires Java 21+ runtime)
-. upgrade to *Jackson 3* (as _Spring_ does) 
+. upgrade to *Jackson 3* (as _Spring_ does)
 . upgrade to *JUnit 6* (as _Spring_ does)
 . *Shiro* support removed ✅
 . *JDO* support removed ✅
 . *Joda* time support removed ✅
-. *RestEasy* integration removed ✅ 
+. *RestEasy* integration removed ✅
 . Causeway now uses *slf4j* (instead of _log4j_) ✅
 . Migrate build requirements to *Maven 4* ✅
 . ditch *rest-client* artifact in favor of Spring's RestClient (optional)
@@ -39,11 +39,11 @@ Some presets for the _Spring Configuration_ have been removed
 [source,xml]
 .Maven
 ----
-<!-- REMOVED 
+<!-- REMOVED
 <dependency>
     <groupId>org.apache.causeway.viewer</groupId>
     <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
-</dependency> 
+</dependency>
 -->
 
 <!-- USE INSTEAD -->
@@ -60,7 +60,7 @@ Some presets for the _Spring Configuration_ have been removed
     //..
 
     // REST
-    
+
     // CausewayModuleViewerRestfulObjectsJaxrsResteasy.class <-- REMOVED
     CausewayModuleViewerRestfulObjectsViewer.class, // <-- USE INSTEAD
 })
@@ -85,8 +85,8 @@ causeway:
 
 == Immutable Configuration
 
-`CausewayConfiguration` was refactored using Java records over regular classes, 
-in effect all accessors have been renamed, stripping any `get` or `is` prefixes. 
+`CausewayConfiguration` was refactored using Java records over regular classes,
+in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 `CausewayConfiguration` is now immutable.
 
 == ErrorDetails
@@ -97,11 +97,11 @@ in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 == Object Icon Support
 
 Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconWhere iconWhere)`,
-which also supports image data embedding and supersedes `String iconName()`. 
+which also supports image data embedding and supersedes `String iconName()`.
 However, the latter is still supported for backward compatibility.
 
 With `TitleService` method
-`String iconNameOf(final Object domainObject)` was replaced by 
-    `IconResource iconOf(Object domainObject, IconWhere iconWhere)`. 
+`String iconNameOf(final Object domainObject)` was replaced by
+    `IconResource iconOf(Object domainObject, IconWhere iconWhere)`.
 
 Likewise `IconUiEvent` was updated to reflect the new programming model.

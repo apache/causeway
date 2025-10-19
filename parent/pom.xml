@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.causeway</groupId>
         <artifactId>causeway-bom</artifactId>
-        <version>${revision}</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../bom/pom.xml</relativePath>
     </parent>
 
@@ -57,7 +57,7 @@
         <causeway.skipTests>false</causeway.skipTests>
         <maven.test.skip>${causeway.skipTests}</maven.test.skip>
 
-        <project.build.outputTimestamp>2025-05-28T05:00:00Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2025-10-08T16:48:14Z</project.build.outputTimestamp>
 
         <delombok.output>${project.build.directory}/delombok</delombok.output>
 
@@ -947,40 +947,6 @@
                         </configuration>
                     </plugin>
 
-                    <!--  Create a source-release artifact that contains the
-                    fully buildable
-                                   project directory source structure. This is the artifact which is
-                                   the official subject of any release vote.  -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.apache.resources</groupId>
-                                <artifactId>
-                                    apache-source-release-assembly-descriptor</artifactId>
-                                <version>1.7</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>source-release-assembly</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <archiveBaseDirectory>..</archiveBaseDirectory>
-                                    <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                                    <descriptorRefs>
-                                        <descriptorRef>
-                                            ${sourceReleaseAssemblyDescriptor}</descriptorRef>
-                                    </descriptorRefs>
-                                    <tarLongFileMode>posix</tarLongFileMode>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <!--  We want to deploy the artifact to a staging location
                     for perusal  -->
                     <plugin>

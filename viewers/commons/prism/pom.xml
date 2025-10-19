@@ -19,7 +19,7 @@ additional
     <parent>
         <groupId>org.apache.causeway.viewer</groupId>
         <artifactId>causeway-viewer-commons</artifactId>
-        <version>${revision}</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>causeway-viewer-commons-prism</artifactId>

@@ -42,7 +42,7 @@ These same details should also be in the VOTE email:
 include::partial$verify-process-docker-container.adoc[]
 ----
 
-* and then within the docker container, install prerqs and verify (update the envirnment variables as necessary):
+* and then within the docker container, install prerqs and verify (update the environment variables as necessary):
 +
 [source,bash,subs="attributes+"]
 ----

@@ -44,7 +44,7 @@ identified
     </parent>
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-bom</artifactId>
-    <version>${revision}</version>
+    <version>4.0.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -2138,5 +2138,52 @@ identified
             <timezone>+3</timezone>
         </developer>
     </developers>
+
+    <profiles>
+        <!--  START SNIPPET: release-profile  -->
+        <profile>
+            <id>apache-release</id>
+            <activation>
+                <property>
+                    <name>apache-release</name>
+                </property>
+            </activation>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>apache.releases.https</id>
+                    <name>Apache Release Distribution Repository</name>
+                    <url>
+                        https://repository.apache.org/service/local/staging/deploy/maven2</url>
+                </repository>
+                <snapshotRepository>
+                    <id>apache.snapshots.https</id>
+                    <name>${distMgmtSnapshotsName}</name>
+                    <url>${distMgmtSnapshotsUrl}</url>
+                </snapshotRepository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <!--  We want to sign the artifact, the POM, and all attached
+artifacts (except for SHA-512 checksum)  -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--  END SNIPPET: release-profile  -->
+    </profiles>
 
 </project>
