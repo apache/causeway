@@ -67,7 +67,7 @@
             <artifactId>causeway-core-transaction</artifactId>
 			<scope>provided</scope>
         </dependency>
-
+        
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-core</artifactId>
@@ -105,6 +105,7 @@
                                 <configuration>
                                     <sources>
                                         <source>src/main/java</source>
+                                        <source>src/main/java-jigsaw</source>
                                     </sources>
                                 </configuration>
                             </execution>
