@@ -79,3 +79,7 @@ public class Customer {
 <.> Renders the address using AsciiDoc
 <.> Allows the state of the embedded object to be updated (or replaced).
 
+== See Also
+
+- link:https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/Embeddable[@Embeddable] (JPA API javadoc)
+- link:https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/Embedded[@Embedded] (JPA API javadoc)

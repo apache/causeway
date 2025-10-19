@@ -186,3 +186,8 @@ public void setDoc(final Clob doc) {
   this.doc = ClobJpaEmbeddable.fromClob(doc);
 }
 ----
+
+
+== See Also
+
+- link:https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/Column[@Column] (JPA API javadoc)

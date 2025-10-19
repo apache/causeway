@@ -38,4 +38,6 @@ Causeway parses the `@Entity` annotation from the Java source code; it does not 
 This means that it the `@Entity` annotation must be used rather than the equivalent XML metadata.
 ====
 
-...
+== See Also
+
+- link:https://jakarta.ee/specifications/persistence/3.0/apidocs/jakarta.persistence/jakarta/persistence/Entity[@Entity] (JPA API javadoc)
