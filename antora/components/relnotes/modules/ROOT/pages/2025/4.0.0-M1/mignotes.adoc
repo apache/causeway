@@ -14,8 +14,11 @@ Upgrade Summary:
 . *RestEasy* integration removed ✅
 . Causeway now uses *slf4j* (instead of _log4j_) ✅
 . Migrate build requirements to *Maven 4* ✅
-. ditch *rest-client* artifact in favor of Spring's RestClient (optional)
-. ditch *encrypt-jbcrypt* artifact (optional)
+
+Optional to come with `4.0.0` or later 
+
+. Removal of *rest-client* artifact in favor of Spring's RestClient
+. Removal of *encrypt-jbcrypt* artifact 
 
 == Configuration
 
@@ -63,7 +66,7 @@ and use instead:
 </dependency>
 ----
 
-* in your `AppManifest` (`@Import` staatements):
+* in your `AppManifest` (`@Import` statements):
 +
 replace:
 +
@@ -125,14 +128,36 @@ in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
 `ErrorDetails` as used by the `ErrorReportingService` has been converted from a class to a record.
 (In effect all accessors have been renamed, stripping any `get` or `is` prefixes)
 
-== Object Icon Support
+== Object Icon Support (Experimental)
 
-Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconWhere iconWhere)`,
+WARNING: This is a _Programming Model_/_API_ draft. It might receive some polishing till final `4.0.0`.  
+
+Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconSize iconSize)`,
 which also supports image data embedding and supersedes `String iconName()`.
-However, the latter is still supported for backward compatibility.
+However, `String iconName()` is still supported for backward compatibility.
 
-With `TitleService` method
+With `IconSize` defined as
+
+[source,java]
+----
+public enum IconSize {
+    /**
+     * as used for the object detail page header (along the object's title)
+     */
+    LARGE,
+    /**
+     * as used for table data, properties and tree nodes
+     */
+    MEDIUM,
+    /**
+     * as used for choice drop downs (single- and multi-choice)
+     */
+    SMALL
+}
+----
+
+`TitleService` method
 `String iconNameOf(final Object domainObject)` was replaced by
-    `IconResource iconOf(Object domainObject, IconWhere iconWhere)`.
+ `IconResource iconOf(Object domainObject, IconSize iconSize)`.
 
 Likewise `IconUiEvent` was updated to reflect the new programming model.
