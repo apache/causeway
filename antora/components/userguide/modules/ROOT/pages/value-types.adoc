@@ -58,46 +58,29 @@ A JAXB view model would require `@XmlJavaTypeAdapter(JavaTimeJaxbAdapters.LocalD
 In the following sections we look at the other datatypes that you can use as the value types, and then we look at defining custom types.
 
 [#jdk-types]
-== JDK types
+== Built-in: JDK types
 
-The most common value types to use are those built-into JDK.
-None of the following require additional annotations when used in entities or view models:
+Apache Causeway can render and persist all the JDK primitives and wrapper classes, and a number of other JDK classes that represent value types.
 
-* primitives
-+
-`int`, `long`, `short`, `byte`, `char`, `float`, `double`, `boolean`
+In addition to primitives, the JDK Classes supported are:
 
-* wrappers
+* the wrapper classes (in `java.lang`)
 +
 `Integer`, `Long`, `Short`, `Byte`, `Character`, `Float`, `Double`, `Boolean`
 
-* `java.lang.String`
+* strings and similar:
 
-* `java.math.BigInteger` and `java.math.BigDecimal`
+** `java.lang.String`
+** any enum (subtype of `java.lang.Enum`)
+
+* numeric data types for arbitrary accuracy:
+
+** `java.math.BigDecimal` and `java.math.BigInteger`
 +
 for arbitrary accuracy.
 These can be combined with `@Digits` to specify scale.
 
-* `java.util.UUID`
-
-These are also a couple of value types that have special properties when rendered:
-
-* `java.net.URL`
-+
-Essentially a string, but will render as a hyperlink that the end-user can click
-
-* `java.awt.image.BufferedImage`
-+
-In essence a byte array containing a `.png` or similar.
-Note though that properties if this type must be read-only.
-+
-[source,java]
-----
-val bytes = _Bytes.of(_Resources.load(getClass(), "spring-boot-logo.png" ));
-return javax.imageio.ImageIO.read(new ByteArrayInputStream(bytes));
-----
-
-== Dates
+== Built-in: JDK Dates
 
 Dates are also supported of course, though there are lots of options:
 
@@ -138,7 +121,35 @@ Depending on context, additional entities may be required on the property's fiel
 This tells JAXB how to serialize the value in and out of XML.
 Apache Causeway provides adapters for all of these.
 
+
+== Built-in: Other JDK types
+
+These are also a couple of value types that have special properties when rendered:
+
+* `java.util.UUID`
++
+Essentially a string with a particular format.
+
+* `java.util.Locale`
+
+* `java.net.URL`
++
+Renders as a hyperlink that the end-user can click
+
+* `java.awt.image.BufferedImage`
++
+In essence a byte array containing a `.png` or similar.
+Note though that properties if this type must be read-only.
++
+[source,java]
+----
+val bytes = _Bytes.of(_Resources.load(getClass(), "spring-boot-logo.png" ));
+return javax.imageio.ImageIO.read(new ByteArrayInputStream(bytes));
+----
+
+
 Apache Causeway defines a number of its own custom value types, described next.
+
 
 [#causeway-specific]
 == Causeway-specific
@@ -177,7 +188,14 @@ There are several such built-in resources that can be useful in a development/pr
 ** `/db/` - the H2 database console
 
 +
-You could of course also define additional resources for your own requirements.
+You can also use this as a way to redirect to a custom controller.
+
+* xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] and xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode]
++
+These can be used to render tree structures.
+
+
+== Value type catalogue (extensions)
 
 The above value types are part of the core framework.
 There are also several value types that are packaged as extensions in the xref:valuetypes::about.adoc[Value Types Catalog]:
@@ -194,6 +212,23 @@ This renders Markdown content (as defined by the link:https://spec.commonmark.or
 +
 This renders graphics defined by the link:https://vega.github.io/vega-lite/[Vega-Lite] grammar.
 
+
+== Internal value types
+
+The core framework also defines a number of value types whose use is primarily internal:
+
+* xref:refguide:applib:index/services/bookmark/Bookmark.adoc[Bookmark]
+* anything supported by xref:refguide:applib:index/services/bookmark/IdStringifier.adoc[IdStringifier]
++
+Used by the xref:userguide:commandlog:about.adoc[], xref:userguide:executionlog:about.adoc[], xref:userguide:executionoutbox:about.adoc[] and xref:security:sessionlog:about.adoc[] externsions modules so that their application primary keys of their corresponding entities are recognised as value types
+
+* `ApplicationFeatureIdValueSemantics`
+
+The xref:refguide:schema:about.adoc[] of XSDs define a number of DTOs (persisted by the above core extensions) which are also recognised as value types:
+
+* xref:refguide:schema:cmd.adoc[CommandDto] (and an XML pretty-render variant)
+* xref:refguide:schema:ixn.adoc[InteractionDto] (and an XML pretty-render variant)
+* xref:refguide:schema:chg.adoc[ChangesDto] (and an XML pretty-render variant)
 
 
 [#custom-value-types]

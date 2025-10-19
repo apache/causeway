@@ -5,43 +5,57 @@
 :page-partial:
 
 
-== Built-in
+== Built-in: JDK types
 
-Apache Causeway can render and persist all of the JDK primitives and wrapper classes, and a number of other JDK classes that represent value types.
+Apache Causeway can render and persist all the JDK primitives and wrapper classes, and a number of other JDK classes that represent value types.
 
 It also supports a number of value types that are shipped by the framework itself.
 
 In addition to primitives, the JDK Classes supported are:
 
-* the wrapper classes:
+* the wrapper classes (in `java.lang`)
++
+`Integer`, `Long`, `Short`, `Byte`, `Character`, `Float`, `Double`, `Boolean`
 
-** `java.lang.Boolean`, `java.lang.Character`, `java.lang.Double`, `java.lang.Float`, `java.lang.Long`, `java.lang.Integer`, `java.lang.Short`, `java.lang.Byte`
-
-* strings and similar: classes:
+* strings and similar:
 
 ** `java.lang.String`
 ** any enum (subtype of `java.lang.Enum`)
 
-* numeric data types:
+* numeric data types for arbitrary accuracy:
 
-** `java.math.BigDecimal`
-** `java.math.BigInteger`
+** `java.math.BigDecimal` and `java.math.BigInteger`
++
+These can be combined with `@Digits` to specify scale.
 
-* date types:
+== Built-in: JDK Dates
 
-** `java.sql.Date`
-** `java.sql.Time`
-** `java.sql.Timestamp`
-** `java.util.Date`
+Dates are also supported of course, though there are lots of options:
 
-* JDK 8 datetime types:
+* in the `java.time` package; these are the most modern and generally is to be preferred:
 
-** `java.time.LocalDate`
-** `java.time.LocalTime`
-** `java.time.LocalDateTime`
-** `java.time.OffsetDateTime`
-** `java.time.OffsetTime`
-** `java.time.ZonedDateTime`
+** local times (no time zone):
++
+`java.time.LocalDate,` `java.time.LocalTime`, `java.time.LocalDateTime`
+
+** for storing date/time, with respect to the UTC:
++
+`java.time.OffsetDateTime`, `java.time.OffsetTime`
+
+** primarily for _displaying_ time in a specified time zone:
++
+`java.time.ZonedDateTime`
+
+* in the `java.util` package (usage is discouraged since these classes are not immutable):
++
+`java.util.Date`
+
+* in the `java.sql` package:
++
+`java.sql.Date,` `java.sql.Timestamp`, `java.sql.Time`
+
+
+== Built-in: Other JDK types
 
 * miscellaneous:
 
@@ -55,9 +69,6 @@ In addition to primitives, the JDK Classes supported are:
 == Framework-defined
 
 The framework also defines a number of custom value types:
-
-
-
 
 * xref:refguide:applib:index/value/Blob.adoc[Blob]
 * xref:refguide:applib:index/value/Clob.adoc[Clob]
@@ -80,7 +91,7 @@ This is therefore a way to redirect to a custom controller.
 
 * xref:refguide:applib:index/graph/tree/TreePath.adoc[TreePath] and xref:refguide:applib:index/graph/tree/TreeNode.adoc[TreeNode]
 +
-These can be used to render filesystem structures and similar
+These can be used to render tree structures.
 
 In addition, there are a number of non-core value types that can be brought in individually:
 
@@ -119,4 +130,4 @@ The xref:refguide:schema:about.adoc[] of XSDs define a number of DTOs (persisted
 == Custom value types
 
 It is also possible to write your own value types, either scalar or composite.
-For more on this topic, see xref:userguide:ROOT:value-types.adoc[value types] topic in the user guide.
+For more on this topic, see xref:userguide:ROOT:value-types.adoc#custom-value-types[custom value types] topic in the user guide.
