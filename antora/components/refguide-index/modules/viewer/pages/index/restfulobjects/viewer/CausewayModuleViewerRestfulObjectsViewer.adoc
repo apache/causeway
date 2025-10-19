@@ -7,6 +7,7 @@
 .CausewayModuleViewerRestfulObjectsViewer.java
 ----
 class CausewayModuleViewerRestfulObjectsViewer {
+  ExceptionResponseFactory exceptionResponseFactory(List<RootCauseFinder> rootCauseFinders)
 }
 ----
 

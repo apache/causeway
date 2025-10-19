@@ -89,6 +89,8 @@ import lombok.experimental.Accessors;
 
 /**
  * Default implementation of {@link WrapperFactory}.
+ *
+ * @since 1.x {@index}
  */
 @Service
 @Named(WrapperFactoryDefault.LOGICAL_TYPE_NAME)

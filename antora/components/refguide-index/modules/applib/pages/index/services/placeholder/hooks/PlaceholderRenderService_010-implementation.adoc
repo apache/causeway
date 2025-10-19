@@ -5,5 +5,5 @@
 
 == Implementation
 
-The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default of this service, namely xref:refguide:core:index/runtimeservices/placeholder/PlaceholderRenderServiceDefault.adoc[].
+The xref:core:runtimeservices:about.adoc[Core Runtime Services] module provides a default of this service, namely xref:refguide:core:index/runtimeservices/render/PlaceholderRenderServiceDefault.adoc[].
 

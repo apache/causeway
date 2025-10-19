@@ -11,42 +11,7 @@ User specific regional preferred settings.
 record UserLocale {
   UserLocale getDefault()
   UserLocale valueOf(Locale mainLocale)
-  Locale getLanguageLocale()     // <.>
-  Locale getNumberFormatLocale()     // <.>
-  Locale getTimeFormatLocale()     // <.>
   UserLocaleBuilder asBuilder()
 }
 ----
 
-<.> xref:#getLanguageLocale_[getLanguageLocale()]
-+
---
-use _#languageLocale()_ instead
---
-<.> xref:#getNumberFormatLocale_[getNumberFormatLocale()]
-+
---
-use _#numberFormatLocale()_ instead
---
-<.> xref:#getTimeFormatLocale_[getTimeFormatLocale()]
-+
---
-use _#timeFormatLocale()_ instead
---
-
-== Members
-
-[#getLanguageLocale_]
-=== getLanguageLocale()
-
-use _#languageLocale()_ instead
-
-[#getNumberFormatLocale_]
-=== getNumberFormatLocale()
-
-use _#numberFormatLocale()_ instead
-
-[#getTimeFormatLocale_]
-=== getTimeFormatLocale()
-
-use _#timeFormatLocale()_ instead

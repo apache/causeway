@@ -53,6 +53,10 @@ public record SyncControl(
         ExceptionHandler exceptionHandler) {
 
     //TODO can this be further simplified, or is there already an API we can reuse?
+
+    /**
+     * @since 2.0 revised for 3.4 {@index}
+     */
     @FunctionalInterface
     public interface CommandListener {
         public void onCommand(

@@ -30,10 +30,6 @@ record Identifier {
   boolean isEqualTo(Identifier other)
   int hashCode()
   String toString()
-  String getMemberLogicalName()
-  int getParameterIndex()
-  Can<String> getMemberParameterClassNames()
-  Type getType()
 }
 ----
 

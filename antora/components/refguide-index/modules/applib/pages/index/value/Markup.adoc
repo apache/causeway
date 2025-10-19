@@ -12,21 +12,9 @@ record Markup {
   Markup()
   Markup(String html)
   Markup valueOf(String html)
-  String asHtml()     // <.>
+  Markup embeddedImage(DataUri dataUri)
   String toString()
   String summarizeHtmlAsTitle(String html)
 }
 ----
 
-<.> xref:#asHtml_[asHtml()]
-+
---
-use _#html()_ instead
---
-
-== Members
-
-[#asHtml_]
-=== asHtml()
-
-use _#html()_ instead

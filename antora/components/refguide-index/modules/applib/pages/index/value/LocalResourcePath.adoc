@@ -16,7 +16,6 @@ record LocalResourcePath {
   public static final String LOGICAL_TYPE_NAME;
   LocalResourcePath(String path)
   LocalResourcePath(String path, OpenUrlStrategy openUrlStrategy)
-  OpenUrlStrategy getOpenUrlStrategy()     // <.>
   String getValue()
   String getEffectivePath(UnaryOperator<String> contextPathPrepender)
   String toString()
@@ -26,15 +25,3 @@ record LocalResourcePath {
 }
 ----
 
-<.> xref:#getOpenUrlStrategy_[getOpenUrlStrategy()]
-+
---
-use _#openUrlStrategy()_ instead
---
-
-== Members
-
-[#getOpenUrlStrategy_]
-=== getOpenUrlStrategy()
-
-use _#openUrlStrategy()_ instead

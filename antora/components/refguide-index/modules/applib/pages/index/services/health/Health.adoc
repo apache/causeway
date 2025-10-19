@@ -11,41 +11,6 @@ record Health {
   Health error(Throwable throwable)
   Health error(String message)
   boolean isOk()
-  String getMessage()     // <.>
-  Throwable getCause()     // <.>
-  boolean getResult()     // <.>
 }
 ----
 
-<.> xref:#getMessage_[getMessage()]
-+
---
-use _#message()_ instead
---
-<.> xref:#getCause_[getCause()]
-+
---
-use _#cause()_ instead
---
-<.> xref:#getResult_[getResult()]
-+
---
-use _#isOk()_ instead
---
-
-== Members
-
-[#getMessage_]
-=== getMessage()
-
-use _#message()_ instead
-
-[#getCause_]
-=== getCause()
-
-use _#cause()_ instead
-
-[#getResult_]
-=== getResult()
-
-use _#isOk()_ instead

@@ -106,6 +106,5 @@ Such a feature would probably also use xref:refguide:applib:index/services/iactn
 
 * xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl] and xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc[AsyncControl]
 ** xref:refguide:applib:index/services/wrapper/control/ExceptionHandler.adoc[ExceptionHandler]
-** xref:refguide:applib:index/services/wrapper/control/ExecutionMode.adoc[ExecutionMode]
 * xref:refguide:applib:index/services/wrapper/listeners/InteractionListener.adoc[InteractionListener]
 ** xref:refguide:applib:index/services/wrapper/listeners/InteractionAdapter.adoc[InteractionAdapter]

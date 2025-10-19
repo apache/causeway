@@ -17,9 +17,7 @@ causeway.persistence.commons. +
 entity-change-tracker.enabled
 
 |  true
-| Provides a mechanism to globally enable or disable this service.
-
-By default this service is enabled (if added to the classpath as a module).
+| null
 
 
 |
@@ -29,11 +27,7 @@ entity-change-tracker. +
 suppress-auto-flush
 
 |  true
-| Normally any query submitted to `RepositoryService#allMatches(Query)` will trigger a flush first, unless auto-flush has been disabled.
-
-However, this auto-flush behaviour can be troublesome if the query occurs as a side effect of the evaluation of a derived property, whose value in turn is enlisted by an implementation of a subscriber (in particular `EntityPropertyChangeSubscriber`) which captures the value of all properties (both persisted and derived). However, this behaviour may result in a `ConcurrentModificationException`.
-
-By default, `EntityChangeTracker` will therefore temporarily suppress any auto-flushing while this is ongoing. The purpose of this configuration property is to never suppress, ie always autoflush.
+| null
 
 
 |
@@ -42,12 +36,8 @@ causeway.persistence.commons. +
 repository-service. +
 disable-auto-flush
 
-|
-| Normally any queries are automatically preceded by flushing pending executions.
-
-This key allows this behaviour to be disabled.
-
-NOTE: this key is redundant for JPA/EclipseLink, which supports its own auto-flush using https://www.eclipse.org/eclipselink/documentation/2.7/jpa/extensions/persistenceproperties_ref.htm#BABDHEEB[eclipselink.persistence-context.flush-mode]
+| 
+| null
 
 
 

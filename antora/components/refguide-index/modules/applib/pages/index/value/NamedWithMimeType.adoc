@@ -9,51 +9,7 @@
 interface NamedWithMimeType {
   String name()
   MimeType mimeType()
-  String getName()     // <.>
-  MimeType getMimeType()     // <.>
   int compareTo(NamedWithMimeType o)
 }
 ----
 
-<.> xref:#getName_[getName()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#name()_ instead
-====
---
-<.> xref:#getMimeType_[getMimeType()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#mimeType()_ instead
-====
---
-
-== Members
-
-[#getName_]
-=== getName()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#name()_ instead
-====
-
-[#getMimeType_]
-=== getMimeType()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#mimeType()_ instead
-====

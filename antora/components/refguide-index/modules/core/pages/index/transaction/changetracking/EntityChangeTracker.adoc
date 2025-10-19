@@ -53,7 +53,7 @@ Publishing support: for object stores to enlist an object that is about to be up
 
 The post-modification values are captured when the transaction commits.
 
-Overload as an optimization for ORMs (specifically, JPA) where already have access to the changed records by accessing the ORM-specific data structures ( `EntityManager` 's unit-of-work).
+Overload is an optimization for the JPA object store where we already have access to the changed records by accessing the ORM-specific data structures ( _jakarta.persistence.EntityManager_ 's "unit-of-work").
 
 [#enlistDeleting_ManagedObject]
 === enlistDeleting(ManagedObject)

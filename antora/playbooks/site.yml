@@ -184,9 +184,6 @@ content:
       start_path: persistence/jpa/adoc
       branches: HEAD
     - url: .
-      start_path: persistence/jdo/adoc
-      branches: HEAD
-    - url: .
       start_path: persistence/querydsl/adoc
       branches: HEAD
 
@@ -204,9 +201,6 @@ content:
       branches: HEAD
     - url: .
       start_path: security/simple/src/main/adoc # security
-      branches: HEAD
-    - url: .
-      start_path: security/shiro/src/main/adoc # security
       branches: HEAD
     - url: .
       start_path: security/keycloak/src/main/adoc # security
@@ -256,9 +250,6 @@ content:
       branches: HEAD
     - url: .
       start_path: valuetypes/asciidoc/adoc # valuetypes
-      branches: HEAD
-    - url: .
-      start_path: valuetypes/jodatime/adoc # valuetypes
       branches: HEAD
     - url: .
       start_path: valuetypes/markdown/adoc # valuetypes

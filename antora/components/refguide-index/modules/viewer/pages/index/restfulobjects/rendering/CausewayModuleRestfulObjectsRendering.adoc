@@ -8,6 +8,7 @@
 ----
 class CausewayModuleRestfulObjectsRendering {
   public static final String NAMESPACE;
+  ResponseFactory responseFactory(MetaModelContext mmc)
 }
 ----
 

@@ -342,7 +342,7 @@ This subclass must provide a no-arg constructor; the fields are set reflectively
 
 If at least one property of the entity has been annotated with _Property#queryDslAutoComplete()_ , then that property (and any others) will automatically be used for autocomplete functionality; this attribute determines the minimum number of characters that must be entered before the query is submitted. Fine-tunes how auto-complete queries work, Whether to use the value of this (string) property for auto.
 
-NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
+NOTE: this feature requires that the `querydsl-jpa` module is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 
 NOTE: if _DomainObject#autoCompleteRepository()_ (and _DomainObject#autoCompleteMethod()_ ) have been specified, then these take precedence of the query DSL auto-complete.
 
@@ -353,7 +353,7 @@ If at least one property of the entity has been annotated with _Property#queryDs
 
 NOTE: if _DomainObject#autoCompleteRepository()_ (and _DomainObject#autoCompleteMethod()_ ) have been specified, then these take precedence of the query DSL auto-complete.
 
-NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
+NOTE: this feature requires that the `querydsl-jpa` module is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 
 [#queryDslAutoCompleteAdditionalPredicateRepository]
 === queryDslAutoCompleteAdditionalPredicateRepository
@@ -362,14 +362,14 @@ If at least one property of the entity has been annotated with _Property#queryDs
 
 If this attribute is specified, it indicates the class of a repository service that includes a method which returns an additional predicate to be applied. The default name of that method is "queryDslAutoCompleteAdditionalPredicates" (but can be overridden if required using _DomainObject#queryDslAutoCompleteAdditionalPredicateMethod()_ ).
 
-NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
+NOTE: this feature requires that the `querydsl-jpa` module is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 
 [#queryDslAutoCompleteAdditionalPredicateMethod]
 === queryDslAutoCompleteAdditionalPredicateMethod
 
 If at least one property of the entity has been annotated with _Property#queryDslAutoComplete()_ , then that property (and any others) will automatically be used for autocomplete functionality; this attribute can be used to specify the name of a method in a repository to provide additional predicate(s) to always be added to the autocomplete (for example to search only for current or active objects).
 
-NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
+NOTE: this feature requires that the `querydsl-jpa` module is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 
 include::hooks/DomainObject_010-examples-and-usage.adoc[]
 

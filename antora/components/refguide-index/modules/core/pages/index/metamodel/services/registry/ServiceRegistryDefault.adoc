@@ -9,9 +9,9 @@ Default implementation of xref:refguide:applib:index/services/registry/ServiceRe
 .ServiceRegistryDefault.java
 ----
 class ServiceRegistryDefault {
-  Optional<_SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id)
+  Optional<SingletonBeanProvider> lookupRegisteredBeanById(LogicalType id)
   Optional<?> lookupBeanById(String id)
-  Stream<_SingletonBeanProvider> streamRegisteredBeans()
+  Stream<SingletonBeanProvider> streamRegisteredBeans()
   Can<T> select(Class<T> type, Annotation[] qualifiers)
   void clearRegisteredBeans()
 }

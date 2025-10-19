@@ -30,7 +30,7 @@ The default; allows the programmer to combine `@DomainObject` annotation with th
 <.> xref:#ENTITY[ENTITY]
 +
 --
-A domain entity whose persistence is managed internally by Causeway, using JPA or JDO as the persistence implementation.
+A domain entity whose persistence is managed by Causeway using the configured object store, eg JPA/EclipseLink.
 --
 <.> xref:#VIEW_MODEL[VIEW_MODEL]
 +
@@ -58,7 +58,7 @@ The default; allows the programmer to combine `@DomainObject` annotation with th
 [#ENTITY]
 === ENTITY
 
-A domain entity whose persistence is managed internally by Causeway, using JPA or JDO as the persistence implementation.
+A domain entity whose persistence is managed by Causeway using the configured object store, eg JPA/EclipseLink.
 
 Domain entities are considered to be part of the domain model layer.
 

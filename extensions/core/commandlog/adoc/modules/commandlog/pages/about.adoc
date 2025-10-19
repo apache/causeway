@@ -212,9 +212,7 @@ By default all the usual hide/disable/validate rules will be checked, but there 
 
 Behind the scenes this service uses xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc#asyncWrap_T_AsyncControl[WrapperFactory#asyncWrap(...)] using xref:refguide:applib:index/services/wrapper/control/AsyncControl.adoc#with_ExecutorService[AsyncControl#with(ExecutorService)] to pass an implementation of `ExecutorService` that persists the command as a `CommandLogEntry` instance.
 
-If you require more fine-grained control, you can always just use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] async method yourself.
-The `ExecutorService` to use is xref:refguide:extensions:index/commandlog/applib/dom/BackgroundService_PersistCommandExecutorService.adoc[BackgroundService.PersistCommandExecutorService].
-This is a Spring `@Service` and so can be obtained through injection.
+If you require more fine-grained control, you can always just use the xref:refguide:applib:index/services/wrapper/WrapperFactory.adoc[WrapperFactory] async method yourself, specifying an implementation of the xref:refguide:applib:index/services/wrapper/control/SyncControl.adoc[SyncControl.CommandListener].
 
 === Executing Actions using the Quartz scheduler
 

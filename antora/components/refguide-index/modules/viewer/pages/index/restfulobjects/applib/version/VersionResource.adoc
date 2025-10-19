@@ -7,10 +7,10 @@
 .VersionResource.java
 ----
 interface VersionResource {
-  Response version()
-  Response deleteVersionNotAllowed()
-  Response putVersionNotAllowed()
-  Response postVersionNotAllowed()
+  ResponseEntity<Object> version()
+  ResponseEntity<Object> deleteVersionNotAllowed()
+  ResponseEntity<Object> putVersionNotAllowed()
+  ResponseEntity<Object> postVersionNotAllowed()
 }
 ----
 

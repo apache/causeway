@@ -11,8 +11,6 @@ Server-sent events.
 interface SseChannel {
   UUID uuid()
   Class<?> sourceType()
-  UUID getId()
-  Class<?> getSourceType()
   void listenWhile(Predicate<SseSource> listener)
   void fire(SseSource source)
   void close()

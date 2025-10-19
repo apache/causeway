@@ -10,7 +10,7 @@ The application is also built nightly as a docker image, so you can quickly try 
 
 [source,bash,subs="attributes+"]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-helloworld:v{fwk-version}-jpa-SNAPSHOT
+docker run -p 8080:8080 apache/causeway-app-helloworld:latest
 ----
 
 
@@ -40,7 +40,7 @@ Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the hellowor
 
 Create a new directory, and `cd` into that directory.
 
-To build the app from the latest stable release:
+To build the app from the latest release:
 
 include::helloworld-script-jpa.adoc[]
 

@@ -16,8 +16,8 @@ include::../section-hooks/causeway.core.runtime-services~pre.adoc[]
 causeway.core.runtime-services. +
 application-features.init
 
-|  not-specified
-| Whether the `ApplicationFeatureRepository` (or the default implementation of that service, at least) should compute the set of `ApplicationFeature` that describe the metamodel eagerly, or lazily.
+|  NOT_SPECIFIED
+| null
 
 
 |
@@ -26,7 +26,7 @@ causeway.core.runtime-services. +
 email.override.bcc
 
 | 
-| Intended for testing purposes only, if set then the requested `bcc:` of the email will be ignored, and instead sent to this email address instead.
+| null
 
 
 |
@@ -35,7 +35,7 @@ causeway.core.runtime-services. +
 email.override.cc
 
 | 
-| Intended for testing purposes only, if set then the requested `cc:` of the email will be ignored, and instead sent to this email address instead.
+| null
 
 
 |
@@ -44,7 +44,7 @@ causeway.core.runtime-services. +
 email.override.to
 
 | 
-| Intended for testing purposes only, if set then the requested `to:` of the email will be ignored, and instead sent to this email address instead.
+| null
 
 
 |
@@ -53,11 +53,7 @@ causeway.core.runtime-services. +
 email.sender.address
 
 | 
-| Specifies the email address of the user sending the email.
-
-If the username is not specified, is also used as the username to connect to the SMTP service.
-
-This configuration property is mandatory (for the default implementation of the `EmailService`, at least).
+| null
 
 
 |
@@ -66,7 +62,7 @@ causeway.core.runtime-services. +
 email.throw-exception-on-fail
 
 |  true
-| If an email fails to send, whether to propagate the exception (meaning that potentially the end-user might see the exception), or whether instead to just indicate failure through the return value of the method (`)` that's being called.
+| null
 
 
 |
@@ -76,9 +72,7 @@ entity-property-change-publisher. +
 bulk.threshold
 
 |  1
-| Determines the threshold as to whether to execute a set of entity changes in blk, in other words without a transaction flush in between.
-
-If the threshold is passed (by default, anything more than 1 entity to persist), then the `RepositoryService#execInBulk(Callable)` API is used.
+| null
 
 
 |
@@ -87,7 +81,7 @@ causeway.core.runtime-services. +
 exception-recognizer.dae.disable
 
 | 
-| Whether the `ExceptionRecognizer` implementation for Spring's DataAccessException - which attempts to sanitize any exceptions arising from object stores - should be disabled (meaning that exceptions will potentially propagate as more serious to the end user).
+| null
 
 
 |
@@ -95,97 +89,14 @@ exception-recognizer.dae.disable
 causeway.core.runtime-services. +
 translation.po.mode
 
-|  write
-| Specifies the initial mode for obtaining/discovering translations.
-
-There are three modes:
-
-* The default mode of write is appropriate for integration testing or prototyping, meaning that the service records any requests made of it but just returns the string unaltered. This is a good way to discover new strings that require translation.
-* The read mode is appropriate for production; the service looks up translations that have previously been captured.
-* The disabled performs no translation and simply returns the original string unchanged. Unlike the write mode, it does _not_ keep track of translation requests.
+|  WRITE
+| null
 
 
 |
 [[causeway.core.runtime-services.translation.resource-location]]
 causeway.core.runtime-services. +
 translation.resource-location
-
-| 
-| Specifies the relative resource path to look for translation files.
-
-If ++{++@code null} uses ++{++@code servletContext.getResource("/WEB-INF/")}.
-
-Replaces the former Servlet context parameter 'causeway.config.dir';
-
-
-|
-[[causeway.core.runtime-services.email.port]]
-causeway.core.runtime-services. +
-email.port
-
-|  587
-| null
-
-
-|
-[[causeway.core.runtime-services.email.sender.hostname]]
-causeway.core.runtime-services. +
-email.sender.hostname
-
-| 
-| null
-
-
-|
-[[causeway.core.runtime-services.email.sender.password]]
-causeway.core.runtime-services. +
-email.sender.password
-
-| 
-| null
-
-
-|
-[[causeway.core.runtime-services.email.sender.username]]
-causeway.core.runtime-services. +
-email.sender.username
-
-| 
-| null
-
-
-|
-[[causeway.core.runtime-services.email.socket-connection-timeout]]
-causeway.core.runtime-services. +
-email.socket-connection-timeout
-
-|  2000
-| null
-
-
-|
-[[causeway.core.runtime-services.email.socket-timeout]]
-causeway.core.runtime-services. +
-email.socket-timeout
-
-|  2000
-| null
-
-
-|
-[[causeway.core.runtime-services.email.tls.enabled]]
-causeway.core.runtime-services. +
-email.tls.enabled
-
-|  true
-| null
-
-
-|
-[[causeway.core.runtime-services.repository-service.disable-auto-flush]]
-causeway.core.runtime-services. +
-repository-service. +
-disable-auto-flush
 
 | 
 | null

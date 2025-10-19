@@ -10,7 +10,7 @@ Default implementation of xref:refguide:applib:index/services/swagger/SwaggerSer
 ----
 class SwaggerServiceDefault {
   public static final String LOGICAL_TYPE_NAME;     // <.>
-  SwaggerServiceDefault(OpenApiSpecGenerator swaggerSpecGenerator, RestEasyConfiguration restEasyConfiguration, WebAppContextPath webAppContextPath)
+  SwaggerServiceDefault(OpenApiSpecGenerator swaggerSpecGenerator, CausewayConfiguration causewayConfiguration, WebAppContextPath webAppContextPath)
   String generateSwaggerSpec(Visibility visibility, Format format)
 }
 ----

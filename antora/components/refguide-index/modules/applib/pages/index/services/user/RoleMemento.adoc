@@ -14,8 +14,6 @@ record RoleMemento {
   RoleMemento(String name, String description)     // <.>
   boolean equals(Object obj)
   int hashCode()
-  String getName()     // <.>
-  String getDescription()     // <.>
 }
 ----
 
@@ -29,26 +27,6 @@ Creates a new role with the specified name. Description is left blank.
 --
 Creates a new role with the specified name and description.
 --
-<.> xref:#getName_[getName()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#name()_ instead
-====
---
-<.> xref:#getDescription_[getDescription()]
-+
---
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#description()_ instead
-====
---
 
 == Members
 
@@ -61,23 +39,3 @@ Creates a new role with the specified name. Description is left blank.
 === RoleMemento(String, String)
 
 Creates a new role with the specified name and description.
-
-[#getName_]
-=== getName()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#name()_ instead
-====
-
-[#getDescription_]
-=== getDescription()
-
-[WARNING]
-====
-[red]#_deprecated:_#
-
-use _#description()_ instead
-====

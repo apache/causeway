@@ -16,12 +16,8 @@ include::../section-hooks/causeway.prototyping~pre.adoc[]
 causeway.prototyping.h2-console. +
 generate-random-web-admin-password
 
-|  true
-| Whether to generate a random password for access to the H2 Web-Console advanced features.
-
-If a password is generated, it is logged to the logging subsystem (Log4j2).
-
-Recommended (`true`) when `#isWebAllowRemoteAccess()` is also `true`.
+| 
+| null
 
 
 |
@@ -30,9 +26,7 @@ causeway.prototyping.h2-console. +
 web-allow-remote-access
 
 | 
-| Whether to allow remote access to the H2 Web-Console, which is a potential security risk when no web-admin password is set.
-
-Corresponds to Spring Boot's "spring.h2.console.settings.web-allow-others" config property.
+| null
 
 
 |
@@ -40,12 +34,8 @@ Corresponds to Spring Boot's "spring.h2.console.settings.web-allow-others" confi
 causeway.prototyping. +
 if-disabled-policy
 
-|  disable
-| Whether and how to display any properties, actions and collections whose usability has been vetoed.
-
-By default, such object members are shown as disabled, with the tooltip indicating why. Setting the property to SHOW++_++AS++_++DISABLED++_++WITH++_++DIAGNOSTICS shows additional detail in the tooltip.
-
-This config property only applies in prototyping mode.
+|  DISABLE
+| null
 
 
 |
@@ -53,12 +43,8 @@ This config property only applies in prototyping mode.
 causeway.prototyping. +
 if-hidden-policy
 
-|  hide
-| Whether and how to display any properties, actions and collections whose visibility has been vetoed.
-
-By default, such object members are of course hidden. However, this config property can be used to instead show these objects as disabled, with the tooltip indicating why the object member has been vetoed. Setting the property to SHOW++_++AS++_++DISABLED++_++WITH++_++DIAGNOSTICS shows additional detail in the tooltip.
-
-This config property only applies in prototyping mode.
+|  HIDE
+| null
 
 
 

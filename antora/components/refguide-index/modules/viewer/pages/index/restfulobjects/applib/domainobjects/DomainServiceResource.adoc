@@ -7,22 +7,22 @@
 .DomainServiceResource.java
 ----
 interface DomainServiceResource {
-  Response services()
-  Response deleteServicesNotAllowed()
-  Response putServicesNotAllowed()
-  Response postServicesNotAllowed()
-  Response service(String serviceId)
-  Response deleteServiceNotAllowed(String serviceId)
-  Response putServiceNotAllowed(String serviceId)
-  Response postServiceNotAllowed(String serviceId)
-  Response actionPrompt(String serviceId, String actionId)
-  Response deleteActionPromptNotAllowed(String serviceId, String actionId)
-  Response putActionPromptNotAllowed(String serviceId, String actionId)
-  Response postActionPromptNotAllowed(String serviceId, String actionId)
-  Response invokeActionQueryOnly(String serviceId, String actionId, String xCausewayQueryString)     // <.>
-  Response invokeActionIdempotent(String serviceId, String actionId, InputStream arguments)
-  Response invokeAction(String serviceId, String actionId, InputStream arguments)
-  Response deleteInvokeActionNotAllowed(String serviceId, String actionId)
+  ResponseEntity<Object> services()
+  ResponseEntity<Object> deleteServicesNotAllowed()
+  ResponseEntity<Object> putServicesNotAllowed()
+  ResponseEntity<Object> postServicesNotAllowed()
+  ResponseEntity<Object> service(String serviceId)
+  ResponseEntity<Object> deleteServiceNotAllowed(String serviceId)
+  ResponseEntity<Object> putServiceNotAllowed(String serviceId)
+  ResponseEntity<Object> postServiceNotAllowed(String serviceId)
+  ResponseEntity<Object> actionPrompt(String serviceId, String actionId)
+  ResponseEntity<Object> deleteActionPromptNotAllowed(String serviceId, String actionId)
+  ResponseEntity<Object> putActionPromptNotAllowed(String serviceId, String actionId)
+  ResponseEntity<Object> postActionPromptNotAllowed(String serviceId, String actionId)
+  ResponseEntity<Object> invokeActionQueryOnly(String serviceId, String actionId, String xCausewayQueryString)     // <.>
+  ResponseEntity<Object> invokeActionIdempotent(String serviceId, String actionId, InputStream arguments)
+  ResponseEntity<Object> invokeAction(String serviceId, String actionId, InputStream arguments)
+  ResponseEntity<Object> deleteInvokeActionNotAllowed(String serviceId, String actionId)
 }
 ----
 

@@ -7,10 +7,10 @@
 .HealthResource.java
 ----
 interface HealthResource {
-  Response health()
-  Response deleteHealthNotAllowed()
-  Response putHealthNotAllowed()
-  Response postHealthNotAllowed()
+  ResponseEntity<Object> health()
+  ResponseEntity<Object> deleteHealthNotAllowed()
+  ResponseEntity<Object> putHealthNotAllowed()
+  ResponseEntity<Object> postHealthNotAllowed()
 }
 ----
 

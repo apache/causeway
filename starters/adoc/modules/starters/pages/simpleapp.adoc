@@ -9,7 +9,7 @@ The application is also built nightly as a docker image, so you can quickly try 
 
 [source,bash,subs="attributes+"]
 ----
-docker run -d -p 8080:8080 apache/causeway-app-simpleapp:v{fwk-version}-jpa-SNAPSHOT
+docker run -p 8080:8080 apache/causeway-app-simpleapp:latest
 ----
 
 As with the xref:docs:starters:helloworld.adoc[HelloWorld] starter app, the instructions <<Downloading & Running,below>> will download a minimal Apache Causeway app consisting of a single entity (`SimpleObject`) with supporting domain services.
@@ -44,7 +44,7 @@ Apache Causeway v{fwk-version} requires Java {fwk-jdk-version}, and the simpleap
 
 Create a new directory, and `cd` into that directory.
 
-To build the app from the latest stable release:
+To build the app from the latest release:
 
 include::simpleapp-script-jpa.adoc[]
 

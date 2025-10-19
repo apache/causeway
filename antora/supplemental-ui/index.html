@@ -566,92 +566,99 @@
   <!--==========================
     Call To Action
   ============================-->
-  <section id="call-to-action" class="wow fadeInUp">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12 text-center text-lg-left">
-          <h3 class="cta-title">Quick Start</h3>
+    <section id="call-to-action" class="wow fadeInUp">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center text-lg-left">
+                    <h3 class="cta-title">Quick Start</h3>
 
-          <div class="row">
-            <div class="col-lg-12 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; ">
-                Prereqs: v3.x: Java 17 and Maven 3.6+<br/>
-                We recommend you try out using Linux, MacOS or WSL2 <br/>
-                (to <a href="https://github.com/spring-projects/spring-boot/issues/17766">avoid exceeding</a> Windows' limits due to classpath length).
-              </p>
-              <br/>
-            </div>
-            <div class="col-lg-6 text-left text-lg-left">
-              <h4 class="cta-text">Try out ...</h4>
-                <p class="cta-text text-left" style="margin-block-end: 0; ">
-                  Try out the framework with the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
-                  <p>
-                  <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Run it locally using:
-                  <pre id="helloworld-docker-text"  style="margin-top: 5px">
+                    <div class="row">
+                        <div class="col-lg-6 text-left text-lg-left">
+                            <h4 class="cta-text">Try out ...</h4>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Try out the framework with the minimal <a href="docs/latest/starters/helloworld.html">helloworld</a> starter&nbsp;app.
+                            <p>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Run it locally using:
+                            <pre id="helloworld-docker-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-helloworld:latest</pre>
-                <p>
-                <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source using:
-                <pre id="helloworld-jpa-text">
+                            <p>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Build from source (prereqs below) using:
+                            <pre id="helloworld-jpa-text"  style="margin-top: 5px">
 APP=causeway-app-helloworld
-VARIANT="3-jpa"
-curl https://codeload.github.com/apache/$APP/zip/v$VARIANT | jar xv
-cd $APP-$VARIANT
+VER="3-jpa"                  # or "4-jpa"
+curl https://codeload.github.com/apache/$APP/zip/v$VER | jar xv
+cd $APP-$VER
 
 mvn clean install -Dskip.staging -Dskip.nightly
 mvn spring-boot:run</pre>
-            </div>
-            <div class="col-lg-6 text-left text-lg-left">
-                <h4 class="cta-text">Develop your own ...</h4>
-              <p class="cta-text text-left" style="margin-block-end: 0; ">
-                Develop your own app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
-                <p>
-                <p class="cta-text text-left" style="margin-block-end: 0; ">
-                Run it locally using:
-                <pre id="simpleapp-docker-jpa-text"  style="margin-top: 5px">
+                        </div>
+                        <div class="col-lg-6 text-left text-lg-left">
+                            <h4 class="cta-text">Develop your own ...</h4>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Develop your own app with the structured <a href="docs/latest/starters/simpleapp.html">simpleapp</a> starter&nbsp;app.
+                            <p>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Run it locally using:
+                            <pre id="simpleapp-docker-jpa-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-simpleapp:latest</pre>
-                <p>
-                <p class="cta-text text-left" style="margin-block-end: 0; ">
-                    Build from source using:
-              <pre id="simpleapp-jpa-text">
+                            <p>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Build from source (prereqs below) using:
+                            <pre id="simpleapp-jpa-text"  style="margin-top: 5px">
 APP=causeway-app-simpleapp
-VARIANT="3-jpa"
-curl https://codeload.github.com/apache/$APP/zip/v$VARIANT | jar xv
-cd $APP-$VARIANT
+VER="3-jpa"                  # or "4-jpa"
+curl https://codeload.github.com/apache/$APP/zip/v$VER | jar xv
+cd $APP-$VER
 
 mvn clean install -Dskip.staging -Dskip.nightly
 mvn -pl webapp spring-boot:run</pre>
-            </div>
-          </div>
-          <div class="row">
-              <div class="col-lg-2 text-left text-lg-left">
-              </div>
-              <div class="col-lg-8 text-left text-lg-left">
-                  <h4 class="cta-text" style="margin-top: 20px">Learn and Explore...</h4>
-                <p class="cta-text text-left" style="margin-block-end: 0; margin-top: 20px;">
-                  You can also explore the Apache Causeway™ programming model through the reference app, which illustrates many of the framework's annotations and programming conventions.
-                  <br/>
-                  <p class="cta-text text-left" style="margin-block-end: 0; ">
-                  <pre id="demoapp-docker-text"  style="margin-top: 5px">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 text-left text-lg-left">
+                            <h4 class="cta-text" style="margin-top: 20px">Build Prereqs</h4>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                The prereqs are Java 17 and Maven 3.x.  You could start off by building within a container (files accessible at <span style="font-family: "Courier New", Courier, monospace">/tmp/causeway</span>):<br/>
+                            <pre id="docker-container-text"  style="margin-top: 5px">
+mkdir /tmp/causeway
+docker run -p8080:8080 -v /tmp/causeway:/tmp \
+    -it --platform linux/amd64 eclipse-temurin:21-jdk /bin/bash</pre>
+                            </p>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                and then within the container:<br/>
+                            <pre id="docker-prereqs-text"  style="margin-top: 5px">
+apt update && apt install -y curl zip unzip vim
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install maven 3.9.11
+sdk install mvnd 1.0.3
+cd /tmp
+</pre>
+                            </p>
+                        </div>
+                        <div class="col-lg-6 text-left text-lg-left">
+                            <h4 class="cta-text" style="margin-top: 20px">Learn and Explore...</h4>
+                            <p class="cta-text text-left" style="margin-block-end: 0; margin-top: 20px;">
+                                You can also explore the Apache Causeway™ programming model through the demo app, which illustrates many of the framework's annotations and programming conventions.
+                            <p>
+                            <p class="cta-text text-left" style="margin-block-end: 0; ">
+                                Run it locally using:
+                            <pre id="demoapp-docker-text"  style="margin-top: 5px">
 docker run -p 8080:8080 apache/causeway-app-demo-jpa:latest</pre>
-                  <br/>
-                <p>
-              </div>
-              <div class="col-lg-2 text-left text-lg-left">
-              </div>
-          </div>
-            <div class="row">
-            <div class="col-lg-12 text-left text-lg-left">
-              <p class="cta-text text-center" style="margin-block-end: 0; margin-top: 20px;">
-                  <b>NOTE</b>: The online apps all scale to zero when not in use, so please allow up to a minute for it to restart if necessary.
-              </p>
+                            </p>
+                            <p class="cta-text text-left" style="margin-block-end: 0;">
+                                You might also want to download the programming model <a href="docs/latest/resources/cheatsheet.html">cheatsheet</a>.
+                            </p>
+                        </div>
+                        <div class="col-lg-2 text-left text-lg-left">
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
   <!--==========================
     Support

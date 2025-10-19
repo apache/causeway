@@ -192,14 +192,14 @@ The maximum entry length of a field.
 
 The default value ( `-1` ) indicates that no maxLength has been specified.
 
-NOTE: this will usually be supplemented by a JDO or JPA-specific annotation to indicate length of the column in the table to whic the entity is mapped.
+NOTE: if using the JPA object store, the field will usually also be annotated using _Column#length()_ to specify the length of the column in the table to which the entity is mapped.
 
 [#snapshot]
 === snapshot
 
 Indicates whether the property should be included or excluded from mementos.
 
-To ensure that the property is actually not persisted in the objectstore, also annotate with the JPA annotation `jakarta.persistence.Transient`
+To ensure that the property is actually not persisted in the JPA object store, also annotate with _jakarta.persistence.Transient_ .
 
 [#mustSatisfy]
 === mustSatisfy
@@ -213,7 +213,7 @@ If more than one is provided, then all must be satisfied (in effect "AND"ed toge
 
 Whether this property is optional or is mandatory (ie required).
 
-NOTE: this will usually be supplmented by a JDO or JPA-specific annotation to specify the nullability of the corresponding column in the table to which the owning entity is mapped.
+NOTE: if using the JPA object store, the field will usually also be annotated using _Column#nullable()_ to specify the nullability of the corresponding column in the table to which the owning entity is mapped.
 
 [#projecting]
 === projecting
@@ -252,7 +252,7 @@ Moreover, additional criteria (predicates) can be specified for the auto-complet
 
 NOTE: if _DomainObject#autoCompleteRepository()_ (and _DomainObject#autoCompleteMethod()_ ) have been specified, then these take precedence of the query DSL auto-complete.
 
-NOTE: this feature requires that the `querydsl-xxx` module (for JDO or JPA as required) is included as part of the application manifest. Otherwise, no autocomplete will be generated.
+NOTE: this feature requires that the `querydsl-jpa` module is included as part of the application manifest. Otherwise, no autocomplete will be generated.
 
 NOTE: this feature only applies to entities, not to view models. Only persisted properties should be annotated.
 
