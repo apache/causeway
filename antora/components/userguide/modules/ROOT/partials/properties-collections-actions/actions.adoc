@@ -181,7 +181,7 @@ For example:
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 @Action(semantics=SemanticsOf.IDEMPOTENT)
 public Order invoice(
@@ -190,7 +190,7 @@ public Order invoice(
                 @ParameterLayout(named="Ship no later than")
                 LocalDate shipBy) {
     // ...
-    setShipBy(shipBy)
+    setShipBy(shipBy);
     return this;
 }
 

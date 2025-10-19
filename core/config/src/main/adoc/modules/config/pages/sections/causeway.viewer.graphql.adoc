@@ -33,7 +33,7 @@ api-variant
 causeway.viewer.graphql. +
 authentication.fallback.roles
 
-| 
+|
 | Used as the set of roles for the default username (if not provided by other means).
 
 
@@ -42,7 +42,7 @@ authentication.fallback.roles
 causeway.viewer.graphql. +
 authentication.fallback.username
 
-| 
+|
 | Used as the default username (if not provided by other means).
 
 
@@ -60,7 +60,7 @@ arg-name
 causeway.viewer.graphql.lookup. +
 field-name-prefix
 
-| 
+|
 | Lookup field prefix
 
 
@@ -69,7 +69,7 @@ field-name-prefix
 causeway.viewer.graphql.lookup. +
 field-name-suffix
 
-| 
+|
 | Lookup field suffix
 
 
@@ -109,7 +109,7 @@ scalar-marshaller. +
 local-date-format
 
 |  yyyy-MM-dd
-| For both JDK8's `LocalDate` and JodaTime's `LocalDate`
+| For JDK8's `LocalDate`
 
 
 |
@@ -119,7 +119,7 @@ scalar-marshaller. +
 local-time-format
 
 |  HH:mm:ss
-| For both JDK8's `LocalTime` and JodaTime's `LocalTime`
+| For JDK8's `LocalTime`
 
 
 |
@@ -129,7 +129,7 @@ scalar-marshaller. +
 zoned-date-time-format
 
 |  yyyy-MM-dd'T'HH:mm:ssXXX
-| for JDK8's `ZonedDateTime` and JodaTime's `DateTime`
+| for JDK8's `ZonedDateTime`
 
 
 |
@@ -146,7 +146,7 @@ schema-style
 causeway.viewer.graphql.schema. +
 rich.enable-scenario-testing
 
-| 
+|
 | If the `#getSchemaStyle()` is set to either `SchemaStyle#RICH++_++ONLY` or `SchemaStyle#SIMPLE++_++AND++_++RICH`, then determines whether the "Scenario" field is included in order to allow given/when/then tests to be expressed.
 
 Ignored if the `#getSchemaStyle()` is `SchemaStyle#SIMPLE++_++ONLY`.
