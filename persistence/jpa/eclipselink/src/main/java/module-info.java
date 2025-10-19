@@ -20,8 +20,6 @@ module org.apache.causeway.persistence.jpa.eclipselink {
     exports org.apache.causeway.persistence.jpa.eclipselink.inject;
     exports org.apache.causeway.persistence.jpa.eclipselink;
     exports org.apache.causeway.persistence.jpa.eclipselink.config;
-    exports org.apache.causeway.persistence.jpa.eclipselink.services;
-    exports org.apache.causeway.persistence.jpa.eclipselink.app;
 
     requires static lombok;
 
