@@ -19,4 +19,6 @@
 ** Persistence
 
 *** xref:pjpa:ROOT:about.adoc[]
+*** xref:querydsl:ROOT:about.adoc[]
+
 

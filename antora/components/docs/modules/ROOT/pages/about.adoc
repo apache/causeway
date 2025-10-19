@@ -89,6 +89,7 @@ _Viewers_
 _Persistence_
 
 * xref:pjpa:ROOT:about.adoc[JPA (EclipseLink)]
+* xref:querydsl:ROOT:about.adoc[QueryDSL]
 
 
 |
