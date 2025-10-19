@@ -627,7 +627,7 @@ docker run -p8080:8080 -v /tmp/causeway:/tmp \
     -it --platform linux/amd64 eclipse-temurin:21-jdk /bin/bash</pre>
                             </p>
                             <p class="cta-text text-left" style="margin-block-end: 0; ">
-                                and then within the container:<br/>
+                                within the container, install the prereqs and continue as above:<br/>
                             <pre id="docker-prereqs-text"  style="margin-top: 5px">
 apt update && apt install -y curl zip unzip vim
 curl -s "https://get.sdkman.io" | bash

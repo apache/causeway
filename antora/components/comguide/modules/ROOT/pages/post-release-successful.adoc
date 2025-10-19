@@ -351,9 +351,7 @@ git commit -m "$CAUSEWAYJIRA: bumps antora.yml versions to $CAUSEWAYREL"
 +
 [source,bash,subs="attributes+"]
 ----
-pushd bom
-mvnd clean install -T1C -DskipTests -Dgithub
-popd
+mvnd clean install -DskipTests -Dgithub
 ----
 
 * build and link to the module tooling jar, as per xref:release-process-prereqs.adoc#doc-tooling[doc tooling prereqs] process
@@ -415,13 +413,13 @@ content:
   sources:
     - url: .
       start_path: antora/components/docs # docs
-      branches: [{page-causewayreleaseversion}]
+      branches: [..., {page-causewayreleaseversion}]  # <.>
       # ...
     - url: .
       start_path: viewers/wicket/adoc # vw
-      branches: [{page-causewayreleaseversion}]
+      branches: [..., {page-causewayreleaseversion}]  # <1>
 ----
-
+<.> comma-separated list of all branches to include.
 
 * check that the attributes are correct.
 +
