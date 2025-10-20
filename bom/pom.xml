@@ -166,7 +166,7 @@ identified
 
         <ognl.version>3.4.7</ognl.version>
 
-        <pdfbox.version>3.0.5</pdfbox.version>
+        <pdfbox.version>3.0.6</pdfbox.version>
         <picocontainer.version>2.15.2</picocontainer.version>
         <poi.version>5.4.1</poi.version>
 
