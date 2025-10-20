@@ -21,9 +21,15 @@ If you just want to get going quickly, we suggest using our xref:docs:starters:h
 
 If you want to build Apache Causeway from formally released source tarballs, you can download from here:
 
-* 3.x release:
+* 4.x release:
 +
 link:https://dlcdn.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip[causeway-bom-{page-causewayreleaseversion}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion}-source-release.zip.sha512[sha512])
+
+:page-causewayreleaseversion3: 3.4.0
+
+* 3.x release:
++
+link:https://dlcdn.apache.org/causeway/causeway-bom-{page-causewayreleaseversion3}-source-release.zip[causeway-bom-{page-causewayreleaseversion3}-source-release.zip] (link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion3}-source-release.zip.asc[asc], link:https://downloads.apache.org/causeway/causeway-bom-{page-causewayreleaseversion3}-source-release.zip.sha512[sha512])
 
 :page-causewayreleaseversion2: 2.1.0
 
