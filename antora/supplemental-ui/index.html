@@ -624,14 +624,15 @@ mvn -pl webapp spring-boot:run</pre>
                             <pre id="docker-container-text"  style="margin-top: 5px">
 mkdir /tmp/causeway
 docker run -p8080:8080 -v /tmp/causeway:/tmp \
-    -it --platform linux/amd64 eclipse-temurin:21-jdk /bin/bash</pre>
+    -it ubuntu:latest /bin/bash</pre>
                             </p>
                             <p class="cta-text text-left" style="margin-block-end: 0; ">
                                 within the container, install the prereqs and continue as above:<br/>
                             <pre id="docker-prereqs-text"  style="margin-top: 5px">
-apt update && apt install -y curl zip unzip vim
+apt update && apt install -y curl zip unzip vim git
 curl -s "https://get.sdkman.io" | bash
 source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install java 21.0.8-tem
 sdk install maven 3.9.11
 sdk install mvnd 1.0.3
 cd /tmp
