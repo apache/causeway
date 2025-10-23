@@ -20,30 +20,61 @@ package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.util.Facets;
 
-import org.jspecify.annotations.NonNull;
+import lombok.AccessLevel;
+import lombok.Builder;
 
 public record MenuAction (
         @NonNull Bookmark serviceBookmark,
         @NonNull Identifier actionId,
         @NonNull String name,
-        @Nullable String cssClassFa
+        @NonNull DecorationModel decorationModel
         ) implements MenuEntry {
 
+    @Builder(access = AccessLevel.PRIVATE)
+    public record DecorationModel(
+        boolean isPrototype,
+        int paramCount,
+        Optional<VetoReason> interactionVetoOpt,
+        Optional<FontAwesomeLayers> fontAwesomeLayersOpt,
+        Optional<String> describedAsOpt,
+        Optional<String> additionalCssClassOpt) {
+        static DecorationModel of(final @NonNull ManagedAction managedAction) {
+            var action = managedAction.getAction();
+            return DecorationModel.builder()
+                .isPrototype(action.isPrototype())
+                .paramCount(action.getParameterCount())
+                .interactionVetoOpt(managedAction.checkUsability()
+                    .flatMap(veto->veto.getReason()))
+                .fontAwesomeLayersOpt(ObjectAction.Util.cssClassFaFactoryFor(
+                    managedAction.getAction(),
+                    managedAction.getOwner())
+                    .map(FaLayersProvider::getLayers)
+                    .map(FontAwesomeLayers::emptyToBlank))
+                .describedAsOpt(managedAction.getDescription())
+                .additionalCssClassOpt(Facets.cssClass(action, managedAction.getOwner()))
+                .build();
+        }
+    }
+
     public static MenuAction of(final @NonNull ManagedAction managedAction) {
-        // TODO missing cssClass
         return new MenuAction(
                 managedAction.getOwner().getBookmark().orElseThrow(),
                 managedAction.getIdentifier(),
                 managedAction.getFriendlyName(),
-                null);
+                DecorationModel.of(managedAction));
     }
 
     public Optional<ManagedAction> managedAction(){

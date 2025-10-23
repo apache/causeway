@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -341,22 +342,20 @@ extends GridSystemServiceAbstract<BSGrid> {
             }
 
             if(!unboundPropertyIds.isEmpty()) {
-                var fieldSet = gridModel.getFieldSetForUnreferencedPropertiesRef();
-                if(fieldSet != null) {
-                    unboundPropertyIds.removeAll(unboundMetadataContributingIds);
+                var fieldSet = gridModel.nodeForUnreferencedProperties();
+                unboundPropertyIds.removeAll(unboundMetadataContributingIds);
 
-                    // add unbound properties respecting configured sequence policy
-                    var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
-                            .sortProperties(config, unboundPropertyIds.stream()
-                                    .map(oneToOneAssociationById::get)
-                                    .filter(_NullSafe::isPresent));
+                // add unbound properties respecting configured sequence policy
+                var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
+                    .sortProperties(config, unboundPropertyIds.stream()
+                            .map(oneToOneAssociationById::get)
+                            .filter(_NullSafe::isPresent));
 
-                    addPropertiesTo(
-                            fieldSet,
-                            sortedUnboundPropertyIds,
-                            layoutDataFactory::createPropertyLayoutData,
-                            propertyLayoutDataById::put);
-                }
+                addPropertiesTo(
+                        fieldSet,
+                        sortedUnboundPropertyIds,
+                        layoutDataFactory::createPropertyLayoutData,
+                        propertyLayoutDataById::put);
             }
         }
 
@@ -378,23 +377,22 @@ extends GridSystemServiceAbstract<BSGrid> {
                             .map(oneToManyAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
-            final BSTabGroup bsTabGroup = gridModel.getTabGroupForUnreferencedCollectionsRef();
-            if(bsTabGroup != null) {
-                addCollectionsTo(
-                        bsTabGroup,
-                        sortedMissingCollectionIds,
-                        objectSpec,
-                        layoutDataFactory::createCollectionLayoutData);
-            } else {
-                final BSCol bsCol = gridModel.getColForUnreferencedCollectionsRef();
-                if(bsCol != null) {
-                    addCollectionsTo(
+            gridModel.nodeForUnreferencedCollections()
+            .accept(
+                bsCol->{
+                    addUnreferencedCollectionsTo(
                         bsCol,
                         sortedMissingCollectionIds,
                         layoutDataFactory::createCollectionLayoutData,
                         collectionLayoutDataById::put);
-                }
-            }
+                },
+                bsTabGroup->{
+                    addUnreferencedCollectionsTo(
+                        bsTabGroup,
+                        sortedMissingCollectionIds,
+                        objectSpec,
+                        layoutDataFactory::createCollectionLayoutData);
+                });
         }
 
         // any missing actions will be added as actions in the specified column
@@ -502,25 +500,25 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
 
         if(!missingActionIds.isEmpty()) {
-            final BSCol bsCol = gridModel.getColForUnreferencedActionsRef();
-            if(bsCol != null) {
-                addActionsTo(
-                        bsCol,
-                        missingActionIds,
-                        layoutDataFactory::createActionLayoutData,
-                        actionLayoutDataById::put);
-            } else {
-                final FieldSet fieldSet = gridModel.getFieldSetForUnreferencedActionsRef();
-                if(fieldSet != null) {
-                    addActionsTo(
+            gridModel.nodeForUnreferencedActions()
+                .accept(
+                    bsCol->{
+                        addActionsTo(
+                            bsCol,
+                            missingActionIds,
+                            layoutDataFactory::createActionLayoutData,
+                            actionLayoutDataById::put);
+                    },
+                    fieldSet->{
+                        addActionsTo(
                             fieldSet,
                             missingActionIds,
                             layoutDataFactory::createActionLayoutData,
                             actionLayoutDataById::put);
-                }
-            }
+                    });
         }
 
+        new CollapseIfOneTabProcessor(bsGrid).run();
         return true;
     }
 
@@ -546,7 +544,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
     }
 
-    private void addCollectionsTo(
+    private void addUnreferencedCollectionsTo(
             final BSCol tabRowCol,
             final Collection<String> collectionIds,
             final Function<String, CollectionLayoutData> layoutFactory,
@@ -559,21 +557,27 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
     }
 
-    private void addCollectionsTo(
+    private void addUnreferencedCollectionsTo(
             final BSTabGroup tabGroup,
             final Collection<String> collectionIds,
             final ObjectSpecification objectSpec,
             final Function<String, CollectionLayoutData> layoutFactory) {
 
-        for (final String collectionId : collectionIds) {
-            final BSTab bsTab = new BSTab();
+        // prevent multiple tabs with the same name
+        var tabsByName = new HashMap<String, BSTab>();
+        tabGroup.getTabs().forEach(tab->tabsByName.put(tab.getName(), tab));
 
+        for (final String collectionId : collectionIds) {
             var feature = objectSpec.getCollectionElseFail(collectionId);
             var featureCanonicalFriendlyName = feature.getCanonicalFriendlyName();
 
-            bsTab.setName(featureCanonicalFriendlyName);
-            tabGroup.getTabs().add(bsTab);
-            bsTab.setOwner(tabGroup);
+            final BSTab bsTab = tabsByName.computeIfAbsent(featureCanonicalFriendlyName, __->{
+                var newTab = new BSTab();
+                newTab.setName(featureCanonicalFriendlyName);
+                tabGroup.getTabs().add(newTab);
+                newTab.setOwner(tabGroup);
+                return newTab;
+            });
 
             final BSRow tabRow = new BSRow();
             tabRow.setOwner(bsTab);

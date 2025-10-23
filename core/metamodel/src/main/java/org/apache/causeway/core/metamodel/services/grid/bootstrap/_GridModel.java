@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.FieldSet;
@@ -28,12 +29,12 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -47,11 +48,32 @@ final class _GridModel {
         private final LinkedHashMap<String, BSCol> cols = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, FieldSet> fieldSets = _Maps.newLinkedHashMap();
 
-        @Getter private BSCol colForUnreferencedActionsRef;
-        @Getter private BSCol colForUnreferencedCollectionsRef;
-        @Getter private FieldSet fieldSetForUnreferencedActionsRef;
-        @Getter private FieldSet fieldSetForUnreferencedPropertiesRef;
-        @Getter private BSTabGroup tabGroupForUnreferencedCollectionsRef;
+        private BSCol colForUnreferencedActionsRef;
+        private FieldSet fieldSetForUnreferencedActionsRef;
+
+        private BSCol colForUnreferencedCollectionsRef;
+        private BSTabGroup tabGroupForUnreferencedCollectionsRef;
+
+        private FieldSet fieldSetForUnreferencedPropertiesRef;
+
+        // safe to call once validated
+        FieldSet nodeForUnreferencedProperties() {
+            return Objects.requireNonNull(fieldSetForUnreferencedPropertiesRef);
+        }
+
+        // safe to call once validated
+        Either<BSCol, FieldSet> nodeForUnreferencedActions() {
+            return colForUnreferencedActionsRef!=null
+                ? Either.left(colForUnreferencedActionsRef)
+                : Either.right(fieldSetForUnreferencedActionsRef);
+        }
+
+        // safe to call once validated
+        Either<BSCol, BSTabGroup> nodeForUnreferencedCollections() {
+            return colForUnreferencedCollectionsRef!=null
+                ? Either.left(colForUnreferencedCollectionsRef)
+                : Either.right(tabGroupForUnreferencedCollectionsRef);
+        }
 
         private boolean gridErrorsDetected = false;
 
@@ -190,25 +212,26 @@ final class _GridModel {
                 }
             });
 
-            if(gridModel.colForUnreferencedActionsRef == null && gridModel.fieldSetForUnreferencedActionsRef == null) {
+            boolean isValid = true;
+
+            if(gridModel.colForUnreferencedActionsRef == null
+                && gridModel.fieldSetForUnreferencedActionsRef == null) {
                 bsGrid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
+                isValid = false;
             }
             if(gridModel.fieldSetForUnreferencedPropertiesRef == null) {
                 bsGrid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
+                isValid = false;
             }
-            if(gridModel.colForUnreferencedCollectionsRef == null && gridModel.tabGroupForUnreferencedCollectionsRef == null) {
+            if(gridModel.colForUnreferencedCollectionsRef == null
+                && gridModel.tabGroupForUnreferencedCollectionsRef == null) {
                 bsGrid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
+                isValid = false;
             }
 
-            final boolean hasErrors =
-                    gridModel.colForUnreferencedActionsRef == null
-                    && gridModel.fieldSetForUnreferencedActionsRef == null
-                    || gridModel.fieldSetForUnreferencedPropertiesRef == null
-                    || gridModel.colForUnreferencedCollectionsRef == null
-                    && gridModel.tabGroupForUnreferencedCollectionsRef == null;
-
-            return hasErrors ? Optional.empty() : Optional.of(gridModel);
-
+            return isValid
+                ? Optional.of(gridModel)
+                : Optional.empty();
         }
 
         private void putRow(final String id, final BSRow bsRow) {

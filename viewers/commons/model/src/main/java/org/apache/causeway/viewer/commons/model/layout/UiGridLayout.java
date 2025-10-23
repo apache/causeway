@@ -19,8 +19,6 @@
 package org.apache.causeway.viewer.commons.model.layout;
 
 import java.util.Optional;
-import java.util.Set;
-
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -32,20 +30,16 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
-import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.UiModel;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(staticName = "bind")
-public class UiGridLayout implements UiModel {
+public record UiGridLayout(
+    BSGrid bsGrid
+    ) implements UiModel {
 
     @RequiredArgsConstructor
     public static abstract class Visitor<C, T> {
@@ -61,53 +55,23 @@ public class UiGridLayout implements UiModel {
         protected abstract void onAction(C container, ActionLayoutData actionData);
         protected abstract void onProperty(C container, PropertyLayoutData propertyData);
         protected abstract void onCollection(C container, CollectionLayoutData collectionData);
-
     }
 
-    @NonNull private final ManagedObject managedObject;
-    private _Lazy<Optional<BSGrid>> gridData = _Lazy.threadSafe(this::initGridData);
+    public static Optional<UiGridLayout> createGrid(ManagedObject mo) {
+        return Facets.bootstrapGrid(mo.objSpec(), mo)
+            .map(UiGridLayout::new);
+    }
 
+    /**
+     * recursively visits the grid
+     */
     public <C, T> void visit(final Visitor<C, T> visitor) {
-
-        // recursively visit the grid
-        gridData.get()
-        .ifPresent(bsGrid->{
-            for(var bsRow: bsGrid.getRows()) {
-                visitRow(bsRow, visitor.rootContainer, visitor);
-            }
-        });
-
+        for(var bsRow: bsGrid.getRows()) {
+            visitRow(bsRow, visitor.rootContainer, visitor);
+        }
     }
 
-    private Optional<BSGrid> initGridData() {
-        return Facets.bootstrapGrid(managedObject.objSpec(), managedObject)
-        .map(this::attachAssociatedActions);
-    }
-
-    //TODO[refactor] this should not be necessary here, the GridFacet should already have done that for us
-    private BSGrid attachAssociatedActions(final BSGrid bSGrid) {
-
-        var primedActions = bSGrid.getAllActionsById();
-        final Set<String> actionIdsAlreadyAdded = _Sets.newHashSet(primedActions.keySet());
-
-        managedObject.objSpec().streamProperties(MixedIn.INCLUDED)
-        .forEach(property->{
-            Optional.ofNullable(
-                    bSGrid.getAllPropertiesById().get(property.getId()))
-            .ifPresent(pl->{
-
-                ObjectAction.Util.findForAssociation(managedObject, property)
-                .map(action->action.getId())
-                .filter(id->!actionIdsAlreadyAdded.contains(id))
-                .peek(actionIdsAlreadyAdded::add)
-                .map(ActionLayoutData::new)
-                .forEach(pl.getActions()::add);
-
-            });
-
-        });
-        return bSGrid;
-    }
+    // -- HELPER
 
     private <C, T> void visitRow(final BSRow bsRow, final C container, final Visitor<C, T> visitor) {
 
@@ -115,9 +79,7 @@ public class UiGridLayout implements UiModel {
 
         for(var bsRowContent: bsRow.getCols()) {
             if(bsRowContent instanceof BSCol) {
-
                 visitCol((BSCol) bsRowContent, uiRow, visitor);
-
             } else if (bsRowContent instanceof BSClearFix) {
                 visitor.onClearfix(uiRow, (BSClearFix) bsRowContent);
             } else {
@@ -126,55 +88,59 @@ public class UiGridLayout implements UiModel {
         }
     }
 
-    private <C, T> void visitCol(final BSCol bSCol, final C container, final Visitor<C, T> visitor) {
-        var uiCol = visitor.newCol(container, bSCol);
+    private <C, T> void visitCol(final BSCol bsCol, final C container, final Visitor<C, T> visitor) {
 
-        var hasDomainObject = bSCol.getDomainObject()!=null;
-        var hasActions = _NullSafe.size(bSCol.getActions())>0;
-        var hasRows = _NullSafe.size(bSCol.getRows())>0;
+        if(bsCol.getSpan() == 0) return; // skip
+
+        var uiCol = visitor.newCol(container, bsCol);
+
+        var hasDomainObject = bsCol.getDomainObject()!=null;
+        var hasActions = _NullSafe.size(bsCol.getActions())>0;
+        var hasRows = _NullSafe.size(bsCol.getRows())>0;
 
         if(hasDomainObject || hasActions) {
             var uiActionPanel = visitor.newActionPanel(uiCol);
             if(hasDomainObject) {
-                visitor.onObjectTitle(uiActionPanel, bSCol.getDomainObject());
+                visitor.onObjectTitle(uiActionPanel, bsCol.getDomainObject());
             }
             if(hasActions) {
-                for(var action : bSCol.getActions()) {
+                for(var action : bsCol.getActions()) {
                     visitor.onAction(uiActionPanel, action);
                 }
             }
         }
 
-        for(var fieldSet : bSCol.getFieldSets()) {
+        for(var fieldSet : bsCol.getFieldSets()) {
+            if(_NullSafe.isEmpty(fieldSet.getProperties())) continue; // skip empty fieldsets
             visitFieldSet(fieldSet, uiCol, visitor);
         }
 
-        for(var tabGroup : bSCol.getTabGroups()) {
+        for(var tabGroup : bsCol.getTabGroups()) {
             visitTabGroup(tabGroup, uiCol, visitor);
         }
 
         if(hasRows) {
-            for(var bsRow: bSCol.getRows()) {
+            for(var bsRow: bsCol.getRows()) {
                 visitRow(bsRow, uiCol, visitor);
             }
         }
 
-        for(var collectionData : bSCol.getCollections()) {
+        for(var collectionData : bsCol.getCollections()) {
             visitor.onCollection(uiCol, collectionData);
         }
 
     }
 
-    private <C, T> void visitTabGroup(final BSTabGroup BSColTabGroup, final C container, final Visitor<C, T> visitor) {
-        var uiTabGroup = visitor.newTabGroup(container, BSColTabGroup);
-        for(var bsTab: BSColTabGroup.getTabs()) {
+    private <C, T> void visitTabGroup(final BSTabGroup bsTabGroup, final C container, final Visitor<C, T> visitor) {
+        var uiTabGroup = visitor.newTabGroup(container, bsTabGroup);
+        for(var bsTab: bsTabGroup.getTabs()) {
             visitTab(bsTab, uiTabGroup, visitor);
         }
     }
 
-    private <C, T> void visitTab(final BSTab bSTab, final T container, final Visitor<C, T> visitor) {
-        var uiTab = visitor.newTab(container, bSTab);
-        for(var bsRow: bSTab.getRows()) {
+    private <C, T> void visitTab(final BSTab bsTab, final T container, final Visitor<C, T> visitor) {
+        var uiTab = visitor.newTab(container, bsTab);
+        for(var bsRow: bsTab.getRows()) {
             visitRow(bsRow, uiTab, visitor);
         }
     }

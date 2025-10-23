@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.Nullable;
+
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
@@ -121,9 +122,9 @@ public final class Facets {
     }
 
     public Optional<BSGrid> bootstrapGrid(
-            final ObjectSpecification objectSpec, final @Nullable ManagedObject objectAdapter) {
+            final ObjectSpecification objectSpec, final @Nullable ManagedObject mo) {
         return objectSpec.lookupFacet(GridFacet.class)
-            .map(gridFacet->gridFacet.getGrid(objectAdapter))
+            .map(gridFacet->gridFacet.getGrid(mo))
             .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
