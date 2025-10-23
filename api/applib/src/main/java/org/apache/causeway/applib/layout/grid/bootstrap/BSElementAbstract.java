@@ -20,31 +20,26 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
  *
  * @since 1.x {@index}
  */
-public abstract class BSElementAbstract implements BSElement {
+public sealed abstract class BSElementAbstract implements BSElement
+permits BSRow, BSRowContent, BSTab, BSTabGroup {
 
     private static final long serialVersionUID = 1L;
-
-    private String cssClass;
 
     /**
      * Any additional CSS classes to render on the page element corresponding to this object,
      * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
      * custom styling.
      */
-    @Override
-    @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    @Override
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
+    @Getter(onMethod_ = {@XmlAttribute(required = false)})
+    @Setter
+    private String cssClass;
 
 }

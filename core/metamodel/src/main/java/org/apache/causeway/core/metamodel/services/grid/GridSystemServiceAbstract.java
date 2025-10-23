@@ -150,7 +150,7 @@ implements GridSystemService<G> {
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
-        fcGrid.visit(new Grid.VisitorAdapter() {
+        fcGrid.visit(new Grid.Visitor() {
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -393,7 +393,7 @@ implements GridSystemService<G> {
     @Override
     public void minimal(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        grid.visit(new Grid.VisitorAdapter() {
+        grid.visit(new Grid.Visitor() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 actionLayoutData.getOwner().getActions().remove(actionLayoutData);

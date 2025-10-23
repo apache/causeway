@@ -36,7 +36,6 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
-import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.sitemap.SitemapService;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -63,7 +62,6 @@ import lombok.RequiredArgsConstructor;
 public class SitemapServiceDefault implements SitemapService {
 
     private final SpecificationLoader specificationLoader;
-    private final GridService gridService;
     private final MenuBarsService menuBarsService;
 
     @Override
@@ -122,7 +120,7 @@ public class SitemapServiceDefault implements SitemapService {
                     var grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
                                 .flatMap(Facets::bootstrapGrid)
                                 .orElse(null);
-                    grid.visit(new Grid.VisitorAdapter() {
+                    grid.visit(new Grid.Visitor() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
                             actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
                             .ifPresent(action->{

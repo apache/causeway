@@ -26,6 +26,7 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
@@ -42,7 +43,7 @@ import lombok.NoArgsConstructor;
  * @since 2.0
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class _GridModel {
+final class GridModel {
         private final LinkedHashSet<String> allIds = _Sets.newLinkedHashSet();
         private final LinkedHashMap<String, BSRow> rows = _Maps.newLinkedHashMap();
         private final LinkedHashMap<String, BSCol> cols = _Maps.newLinkedHashMap();
@@ -77,19 +78,6 @@ final class _GridModel {
 
         private boolean gridErrorsDetected = false;
 
-        public boolean contains(final String id) {
-            return allIds.contains(id);
-        }
-
-        public Collection<FieldSet> fieldSets() {
-            return fieldSets.values();
-        }
-        public boolean containsFieldSetId(final String id) {
-            return fieldSets.containsKey(id);
-        }
-        public FieldSet getFieldSet(final String id) {
-            return fieldSets.get(id);
-        }
 
         /**
          * find all row and col ids<br>
@@ -99,11 +87,11 @@ final class _GridModel {
          * @param bsGrid
          * @return empty if not valid
          */
-        public static Optional<_GridModel> createFrom(final BSGrid bsGrid) {
+        public static Optional<GridModel> createFrom(final BSGrid bsGrid) {
 
-            var gridModel = new _GridModel();
+            var gridModel = new GridModel();
 
-            bsGrid.visit(new BSGrid.VisitorAdapter(){
+            bsGrid.visit(new BSElement.Visitor() {
                 @Override
                 public void visit(final BSRow bsRow) {
                     final String id = bsRow.getId();
@@ -154,7 +142,7 @@ final class _GridModel {
                 return Optional.empty();
             }
 
-            bsGrid.visit(new BSGrid.VisitorAdapter(){
+            bsGrid.visit(new BSElement.Visitor(){
 
                 @Override
                 public void visit(final BSCol bsCol) {
@@ -232,6 +220,20 @@ final class _GridModel {
             return isValid
                 ? Optional.of(gridModel)
                 : Optional.empty();
+        }
+
+        public boolean contains(final String id) {
+            return allIds.contains(id);
+        }
+
+        public Collection<FieldSet> fieldSets() {
+            return fieldSets.values();
+        }
+        public boolean containsFieldSetId(final String id) {
+            return fieldSets.containsKey(id);
+        }
+        public FieldSet getFieldSet(final String id) {
+            return fieldSets.get(id);
         }
 
         private void putRow(final String id, final BSRow bsRow) {

@@ -245,6 +245,12 @@ extends GridSystemServiceAbstract<BSGrid> {
         var bsGrid = (BSGrid) grid;
         var objectSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
 
+        var gridModelIfValid = GridModel.createFrom(bsGrid);
+        if(!gridModelIfValid.isPresent()) { // only present if valid
+            return false;
+        }
+        var gridModel = gridModelIfValid.get();
+
         var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
         var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
@@ -252,12 +258,6 @@ extends GridSystemServiceAbstract<BSGrid> {
         var propertyLayoutDataById = bsGrid.getAllPropertiesById();
         var collectionLayoutDataById = bsGrid.getAllCollectionsById();
         var actionLayoutDataById = bsGrid.getAllActionsById();
-
-        var gridModelIfValid = _GridModel.createFrom(bsGrid);
-        if(!gridModelIfValid.isPresent()) { // only present if valid
-            return false;
-        }
-        var gridModel = gridModelIfValid.get();
 
         var layoutDataFactory = LayoutDataFactory.of(objectSpec);
 
@@ -581,13 +581,11 @@ extends GridSystemServiceAbstract<BSGrid> {
             });
 
             final BSRow tabRow = new BSRow();
-            tabRow.setOwner(bsTab);
             bsTab.getRows().add(tabRow);
 
             final BSCol tabRowCol = new BSCol();
             tabRowCol.setSpan(12);
             tabRowCol.setSize(Size.MD);
-            tabRowCol.setOwner(tabRow);
             tabRow.getCols().add(tabRowCol);
 
             var collectionLayoutData = layoutFactory.apply(collectionId);

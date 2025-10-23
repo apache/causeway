@@ -25,6 +25,7 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 
@@ -41,19 +42,19 @@ record EmptyTabRemovalProcessor(BSGrid bsGrid) {
 
         var emptyTabs = new ArrayList<BSTab>();
 
-        bsGrid.visit(new BSGrid.VisitorAdapter() {
+        bsGrid.visit(new BSElement.Visitor() {
 
             final Stack<Flag> stack = new Stack<Flag>();
 
-            @Override public void visit(ActionLayoutData actionLayoutData) { keep(); }
-            @Override public void visit(DomainObjectLayoutData domainObjectLayoutData) { keep(); }
-            @Override public void visit(PropertyLayoutData propertyLayoutData) { keep(); }
-            @Override public void visit(CollectionLayoutData collectionLayoutData) { keep(); }
+            @Override public void visit(final ActionLayoutData actionLayoutData) { keep(); }
+            @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) { keep(); }
+            @Override public void visit(final PropertyLayoutData propertyLayoutData) { keep(); }
+            @Override public void visit(final CollectionLayoutData collectionLayoutData) { keep(); }
 
-            @Override public void visit(BSTab bsTab) {
+            @Override public void visit(final BSTab bsTab) {
                 stack.push(new Flag());
             }
-            @Override public void postVisit(BSTab bsTab) {
+            @Override public void postVisit(final BSTab bsTab) {
                 var flag = stack.pop();
                 if(!flag.keep) {
                     // collecting into list, so we don't risk a ConcurrentModificationException,

@@ -26,21 +26,17 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 /**
  * Represents a tab group containing one or more {@link BSTab tab}s.
  *
  * @since 1.x {@index}
  */
 @XmlType(
-        name = "tabGroup"
-        , propOrder = {
+        name = "tabGroup",
+        propOrder = {
                 "tabs",
-                "metadataError"
-        }
-        )
-public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
+                "metadataError"})
+public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -117,13 +113,6 @@ public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
 
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
-    }
-
-    @Override
-    @XmlTransient
-    @Programmatic
-    public BSGrid getGrid() {
-        return getOwner().getGrid();
     }
 
 }

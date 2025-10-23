@@ -37,7 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(
         name = "clearFixHidden"
         )
-public class BSClearFixHidden extends BSClearFix {
+public final class BSClearFixHidden extends BSClearFix {
 
     private static final long serialVersionUID = 1L;
 

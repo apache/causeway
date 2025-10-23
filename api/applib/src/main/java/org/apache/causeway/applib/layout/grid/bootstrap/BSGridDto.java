@@ -18,29 +18,29 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Common superclass for any content of a row.
- *
- * <p> Most commonly the content of a row is {@link BSCol col}umns, but it may be either of the
- * {@link BSClearFix clearfix} classes.
- *
- * @since 1.x {@index}
- */
-public sealed abstract class BSRowContent extends BSElementAbstract
-permits BSCol, BSClearFix {
-
+@XmlRootElement(name = "grid")
+@XmlType(name = "grid", propOrder = {"rows", "metadataErrors"})
+@Setter
+public class BSGridDto implements BSElement, BSRowOwner {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Default if not specified is {@link Size#MD}.
-     */
     @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
-    private Size size;
+    private String cssClass;
 
+    @Getter(onMethod_ = {@XmlElement(name = "row", required = true)})
+    private List<BSRow> rows;
+
+    @Getter(onMethod_ = {@XmlElement(name = "metadataError", required = false)})
+    private List<String> metadataErrors = new ArrayList<>();
 }

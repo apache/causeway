@@ -225,7 +225,7 @@ public class WelcomeHelpPage implements HelpPage {
             html.append("</ul>");
             html.append("<ul>");
             {
-                grid.visit(new Grid.VisitorAdapter() {
+                grid.visit(new Grid.Visitor() {
                     @Override
                     public void visit(final FieldSet fieldSet) {
                         if (_NullSafe.isEmpty(fieldSet.getProperties())) {

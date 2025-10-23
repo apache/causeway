@@ -269,7 +269,7 @@ implements DomainObjectResource {
             final String instanceId,
             final Grid grid) {
 
-        grid.visit(new Grid.VisitorAdapter() {
+        grid.visit(new Grid.Visitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 Link link = newLink(

@@ -16,15 +16,25 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.layout.grid.bootstrap;
+package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
-import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGridDto;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSRowOwner;
 
-/**
- * @since 1.x {@index}
- */
-public interface WithinGrid {
+record GridConverterToDto(BSGrid grid) {
 
-    @Programmatic
-    BSGrid getGrid();
+    public BSGridDto createDto() {
+        var dto = new BSGridDto();
+        traversRows(grid, dto);
+        return dto;
+    }
+
+    private void traversRows(final BSGrid grid, final BSRowOwner rowOwner) {
+        rowOwner.getRows().forEach(row->{
+            grid.getRows().add(row);
+        });
+
+    }
+
 }

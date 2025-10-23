@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 
@@ -32,9 +33,9 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 record CollapseIfOneTabProcessor(BSGrid bsGrid) {
 
     public void run() {
-        bsGrid.visit(new BSGrid.VisitorAdapter() {
+        bsGrid.visit(new BSElement.Visitor() {
             @Override
-            public void visit(BSTabGroup bsTabGroup) {
+            public void visit(final BSTabGroup bsTabGroup) {
                 if(bsTabGroup.getTabs().size()!=1) return; // when has no tabs is also a no-op
 
                 var isCollapseIfOne = Optional.ofNullable(bsTabGroup.isCollapseIfOne())
@@ -48,7 +49,6 @@ record CollapseIfOneTabProcessor(BSGrid bsGrid) {
                 bsTabGroup.getTabs().get(0).getRows()
                     .forEach(row->{
                         parent.getRows().add(row);
-                        row.setOwner(parent);
                     });
             }
         });

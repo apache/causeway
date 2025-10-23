@@ -21,7 +21,7 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 /**
  * @since 2.0 {@index}
  */
-public interface HasCssId {
+public interface HasElementId {
 
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.

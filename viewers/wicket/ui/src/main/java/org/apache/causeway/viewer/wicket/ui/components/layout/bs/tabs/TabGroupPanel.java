@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
@@ -54,7 +55,7 @@ implements HasDynamicallyVisibleContent {
         final List<ITab> tabs = new ArrayList<>();
 
         final List<BSTab> tablist = _NullSafe.stream(bsTabGroup.getTabs())
-                .filter(BSTab.Predicates.notEmpty())
+                .filter(BSUtil::hasContent)
                 .collect(Collectors.toList());
 
         for (var bsTab : tablist) {

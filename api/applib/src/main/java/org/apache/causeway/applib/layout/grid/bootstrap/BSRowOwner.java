@@ -25,7 +25,7 @@ import org.apache.causeway.applib.layout.component.Owner;
 /**
  * @since 1.x {@index}
  */
-public interface BSRowOwner extends Owner, WithinGrid {
+public interface BSRowOwner extends Owner {
 
     List<BSRow> getRows();
 }
