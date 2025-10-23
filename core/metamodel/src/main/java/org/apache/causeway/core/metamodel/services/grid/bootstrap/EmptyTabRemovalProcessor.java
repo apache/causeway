@@ -28,16 +28,12 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * Removes empty tabs from tab groups.
  */
 record EmptyTabRemovalProcessor(BSGrid bsGrid) {
 
-    @RequiredArgsConstructor
-    static final class Wrapper {
-        final BSTab tab;
+    static final class Flag {
         boolean keep = false;
     }
 
@@ -47,7 +43,7 @@ record EmptyTabRemovalProcessor(BSGrid bsGrid) {
 
         bsGrid.visit(new BSGrid.VisitorAdapter() {
 
-            final Stack<Wrapper> stack = new Stack<Wrapper>();
+            final Stack<Flag> stack = new Stack<Flag>();
 
             @Override public void visit(ActionLayoutData actionLayoutData) { keep(); }
             @Override public void visit(DomainObjectLayoutData domainObjectLayoutData) { keep(); }
@@ -55,11 +51,11 @@ record EmptyTabRemovalProcessor(BSGrid bsGrid) {
             @Override public void visit(CollectionLayoutData collectionLayoutData) { keep(); }
 
             @Override public void visit(BSTab bsTab) {
-                stack.push(new Wrapper(bsTab));
+                stack.push(new Flag());
             }
             @Override public void postVisit(BSTab bsTab) {
-                var wrapper = stack.pop();
-                if(!wrapper.keep) {
+                var flag = stack.pop();
+                if(!flag.keep) {
                     // collecting into list, so we don't risk a ConcurrentModificationException,
                     // when racing with the underlying iterator
                     emptyTabs.add(bsTab);
