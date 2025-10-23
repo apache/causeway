@@ -35,15 +35,11 @@ record CollapseIfOneTabProcessor(BSGrid bsGrid) {
         bsGrid.visit(new BSGrid.VisitorAdapter() {
             @Override
             public void visit(BSTabGroup bsTabGroup) {
+                if(bsTabGroup.getTabs().size()!=1) return; // when has not tabs is also a no-op
+
                 var isCollapseIfOne = Optional.ofNullable(bsTabGroup.isCollapseIfOne())
-                    .map(boolean.class::cast)
+                    .map(Boolean::booleanValue)
                     .orElse(true); // opt-out semantics: absence of the attribute results in participation
-
-                if(!isCollapseIfOne
-                        || bsTabGroup.getTabs().size()>1) {
-                    return;
-                }
-
                 if(!isCollapseIfOne) return;
 
                 var parent = (BSCol) bsTabGroup.getOwner();
