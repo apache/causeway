@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
+import java.util.Optional;
+
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
@@ -33,11 +35,17 @@ record CollapseIfOneTabProcessor(BSGrid bsGrid) {
         bsGrid.visit(new BSGrid.VisitorAdapter() {
             @Override
             public void visit(BSTabGroup bsTabGroup) {
-                if(bsTabGroup.isCollapseIfOne() == null
-                        || !bsTabGroup.isCollapseIfOne()
+                var isCollapseIfOne = Optional.ofNullable(bsTabGroup.isCollapseIfOne())
+                    .map(boolean.class::cast)
+                    .orElse(true); // opt-out semantics: absence of the attribute results in participation
+
+                if(!isCollapseIfOne
                         || bsTabGroup.getTabs().size()>1) {
                     return;
                 }
+
+                if(!isCollapseIfOne) return;
+
                 var parent = (BSCol) bsTabGroup.getOwner();
                 parent.getTabGroups().remove(bsTabGroup);
                 // relocate rows from tab to owning col
