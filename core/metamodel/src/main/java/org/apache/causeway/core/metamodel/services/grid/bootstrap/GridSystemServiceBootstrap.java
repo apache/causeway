@@ -518,6 +518,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                     });
         }
 
+        new EmptyTabRemovalProcessor(bsGrid).run();
         new CollapseIfOneTabProcessor(bsGrid).run();
         return true;
     }

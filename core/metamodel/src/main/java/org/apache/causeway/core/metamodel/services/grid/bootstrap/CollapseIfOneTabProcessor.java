@@ -35,7 +35,7 @@ record CollapseIfOneTabProcessor(BSGrid bsGrid) {
         bsGrid.visit(new BSGrid.VisitorAdapter() {
             @Override
             public void visit(BSTabGroup bsTabGroup) {
-                if(bsTabGroup.getTabs().size()!=1) return; // when has not tabs is also a no-op
+                if(bsTabGroup.getTabs().size()!=1) return; // when has no tabs is also a no-op
 
                 var isCollapseIfOne = Optional.ofNullable(bsTabGroup.isCollapseIfOne())
                     .map(Boolean::booleanValue)

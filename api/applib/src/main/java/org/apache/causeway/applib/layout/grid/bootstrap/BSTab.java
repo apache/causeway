@@ -100,62 +100,59 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
             final AtomicBoolean visitingTheNode = new AtomicBoolean(false);
             final AtomicBoolean foundContent = new AtomicBoolean(false);
 
-            return new Predicate<BSTab>() {
-                @Override
-                public boolean test(final BSTab thisBsTab) {
-                    final BSGrid owningGrid = thisBsTab.getGrid();
-                    owningGrid.visit(new BSGrid.VisitorAdapter() {
+            return thisBsTab -> {
+                final BSGrid owningGrid = thisBsTab.getGrid();
+                owningGrid.visit(new BSGrid.VisitorAdapter() {
 
-                        /**
-                         * if found the tab, then reset 'foundContent' to false, and then use 'visitingTheNode' as
-                         * a marker to indicate that the visitor is now being passed to the nodes underneath the tab.
-                         * In those children, if visited (with the 'visitingTheNode' flag enabled), then simply set the
-                         * 'foundContent' flag.
-                         */
-                        @Override
-                        public void preVisit(final BSTab bsTab) {
-                            if(bsTab == thisBsTab) {
-                                foundContent.set(false);
-                                visitingTheNode.set(true);
-                            }
+                    /**
+                     * if found the tab, then reset 'foundContent' to false, and then use 'visitingTheNode' as
+                     * a marker to indicate that the visitor is now being passed to the nodes underneath the tab.
+                     * In those children, if visited (with the 'visitingTheNode' flag enabled), then simply set the
+                     * 'foundContent' flag.
+                     */
+                    @Override
+                    public void preVisit(final BSTab bsTab) {
+                        if(bsTab == thisBsTab) {
+                            foundContent.set(false);
+                            visitingTheNode.set(true);
                         }
+                    }
 
-                        @Override public void postVisit(final BSTab bsTab) {
-                            if(bsTab == thisBsTab) {
-                                visitingTheNode.set(false);
-                            }
+                    @Override public void postVisit(final BSTab bsTab) {
+                        if(bsTab == thisBsTab) {
+                            visitingTheNode.set(false);
                         }
+                    }
 
-                        @Override
-                        public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                            if(visitingTheNode.get()) {
-                                foundContent.set(true);
-                            }
+                    @Override
+                    public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                        if(visitingTheNode.get()) {
+                            foundContent.set(true);
                         }
+                    }
 
-                        @Override
-                        public void visit(final ActionLayoutData actionLayoutData) {
-                            if(visitingTheNode.get()) {
-                                foundContent.set(true);
-                            }
+                    @Override
+                    public void visit(final ActionLayoutData actionLayoutData) {
+                        if(visitingTheNode.get()) {
+                            foundContent.set(true);
                         }
+                    }
 
-                        @Override
-                        public void visit(final PropertyLayoutData propertyLayoutData) {
-                            if(visitingTheNode.get()) {
-                                foundContent.set(true);
-                            }
+                    @Override
+                    public void visit(final PropertyLayoutData propertyLayoutData) {
+                        if(visitingTheNode.get()) {
+                            foundContent.set(true);
                         }
+                    }
 
-                        @Override
-                        public void visit(final CollectionLayoutData collectionLayoutData) {
-                            if(visitingTheNode.get()) {
-                                foundContent.set(true);
-                            }
+                    @Override
+                    public void visit(final CollectionLayoutData collectionLayoutData) {
+                        if(visitingTheNode.get()) {
+                            foundContent.set(true);
                         }
-                    });
-                    return foundContent.get();
-                }
+                    }
+                });
+                return foundContent.get();
             };
         }
     }
@@ -165,6 +162,17 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
     @Programmatic
     public BSGrid getGrid() {
         return getOwner().getGrid();
+    }
+
+    /**
+     * removes this tab from its tab-group
+     */
+    @Programmatic
+    public void remove() {
+        if(owner!=null) {
+            owner.getTabs().remove(this);
+            owner = null;
+        }
     }
 
     @Override public String toString() {

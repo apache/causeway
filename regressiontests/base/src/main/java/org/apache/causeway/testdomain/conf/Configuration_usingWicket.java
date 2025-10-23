@@ -113,8 +113,8 @@ public class Configuration_usingWicket {
 
         public static final String BOOK_DELETE_ACTION_JPA = "theme:domainObjectContainer:domainObject:rows:2"
                 + ":rowContents:1"
-                + ":col:rows:1:rowContents:1:col:tabGroups:1"
-                + ":1:rowContents:1"
+                + ":col:rows:1:rowContents:1:col:rows:1"
+                + ":rowContents:1"
                 + ":col:fieldSets:1:memberGroup"
                 + ":panelHeading:associatedActionLinksPanel"
                 + ":additionalLinkList:additionalLinkItem:0:actionLink";
@@ -152,7 +152,7 @@ public class Configuration_usingWicket {
                     + ":property"),
             JPA_BOOK_ISBN("theme:domainObjectContainer:domainObject:rows:2"
                     + ":rowContents:1:col:rows:1:rowContents:1"
-                    + ":col:tabGroups:1:1"
+                    + ":col:rows:1"
                     + ":rowContents:1:col"
                     + ":fieldSets:1"
                     + ":memberGroup:properties:4"
