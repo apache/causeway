@@ -19,8 +19,8 @@
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -29,20 +29,23 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.dto.Dto;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * This is the top-level for rendering the domain object's properties, collections and actions.
  * It simply consists of a number of rows.
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
+@RequiredArgsConstructor
 public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter @Setter private Class<?> domainClass;
-    @Getter @Setter private String tnsAndSchemaLocation;
+    @Getter @Accessors(fluent=true) private final Class<?> domainClass;
+
     @Getter @Setter private boolean fallback;
     @Getter @Setter private boolean normalized;
     @Getter @Setter private String cssClass;
@@ -55,82 +58,43 @@ public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
 
     @Override
     public void visit(final Grid.Visitor visitor) {
-        new BSWalker(this).visit(visitor);
+        new BSWalker(this).walk(visitor);
     }
 
     @Override
-    public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
-        final LinkedHashMap<String, PropertyLayoutData> propertiesById = new LinkedHashMap<>();
+    public Stream<PropertyLayoutData> streamPropertyLayoutData() {
+        final var properties = new ArrayList<PropertyLayoutData>();
         visit(new BSElement.Visitor() {
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                propertiesById.put(propertyLayoutData.getId(), propertyLayoutData);
+                properties.add(propertyLayoutData);
             }
         });
-        return propertiesById;
+        return properties.stream();
     }
 
     @Override
-    public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
-        final LinkedHashMap<String, CollectionLayoutData> collectionsById = new LinkedHashMap<>();
+    public Stream<CollectionLayoutData> streamCollectionLayoutData() {
+        final var collections = new ArrayList<CollectionLayoutData>();
         visit(new BSElement.Visitor() {
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                collectionsById.put(collectionLayoutData.getId(), collectionLayoutData);
+                collections.add(collectionLayoutData);
             }
         });
-        return collectionsById;
+        return collections.stream();
     }
 
     @Override
-    public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {
-        final LinkedHashMap<String, ActionLayoutData> actionsById = new LinkedHashMap<>();
+    public Stream<ActionLayoutData> streamActionLayoutData() {
+        final var actions = new ArrayList<ActionLayoutData>();
         visit(new BSElement.Visitor() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                actionsById.put(actionLayoutData.getId(), actionLayoutData);
+                actions.add(actionLayoutData);
             }
         });
-        return actionsById;
+        return actions.stream();
     }
-
-// -- UNUSED
-
-//  public LinkedHashMap<String, BSTab> getAllTabsByName() {
-//      final LinkedHashMap<String, BSTab> tabsByName = new LinkedHashMap<>();
-//
-//      visit(new BSGrid.Visitor() {
-//          @Override
-//          public void visit(final BSTab bSTab) {
-//              tabsByName.put(bSTab.getName(), bSTab);
-//          }
-//      });
-//      return tabsByName;
-//  }
-//
-//  public LinkedHashMap<String, HasElementId> getAllCssId() {
-//      final LinkedHashMap<String, HasElementId> divsByCssId = new LinkedHashMap<>();
-//
-//      visit(new BSGrid.Visitor() {
-//          @Override
-//          public void visit(final BSRow bsRow) {
-//              final String id = bsRow.getId();
-//              divsByCssId.put(id, bsRow);
-//          }
-//      });
-//      return divsByCssId;
-//  }
-//
-//    public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
-//        final LinkedHashMap<String, FieldSet> fieldSetsByName = new LinkedHashMap<>();
-//
-//        visit(new BSGrid.Visitor() {
-//            @Override
-//            public void visit(final FieldSet fieldSet) {
-//                fieldSetsByName.put(fieldSet.getName(), fieldSet);
-//            }
-//        });
-//        return fieldSetsByName;
-//    }
 
 }

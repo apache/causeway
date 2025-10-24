@@ -29,6 +29,10 @@ import jakarta.xml.bind.annotation.XmlType;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * DTO reflecting the bootstrap grid XML format.
+ * @since 4.0 {@index}
+ */
 @XmlRootElement(name = "grid")
 @XmlType(name = "grid", propOrder = {"rows", "metadataErrors"})
 @Setter
@@ -39,7 +43,7 @@ public class BSGridDto implements BSElement, BSRowOwner {
     private String cssClass;
 
     @Getter(onMethod_ = {@XmlElement(name = "row", required = true)})
-    private List<BSRow> rows;
+    private List<BSRow> rows = new ArrayList<>();
 
     @Getter(onMethod_ = {@XmlElement(name = "metadataError", required = false)})
     private List<String> metadataErrors = new ArrayList<>();

@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.inject.Inject;
@@ -38,7 +36,6 @@ import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -111,9 +108,8 @@ implements GridSystemService<G> {
                 log.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
             }
         } else {
-
             if(causewaySystemEnvironment.isPrototyping()) {
-                messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
+                messageService.warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
             }
             log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
         }
@@ -366,17 +362,6 @@ implements GridSystemService<G> {
                         .create(collectionSequence++, oneToManyAssociation, precedence));
             }
         });
-    }
-
-    protected record SurplusAndMissing(
-            Set<String> surplus,
-            Set<String> missing) {
-    }
-
-    protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
-        var firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
-        var secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
-        return new SurplusAndMissing(firstNotSecond, secondNotFirst);
     }
 
     // --

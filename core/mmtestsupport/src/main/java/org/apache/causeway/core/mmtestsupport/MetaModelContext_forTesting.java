@@ -39,6 +39,7 @@ import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -92,6 +93,7 @@ import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
@@ -458,8 +460,20 @@ implements MetaModelContext {
     private final GridMarshallerService gridMarshallerService = createGridMarshallerService();
     //XXX lombok issue: won't compile if inlined
     private final GridMarshallerService<? extends Grid> createGridMarshallerService() {
-        return new GridMarshallerServiceBootstrap(getJaxbService());
+        return new GridMarshallerServiceBootstrap(getJaxbService(), new XsiSchemaLocationProviderForGrid(List.of()));
     }
+
+    @Getter(lazy = true)
+    private final List<GridSystemService<? extends Grid>> gridSystemServices = List.of(
+        new GridSystemServiceBootstrap(
+            getConfiguration(),
+            ()->getSpecificationLoader(),
+            getTranslationService(),
+            getJaxbService(),
+            getMessageService(),
+            getSystemEnvironment(),
+            List.of())
+            .setMarshaller(getGridMarshallerService()));
 
     @Getter(lazy = true)
     private final GridLoaderService gridLoaderService = createGridLoaderService();
@@ -476,17 +490,7 @@ implements MetaModelContext {
         return new GridServiceDefault(
             getGridLoaderService(),
             getGridMarshallerService(),
-            List.of(
-                    new GridSystemServiceBootstrap(
-                            getConfiguration(),
-                            ()->getSpecificationLoader(),
-                            getTranslationService(),
-                            getJaxbService(),
-                            getMessageService(),
-                            getSystemEnvironment(),
-                            List.of())
-                            .setMarshaller(getGridMarshallerService())
-                    )); // support reloading
+            getGridSystemServices());
     }
 
     @Getter(lazy = true)

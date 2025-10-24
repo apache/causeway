@@ -89,7 +89,7 @@ extends ManagedMember {
     }
 
     public Can<ObjectAction> getAssociatedActions() {
-        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner(), getProperty()));
+        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner().objSpec(), getProperty()));
     }
 
     // -- INTERACTION

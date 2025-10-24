@@ -20,8 +20,6 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.Map;
 
-import jakarta.xml.bind.Marshaller;
-
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -37,8 +35,9 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 
@@ -57,7 +56,7 @@ extends MetaModelTestAbstract {
     @Test
     void happy_case() throws Exception {
 
-        final BSGrid bsGrid = new BSGrid();
+        final BSGrid bsGrid = new BSGrid(Object.class);
 
         // header
         final BSRow headerRow = new BSRow();
@@ -124,14 +123,15 @@ extends MetaModelTestAbstract {
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bsGrid);
-        String xml = jaxbService.toXml(bsGrid,
-                _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
+        String xml = gridServiceDefault.marshaller().marshal(_Casts.uncheckedCast(bsGrid), CommonMimeType.XML);
+
         println(xml);
 
-        BSGrid bsPageroundtripped = jaxbService.fromXml(BSGrid.class, xml);
-        String xmlRoundtripped = jaxbService.toXml(bsPageroundtripped,
-                _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
+        BSGrid bsGridRoundtripped = (BSGrid) gridServiceDefault.marshaller().unmarshal(xml, CommonMimeType.XML)
+            .valueAsNonNullElseFail();
+
+        String xmlRoundtripped = gridServiceDefault.marshaller().marshal(_Casts.uncheckedCast(bsGridRoundtripped), CommonMimeType.XML);
+
         _DocumentTester.assertXmlEqualsIgnoreOrder(xml, xmlRoundtripped);
 
         println("==========");

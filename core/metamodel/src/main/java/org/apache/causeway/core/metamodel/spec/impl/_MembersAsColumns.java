@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -130,8 +131,10 @@ class _MembersAsColumns implements HasMetaModelContext {
         var elementTypeGrid = elementTypeGridFacet.getGrid(null);
 
         final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
-        elementTypeGrid.getAllPropertiesById().forEach((propertyId, __)->{
-            propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
+        elementTypeGrid.streamPropertyLayoutData()
+            .map(PropertyLayoutData::getId)
+            .forEach(propertyId->{
+                propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
         });
 
         // if propertyId is mentioned within grid, put into first 'half' ordered by

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.io.UrlUtils;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet.GridVariant;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -115,7 +116,7 @@ implements DomainTypeResource {
         var serializationStrategy = resourceContext.getSerializationStrategy();
 
         var response = getSpecificationLoader().specForLogicalTypeName(domainType)
-                .map(Facets::bootstrapGrid)
+                .map(mo->Facets.bootstrapGrid(GridVariant.NORMALIZED, mo))
                 .map(grid ->
                     responseFactory.ok(serializationStrategy.entity(grid),
                                 serializationStrategy.type(RepresentationType.LAYOUT)))

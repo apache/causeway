@@ -31,6 +31,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet.GridVariant;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.UiModel;
@@ -57,8 +58,8 @@ public record UiGridLayout(
         protected abstract void onCollection(C container, CollectionLayoutData collectionData);
     }
 
-    public static Optional<UiGridLayout> createGrid(ManagedObject mo) {
-        return Facets.bootstrapGrid(mo.objSpec(), mo)
+    public static Optional<UiGridLayout> createGrid(final ManagedObject mo) {
+        return Facets.bootstrapGrid(GridVariant.UI, mo.objSpec(), mo)
             .map(UiGridLayout::new);
     }
 

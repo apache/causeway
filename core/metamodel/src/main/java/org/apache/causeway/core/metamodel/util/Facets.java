@@ -58,6 +58,7 @@ import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoComplet
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet.GridVariant;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.facets.object.projection.ProjectionFacet;
@@ -122,14 +123,17 @@ public final class Facets {
     }
 
     public Optional<BSGrid> bootstrapGrid(
+            final GridVariant gridVariant,
             final ObjectSpecification objectSpec, final @Nullable ManagedObject mo) {
         return objectSpec.lookupFacet(GridFacet.class)
-            .map(gridFacet->gridFacet.getGrid(mo))
+            .map(gridFacet->gridFacet.getGrid(gridVariant, mo))
             .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
-    public Optional<BSGrid> bootstrapGrid(final ObjectSpecification objectSpec) {
-        return bootstrapGrid(objectSpec, null);
+    public Optional<BSGrid> bootstrapGrid(
+        final GridVariant gridVariant,
+        final ObjectSpecification objectSpec) {
+        return bootstrapGrid(gridVariant, objectSpec, null);
     }
 
     public boolean collectionIsPresent(final ObjectSpecification objectSpec) {

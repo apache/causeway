@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
@@ -62,7 +61,6 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -89,15 +87,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MenuBarsServiceBootstrap
 implements MenuBarsService {
 
-    public static final String MB3_TNS = "https://causeway.apache.org/applib/layout/menubars/bootstrap3";
-    public static final String MB3_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
-
-    public static final String COMPONENT_TNS = GridServiceDefault.COMPONENT_TNS;
-    public static final String COMPONENT_SCHEMA_LOCATION = GridServiceDefault.COMPONENT_SCHEMA_LOCATION;
-
-    public static final String LINKS_TNS = GridServiceDefault.LINKS_TNS;
-    public static final String LINKS_SCHEMA_LOCATION = GridServiceDefault.LINKS_SCHEMA_LOCATION;
-
     private final MenuBarsLoaderService loader;
 
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
@@ -105,6 +94,7 @@ implements MenuBarsService {
     private final MessageService messageService;
     private final JaxbService jaxbService;
     private final MetaModelContext metaModelContext;
+    private final BSMenuBarsAttributesAppender attributesAppender = new BSMenuBarsAttributesAppender();
 
     private final _Lazy<BSMenuBars> menuBarsFromAnnotationsOnly =
             _Lazy.threadSafe(this::menuBarsFromAnnotationsOnly);
@@ -136,7 +126,7 @@ implements MenuBarsService {
 
         var menuBars = loader.menuBars(marshaller)
                 .map(this::updateFacetsFromActionLayoutXml)
-                .map(this::addTnsAndSchemaLocation)
+                .map(attributesAppender::appendAttributes)
                 .orElse(menuBarsFromAnnotationsOnly);
 
         var unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
@@ -217,11 +207,6 @@ implements MenuBarsService {
         return menuBarsFromXml;
     }
 
-    private BSMenuBars addTnsAndSchemaLocation(final BSMenuBars menuBars) {
-        menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
-        return menuBars;
-    }
-
     private static BSMenuSection addSectionToMenu(final BSMenu menu) {
         var section = new BSMenuSection();
         menu.getSections().add(section);
@@ -276,7 +261,7 @@ implements MenuBarsService {
         appendFromAnnotationsOnly(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
         appendFromAnnotationsOnly(visibleServiceAdapters, menuBars.getTertiary(), DomainServiceLayout.MenuBar.TERTIARY);
 
-        menuBars.setTnsAndSchemaLocation(tnsAndSchemaLocation());
+        attributesAppender.appendAttributes(menuBars);
 
         final BSMenu otherMenu = new BSMenu();
         otherMenu.setNamed("Other");
@@ -453,20 +438,6 @@ implements MenuBarsService {
                     input.objSpec().getFacet(DomainServiceLayoutFacet.class);
             return facet != null && facet.getMenuBar() == menuBar;
         };
-    }
-
-    private String tnsAndSchemaLocation() {
-
-        return Stream.of(
-                MB3_TNS,
-                MB3_SCHEMA_LOCATION,
-
-                COMPONENT_TNS,
-                COMPONENT_SCHEMA_LOCATION,
-
-                LINKS_TNS,
-                LINKS_SCHEMA_LOCATION)
-                .collect(Collectors.joining(" "));
     }
 
 }

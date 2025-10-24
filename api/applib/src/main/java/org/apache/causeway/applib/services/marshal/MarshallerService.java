@@ -20,12 +20,11 @@ package org.apache.causeway.applib.services.marshal;
 
 import java.util.EnumSet;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Supports marshaling and unmarshaling of the generic type T

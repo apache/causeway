@@ -18,8 +18,13 @@
  */
 package org.apache.causeway.applib.services.grid;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.marshal.MarshallerService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.functional.Try;
 
 /**
  * Supports {@link Grid} marshaling and unmarshaling.
@@ -28,4 +33,12 @@ import org.apache.causeway.applib.services.marshal.MarshallerService;
  */
 public interface GridMarshallerService<T extends Grid>
 extends MarshallerService<T> {
+
+    Try<T> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
+
+    @Override
+    default Try<T> unmarshal(@Nullable final String content, @NonNull final CommonMimeType format) {
+        return unmarshal(Object.class, content, format);
+    }
+
 }

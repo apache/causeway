@@ -37,7 +37,7 @@ extends FacetFactoryAbstract {
         if(gridService.get()==null) return;
 
         var facetHolder = processClassContext.getFacetHolder();
-        addFacet(GridFacetDefault
+        addFacet(BSGridFacet
             .create(facetHolder, gridService.get()));
     }
 

@@ -33,7 +33,7 @@ import org.apache.causeway.applib.layout.grid.Grid;
 
 public record BSWalker(BSRowOwner root) {
 
-    public void visit(final Grid.Visitor visitor) {
+    public void walk(final Grid.Visitor visitor) {
         final BSElement.Visitor bsVisitor = asBsVisitor(visitor);
         if(root instanceof BSGrid bsGrid) {
             bsVisitor.preVisit(bsGrid);
@@ -45,34 +45,30 @@ public record BSWalker(BSRowOwner root) {
         }
     }
 
-    private void traverseRows(final BSRowOwner rowOwner, final BSElement.Visitor visitor) {
-        final BSElement.Visitor bsVisitor = asBsVisitor(visitor);
+    private void traverseRows(final BSRowOwner rowOwner, final BSElement.Visitor bsVisitor) {
         final List<BSRow> rows = rowOwner.getRows();
         for (BSRow bsRow : new ArrayList<>(rows)) {
             bsVisitor.preVisit(bsRow);
             bsVisitor.visit(bsRow);
-            traverseCols(bsRow, visitor);
+            traverseCols(bsRow, bsVisitor);
             bsVisitor.postVisit(bsRow);
         }
     }
 
-    private void traverseCols(final BSRow bsRow, final BSElement.Visitor visitor) {
-        final BSElement.Visitor bsVisitor = asBsVisitor(visitor);
+    private void traverseCols(final BSRow bsRow, final BSElement.Visitor bsVisitor) {
         final List<BSRowContent> cols = bsRow.getCols();
         for (BSRowContent rowContent : new ArrayList<>(cols)) {
-            if(rowContent instanceof BSCol) {
-                final BSCol bsCol = (BSCol) rowContent;
+            if(rowContent instanceof BSCol bsCol) {
                 bsVisitor.preVisit(bsCol);
                 bsVisitor.visit(bsCol);
-                traverseDomainObject(bsCol, visitor);
-                traverseTabGroups(bsCol, visitor);
-                traverseActions(bsCol, visitor);
-                traverseFieldSets(bsCol, visitor);
-                traverseCollections(bsCol, visitor);
-                traverseRows(bsCol, visitor);
+                traverseDomainObject(bsCol, bsVisitor);
+                traverseTabGroups(bsCol, bsVisitor);
+                traverseActions(bsCol, bsVisitor);
+                traverseFieldSets(bsCol, bsVisitor);
+                traverseCollections(bsCol, bsVisitor);
+                traverseRows(bsCol, bsVisitor);
                 bsVisitor.postVisit(bsCol);
-            } else if (rowContent instanceof BSClearFix) {
-                final BSClearFix bsClearFix = (BSClearFix) rowContent;
+            } else if (rowContent instanceof BSClearFix bsClearFix) {
                 bsVisitor.visit(bsClearFix);
             } else {
                 throw new IllegalStateException(
@@ -81,79 +77,60 @@ public record BSWalker(BSRowOwner root) {
         }
     }
 
-    private void traverseDomainObject(final BSCol bsCol, final BSElement.Visitor visitor) {
+    private void traverseDomainObject(final BSCol bsCol, final BSElement.Visitor bsVisitor) {
         final DomainObjectLayoutData domainObject = bsCol.getDomainObject();
         if(domainObject == null) return;
-
-        domainObject.setOwner(bsCol);
-        visitor.visit(domainObject);
+        bsVisitor.visit(domainObject);
     }
 
-    private void traverseTabGroups(final BSTabGroupOwner bsTabGroupOwner, final BSElement.Visitor visitor) {
-        final BSElement.Visitor bsVisitor = asBsVisitor(visitor);
+    private void traverseTabGroups(final BSTabGroupOwner bsTabGroupOwner, final BSElement.Visitor bsVisitor) {
         final List<BSTabGroup> tabGroups = bsTabGroupOwner.getTabGroups();
         for (BSTabGroup bsTabGroup : new ArrayList<>(tabGroups)) {
-            bsTabGroup.setOwner(bsTabGroupOwner);
             bsVisitor.preVisit(bsTabGroup);
             bsVisitor.visit(bsTabGroup);
-            traverseTabs(bsTabGroup, visitor);
+            traverseTabs(bsTabGroup, bsVisitor);
             bsVisitor.postVisit(bsTabGroup);
         }
     }
 
-    private void traverseTabs(final BSTabOwner bsTabOwner, final BSElement.Visitor visitor) {
-        final BSElement.Visitor bsVisitor = asBsVisitor(visitor);
+    private void traverseTabs(final BSTabOwner bsTabOwner, final BSElement.Visitor bsVisitor) {
         final List<BSTab> tabs = bsTabOwner.getTabs();
         for (BSTab tab : new ArrayList<>(tabs)) {
-            tab.setOwner(bsTabOwner);
             bsVisitor.preVisit(tab);
             bsVisitor.visit(tab);
-            traverseRows(tab, visitor);
+            traverseRows(tab, bsVisitor);
             bsVisitor.postVisit(tab);
         }
     }
 
-    /**
-     * Convenience for subclasses.
-     */
-    private void traverseActions(final ActionLayoutDataOwner actionLayoutDataOwner, final BSElement.Visitor visitor) {
+    private void traverseActions(final ActionLayoutDataOwner actionLayoutDataOwner, final BSElement.Visitor bsVisitor) {
         final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
         if(actionLayoutDatas == null) return;
 
         for (final ActionLayoutData actionLayoutData : new ArrayList<>(actionLayoutDatas)) {
-            actionLayoutData.setOwner(actionLayoutDataOwner);
-            visitor.visit(actionLayoutData);
+            bsVisitor.visit(actionLayoutData);
         }
     }
 
-    /**
-     * Convenience for subclasses.
-     */
-    private void traverseFieldSets(final FieldSetOwner fieldSetOwner, final BSElement.Visitor visitor) {
+    private void traverseFieldSets(final FieldSetOwner fieldSetOwner, final BSElement.Visitor bsVisitor) {
         final List<FieldSet> fieldSets = fieldSetOwner.getFieldSets();
         for (FieldSet fieldSet : new ArrayList<>(fieldSets)) {
-            fieldSet.setOwner(fieldSetOwner);
-            visitor.visit(fieldSet);
-            traverseActions(fieldSet, visitor);
+            bsVisitor.visit(fieldSet);
+            traverseActions(fieldSet, bsVisitor);
             final List<PropertyLayoutData> properties = fieldSet.getProperties();
             for (final PropertyLayoutData property : new ArrayList<>(properties)) {
-                property.setOwner(fieldSet);
-                visitor.visit(property);
-                traverseActions(property, visitor);
+                bsVisitor.visit(property);
+                traverseActions(property, bsVisitor);
             }
         }
     }
 
-    /**
-     * Convenience for subclasses.
-     */
     private void traverseCollections(
-            final CollectionLayoutDataOwner owner, final BSElement.Visitor visitor) {
+            final CollectionLayoutDataOwner owner, final BSElement.Visitor bsVisitor) {
         final List<CollectionLayoutData> collections = owner.getCollections();
         for (CollectionLayoutData collection : new ArrayList<>(collections)) {
-            collection.setOwner(owner);
-            visitor.visit(collection);
-            traverseActions(collection, visitor);
+            bsVisitor.visit(collection);
+            traverseActions(collection, bsVisitor);
         }
     }
 

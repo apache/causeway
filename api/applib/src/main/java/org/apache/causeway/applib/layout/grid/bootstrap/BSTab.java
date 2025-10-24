@@ -25,8 +25,6 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 /**
  * Represents a tab within a {@link BSTabGroup tab group}.
  *
@@ -80,17 +78,6 @@ public final class BSTab extends BSElementAbstract implements BSRowOwner {
 
     public void setOwner(final BSTabOwner owner) {
         this.owner = owner;
-    }
-
-    /**
-     * removes this tab from its tab-group
-     */
-    @Programmatic
-    public void remove() {
-        if(owner!=null) {
-            owner.getTabs().remove(this);
-            owner = null;
-        }
     }
 
     @Override public String toString() {

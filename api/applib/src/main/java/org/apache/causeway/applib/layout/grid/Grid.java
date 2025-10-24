@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.layout.grid;
 
-import java.util.LinkedHashMap;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -33,16 +33,12 @@ import org.apache.causeway.applib.services.layout.LayoutService;
  *
  * <p>It is used by the {@link LayoutService} as a common based type for any layouts read in from XML.
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
 @Programmatic
 public interface Grid {
 
-    Class<?> getDomainClass();
-    void setDomainClass(final Class<?> domainClass);
-
-    String getTnsAndSchemaLocation();
-    void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
+    Class<?> domainClass();
 
     /**
      * Indicates whether or not this grid is a fallback.
@@ -52,14 +48,12 @@ public interface Grid {
      * Governs meta-model facet precedence, that is,
      * facets from annotations should overrule those from fallback XML grids.
      */
-    default boolean isFallback() { return false; }
-
+    boolean isFallback();
     boolean isNormalized();
-    void setNormalized(final boolean normalized);
 
-    LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
-    LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
-    LinkedHashMap<String, ActionLayoutData> getAllActionsById();
+    Stream<PropertyLayoutData> streamPropertyLayoutData();
+    Stream<CollectionLayoutData> streamCollectionLayoutData();
+    Stream<ActionLayoutData> streamActionLayoutData();
 
     interface Visitor {
         default void visit(final DomainObjectLayoutData domainObjectLayoutData) {}

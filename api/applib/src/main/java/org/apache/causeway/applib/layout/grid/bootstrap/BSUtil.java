@@ -24,6 +24,8 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.resources._Serializables;
 
 import lombok.experimental.UtilityClass;
 
@@ -32,7 +34,7 @@ public class BSUtil {
 
     public boolean hasContent(final BSTab thisBsTab) {
         final AtomicBoolean foundContent = new AtomicBoolean(false);
-        new BSWalker(thisBsTab).visit(new BSElement.Visitor() {
+        new BSWalker(thisBsTab).walk(new BSElement.Visitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 foundContent.set(true);
@@ -53,5 +55,27 @@ public class BSUtil {
         return foundContent.get();
     }
 
+    /**
+     * Creates a deep copy of given original grid.
+     */
+    public BSGrid deepCopy(final BSGrid orig) {
+        var bytes = _Serializables.write(orig);
+        return _Casts.uncheckedCast(
+                _Serializables.read(BSGrid.class, bytes));
+    }
+
+    /**
+     * Creates a deep copy of given original dto.
+     */
+    public BSGridDto deepCopy(final BSGridDto orig) {
+        var bytes = _Serializables.write(orig);
+        return _Casts.uncheckedCast(
+                _Serializables.read(BSGridDto.class, bytes));
+    }
+
+    public BSGrid setupOwnerPointers(final BSGrid grid) {
+        new BSElementOwnerShipSettingWalker(grid).walk();
+        return grid;
+    }
 
 }
