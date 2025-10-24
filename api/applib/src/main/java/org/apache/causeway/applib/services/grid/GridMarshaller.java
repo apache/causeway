@@ -16,23 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.marshal;
+package org.apache.causeway.applib.services.grid;
 
 import java.util.EnumSet;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.services.marshal.Marshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 
 /**
- * Supports marshaling and unmarshaling of the generic type T
- * for a set of mime types.
+ * Supports {@link Grid} marshaling and unmarshaling.
  *
- * @since 2.0 {@index}
+ * @apiNote almost a copy of {@link Marshaller}
+ *
+ * @since 2.0 revised for 4.0 {@index}
  */
-public interface MarshallerService<T> {
+public interface GridMarshaller<T extends Grid> {
 
     Class<T> supportedClass();
 
@@ -51,6 +54,6 @@ public interface MarshallerService<T> {
      * Returns a new de-serialized instance wrapped in a {@link Try}.
      * @throws UnsupportedOperationException when format is not supported (not wrapped)
      */
-    Try<T> unmarshal(@Nullable String content, @NonNull CommonMimeType format);
+    Try<T> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
 
 }

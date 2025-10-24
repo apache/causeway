@@ -53,7 +53,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -118,7 +118,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
-    private GridMarshallerService<BSGrid> marshaller;
+    private GridMarshaller<BSGrid> marshaller;
 
     private final CausewayConfiguration config;
     private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;

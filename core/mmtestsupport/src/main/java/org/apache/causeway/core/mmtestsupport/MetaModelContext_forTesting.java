@@ -37,7 +37,7 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -457,9 +457,9 @@ implements MetaModelContext {
     }
 
     @Getter(lazy = true)
-    private final GridMarshallerService gridMarshallerService = createGridMarshallerService();
+    private final GridMarshaller gridMarshallerService = createGridMarshallerService();
     //XXX lombok issue: won't compile if inlined
-    private final GridMarshallerService<? extends Grid> createGridMarshallerService() {
+    private final GridMarshaller<? extends Grid> createGridMarshallerService() {
         return new GridMarshallerServiceBootstrap(getJaxbService(), new XsiSchemaLocationProviderForGrid(List.of()));
     }
 

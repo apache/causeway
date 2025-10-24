@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Qualifier("Default")
 public record GridServiceDefault(
     GridLoaderService gridLoaderService,
-    GridMarshallerService<? extends Grid> marshaller,
+    GridMarshaller<? extends Grid> marshaller,
     List<GridSystemService<? extends Grid>> gridSystemServices) implements GridService {
 
     @Override

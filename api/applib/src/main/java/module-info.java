@@ -84,6 +84,7 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.layout;
     exports org.apache.causeway.applib.services.linking;
     exports org.apache.causeway.applib.services.locale;
+    exports org.apache.causeway.applib.services.marshal;
     exports org.apache.causeway.applib.services.menu;
     exports org.apache.causeway.applib.services.message;
     exports org.apache.causeway.applib.services.metamodel;

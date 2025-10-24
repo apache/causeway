@@ -127,7 +127,7 @@ extends MetaModelTestAbstract {
 
         println(xml);
 
-        BSGrid bsGridRoundtripped = (BSGrid) gridServiceDefault.marshaller().unmarshal(xml, CommonMimeType.XML)
+        BSGrid bsGridRoundtripped = (BSGrid) gridServiceDefault.marshaller().unmarshal(Object.class, xml, CommonMimeType.XML)
             .valueAsNonNullElseFail();
 
         String xmlRoundtripped = gridServiceDefault.marshaller().marshal(_Casts.uncheckedCast(bsGridRoundtripped), CommonMimeType.XML);

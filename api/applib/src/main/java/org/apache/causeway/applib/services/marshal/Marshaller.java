@@ -16,35 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.grid;
+package org.apache.causeway.applib.services.marshal;
+
+import java.util.EnumSet;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.marshal.MarshallerService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 
 /**
- * Supports {@link Grid} marshaling and unmarshaling.
+ * Supports marshaling and unmarshaling of the generic type T
+ * for a set of mime types.
  *
- * @since 2.0 revised for 4.0 {@index}
+ * @since 2.0 {@index}
  */
-public interface GridMarshallerService<T extends Grid>
-extends MarshallerService<T> {
+public interface Marshaller<T> {
 
-    Try<T> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
+    Class<T> supportedClass();
 
     /**
-     * @deprecated kept to comply with MarshallerService<T> but should not be used.
+     * Supported format(s) for {@link #unmarshal(String, CommonMimeType)}
+     * and {@link #marshal(Object, CommonMimeType)}.
      */
-    @Deprecated
-    @Override
-    default Try<T> unmarshal(@Nullable final String content, @NonNull final CommonMimeType format) {
-        System.err.println("Call of org.apache.causeway.applib.services.grid.GridMarshallerService.unmarshal(String, CommonMimeType), detected.\n"
-                + "org.apache.causeway.applib.services.grid.GridMarshallerService.unmarshal(Class<?>, String, CommonMimeType) should be called instead.");
-        return unmarshal(Object.class, content, format);
-    }
+    EnumSet<CommonMimeType> supportedFormats();
+
+    /**
+     * @throws UnsupportedOperationException when format is not supported
+     */
+    String marshal(@NonNull T value, @NonNull CommonMimeType format);
+
+    /**
+     * Returns a new de-serialized instance wrapped in a {@link Try}.
+     * @throws UnsupportedOperationException when format is not supported (not wrapped)
+     */
+    Try<T> unmarshal(@Nullable String content, @NonNull CommonMimeType format);
 
 }
