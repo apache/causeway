@@ -25,6 +25,9 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Represents a tab within a {@link BSTabGroup tab group}.
  *
@@ -39,46 +42,21 @@ public final class BSTab extends BSElementAbstract implements BSRowOwner {
 
     private static final long serialVersionUID = 1L;
 
+    @Getter(onMethod_ = {@XmlAttribute(required = true)})
+    @Setter
     private String name;
-    @XmlAttribute(required = true)
-    public String getName() {
-        return name;
-    }
 
-    public void setName(final String name) {
-        this.name = name;
-    }
-
+    @Getter(onMethod_ = {@XmlElement(name = "row", required = true)})
+    @Setter
     private List<BSRow> rows = new ArrayList<>();
-
-    // no wrapper
-    @Override
-    @XmlElement(name = "row", required = true)
-    public List<BSRow> getRows() {
-        return rows;
-    }
-
-    public void setRows(final List<BSRow> rows) {
-        this.rows = rows;
-    }
-
-    private BSTabOwner owner;
 
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
-    @XmlTransient
-    public BSTabOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final BSTabOwner owner) {
-        this.owner = owner;
-    }
+    @Getter(onMethod_ = {@XmlTransient})
+    @Setter
+    private BSTabOwner owner;
 
     @Override public String toString() {
         return "BSTab{" +

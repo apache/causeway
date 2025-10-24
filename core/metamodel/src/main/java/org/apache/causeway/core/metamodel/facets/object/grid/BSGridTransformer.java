@@ -84,7 +84,17 @@ interface BSGridTransformer extends UnaryOperator<BSGrid> {
                 }
             });
 
-            emptyTabs.forEach(tab->tab.getOwner().getTabs().remove(tab));
+            emptyTabs.forEach(tab->{
+                    var tabGroup = (BSTabGroup)tab.getOwner();
+                    tab.setOwner(null); //fully detach
+                    if(tabGroup==null) return;
+                    tabGroup.getTabs().remove(tab);
+                    // remove empty tab-groups as well
+                    if(tabGroup.getTabs().isEmpty()) {
+                        var tabGroupOwner = tabGroup.getOwner();
+                        tabGroupOwner.getTabGroups().remove(tabGroup);
+                    }
+                });
 
             return bsGrid;
         }
