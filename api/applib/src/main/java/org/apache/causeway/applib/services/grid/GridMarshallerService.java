@@ -29,15 +29,21 @@ import org.apache.causeway.commons.functional.Try;
 /**
  * Supports {@link Grid} marshaling and unmarshaling.
  *
- * @since 2.0 {@index}
+ * @since 2.0 revised for 4.0 {@index}
  */
 public interface GridMarshallerService<T extends Grid>
 extends MarshallerService<T> {
 
     Try<T> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
 
+    /**
+     * @deprecated kept to comply with MarshallerService<T> but should not be used.
+     */
+    @Deprecated
     @Override
     default Try<T> unmarshal(@Nullable final String content, @NonNull final CommonMimeType format) {
+        System.err.println("Call of org.apache.causeway.applib.services.grid.GridMarshallerService.unmarshal(String, CommonMimeType), detected.\n"
+                + "org.apache.causeway.applib.services.grid.GridMarshallerService.unmarshal(Class<?>, String, CommonMimeType) should be called instead.");
         return unmarshal(Object.class, content, format);
     }
 

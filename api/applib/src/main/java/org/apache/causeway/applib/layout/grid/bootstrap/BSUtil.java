@@ -32,6 +32,17 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class BSUtil {
 
+    /**
+     * Not required when
+     * org.apache.causeway.core.metamodel.facets.object.grid.BSGridTransformer.EmptyTabRemover
+     * has already run.
+     *
+     * However, might still be useful to handle 'dynamically' visible tabs,
+     * based on feature visibility.
+     *
+     * @implNote at the time of writing, I'm not sure whether presence of a layout
+     * feature entry guarantees presence of a 'real' feature from the meta-model.
+     */
     public boolean hasContent(final BSTab thisBsTab) {
         final AtomicBoolean foundContent = new AtomicBoolean(false);
         new BSWalker(thisBsTab).walk(new BSElement.Visitor() {
@@ -74,7 +85,7 @@ public class BSUtil {
     }
 
     public BSGrid setupOwnerPointers(final BSGrid grid) {
-        new BSElementOwnerShipSettingWalker(grid).walk();
+        new BSElementOwnerResolvingWalker(grid).walk();
         return grid;
     }
 

@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,5 +43,13 @@ permits BSCol, BSClearFix {
     @Getter(onMethod_ = {@XmlAttribute(required = false)})
     @Setter
     private Size size;
+
+    /**
+     * Owner.
+     * <p>Set programmatically by framework after reading in from XML.
+     */
+    @Getter(onMethod_ = {@XmlTransient})
+    @Setter
+    private BSRowContentOwner owner;
 
 }

@@ -28,7 +28,7 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.FieldSetOwner;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 
-public record BSElementOwnerShipSettingWalker(BSRowOwner root) {
+public record BSElementOwnerResolvingWalker(BSRowOwner root) {
 
     public void walk() {
         traverseRows(root);
@@ -42,6 +42,7 @@ public record BSElementOwnerShipSettingWalker(BSRowOwner root) {
 
     private void traverseCols(final BSRow bsRow) {
         for (BSRowContent rowContent : bsRow.getCols()) {
+            rowContent.setOwner(bsRow);
             if(rowContent instanceof BSCol bsCol) {
                 traverseDomainObject(bsCol);
                 traverseTabGroups(bsCol);

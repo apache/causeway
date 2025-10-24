@@ -155,8 +155,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
         try {
             final T grid = marshaller
-                    .unmarshal(domainClass, layoutResource.content(), layoutResource.format())
-                    .getValue().orElseThrow();
+                .unmarshal(domainClass, layoutResource.content(), layoutResource.format())
+                .getValue().orElseThrow();
             if(supportsReloading()) {
                 gridCache.put(layoutKey, grid);
             }
