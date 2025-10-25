@@ -24,19 +24,14 @@ import jakarta.xml.bind.annotation.XmlType;
 /**
  * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.
  *
- *
- * <p>
- *     It is rendered as a (eg) &lt;div class=&quot;clearfix hidden-xs ...&quot;&gt;
- * </p>
+ * <p>It is rendered as a (eg) &lt;div class=&quot;clearfix hidden-xs ...&quot;&gt;
  *
  * @since 1.x {@index}
  */
 @XmlRootElement(
-        name = "clearFixHidden"
-        )
+        name = "clearFixHidden")
 @XmlType(
-        name = "clearFixHidden"
-        )
+        name = "clearFixHidden")
 public final class BSClearFixHidden extends BSClearFix {
 
     private static final long serialVersionUID = 1L;

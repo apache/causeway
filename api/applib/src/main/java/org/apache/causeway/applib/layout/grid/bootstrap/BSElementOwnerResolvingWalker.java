@@ -41,7 +41,7 @@ public record BSElementOwnerResolvingWalker(BSRowOwner root) {
     }
 
     private void traverseCols(final BSRow bsRow) {
-        for (BSRowContent rowContent : bsRow.getCols()) {
+        for (BSRowContent rowContent : bsRow.getRowContents()) {
             rowContent.setOwner(bsRow);
             if(rowContent instanceof BSCol bsCol) {
                 traverseDomainObject(bsCol);

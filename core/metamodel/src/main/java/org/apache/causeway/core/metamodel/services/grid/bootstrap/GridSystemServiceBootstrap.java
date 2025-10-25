@@ -192,7 +192,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         headerRowCol.setSpan(12);
         headerRowCol.setUnreferencedActions(true);
         headerRowCol.setDomainObject(new DomainObjectLayoutData());
-        headerRow.getCols().add(headerRowCol);
+        headerRow.getRowContents().add(headerRowCol);
 
         final BSRow propsRow = new BSRow();
         bsGrid.getRows().add(propsRow);
@@ -203,7 +203,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         final BSCol col = new BSCol();
         col.setUnreferencedCollections(true);
         col.setSpan(12);
-        propsRow.getCols().add(col);
+        propsRow.getRowContents().add(col);
 
         return bsGrid;
     }
@@ -217,7 +217,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         if(span > 0 || unreferencedProperties) {
             final BSCol col = new BSCol();
             col.setSpan(span); // in case we are here because of 'unreferencedProperties' needs setting
-            propsRow.getCols().add(col);
+            propsRow.getRowContents().add(col);
             final List<String> leftMemberGroups = memberGroupNames;
             for (String memberGroup : leftMemberGroups) {
                 final FieldSet fieldSet = new FieldSet();
@@ -580,7 +580,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final BSCol tabRowCol = new BSCol();
             tabRowCol.setSpan(12);
             tabRowCol.setSize(Size.MD);
-            tabRow.getCols().add(tabRowCol);
+            tabRow.getRowContents().add(tabRowCol);
 
             var collectionLayoutData = layoutFactory.apply(collectionId);
             tabRowCol.getCollections().add(collectionLayoutData);

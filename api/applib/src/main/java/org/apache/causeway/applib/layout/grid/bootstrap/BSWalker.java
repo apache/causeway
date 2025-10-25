@@ -56,7 +56,7 @@ public record BSWalker(BSRowOwner root) {
     }
 
     private void traverseCols(final BSRow bsRow, final BSElement.Visitor bsVisitor) {
-        final List<BSRowContent> cols = bsRow.getCols();
+        final List<BSRowContent> cols = bsRow.getRowContents();
         for (BSRowContent rowContent : new ArrayList<>(cols)) {
             if(rowContent instanceof BSCol bsCol) {
                 bsVisitor.preVisit(bsCol);

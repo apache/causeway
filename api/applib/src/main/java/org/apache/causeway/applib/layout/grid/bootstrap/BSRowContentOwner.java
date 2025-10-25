@@ -18,11 +18,15 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
+import java.util.List;
+
 import org.apache.causeway.applib.layout.component.Owner;
 
 /**
  * @since 1.x {@index}
  */
 public interface BSRowContentOwner extends Owner {
+
+    List<BSRowContent> getRowContents();
 
 }

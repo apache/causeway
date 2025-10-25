@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.grid;
+package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.Stack;
 import java.util.function.UnaryOperator;
 
@@ -27,15 +26,10 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSElement;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.commons.internal.base._NullSafe;
 
 @FunctionalInterface
-interface BSGridTransformer extends UnaryOperator<BSGrid> {
+public interface BSGridTransformer extends UnaryOperator<BSGrid> {
 
     /**
      * Removes empty tabs from tab groups.
@@ -115,10 +109,8 @@ interface BSGridTransformer extends UnaryOperator<BSGrid> {
                 public void visit(final BSTabGroup bsTabGroup) {
                     if(bsTabGroup.getTabs().size()!=1) return; // when has no tabs is also a no-op
 
-                    var isCollapseIfOne = Optional.ofNullable(bsTabGroup.isCollapseIfOne())
-                        .map(Boolean::booleanValue)
-                        .orElse(true); // opt-out semantics: absence of the attribute results in participation
-                    if(!isCollapseIfOne) return;
+                    // opt-out semantics: absence of the attribute results in participation
+                    if(!bsTabGroup.isCollapseIfOne(true)) return;
 
                     var parent = (BSCol) bsTabGroup.getOwner();
                     parent.getTabGroups().remove(bsTabGroup);

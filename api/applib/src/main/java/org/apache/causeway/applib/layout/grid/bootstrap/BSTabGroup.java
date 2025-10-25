@@ -43,48 +43,34 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
 
     private static final long serialVersionUID = 1L;
 
-    private Boolean unreferencedCollections;
     /**
      * Whether this tab group should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
-     * <p>
-     *     Any layout must have precisely one tab group or {@link BSCol col} that has this attribute set.
-     * </p>
+     * <p>Any layout must have precisely one tab group or {@link BSCol col} that has this attribute set.
      */
-    @XmlAttribute(required = false)
-    public Boolean isUnreferencedCollections() {
-        return unreferencedCollections;
+    @Getter(onMethod_ = {@XmlAttribute(required = false)})
+    @Setter
+    private Boolean unreferencedCollections;
+    /** unwraps nullable Boolean */
+    @XmlTransient public boolean isUnreferencedCollections() {
+        return unreferencedCollections == null ? false : unreferencedCollections;
     }
 
-    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
-        this.unreferencedCollections = unreferencedCollections;
-    }
-
-    private Boolean collapseIfOne;
     /**
      * If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
      */
-    @XmlAttribute(required = false)
-    public Boolean isCollapseIfOne() {
-        return collapseIfOne;
+    @Getter(onMethod_ = {@XmlAttribute(required = false)})
+    @Setter
+    private Boolean collapseIfOne;
+    /** unwraps nullable Boolean */
+    public boolean isCollapseIfOne(boolean _default) {
+        return collapseIfOne == null ? _default : collapseIfOne;
     }
 
-    public void setCollapseIfOne(final Boolean collapseIfOne) {
-        this.collapseIfOne = collapseIfOne;
-    }
-
+    // required=false because may be auto-generated
+    @Getter(onMethod_ = {@XmlElement(name = "tab", required = false)})
+    @Setter
     private List<BSTab> tabs = new ArrayList<>();
-
-    // no wrapper; required=false because may be auto-generated
-    @Override
-    @XmlElement(name = "tab", required = false)
-    public List<BSTab> getTabs() {
-        return tabs;
-    }
-
-    public void setTabs(final List<BSTab> tabs) {
-        this.tabs = tabs;
-    }
 
     /**
      * Owner.
@@ -94,18 +80,11 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     @Setter
     private BSTabGroupOwner owner;
 
-    private String metadataError;
-
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
-    @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
+    @Getter(onMethod_ = {@XmlAttribute(required = false)})
+    @Setter
+    private String metadataError;
 
 }

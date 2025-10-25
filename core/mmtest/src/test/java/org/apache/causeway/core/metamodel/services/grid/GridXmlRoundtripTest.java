@@ -62,7 +62,7 @@ extends MetaModelTestAbstract {
         final BSRow headerRow = new BSRow();
         bsGrid.getRows().add(headerRow);
         final BSCol headerCol = new BSCol();
-        headerRow.getCols().add(headerCol);
+        headerRow.getRowContents().add(headerCol);
         headerCol.setSpan(12);
 
         final DomainObjectLayoutData objectLayoutData = new DomainObjectLayoutData();
@@ -78,7 +78,7 @@ extends MetaModelTestAbstract {
         bsGrid.getRows().add(contentRow);
 
         final BSCol contentCol = new BSCol();
-        contentRow.getCols().add(contentCol);
+        contentRow.getRowContents().add(contentCol);
         contentCol.setSpan(12);
 
         // a tabgroup containing a 'Common' tab
@@ -92,7 +92,7 @@ extends MetaModelTestAbstract {
         final BSRow tabRow = new BSRow();
         bsTab.getRows().add(tabRow);
         final BSCol tabLeftCol = new BSCol();
-        tabRow.getCols().add(tabLeftCol);
+        tabRow.getRowContents().add(tabLeftCol);
         tabLeftCol.setSpan(6);
 
         // containing a fieldset
@@ -114,7 +114,7 @@ extends MetaModelTestAbstract {
 
         // and the tab also has a right col...
         final BSCol tabRightCol = new BSCol();
-        tabRow.getCols().add(tabRightCol);
+        tabRow.getRowContents().add(tabRightCol);
         tabRightCol.setSpan(6);
 
         // containing a collection

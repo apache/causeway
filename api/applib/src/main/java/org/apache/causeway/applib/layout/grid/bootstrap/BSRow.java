@@ -39,7 +39,7 @@ import lombok.Setter;
  */
 @XmlType(
         name = "row",
-        propOrder = {"cols", "metadataError"})
+        propOrder = {"rowContents", "metadataError"})
 public final class BSRow extends BSElementAbstract implements HasElementId, BSRowContentOwner {
 
     private static final long serialVersionUID = 1L;
@@ -58,7 +58,7 @@ public final class BSRow extends BSElementAbstract implements HasElementId, BSRo
                 @XmlElementRef(type = BSClearFixHidden.class,  name="clearFixHidden", required = false)
             })
     })
-    private List<BSRowContent> cols = new ArrayList<>();
+    private List<BSRowContent> rowContents = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.

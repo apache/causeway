@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.commons.model.layout;
 
 import java.util.Optional;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -78,7 +79,7 @@ public record UiGridLayout(
 
         var uiRow = visitor.newRow(container, bsRow);
 
-        for(var bsRowContent: bsRow.getCols()) {
+        for(var bsRowContent: bsRow.getRowContents()) {
             if(bsRowContent instanceof BSCol) {
                 visitCol((BSCol) bsRowContent, uiRow, visitor);
             } else if (bsRowContent instanceof BSClearFix) {

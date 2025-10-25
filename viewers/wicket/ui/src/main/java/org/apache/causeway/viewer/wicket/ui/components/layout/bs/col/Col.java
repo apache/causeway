@@ -177,7 +177,7 @@ implements HasDynamicallyVisibleContent {
                     // shouldn't occur; previously have filtered these out
                     throw new IllegalStateException("Cannot render tabGroup with no tabs");
                 case 1:
-                    if(bsTabGroup.isCollapseIfOne() == null || bsTabGroup.isCollapseIfOne()) {
+                    if(bsTabGroup.isCollapseIfOne(true)) {
                         final BSTab bsTab = tabs.get(0);
                         // render the rows of the one-and-only tab of this tab group.
                         final List<BSRow> tabRows = bsTab.getRows();

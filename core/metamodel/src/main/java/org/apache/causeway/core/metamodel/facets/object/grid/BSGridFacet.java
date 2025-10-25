@@ -28,6 +28,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGridTransformer;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
