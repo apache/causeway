@@ -53,8 +53,7 @@ import lombok.Setter;
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "col")
+@XmlRootElement(name = "col")
 @XmlType(
         name = "col",
         propOrder = {
@@ -69,20 +68,18 @@ import lombok.Setter;
 public final class BSCol extends BSRowContent
 implements ActionLayoutDataOwner, BSTabGroupOwner, BSRowOwner, FieldSetOwner, HasElementId,
 CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
-
     private static final long serialVersionUID = 1L;
-
     private static final _Ints.Range range1_12 = _Ints.Range.of(Bound.inclusive(1), Bound.inclusive(12));
 
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String id;
 
-    private int span;
     @XmlAttribute(required = true)
+    private int span;
     public int getSpan() { return range1_12.bounded(span); }
     public void setSpan(final int span) { this.span = range1_12.bounded(span); }
 
@@ -91,8 +88,8 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
      *
      * <p>Any layout must have precisely one column or {@link FieldSet} that has this attribute set.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Boolean unreferencedActions;
     /** unwraps nullable Boolean */
     @XmlTransient public boolean isUnreferencedActions() {
@@ -104,8 +101,8 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
      *
      * <p>Any layout must have precisely one column or {@link BSTabGroup tabgroup} that has this attribute set.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Boolean unreferencedCollections;
     /** unwraps nullable Boolean */
     @XmlTransient public boolean isUnreferencedCollections() {
@@ -115,39 +112,39 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     /**
      * Whether to show the object's icon and title.
      */
-    @Getter(onMethod_ = {@XmlElementRef(type=DomainObjectLayoutData.class, name="domainObject", required = false)})
-    @Setter
+    @XmlElementRef(type=DomainObjectLayoutData.class, name="domainObject", required = false)
+    @Getter @Setter
     private DomainObjectLayoutData domainObject;
 
-    @Getter(onMethod_ = {@XmlElement(name = "sizeSpan", required = false)})
-    @Setter
+    @XmlElement(name = "sizeSpan", required = false)
+    @Getter @Setter
     private List<SizeSpan> sizeSpans = new ArrayList<>();
 
-    @Getter(onMethod_ = {@XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)})
-    @Setter
+    @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
+    @Getter @Setter
     private List<ActionLayoutData> actions = new ArrayList<>();
 
-    @Getter(onMethod_ = {@XmlElement(name = "row", required = false)})
-    @Setter
+    @XmlElement(name = "row", required = false)
+    @Getter @Setter
     private List<BSRow> rows = new ArrayList<>();
 
-    @Getter(onMethod_ = {@XmlElement(name = "tabGroup", required = false)})
-    @Setter
+    @XmlElement(name = "tabGroup", required = false)
+    @Getter @Setter
     private List<BSTabGroup> tabGroups = new ArrayList<>();
 
-    @Getter(onMethod_ = {@XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)})
-    @Setter
+    @XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)
+    @Getter @Setter
     private List<FieldSet> fieldSets = new ArrayList<>();
 
-    @Getter(onMethod_ = {@XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)})
-    @Setter
+    @XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)
+    @Getter @Setter
     private List<CollectionLayoutData> collections = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String metadataError;
 
     public String toCssClass() {

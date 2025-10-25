@@ -64,4 +64,24 @@ public interface Grid {
     }
 
     void visit(final Grid.Visitor visitor);
+
+    // -- EMPTY GRID
+
+    final static Grid EMPTY = new EmptyGrid(Object.class);
+    static Grid empty() { return EMPTY; }
+
+    public record EmptyGrid(Class<?> domainClass) implements Grid {
+        @Override public boolean isFallback() { return false; }
+        @Override public boolean isNormalized() { return true; }
+        @Override public Stream<PropertyLayoutData> streamPropertyLayoutData() {
+            return Stream.empty();
+        }
+        @Override public Stream<CollectionLayoutData> streamCollectionLayoutData() {
+            return Stream.empty();
+        }
+        @Override public Stream<ActionLayoutData> streamActionLayoutData() {
+            return Stream.empty();
+        }
+        @Override public void visit(Visitor visitor) { }
+    };
 }

@@ -20,6 +20,7 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
@@ -42,20 +43,20 @@ public final class BSTab extends BSElementAbstract implements BSRowOwner {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod_ = {@XmlAttribute(required = true)})
-    @Setter
+    @XmlAttribute(required = true)
+    @Getter @Setter
     private String name;
 
-    @Getter(onMethod_ = {@XmlElement(name = "row", required = true)})
-    @Setter
+    @XmlElement(name = "row", required = true)
+    @Getter @Setter
     private List<BSRow> rows = new ArrayList<>();
 
     /**
      * Owner.
      * <p>Set programmatically by framework after reading in from XML.
      */
-    @Getter(onMethod_ = {@XmlTransient})
-    @Setter
+    @XmlTransient
+    @Getter @Setter
     private BSTabOwner owner;
 
     @Override public String toString() {

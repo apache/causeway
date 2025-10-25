@@ -34,13 +34,8 @@ import lombok.Setter;
  *
  * @since 1.x {@index}
  */
-@XmlType(
-        name = "tabGroup",
-        propOrder = {
-                "tabs",
-                "metadataError"})
+@XmlType(name = "tabGroup", propOrder = {"tabs", "metadataError"})
 public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -48,8 +43,8 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
      *
      * <p>Any layout must have precisely one tab group or {@link BSCol col} that has this attribute set.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Boolean unreferencedCollections;
     /** unwraps nullable Boolean */
     @XmlTransient public boolean isUnreferencedCollections() {
@@ -59,8 +54,8 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     /**
      * If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Boolean collapseIfOne;
     /** unwraps nullable Boolean */
     public boolean isCollapseIfOne(boolean _default) {
@@ -68,23 +63,23 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     }
 
     // required=false because may be auto-generated
-    @Getter(onMethod_ = {@XmlElement(name = "tab", required = false)})
-    @Setter
+    @XmlElement(name = "tab", required = false)
+    @Getter @Setter
     private List<BSTab> tabs = new ArrayList<>();
 
     /**
      * Owner.
      * <p>Set programmatically by framework after reading in from XML.
      */
-    @Getter(onMethod_ = {@XmlTransient})
-    @Setter
+    @XmlTransient
+    @Getter @Setter
     private BSTabGroupOwner owner;
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String metadataError;
 
 }

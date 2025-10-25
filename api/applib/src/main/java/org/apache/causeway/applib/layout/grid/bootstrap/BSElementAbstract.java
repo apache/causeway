@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 
 import lombok.Getter;
@@ -28,6 +30,7 @@ import lombok.Setter;
  *
  * @since 1.x {@index}
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public sealed abstract class BSElementAbstract implements BSElement
 permits BSRow, BSRowContent, BSTab, BSTabGroup {
 
@@ -38,8 +41,8 @@ permits BSRow, BSRowContent, BSTab, BSTabGroup {
      * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
      * custom styling.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String cssClass;
 
 }

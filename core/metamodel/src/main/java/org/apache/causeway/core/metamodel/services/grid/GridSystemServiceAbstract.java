@@ -109,7 +109,7 @@ implements GridSystemService<G> {
             if(causewaySystemEnvironment.isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
             }
-            log.error("Grid metadata errors:\n\n{}\n\n", toXml(grid));
+            log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
         }
     }
 

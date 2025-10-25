@@ -9,11 +9,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Mixin Concrete"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -49,8 +44,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -3126,13 +3121,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Specification"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
                 <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -5028,11 +5018,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Choices When Action Has Param Supporting Method_remove"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -5068,8 +5053,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -5164,11 +5149,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
@@ -6299,11 +6279,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Choices When Action Has Param Supporting Method_remove"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -6339,8 +6314,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -6435,11 +6410,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
@@ -21474,11 +21444,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
@@ -26983,11 +26948,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_action1"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -27023,8 +26983,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -27310,11 +27270,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_action2"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -27350,8 +27305,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -27467,11 +27422,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
@@ -27631,11 +27581,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_action3"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -27671,8 +27616,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -27788,11 +27733,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
@@ -27966,11 +27906,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_action4"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -28006,8 +27941,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -28123,11 +28058,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
@@ -28301,11 +28231,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_action5"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -28341,8 +28266,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -28445,11 +28370,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
                         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
@@ -28495,11 +28415,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_action6"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -28535,8 +28450,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -28636,11 +28551,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet" fqcn="org.apache.causeway.core.metamodel.postprocessors.members.navigation.NavigationFacetFromHiddenType">
                         <mml:attr name="facet" value="NavigationFacetFromHiddenType"/>
@@ -28822,11 +28732,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_collection1"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -28862,8 +28767,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -29046,11 +28951,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_collection2"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -29086,8 +28986,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -29270,11 +29170,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_collection3"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -29310,8 +29205,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -29473,11 +29368,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_property1"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -29513,8 +29403,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -29706,11 +29596,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_property2"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -29746,8 +29631,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -29939,11 +29824,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Member Support_property3"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -29979,8 +29859,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -31834,11 +31714,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action1"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -31874,8 +31749,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -31976,11 +31851,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -32019,11 +31889,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action 1a"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -32059,8 +31924,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -32161,11 +32026,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -32204,11 +32064,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action 1b"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -32244,8 +32099,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -32346,11 +32201,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -32389,11 +32239,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action2"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -32429,8 +32274,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -32531,11 +32376,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -32574,11 +32414,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action3"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -32614,8 +32449,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -32716,11 +32551,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -32759,11 +32589,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action4"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -32799,8 +32624,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -32901,11 +32726,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -32944,11 +32764,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action5"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -32984,8 +32799,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -33086,11 +32901,6 @@
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -33129,11 +32939,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Proper Mixin Contribution_action6"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -33169,8 +32974,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -33270,11 +33075,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>
@@ -37717,11 +37517,6 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="translated" value="Now"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-                <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-                <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-                <mml:attr name="precedence" value="LOW"/>
-            </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
                 <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
                 <mml:attr name="precedence" value="DEFAULT"/>
@@ -37757,8 +37552,8 @@
                 <mml:attr name="precedence" value="DEFAULT"/>
                 <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
             </mml:facet>
-            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
-                <mml:attr name="precedence" value="DEFAULT"/>
+            <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+                <mml:attr name="precedence" value="LOW"/>
             </mml:facet>
             <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
                 <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -37853,11 +37648,6 @@
                         <mml:attr name="facet" value="FaFacetOnMemberFromConfiguredRegex"/>
                         <mml:attr name="position" value="!imperative"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-                        <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-                        <mml:attr name="precedence" value="LOW"/>
-                        <mml:attr name="sequence" value="1"/>
                     </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForActionFromConfiguration.None">
                         <mml:attr name="facet" value="CommandPublishingFacetForActionFromConfiguration.None"/>

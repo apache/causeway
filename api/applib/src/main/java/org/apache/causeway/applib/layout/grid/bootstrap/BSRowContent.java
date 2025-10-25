@@ -40,16 +40,16 @@ permits BSCol, BSClearFix {
     /**
      * Default if not specified is {@link Size#MD}.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Size size;
 
     /**
      * Owner.
      * <p>Set programmatically by framework after reading in from XML.
      */
-    @Getter(onMethod_ = {@XmlTransient})
-    @Setter
+    @XmlTransient
+    @Getter @Setter
     private BSRowContentOwner owner;
 
 }

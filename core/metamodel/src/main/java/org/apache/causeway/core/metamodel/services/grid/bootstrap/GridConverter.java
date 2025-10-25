@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
+import java.util.ArrayList;
+
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.core.convert.converter.Converter;
@@ -35,6 +37,7 @@ interface GridConverter<S, T> extends Converter<S, T> {
         public @Nullable BSGrid convert(final BSGridDto orig) {
             var dto = BSUtil.deepCopy(orig);
             var grid = new BSGrid(domainClass);
+            grid.setCssClass(dto.getCssClass());
             grid.getRows().addAll(dto.getRows());
             grid.getMetadataErrors().addAll(dto.getMetadataErrors());
             dto.getRows().clear();
@@ -42,7 +45,6 @@ interface GridConverter<S, T> extends Converter<S, T> {
             BSUtil.setupOwnerPointers(grid);
             return grid;
         }
-
     }
 
     record ToDto() implements GridConverter<BSGrid, BSGridDto> {
@@ -50,9 +52,10 @@ interface GridConverter<S, T> extends Converter<S, T> {
         @Override
         public @Nullable BSGridDto convert(final BSGrid orig) {
             var grid = BSUtil.deepCopy(orig);
-            var dto = new BSGridDto();
-            dto.getRows().addAll(grid.getRows());
-            dto.getMetadataErrors().addAll(grid.getMetadataErrors());
+            var dto = new BSGridDto(
+                    grid.getCssClass(),
+                    new ArrayList<>(grid.getRows()),
+                    new ArrayList<>(grid.getMetadataErrors()));
             return dto;
         }
 

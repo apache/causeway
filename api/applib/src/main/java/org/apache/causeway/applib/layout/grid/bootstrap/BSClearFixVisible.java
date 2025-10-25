@@ -22,6 +22,9 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * One of the <a href="http://getbootstrap.com/css/#responsive-utilities">Responsive utility classes</a>.
  *
@@ -29,24 +32,15 @@ import jakarta.xml.bind.annotation.XmlType;
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "clearFixVisible")
-@XmlType(
-        name = "clearFixVisible")
+@XmlRootElement(name = "clearFixVisible")
+@XmlType(name = "clearFixVisible")
 public final class BSClearFixVisible extends BSClearFix {
 
     private static final long serialVersionUID = 1L;
 
-    private CssDisplay cssDisplay;
-
     @XmlAttribute(required = true)
-    public CssDisplay getCssDisplay() {
-        return cssDisplay;
-    }
-
-    public void setCssDisplay(final CssDisplay cssDisplay) {
-        this.cssDisplay = cssDisplay;
-    }
+    @Getter @Setter
+    private CssDisplay cssDisplay;
 
     @Override
     public String toCssClass() {

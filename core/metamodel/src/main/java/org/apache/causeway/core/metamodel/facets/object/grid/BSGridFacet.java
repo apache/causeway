@@ -155,4 +155,20 @@ implements GridFacet {
         return (ObjectSpecification) getFacetHolder();
     }
 
+    record NoLayout(
+            @NonNull FacetHolder facetHolder,
+            Facet.@NonNull Precedence precedence) implements GridFacet {
+        @Override public Class<? extends Facet> facetType() { return GridFacet.class; }
+        @Override public Precedence getPrecedence() { return precedence(); }
+        @Override public FacetHolder getFacetHolder() { return facetHolder(); }
+
+        @Override public void visitAttributes(BiConsumer<String, Object> visitor) {
+            visitor.accept("precedence", getPrecedence().name());
+        }
+        @Override public Grid getGrid(GridVariant variant, @Nullable ManagedObject mo) {
+            return Grid.empty();
+        }
+
+    }
+
 }

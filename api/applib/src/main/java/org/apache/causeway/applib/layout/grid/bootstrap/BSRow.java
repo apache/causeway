@@ -26,7 +26,9 @@ import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlElementRefs;
 import jakarta.xml.bind.annotation.XmlType;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -37,38 +39,34 @@ import lombok.Setter;
  *
  * @since 1.x {@index}
  */
-@XmlType(
-        name = "row",
-        propOrder = {"rowContents", "metadataError"})
+@XmlType(name = "row", propOrder = {"rowContents", "metadataError"})
+@NoArgsConstructor @AllArgsConstructor
 public final class BSRow extends BSElementAbstract implements HasElementId, BSRowContentOwner {
-
     private static final long serialVersionUID = 1L;
 
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String id;
 
-    @Getter(onMethod_ = {
-            @XmlElementRefs({
-                @XmlElementRef(type = BSCol.class, name="col", required = true),
-                @XmlElementRef(type = BSClearFixVisible.class,  name="clearFixVisible", required = false),
-                @XmlElementRef(type = BSClearFixHidden.class,  name="clearFixHidden", required = false)
-            })
+    @XmlElementRefs({
+        @XmlElementRef(type = BSCol.class, name="col", required = true),
+        @XmlElementRef(type = BSClearFixVisible.class,  name="clearFixVisible", required = false),
+        @XmlElementRef(type = BSClearFixHidden.class,  name="clearFixHidden", required = false)
     })
+    @Getter @Setter
     private List<BSRowContent> rowContents = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
-    @Setter
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String metadataError;
 
     @Override public String toString() {
         return "BSRow{" + "id='" + id + '\'' + '}';
     }
-
 }

@@ -21,30 +21,34 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO reflecting the bootstrap grid XML format.
  * @since 4.0 {@index}
  */
 @XmlRootElement(name = "grid")
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "grid", propOrder = {"rows", "metadataErrors"})
-@Setter
-public class BSGridDto implements BSElement, BSRowOwner {
+@Data @NoArgsConstructor @AllArgsConstructor
+public final class BSGridDto implements BSElement, BSRowOwner {
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod_ = {@XmlAttribute(required = false)})
+    @XmlAttribute(required = false)
     private String cssClass;
 
-    @Getter(onMethod_ = {@XmlElement(name = "row", required = true)})
+    @XmlElement(name = "row", required = true)
     private List<BSRow> rows = new ArrayList<>();
 
-    @Getter(onMethod_ = {@XmlElement(name = "metadataError", required = false)})
+    @XmlElement(name = "metadataError", required = false)
     private List<String> metadataErrors = new ArrayList<>();
 }
