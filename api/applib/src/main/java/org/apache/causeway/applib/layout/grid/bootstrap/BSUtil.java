@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -75,9 +76,40 @@ public class BSUtil {
                 _Serializables.read(BSGrid.class, bytes));
     }
 
-    public BSGrid setupOwnerPointers(final BSGrid grid) {
+    public BSGrid resolveOwners(final BSGrid grid) {
         new BSElementOwnerResolvingWalker(grid).walk();
         return grid;
+    }
+
+    // -- REMOVERS
+
+    /** removes the tab from its owner and returns the owner */
+    public Optional<BSTabOwner> remove(BSTab tab) {
+        var ownerOpt = Optional.ofNullable(tab.getOwner());
+        ownerOpt.ifPresent(owner->owner.getTabs().remove(tab));
+        tab.setOwner(null);
+        return ownerOpt;
+    }
+    /** removes the col from its owner and returns the owner */
+    public Optional<BSRowContentOwner> remove(BSCol col) {
+        var ownerOpt = Optional.ofNullable(col.getOwner());
+        ownerOpt.ifPresent(owner->owner.getRowContents().remove(col));
+        col.setOwner(null);
+        return ownerOpt;
+    }
+    /** removes the tabGroup from its owner and returns the owner */
+    public Optional<BSTabGroupOwner> remove(BSTabGroup tabGroup) {
+        var ownerOpt = Optional.ofNullable(tabGroup.getOwner());
+        ownerOpt.ifPresent(owner->owner.getTabGroups().remove(tabGroup));
+        tabGroup.setOwner(null);
+        return ownerOpt;
+    }
+    /** removes the row from its owner and returns the owner */
+    public Optional<BSRowOwner> remove(BSRow row) {
+        var ownerOpt = Optional.ofNullable(row.getOwner());
+        ownerOpt.ifPresent(owner->owner.getRows().remove(row));
+        row.setOwner(null);
+        return ownerOpt;
     }
 
 }

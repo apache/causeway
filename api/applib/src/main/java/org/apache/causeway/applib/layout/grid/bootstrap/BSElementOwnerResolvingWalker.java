@@ -36,6 +36,7 @@ public record BSElementOwnerResolvingWalker(BSRowOwner root) {
 
     private void traverseRows(final BSRowOwner rowOwner) {
         for (BSRow bsRow : rowOwner.getRows()) {
+            bsRow.setOwner(rowOwner);
             traverseCols(bsRow);
         }
     }

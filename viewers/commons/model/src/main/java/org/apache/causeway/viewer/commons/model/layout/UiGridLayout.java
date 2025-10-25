@@ -68,6 +68,7 @@ public record UiGridLayout(
         bsGrid = BSUtil.deepCopy(Objects.requireNonNull(bsGrid));
         new BSGridTransformer.EmptyTabRemover().apply(bsGrid);
         new BSGridTransformer.CollapseIfOneTab().apply(bsGrid);
+        new BSGridTransformer.EmptyRowRemover().apply(bsGrid);
     }
 
     public static Optional<UiGridLayout> forObject(final ManagedObject mo) {

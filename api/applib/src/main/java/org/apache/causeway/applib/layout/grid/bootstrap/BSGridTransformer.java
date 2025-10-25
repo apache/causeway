@@ -32,7 +32,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 public interface BSGridTransformer extends UnaryOperator<BSGrid> {
 
     /**
-     * Removes empty tabs from tab groups.
+     * Removes empty tabs from tab groups. And then also empty tab groups.
      */
     record EmptyTabRemover() implements BSGridTransformer {
 
@@ -73,26 +73,73 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                     }
                 }
                 private void keep() {
-                    if(stack.isEmpty()) return;
-                    stack.peek().keep = true;
+                    stack.stream().forEach(row->row.keep=true);
                 }
             });
 
-            emptyTabs.forEach(tab->{
-                    var tabGroup = (BSTabGroup)tab.getOwner();
-                    tab.setOwner(null); //fully detach
-                    if(tabGroup==null) return;
-                    tabGroup.getTabs().remove(tab);
-                    // remove empty tab-groups as well
-                    if(tabGroup.getTabs().isEmpty()) {
-                        var tabGroupOwner = tabGroup.getOwner();
-                        tabGroupOwner.getTabGroups().remove(tabGroup);
-                    }
-                });
+            emptyTabs.forEach(tab->
+                BSUtil.remove(tab)
+                    .map(BSTabGroup.class::cast)
+                    .filter(tabGroup->tabGroup.getTabs().isEmpty())
+                    .ifPresent(BSUtil::remove));
 
             return bsGrid;
         }
 
+    }
+
+    /**
+     * Removes empty rows from their row-owners.
+     */
+    record EmptyRowRemover() implements BSGridTransformer {
+
+        static final class Flag {
+            boolean keep = false;
+        }
+
+        @Override
+        public BSGrid apply(final BSGrid bsGrid) {
+            var emptyRows = new ArrayList<BSRow>();
+
+            bsGrid.visit(new BSElement.Visitor() {
+
+                final Stack<Flag> stack = new Stack<Flag>();
+
+                @Override public void visit(final ActionLayoutData actionLayoutData) {
+                    if(_NullSafe.isEmpty(actionLayoutData.getMetadataError())) keep();
+                }
+                @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                    if(_NullSafe.isEmpty(domainObjectLayoutData.getMetadataError())) keep();
+                }
+                @Override public void visit(final PropertyLayoutData propertyLayoutData) {
+                    if(_NullSafe.isEmpty(propertyLayoutData.getMetadataError())) keep();
+                }
+                @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+                    if(_NullSafe.isEmpty(collectionLayoutData.getMetadataError())) keep();
+                }
+
+                @Override public void visit(final BSRow bsRow) {
+                    stack.push(new Flag());
+                }
+                @Override public void postVisit(final BSRow bsRow) {
+                    var flag = stack.pop();
+                    if(!flag.keep) {
+                        // collecting into list, so we don't risk a ConcurrentModificationException,
+                        // when racing with the underlying iterator
+                        emptyRows.add(bsRow);
+                    }
+                }
+                private void keep() {
+                    stack.stream().forEach(row->row.keep=true);
+                }
+            });
+
+            emptyRows.forEach(row->{
+                BSUtil.remove(row);
+            });
+
+            return bsGrid;
+        }
     }
 
     /**

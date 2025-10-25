@@ -98,7 +98,7 @@ public record GridMarshallerServiceBootstrap(
         case XML:{
             return Try.call(()->jaxbService.fromXml(BSGrid.class, content))
                     .mapSuccessWhenPresent(bsGrid->bsGrid.domainClass(Objects.requireNonNull(domainClass)))
-                    .mapSuccessWhenPresent(BSUtil::setupOwnerPointers);
+                    .mapSuccessWhenPresent(BSUtil::resolveOwners);
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());

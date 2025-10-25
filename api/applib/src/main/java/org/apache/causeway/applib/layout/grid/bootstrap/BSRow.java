@@ -24,6 +24,7 @@ import java.util.List;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlElementRefs;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import lombok.AllArgsConstructor;
@@ -65,6 +66,14 @@ public final class BSRow extends BSElementAbstract implements HasElementId, BSRo
     @XmlAttribute(required = false)
     @Getter @Setter
     private String metadataError;
+
+    /**
+     * Owner.
+     * <p>Set programmatically by framework after reading in from XML.
+     */
+    @XmlTransient
+    @Getter @Setter
+    private BSRowOwner owner;
 
     @Override public String toString() {
         return "BSRow{" + "id='" + id + '\'' + '}';
