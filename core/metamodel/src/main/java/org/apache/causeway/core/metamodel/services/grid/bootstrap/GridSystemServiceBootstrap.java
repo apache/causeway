@@ -188,7 +188,8 @@ extends GridSystemServiceAbstract<BSGrid> {
     // which *really* shouldn't happen
     //
     private BSGrid fallback(final Class<?> domainClass) {
-        final BSGrid bsGrid = new BSGrid(domainClass);
+        final BSGrid bsGrid = new BSGrid();
+        bsGrid.domainClass(domainClass);
         bsGrid.setFallback(true);
 
         final BSRow headerRow = new BSRow();
@@ -621,12 +622,7 @@ extends GridSystemServiceAbstract<BSGrid> {
     private void addActionTo(
             final ActionLayoutDataOwner owner,
             final ActionLayoutData actionLayoutData) {
-
-        List<ActionLayoutData> actions = owner.getActions();
-        if(actions == null) {
-            owner.setActions(actions = _Lists.newArrayList());
-        }
-        actions.add(actionLayoutData);
+        owner.getActions().add(actionLayoutData);
         actionLayoutData.setOwner(owner);
     }
 

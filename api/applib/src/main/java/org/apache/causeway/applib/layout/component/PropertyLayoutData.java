@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -34,234 +36,102 @@ import org.apache.causeway.applib.annotation.Repainting;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.links.Link;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.causeway.applib.annotation.PropertyLayout} annotation.
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "property"
-        )
+@XmlRootElement(name = "property")
 @XmlType(
-        name = "property"
-        , propOrder = {
-                "named"
-                , "describedAs"
-                , "actions"
-                , "metadataError"
-                , "link"
-        }
-        )
+    name = "property",
+    propOrder = {"named", "describedAs", "actions", "metadataError", "link"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PropertyLayoutData
-implements ActionLayoutDataOwner,
-Serializable,
-Owned<FieldSet>,
+implements ActionLayoutDataOwner, Serializable, Owned<FieldSet>,
 HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
-
     private static final long serialVersionUID = 1L;
 
-    public PropertyLayoutData() {
-    }
-
+    public PropertyLayoutData() {}
     public PropertyLayoutData(final String id) {
         this.id = id;
     }
-
-    private String id;
 
     /**
      * Property identifier, being the getter method without 'get' or 'is' prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
-    public String getId() {
-        return id;
-    }
+    @Getter @Setter
+    private String id;
 
-    public void setId(final String id) {
-        this.id = id;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String cssClass;
 
-    @Override
-    @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    @Override
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
-
+    @XmlElement(required = false)
+    @Getter @Setter
     private String describedAs;
 
-    @Override
-    @XmlElement(required = false)
-    public String getDescribedAs() {
-        return describedAs;
-    }
-
-    @Override
-    public void setDescribedAs(final String describedAs) {
-        this.describedAs = describedAs;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Where hidden;
 
-    @Override
     @XmlAttribute(required = false)
-    public Where getHidden() {
-        return hidden;
-    }
-
-    @Override
-    public void setHidden(final Where hidden) {
-        this.hidden = hidden;
-    }
-
+    @Getter @Setter
     private LabelPosition labelPosition;
 
     @XmlAttribute(required = false)
-    public LabelPosition getLabelPosition() {
-        return labelPosition;
-    }
-
-    public void setLabelPosition(final LabelPosition labelPosition) {
-        this.labelPosition = labelPosition;
-    }
-
+    @Getter @Setter
     private Integer multiLine;
 
-    @XmlAttribute(required = false)
-    public Integer getMultiLine() {
-        return multiLine;
-    }
-
-    public void setMultiLine(final Integer multiLine) {
-        this.multiLine = multiLine;
-    }
-
+    @XmlElement(required = false)
+    @Getter @Setter
     private String named;
 
-    @Override
-    @XmlElement(required = false)
-    public String getNamed() {
-        return named;
-    }
-
-    @Override
-    public void setNamed(final String named) {
-        this.named = named;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private PromptStyle promptStyle;
 
     @XmlAttribute(required = false)
-    public PromptStyle getPromptStyle() {
-        return promptStyle;
-    }
-
-    public void setPromptStyle(final PromptStyle promptStyle) {
-        this.promptStyle = promptStyle;
-    }
-
+    @Getter @Setter
     private int dateRenderAdjustDays;
 
     @XmlAttribute(required = false)
-    public int getDateRenderAdjustDays() {
-        return dateRenderAdjustDays;
-    }
-
-    public void setDateRenderAdjustDays(final int dateRenderAdjustDays) {
-        this.dateRenderAdjustDays = dateRenderAdjustDays;
-    }
-
+    @Getter @Setter
     private Integer typicalLength;
 
     @XmlAttribute(required = false)
-    public Integer getTypicalLength() {
-        return typicalLength;
-    }
-
-    public void setTypicalLength(final Integer typicalLength) {
-        this.typicalLength = typicalLength;
-    }
-
+    @Getter @Setter
     private Repainting repainting;
 
-    @XmlAttribute(required = false)
-    public Repainting getRepainting() {
-        return repainting;
-    }
-
-    public void setRepainting(final Repainting repainting) {
-        this.repainting = repainting;
-    }
-
-    private List<ActionLayoutData> actions = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElement(name = "action", required = false)
-    public List<ActionLayoutData> getActions() {
-        return actions;
-    }
+    @Getter
+    private final List<ActionLayoutData> actions = new ArrayList<>();
 
-    @Override
-    public void setActions(final List<ActionLayoutData> actionLayoutDatas) {
-        this.actions = actionLayoutDatas;
-    }
-
-    private FieldSet owner;
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
-    @Override
     @XmlTransient
-    public FieldSet getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final FieldSet owner) {
-        this.owner = owner;
-    }
-
-    private String metadataError;
+    @Getter @Setter
+    private FieldSet owner;
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
     @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
-
-    private Link link;
+    @Getter @Setter
+    private String metadataError;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
-     *
-     * <p>
-     *     Populated by the framework automatically.
-     * </p>
+     * <p>Populated by the framework automatically.
      */
     @XmlElement(required = false)
-    public Link getLink() {
-        return link;
-    }
-
-    public void setLink(final Link link) {
-        this.link = link;
-    }
+    @Getter @Setter
+    private Link link;
 
     @Override
     public String toString() {

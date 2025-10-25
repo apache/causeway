@@ -56,8 +56,8 @@ public final class BSRow extends BSElementAbstract implements HasElementId, BSRo
         @XmlElementRef(type = BSClearFixVisible.class,  name="clearFixVisible", required = false),
         @XmlElementRef(type = BSClearFixHidden.class,  name="clearFixHidden", required = false)
     })
-    @Getter @Setter
-    private List<BSRowContent> rowContents = new ArrayList<>();
+    @Getter
+    private final List<BSRowContent> rowContents = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.

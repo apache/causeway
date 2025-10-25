@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
 import java.util.EnumSet;
 import java.util.Map;
+import java.util.Objects;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -33,10 +34,9 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSGridDto;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.marshal.Marshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -57,36 +57,14 @@ import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProvide
 public record GridMarshallerServiceBootstrap(
         JaxbService jaxbService,
         XsiSchemaLocationProviderForGrid schemaLocationProvider,
-        EnumSet<CommonMimeType> supportedFormats,
-        GridConverter.ToDto toDto,
-        Marshaller<BSGridDto> dtoMarshaller
+        EnumSet<CommonMimeType> supportedFormats
     ) implements GridMarshaller<BSGrid> {
-
-    private record GridDtoMarshaller(
-
-            Class<BSGridDto> supportedClass,
-            EnumSet<CommonMimeType> supportedFormats,
-            JaxbService jaxbService,
-            XsiSchemaLocationProviderForGrid schemaLocationProvider
-            ) implements Marshaller<BSGridDto> {
-        @Override
-        public String marshal(@NonNull BSGridDto value, @NonNull CommonMimeType format) {
-            return jaxbService.toXml(value,
-                Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
-                    schemaLocationProvider.xsiSchemaLocation(BSGrid.class)));
-        }
-        @Override
-        public Try<BSGridDto> unmarshal(@Nullable String content, @NonNull CommonMimeType format) {
-            return Try.call(()->jaxbService.fromXml(BSGridDto.class, content));
-        }
-    }
 
     @Inject
     public GridMarshallerServiceBootstrap(final JaxbService jaxbService, final XsiSchemaLocationProviderForGrid schemaLocationProvider) {
-        this(jaxbService, schemaLocationProvider, EnumSet.of(CommonMimeType.XML), new GridConverter.ToDto(),
-                new GridDtoMarshaller(BSGridDto.class, EnumSet.of(CommonMimeType.XML), jaxbService, schemaLocationProvider));
+        this(jaxbService, schemaLocationProvider, EnumSet.of(CommonMimeType.XML));
         // eagerly create a JAXBContext for this grid type (and cache it)
-        JaxbUtils.jaxbContextFor(BSGridDto.class, true);
+        JaxbUtils.jaxbContextFor(BSGrid.class, true);
     }
 
     @Override
@@ -104,7 +82,9 @@ public record GridMarshallerServiceBootstrap(
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
-            return dtoMarshaller.marshal(toDto().convert(bsGrid), format);
+            return jaxbService.toXml(bsGrid,
+                    Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
+                        schemaLocationProvider.xsiSchemaLocation(BSGrid.class)));
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
@@ -116,8 +96,9 @@ public record GridMarshallerServiceBootstrap(
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
-            return dtoMarshaller.unmarshal(content, format)
-                .mapSuccessWhenPresent(new GridConverter.FromDto(domainClass)::convert);
+            return Try.call(()->jaxbService.fromXml(BSGrid.class, content))
+                    .mapSuccessWhenPresent(bsGrid->bsGrid.domainClass(Objects.requireNonNull(domainClass)))
+                    .mapSuccessWhenPresent(BSUtil::setupOwnerPointers);
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());

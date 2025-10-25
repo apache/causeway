@@ -64,8 +64,8 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
 
     // required=false because may be auto-generated
     @XmlElement(name = "tab", required = false)
-    @Getter @Setter
-    private List<BSTab> tabs = new ArrayList<>();
+    @Getter
+    private final List<BSTab> tabs = new ArrayList<>();
 
     /**
      * Owner.

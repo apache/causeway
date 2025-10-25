@@ -25,5 +25,4 @@ import java.util.List;
  */
 public interface ActionLayoutDataOwner extends Owner {
     List<ActionLayoutData> getActions();
-    void setActions(List<ActionLayoutData> actions);
 }

@@ -37,7 +37,6 @@ import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 
@@ -56,7 +55,8 @@ extends MetaModelTestAbstract {
     @Test
     void happy_case() throws Exception {
 
-        final BSGrid bsGrid = new BSGrid(Object.class);
+        final BSGrid bsGrid = new BSGrid();
+        bsGrid.domainClass(Object.class);
 
         // header
         final BSRow headerRow = new BSRow();
@@ -70,7 +70,6 @@ extends MetaModelTestAbstract {
 
         final ActionLayoutData deleteActionLayoutData = new ActionLayoutData();
         deleteActionLayoutData.setId("delete");
-        headerCol.setActions(_Lists.<ActionLayoutData>newArrayList());
         headerCol.getActions().add(deleteActionLayoutData);
 
         // content
@@ -97,7 +96,6 @@ extends MetaModelTestAbstract {
 
         // containing a fieldset
         final FieldSet leftPropGroup = new FieldSet("General");
-        tabLeftCol.setFieldSets(_Lists.<FieldSet>newArrayList());
         tabLeftCol.getFieldSets().add(leftPropGroup);
         leftPropGroup.setName("General");
 
@@ -109,7 +107,6 @@ extends MetaModelTestAbstract {
         // and its associated action
         final ActionLayoutData updateNameActionLayoutData = new ActionLayoutData();
         updateNameActionLayoutData.setId("updateName");
-        namePropertyLayoutData.setActions(_Lists.<ActionLayoutData>newArrayList());
         namePropertyLayoutData.getActions().add(updateNameActionLayoutData);
 
         // and the tab also has a right col...
@@ -119,7 +116,6 @@ extends MetaModelTestAbstract {
 
         // containing a collection
         final CollectionLayoutData similarToColl = new CollectionLayoutData();
-        tabRightCol.setCollections(_Lists.<CollectionLayoutData>newArrayList());
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 

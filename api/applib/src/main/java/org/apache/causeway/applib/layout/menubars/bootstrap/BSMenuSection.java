@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -29,49 +31,27 @@ import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutDataOwner;
 import org.apache.causeway.applib.layout.menubars.MenuSection;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Corresponds to a domain service that contributes its serviceActions under a particular {@link BSMenuBar}.
  *
  * @since 1.x {@index}
  */
-@XmlType(
-        name = "section"
-        , propOrder = {
-                "named",
-                "serviceActions"
-        }
-        )
+@XmlType(name = "section", propOrder = {"named", "serviceActions"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BSMenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
-
     private static final long serialVersionUID = 1L;
 
-    public BSMenuSection() {
-    }
+    public BSMenuSection() {}
 
+    @XmlElement(required = false)
+    @Getter @Setter
     private String named;
 
-    @Override
-    @XmlElement(required = false)
-    public String getNamed() {
-        return named;
-    }
-
-    public void setNamed(String named) {
-        this.named = named;
-    }
-
-    private List<ServiceActionLayoutData> serviceActions = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElement(name = "serviceAction", required = true)
-    public List<ServiceActionLayoutData> getServiceActions() {
-        return serviceActions;
-    }
-
-    @Override
-    public void setServiceActions(List<ServiceActionLayoutData> actionLayoutDatas) {
-        this.serviceActions = actionLayoutDatas;
-    }
+    @Getter
+    private final List<ServiceActionLayoutData> serviceActions = new ArrayList<>();
 
 }

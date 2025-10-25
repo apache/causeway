@@ -18,18 +18,14 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
-
 /**
  * @since 2.0 {@index}
  */
 public interface HasCssClassFa {
 
-    @XmlAttribute(required = false)
     String getCssClassFa();
     void setCssClassFa(String cssClassFa);
 
-    @XmlAttribute(required = false)
     CssClassFaPosition getCssClassFaPosition();
     void setCssClassFaPosition(CssClassFaPosition cssClassFaPosition);
 

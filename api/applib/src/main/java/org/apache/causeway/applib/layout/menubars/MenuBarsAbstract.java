@@ -34,6 +34,7 @@ public abstract class MenuBarsAbstract implements MenuBars, Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @XmlTransient
     private String tnsAndSchemaLocation;
 
     @Override

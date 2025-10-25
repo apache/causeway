@@ -117,28 +117,28 @@ CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
     private DomainObjectLayoutData domainObject;
 
     @XmlElement(name = "sizeSpan", required = false)
-    @Getter @Setter
-    private List<SizeSpan> sizeSpans = new ArrayList<>();
+    @Getter
+    private final List<SizeSpan> sizeSpans = new ArrayList<>();
 
     @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
-    @Getter @Setter
-    private List<ActionLayoutData> actions = new ArrayList<>();
+    @Getter
+    private final List<ActionLayoutData> actions = new ArrayList<>();
 
     @XmlElement(name = "row", required = false)
-    @Getter @Setter
-    private List<BSRow> rows = new ArrayList<>();
+    @Getter
+    private final List<BSRow> rows = new ArrayList<>();
 
     @XmlElement(name = "tabGroup", required = false)
-    @Getter @Setter
-    private List<BSTabGroup> tabGroups = new ArrayList<>();
+    @Getter
+    private final List<BSTabGroup> tabGroups = new ArrayList<>();
 
     @XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)
-    @Getter @Setter
-    private List<FieldSet> fieldSets = new ArrayList<>();
+    @Getter
+    private final List<FieldSet> fieldSets = new ArrayList<>();
 
     @XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)
-    @Getter @Setter
-    private List<CollectionLayoutData> collections = new ArrayList<>();
+    @Getter
+    private final List<CollectionLayoutData> collections = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.

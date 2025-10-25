@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -32,222 +34,102 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.links.Link;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Describes the layout of a single collection, broadly corresponds to the
  * {@link org.apache.causeway.applib.annotation.CollectionLayout} annotation.
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "collection"
-        )
+@XmlRootElement(name = "collection")
 @XmlType(
-        name = "collection"
-        , propOrder = {
-                "named"
-                ,"describedAs"
-                ,"cssClass"
-                ,"defaultView"
-                ,"hidden"
-                ,"paged"
-                ,"sortedBy"
-                ,"tableDecorator"
-                , "actions"
-                , "metadataError"
-                , "link"
-        }
-        )
+    name = "collection", propOrder = {
+        "named", "describedAs", "cssClass", "defaultView", "hidden", "paged",
+        "sortedBy", "tableDecorator", "actions", "metadataError", "link"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CollectionLayoutData
 implements MemberRegion<CollectionLayoutDataOwner>,
 ActionLayoutDataOwner,
 Serializable,
 HasCssClass, HasDescribedAs, HasHidden, HasNamed {
-
     private static final long serialVersionUID = 1L;
 
-    public CollectionLayoutData() {
-    }
+    public CollectionLayoutData() {}
     public CollectionLayoutData(final String id) {
         setId(id);
     }
-
-    private String id;
 
     /**
      * Collection identifier, being the getter method without 'get' prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
-    public String getId() {
-        return id;
-    }
+    @Getter @Setter
+    private String id;
 
-    public void setId(final String id) {
-        this.id = id;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String cssClass;
 
-    @Override
-    @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    @Override
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
-
-    private String describedAs;
-
-    @Override
     @XmlElement(required = false)
-    public String getDescribedAs() {
-        return describedAs;
-    }
-
-    @Override
-    public void setDescribedAs(final String describedAs) {
-        this.describedAs = describedAs;
-    }
-
-    private String defaultView;
+    @Getter @Setter
+    private String describedAs;
 
     /**
      * Typically <code>table</code> or <code>hidden</code>, but could be any other named view that is configured and
      * appropriate, eg <code>gmap3</code> or <code>fullcalendar2</code>.
      */
     @XmlAttribute(required = false)
-    public String getDefaultView() {
-        return defaultView;
-    }
+    @Getter @Setter
+    private String defaultView;
 
-    public void setDefaultView(final String defaultView) {
-        this.defaultView = defaultView;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Where hidden;
 
-    @Override
-    @XmlAttribute(required = false)
-    public Where getHidden() {
-        return hidden;
-    }
-
-    @Override
-    public void setHidden(final Where hidden) {
-        this.hidden = hidden;
-    }
-
+    @XmlElement(required = false)
+    @Getter @Setter
     private String named;
 
-    @Override
-    @XmlElement(required = false)
-    public String getNamed() {
-        return named;
-    }
-
-    @Override
-    public void setNamed(final String named) {
-        this.named = named;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private Integer paged;
 
-    @XmlAttribute(required = false)
-    public Integer getPaged() {
-        return paged;
-    }
-
-    public void setPaged(final Integer paged) {
-        this.paged = paged;
-    }
-
+    @XmlElement(required = false)
+    @Getter @Setter
     private String sortedBy;
 
     @XmlElement(required = false)
-    public String getSortedBy() {
-        return sortedBy;
-    }
-
-    public void setSortedBy(final String sortedBy) {
-        this.sortedBy = sortedBy;
-    }
-
+    @Getter @Setter
     private Class<? extends TableDecorator> tableDecorator;
 
-    @XmlElement(required = false)
-    public Class<? extends TableDecorator> getTableDecorator() {
-        return tableDecorator;
-    }
-
-    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
-        this.tableDecorator = tableDecorator;
-    }
-
-    private List<ActionLayoutData> actions = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElement(name = "action", required = false)
-    public List<ActionLayoutData> getActions() {
-        return actions;
-    }
+    @Getter
+    private final List<ActionLayoutData> actions = new ArrayList<>();
 
-    @Override
-    public void setActions(final List<ActionLayoutData> actionLayoutDatas) {
-        this.actions = actionLayoutDatas;
-    }
-
-    private CollectionLayoutDataOwner owner;
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
-    @Override
     @XmlTransient
-    public CollectionLayoutDataOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final CollectionLayoutDataOwner owner) {
-        this.owner = owner;
-    }
-
-    private String metadataError;
+    @Getter @Setter
+    private CollectionLayoutDataOwner owner;
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
     @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
-
-    private Link link;
+    @Getter @Setter
+    private String metadataError;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
-     *
-     * <p>
-     *     Populated by the framework automatically.
-     * </p>
+     * <p>Populated by the framework automatically.
      */
     @XmlElement(required = false)
-    public Link getLink() {
-        return link;
-    }
-
-    public void setLink(final Link link) {
-        this.link = link;
-    }
+    @Getter @Setter
+    private Link link;
 
     @Override public String toString() {
         return "CollectionLayoutData{" +

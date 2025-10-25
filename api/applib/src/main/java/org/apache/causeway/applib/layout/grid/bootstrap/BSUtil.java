@@ -75,15 +75,6 @@ public class BSUtil {
                 _Serializables.read(BSGrid.class, bytes));
     }
 
-    /**
-     * Creates a deep copy of given original dto.
-     */
-    public BSGridDto deepCopy(final BSGridDto orig) {
-        var bytes = _Serializables.write(orig);
-        return _Casts.uncheckedCast(
-                _Serializables.read(BSGridDto.class, bytes));
-    }
-
     public BSGrid setupOwnerPointers(final BSGrid grid) {
         new BSElementOwnerResolvingWalker(grid).walk();
         return grid;

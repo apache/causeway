@@ -20,6 +20,8 @@ package org.apache.causeway.applib.layout.component;
 
 import java.io.Serializable;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -38,181 +40,91 @@ import lombok.Setter;
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "serviceAction"
-        )
+@XmlRootElement(name = "serviceAction")
 @XmlType(
-        name = "serviceAction"
-        , propOrder = {
-                "logicalTypeName"
-                , "id"
-                , "named"
-                , "namedEscaped"
-                , "bookmarking"
-                , "cssClass"
-                , "cssClassFa"
-                , "describedAs"
-                , "metadataError"
-                , "link"
-        }
-        )
+    name = "serviceAction",
+    propOrder = {
+        "objectType", "id", "named", "namedEscaped", "bookmarking",
+        "cssClass", "cssClassFa", "describedAs", "metadataError", "link"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceActionLayoutData implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    public ServiceActionLayoutData() {
-    }
+    public ServiceActionLayoutData() {}
     public ServiceActionLayoutData(final String logicalTypeName, final String id) {
-        this.logicalTypeName = logicalTypeName;
+        this.objectType = logicalTypeName;
         this.id = id;
     }
-
-    @XmlTransient // meant to replace 'objectType'
-    @Getter @Setter
-    private String logicalTypeName;
 
     // objectType is deprecated with applib, but the schema was not yet updated
     @XmlAttribute(required = true)
-    public String getObjectType() {
-        return getLogicalTypeName();
+    @Getter @Setter
+    private String objectType;
+    public String getLogicalTypeName() {
+        return objectType;
     }
-    public void setObjectType(final String objectType) {
+    public void setLogicalTypeName(final String objectType) {
         setLogicalTypeName(objectType);
     }
 
-    private String id;
     /**
      * Method name.
-     *
-     * <p>
-     *     Overloaded methods are not supported.
-     * </p>
+     * <p>Overloaded methods are not supported.
      */
     @XmlAttribute(name="id", required = true)
-    public String getId() {
-        return id;
-    }
+    @Getter @Setter
+    private String id;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private BookmarkPolicy bookmarking;
 
     @XmlAttribute(required = false)
-    public BookmarkPolicy getBookmarking() {
-        return bookmarking;
-    }
-
-    public void setBookmarking(BookmarkPolicy bookmarking) {
-        this.bookmarking = bookmarking;
-    }
-
+    @Getter @Setter
     private String cssClass;
 
     @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(String cssClass) {
-        this.cssClass = cssClass;
-    }
-
+    @Getter @Setter
     private String cssClassFa;
 
-    @XmlAttribute(required = false)
-    public String getCssClassFa() {
-        return cssClassFa;
-    }
-
-    public void setCssClassFa(String cssClassFa) {
-        this.cssClassFa = cssClassFa;
-    }
-
+    @XmlElement(required = false)
+    @Getter @Setter
     private String describedAs;
 
     @XmlElement(required = false)
-    public String getDescribedAs() {
-        return describedAs;
-    }
-
-    public void setDescribedAs(String describedAs) {
-        this.describedAs = describedAs;
-    }
-
+    @Getter @Setter
     private String named;
 
-    @XmlElement(required = false)
-    public String getNamed() {
-        return named;
-    }
-
-    public void setNamed(String named) {
-        this.named = named;
-    }
-
-    private Boolean namedEscaped;
-
     @XmlAttribute(required = false)
-    public Boolean getNamedEscaped() {
-        return namedEscaped;
+    @Getter @Setter
+    private Boolean namedEscaped;
+    public boolean isNamedEscaped(boolean _default) {
+        return namedEscaped!=null ? namedEscaped.booleanValue() : _default;
     }
 
-    public void setNamedEscaped(Boolean namedEscaped) {
-        this.namedEscaped = namedEscaped;
-    }
-
-    private ServiceActionLayoutDataOwner owner;
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    public ServiceActionLayoutDataOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final ServiceActionLayoutDataOwner owner) {
-        this.owner = owner;
-    }
-
-    private String metadataError;
+    @Getter @Setter
+    private ServiceActionLayoutDataOwner owner;
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
     @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
-
-    private Link link;
+    @Getter @Setter
+    private String metadataError;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
-     *
-     * <p>
-     *     Populated by the framework automatically.
-     * </p>
+     * <p>Populated by the framework automatically.
      */
     @XmlElement(required = false)
-    public Link getLink() {
-        return link;
-    }
+    @Getter @Setter
+    private Link link;
 
-    public void setLink(final Link link) {
-        this.link = link;
-    }
-
-    @XmlTransient
     public String getLogicalTypeNameAndId() {
         return getLogicalTypeName() + "#" + getId();
     }
@@ -220,7 +132,7 @@ public class ServiceActionLayoutData implements Serializable {
     @Override
     public String toString() {
         return "ServiceActionLayoutData{" +
-                "logicalTypeName='" + logicalTypeName + '\'' +
+                "logicalTypeName='" + getLogicalTypeName() + '\'' +
                 ", id='" + id + '\'' +
                 '}';
     }

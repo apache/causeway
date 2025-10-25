@@ -22,6 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
@@ -29,7 +37,6 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.dto.Dto;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -39,21 +46,25 @@ import lombok.experimental.Accessors;
  *
  * @since 1.x revised for 4.0 {@index}
  */
-@RequiredArgsConstructor
+@XmlRootElement(name = "grid")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "grid", propOrder = {"rows", "metadataErrors"})
 public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
-
     private static final long serialVersionUID = 1L;
 
-    @Getter @Accessors(fluent=true) private final Class<?> domainClass;
+    @XmlTransient @Getter @Accessors(fluent=true)  @Setter private Class<?> domainClass;
+    @XmlTransient @Getter @Setter private boolean fallback;
+    @XmlTransient @Getter @Setter private boolean normalized;
 
-    @Getter @Setter private boolean fallback;
-    @Getter @Setter private boolean normalized;
+    @XmlAttribute(required = false)
     @Getter @Setter private String cssClass;
 
+    @XmlElement(name = "row", required = true)
     @Getter private final List<BSRow> rows = new ArrayList<>();
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
+    @XmlElement(name = "metadataError", required = false)
     @Getter private final List<String> metadataErrors = new ArrayList<>();
 
     @Override

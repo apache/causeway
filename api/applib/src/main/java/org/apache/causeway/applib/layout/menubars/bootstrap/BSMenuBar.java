@@ -22,40 +22,33 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.menubars.MenuBar;
 
+import lombok.Getter;
+
 /**
- * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link org.apache.causeway.applib.annotation.DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
+ * Describes the collection of domain services into menubars,
+ * broadly corresponding to the aggregation of information of
+ * {@link org.apache.causeway.applib.annotation.DomainServiceLayout}
+ * that have the same value of {@link DomainServiceLayout#named()}.
  *
  * @since 1.x {@index}
  */
-@XmlType(
-        name = "menuBar"
-        , propOrder = {
-                "menus"
-        }
-        )
+@XmlType(name = "menuBar", propOrder = {"menus"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class BSMenuBar implements MenuBar, Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    public BSMenuBar() {
-    }
+    public BSMenuBar() {}
 
-    private List<BSMenu> menus = new ArrayList<>();
-
-    // no wrapper
     @XmlElement(name = "menu", required = true)
-    public List<BSMenu> getMenus() {
-        return menus;
-    }
-
-    public void setMenus(List<BSMenu> menus) {
-        this.menus = menus;
-    }
+    @Getter
+    private final List<BSMenu> menus = new ArrayList<>();
 
 }
