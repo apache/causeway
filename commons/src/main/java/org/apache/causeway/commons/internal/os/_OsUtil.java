@@ -132,7 +132,8 @@ public class _OsUtil {
             cmd = new String[] {"taskkill.exe", "/F", "/PID", pidTrimmed, "/T"};
             break;
         case LINUX:
-            //XXX implement eventually
+            cmd = new String[] {"kill", "-SIGTERM", pidTrimmed};
+            break;
         case MAC_OS:
             //XXX implement eventually
         default:
