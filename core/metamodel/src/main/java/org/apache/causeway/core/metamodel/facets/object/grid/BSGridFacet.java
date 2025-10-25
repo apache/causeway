@@ -28,8 +28,6 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSGridTransformer;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -44,7 +42,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 record BSGridFacet(
     GridService gridService,
     Map<String, BSGrid> normalizedGridByLayoutPrefix,
-    Map<String, BSGrid> presentableGridByLayoutPrefix,
     _Lazy<LayoutPrefixFacet> layoutFacetLazy,
     @NonNull FacetHolder facetHolder,
     Facet.@NonNull Precedence precedence)
@@ -55,8 +52,7 @@ implements GridFacet {
     public static GridFacet create(
             final FacetHolder facetHolder,
             final GridService gridService) {
-        return new BSGridFacet(gridService,
-            new ConcurrentHashMap<>(), new ConcurrentHashMap<>(),
+        return new BSGridFacet(gridService, new ConcurrentHashMap<>(),
             _Lazy.threadSafe(()->facetHolder.getFacet(LayoutPrefixFacet.class)),
             facetHolder, Precedence.DEFAULT);
     }
@@ -68,12 +64,14 @@ implements GridFacet {
     @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
-    public Grid getGrid(final GridVariant gridVariant, final @Nullable ManagedObject mo) {
+    public boolean supports(Class<? extends Grid> gridClass) {
+        return BSGrid.class.equals(gridClass);
+    }
+
+    @Override
+    public Grid getGrid(final @Nullable ManagedObject mo) {
         guardAgainstObjectOfDifferentType(mo);
-        return switch (gridVariant) {
-            case NORMALIZED -> normalized(mo);
-            case UI -> ui(mo);
-        };
+        return normalized(mo);
     }
 
     @Override
@@ -93,26 +91,6 @@ implements GridFacet {
                         || gridService.supportsReloading())
                 ? this.load(layoutPrefix)
                 : cachedLayout);
-    }
-
-    /**
-     * presentableGridByLayoutPrefix is used as cache, unless gridService.supportsReloading() returns true
-     */
-    private BSGrid ui(final @Nullable ManagedObject mo) {
-        return presentableGridByLayoutPrefix.compute(layoutPrefixFor(mo),
-            (layoutPrefix, cachedLayout)->
-                (cachedLayout==null
-                        || gridService.supportsReloading())
-                ? postprocess(normalized(mo))
-                : cachedLayout);
-    }
-
-    private BSGrid postprocess(final BSGrid normalized) {
-        return Optional.ofNullable(normalized)
-            .map(BSUtil::deepCopy)
-            .map(new BSGridTransformer.EmptyTabRemover())
-            .map(new BSGridTransformer.CollapseIfOneTab())
-            .orElse(normalized);
     }
 
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
@@ -165,8 +143,12 @@ implements GridFacet {
         @Override public void visitAttributes(BiConsumer<String, Object> visitor) {
             visitor.accept("precedence", getPrecedence().name());
         }
-        @Override public Grid getGrid(GridVariant variant, @Nullable ManagedObject mo) {
+        @Override public Grid getGrid(@Nullable ManagedObject mo) {
             return Grid.empty();
+        }
+        @Override
+        public boolean supports(Class<? extends Grid> gridClass) {
+            return false;
         }
 
     }

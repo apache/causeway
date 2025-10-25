@@ -40,7 +40,6 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.sitemap.SitemapService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet.GridVariant;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -119,7 +118,7 @@ public class SitemapServiceDefault implements SitemapService {
                     };
 
                     var grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
-                                .flatMap(mo->Facets.bootstrapGrid(GridVariant.NORMALIZED, mo))
+                                .flatMap(mo->Facets.bootstrapGrid(mo))
                                 .orElse(null);
                     grid.visit(new Grid.Visitor() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {

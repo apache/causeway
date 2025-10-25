@@ -26,8 +26,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -37,7 +37,6 @@ import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet.GridVariant;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction.AccessIntent;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
@@ -257,7 +256,6 @@ implements DomainObjectResource {
 
         return getSpecificationLoader().specForLogicalTypeName(domainType)
             .flatMap(spec->Facets.bootstrapGrid(
-                    GridVariant.NORMALIZED,
                     spec,
                     getObjectAdapterElseThrowNotFound(domainType, instanceId,
                             roEx->_EndpointLogging

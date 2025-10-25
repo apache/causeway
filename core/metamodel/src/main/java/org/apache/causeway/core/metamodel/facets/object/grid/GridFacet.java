@@ -34,22 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  */
 public interface GridFacet extends Facet {
 
-    enum GridVariant {
-        /**
-         * 'normalized' variant, that can also be exported back to a layout DTO
-         */
-        NORMALIZED,
-        /**
-         * Variant, that can NOT be exported back to a layout DTO,
-         * as it has presentation specific modifications applied.
-         * <p> e.g. removal of empty tabs
-         */
-        UI;
-    }
-
-    Grid getGrid(GridVariant variant, @Nullable ManagedObject mo);
-    default Grid getGrid(@Nullable final ManagedObject mo) {
-        return getGrid(GridVariant.NORMALIZED, mo);
-    }
+    boolean supports(Class<? extends Grid> gridClass);
+    Grid getGrid(@Nullable ManagedObject mo);
 
 }

@@ -23,9 +23,9 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet.GridVariant;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.commons.model.layout.UiGridLayout;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
@@ -43,11 +43,11 @@ public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
 
-        var objectAdapter = objectModel.getObject();
+        var mo = objectModel.getObject();
         var objectSpec = objectModel.getTypeOfSpecification();
 
         return ApplicationAdvice.appliesIf(
-                Facets.bootstrapGrid(GridVariant.UI, objectSpec, objectAdapter)
+                Facets.bootstrapGrid(objectSpec, mo)
                 .isPresent());
     }
 
@@ -55,12 +55,13 @@ public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
     public Component createComponent(final String id, final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
 
-        var objectAdapter = objectModel.getObject();
+        var mo = objectModel.getObject();
         var objectSpec = objectModel.getTypeOfSpecification();
 
-        return Facets.bootstrapGrid(GridVariant.UI, objectSpec, objectAdapter)
-                .map(grid->new BSGridPanel(id, objectModel, grid))
-                .orElseThrow(); // empty case guarded against by appliesTo(...) above
+        return Facets.bootstrapGrid(objectSpec, mo)
+            .map(UiGridLayout::new) // creates a deep copy of the underlying grid and applies rules
+            .map(ui->new BSGridPanel(id, objectModel, ui.bsGrid()))
+            .orElseThrow(); // empty case guarded against by appliesTo(...) above
     }
 
     /**
