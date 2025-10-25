@@ -34,6 +34,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -156,7 +157,7 @@ implements HasDynamicallyVisibleContent {
                 .filter(_NullSafe::isPresent)
                 .filter(bsTabGroup ->
                         _NullSafe.stream(bsTabGroup.getTabs())
-                                .anyMatch(BSTab.Predicates.notEmpty())
+                                .anyMatch(BSUtil::hasContent)
                 )
                 .collect(Collectors.toList());
 
@@ -168,7 +169,7 @@ implements HasDynamicallyVisibleContent {
 
                 final String id = tabGroupRv.newChildId();
                 final List<BSTab> tabs = _NullSafe.stream(bsTabGroup.getTabs())
-                        .filter(BSTab.Predicates.notEmpty())
+                        .filter(BSUtil::hasContent)
                         .collect(Collectors.toList());
 
                 switch (tabs.size()) {
@@ -176,7 +177,7 @@ implements HasDynamicallyVisibleContent {
                     // shouldn't occur; previously have filtered these out
                     throw new IllegalStateException("Cannot render tabGroup with no tabs");
                 case 1:
-                    if(bsTabGroup.isCollapseIfOne() == null || bsTabGroup.isCollapseIfOne()) {
+                    if(bsTabGroup.isCollapseIfOne(true)) {
                         final BSTab bsTab = tabs.get(0);
                         // render the rows of the one-and-only tab of this tab group.
                         final List<BSRow> tabRows = bsTab.getRows();

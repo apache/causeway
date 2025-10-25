@@ -19,33 +19,33 @@
 package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Objects;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.xml.bind.Marshaller;
+
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-import lombok.experimental.Accessors;
+import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
 
 /**
- * Default implementation of {@link GridMarshallerService} using DTOs based on
+ * Default implementation of {@link GridMarshaller} using DTOs based on
  * <a href="https://getbootstrap.com>Bootstrap</a> design system.
  *
  * @since 2.0 {@index}
@@ -54,23 +54,23 @@ import lombok.experimental.Accessors;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerServiceBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-//@Slf4j
-public class GridMarshallerServiceBootstrap
-implements GridMarshallerService<BSGrid> {
-
-    private final JaxbService jaxbService;
+public record GridMarshallerServiceBootstrap(
+        JaxbService jaxbService,
+        XsiSchemaLocationProviderForGrid schemaLocationProvider,
+        EnumSet<CommonMimeType> supportedFormats
+    ) implements GridMarshaller<BSGrid> {
 
     @Inject
-    public GridMarshallerServiceBootstrap(final JaxbService jaxbService) {
-        super();
-        this.jaxbService = jaxbService;
+    public GridMarshallerServiceBootstrap(final JaxbService jaxbService, final XsiSchemaLocationProviderForGrid schemaLocationProvider) {
+        this(jaxbService, schemaLocationProvider, EnumSet.of(CommonMimeType.XML));
         // eagerly create a JAXBContext for this grid type (and cache it)
         JaxbUtils.jaxbContextFor(BSGrid.class, true);
     }
 
-    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
-    private final EnumSet<CommonMimeType> supportedFormats =
-        EnumSet.of(CommonMimeType.XML);
+    @Override
+    public EnumSet<CommonMimeType> supportedFormats() {
+        return supportedFormats;
+    }
 
     @Override
     public Class<BSGrid> supportedClass() {
@@ -78,15 +78,13 @@ implements GridMarshallerService<BSGrid> {
     }
 
     @Override
-    public String marshal(final @NonNull BSGrid grid, final @NonNull CommonMimeType format) {
+    public String marshal(final @NonNull BSGrid bsGrid, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
-            return jaxbService.toXml(grid,
-                    _Maps.unmodifiable(
-                            Marshaller.JAXB_SCHEMA_LOCATION,
-                            Objects.requireNonNull(grid.getTnsAndSchemaLocation())
-                            ));
+            return jaxbService.toXml(bsGrid,
+                    Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
+                        schemaLocationProvider.xsiSchemaLocation(BSGrid.class)));
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
@@ -94,11 +92,13 @@ implements GridMarshallerService<BSGrid> {
     }
 
     @Override
-    public Try<BSGrid> unmarshal(final String content, final @NonNull CommonMimeType format) {
+    public Try<BSGrid> unmarshal(final Class<?> domainClass, @Nullable final String content, @NonNull final CommonMimeType format) {
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
-            return Try.call(()->jaxbService.fromXml(BSGrid.class, content));
+            return Try.call(()->jaxbService.fromXml(BSGrid.class, content))
+                    .mapSuccessWhenPresent(bsGrid->bsGrid.domainClass(Objects.requireNonNull(domainClass)))
+                    .mapSuccessWhenPresent(BSUtil::resolveOwners);
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());

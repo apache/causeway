@@ -24,13 +24,11 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-@SuppressWarnings("rawtypes")
-abstract class MenuActionPanel extends PanelBase {
+abstract class MenuActionPanel extends PanelBase<Object> {
 
     private static final long serialVersionUID = 1L;
 

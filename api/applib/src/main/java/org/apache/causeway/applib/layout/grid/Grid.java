@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.applib.layout.grid;
 
-import java.util.LinkedHashMap;
+import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -31,25 +31,14 @@ import org.apache.causeway.applib.services.layout.LayoutService;
 /**
  * All top-level page layout classes should implement this interface.
  *
- * <p>
- *     It is used by the {@link LayoutService} as a common based type for any layouts read in from XML.
- * </p>
+ * <p>It is used by the {@link LayoutService} as a common based type for any layouts read in from XML.
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
+@Programmatic
 public interface Grid {
 
-    @Programmatic
-    Class<?> getDomainClass();
-
-    @Programmatic
-    void setDomainClass(final Class<?> domainClass);
-
-    @Programmatic
-    String getTnsAndSchemaLocation();
-
-    @Programmatic
-    void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
+    Class<?> domainClass();
 
     /**
      * Indicates whether or not this grid is a fallback.
@@ -59,50 +48,40 @@ public interface Grid {
      * Governs meta-model facet precedence, that is,
      * facets from annotations should overrule those from fallback XML grids.
      */
-    @Programmatic
-    default boolean isFallback() { return false; }
-
-    @Programmatic
+    boolean isFallback();
     boolean isNormalized();
 
-    @Programmatic
-    void setNormalized(final boolean normalized);
-
-    @Programmatic
-    LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
-
-    @Programmatic
-    LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
-
-    @Programmatic
-    LinkedHashMap<String, ActionLayoutData> getAllActionsById();
+    Stream<PropertyLayoutData> streamPropertyLayoutData();
+    Stream<CollectionLayoutData> streamCollectionLayoutData();
+    Stream<ActionLayoutData> streamActionLayoutData();
 
     interface Visitor {
-        void visit(final DomainObjectLayoutData domainObjectLayoutData);
-
-        void visit(final ActionLayoutData actionLayoutData);
-
-        void visit(final PropertyLayoutData propertyLayoutData);
-
-        void visit(final CollectionLayoutData collectionLayoutData);
-
-        void visit(final FieldSet fieldSet);
+        default void visit(final DomainObjectLayoutData domainObjectLayoutData) {}
+        default void visit(final ActionLayoutData actionLayoutData) {}
+        default void visit(final PropertyLayoutData propertyLayoutData) {}
+        default void visit(final CollectionLayoutData collectionLayoutData) {}
+        default void visit(final FieldSet fieldSet) {}
     }
 
-    class VisitorAdapter implements Visitor {
-        @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-        }
-        @Override public void visit(final ActionLayoutData actionLayoutData) {
-        }
-        @Override public void visit(final PropertyLayoutData propertyLayoutData) {
-        }
-        @Override public void visit(final CollectionLayoutData collectionLayoutData) {
-        }
-        @Override public void visit(final FieldSet fieldSet) {
-        }
-    }
-
-    @Programmatic
     void visit(final Grid.Visitor visitor);
 
+    // -- EMPTY GRID
+
+    final static Grid EMPTY = new EmptyGrid(Object.class);
+    static Grid empty() { return EMPTY; }
+
+    public record EmptyGrid(Class<?> domainClass) implements Grid {
+        @Override public boolean isFallback() { return false; }
+        @Override public boolean isNormalized() { return true; }
+        @Override public Stream<PropertyLayoutData> streamPropertyLayoutData() {
+            return Stream.empty();
+        }
+        @Override public Stream<CollectionLayoutData> streamCollectionLayoutData() {
+            return Stream.empty();
+        }
+        @Override public Stream<ActionLayoutData> streamActionLayoutData() {
+            return Stream.empty();
+        }
+        @Override public void visit(Visitor visitor) { }
+    };
 }

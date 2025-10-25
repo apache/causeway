@@ -157,7 +157,7 @@ public interface GridService {
 
     // -- LAYOUT EXPORT
 
-    GridMarshallerService<? extends Grid> marshaller();
+    GridMarshaller<? extends Grid> marshaller();
 
     default Grid toGridForExport(
             final Class<?> domainClass,

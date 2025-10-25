@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.applib.layout.grid.bootstrap;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-
 /**
- * @since 1.x {@index}
+ * @since 2.0 {@index}
  */
-public interface WithinGrid {
+public interface HasElementId {
 
-    @Programmatic
-    BSGrid getGrid();
+    /**
+     * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
+     */
+    String getId();
+
 }

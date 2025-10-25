@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  */
 public interface GridFacet extends Facet {
 
-    Grid getGrid(@Nullable ManagedObject objectAdapter);
+    boolean supports(Class<? extends Grid> gridClass);
+    Grid getGrid(@Nullable ManagedObject mo);
 
 }

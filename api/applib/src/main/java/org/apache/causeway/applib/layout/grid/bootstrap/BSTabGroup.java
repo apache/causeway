@@ -26,104 +26,60 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
-import org.apache.causeway.applib.annotation.Programmatic;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Represents a tab group containing one or more {@link BSTab tab}s.
  *
  * @since 1.x {@index}
  */
-@XmlType(
-        name = "tabGroup"
-        , propOrder = {
-                "tabs",
-                "metadataError"
-        }
-        )
-public class BSTabGroup extends BSElementAbstract implements BSTabOwner {
-
+@XmlType(name = "tabGroup", propOrder = {"tabs", "metadataError"})
+public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
     private static final long serialVersionUID = 1L;
 
-    private Boolean unreferencedCollections;
     /**
      * Whether this tab group should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
-     * <p>
-     *     Any layout must have precisely one tab group or {@link BSCol col} that has this attribute set.
-     * </p>
+     * <p>Any layout must have precisely one tab group or {@link BSCol col} that has this attribute set.
      */
     @XmlAttribute(required = false)
-    public Boolean isUnreferencedCollections() {
-        return unreferencedCollections;
+    @Getter @Setter
+    private Boolean unreferencedCollections;
+    /** unwraps nullable Boolean */
+    @XmlTransient public boolean isUnreferencedCollections() {
+        return unreferencedCollections == null ? false : unreferencedCollections;
     }
 
-    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
-        this.unreferencedCollections = unreferencedCollections;
-    }
-
-    private Boolean collapseIfOne;
     /**
      * If there is a single tab in the tabgroup, then whether to collapse and render without the outer tab.
      */
     @XmlAttribute(required = false)
-    public Boolean isCollapseIfOne() {
-        return collapseIfOne;
+    @Getter @Setter
+    private Boolean collapseIfOne;
+    /** unwraps nullable Boolean */
+    public boolean isCollapseIfOne(boolean _default) {
+        return collapseIfOne == null ? _default : collapseIfOne;
     }
 
-    public void setCollapseIfOne(final Boolean collapseIfOne) {
-        this.collapseIfOne = collapseIfOne;
-    }
-
-    private List<BSTab> tabs = new ArrayList<>();
-
-    // no wrapper; required=false because may be auto-generated
-    @Override
+    // required=false because may be auto-generated
     @XmlElement(name = "tab", required = false)
-    public List<BSTab> getTabs() {
-        return tabs;
-    }
-
-    public void setTabs(final List<BSTab> tabs) {
-        this.tabs = tabs;
-    }
-
-    private BSTabGroupOwner owner;
+    @Getter
+    private final List<BSTab> tabs = new ArrayList<>();
 
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    public BSTabGroupOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final BSTabGroupOwner owner) {
-        this.owner = owner;
-    }
-
-    private String metadataError;
+    @Getter @Setter
+    private BSTabGroupOwner owner;
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
-    @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
-
-    @Override
-    @XmlTransient
-    @Programmatic
-    public BSGrid getGrid() {
-        return getOwner().getGrid();
-    }
+    @XmlAttribute(required = false)
+    @Getter @Setter
+    private String metadataError;
 
 }

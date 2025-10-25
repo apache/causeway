@@ -20,6 +20,8 @@ package org.apache.causeway.applib.layout.component;
 
 import java.io.Serializable;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -30,184 +32,78 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.links.Link;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.causeway.applib.annotation.DomainObjectLayout}.
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "domainObject"
-        )
-@XmlType(
-        name = "domainObject"
-        , propOrder = {
-                "named"
-                , "describedAs"
-                , "cssClass"
-                , "cssClassFa"
-                , "cssClassFaPosition"
-                , "paged"
-                , "tableDecorator"
-                , "metadataError"
-                , "link"
-        }
-        )
+@XmlRootElement(name = "domainObject")
+@XmlType(name = "domainObject", propOrder = {
+    "named", "describedAs", "cssClass", "cssClassFa", "cssClassFaPosition",
+    "paged", "tableDecorator", "metadataError", "link"})
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectLayoutDataOwner>,
 HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
-
     private static final long serialVersionUID = 1L;
 
-    public DomainObjectLayoutData() {
-    }
+    public DomainObjectLayoutData() {}
 
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private BookmarkPolicy bookmarking;
 
-    @Override
     @XmlAttribute(required = false)
-    public BookmarkPolicy getBookmarking() {
-        return bookmarking;
-    }
-
-    @Override
-    public void setBookmarking(final BookmarkPolicy bookmarking) {
-        this.bookmarking = bookmarking;
-    }
-
+    @Getter @Setter
     private String cssClass;
 
-    @Override
     @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    @Override
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
-
+    @Getter @Setter
     private String cssClassFa;
 
-    @Override
     @XmlAttribute(required = false)
-    public String getCssClassFa() {
-        return cssClassFa;
-    }
-
-    @Override
-    public void setCssClassFa(final String cssClassFa) {
-        this.cssClassFa = cssClassFa;
-    }
-
+    @Getter @Setter
     private CssClassFaPosition cssClassFaPosition;
 
-    @Override
-    @XmlAttribute(required = false)
-    public CssClassFaPosition getCssClassFaPosition() {
-        return cssClassFaPosition;
-    }
-
-    @Override
-    public void setCssClassFaPosition(final CssClassFaPosition cssClassFaPosition) {
-        this.cssClassFaPosition = cssClassFaPosition;
-    }
-
+    @XmlElement(required = false)
+    @Getter @Setter
     private String describedAs;
 
-    @Override
     @XmlElement(required = false)
-    public String getDescribedAs() {
-        return describedAs;
-    }
-
-    @Override
-    public void setDescribedAs(final String describedAs) {
-        this.describedAs = describedAs;
-    }
-
+    @Getter @Setter
     private String named;
 
-    @Override
     @XmlElement(required = false)
-    public String getNamed() {
-        return named;
-    }
-
-    @Override
-    public void setNamed(final String named) {
-        this.named = named;
-    }
-
+    @Getter @Setter
     private Integer paged;
 
     @XmlElement(required = false)
-    public Integer getPaged() {
-        return paged;
-    }
-
-    public void setPaged(final Integer paged) {
-        this.paged = paged;
-    }
-
+    @Getter @Setter
     private Class<? extends TableDecorator> tableDecorator;
-
-    @XmlElement(required = false)
-    public Class<? extends TableDecorator> getTableDecorator() {
-        return tableDecorator;
-    }
-
-    public void setTableDecorator(final Class<? extends TableDecorator> tableDecorator) {
-        this.tableDecorator = tableDecorator;
-    }
-
-    private String metadataError;
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
     @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
+    @Getter @Setter
+    private String metadataError;
 
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
-
-    private DomainObjectLayoutDataOwner owner;
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
-    @Override
     @XmlTransient
-    public DomainObjectLayoutDataOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final DomainObjectLayoutDataOwner owner) {
-        this.owner = owner;
-    }
-
-    private Link link;
+    @Getter @Setter
+    private DomainObjectLayoutDataOwner owner;
 
     /**
      * The link to access this resource from the REST API (Restful Objects viewer).
-     *
-     * <p>
-     *     Populated by the framework automatically.
-     * </p>
+     * <p>Populated by the framework automatically.
      */
     @XmlElement(required = false)
-    public Link getLink() {
-        return link;
-    }
-
-    public void setLink(final Link link) {
-        this.link = link;
-    }
+    @Getter @Setter
+    private Link link;
 
 }

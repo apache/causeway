@@ -115,7 +115,7 @@ implements DomainTypeResource {
         var serializationStrategy = resourceContext.getSerializationStrategy();
 
         var response = getSpecificationLoader().specForLogicalTypeName(domainType)
-                .map(Facets::bootstrapGrid)
+                .map(mo->Facets.bootstrapGrid(mo))
                 .map(grid ->
                     responseFactory.ok(serializationStrategy.entity(grid),
                                 serializationStrategy.type(RepresentationType.LAYOUT)))

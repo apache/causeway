@@ -20,10 +20,12 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.io.Serializable;
 
+import org.apache.causeway.applib.layout.grid.Grid;
+
 /**
  * @since 1.x {@index}
  */
-public interface BSElement extends WithinGrid, Serializable {
+public interface BSElement extends Serializable {
 
     /**
      * Any additional CSS classes to render on the page element corresponding to this object,
@@ -31,7 +33,25 @@ public interface BSElement extends WithinGrid, Serializable {
      * custom styling.
      */
     String getCssClass();
-
     void setCssClass(final String cssClass);
+
+    public interface Visitor extends Grid.Visitor {
+        default void preVisit(final BSGrid bsGrid) {}
+        default void visit(final BSGrid bsGrid) {}
+        default void postVisit(final BSGrid bsGrid) {}
+        default void preVisit(final BSRow bsRow) {}
+        default void visit(final BSRow bsRow) {}
+        default void postVisit(final BSRow bsRow) {}
+        default void preVisit(final BSCol bsCol) {}
+        default void visit(final BSCol bsCol) {}
+        default void postVisit(final BSCol bsCol) {}
+        default void visit(final BSClearFix bsClearFix) {}
+        default void preVisit(final BSTabGroup bsTabGroup) {}
+        default void visit(final BSTabGroup bsTabGroup) {}
+        default void postVisit(final BSTabGroup bsTabGroup) {}
+        default void preVisit(final BSTab bsTab) {}
+        default void visit(final BSTab bsTab) {}
+        default void postVisit(final BSTab bsTab) {}
+    }
 
 }

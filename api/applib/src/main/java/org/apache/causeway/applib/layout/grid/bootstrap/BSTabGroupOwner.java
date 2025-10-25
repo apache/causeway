@@ -25,7 +25,8 @@ import org.apache.causeway.applib.layout.component.Owner;
 /**
  * @since 1.x {@index}
  */
-public interface BSTabGroupOwner extends Owner, WithinGrid {
+public sealed interface BSTabGroupOwner extends Owner
+permits BSCol {
 
     List<BSTabGroup> getTabGroups();
 }

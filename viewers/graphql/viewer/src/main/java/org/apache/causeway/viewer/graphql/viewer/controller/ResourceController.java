@@ -23,8 +23,6 @@ import java.util.Optional;
 
 import jakarta.inject.Inject;
 
-import org.jspecify.annotations.Nullable;
-
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,12 +35,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -51,20 +50,19 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 @RestController()
 @RequestMapping("/graphql/object")
-public class ResourceController {
-
-    private final BookmarkService bookmarkService;
-    private final ObjectManager objectManager;
-    private final CausewayConfiguration.Viewer.Graphql graphqlConfiguration;
+public record ResourceController(
+    BookmarkService bookmarkService,
+    ObjectManager objectManager,
+    GridService gridService,
+    CausewayConfiguration.Viewer.Graphql graphqlConfiguration) {
 
     @Inject
     public ResourceController(
             final BookmarkService bookmarkService,
             final ObjectManager objectManager,
+            final GridService gridService,
             final CausewayConfiguration causewayConfiguration) {
-        this.bookmarkService = bookmarkService;
-        this.objectManager = objectManager;
-        this.graphqlConfiguration = causewayConfiguration.viewer().graphql();
+        this(bookmarkService, objectManager, gridService, causewayConfiguration.viewer().graphql());
     }
 
     @GetMapping(value = "/{logicalTypeName}:{id}/{propertyId}/blobBytes")
@@ -142,10 +140,8 @@ public class ResourceController {
         }
 
         return lookup(logicalTypeName, id)
-                .map(ResourceController::gridOf)
+                .map(mo->gridAsXml(mo).orElse(null))
                 .filter(Objects::nonNull)
-                .map(JaxbUtils::toStringUtf8)
-                .map(x -> x.replaceAll("(\r\n)", "\n"))
                 .map(gridText -> {
                     var bodyBuilder = ResponseEntity.ok()
                             .contentType(MediaType.APPLICATION_XML);
@@ -191,10 +187,11 @@ public class ResourceController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Nullable
-    private static Grid gridOf(final ManagedObject managedObject) {
-        var facet = managedObject.objSpec().getFacet(GridFacet.class);
-        return facet != null ? facet.getGrid(managedObject) : null;
+    private Optional<String> gridAsXml(final ManagedObject managedObject) {
+        return managedObject.objSpec().lookupFacet(GridFacet.class)
+            .map(facet->facet.getGrid(managedObject))
+            .map(grid->gridService().marshaller().marshal(_Casts.uncheckedCast(grid), CommonMimeType.XML))
+            .map(x -> x.replaceAll("(\r\n)", "\n"));
     }
 
     private Optional<Object> valueOfProperty(final String logicalTypeName, final String id, final String propertyId) {

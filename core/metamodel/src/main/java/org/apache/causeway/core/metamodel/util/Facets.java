@@ -124,11 +124,13 @@ public final class Facets {
     public Optional<BSGrid> bootstrapGrid(
             final ObjectSpecification objectSpec, final @Nullable ManagedObject mo) {
         return objectSpec.lookupFacet(GridFacet.class)
+            .filter(facet->facet.supports(BSGrid.class))
             .map(gridFacet->gridFacet.getGrid(mo))
             .flatMap(grid->_Casts.castTo(BSGrid.class, grid));
     }
 
-    public Optional<BSGrid> bootstrapGrid(final ObjectSpecification objectSpec) {
+    public Optional<BSGrid> bootstrapGrid(
+            final ObjectSpecification objectSpec) {
         return bootstrapGrid(objectSpec, null);
     }
 

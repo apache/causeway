@@ -61,7 +61,7 @@ implements HasDynamicallyVisibleContent {
         final RepeatingViewWithDynamicallyVisibleContent rv =
                 new RepeatingViewWithDynamicallyVisibleContent(ID_ROW_CONTENTS);
 
-        for(final BSRowContent bsRowContent: bsRow.getCols()) {
+        for(final BSRowContent bsRowContent: bsRow.getRowContents()) {
 
             final String id = rv.newChildId();
 

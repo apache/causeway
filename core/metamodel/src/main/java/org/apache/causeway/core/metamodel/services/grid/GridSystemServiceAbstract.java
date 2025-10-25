@@ -18,9 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.inject.Inject;
@@ -36,9 +34,7 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
@@ -94,7 +90,6 @@ implements GridSystemService<G> {
 
     protected final Provider<SpecificationLoader> specLoaderProvider;
     protected final TranslationService translationService;
-    protected final JaxbService jaxbService;
     protected final MessageService messageService;
     protected final CausewaySystemEnvironment causewaySystemEnvironment;
 
@@ -108,16 +103,17 @@ implements GridSystemService<G> {
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(log.isDebugEnabled()) {
-                log.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
+                log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }
         } else {
-
             if(causewaySystemEnvironment.isPrototyping()) {
-                messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
+                messageService.warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
             }
-            log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
+            log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
         }
     }
+
+    protected abstract String toXml(Grid grid);
 
     /**
      * Mandatory hook method for subclasses, where they must ensure that all object members (properties, collections
@@ -150,7 +146,7 @@ implements GridSystemService<G> {
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
-        fcGrid.visit(new Grid.VisitorAdapter() {
+        fcGrid.visit(new Grid.Visitor() {
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -368,17 +364,6 @@ implements GridSystemService<G> {
         });
     }
 
-    protected record SurplusAndMissing(
-            Set<String> surplus,
-            Set<String> missing) {
-    }
-
-    protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
-        var firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
-        var secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
-        return new SurplusAndMissing(firstNotSecond, secondNotFirst);
-    }
-
     // --
 
     @Programmatic
@@ -393,7 +378,7 @@ implements GridSystemService<G> {
     @Override
     public void minimal(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        grid.visit(new Grid.VisitorAdapter() {
+        grid.visit(new Grid.Visitor() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 actionLayoutData.getOwner().getActions().remove(actionLayoutData);

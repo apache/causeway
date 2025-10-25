@@ -22,6 +22,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
@@ -29,80 +31,51 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.applib.layout.menubars.Menu;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Describes the collection of domain services into menubars, broadly corresponding to the aggregation of information of {@link DomainServiceLayout} that have the same value of {@link DomainServiceLayout#named()}.
+ * Describes the collection of domain services into menubars,
+ * broadly corresponding to the aggregation of information of
+ * {@link DomainServiceLayout} that have the same value of
+ * {@link DomainServiceLayout#named()}.
  *
  * @since 1.x {@index}
  */
 @XmlType(
-        name = "menu"
-        , propOrder = {
-                "named",
-                "cssClassFa",
-                "sections"
-        }
-        )
+    name = "menu", propOrder = {"named", "cssClassFa", "sections"})
+@XmlAccessorType(XmlAccessType.FIELD)
 @ToString(of = "named")
 public class BSMenu implements Menu, Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    public BSMenu() {
-    }
-
+    public BSMenu() {}
     public BSMenu(String named) {
         this.named = named;
     }
 
+    @XmlElement(required = true)
+    @Getter @Setter
     private String named;
 
-    @Override
-    @XmlElement(required = true)
-    public String getNamed() {
-        return named;
-    }
-
-    public void setNamed(String named) {
-        this.named = named;
-    }
-
+    @XmlAttribute(required = false)
+    @Getter @Setter
     private String cssClassFa;
 
-    @XmlAttribute(required = false)
-    public String getCssClassFa() {
-        return cssClassFa;
-    }
-
-    public void setCssClassFa(final String cssClassFa) {
-        this.cssClassFa = cssClassFa;
-    }
-
-    private List<BSMenuSection> sections = new ArrayList<>();
-
-    // no wrapper
     @XmlElement(name = "section", required = true)
-    public List<BSMenuSection> getSections() {
-        return sections;
-    }
-
-    private Boolean unreferencedActions;
+    @Getter
+    private final List<BSMenuSection> sections = new ArrayList<>();
 
     /**
      * Whether this menu should be used to hold any unreferenced actions.
-     *
-     * <p>
-     *     Any menubars layout must have precisely one menu that has this attribute set.
-     * </p>
+     * <p>Any menubars layout must have precisely one menu that has this attribute set.
      */
     @XmlAttribute(required = false)
-    public Boolean isUnreferencedActions() {
-        return unreferencedActions;
-    }
-
-    public void setUnreferencedActions(final Boolean unreferencedActions) {
-        this.unreferencedActions = unreferencedActions;
+    @Getter @Setter
+    private Boolean unreferencedActions;
+    public boolean isUnreferencedActions() {
+        return unreferencedActions!=null && unreferencedActions.booleanValue();
     }
 
 }

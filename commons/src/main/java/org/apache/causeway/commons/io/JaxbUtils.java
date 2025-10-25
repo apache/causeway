@@ -47,6 +47,9 @@ import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.SchemaOutputResolver;
 import jakarta.xml.bind.Unmarshaller;
 
+import org.glassfish.jaxb.core.v2.runtime.IllegalAnnotationException;
+import org.glassfish.jaxb.runtime.v2.runtime.IllegalAnnotationsException;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.functional.Try;
@@ -61,7 +64,6 @@ import org.apache.causeway.commons.internal.reflection._ClassCache;
 
 import lombok.Builder;
 import lombok.Data;
-import org.jspecify.annotations.NonNull;
 import lombok.Singular;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -378,9 +380,10 @@ public class JaxbUtils {
         try {
             return JAXB_CONTEXT_FACTORY.createContext(open(classesToBeBound), JAXB_CONTEXT_FACTORY_PROPS);
         } catch (Exception e) {
-            var msg = String.format("obtaining JAXBContext for classes (to be bound) {%s}", _NullSafe.stream(classesToBeBound)
-                    .map(Class::getName)
-                    .collect(Collectors.joining(", ")));
+            var msg = "obtaining JAXBContext for classes (to be bound) {%s}"
+                    .formatted(_NullSafe.stream(classesToBeBound)
+                        .map(Class::getName)
+                        .collect(Collectors.joining(", ")));
             throw verboseException(msg, classesToBeBound[0], e); // assuming we have at least one argument
         }
     }
@@ -423,41 +426,25 @@ public class JaxbUtils {
 
         var dtoClassName = Optional.ofNullable(dtoClass).map(Class::getName).orElse("unknown");
 
-        if(isIllegalAnnotationsException(cause)) {
+        if(cause instanceof IllegalAnnotationsException annotEx) {
             // report a better error if possible
-            // this is done reflectively because on JDK 8 this exception type is only provided by Oracle JDK
-            try {
-
-                var errors = _Casts.<List<? extends Exception>>uncheckedCast(
-                        cause.getClass().getMethod("getErrors").invoke(cause));
-
-                if(_NullSafe.size(errors)>0) {
-
-                    return _Exceptions.unrecoverable(cause,
-                            "Error %s, "
-                            + "due to illegal annotations on object class '%s'; "
-                            + "%d error(s) reported: %s",
-                            doingWhat,
-                            dtoClassName,
-                            errors.size(),
-                            errors.stream()
-                                .map(Exception::getMessage)
-                                .collect(Collectors.joining("; ")));
-                }
-
-            } catch (Exception ex) {
-                // just fall through if we hit any issues
+            var errors = annotEx.getErrors();
+            if(_NullSafe.size(errors)>0) {
+                return _Exceptions.unrecoverable(cause,
+                    "Error %s, "
+                    + "due to illegal annotations on object class '%s'; "
+                    + "%d error(s) reported: %s",
+                    doingWhat,
+                    dtoClassName,
+                    errors.size(),
+                    errors.stream()
+                        .map(IllegalAnnotationException::toString)
+                        .collect(Collectors.joining("; ")));
             }
         }
 
         return _Exceptions.unrecoverable(cause,
                 "Error %s; object class is '%s'", doingWhat, dtoClassName);
-    }
-
-    private static boolean isIllegalAnnotationsException(final Throwable cause) {
-        /*sonar-ignore-on*/
-        return "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException".equals(cause.getClass().getName());
-        /*sonar-ignore-off*/
     }
 
 }

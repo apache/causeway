@@ -25,5 +25,4 @@ import java.util.List;
  */
 public interface ServiceActionLayoutDataOwner extends Owner {
     List<ServiceActionLayoutData> getServiceActions();
-    void setServiceActions(List<ServiceActionLayoutData> actions);
 }

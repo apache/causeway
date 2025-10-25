@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
@@ -117,7 +117,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     public <T extends Grid> Optional<T> load(
             final Class<?> domainClass,
             final String layoutIfAny,
-            final @NonNull GridMarshallerService<T> marshaller) {
+            final @NonNull GridMarshaller<T> marshaller) {
 
         var supportedFormats = marshaller.supportedFormats();
 
@@ -155,9 +155,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
         try {
             final T grid = marshaller
-                    .unmarshal(layoutResource.content(), layoutResource.format())
-                    .getValue().orElseThrow();
-            grid.setDomainClass(domainClass);
+                .unmarshal(domainClass, layoutResource.content(), layoutResource.format())
+                .getValue().orElseThrow();
             if(supportsReloading()) {
                 gridCache.put(layoutKey, grid);
             }

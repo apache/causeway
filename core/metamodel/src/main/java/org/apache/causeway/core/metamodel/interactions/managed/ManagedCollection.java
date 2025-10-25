@@ -78,7 +78,7 @@ public final class ManagedCollection extends ManagedMember {
     }
 
     public Can<ObjectAction> getAssociatedActions() {
-        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner(), getCollection()));
+        return Can.ofStream(ObjectAction.Util.findForAssociation(getOwner().objSpec(), getCollection()));
     }
 
     public ManagedObject getCollectionValue() {

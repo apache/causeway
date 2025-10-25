@@ -21,59 +21,35 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlTransient;
 
-import org.apache.causeway.applib.annotation.Programmatic;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Common superclass for any content of a row.
  *
- * <p>
- *     Most commonly the content of a row is {@link BSCol col}umns, but it may be either of the
- *     {@link BSClearFix clearfix} classes.
- * </p>
+ * <p> Most commonly the content of a row is {@link BSCol col}umns, but it may be either of the
+ * {@link BSClearFix clearfix} classes.
  *
  * @since 1.x {@index}
  */
-public abstract class BSRowContent extends BSElementAbstract {
+public sealed abstract class BSRowContent extends BSElementAbstract
+permits BSCol, BSClearFix {
 
     private static final long serialVersionUID = 1L;
-
-    private Size size;
 
     /**
      * Default if not specified is {@link Size#MD}.
      */
     @XmlAttribute(required = false)
-    public Size getSize() {
-        return size;
-    }
-
-    public void setSize(final Size size) {
-        this.size = size;
-    }
-
-    private BSRowContentOwner owner;
+    @Getter @Setter
+    private Size size;
 
     /**
      * Owner.
-     *
-     * <p>
-     *     Set programmatically by framework after reading in from XML.
-     * </p>
+     * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    public BSRowContentOwner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(final BSRowContentOwner owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    @XmlTransient
-    @Programmatic
-    public BSGrid getGrid() {
-        return getOwner().getGrid();
-    }
+    @Getter @Setter
+    private BSRowContentOwner owner;
 
 }

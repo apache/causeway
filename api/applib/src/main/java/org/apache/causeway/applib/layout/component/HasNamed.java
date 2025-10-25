@@ -18,14 +18,11 @@
  */
 package org.apache.causeway.applib.layout.component;
 
-import jakarta.xml.bind.annotation.XmlElement;
-
 /**
  * @since 1.x {@index}
  */
 public interface HasNamed {
 
-    @XmlElement(required = false)
     String getNamed();
     void setNamed(String named);
 

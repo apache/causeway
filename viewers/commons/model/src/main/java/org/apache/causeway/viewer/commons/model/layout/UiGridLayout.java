@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.viewer.commons.model.layout;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -27,11 +30,14 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSClearFix;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGridTransformer;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.UiModel;
 
@@ -39,7 +45,7 @@ import lombok.RequiredArgsConstructor;
 
 public record UiGridLayout(
     BSGrid bsGrid
-    ) implements UiModel {
+    ) implements Serializable, UiModel {
 
     @RequiredArgsConstructor
     public static abstract class Visitor<C, T> {
@@ -57,9 +63,19 @@ public record UiGridLayout(
         protected abstract void onCollection(C container, CollectionLayoutData collectionData);
     }
 
-    public static Optional<UiGridLayout> createGrid(ManagedObject mo) {
-        return Facets.bootstrapGrid(mo.objSpec(), mo)
-            .map(UiGridLayout::new);
+    public UiGridLayout {
+        //since BSGrid is mutable, always create a defensive copy for wrapping
+        bsGrid = BSUtil.deepCopy(Objects.requireNonNull(bsGrid));
+        new BSGridTransformer.EmptyTabRemover().apply(bsGrid);
+        new BSGridTransformer.CollapseIfOneTab().apply(bsGrid);
+        new BSGridTransformer.EmptyRowRemover().apply(bsGrid);
+    }
+
+    public static Optional<UiGridLayout> forObject(final ManagedObject mo) {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(mo)
+            ? Optional.empty()
+            : Facets.bootstrapGrid(mo.objSpec(), mo)
+                .map(UiGridLayout::new);
     }
 
     /**
@@ -77,7 +93,7 @@ public record UiGridLayout(
 
         var uiRow = visitor.newRow(container, bsRow);
 
-        for(var bsRowContent: bsRow.getCols()) {
+        for(var bsRowContent: bsRow.getRowContents()) {
             if(bsRowContent instanceof BSCol) {
                 visitCol((BSCol) bsRowContent, uiRow, visitor);
             } else if (bsRowContent instanceof BSClearFix) {

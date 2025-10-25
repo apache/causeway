@@ -26,8 +26,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -269,7 +269,7 @@ implements DomainObjectResource {
             final String instanceId,
             final Grid grid) {
 
-        grid.visit(new Grid.VisitorAdapter() {
+        grid.visit(new Grid.Visitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 Link link = newLink(

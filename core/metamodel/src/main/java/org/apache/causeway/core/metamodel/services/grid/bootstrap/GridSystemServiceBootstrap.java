@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -52,7 +53,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
-import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -61,7 +62,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
@@ -118,7 +118,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
-    private GridMarshallerService<BSGrid> marshaller;
+    private GridMarshaller<BSGrid> marshaller;
 
     private final CausewayConfiguration config;
     private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
@@ -132,7 +132,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final MessageService messageService,
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
-        super(specLoaderProvider, translationService, jaxbService, messageService, causewaySystemEnvironment);
+        super(specLoaderProvider, translationService, messageService, causewaySystemEnvironment);
         this.config = causewayConfiguration;
         this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
@@ -153,14 +153,19 @@ extends GridSystemServiceAbstract<BSGrid> {
     }
 
     @Override
+    protected String toXml(Grid grid) {
+        return marshaller.marshal((BSGrid) grid, CommonMimeType.XML);
+    }
+
+    @Override
     public BSGrid defaultGrid(final Class<?> domainClass) {
         final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
         try {
             return content.getValue()
-                    .map(xml -> marshaller.unmarshal(xml, CommonMimeType.XML).getValue().orElse(null))
+                    .flatMap(xml -> marshaller.unmarshal(domainClass, xml, CommonMimeType.XML)
+                        .getValue())
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
-                    .map(bsGrid -> withDomainClass(bsGrid, domainClass))
                     .map(_Functions.peek(bsGrid -> bsGrid.setFallback(true)))
                     .orElseGet(() -> fallback(domainClass));
         } catch (final Exception e) {
@@ -183,7 +188,8 @@ extends GridSystemServiceAbstract<BSGrid> {
     // which *really* shouldn't happen
     //
     private BSGrid fallback(final Class<?> domainClass) {
-        final BSGrid bsGrid = withDomainClass(new BSGrid(), domainClass);
+        final BSGrid bsGrid = new BSGrid();
+        bsGrid.domainClass(domainClass);
         bsGrid.setFallback(true);
 
         final BSRow headerRow = new BSRow();
@@ -192,7 +198,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         headerRowCol.setSpan(12);
         headerRowCol.setUnreferencedActions(true);
         headerRowCol.setDomainObject(new DomainObjectLayoutData());
-        headerRow.getCols().add(headerRowCol);
+        headerRow.getRowContents().add(headerRowCol);
 
         final BSRow propsRow = new BSRow();
         bsGrid.getRows().add(propsRow);
@@ -203,13 +209,8 @@ extends GridSystemServiceAbstract<BSGrid> {
         final BSCol col = new BSCol();
         col.setUnreferencedCollections(true);
         col.setSpan(12);
-        propsRow.getCols().add(col);
+        propsRow.getRowContents().add(col);
 
-        return bsGrid;
-    }
-
-    private static BSGrid withDomainClass(final BSGrid bsGrid, final Class<?> domainClass) {
-        bsGrid.setDomainClass(domainClass);
         return bsGrid;
     }
 
@@ -222,7 +223,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         if(span > 0 || unreferencedProperties) {
             final BSCol col = new BSCol();
             col.setSpan(span); // in case we are here because of 'unreferencedProperties' needs setting
-            propsRow.getCols().add(col);
+            propsRow.getRowContents().add(col);
             final List<String> leftMemberGroups = memberGroupNames;
             for (String memberGroup : leftMemberGroups) {
                 final FieldSet fieldSet = new FieldSet();
@@ -243,41 +244,33 @@ extends GridSystemServiceAbstract<BSGrid> {
             final Class<?> domainClass) {
 
         var bsGrid = (BSGrid) grid;
-        var objectSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
 
-        var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
-        var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
-        var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
+        var gridModelIfValid = GridInitializationModel.createFrom(bsGrid);
+        if(!gridModelIfValid.isPresent()) return false; // only present if valid
 
-        var propertyLayoutDataById = bsGrid.getAllPropertiesById();
-        var collectionLayoutDataById = bsGrid.getAllCollectionsById();
-        var actionLayoutDataById = bsGrid.getAllActionsById();
-
-        var gridModelIfValid = _GridModel.createFrom(bsGrid);
-        if(!gridModelIfValid.isPresent()) { // only present if valid
-            return false;
-        }
         var gridModel = gridModelIfValid.get();
+        var objSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
 
-        var layoutDataFactory = LayoutDataFactory.of(objectSpec);
+        var oneToOneAssociationById = ObjectMember.mapById(objSpec.streamProperties(MixedIn.INCLUDED));
+        var oneToManyAssociationById = ObjectMember.mapById(objSpec.streamCollections(MixedIn.INCLUDED));
+        var objectActionById = ObjectMember.mapById(objSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
-        // * surplus ... those defined in the grid model but not available with the meta-model
-        // * missing ... those available with the meta-model but missing in the grid-model
+        var layoutDataFactory = LayoutDataFactory.of(objSpec);
+
+        // * left  ... those defined in the grid model but not available with the meta-model
+        // * right ... those available with the meta-model but missing in the grid-model
         // (missing properties will be added to the first field-set of the specified column)
 
-        var surplusAndMissingPropertyIds =
-                surplusAndMissing(propertyLayoutDataById.keySet(),  oneToOneAssociationById.keySet());
-        var surplusPropertyIds = surplusAndMissingPropertyIds.surplus();
-        var missingPropertyIds = surplusAndMissingPropertyIds.missing();
-
-        for (String surplusPropertyId : surplusPropertyIds) {
-            propertyLayoutDataById.get(surplusPropertyId).setMetadataError("No such property");
+        var propertyDisjunction = gridModel.propertyDisjunction(oneToOneAssociationById.keySet());
+        for (String leftPropertyId : propertyDisjunction.left()) {
+            gridModel.propertyLayoutDataById.get(leftPropertyId)
+                .forEach(it->it.setMetadataError("No such property"));
         }
 
         // catalog which associations are bound to an existing field-set
         // so that (below) we can determine which missing property IDs are not unbound vs
         // which should be included in the field-set that they are bound to.
-        var boundAssociationIdsByFieldSetId = _Maps.<String, Set<String>>newHashMap();
+        var boundAssociationIdsByFieldSetId = new HashMap<String, Set<String>>();
 
         for (var fieldSet : gridModel.fieldSets()) {
             var fieldSetId = GroupIdAndName.forFieldSet(fieldSet)
@@ -295,7 +288,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
         // 1-to-1-association IDs, that want to contribute to the 'metadata' FieldSet
         // but are unbound, because such a FieldSet is not defined by the given layout.
-        var unboundMetadataContributingIds = _Sets.<String>newHashSet();
+        var unboundMetadataContributingIds = new HashSet<String>();
 
         // along with any specified by existing metadata
         for (final OneToOneAssociation oneToOneAssociation : oneToOneAssociationById.values()) {
@@ -313,9 +306,8 @@ extends GridSystemServiceAbstract<BSGrid> {
             }
         }
 
-        if(!missingPropertyIds.isEmpty()) {
-
-            var unboundPropertyIds = _Sets.newLinkedHashSet(missingPropertyIds);
+        if(!propertyDisjunction.right().isEmpty()) {
+            var unboundPropertyIds = _Sets.newLinkedHashSet(propertyDisjunction.right());
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
                 var boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
@@ -338,7 +330,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                         fieldSet,
                         associations1To1Ids,
                         layoutDataFactory::createPropertyLayoutData,
-                        propertyLayoutDataById::put);
+                        gridModel.propertyLayoutDataById::putElement);
             }
 
             if(!unboundPropertyIds.isEmpty()) {
@@ -355,25 +347,22 @@ extends GridSystemServiceAbstract<BSGrid> {
                         fieldSet,
                         sortedUnboundPropertyIds,
                         layoutDataFactory::createPropertyLayoutData,
-                        propertyLayoutDataById::put);
+                        gridModel.propertyLayoutDataById::putElement);
             }
         }
 
         // any missing collections will be added as tabs to a new TabGroup in the specified column
-        var surplusAndMissingCollectionIds =
-                surplusAndMissing(collectionLayoutDataById.keySet(), oneToManyAssociationById.keySet());
-        var surplusCollectionIds = surplusAndMissingCollectionIds.surplus();
-        var missingCollectionIds = surplusAndMissingCollectionIds.missing();
-
-        for (String surplusCollectionId : surplusCollectionIds) {
-            collectionLayoutDataById.get(surplusCollectionId).setMetadataError("No such collection");
+        var collectionDisjunction = gridModel.collectionDisjunction(oneToManyAssociationById.keySet());
+        for (String leftCollectionId : collectionDisjunction.left()) {
+            gridModel.collectionLayoutDataById.get(leftCollectionId)
+                .forEach(it->it.setMetadataError("No such collection"));
         }
 
-        if(!missingCollectionIds.isEmpty()) {
+        if(!collectionDisjunction.right().isEmpty()) {
 
             // add missing collections respecting configured sequence policy
             var sortedMissingCollectionIds = _UnreferencedSequenceUtil
-                    .sortCollections(config, missingCollectionIds.stream()
+                    .sortCollections(config, collectionDisjunction.right().stream()
                             .map(oneToManyAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -384,22 +373,20 @@ extends GridSystemServiceAbstract<BSGrid> {
                         bsCol,
                         sortedMissingCollectionIds,
                         layoutDataFactory::createCollectionLayoutData,
-                        collectionLayoutDataById::put);
+                        gridModel.collectionLayoutDataById::putElement);
                 },
                 bsTabGroup->{
                     addUnreferencedCollectionsTo(
                         bsTabGroup,
                         sortedMissingCollectionIds,
-                        objectSpec,
+                        objSpec,
                         layoutDataFactory::createCollectionLayoutData);
                 });
         }
 
         // any missing actions will be added as actions in the specified column
-        var surplusAndMissingActionIds =
-                surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
-        var surplusActionIds = surplusAndMissingActionIds.surplus();
-        var possiblyMissingActionIds = surplusAndMissingActionIds.missing();
+        var actionDisjunction = gridModel.actionDisjunction(objectActionById.keySet());
+        var possiblyMissingActionIds = actionDisjunction.right();
 
         final List<String> associatedActionIds = _Lists.newArrayList();
 
@@ -415,53 +402,46 @@ extends GridSystemServiceAbstract<BSGrid> {
             var objectAction = objectActionById.get(actionId);
 
             var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-            if(layoutGroupFacet == null) {
-                continue;
-            }
+            if(layoutGroupFacet == null) continue;
+
             final String layoutGroupName = layoutGroupFacet.getGroupId();
-            if (layoutGroupName == null) {
-                continue;
-            }
+            if (layoutGroupName == null) continue;
 
             if (oneToOneAssociationById.containsKey(layoutGroupName)) {
                 associatedActionIds.add(actionId);
 
                 if(layoutGroupFacet.isExplicitBinding()) {
-                    final PropertyLayoutData propertyLayoutData = propertyLayoutDataById.get(layoutGroupName);
-                    if(propertyLayoutData == null) {
+                    var propertyLayoutDataList = gridModel.propertyLayoutDataById.get(layoutGroupName);
+                    if(_NullSafe.isEmpty(propertyLayoutDataList)) {
                         log.warn(String.format("Could not find propertyLayoutData for layoutGroupName of '%s'", layoutGroupName));
                         continue;
                     }
-                    var actionLayoutData = new ActionLayoutData(actionId);
                     var actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
-                    final ActionLayoutDataOwner owner;
-                    final ActionLayout.Position position;
-                    if(actionPositionFacet != null) {
-                        position = actionPositionFacet.position();
-                        owner = position == ActionLayout.Position.PANEL
-                                || position == ActionLayout.Position.PANEL_DROPDOWN
-                                ? propertyLayoutData.getOwner()
-                                : propertyLayoutData;
-                    } else {
-                        position = ActionLayout.Position.BELOW;
-                        owner = propertyLayoutData;
-                    }
-                    actionLayoutData.setPosition(position);
-                    addActionTo(owner, actionLayoutData);
+                    final ActionLayout.Position position = actionPositionFacet != null
+                        ? actionPositionFacet.position()
+                        : ActionLayout.Position.BELOW;
+                    propertyLayoutDataList.forEach(propertyLayoutData->{
+                        final ActionLayoutDataOwner owner = position == ActionLayout.Position.PANEL
+                                    || position == ActionLayout.Position.PANEL_DROPDOWN
+                            ? propertyLayoutData.getOwner()
+                            : propertyLayoutData;
+                        var actionLayoutData = new ActionLayoutData(actionId);
+                        actionLayoutData.setPosition(position);
+                        addActionTo(owner, actionLayoutData);
+                    });
                 }
-
                 continue;
             }
             if (oneToManyAssociationById.containsKey(layoutGroupName)) {
                 associatedActionIds.add(actionId);
 
                 if(layoutGroupFacet.isExplicitBinding()) {
-                    var collectionLayoutData = collectionLayoutDataById.get(layoutGroupName);
-                    if(collectionLayoutData==null) {
+                    var collectionLayoutDataList = gridModel.collectionLayoutDataById.get(layoutGroupName);
+                    if(_NullSafe.isEmpty(collectionLayoutDataList)) {
                         log.warn("failed to lookup CollectionLayoutData by layoutGroupName '{}'", layoutGroupName);
                     } else {
-                        var actionLayoutData = new ActionLayoutData(actionId);
-                        addActionTo(collectionLayoutData, actionLayoutData);
+                        collectionLayoutDataList.forEach(collectionLayoutData->
+                            addActionTo(collectionLayoutData, new ActionLayoutData(actionId)));
                     }
                 }
                 continue;
@@ -495,8 +475,9 @@ extends GridSystemServiceAbstract<BSGrid> {
         final List<String> missingActionIds = _Lists.newArrayList(sortedPossiblyMissingActionIds);
         missingActionIds.removeAll(associatedActionIds);
 
-        for (String surplusActionId : surplusActionIds) {
-            actionLayoutDataById.get(surplusActionId).setMetadataError("No such action");
+        for (String leftActionId : actionDisjunction.left()) {
+            gridModel.actionLayoutDataById.get(leftActionId)
+                .forEach(it->it.setMetadataError("No such action"));
         }
 
         if(!missingActionIds.isEmpty()) {
@@ -507,19 +488,38 @@ extends GridSystemServiceAbstract<BSGrid> {
                             bsCol,
                             missingActionIds,
                             layoutDataFactory::createActionLayoutData,
-                            actionLayoutDataById::put);
+                            gridModel.actionLayoutDataById::putElement);
                     },
                     fieldSet->{
                         addActionsTo(
                             fieldSet,
                             missingActionIds,
                             layoutDataFactory::createActionLayoutData,
-                            actionLayoutDataById::put);
+                            gridModel.actionLayoutDataById::putElement);
                     });
         }
 
-        new EmptyTabRemovalProcessor(bsGrid).run();
-        new CollapseIfOneTabProcessor(bsGrid).run();
+        {
+            // bind actions closest to properties
+            final Set<String> actionIdsAlreadyAdded = bsGrid.streamActionLayoutData()
+                .map(ActionLayoutData::getId)
+                .collect(Collectors.toCollection(HashSet::new));
+
+            objSpec.streamProperties(MixedIn.INCLUDED)
+                .forEach(property->{
+                    _NullSafe.stream(gridModel.propertyLayoutDataById.get(property.getId()))
+                        .forEach(pl->{
+                            ObjectAction.Util.findForAssociation(objSpec, property)
+                                .map(ObjectAction::getId)
+                                .filter(id->!actionIdsAlreadyAdded.contains(id))
+                                //.peek(actionIdsAlreadyAdded::add)
+                                .map(ActionLayoutData::new)
+                                .forEach(pl.getActions()::add);
+                        });
+                });
+        }
+
+        bsGrid.setNormalized(true);
         return true;
     }
 
@@ -581,14 +581,12 @@ extends GridSystemServiceAbstract<BSGrid> {
             });
 
             final BSRow tabRow = new BSRow();
-            tabRow.setOwner(bsTab);
             bsTab.getRows().add(tabRow);
 
             final BSCol tabRowCol = new BSCol();
             tabRowCol.setSpan(12);
             tabRowCol.setSize(Size.MD);
-            tabRowCol.setOwner(tabRow);
-            tabRow.getCols().add(tabRowCol);
+            tabRow.getRowContents().add(tabRowCol);
 
             var collectionLayoutData = layoutFactory.apply(collectionId);
             tabRowCol.getCollections().add(collectionLayoutData);
@@ -624,12 +622,7 @@ extends GridSystemServiceAbstract<BSGrid> {
     private void addActionTo(
             final ActionLayoutDataOwner owner,
             final ActionLayoutData actionLayoutData) {
-
-        List<ActionLayoutData> actions = owner.getActions();
-        if(actions == null) {
-            owner.setActions(actions = _Lists.newArrayList());
-        }
-        actions.add(actionLayoutData);
+        owner.getActions().add(actionLayoutData);
         actionLayoutData.setOwner(owner);
     }
 

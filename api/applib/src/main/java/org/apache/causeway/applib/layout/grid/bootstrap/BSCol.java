@@ -25,6 +25,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -38,27 +39,24 @@ import org.apache.causeway.applib.layout.component.FieldSetOwner;
 import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.internal.primitives._Ints.Bound;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
  *
- * <p>
- *     Pretty much other content can be contained within a column, though most commonly it will be {@link FieldSet fieldset}s
- *     (a group of properties) or {@link CollectionLayoutData collection}s.  However, columns can also be used to
- *     contain further {@link BSRow row}s (creating a nested grid of rows/cols/rows/cols) and {@link BSTabGroup tabgroup}s.
- * </p>
+ * <p>Pretty much other content can be contained within a column, though most commonly it will be {@link FieldSet fieldset}s
+ * (a group of properties) or {@link CollectionLayoutData collection}s.  However, columns can also be used to
+ * contain further {@link BSRow row}s (creating a nested grid of rows/cols/rows/cols) and {@link BSTabGroup tabgroup}s.
  *
- * <p>
- *     It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
- * </p>
+ * <p>It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
  *
  * @since 1.x {@index}
  */
-@XmlRootElement(
-        name = "col"
-        )
+@XmlRootElement(name = "col")
 @XmlType(
-        name = "col"
-        , propOrder = {
+        name = "col",
+        propOrder = {
                 "sizeSpans",
                 "domainObject",
                 "actions",
@@ -66,185 +64,88 @@ import org.apache.causeway.commons.internal.primitives._Ints.Bound;
                 "tabGroups",
                 "fieldSets",
                 "collections",
-                "metadataError"
-        }
-        )
-public class BSCol extends BSRowContent
-implements ActionLayoutDataOwner, BSTabGroupOwner, BSRowOwner, FieldSetOwner, HasCssId,
+                "metadataError"})
+public final class BSCol extends BSRowContent
+implements ActionLayoutDataOwner, BSTabGroupOwner, BSRowOwner, FieldSetOwner, HasElementId,
 CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
-
     private static final long serialVersionUID = 1L;
-
     private static final _Ints.Range range1_12 = _Ints.Range.of(Bound.inclusive(1), Bound.inclusive(12));
-
-    private String id;
 
     /**
      * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
      */
-    @Override
     @XmlAttribute(required = false)
-    public String getId() {
-        return id;
-    }
-
-    public void setId(final String id) {
-        this.id = id;
-    }
-
-    private int span;
+    @Getter @Setter
+    private String id;
 
     @XmlAttribute(required = true)
-    public int getSpan() {
-        return range1_12.bounded(span);
-    }
-
-    public void setSpan(final int span) {
-        this.span = range1_12.bounded(span);
-    }
-
-    private Boolean unreferencedActions;
+    private int span;
+    public int getSpan() { return range1_12.bounded(span); }
+    public void setSpan(final int span) { this.span = range1_12.bounded(span); }
 
     /**
      * Whether this column should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
      *
-     * <p>
-     *     Any layout must have precisely one column or {@link FieldSet} that has this attribute set.
-     * </p>
+     * <p>Any layout must have precisely one column or {@link FieldSet} that has this attribute set.
      */
     @XmlAttribute(required = false)
-    public Boolean isUnreferencedActions() {
-        return unreferencedActions;
+    @Getter @Setter
+    private Boolean unreferencedActions;
+    /** unwraps nullable Boolean */
+    @XmlTransient public boolean isUnreferencedActions() {
+        return unreferencedActions == null ? false : unreferencedActions;
     }
 
-    public void setUnreferencedActions(final Boolean unreferencedActions) {
-        this.unreferencedActions = unreferencedActions;
-    }
-
-    private Boolean unreferencedCollections;
     /**
      * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
-     * <p>
-     *     Any layout must have precisely one column or {@link BSTabGroup tabgroup} that has this attribute set.
-     * </p>
+     * <p>Any layout must have precisely one column or {@link BSTabGroup tabgroup} that has this attribute set.
      */
     @XmlAttribute(required = false)
-    public Boolean isUnreferencedCollections() {
-        return unreferencedCollections;
+    @Getter @Setter
+    private Boolean unreferencedCollections;
+    /** unwraps nullable Boolean */
+    @XmlTransient public boolean isUnreferencedCollections() {
+        return unreferencedCollections == null ? false : unreferencedCollections;
     }
-
-    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
-        this.unreferencedCollections = unreferencedCollections;
-    }
-
-    private DomainObjectLayoutData domainObject;
 
     /**
      * Whether to show the object's icon and title.
      */
-    @Override
     @XmlElementRef(type=DomainObjectLayoutData.class, name="domainObject", required = false)
-    public DomainObjectLayoutData getDomainObject() {
-        return domainObject;
-    }
+    @Getter @Setter
+    private DomainObjectLayoutData domainObject;
 
-    @Override
-    public void setDomainObject(final DomainObjectLayoutData domainObjectLayoutData) {
-        this.domainObject = domainObjectLayoutData;
-    }
-
-    private List<SizeSpan> sizeSpans = new ArrayList<>();
-
-    // no wrapper
     @XmlElement(name = "sizeSpan", required = false)
-    public List<SizeSpan> getSizeSpans() {
-        return sizeSpans;
-    }
+    @Getter
+    private final List<SizeSpan> sizeSpans = new ArrayList<>();
 
-    public void setSizeSpans(final List<SizeSpan> sizeSpans) {
-        this.sizeSpans = sizeSpans;
-    }
-
-    private List<ActionLayoutData> actions = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
-    public List<ActionLayoutData> getActions() {
-        return actions;
-    }
+    @Getter
+    private final List<ActionLayoutData> actions = new ArrayList<>();
 
-    @Override
-    public void setActions(final List<ActionLayoutData> actions) {
-        this.actions = actions;
-    }
-
-    private List<BSRow> rows = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElement(name = "row", required = false)
-    public List<BSRow> getRows() {
-        return rows;
-    }
+    @Getter
+    private final List<BSRow> rows = new ArrayList<>();
 
-    public void setRows(final List<BSRow> rows) {
-        this.rows = rows;
-    }
-
-    private List<BSTabGroup> tabGroups = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElement(name = "tabGroup", required = false)
-    public List<BSTabGroup> getTabGroups() {
-        return tabGroups;
-    }
+    @Getter
+    private final List<BSTabGroup> tabGroups = new ArrayList<>();
 
-    public void setTabGroups(final List<BSTabGroup> tabGroups) {
-        this.tabGroups = tabGroups;
-    }
-
-    private List<FieldSet> fieldSets = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)
-    public List<FieldSet> getFieldSets() {
-        return fieldSets;
-    }
+    @Getter
+    private final List<FieldSet> fieldSets = new ArrayList<>();
 
-    public void setFieldSets(final List<FieldSet> fieldSets) {
-        this.fieldSets = fieldSets;
-    }
-
-    private List<CollectionLayoutData> collections = new ArrayList<>();
-
-    // no wrapper
-    @Override
     @XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)
-    public List<CollectionLayoutData> getCollections() {
-        return collections;
-    }
-
-    public void setCollections(final List<CollectionLayoutData> collections) {
-        this.collections = collections;
-    }
-
-    private String metadataError;
+    @Getter
+    private final List<CollectionLayoutData> collections = new ArrayList<>();
 
     /**
      * For diagnostics; populated by the framework if and only if a metadata error.
      */
-    @XmlElement(required = false)
-    public String getMetadataError() {
-        return metadataError;
-    }
-
-    public void setMetadataError(final String metadataError) {
-        this.metadataError = metadataError;
-    }
+    @XmlAttribute(required = false)
+    @Getter @Setter
+    private String metadataError;
 
     public String toCssClass() {
         final StringBuilder buf = new StringBuilder();

@@ -177,7 +177,7 @@ public interface ObjectAction extends ObjectMember {
     // -- INTERACTION HEAD
 
     InteractionHead interactionHead(@NonNull ManagedObject actionOwner);
-    default ActionInteractionHead actionInteractionHead(@NonNull ManagedObject actionOwner) {
+    default ActionInteractionHead actionInteractionHead(@NonNull final ManagedObject actionOwner) {
         return new ActionInteractionHead(interactionHead(actionOwner), this);
     }
 
@@ -378,14 +378,12 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static Stream<ObjectAction> findForAssociation(
-                final ManagedObject adapter,
+                final ObjectSpecification objSpec,
                 final ObjectAssociation association) {
 
-            var spec = adapter.objSpec();
-
-            return spec.streamRuntimeActions(MixedIn.INCLUDED)
-            .filter(Predicates.isSameLayoutGroupAs(association))
-            .sorted(ObjectMember.byMemberOrderSequence(false));
+            return objSpec.streamRuntimeActions(MixedIn.INCLUDED)
+                .filter(Predicates.isSameLayoutGroupAs(association))
+                .sorted(ObjectMember.byMemberOrderSequence(false));
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {

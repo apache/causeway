@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel;
 
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -48,6 +50,7 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
 import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
@@ -101,8 +104,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSql
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
-
-import org.jspecify.annotations.NonNull;
 
 @Configuration
 @Import({
@@ -172,6 +173,7 @@ import org.jspecify.annotations.NonNull;
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
+        XsiSchemaLocationProviderForGrid.class,
         GridLoaderServiceDefault.class,
         GridMarshallerServiceBootstrap.class,
         GridServiceDefault.class,

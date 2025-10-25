@@ -21,13 +21,12 @@ package org.apache.causeway.applib.services.grid;
 import java.util.EnumSet;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.
@@ -79,7 +78,7 @@ public interface GridLoaderService {
     <T extends Grid> Optional<T> load(
             Class<?> domainClass,
             @Nullable String layoutIfAny,
-            @NonNull GridMarshallerService<T> marshaller);
+            @NonNull GridMarshaller<T> marshaller);
 
     /**
      * Optionally returns a new instance of a {@link Grid},
@@ -88,7 +87,7 @@ public interface GridLoaderService {
      */
     default <T extends Grid> Optional<T> load(
             final Class<?> domainClass,
-            final @NonNull GridMarshallerService<T> marshaller) {
+            final @NonNull GridMarshaller<T> marshaller) {
         return load(domainClass, null, marshaller);
     }
 

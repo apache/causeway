@@ -195,9 +195,9 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 
         var entity = objectModel.getManagedObject();
 
-        ObjectAction.Util.findForAssociation(entity, property)
-        .map(act->ActionModel.forEntity(act, objectModel))
-        .forEach(onAssociatedAction);
+        ObjectAction.Util.findForAssociation(entity.objSpec(), property)
+            .map(act->ActionModel.forEntity(act, objectModel))
+            .forEach(onAssociatedAction);
 
         return scalarNameAndValueComponent;
     }
