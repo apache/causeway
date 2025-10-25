@@ -33,10 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
@@ -48,13 +47,13 @@ import org.apache.causeway.testdomain.jpa.springdata.EmployeeRepository;
 import org.apache.causeway.testdomain.jpa.springdata.SpringDataJpaTestModule;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
-@DataJpaTest(
+@SpringBootTest(
+        classes = {
+                Configuration_usingSpringDataJpa.class,
+        },
         properties = {
                 "spring.datasource.url=jdbc:h2:mem:SpringDataJpaBootstrappingTest",
         })
-@ContextConfiguration(classes = {
-        Configuration_usingSpringDataJpa.class,
-})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext
 // @Disabled // CAUSEWAY-2789 revert
