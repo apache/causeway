@@ -34,7 +34,6 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -91,7 +90,6 @@ implements GridSystemService<G> {
 
     protected final Provider<SpecificationLoader> specLoaderProvider;
     protected final TranslationService translationService;
-    protected final JaxbService jaxbService;
     protected final MessageService messageService;
     protected final CausewaySystemEnvironment causewaySystemEnvironment;
 
@@ -105,15 +103,17 @@ implements GridSystemService<G> {
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(log.isDebugEnabled()) {
-                log.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
+                log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }
         } else {
             if(causewaySystemEnvironment.isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
             }
-            log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
+            log.error("Grid metadata errors:\n\n{}\n\n", toXml(grid));
         }
     }
+
+    protected abstract String toXml(Grid grid);
 
     /**
      * Mandatory hook method for subclasses, where they must ensure that all object members (properties, collections

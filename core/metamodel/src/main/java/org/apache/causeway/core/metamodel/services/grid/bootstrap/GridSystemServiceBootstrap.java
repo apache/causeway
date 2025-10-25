@@ -132,7 +132,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final MessageService messageService,
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
-        super(specLoaderProvider, translationService, jaxbService, messageService, causewaySystemEnvironment);
+        super(specLoaderProvider, translationService, messageService, causewaySystemEnvironment);
         this.config = causewayConfiguration;
         this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
@@ -150,6 +150,11 @@ extends GridSystemServiceAbstract<BSGrid> {
     @Override
     public String schemaLocation() {
         return SCHEMA_LOCATION;
+    }
+
+    @Override
+    protected String toXml(Grid grid) {
+        return marshaller.marshal((BSGrid) grid, CommonMimeType.XML);
     }
 
     @Override
