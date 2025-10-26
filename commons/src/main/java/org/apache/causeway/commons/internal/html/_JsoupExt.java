@@ -62,6 +62,25 @@ public class _JsoupExt {
         Element appendTo(Element container, T1 model1, T2 model2, T3 model3);
     }
 
+    public record Href(String plain) {
+        /**
+         * on click causes the browser to navigate to the top of the page
+         */
+        public static Href self() {
+            return new Href("#");
+        }
+        /**
+         * on click does nothing
+         */
+        public static Href empty() {
+            return new Href("javascript:;");
+        }
+        public static Href validate(final String url) {
+            //TODO validate
+            return new Href(url);
+        }
+    }
+
     // -- EVALUATOR LOGIC
 
     public Evaluator not(final Evaluator evaluator) {
@@ -128,6 +147,23 @@ public class _JsoupExt {
     }
 
     // -- APPENDERS
+
+    public Element appendA(final Element container) {
+        return container.appendElement("a");
+    }
+    public Element appendA(final Element container, final String cssClass) {
+        return container.appendElement("a")
+            .attr("class", cssClass);
+    }
+    public Element appendA(final Element container, Href href) {
+        return container.appendElement("a")
+                .attr("href", href.plain());
+    }
+    public Element appendA(final Element container, final String cssClass, Href href) {
+        return container.appendElement("a")
+            .attr("class", cssClass)
+            .attr("href", href.plain());
+    }
 
     public Element appendDiv(final Element container) {
         return container.appendElement("div");
