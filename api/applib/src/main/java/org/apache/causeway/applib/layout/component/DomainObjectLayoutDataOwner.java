@@ -18,10 +18,13 @@
  */
 package org.apache.causeway.applib.layout.component;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+
 /**
  * @since 1.x {@index}
  */
-public interface DomainObjectLayoutDataOwner extends Owner {
+public sealed interface DomainObjectLayoutDataOwner extends Owner
+permits BSCol {
 
     DomainObjectLayoutData getDomainObject();
     void setDomainObject(DomainObjectLayoutData domainObjectLayoutData);

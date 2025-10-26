@@ -85,30 +85,30 @@ public class BSUtil {
 
     /** removes the tab from its owner and returns the owner */
     public Optional<BSTabOwner> remove(BSTab tab) {
-        var ownerOpt = Optional.ofNullable(tab.getOwner());
+        var ownerOpt = Optional.ofNullable(tab.owner());
         ownerOpt.ifPresent(owner->owner.getTabs().remove(tab));
-        tab.setOwner(null);
+        tab.owner(null);
         return ownerOpt;
     }
     /** removes the col from its owner and returns the owner */
     public Optional<BSRowContentOwner> remove(BSCol col) {
-        var ownerOpt = Optional.ofNullable(col.getOwner());
+        var ownerOpt = Optional.ofNullable(col.owner());
         ownerOpt.ifPresent(owner->owner.getRowContents().remove(col));
-        col.setOwner(null);
+        col.owner(null);
         return ownerOpt;
     }
     /** removes the tabGroup from its owner and returns the owner */
     public Optional<BSTabGroupOwner> remove(BSTabGroup tabGroup) {
-        var ownerOpt = Optional.ofNullable(tabGroup.getOwner());
+        var ownerOpt = Optional.ofNullable(tabGroup.owner());
         ownerOpt.ifPresent(owner->owner.getTabGroups().remove(tabGroup));
-        tabGroup.setOwner(null);
+        tabGroup.owner(null);
         return ownerOpt;
     }
     /** removes the row from its owner and returns the owner */
     public Optional<BSRowOwner> remove(BSRow row) {
-        var ownerOpt = Optional.ofNullable(row.getOwner());
+        var ownerOpt = Optional.ofNullable(row.owner());
         ownerOpt.ifPresent(owner->owner.getRows().remove(row));
-        row.setOwner(null);
+        row.owner(null);
         return ownerOpt;
     }
 

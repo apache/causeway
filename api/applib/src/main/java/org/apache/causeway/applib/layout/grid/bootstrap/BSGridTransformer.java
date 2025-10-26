@@ -44,6 +44,7 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
         public BSGrid apply(final BSGrid bsGrid) {
             var emptyTabs = new ArrayList<BSTab>();
 
+            // first phase: collect all empty tabs for removal
             bsGrid.visit(new BSElement.Visitor() {
 
                 final Stack<Flag> stack = new Stack<Flag>();
@@ -67,8 +68,7 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                 @Override public void postVisit(final BSTab bsTab) {
                     var flag = stack.pop();
                     if(!flag.keep) {
-                        // collecting into list, so we don't risk a ConcurrentModificationException,
-                        // when racing with the underlying iterator
+                        // collecting empty tabs
                         emptyTabs.add(bsTab);
                     }
                 }
@@ -77,6 +77,7 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                 }
             });
 
+            // second phase: removal of tabs not to keep
             emptyTabs.forEach(tab->
                 BSUtil.remove(tab)
                     .map(BSTabGroup.class::cast)
@@ -159,12 +160,12 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                     // opt-out semantics: absence of the attribute results in participation
                     if(!bsTabGroup.isCollapseIfOne(true)) return;
 
-                    var parent = (BSCol) bsTabGroup.getOwner();
-                    parent.getTabGroups().remove(bsTabGroup);
+                    var col = (BSCol) bsTabGroup.owner();
+                    col.getTabGroups().remove(bsTabGroup);
                     // relocate rows from tab to owning col
                     bsTabGroup.getTabs().get(0).getRows()
                         .forEach(row->{
-                            parent.getRows().add(row);
+                            col.getRows().add(row);
                         });
                 }
             });

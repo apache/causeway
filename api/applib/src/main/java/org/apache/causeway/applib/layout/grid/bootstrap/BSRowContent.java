@@ -23,6 +23,7 @@ import jakarta.xml.bind.annotation.XmlTransient;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Common superclass for any content of a row.
@@ -49,7 +50,7 @@ permits BSCol, BSClearFix {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private BSRowContentOwner owner;
 
 }

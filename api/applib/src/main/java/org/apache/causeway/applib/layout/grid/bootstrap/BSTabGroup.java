@@ -28,6 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Represents a tab group containing one or more {@link BSTab tab}s.
@@ -72,7 +73,7 @@ public final class BSTabGroup extends BSElementAbstract implements BSTabOwner {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private BSTabGroupOwner owner;
 
     /**

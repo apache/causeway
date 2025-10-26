@@ -22,5 +22,5 @@ package org.apache.causeway.applib.layout.component;
  * @since 1.x {@index}
  */
 public interface Owned<T extends Owner> {
-    T getOwner();
+    T owner();
 }

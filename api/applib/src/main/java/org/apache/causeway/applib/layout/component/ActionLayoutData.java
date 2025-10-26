@@ -34,6 +34,7 @@ import org.apache.causeway.applib.layout.links.Link;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Describes the layout of a single action, broadly corresponding to
@@ -99,7 +100,7 @@ HasDescribedAs, HasHidden, HasNamed {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private ActionLayoutDataOwner owner;
 
     /**

@@ -38,6 +38,7 @@ import org.apache.causeway.applib.layout.links.Link;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Describes the layout of a single property, broadly corresponds to the {@link org.apache.causeway.applib.annotation.PropertyLayout} annotation.
@@ -49,7 +50,7 @@ import lombok.Setter;
     name = "property",
     propOrder = {"named", "describedAs", "actions", "metadataError", "link"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class PropertyLayoutData
+public final class PropertyLayoutData
 implements ActionLayoutDataOwner, Serializable, Owned<FieldSet>,
 HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
     private static final long serialVersionUID = 1L;
@@ -115,7 +116,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private FieldSet owner;
 
     /**

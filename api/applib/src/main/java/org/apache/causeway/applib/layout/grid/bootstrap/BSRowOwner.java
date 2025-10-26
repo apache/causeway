@@ -25,7 +25,8 @@ import org.apache.causeway.applib.layout.component.Owner;
 /**
  * @since 1.x {@index}
  */
-public interface BSRowOwner extends Owner {
+public sealed interface BSRowOwner extends Owner
+permits BSCol, BSGrid, BSTab {
 
     List<BSRow> getRows();
 }

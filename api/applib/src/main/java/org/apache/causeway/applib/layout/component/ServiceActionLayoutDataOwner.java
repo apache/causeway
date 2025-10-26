@@ -20,9 +20,12 @@ package org.apache.causeway.applib.layout.component;
 
 import java.util.List;
 
+import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuSection;
+
 /**
  * @since 1.x {@index}
  */
-public interface ServiceActionLayoutDataOwner extends Owner {
+public sealed interface ServiceActionLayoutDataOwner extends Owner
+permits BSMenuSection {
     List<ServiceActionLayoutData> getServiceActions();
 }

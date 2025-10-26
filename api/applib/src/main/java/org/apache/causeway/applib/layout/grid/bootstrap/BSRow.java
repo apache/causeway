@@ -31,6 +31,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Contains a row of content, either on the top-level {@link BSGrid page} or at any other lower-level element that can
@@ -72,7 +73,7 @@ public final class BSRow extends BSElementAbstract implements HasElementId, BSRo
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private BSRowOwner owner;
 
     @Override public String toString() {

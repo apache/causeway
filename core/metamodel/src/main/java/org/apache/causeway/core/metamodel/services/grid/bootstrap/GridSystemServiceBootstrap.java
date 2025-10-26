@@ -423,7 +423,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                     propertyLayoutDataList.forEach(propertyLayoutData->{
                         final ActionLayoutDataOwner owner = position == ActionLayout.Position.PANEL
                                     || position == ActionLayout.Position.PANEL_DROPDOWN
-                            ? propertyLayoutData.getOwner()
+                            ? propertyLayoutData.owner()
                             : propertyLayoutData;
                         var actionLayoutData = new ActionLayoutData(actionId);
                         actionLayoutData.setPosition(position);
@@ -540,7 +540,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             }
             var propertyLayoutData = layoutFactory.apply(propertyId);
             fieldSet.getProperties().add(propertyLayoutData);
-            propertyLayoutData.setOwner(fieldSet);
+            propertyLayoutData.owner(fieldSet);
             onNewLayoutData.accept(propertyId, propertyLayoutData);
         }
     }
@@ -576,7 +576,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                 var newTab = new BSTab();
                 newTab.setName(featureCanonicalFriendlyName);
                 tabGroup.getTabs().add(newTab);
-                newTab.setOwner(tabGroup);
+                newTab.owner(tabGroup);
                 return newTab;
             });
 
@@ -623,7 +623,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final ActionLayoutDataOwner owner,
             final ActionLayoutData actionLayoutData) {
         owner.getActions().add(actionLayoutData);
-        actionLayoutData.setOwner(owner);
+        actionLayoutData.owner(owner);
     }
 
 }

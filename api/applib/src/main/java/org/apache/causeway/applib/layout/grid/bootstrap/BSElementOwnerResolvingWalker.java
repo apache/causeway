@@ -36,14 +36,14 @@ public record BSElementOwnerResolvingWalker(BSRowOwner root) {
 
     private void traverseRows(final BSRowOwner rowOwner) {
         for (BSRow bsRow : rowOwner.getRows()) {
-            bsRow.setOwner(rowOwner);
+            bsRow.owner(rowOwner);
             traverseCols(bsRow);
         }
     }
 
     private void traverseCols(final BSRow bsRow) {
         for (BSRowContent rowContent : bsRow.getRowContents()) {
-            rowContent.setOwner(bsRow);
+            rowContent.owner(bsRow);
             if(rowContent instanceof BSCol bsCol) {
                 traverseDomainObject(bsCol);
                 traverseTabGroups(bsCol);
@@ -58,19 +58,19 @@ public record BSElementOwnerResolvingWalker(BSRowOwner root) {
     private void traverseDomainObject(final BSCol bsCol) {
         var domainObject = bsCol.getDomainObject();
         if(domainObject == null) return;
-        domainObject.setOwner(bsCol);
+        domainObject.owner(bsCol);
     }
 
     private void traverseTabGroups(final BSTabGroupOwner bsTabGroupOwner) {
         for (BSTabGroup bsTabGroup : bsTabGroupOwner.getTabGroups()) {
-            bsTabGroup.setOwner(bsTabGroupOwner);
+            bsTabGroup.owner(bsTabGroupOwner);
             traverseTabs(bsTabGroup);
         }
     }
 
     private void traverseTabs(final BSTabOwner bsTabOwner) {
         for (BSTab tab : bsTabOwner.getTabs()) {
-            tab.setOwner(bsTabOwner);
+            tab.owner(bsTabOwner);
             traverseRows(tab);
         }
     }
@@ -78,18 +78,18 @@ public record BSElementOwnerResolvingWalker(BSRowOwner root) {
     private void traverseActions(final ActionLayoutDataOwner actionLayoutDataOwner) {
         if(actionLayoutDataOwner.getActions() == null) return;
         for (final ActionLayoutData actionLayoutData : actionLayoutDataOwner.getActions()) {
-            actionLayoutData.setOwner(actionLayoutDataOwner);
+            actionLayoutData.owner(actionLayoutDataOwner);
         }
     }
 
     private void traverseFieldSets(final FieldSetOwner fieldSetOwner) {
         final List<FieldSet> fieldSets = fieldSetOwner.getFieldSets();
         for (FieldSet fieldSet : fieldSets) {
-            fieldSet.setOwner(fieldSetOwner);
+            fieldSet.owner(fieldSetOwner);
             traverseActions(fieldSet);
             final List<PropertyLayoutData> properties = fieldSet.getProperties();
             for (final PropertyLayoutData property : properties) {
-                property.setOwner(fieldSet);
+                property.owner(fieldSet);
                 traverseActions(property);
             }
         }
@@ -99,7 +99,7 @@ public record BSElementOwnerResolvingWalker(BSRowOwner root) {
         final CollectionLayoutDataOwner owner) {
         final List<CollectionLayoutData> collections = owner.getCollections();
         for (CollectionLayoutData collection : collections) {
-            collection.setOwner(owner);
+            collection.owner(owner);
             traverseActions(collection);
         }
     }

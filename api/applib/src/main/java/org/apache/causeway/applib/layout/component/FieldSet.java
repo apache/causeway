@@ -35,6 +35,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of
@@ -48,7 +49,7 @@ import lombok.Setter;
         name = "fieldSet",
         propOrder = {"name", "actions", "properties", "metadataError"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FieldSet
+public final class FieldSet
 implements MemberRegion<FieldSetOwner>, ActionLayoutDataOwner, Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -109,7 +110,7 @@ implements MemberRegion<FieldSetOwner>, ActionLayoutDataOwner, Serializable {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private FieldSetOwner owner;
 
     /**

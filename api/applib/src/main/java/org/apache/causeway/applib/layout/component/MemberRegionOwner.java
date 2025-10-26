@@ -21,6 +21,7 @@ package org.apache.causeway.applib.layout.component;
 /**
  * @since 1.x {@index}
  */
-public interface MemberRegionOwner extends Owner {
+public sealed interface MemberRegionOwner extends Owner
+permits CollectionLayoutDataOwner, FieldSetOwner {
 
 }

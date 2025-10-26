@@ -41,7 +41,7 @@ import lombok.Setter;
  */
 @XmlType(name = "section", propOrder = {"named", "serviceActions"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class BSMenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
+public final class BSMenuSection implements MenuSection, Serializable, ServiceActionLayoutDataOwner {
     private static final long serialVersionUID = 1L;
 
     public BSMenuSection() {}

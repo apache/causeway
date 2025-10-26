@@ -34,6 +34,7 @@ import org.apache.causeway.applib.layout.links.Link;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.causeway.applib.annotation.DomainObjectLayout}.
@@ -45,7 +46,7 @@ import lombok.Setter;
     "named", "describedAs", "cssClass", "cssClassFa", "cssClassFaPosition",
     "paged", "tableDecorator", "metadataError", "link"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectLayoutDataOwner>,
+public final class DomainObjectLayoutData implements Serializable, Owned<DomainObjectLayoutDataOwner>,
 HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
     private static final long serialVersionUID = 1L;
 
@@ -95,7 +96,7 @@ HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private DomainObjectLayoutDataOwner owner;
 
     /**

@@ -180,11 +180,9 @@ implements GridSystemService<G> {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
 
-                var actionLayoutDataOwner = actionLayoutData.getOwner();
+                var actionLayoutDataOwner = actionLayoutData.owner();
                 var objectAction = objectActionById.get(actionLayoutData.getId());
-                if(objectAction == null) {
-                    return;
-                }
+                if(objectAction == null) return;
 
                 {
                     GroupIdAndName groupIdAndName = null;
@@ -311,7 +309,7 @@ implements GridSystemService<G> {
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
-                final FieldSet fieldSet = propertyLayoutData.getOwner();
+                final FieldSet fieldSet = propertyLayoutData.owner();
 
                 updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence));
 
@@ -381,22 +379,22 @@ implements GridSystemService<G> {
         grid.visit(new Grid.Visitor() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                actionLayoutData.getOwner().getActions().remove(actionLayoutData);
+                actionLayoutData.owner().getActions().remove(actionLayoutData);
             }
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                collectionLayoutData.getOwner().getCollections().remove(collectionLayoutData);
+                collectionLayoutData.owner().getCollections().remove(collectionLayoutData);
             }
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                propertyLayoutData.getOwner().getProperties().remove(propertyLayoutData);
+                propertyLayoutData.owner().getProperties().remove(propertyLayoutData);
             }
 
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                final DomainObjectLayoutDataOwner owner = domainObjectLayoutData.getOwner();
+                final DomainObjectLayoutDataOwner owner = domainObjectLayoutData.owner();
                 owner.setDomainObject(new DomainObjectLayoutData());
             }
         });

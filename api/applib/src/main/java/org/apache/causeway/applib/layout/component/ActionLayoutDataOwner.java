@@ -20,9 +20,12 @@ package org.apache.causeway.applib.layout.component;
 
 import java.util.List;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+
 /**
  * @since 1.x {@index}
  */
-public interface ActionLayoutDataOwner extends Owner {
+public sealed interface ActionLayoutDataOwner extends Owner
+permits BSCol, CollectionLayoutData, FieldSet, PropertyLayoutData {
     List<ActionLayoutData> getActions();
 }

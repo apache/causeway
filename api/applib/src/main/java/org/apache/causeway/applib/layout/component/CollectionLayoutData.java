@@ -36,6 +36,7 @@ import org.apache.causeway.applib.layout.links.Link;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 /**
  * Describes the layout of a single collection, broadly corresponds to the
@@ -49,7 +50,7 @@ import lombok.Setter;
         "named", "describedAs", "cssClass", "defaultView", "hidden", "paged",
         "sortedBy", "tableDecorator", "actions", "metadataError", "link"})
 @XmlAccessorType(XmlAccessType.FIELD)
-public class CollectionLayoutData
+public final class CollectionLayoutData
 implements MemberRegion<CollectionLayoutDataOwner>,
 ActionLayoutDataOwner,
 Serializable,
@@ -113,7 +114,7 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed {
      * <p>Set programmatically by framework after reading in from XML.
      */
     @XmlTransient
-    @Getter @Setter
+    @Getter @Setter @Accessors(fluent=true)
     private CollectionLayoutDataOwner owner;
 
     /**
