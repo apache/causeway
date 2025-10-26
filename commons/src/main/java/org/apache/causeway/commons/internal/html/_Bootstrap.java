@@ -43,7 +43,7 @@ import lombok.experimental.UtilityClass;
  * @since 4.0
  */
 @UtilityClass
-@ExtensionMethod({_JsoupExt.class, _Bootstrap.Extensions.class})
+@ExtensionMethod({_JsoupExt.class})
 public class _Bootstrap {
 
     public record BootstrapSettings(
@@ -156,7 +156,7 @@ public class _Bootstrap {
             (hrefOpt!=null
                     ? hrefOpt.filter(StringUtils::hasText)
                     : Optional.<String>empty())
-                .ifPresent(href->head().appendCssLink(href));
+                .ifPresent(href->Extensions.appendCssLink(head(), href));
             return this;
         }
         public Page addScriptLink(final @Nullable String href) {
@@ -486,14 +486,14 @@ public class _Bootstrap {
         public Modal appendModal(final Element container, final String title) {
             var modal = Modal.create(container);
             modal.header().appendElement("h3").addClass("modal-title").appendText(title);
-            modal.header().appendButton()
+            appendButton(modal.header())
                 .attr("data-bs-dismiss", "modal")
                 .attr("aria-label", "Close")
                 .addClass("btn-close");
-            modal.footer().appendButton(ButtonVariant.SECONDARY)
+            appendButton(modal.footer(), ButtonVariant.SECONDARY)
                 .attr("data-bs-dismiss", "modal")
                 .appendText("Close");
-            modal.footer().appendButton(ButtonVariant.PRIMARY)
+            appendButton(modal.footer(), ButtonVariant.PRIMARY)
                 .appendText("Save changes");
             return modal;
         }
