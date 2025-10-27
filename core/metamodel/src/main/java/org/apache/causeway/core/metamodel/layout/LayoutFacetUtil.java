@@ -77,7 +77,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var bookmarkPolicyFacet = facetHolder.getFacet(BookmarkPolicyFacet.class);
-        if(isDoOp(bookmarkPolicyFacet)) {
+        if(isNonFallback(bookmarkPolicyFacet)) {
             final BookmarkPolicy bookmarking = bookmarkPolicyFacet.value();
             if(bookmarking != null) {
                 hasBookmarking.setBookmarking(bookmarking);
@@ -90,7 +90,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var cssClassFacet = facetHolder.getFacet(CssClassFacet.class);
-        if(isDoOp(cssClassFacet)) {
+        if(isNonFallback(cssClassFacet)) {
             try {
                 // try...finally because CSS class may vary by object, and we pass in only null
                 final String cssClass = cssClassFacet.cssClass(null);
@@ -126,7 +126,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
-        if(isDoOp(defaultViewFacet)) {
+        if(isNonFallback(defaultViewFacet)) {
             final String defaultView = defaultViewFacet.value();
             if(_Strings.isNotEmpty(defaultView)) {
                 collectionLayoutData.setDefaultView(defaultView);
@@ -159,7 +159,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder).orElse(null);
-        if(isDoOp(pagedFacet)) {
+        if(isNonFallback(pagedFacet)) {
             final int value = pagedFacet.value();
             if(value > 0) {
                 domainObjectLayoutData.setPaged(value);
@@ -172,7 +172,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder).orElse(null);
-        if(isDoOp(tableDecoratorFacet)) {
+        if(isNonFallback(tableDecoratorFacet)) {
             final Class<? extends TableDecorator> value = tableDecoratorFacet.value();
             if(value != TableDecorator.Default.class) {
                 domainObjectLayoutData.setTableDecorator(value);
@@ -219,7 +219,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
-        if (isDoOp(hiddenFacet)) {
+        if (isNonFallback(hiddenFacet)) {
             final Where where = hiddenFacet.where();
             if(where != null) {
                 hasHidden.setHidden(where);
@@ -232,7 +232,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var labelAtFacet = facetHolder.getFacet(LabelAtFacet.class);
-        if(isDoOp(labelAtFacet)) {
+        if(isNonFallback(labelAtFacet)) {
             final LabelPosition labelPosition = labelAtFacet.label();
             if(labelPosition != null) {
                 propertyLayoutData.setLabelPosition(labelPosition);
@@ -245,7 +245,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var multiLineFacet = facetHolder.getFacet(MultiLineFacet.class);
-        if(isDoOp(multiLineFacet)) {
+        if(isNonFallback(multiLineFacet)) {
             final int numberOfLines = multiLineFacet.numberOfLines();
             if(numberOfLines > 0) {
                 propertyLayoutData.setMultiLine(numberOfLines);
@@ -258,7 +258,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder, final ObjectSpecification objectSpec) {
 
         var pagedFacet = FacetUtil.lookupFacetIn(PagedFacet.class, facetHolder, objectSpec).orElse(null);
-        if(isDoOp(pagedFacet)) {
+        if(isNonFallback(pagedFacet)) {
             final int value = pagedFacet.value();
             if(value > 0) {
                 collectionLayoutData.setPaged(value);
@@ -271,7 +271,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder, final ObjectSpecification objectSpec) {
 
         var tableDecoratorFacet = FacetUtil.lookupFacetIn(TableDecoratorFacet.class, facetHolder, objectSpec).orElse(null);
-        if(isDoOp(tableDecoratorFacet)) {
+        if(isNonFallback(tableDecoratorFacet)) {
             final Class<? extends TableDecorator> value = tableDecoratorFacet.value();
             if(value != TableDecorator.Default.class) {
                 collectionLayoutData.setTableDecorator(value);
@@ -284,7 +284,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var actionPositionFacet = facetHolder.getFacet(ActionPositionFacet.class);
-        if(isDoOp(actionPositionFacet)) {
+        if(isNonFallback(actionPositionFacet)) {
             final ActionLayout.Position position = actionPositionFacet.position();
             if(position != null) {
                 actionLayoutData.setPosition(position);
@@ -306,7 +306,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var sortedByFacet = facetHolder.getFacet(SortedByFacet.class);
-        if(isDoOp(sortedByFacet)) {
+        if(isNonFallback(sortedByFacet)) {
             final Class<? extends Comparator<?>> cls = sortedByFacet.value();
             if(cls != null
                     && cls.getCanonicalName()!=null) {
@@ -320,7 +320,7 @@ public class LayoutFacetUtil {
             final FacetHolder facetHolder) {
 
         var typicalLengthFacet = facetHolder.getFacet(TypicalLengthFacet.class);
-        if(isDoOp(typicalLengthFacet)) {
+        if(isNonFallback(typicalLengthFacet)) {
             final int typicalLength = typicalLengthFacet.value();
             if(typicalLength > 0) {
                 propertyLayoutData.setTypicalLength(typicalLength);
@@ -427,7 +427,7 @@ public class LayoutFacetUtil {
 
     // -- HELPER
 
-    private static boolean isDoOp(final Facet facet) {
+    private static boolean isNonFallback(final Facet facet) {
         return facet != null
                 && !facet.getPrecedence().isFallback();
     }
