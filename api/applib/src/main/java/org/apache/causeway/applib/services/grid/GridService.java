@@ -22,7 +22,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -61,7 +60,7 @@ public interface GridService {
     boolean existsFor(Class<?> domainClass);
 
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class,
+     * Returns a new instance of a {@link BSGrid} for the specified domain class,
      * for example as loaded from a <code>layout.xml</code> file.
      *
      * <p>If non exists, returns <code>null</code>.  (The caller can then
@@ -113,7 +112,7 @@ public interface GridService {
     BSGrid normalize(BSGrid grid);
 
     /**
-     * Modifies the provided {@link Grid} with additional metadata, broadly speaking corresponding to the
+     * Modifies the provided {@link BSGrid} with additional metadata, broadly speaking corresponding to the
      * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
      *
      * <p>If a 'complete' grid is persisted as the <code>layout.xml</code>, then there should be no need
@@ -123,7 +122,7 @@ public interface GridService {
     BSGrid complete(BSGrid grid);
 
     /**
-     * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure.
+     * Modifies the provided {@link BSGrid}, removing all metadata except the basic grid structure.
      *
      * <p>If a 'minimal' grid is persisted as the <code>layout.xml</code>, then the expectation is that
      * most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},

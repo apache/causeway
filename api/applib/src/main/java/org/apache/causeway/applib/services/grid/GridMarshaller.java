@@ -23,14 +23,13 @@ import java.util.EnumSet;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.marshal.Marshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 
 /**
- * Supports {@link Grid} marshaling and unmarshaling.
+ * Supports {@link BSGrid} marshaling and unmarshaling.
  *
  * @apiNote almost a copy of {@link Marshaller}
  *

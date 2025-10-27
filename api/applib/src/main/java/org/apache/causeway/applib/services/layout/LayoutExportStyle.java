@@ -19,7 +19,7 @@
 package org.apache.causeway.applib.services.layout;
 
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 
 /**
  * Format option when generating a layout file (while prototyping).
@@ -35,7 +35,7 @@ public enum LayoutExportStyle {
     /**
      * Format that yields a full representation for the <code>layout.xml</code>,
      * such that any layout metadata annotations could be removed from the code,
-     * without affecting the resulting {@link Grid}, when loaded from <code>layout.xml</code>.
+     * without affecting the resulting {@link BSGrid}, when loaded from <code>layout.xml</code>.
      */
     COMPLETE,
 

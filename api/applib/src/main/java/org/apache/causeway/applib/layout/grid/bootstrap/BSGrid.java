@@ -35,7 +35,6 @@ import jakarta.xml.bind.annotation.XmlType;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.mixins.dto.Dto;
 
 import lombok.Getter;
@@ -51,11 +50,26 @@ import lombok.experimental.Accessors;
 @XmlRootElement(name = "grid")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "grid", propOrder = {"rows", "metadataErrors"})
-public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
+public final class BSGrid implements BSElement, Dto, BSRowOwner {
     private static final long serialVersionUID = 1L;
 
     @XmlTransient @Getter @Accessors(fluent=true)  @Setter private Class<?> domainClass;
+
+    /**
+     * Indicates whether or not this grid is a fallback.
+     * {@code True}, if this Grid originates from
+     * {@link org.apache.causeway.applib.services.grid.GridSystemService#defaultGrid(Class)}.
+     * <p>
+     * Governs meta-model facet precedence, that is,
+     * facets from annotations should overrule those from fallback XML grids.
+     */
     @XmlTransient @Getter @Setter private boolean fallback;
+
+    /**
+     * Arbitrary additional 'runtime' data attributed to this grid,
+     * but not part of the DTO specification.
+     * @since 4.0
+     */
     @XmlTransient @Getter @Accessors(fluent=true) private final Map<String, Serializable> attributes = Map.of();
 
     @XmlTransient @Getter @Setter private boolean normalized;
@@ -75,7 +89,6 @@ public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
         new BSWalker(this).walk(visitor);
     }
 
-    @Override
     public Stream<PropertyLayoutData> streamPropertyLayoutData() {
         final var properties = new ArrayList<PropertyLayoutData>();
         visit(new BSElementVisitor() {
@@ -87,7 +100,6 @@ public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
         return properties.stream();
     }
 
-    @Override
     public Stream<CollectionLayoutData> streamCollectionLayoutData() {
         final var collections = new ArrayList<CollectionLayoutData>();
         visit(new BSElementVisitor() {
@@ -99,7 +111,6 @@ public final class BSGrid implements Grid, BSElement, Dto, BSRowOwner {
         return collections.stream();
     }
 
-    @Override
     public Stream<ActionLayoutData> streamActionLayoutData() {
         final var actions = new ArrayList<ActionLayoutData>();
         visit(new BSElementVisitor() {

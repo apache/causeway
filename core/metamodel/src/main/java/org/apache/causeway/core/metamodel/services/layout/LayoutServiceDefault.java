@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
@@ -129,10 +129,9 @@ public class LayoutServiceDefault implements LayoutService {
             gridToFormatted(gridService.toGridForExport(domainClass, style), format));
     }
 
-    private String gridToFormatted(final @Nullable Grid grid, final CommonMimeType format) {
-        if(grid==null) {
-            return null;
-        }
+    private String gridToFormatted(final @Nullable BSGrid grid, final CommonMimeType format) {
+        if(grid==null) return null;
+
         return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
     }
 

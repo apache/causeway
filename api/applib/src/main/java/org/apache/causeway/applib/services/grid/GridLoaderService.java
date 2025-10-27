@@ -24,7 +24,6 @@ import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -60,7 +59,7 @@ public interface GridLoaderService {
     boolean existsFor(Class<?> domainClass, EnumSet<CommonMimeType> supportedFormats);
 
     /**
-     * Optionally returns a new instance of a {@link Grid},
+     * Optionally returns a new instance of a {@link BSGrid},
      * based on whether the underlying resource could be found, loaded and parsed.
      *
      * <p>The layout alternative will typically be specified through a
@@ -76,7 +75,7 @@ public interface GridLoaderService {
             @NonNull GridMarshaller marshaller);
 
     /**
-     * Optionally returns a new instance of a {@link Grid},
+     * Optionally returns a new instance of a {@link BSGrid},
      * based on whether the underlying resource could be found, loaded and parsed.
      *
      * @throws UnsupportedOperationException - when format is not supported

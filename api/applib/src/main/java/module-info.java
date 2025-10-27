@@ -37,7 +37,6 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.jaxb;
     exports org.apache.causeway.applib.layout.component;
     exports org.apache.causeway.applib.layout.grid.bootstrap;
-    exports org.apache.causeway.applib.layout.grid;
     exports org.apache.causeway.applib.layout.links;
     exports org.apache.causeway.applib.layout.menubars.bootstrap;
     exports org.apache.causeway.applib.layout.menubars;
@@ -151,7 +150,6 @@ module org.apache.causeway.applib {
     opens org.apache.causeway.applib.annotation;
     opens org.apache.causeway.applib.layout.component;
     opens org.apache.causeway.applib.layout.grid.bootstrap;
-    opens org.apache.causeway.applib.layout.grid;
     opens org.apache.causeway.applib.layout.links;
     opens org.apache.causeway.applib.layout.menubars.bootstrap;
     opens org.apache.causeway.applib.layout.menubars;
