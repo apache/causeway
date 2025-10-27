@@ -31,7 +31,8 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -85,8 +86,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject}, access = AccessLevel.PROTECTED)
 @Slf4j
-public abstract class GridSystemServiceAbstract<G extends org.apache.causeway.applib.layout.grid.Grid>
-implements GridSystemService<G> {
+public abstract class GridSystemServiceAbstract
+implements GridSystemService {
 
     protected final Provider<SpecificationLoader> specLoaderProvider;
     protected final TranslationService translationService;
@@ -94,7 +95,7 @@ implements GridSystemService<G> {
     protected final CausewaySystemEnvironment causewaySystemEnvironment;
 
     @Override
-    public void normalize(final G grid, final Class<?> domainClass) {
+    public void normalize(final BSGrid grid, final Class<?> domainClass) {
 
         // ignore any other grid implementations
         if(!gridImplementation().isAssignableFrom(grid.getClass())) return;
@@ -113,7 +114,7 @@ implements GridSystemService<G> {
         }
     }
 
-    protected abstract String toXml(Grid grid);
+    protected abstract String toXml(BSGrid grid);
 
     /**
      * Mandatory hook method for subclasses, where they must ensure that all object members (properties, collections
@@ -121,7 +122,7 @@ implements GridSystemService<G> {
      * (eg facets from annotations) or just by applying default rules.
      */
     protected abstract boolean validateAndNormalize(
-            final Grid grid,
+            final BSGrid grid,
             final Class<?> domainClass);
 
     /**
@@ -131,7 +132,7 @@ implements GridSystemService<G> {
      * because the layout might be reloaded from XML if reloading is supported.
      */
     private void overwriteFacets(
-            final G fcGrid,
+            final BSGrid fcGrid,
             final Class<?> domainClass) {
 
         var objectSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
@@ -146,7 +147,7 @@ implements GridSystemService<G> {
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
-        fcGrid.visit(new Grid.Visitor() {
+        fcGrid.visit(new BSElementVisitor() {
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -366,17 +367,17 @@ implements GridSystemService<G> {
 
     @Programmatic
     @Override
-    public void complete(final G grid, final Class<?> domainClass) {
+    public void complete(final BSGrid grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
         var objectSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
-        grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
+        grid.visit(new MetamodelToGridOverridingVisitor(objectSpec));
     }
 
     @Programmatic
     @Override
-    public void minimal(final G grid, final Class<?> domainClass) {
+    public void minimal(final BSGrid grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        grid.visit(new Grid.Visitor() {
+        grid.visit(new BSElementVisitor() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 actionLayoutData.owner().getActions().remove(actionLayoutData);

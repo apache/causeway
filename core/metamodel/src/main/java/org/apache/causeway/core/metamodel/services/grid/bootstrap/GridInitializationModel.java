@@ -24,12 +24,13 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSElement;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
@@ -38,6 +39,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -67,7 +69,7 @@ final class GridInitializationModel {
 
         var gridModel = new GridInitializationModel();
 
-        bsGrid.visit(new BSElement.Visitor() {
+        bsGrid.visit(new BSElementVisitor() {
             @Override
             public void visit(final BSRow bsRow) {
                 final String id = bsRow.getId();
@@ -116,7 +118,7 @@ final class GridInitializationModel {
             return Optional.empty();
         }
 
-        bsGrid.visit(new BSElement.Visitor(){
+        bsGrid.visit(new BSElementVisitor(){
 
             @Override
             public void visit(final BSCol bsCol) {

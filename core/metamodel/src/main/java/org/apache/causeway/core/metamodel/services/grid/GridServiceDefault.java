@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
@@ -46,8 +46,8 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Qualifier("Default")
 public record GridServiceDefault(
     GridLoaderService gridLoaderService,
-    GridMarshaller<? extends Grid> marshaller,
-    List<GridSystemService<? extends Grid>> gridSystemServices) implements GridService {
+    GridMarshaller marshaller,
+    List<GridSystemService> gridSystemServices) implements GridService {
 
     @Override
     public boolean supportsReloading() {
@@ -65,19 +65,19 @@ public record GridServiceDefault(
     }
 
     @Override
-    public Grid load(final Class<?> domainClass) {
+    public BSGrid load(final Class<?> domainClass) {
         return gridLoaderService.load(domainClass, marshaller).orElse(null);
     }
 
     @Override
-    public Grid load(final Class<?> domainClass, final String layout) {
+    public BSGrid load(final Class<?> domainClass, final String layout) {
         return gridLoaderService.load(domainClass, layout, marshaller).orElse(null);
     }
 
     // --
 
     @Override
-    public Grid defaultGridFor(final Class<?> domainClass) {
+    public BSGrid defaultGridFor(final Class<?> domainClass) {
         for (var gridSystemService : gridSystemServices()) {
             var grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) return grid;
@@ -87,7 +87,7 @@ public record GridServiceDefault(
     }
 
     @Override
-    public Grid normalize(final Grid grid) {
+    public BSGrid normalize(final BSGrid grid) {
         if(grid.isNormalized()) return grid;
 
         var domainClass = grid.domainClass();
@@ -98,7 +98,7 @@ public record GridServiceDefault(
     }
 
     @Override
-    public Grid complete(final Grid grid) {
+    public BSGrid complete(final BSGrid grid) {
         var domainClass = grid.domainClass();
         for (var gridSystemService : gridSystemServices()) {
             gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
@@ -107,7 +107,7 @@ public record GridServiceDefault(
     }
 
     @Override
-    public Grid minimal(final Grid grid) {
+    public BSGrid minimal(final BSGrid grid) {
         var domainClass = grid.domainClass();
         for (var gridSystemService : gridSystemServices()) {
             gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);

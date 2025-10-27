@@ -58,7 +58,7 @@ public record GridMarshallerServiceBootstrap(
         JaxbService jaxbService,
         XsiSchemaLocationProviderForGrid schemaLocationProvider,
         EnumSet<CommonMimeType> supportedFormats
-    ) implements GridMarshaller<BSGrid> {
+    ) implements GridMarshaller {
 
     @Inject
     public GridMarshallerServiceBootstrap(final JaxbService jaxbService, final XsiSchemaLocationProviderForGrid schemaLocationProvider) {
@@ -84,7 +84,7 @@ public record GridMarshallerServiceBootstrap(
         case XML:{
             return jaxbService.toXml(bsGrid,
                     Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
-                        schemaLocationProvider.xsiSchemaLocation(BSGrid.class)));
+                        schemaLocationProvider.xsiSchemaLocation()));
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.applib.layout.grid;
 
+import java.io.Serializable;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
-import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.services.layout.LayoutService;
 
@@ -35,10 +35,18 @@ import org.apache.causeway.applib.services.layout.LayoutService;
  *
  * @since 1.x revised for 4.0 {@index}
  */
+@Deprecated
 @Programmatic
 public interface Grid {
 
     Class<?> domainClass();
+
+    /**
+     * Arbitrary additional 'runtime' data attributed to this grid,
+     * but not part of the DTO specification.
+     * @since 4.0
+     */
+    Map<String, Serializable> attributes();
 
     /**
      * Indicates whether or not this grid is a fallback.
@@ -55,33 +63,4 @@ public interface Grid {
     Stream<CollectionLayoutData> streamCollectionLayoutData();
     Stream<ActionLayoutData> streamActionLayoutData();
 
-    interface Visitor {
-        default void visit(final DomainObjectLayoutData domainObjectLayoutData) {}
-        default void visit(final ActionLayoutData actionLayoutData) {}
-        default void visit(final PropertyLayoutData propertyLayoutData) {}
-        default void visit(final CollectionLayoutData collectionLayoutData) {}
-        default void visit(final FieldSet fieldSet) {}
-    }
-
-    void visit(final Grid.Visitor visitor);
-
-    // -- EMPTY GRID
-
-    final static Grid EMPTY = new EmptyGrid(Object.class);
-    static Grid empty() { return EMPTY; }
-
-    public record EmptyGrid(Class<?> domainClass) implements Grid {
-        @Override public boolean isFallback() { return false; }
-        @Override public boolean isNormalized() { return true; }
-        @Override public Stream<PropertyLayoutData> streamPropertyLayoutData() {
-            return Stream.empty();
-        }
-        @Override public Stream<CollectionLayoutData> streamCollectionLayoutData() {
-            return Stream.empty();
-        }
-        @Override public Stream<ActionLayoutData> streamActionLayoutData() {
-            return Stream.empty();
-        }
-        @Override public void visit(Visitor visitor) { }
-    };
 }

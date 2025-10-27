@@ -20,7 +20,11 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.io.Serializable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.FieldSet;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 
 /**
  * @since 1.x {@index}
@@ -35,7 +39,7 @@ public interface BSElement extends Serializable {
     String getCssClass();
     void setCssClass(final String cssClass);
 
-    public interface Visitor extends Grid.Visitor {
+    public interface BSElementVisitor {
         default void preVisit(final BSGrid bsGrid) {}
         default void visit(final BSGrid bsGrid) {}
         default void postVisit(final BSGrid bsGrid) {}
@@ -52,6 +56,12 @@ public interface BSElement extends Serializable {
         default void preVisit(final BSTab bsTab) {}
         default void visit(final BSTab bsTab) {}
         default void postVisit(final BSTab bsTab) {}
+
+        default void visit(final DomainObjectLayoutData domainObjectLayoutData) {}
+        default void visit(final ActionLayoutData actionLayoutData) {}
+        default void visit(final PropertyLayoutData propertyLayoutData) {}
+        default void visit(final CollectionLayoutData collectionLayoutData) {}
+        default void visit(final FieldSet fieldSet) {}
     }
 
 }

@@ -46,7 +46,6 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
@@ -100,10 +99,7 @@ import lombok.extern.slf4j.Slf4j;
 @Qualifier("Bootstrap")
 @Slf4j
 public class GridSystemServiceBootstrap
-extends GridSystemServiceAbstract<BSGrid> {
-
-    public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
-    public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
+extends GridSystemServiceAbstract {
 
     /**
      * SPI to customize layout fallback behavior on a per class basis.
@@ -118,7 +114,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
-    private GridMarshaller<BSGrid> marshaller;
+    private GridMarshaller marshaller;
 
     private final CausewayConfiguration config;
     private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
@@ -143,18 +139,8 @@ extends GridSystemServiceAbstract<BSGrid> {
     }
 
     @Override
-    public String tns() {
-        return TNS;
-    }
-
-    @Override
-    public String schemaLocation() {
-        return SCHEMA_LOCATION;
-    }
-
-    @Override
-    protected String toXml(Grid grid) {
-        return marshaller.marshal((BSGrid) grid, CommonMimeType.XML);
+    protected String toXml(final BSGrid grid) {
+        return marshaller.marshal(grid, CommonMimeType.XML);
     }
 
     @Override
@@ -240,10 +226,8 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Override
     protected boolean validateAndNormalize(
-            final Grid grid,
+            final BSGrid bsGrid,
             final Class<?> domainClass) {
-
-        var bsGrid = (BSGrid) grid;
 
         var gridModelIfValid = GridInitializationModel.createFrom(bsGrid);
         if(!gridModelIfValid.isPresent()) return false; // only present if valid
@@ -255,7 +239,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         var oneToManyAssociationById = ObjectMember.mapById(objSpec.streamCollections(MixedIn.INCLUDED));
         var objectActionById = ObjectMember.mapById(objSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
-        var layoutDataFactory = LayoutDataFactory.of(objSpec);
+        var layoutDataFactory = new LayoutDataFactory(objSpec);
 
         // * left  ... those defined in the grid model but not available with the meta-model
         // * right ... those available with the meta-model but missing in the grid-model

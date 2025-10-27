@@ -34,7 +34,6 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.util.ClassUtils;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
@@ -457,45 +456,43 @@ implements MetaModelContext {
     }
 
     @Getter(lazy = true)
-    private final GridMarshaller gridMarshallerService = createGridMarshallerService();
-    //XXX lombok issue: won't compile if inlined
-    private final GridMarshaller<? extends Grid> createGridMarshallerService() {
-        return new GridMarshallerServiceBootstrap(getJaxbService(), new XsiSchemaLocationProviderForGrid(List.of()));
+    private final GridMarshaller gridMarshaller = createGridMarshaller();
+    private final GridMarshaller createGridMarshaller() {
+        return new GridMarshallerServiceBootstrap(getJaxbService(), new XsiSchemaLocationProviderForGrid());
     }
 
     @Getter(lazy = true)
-    private final List<GridSystemService<? extends Grid>> gridSystemServices = List.of(
-        new GridSystemServiceBootstrap(
-            getConfiguration(),
-            ()->getSpecificationLoader(),
-            getTranslationService(),
-            getJaxbService(),
-            getMessageService(),
-            getSystemEnvironment(),
-            List.of())
-            .setMarshaller(getGridMarshallerService()));
+    private final List<GridSystemService> gridSystemServices = createGridSystemService();
+    private final List<GridSystemService> createGridSystemService() {
+        return List.of(
+            new GridSystemServiceBootstrap(
+                getConfiguration(),
+                ()->getSpecificationLoader(),
+                getTranslationService(),
+                getJaxbService(),
+                getMessageService(),
+                getSystemEnvironment(),
+                List.of())
+                .setMarshaller(getGridMarshaller()));
+    }
 
     @Getter(lazy = true)
     private final GridLoaderService gridLoaderService = createGridLoaderService();
-    //XXX lombok issue: won't compile if inlined
     private final GridLoaderService createGridLoaderService() {
         return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
     }
 
     @Getter(lazy = true)
     private final GridService gridService = createGridService();
-    //XXX lombok issue: won't compile if inlined
-    @SuppressWarnings("unchecked")
     private final GridService createGridService() {
         return new GridServiceDefault(
             getGridLoaderService(),
-            getGridMarshallerService(),
+            getGridMarshaller(),
             getGridSystemServices());
     }
 
     @Getter(lazy = true)
     private final LayoutService layoutService = createLayoutService();
-    //XXX lombok issue: won't compile if inlined
     private final LayoutService createLayoutService() {
         return new LayoutServiceDefault(
                 getSpecificationLoader(),

@@ -25,6 +25,7 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.resources._Serializables;
 
@@ -46,7 +47,7 @@ public class BSUtil {
      */
     public boolean hasContent(final BSTab thisBsTab) {
         final AtomicBoolean foundContent = new AtomicBoolean(false);
-        new BSWalker(thisBsTab).walk(new BSElement.Visitor() {
+        new BSWalker(thisBsTab).walk(new BSElementVisitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 foundContent.set(true);
@@ -84,28 +85,28 @@ public class BSUtil {
     // -- REMOVERS
 
     /** removes the tab from its owner and returns the owner */
-    public Optional<BSTabOwner> remove(BSTab tab) {
+    public Optional<BSTabOwner> remove(final BSTab tab) {
         var ownerOpt = Optional.ofNullable(tab.owner());
         ownerOpt.ifPresent(owner->owner.getTabs().remove(tab));
         tab.owner(null);
         return ownerOpt;
     }
     /** removes the col from its owner and returns the owner */
-    public Optional<BSRowContentOwner> remove(BSCol col) {
+    public Optional<BSRowContentOwner> remove(final BSCol col) {
         var ownerOpt = Optional.ofNullable(col.owner());
         ownerOpt.ifPresent(owner->owner.getRowContents().remove(col));
         col.owner(null);
         return ownerOpt;
     }
     /** removes the tabGroup from its owner and returns the owner */
-    public Optional<BSTabGroupOwner> remove(BSTabGroup tabGroup) {
+    public Optional<BSTabGroupOwner> remove(final BSTabGroup tabGroup) {
         var ownerOpt = Optional.ofNullable(tabGroup.owner());
         ownerOpt.ifPresent(owner->owner.getTabGroups().remove(tabGroup));
         tabGroup.owner(null);
         return ownerOpt;
     }
     /** removes the row from its owner and returns the owner */
-    public Optional<BSRowOwner> remove(BSRow row) {
+    public Optional<BSRowOwner> remove(final BSRow row) {
         var ownerOpt = Optional.ofNullable(row.owner());
         ownerOpt.ifPresent(owner->owner.getRows().remove(row));
         row.owner(null);

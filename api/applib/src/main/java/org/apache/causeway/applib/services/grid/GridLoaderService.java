@@ -25,11 +25,12 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 /**
- * Provides the ability to load the XML layout (grid) for a domain class.
+ * Loads the XML layout (grid) for a domain class.
  *
  * @since 1.x - revised for 2.0 {@index}
  */
@@ -38,56 +39,51 @@ public interface GridLoaderService {
     /**
      * Whether dynamic reloading of layouts is enabled.
      *
-     * <p>
-     *     The default implementation enables reloading for prototyping mode,
-     *     disables in production
-     * </p>
+     * <p> The default implementation enables reloading for prototyping mode,
+     * disables in production
      */
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
      *
-     * <p>
-     *     This is called by the {@link Object_rebuildMetamodel} mixin action.
-     * </p>
+     * <p>This is called by the {@link Object_rebuildMetamodel} mixin action.
      */
     void remove(Class<?> domainClass);
 
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      *
-     * <p>
-     *     If none exists, will return null (and the calling {@link GridService}  will use {@link GridSystemService}
-     *     to obtain a default grid for the domain class).
-     * </p>
+     * <p>If none exists, will return null (and the calling {@link GridService}  will use {@link GridSystemService}
+     * to obtain a default grid for the domain class).
      */
     boolean existsFor(Class<?> domainClass, EnumSet<CommonMimeType> supportedFormats);
 
     /**
      * Optionally returns a new instance of a {@link Grid},
      * based on whether the underlying resource could be found, loaded and parsed.
-     * <p>
-     *     The layout alternative will typically be specified through a
-     *     `layout()` method on the domain object, the value of which is used
-     *     for the suffix of the layout file (eg "Customer-layout.archived.xml"
-     *     to use a different layout for customers that have been archived).
-     * </p>
+     *
+     * <p>The layout alternative will typically be specified through a
+     * `layout()` method on the domain object, the value of which is used
+     * for the suffix of the layout file (eg "Customer-layout.archived.xml"
+     * to use a different layout for customers that have been archived).
+     *
      * @throws UnsupportedOperationException - when format is not supported
      */
-    <T extends Grid> Optional<T> load(
+    Optional<BSGrid> load(
             Class<?> domainClass,
             @Nullable String layoutIfAny,
-            @NonNull GridMarshaller<T> marshaller);
+            @NonNull GridMarshaller marshaller);
 
     /**
      * Optionally returns a new instance of a {@link Grid},
      * based on whether the underlying resource could be found, loaded and parsed.
+     *
      * @throws UnsupportedOperationException - when format is not supported
      */
-    default <T extends Grid> Optional<T> load(
+    default Optional<BSGrid> load(
             final Class<?> domainClass,
-            final @NonNull GridMarshaller<T> marshaller) {
+            final @NonNull GridMarshaller marshaller) {
         return load(domainClass, null, marshaller);
     }
 

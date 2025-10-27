@@ -26,7 +26,6 @@ import java.util.function.BiConsumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
@@ -64,12 +63,7 @@ implements GridFacet {
     @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
-    public boolean supports(Class<? extends Grid> gridClass) {
-        return BSGrid.class.equals(gridClass);
-    }
-
-    @Override
-    public Grid getGrid(final @Nullable ManagedObject mo) {
+    public BSGrid getGrid(final @Nullable ManagedObject mo) {
         guardAgainstObjectOfDifferentType(mo);
         return normalized(mo);
     }
@@ -125,7 +119,7 @@ implements GridFacet {
                 gridService.load(domainClass, _Strings.emptyToNull(layoutPrefix)))
                 // loads from default-XML if available
                 .orElseGet(()->gridService.defaultGridFor(domainClass));
-        var bsGrid = (BSGrid) gridService.normalize(grid);
+        var bsGrid = gridService.normalize(grid);
         return bsGrid;
     }
 
@@ -140,17 +134,12 @@ implements GridFacet {
         @Override public Precedence getPrecedence() { return precedence(); }
         @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
-        @Override public void visitAttributes(BiConsumer<String, Object> visitor) {
+        @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
             visitor.accept("precedence", getPrecedence().name());
         }
-        @Override public Grid getGrid(@Nullable ManagedObject mo) {
-            return Grid.empty();
+        @Override public BSGrid getGrid(@Nullable final ManagedObject mo) {
+            return null;
         }
-        @Override
-        public boolean supports(Class<? extends Grid> gridClass) {
-            return false;
-        }
-
     }
 
 }
