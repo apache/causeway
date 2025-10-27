@@ -134,7 +134,7 @@ identified
 
         <prismjs.version>1.29.0</prismjs.version>
 
-        <quartz-scheduler.version>2.5.0</quartz-scheduler.version>
+        <quartz-scheduler.version>2.5.1</quartz-scheduler.version>
         <querydsl.version>5.1.0</querydsl.version>
 
         <select2.version>4.0.13</select2.version>
