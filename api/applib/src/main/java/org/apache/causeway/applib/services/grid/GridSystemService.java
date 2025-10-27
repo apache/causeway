@@ -29,17 +29,9 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
  * of the grid) and in providing a default grid if there is no other metadata
  * available.
  *
- * @since 1.x {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
 public interface GridSystemService {
-
-    /**
-     * The concrete subclass of {@link BSGrid} supported by this implementation.
-     *
-     * <p>There can be multiple implementations of this service, this indicates
-     * the base class used by the implementation.
-     */
-    Class<BSGrid> gridImplementation();
 
     /**
      * A default grid, used when no grid layout can be found for the domain

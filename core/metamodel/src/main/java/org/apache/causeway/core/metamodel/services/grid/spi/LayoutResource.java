@@ -20,11 +20,11 @@ package org.apache.causeway.core.metamodel.services.grid.spi;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
 public record LayoutResource(
         @NonNull String resourceName,
-        NamedWithMimeType.@NonNull CommonMimeType format,
+        @NonNull CommonMimeType format,
         @NonNull String content) {
 
 }

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 import jakarta.xml.bind.Marshaller;
 
-public record XsiSchemaLocationProviderForGrid() {
+record XsiSchemaLocationProviderForGrid() {
 
     static final String COMPONENT_TNS = "https://causeway.apache.org/applib/layout/component";
     static final String COMPONENT_SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/component/component.xsd";

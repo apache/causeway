@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.bootstrap;
+package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -42,7 +42,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
 
 /**
  * Default implementation of {@link GridMarshaller} using DTOs based on
@@ -51,18 +50,18 @@ import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProvide
  * @since 2.0 {@index}
  */
 @Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerServiceBootstrap")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerXml")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public record GridMarshallerServiceBootstrap(
+public record GridMarshallerXml(
         JaxbService jaxbService,
         XsiSchemaLocationProviderForGrid schemaLocationProvider,
         EnumSet<CommonMimeType> supportedFormats
     ) implements GridMarshaller {
 
     @Inject
-    public GridMarshallerServiceBootstrap(final JaxbService jaxbService, final XsiSchemaLocationProviderForGrid schemaLocationProvider) {
-        this(jaxbService, schemaLocationProvider, EnumSet.of(CommonMimeType.XML));
+    public GridMarshallerXml(final JaxbService jaxbService) {
+        this(jaxbService, new XsiSchemaLocationProviderForGrid(), EnumSet.of(CommonMimeType.XML));
         // eagerly create a JAXBContext for this grid type (and cache it)
         JaxbUtils.jaxbContextFor(BSGrid.class, true);
     }
@@ -70,11 +69,6 @@ public record GridMarshallerServiceBootstrap(
     @Override
     public EnumSet<CommonMimeType> supportedFormats() {
         return supportedFormats;
-    }
-
-    @Override
-    public Class<BSGrid> supportedClass() {
-        return BSGrid.class;
     }
 
     @Override

@@ -24,6 +24,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.marshal.Marshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
@@ -37,11 +38,11 @@ import org.apache.causeway.commons.functional.Try;
  */
 public interface GridMarshaller {
 
-    Class<BSGrid> supportedClass();
-
     /**
      * Supported format(s) for {@link #unmarshal(Class, String, CommonMimeType)}
      * and {@link #marshal(BSGrid, CommonMimeType)}.
+     *
+     * @apiNote also used by {@link LayoutService} to lookup different formats
      */
     EnumSet<CommonMimeType> supportedFormats();
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.bootstrap;
+package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.List;
 import java.util.stream.Collectors;

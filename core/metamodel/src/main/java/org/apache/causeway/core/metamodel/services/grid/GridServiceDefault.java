@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.services.grid;
 import java.util.List;
 
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,12 +29,14 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridSystemService;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 /**
  * Default implementation of {@link GridService}.
@@ -45,33 +48,43 @@ import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public record GridServiceDefault(
-    GridLoaderService gridLoaderService,
     GridMarshaller marshaller,
-    List<GridSystemService> gridSystemServices) implements GridService {
+    List<GridSystemService> gridSystemServices,
+    GridCache gridCache) implements GridService {
+
+    @Inject
+    public GridServiceDefault(
+            final CausewaySystemEnvironment causewaySystemEnvironment,
+            final GridMarshaller marshaller,
+            final MessageService messageService,
+            final List<GridSystemService> gridSystemServices,
+            final List<LayoutResourceLoader> layoutResourceLoaders) {
+        this(marshaller, gridSystemServices, new GridCache(messageService, causewaySystemEnvironment.isPrototyping(), layoutResourceLoaders));
+    }
 
     @Override
     public boolean supportsReloading() {
-        return gridLoaderService.supportsReloading();
+        return gridCache.supportsReloading();
     }
 
     @Override
     public void remove(final Class<?> domainClass) {
-        gridLoaderService.remove(domainClass);
+        gridCache.remove(domainClass);
     }
 
     @Override
     public boolean existsFor(final Class<?> domainClass) {
-        return gridLoaderService.existsFor(domainClass, marshaller.supportedFormats());
+        return gridCache.existsFor(domainClass, marshaller.supportedFormats());
     }
 
     @Override
     public BSGrid load(final Class<?> domainClass) {
-        return gridLoaderService.load(domainClass, marshaller).orElse(null);
+        return gridCache.load(domainClass, marshaller).orElse(null);
     }
 
     @Override
     public BSGrid load(final Class<?> domainClass, final String layout) {
-        return gridLoaderService.load(domainClass, layout, marshaller).orElse(null);
+        return gridCache.load(domainClass, layout, marshaller).orElse(null);
     }
 
     // --

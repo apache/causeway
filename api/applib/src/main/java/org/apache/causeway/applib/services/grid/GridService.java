@@ -29,33 +29,26 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 /**
  * Loads the layout (grid) for any domain class.
  *
- * <p> Acts on top of {@link GridLoaderService}, {@link GridMarshaller} and any {@link GridSystemService}(s) registered with Spring.
- * @since 1.x {@index}
+ * <p> Acts on top of {@link GridMarshaller} and any {@link GridSystemService}(s) registered with Spring.
+ *
+ * @since 1.x revised for 4.0 {@index}
  */
 public interface GridService {
 
     /**
      * Whether dynamic reloading of layouts is enabled.
      *
-     * <p> The default implementation just delegates to the configured
-     * {@link GridLoaderService}; the default implementation of <i>that</i>
-     * service enables reloading while prototyping, disables in production.
+     * <p> The default implementation enables reloading while prototyping, disables in production.
      */
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
-     *
-     * <p>The default implementation just delegates to the configured
-     * {@link GridLoaderService}.
      */
     void remove(Class<?> domainClass);
 
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
-     *
-     * <p>The default implementation just delegates to the configured
-     * {@link GridLoaderService}.
      */
     boolean existsFor(Class<?> domainClass);
 
@@ -67,8 +60,6 @@ public interface GridService {
      * use {@link GridService#defaultGridFor(Class)} to obtain a
      * default grid if necessary).
      *
-     * <p>The default implementation just delegates to the configured
-     * {@link GridLoaderService}.
      */
     BSGrid load(final Class<?> domainClass);
 
@@ -79,9 +70,7 @@ public interface GridService {
      * domain object's <code>layout()</code> method, whereby - based on the
      * state of the domain object - it requests a different layout be used.
      *
-     * <p>The default implementation just delegates to the configured
-     * {@link GridLoaderService}; the default implementation of <i>that</i>
-     * service uses the layout name to search for a differently
+     * <p>The default implementation uses the layout name to search for a differently
      * named layout file, <code>[domainClass].layout.[layout].xml</code>.
      */
     BSGrid load(Class<?> domainClass, String layout);
@@ -134,7 +123,7 @@ public interface GridService {
 
     // -- LAYOUT EXPORT
 
-    GridMarshaller marshaller(); //TODO rename
+    GridMarshaller marshaller();
 
     default BSGrid toGridForExport(
             final Class<?> domainClass,

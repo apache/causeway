@@ -35,7 +35,6 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridSystemService;
@@ -90,11 +89,9 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
+import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
@@ -300,7 +297,6 @@ implements MetaModelContext {
                 discoveredServices.stream(),
                 Stream.of(
                     // support for lazy bean providers,
-                    SingletonBeanProvider.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
                     SingletonBeanProvider.forTestingLazy(GridService.class, this::getGridService),
                     SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
                     SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
@@ -458,7 +454,7 @@ implements MetaModelContext {
     @Getter(lazy = true)
     private final GridMarshaller gridMarshaller = createGridMarshaller();
     private final GridMarshaller createGridMarshaller() {
-        return new GridMarshallerServiceBootstrap(getJaxbService(), new XsiSchemaLocationProviderForGrid());
+        return new GridMarshallerXml(getJaxbService());
     }
 
     @Getter(lazy = true)
@@ -477,18 +473,14 @@ implements MetaModelContext {
     }
 
     @Getter(lazy = true)
-    private final GridLoaderService gridLoaderService = createGridLoaderService();
-    private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
-    }
-
-    @Getter(lazy = true)
     private final GridService gridService = createGridService();
     private final GridService createGridService() {
         return new GridServiceDefault(
-            getGridLoaderService(),
+            getSystemEnvironment(),
             getGridMarshaller(),
-            getGridSystemServices());
+            getMessageService(),
+            getGridSystemServices(),
+            List.of(new LayoutResourceLoaderDefault()));
     }
 
     @Getter(lazy = true)

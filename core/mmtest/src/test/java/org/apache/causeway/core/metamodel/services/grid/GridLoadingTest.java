@@ -26,34 +26,49 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 
 class GridLoadingTest
 extends MetaModelTestAbstract {
 
-    private GridLoaderServiceDefault gridLoaderService;
+    private GridCache gridCache;
     private LayoutService layoutService;
+
+    @Override
+    protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
+        CausewaySystemEnvironment.setPrototyping(true);
+        var env = new CausewaySystemEnvironment();
+        CausewaySystemEnvironment.setPrototyping(false);
+        assertTrue(env.isPrototyping());
+        mmcBuilder.systemEnvironment(env);
+        super.onSetUp(mmcBuilder);
+    }
 
     @Override
     protected void afterSetUp() {
         layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
-        gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry()
-                .lookupServiceElseFail(GridLoaderService.class);
+        gridCache = ((GridServiceDefault) getServiceRegistry()
+                .lookupServiceElseFail(GridService.class))
+                .gridCache();
+        assertTrue(gridCache.supportsReloading());
     }
 
     // test blueprint, for future work
     void blueprint() {
-        var domainClassAndLayout = new GridLoaderServiceDefault.LayoutKey(Bar.class, null);
-        gridLoaderService.loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
+        var domainClassAndLayout = new GridLoader.LayoutKey(Bar.class, null);
+        gridCache.gridLoader().loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
 
         var xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
         System.out.println(xml);

@@ -97,7 +97,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.devutils;
     exports org.apache.causeway.core.metamodel.services.events;
     exports org.apache.causeway.core.metamodel.services.exceprecog;
-    exports org.apache.causeway.core.metamodel.services.grid.bootstrap;
     exports org.apache.causeway.core.metamodel.services.grid;
     exports org.apache.causeway.core.metamodel.services.idstringifier;
     exports org.apache.causeway.core.metamodel.services.ixn;

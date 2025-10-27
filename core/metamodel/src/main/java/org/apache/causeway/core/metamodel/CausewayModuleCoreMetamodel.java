@@ -48,11 +48,9 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.columnorder.ColumnOrderTxtFileServiceDefault;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
+import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
@@ -173,9 +171,7 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
-        XsiSchemaLocationProviderForGrid.class,
-        GridLoaderServiceDefault.class,
-        GridMarshallerServiceBootstrap.class,
+        GridMarshallerXml.class,
         GridServiceDefault.class,
         GridSystemServiceBootstrap.class,
         IdStringifierLookupService.class,

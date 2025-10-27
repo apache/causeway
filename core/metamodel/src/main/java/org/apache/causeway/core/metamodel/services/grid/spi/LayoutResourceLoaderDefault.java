@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.services.grid.spi;
 import jakarta.annotation.Priority;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,6 @@ import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.jspecify.annotations.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Default implementation of {@link LayoutResourceLoader}.
@@ -41,9 +41,8 @@ import lombok.RequiredArgsConstructor;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".LayoutResourceLoaderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor //JUnit Support
 //@Slf4j
-public class LayoutResourceLoaderDefault implements LayoutResourceLoader {
+public record LayoutResourceLoaderDefault() implements LayoutResourceLoader {
 
     @Override
     public Try<LayoutResource> tryLoadLayoutResource(
