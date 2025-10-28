@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.object.grid;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
@@ -28,6 +27,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -114,12 +114,7 @@ implements GridFacet {
 
     private BSGrid load(final @NonNull String layoutPrefix) {
         var domainClass = objSpec().getCorrespondingClass();
-        var grid = Optional.ofNullable(
-                // loads from object's XML if available
-                gridService.load(domainClass, _Strings.emptyToNull(layoutPrefix)))
-                // loads from default-XML if available
-                .orElseGet(()->gridService.defaultGridFor(domainClass));
-        var bsGrid = gridService.normalize(grid);
+        var bsGrid = gridService.loadAndNormalize(new LayoutKey(domainClass, _Strings.emptyToNull(layoutPrefix)));
         return bsGrid;
     }
 

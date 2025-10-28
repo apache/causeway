@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.spi;
+package org.apache.causeway.applib.layout.resource;
 
 import java.util.Optional;
 
@@ -27,7 +27,7 @@ import org.apache.causeway.commons.functional.Try;
 /**
  * SPI for grid loading.
  *
- * @since 2.0 {@index}
+ * @since 4.0 {@index}
  */
 public interface LayoutResourceLoader {
 
@@ -35,7 +35,7 @@ public interface LayoutResourceLoader {
      * Try to locate and load a {@link LayoutResource} by type and name.
      */
     Try<LayoutResource> tryLoadLayoutResource(
-            final @NonNull Class<?> type,
+            final @NonNull Class<?> domainObject,
             final @NonNull String candidateResourceName);
 
     /**
@@ -46,9 +46,9 @@ public interface LayoutResourceLoader {
      * <p>Silently ignores exceptions underneath, if any.
      */
     default Optional<LayoutResource> lookupLayoutResource(
-            final @NonNull Class<?> type,
+            final @NonNull Class<?> domainObject,
             final @NonNull String candidateResourceName) {
-        return tryLoadLayoutResource(type, candidateResourceName)
+        return tryLoadLayoutResource(domainObject, candidateResourceName)
                 .getValue();
     }
 

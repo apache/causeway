@@ -35,12 +35,13 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.graph;
     exports org.apache.causeway.applib.id;
     exports org.apache.causeway.applib.jaxb;
+    exports org.apache.causeway.applib.layout;
     exports org.apache.causeway.applib.layout.component;
     exports org.apache.causeway.applib.layout.grid.bootstrap;
     exports org.apache.causeway.applib.layout.links;
     exports org.apache.causeway.applib.layout.menubars.bootstrap;
     exports org.apache.causeway.applib.layout.menubars;
-    exports org.apache.causeway.applib.layout;
+    exports org.apache.causeway.applib.layout.resource;
     exports org.apache.causeway.applib.locale;
     exports org.apache.causeway.applib.mixins.dto;
     exports org.apache.causeway.applib.mixins.layout;

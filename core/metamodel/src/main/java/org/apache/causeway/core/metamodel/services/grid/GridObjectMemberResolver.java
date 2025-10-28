@@ -614,19 +614,21 @@ public record GridObjectMemberResolver(
         actionLayoutData.owner(owner);
     }
 
-    public void normalize(final BSGrid grid, final Class<?> domainClass) {
+    public Optional<BSGrid> normalize(final BSGrid grid, final Class<?> domainClass) {
         final boolean valid = validateAndNormalize(grid, domainClass);
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(log.isDebugEnabled()) {
                 log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }
-        } else {
-            if(gridLoadingContext.causewaySystemEnvironment().isPrototyping()) {
-                gridLoadingContext.messageService().warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
-            }
-            log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
+            return Optional.of(grid);
         }
+        if(gridLoadingContext.causewaySystemEnvironment().isPrototyping()) {
+            gridLoadingContext.messageService().warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
+        }
+        log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
+        return Optional.empty();
+
     }
 
     /**

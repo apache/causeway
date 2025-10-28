@@ -27,6 +27,7 @@ import java.util.Optional;
 
 import jakarta.inject.Provider;
 
+import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -35,7 +36,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 /**
@@ -49,6 +49,12 @@ public record GridLoadingContext(
     Map<CommonMimeType, GridMarshaller> marshallersByMime,
     Can<LayoutResourceLoader> layoutResourceLoaders,
     Can<FallbackLayoutDataSource> fallbackLayoutDataSources,
+    /**
+     * Whether dynamic reloading of layouts is enabled.
+     *
+     * <p> The default implementation enables reloading for prototyping mode,
+     * disables in production
+     */
     boolean supportsReloading) {
 
     /** Factory also to be used for JUnit tests. */

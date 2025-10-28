@@ -19,82 +19,52 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
-import java.util.Map;
 
-import jakarta.inject.Provider;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.applib.services.grid.GridMarshaller;
-import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.services.grid.GridLoader.LayoutKey;
-import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 class GridCache_resourceNameTest {
-
-    private GridCache gridCache;
-    private LayoutResourceLoader layoutResourceLoader;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        layoutResourceLoader = new LayoutResourceLoaderDefault();
-
-        var ctx = new GridLoadingContext(
-            (CausewaySystemEnvironment) null,
-            (CausewayConfiguration) null,
-            (MessageService) null,
-            (Provider<SpecificationLoader>) null,
-            (Map<CommonMimeType, GridMarshaller>) null,
-            Can.of(layoutResourceLoader),
-            Can.<FallbackLayoutDataSource>empty(),
-            false); // reloading supported
-
-        gridCache = new GridCache(ctx);
-    }
 
     @Test
     void when_default_exists() {
         assertEquals(
                 "Foo.layout.xml",
-                resourceNameFor(new GridLoader.LayoutKey(Foo.class, null)));
+                resourceNameFor(new LayoutKey(Foo.class, null)));
     }
 
     @Test
     void when_fallback_exists() {
         assertEquals(
                 "Foo2.layout.fallback.xml",
-                resourceNameFor(new GridLoader.LayoutKey(Foo2.class, null)));
+                resourceNameFor(new LayoutKey(Foo2.class, null)));
     }
 
     @Test
     void when_default_and_fallback_both_exist() {
         assertEquals(
                 "Foo3.layout.xml",
-                resourceNameFor(new GridLoader.LayoutKey(Foo3.class, null)));
+                resourceNameFor(new LayoutKey(Foo3.class, null)));
     }
 
     @Test
     void when_neither_exist() {
         assertEquals(
                 (String)null,
-                resourceNameFor(new GridLoader.LayoutKey(Foo4.class, null)));
+                resourceNameFor(new LayoutKey(Foo4.class, null)));
     }
 
     // -- HELPER
 
-    private String resourceNameFor(final LayoutKey dcal) {
-        return gridCache.gridLoader().loadLayoutResource(dcal, EnumSet.of(CommonMimeType.XML))
+    private String resourceNameFor(final LayoutKey key) {
+        var resourceLookup = new LayoutResourceLookup(Can.of(new LayoutResourceLoaderDefault()));
+        return resourceLookup.lookupLayoutResource(key, EnumSet.of(CommonMimeType.XML))
             .map(LayoutResource::resourceName)
             .orElse(null);
     }

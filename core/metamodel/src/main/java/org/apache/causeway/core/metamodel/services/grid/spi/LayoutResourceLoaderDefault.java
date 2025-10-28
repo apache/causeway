@@ -27,6 +27,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
+import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.DataSource;

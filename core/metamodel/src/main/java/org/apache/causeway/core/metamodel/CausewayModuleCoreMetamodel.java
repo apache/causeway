@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Primary;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
+import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -57,9 +58,8 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
 import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
 import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
-import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
+import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;

@@ -83,7 +83,7 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
-        return gridService.marshaller().supportedFormats();
+        return gridService.supportedFormats();
     }
 
     @Override
@@ -131,8 +131,9 @@ public class LayoutServiceDefault implements LayoutService {
 
     private String gridToFormatted(final @Nullable BSGrid grid, final CommonMimeType format) {
         if(grid==null) return null;
-
-        return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
+        return gridService.marshaller(format)
+            .map(marshaller->marshaller.marshal(grid, format))
+            .orElse(null);
     }
 
     private static String zipEntryNameFor(

@@ -18,90 +18,30 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.EnumSet;
-import java.util.Optional;
-import java.util.stream.Stream;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
+import org.apache.causeway.commons.functional.Try;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
+import lombok.extern.slf4j.Slf4j;
 
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-
+@Slf4j
 record GridLoader(
-        Can<LayoutResourceLoader> layoutResourceLoaders) {
+        GridLoadingContext gridLoadingContext) {
 
-    public record LayoutKey(
-        @NonNull Class<?> domainClass,
-        /** layout suffix */
-        @Nullable String layoutIfAny) {
+    /**
+     * Optionally returns a new instance of a {@link BSGrid},
+     * based on whether the underlying resource could be found, loaded and parsed.
+     *
+     * <p>The layout alternative will typically be specified through a
+     * `layout()` method on the domain object, the value of which is used
+     * for the suffix of the layout file (eg "Customer-layout.archived.xml"
+     * to use a different layout for customers that have been archived).
+     */
+    public Try<BSGrid> tryLoad(final LayoutKey layoutKey, final LayoutResource layoutResource) {
+        return gridLoadingContext.gridMarshaller(layoutResource.format())
+            .orElseThrow()
+            .unmarshal(layoutKey.domainClass(), layoutResource.content(), layoutResource.format());
     }
-
-    // -- HELPER
-
-    Optional<LayoutResource> loadLayoutResource(
-            final LayoutKey layoutKey,
-            final EnumSet<CommonMimeType> supportedFormats) {
-        return _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.EXCLUDE)
-            .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
-            .findFirst();
-    }
-
-    private Optional<LayoutResource> loadContent(
-            final @NonNull Class<?> domainClass,
-            final @Nullable String layoutIfAny,
-            final EnumSet<CommonMimeType> supportedFormats) {
-        return streamResourceNameCandidatesFor(domainClass, layoutIfAny, supportedFormats)
-            .flatMap(candidateResourceName->lookupLayoutResourceUsingLoaders(domainClass, candidateResourceName).stream())
-            .findFirst();
-    }
-
-    private Stream<String> streamResourceNameCandidatesFor(
-            final @NonNull Class<?> domainClass,
-            final @Nullable String layoutIfAny,
-            final @NonNull  EnumSet<CommonMimeType> supportedFormats) {
-        return supportedFormats.stream()
-                .flatMap(format->streamResourceNameCandidatesFor(domainClass, layoutIfAny, format));
-    }
-
-    private Stream<String> streamResourceNameCandidatesFor(
-            final @NonNull Class<?> domainClass,
-            final @Nullable String layoutIfAny,
-            final @NonNull CommonMimeType format) {
-        return format.proposedFileExtensions().stream()
-                .flatMap(fileExtension->streamResourceNameCandidatesFor(domainClass, layoutIfAny, fileExtension));
-    }
-
-    private Stream<String> streamResourceNameCandidatesFor(
-            final @NonNull Class<?> domainClass,
-            final @Nullable String layoutIfAny,
-            final @NonNull String fileExtension) {
-
-        var typeSimpleName = domainClass.getSimpleName();
-
-        return _Strings.isNotEmpty(layoutIfAny)
-                ? Stream.of(
-                        String.format("%s-%s.layout.%s", typeSimpleName, layoutIfAny, fileExtension),
-                        String.format("%s.layout.%s", typeSimpleName, fileExtension),
-                        String.format("%s.layout.fallback.%s", typeSimpleName, fileExtension))
-                : Stream.of(
-                        String.format("%s.layout.%s", typeSimpleName, fileExtension),
-                        String.format("%s.layout.fallback.%s", typeSimpleName,fileExtension));
-    }
-
-    private Optional<LayoutResource> lookupLayoutResourceUsingLoaders(
-            final @NonNull Class<?> type,
-            final @NonNull String candidateResourceName) {
-
-        return layoutResourceLoaders.stream()
-            .flatMap(loader->loader.lookupLayoutResource(type, candidateResourceName).stream())
-            .findFirst();
-    }
-
 
 }

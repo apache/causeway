@@ -18,50 +18,32 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.jspecify.annotations.NonNull;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
-import org.apache.causeway.applib.services.grid.GridMarshaller;
-import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.core.metamodel.services.grid.GridLoader.LayoutKey;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Cache for {@link BSGrid} instances,
- * delegating grid loading to the {@link GridLoader}.
+ * Cache for {@link BSGrid} instances,.
  *
  * @since 4.0
  */
 @Slf4j
 record GridCache(
-    GridLoader gridLoader,
-    MessageService messageService,
-    /**
-     * Whether dynamic reloading of layouts is enabled.
-     *
-     * <p> The default implementation enables reloading for prototyping mode,
-     * disables in production
-     */
-    boolean supportsReloading,
-    Map<LayoutKey, BSGrid> gridCache,
+    Map<LayoutKey, BSGrid> gridsByKey,
     // for better logging messages (used only in prototyping mode)
-    Map<LayoutKey, String> badContentByKey) {
+    Map<LayoutKey, LayoutResource> badLayoutResourceByKey) {
 
     public GridCache(
             final GridLoadingContext gridLoadingContext) {
-        this(new GridLoader(gridLoadingContext.layoutResourceLoaders()),
-            gridLoadingContext.messageService(),
-            gridLoadingContext.supportsReloading(),
-            new HashMap<>(), new HashMap<>());
+        this(
+            new ConcurrentHashMap<>(), new ConcurrentHashMap<>());
     }
 
     /**
@@ -71,111 +53,94 @@ record GridCache(
      * <p>This is called by the {@link Object_rebuildMetamodel} mixin action.
      */
     public void remove(final Class<?> domainClass) {
-        if(!supportsReloading()) return;
+        badLayoutResourceByKey.entrySet().removeIf(entry->entry.getKey().domainClass().equals(domainClass));
+        gridsByKey.entrySet().removeIf(entry->entry.getKey().domainClass().equals(domainClass));
+    }
 
-        final String layoutIfAny = null;
-        var layoutKey = new LayoutKey(domainClass, layoutIfAny);
-        badContentByKey.remove(layoutKey);
-        gridCache.remove(layoutKey);
+    public BSGrid computeIfAbsent(final LayoutKey layoutKey, final Function<LayoutKey, BSGrid> factory) {
+        return gridsByKey.computeIfAbsent(layoutKey, factory);
     }
 
     /**
-     * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
-     *
-     * <p>If none exists, will return null.
+     * Stores a normalized, validated grid.
      */
-    public boolean existsFor(final Class<?> domainClass, final EnumSet<CommonMimeType> supportedFormats) {
-        return gridLoader.loadLayoutResource(new LayoutKey(domainClass, null), supportedFormats).isPresent();
+    public void putValid(final LayoutKey layoutKey, final BSGrid bsGrid) {
+        gridsByKey.put(layoutKey, bsGrid);
     }
 
     /**
-     * Optionally returns a new instance of a {@link BSGrid},
-     * based on whether the underlying resource could be found, loaded and parsed.
-     *
-     * <p>The layout alternative will typically be specified through a
-     * `layout()` method on the domain object, the value of which is used
-     * for the suffix of the layout file (eg "Customer-layout.archived.xml"
-     * to use a different layout for customers that have been archived).
-     *
-     * @throws UnsupportedOperationException - when format is not supported
+     * Stores a bad {@link LayoutResource}.
      */
-    public Optional<BSGrid> load(
-            final Class<?> domainClass,
-            final String layoutIfAny,
-            final @NonNull GridMarshaller marshaller) {
-
-        var supportedFormats = marshaller.supportedFormats();
-
-        var layoutKey = new LayoutKey(domainClass, layoutIfAny);
-        var layoutResource = gridLoader.loadLayoutResource(layoutKey, supportedFormats).orElse(null);
-        if(layoutResource == null) {
-            log.debug(
-                    "Failed to locate or load layout resource for class {}, "
-                    + "with layout-suffix (if any) {}, "
-                    + "using layout-resource-loaders {}.",
-                    domainClass.getName(), layoutIfAny,
-                    gridLoader().layoutResourceLoaders().stream()
-                        .map(Object::getClass)
-                        .map(Class::getName)
-                        .collect(Collectors.joining(", ")));
-            return Optional.empty();
-        }
-
-        if(supportsReloading()) {
-            final String badContent = badContentByKey.get(layoutKey);
-            if(badContent != null) {
-                if(Objects.equals(layoutResource.content(), badContent)) {
-                    // seen this before and already logged; just quit
-                    return Optional.empty();
-                } else {
-                    // this different content might be good
-                    badContentByKey.remove(layoutKey);
-                }
-            }
-        } else {
-            // if cached, serve from cache - otherwise fall through
-            final BSGrid grid = gridCache.get(layoutKey);
-            if(grid != null) return Optional.of(grid);
-        }
-
-        try {
-            final BSGrid grid = marshaller
-                .unmarshal(domainClass, layoutResource.content(), layoutResource.format())
-                .getValue().orElseThrow();
-            if(supportsReloading()) {
-                gridCache.put(layoutKey, grid);
-            }
-            return Optional.of(grid);
-        } catch(Exception ex) {
-
-            if(supportsReloading()) {
-                // save fact that this was bad content, so that we don't log again if called next time
-                badContentByKey.put(layoutKey, layoutResource.content());
-            }
-
-            // note that we don't blacklist if the file exists but couldn't be parsed;
-            // the developer might fix so we will want to retry.
-            final String resourceName = layoutResource.resourceName();
-            final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
-            if(supportsReloading()) {
-                messageService.warnUser(message);
-            }
-            log.warn(message);
-
-            return Optional.empty();
-        }
+    public void putInvalid(final LayoutKey layoutKey, final LayoutResource layoutResource) {
+        badLayoutResourceByKey.put(layoutKey, layoutResource);
     }
 
-    /**
-     * Optionally returns a new instance of a {@link BSGrid},
-     * based on whether the underlying resource could be found, loaded and parsed.
-     *
-     * @throws UnsupportedOperationException - when format is not supported
-     */
-    public Optional<BSGrid> load(
-            final Class<?> domainClass,
-            final @NonNull GridMarshaller marshaller) {
-        return load(domainClass, null, marshaller);
-    }
+
+//    /**
+//     * Optionally returns a new instance of a {@link BSGrid},
+//     * based on whether the underlying resource could be found, loaded and parsed.
+//     *
+//     * <p>The layout alternative will typically be specified through a
+//     * `layout()` method on the domain object, the value of which is used
+//     * for the suffix of the layout file (eg "Customer-layout.archived.xml"
+//     * to use a different layout for customers that have been archived).
+//     *
+//     * @throws UnsupportedOperationException - when format is not supported
+//     */
+//    public Optional<BSGrid> load(
+//            final LayoutKey layoutKey,
+//            final @NonNull GridMarshaller marshaller) {
+//
+//        var supportedFormats = marshaller.supportedFormats();
+//
+//        var layoutResourceOpt = gridLoader.lookupLayoutResource(layoutKey, supportedFormats);
+//        if(layoutResourceOpt.isEmpty()) return Optional.empty();
+//
+//        var layoutResource = layoutResourceOpt.get();
+//
+//        if(supportsReloading()) {
+//            final String badContent = badContentByKey.get(layoutKey);
+//            if(badContent != null) {
+//                if(Objects.equals(layoutResource.content(), badContent)) {
+//                    // seen this before and already logged; just quit
+//                    return Optional.empty();
+//                } else {
+//                    // this different content might be good
+//                    badContentByKey.remove(layoutKey);
+//                }
+//            }
+//        } else {
+//            // if cached, serve from cache - otherwise fall through
+//            final BSGrid grid = gridsByKey.get(layoutKey);
+//            if(grid != null) return Optional.of(grid);
+//        }
+//
+//        try {
+//            final BSGrid grid = marshaller
+//                .unmarshal(domainClass, layoutResource.content(), layoutResource.format())
+//                .getValue().orElseThrow();
+//            if(supportsReloading()) {
+//                gridsByKey.put(layoutKey, grid);
+//            }
+//            return Optional.of(grid);
+//        } catch(Exception ex) {
+//
+//            if(supportsReloading()) {
+//                // save fact that this was bad content, so that we don't log again if called next time
+//                badContentByKey.put(layoutKey, layoutResource.content());
+//            }
+//
+//            // note that we don't blacklist if the file exists but couldn't be parsed;
+//            // the developer might fix so we will want to retry.
+//            final String resourceName = layoutResource.resourceName();
+//            final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
+//            if(supportsReloading()) {
+//                messageService.warnUser(message);
+//            }
+//            log.warn(message);
+//
+//            return Optional.empty();
+//        }
+//    }
 
 }

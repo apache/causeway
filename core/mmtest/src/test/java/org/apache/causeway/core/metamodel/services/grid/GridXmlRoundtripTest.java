@@ -36,7 +36,6 @@ import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 
@@ -119,14 +118,16 @@ extends MetaModelTestAbstract {
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        String xml = gridServiceDefault.marshaller().marshal(_Casts.uncheckedCast(bsGrid), CommonMimeType.XML);
+        var xmlMarshaller = gridServiceDefault.marshaller(CommonMimeType.XML).orElseThrow();
+
+        String xml = xmlMarshaller.marshal(bsGrid, CommonMimeType.XML);
 
         println(xml);
 
-        BSGrid bsGridRoundtripped = (BSGrid) gridServiceDefault.marshaller().unmarshal(Object.class, xml, CommonMimeType.XML)
+        BSGrid bsGridRoundtripped = xmlMarshaller.unmarshal(Object.class, xml, CommonMimeType.XML)
             .valueAsNonNullElseFail();
 
-        String xmlRoundtripped = gridServiceDefault.marshaller().marshal(_Casts.uncheckedCast(bsGridRoundtripped), CommonMimeType.XML);
+        String xmlRoundtripped = xmlMarshaller.marshal(bsGridRoundtripped, CommonMimeType.XML);
 
         _DocumentTester.assertXmlEqualsIgnoreOrder(xml, xmlRoundtripped);
 

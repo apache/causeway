@@ -16,15 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.spi;
+package org.apache.causeway.applib.layout.resource;
 
-import org.jspecify.annotations.NonNull;
+import java.util.Objects;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
+/**
+ * Layout data record with name, format and contents (XML, JSON, etc.) based on format.
+ *
+ * @since 4.0 {@index}
+ */
 public record LayoutResource(
-        @NonNull String resourceName,
-        @NonNull CommonMimeType format,
-        @NonNull String content) {
+        String resourceName,
+        CommonMimeType format,
+        String content) {
+
+    public LayoutResource {
+        Objects.requireNonNull(resourceName);
+        Objects.requireNonNull(format);
+        Objects.requireNonNull(content);
+    }
 
 }
