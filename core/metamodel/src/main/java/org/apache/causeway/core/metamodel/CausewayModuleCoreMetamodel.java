@@ -18,7 +18,10 @@
  */
 package org.apache.causeway.core.metamodel;
 
+import java.util.List;
 import java.util.stream.Stream;
+
+import jakarta.inject.Provider;
 
 import org.jspecify.annotations.NonNull;
 
@@ -30,11 +33,15 @@ import org.springframework.context.annotation.Primary;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.applib.services.grid.GridMarshaller;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
@@ -48,9 +55,11 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.columnorder.ColumnOrderTxtFileServiceDefault;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
+import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
 import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceBootstrap;
+import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
+import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
@@ -61,6 +70,7 @@ import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServ
 import org.apache.causeway.core.metamodel.services.tablecol.TableColumnOrderServiceUsingTxtFile;
 import org.apache.causeway.core.metamodel.services.title.TitleServiceDefault;
 import org.apache.causeway.core.metamodel.spec.impl.CausewayModuleCoreMetamodelConfigurationDefault;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.valuesemantics.ApplicationFeatureIdValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.BigIntegerValueSemantics;
@@ -173,7 +183,6 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         ExceptionRecognizerForRecoverableException.class,
         GridMarshallerXml.class,
         GridServiceDefault.class,
-        GridSystemServiceBootstrap.class,
         IdStringifierLookupService.class,
         LayoutResourceLoaderDefault.class,
         LayoutServiceDefault.class,
@@ -199,6 +208,19 @@ public class CausewayModuleCoreMetamodel {
     @FunctionalInterface
     public static interface PreloadableTypes {
         @NonNull Stream<Class<?>> stream();
+    }
+
+    @Bean
+    public GridLoadingContext gridLoadingContext(
+        final CausewaySystemEnvironment causewaySystemEnvironment,
+        final CausewayConfiguration causewayConfiguration,
+        final MessageService messageService,
+        final Provider<SpecificationLoader> specLoaderProvider,
+        final List<GridMarshaller> marshallers,
+        final List<LayoutResourceLoader> layoutResourceLoaders,
+        final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
+        return GridLoadingContext.create(causewaySystemEnvironment, causewayConfiguration, messageService,
+            specLoaderProvider, marshallers, layoutResourceLoaders, fallbackLayoutDataSources);
     }
 
     @Bean

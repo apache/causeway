@@ -44,6 +44,8 @@ public interface GridService {
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
+     *
+     * <p> Acts as a no-op if not {@link #supportsReloading()}.
      */
     void remove(Class<?> domainClass);
 

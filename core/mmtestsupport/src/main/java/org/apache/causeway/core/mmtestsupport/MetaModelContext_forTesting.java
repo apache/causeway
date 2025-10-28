@@ -37,7 +37,6 @@ import org.springframework.util.ClassUtils;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -71,6 +70,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
@@ -89,9 +89,10 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
+import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
 import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceBootstrap;
+import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
@@ -452,35 +453,28 @@ implements MetaModelContext {
     }
 
     @Getter(lazy = true)
+    private final GridLoadingContext gridLoadingContext = createGridLoadingContext();
+    private final GridLoadingContext createGridLoadingContext() {
+        return new CausewayModuleCoreMetamodel().gridLoadingContext(
+            getSystemEnvironment(),
+            getConfiguration(),
+            getMessageService(),
+            ()->getSpecificationLoader(),
+            List.of(getGridMarshaller()),
+            List.of(new LayoutResourceLoaderDefault()),
+            List.<FallbackLayoutDataSource>of());
+    }
+
+    @Getter(lazy = true)
     private final GridMarshaller gridMarshaller = createGridMarshaller();
     private final GridMarshaller createGridMarshaller() {
         return new GridMarshallerXml(getJaxbService());
     }
 
     @Getter(lazy = true)
-    private final List<GridSystemService> gridSystemServices = createGridSystemService();
-    private final List<GridSystemService> createGridSystemService() {
-        return List.of(
-            new GridSystemServiceBootstrap(
-                getConfiguration(),
-                ()->getSpecificationLoader(),
-                getTranslationService(),
-                getJaxbService(),
-                getMessageService(),
-                getSystemEnvironment(),
-                List.of())
-                .setMarshaller(getGridMarshaller()));
-    }
-
-    @Getter(lazy = true)
     private final GridService gridService = createGridService();
     private final GridService createGridService() {
-        return new GridServiceDefault(
-            getSystemEnvironment(),
-            getGridMarshaller(),
-            getMessageService(),
-            getGridSystemServices(),
-            List.of(new LayoutResourceLoaderDefault()));
+        return new GridServiceDefault(getGridLoadingContext());
     }
 
     @Getter(lazy = true)

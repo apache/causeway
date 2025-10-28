@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,14 +30,9 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
-import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.services.grid.GridLoader.LayoutKey;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -63,12 +57,10 @@ record GridCache(
     Map<LayoutKey, String> badContentByKey) {
 
     public GridCache(
-            final MessageService messageService,
-            final boolean supportsReloading,
-            final List<LayoutResourceLoader> layoutResourceLoaders) {
-        this(new GridLoader(Can.ofCollection(layoutResourceLoaders)),
-            messageService,
-            supportsReloading,
+            final GridLoadingContext gridLoadingContext) {
+        this(new GridLoader(gridLoadingContext.layoutResourceLoaders()),
+            gridLoadingContext.messageService(),
+            gridLoadingContext.supportsReloading(),
             new HashMap<>(), new HashMap<>());
     }
 
@@ -90,8 +82,7 @@ record GridCache(
     /**
      * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
      *
-     * <p>If none exists, will return null (and the calling {@link GridService} will use {@link GridSystemService}
-     * to obtain a default grid for the domain class).
+     * <p>If none exists, will return null.
      */
     public boolean existsFor(final Class<?> domainClass, final EnumSet<CommonMimeType> supportedFormats) {
         return gridLoader.loadLayoutResource(new LayoutKey(domainClass, null), supportedFormats).isPresent();

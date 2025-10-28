@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.List;
-
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -31,12 +29,9 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridSystemService;
-import org.apache.causeway.applib.services.message.MessageService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 
 /**
  * Default implementation of {@link GridService}.
@@ -48,18 +43,14 @@ import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
 public record GridServiceDefault(
-    GridMarshaller marshaller,
-    List<GridSystemService> gridSystemServices,
+    GridLoadingContext gridLoadingContext,
+    GridObjectMemberResolver gridSystemService,
     GridCache gridCache) implements GridService {
 
     @Inject
     public GridServiceDefault(
-            final CausewaySystemEnvironment causewaySystemEnvironment,
-            final GridMarshaller marshaller,
-            final MessageService messageService,
-            final List<GridSystemService> gridSystemServices,
-            final List<LayoutResourceLoader> layoutResourceLoaders) {
-        this(marshaller, gridSystemServices, new GridCache(messageService, causewaySystemEnvironment.isPrototyping(), layoutResourceLoaders));
+            final GridLoadingContext gridLoadingContext) {
+        this(gridLoadingContext, new GridObjectMemberResolver(gridLoadingContext), new GridCache(gridLoadingContext));
     }
 
     @Override
@@ -74,27 +65,33 @@ public record GridServiceDefault(
 
     @Override
     public boolean existsFor(final Class<?> domainClass) {
-        return gridCache.existsFor(domainClass, marshaller.supportedFormats());
+        return gridCache.existsFor(domainClass, gridLoadingContext.supportedFormats());
+    }
+
+    @Deprecated //FIXME bad API
+    @Override
+    public GridMarshaller marshaller() {
+        return gridLoadingContext().marshallersByMime().get(CommonMimeType.XML);
     }
 
     @Override
     public BSGrid load(final Class<?> domainClass) {
-        return gridCache.load(domainClass, marshaller).orElse(null);
+        return gridCache.load(domainClass, marshaller()).orElse(null);
     }
 
     @Override
     public BSGrid load(final Class<?> domainClass, final String layout) {
-        return gridCache.load(domainClass, layout, marshaller).orElse(null);
+        return gridCache.load(domainClass, layout, marshaller()).orElse(null);
     }
 
     // --
 
     @Override
     public BSGrid defaultGridFor(final Class<?> domainClass) {
-        for (var gridSystemService : gridSystemServices()) {
-            var grid = gridSystemService.defaultGrid(domainClass);
-            if(grid != null) return grid;
-        }
+
+        var grid = gridSystemService.defaultGrid(domainClass);
+        if(grid != null) return grid;
+
         throw new IllegalStateException(
                 "No GridSystemService available to create grid for '" + domainClass.getName() + "'");
     }
@@ -104,27 +101,26 @@ public record GridServiceDefault(
         if(grid.isNormalized()) return grid;
 
         var domainClass = grid.domainClass();
-        for (var gridSystemService : gridSystemServices()) {
-            gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
-        }
+        gridSystemService().normalize(_Casts.uncheckedCast(grid), domainClass);
+
         return grid;
     }
 
     @Override
     public BSGrid complete(final BSGrid grid) {
         var domainClass = grid.domainClass();
-        for (var gridSystemService : gridSystemServices()) {
-            gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
-        }
+        var gridSystemService = gridSystemService();
+        gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
+
         return grid;
     }
 
     @Override
     public BSGrid minimal(final BSGrid grid) {
         var domainClass = grid.domainClass();
-        for (var gridSystemService : gridSystemServices()) {
-            gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
-        }
+        var gridSystemService = gridSystemService();
+        gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
+
         return grid;
     }
 

@@ -19,18 +19,27 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
-import java.util.List;
+import java.util.Map;
+
+import jakarta.inject.Provider;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.causeway.applib.services.grid.GridMarshaller;
+import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.services.grid.GridLoader.LayoutKey;
+import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 class GridCache_resourceNameTest {
 
@@ -40,7 +49,18 @@ class GridCache_resourceNameTest {
     @BeforeEach
     void setUp() throws Exception {
         layoutResourceLoader = new LayoutResourceLoaderDefault();
-        gridCache = new GridCache(null, false, List.of(layoutResourceLoader));
+
+        var ctx = new GridLoadingContext(
+            (CausewaySystemEnvironment) null,
+            (CausewayConfiguration) null,
+            (MessageService) null,
+            (Provider<SpecificationLoader>) null,
+            (Map<CommonMimeType, GridMarshaller>) null,
+            Can.of(layoutResourceLoader),
+            Can.<FallbackLayoutDataSource>empty(),
+            false); // reloading supported
+
+        gridCache = new GridCache(ctx);
     }
 
     @Test

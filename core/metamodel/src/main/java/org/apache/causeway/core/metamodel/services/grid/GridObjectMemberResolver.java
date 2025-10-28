@@ -30,17 +30,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
@@ -50,19 +40,14 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
-import org.apache.causeway.applib.services.grid.GridSystemService;
-import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -70,9 +55,6 @@ import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
@@ -118,29 +100,28 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Default implementation of {@link org.apache.causeway.applib.services.grid.GridSystemService} using DTOs based on
+ * Encapsulates a single layout grid system which can be used to customize the layout
+ * of domain objects.
+ *
+ * <p>In particular this means being able to return a "normalized" form
+ * (validating and associating domain object members into the various regions
+ * of the grid) and in providing a default grid if there is no other metadata
+ * available.
+ *
+ * <p> Using DTOs based on
  * <a href="https://getbootstrap.com>Bootstrap</a> design system.
  *
- * @since 2.0 {@index}
  */
-@Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Bootstrap")
 @Slf4j
-public class GridSystemServiceBootstrap
-implements GridSystemService {
+public record GridObjectMemberResolver(
+    GridLoadingContext gridLoadingContext) {
 
     /**
      * SPI to customize layout fallback behavior on a per class basis.
@@ -153,42 +134,21 @@ implements GridSystemService {
         Try<String> tryLoadAsStringUtf8(Class<?> domainClass);
     }
 
-    @Inject @Lazy // circular dependency (late binding)
-    @Setter @Accessors(chain = true) // JUnit support
-    private GridMarshaller marshaller;
-
-    private final Provider<SpecificationLoader> specLoaderProvider;
-    private final MessageService messageService;
-    private final CausewaySystemEnvironment causewaySystemEnvironment;
-    private final CausewayConfiguration config;
-    private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
-
-    @Inject
-    public GridSystemServiceBootstrap(
-            final CausewayConfiguration causewayConfiguration,
-            final Provider<SpecificationLoader> specLoaderProvider,
-            final TranslationService translationService,
-            final JaxbService jaxbService,
-            final MessageService messageService,
-            final CausewaySystemEnvironment causewaySystemEnvironment,
-            final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
-        this.specLoaderProvider = specLoaderProvider;
-        this.messageService = messageService;
-        this.causewaySystemEnvironment = causewaySystemEnvironment;
-        this.config = causewayConfiguration;
-        this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
+    @Deprecated
+    private GridMarshaller marshaller() {
+        return gridLoadingContext().gridMarshaller(CommonMimeType.XML).orElseThrow();
     }
 
     private String toXml(final BSGrid grid) {
-        return marshaller.marshal(grid, CommonMimeType.XML);
+        return marshaller()
+            .marshal(grid, CommonMimeType.XML);
     }
 
-    @Override
     public BSGrid defaultGrid(final Class<?> domainClass) {
         final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
         try {
             return content.getValue()
-                    .flatMap(xml -> marshaller.unmarshal(domainClass, xml, CommonMimeType.XML)
+                    .flatMap(xml -> marshaller().unmarshal(domainClass, xml, CommonMimeType.XML)
                         .getValue())
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
@@ -200,12 +160,12 @@ implements GridSystemService {
     }
 
     private Try<String> loadFallbackLayoutAsStringUtf8(final Class<?> domainClass) {
-        return fallbackLayoutDataSources.stream()
+        return gridLoadingContext.fallbackLayoutDataSources().stream()
             .map(ds->ds.tryLoadAsStringUtf8(domainClass))
             .filter(tried->tried.getValue().isPresent())
             .findFirst()
             .orElseGet(()->{
-                return Try.call(()->_Resources.loadAsStringUtf8(GridSystemServiceBootstrap.class, "GridFallbackLayout.xml"));
+                return Try.call(()->_Resources.loadAsStringUtf8(GridObjectMemberResolver.class, "GridFallbackLayout.xml"));
             });
     }
 
@@ -277,7 +237,7 @@ implements GridSystemService {
         if(!gridModelIfValid.isPresent()) return false; // only present if valid
 
         var gridModel = gridModelIfValid.get();
-        var objSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
+        var objSpec = gridLoadingContext().specLoaderProvider().get().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objSpec.streamCollections(MixedIn.INCLUDED));
@@ -367,7 +327,7 @@ implements GridSystemService {
 
                 // add unbound properties respecting configured sequence policy
                 var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
-                    .sortProperties(config, unboundPropertyIds.stream()
+                    .sortProperties(gridLoadingContext.causewayConfiguration(), unboundPropertyIds.stream()
                             .map(oneToOneAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -390,7 +350,7 @@ implements GridSystemService {
 
             // add missing collections respecting configured sequence policy
             var sortedMissingCollectionIds = _UnreferencedSequenceUtil
-                    .sortCollections(config, collectionDisjunction.right().stream()
+                    .sortCollections(gridLoadingContext.causewayConfiguration(), collectionDisjunction.right().stream()
                             .map(oneToManyAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -654,7 +614,6 @@ implements GridSystemService {
         actionLayoutData.owner(owner);
     }
 
-    @Override
     public void normalize(final BSGrid grid, final Class<?> domainClass) {
         final boolean valid = validateAndNormalize(grid, domainClass);
         if (valid) {
@@ -663,8 +622,8 @@ implements GridSystemService {
                 log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }
         } else {
-            if(causewaySystemEnvironment.isPrototyping()) {
-                messageService.warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
+            if(gridLoadingContext.causewaySystemEnvironment().isPrototyping()) {
+                gridLoadingContext.messageService().warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
             }
             log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
         }
@@ -680,7 +639,7 @@ implements GridSystemService {
             final BSGrid fcGrid,
             final Class<?> domainClass) {
 
-        var objectSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
+        var objectSpec = gridLoadingContext.specLoaderProvider().get().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
@@ -910,14 +869,12 @@ implements GridSystemService {
 
     // --
 
-    @Override
     public void complete(final BSGrid grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        var objectSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
+        var objectSpec = gridLoadingContext.specLoaderProvider().get().specForTypeElseFail(domainClass);
         grid.visit(new MetamodelToGridOverridingVisitor(objectSpec));
     }
 
-    @Override
     public void minimal(final BSGrid grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
         grid.visit(new BSElementVisitor() {
