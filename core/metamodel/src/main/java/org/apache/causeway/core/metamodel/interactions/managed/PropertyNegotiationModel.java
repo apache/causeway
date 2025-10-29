@@ -65,7 +65,7 @@ public class PropertyNegotiationModel implements ManagedValue {
         var currentValue = managedProperty.getPropertyValue();
         var defaultValue = ManagedObjects.isNullOrUnspecifiedOrEmpty(currentValue)
             ? propMeta.isMandatory()
-                    ? propMeta.getDefault(managedProperty.getOwner())
+                    ? ManagedObjects.nullToEmpty(getElementType(), propMeta.getDefault(managedProperty.getOwner()))
                     : ManagedObjects.nullToEmpty(getElementType(), currentValue)
             : currentValue;
 

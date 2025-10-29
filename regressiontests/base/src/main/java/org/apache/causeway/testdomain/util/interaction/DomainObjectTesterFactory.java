@@ -73,6 +73,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -883,7 +884,11 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                     var propNeg = managedProperty.startNegotiation();
                     var initialValue = managedProperty.getPropertyValue();
 
-                    assertEquals(initialValue, propNeg.getValue().getValue());
+                    if(ManagedObjects.isNullOrUnspecifiedOrEmpty(initialValue)) {
+                        assertTrue(ManagedObjects.isNullOrUnspecifiedOrEmpty(propNeg.getValue().getValue()));
+                    } else {
+                        assertEquals(initialValue, propNeg.getValue().getValue());
+                    }
 
                     propNeg.getValueAsParsableText().setValue(parsableProposedValue);
 
