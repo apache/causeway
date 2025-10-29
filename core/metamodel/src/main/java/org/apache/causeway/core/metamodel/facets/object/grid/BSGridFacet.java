@@ -112,9 +112,9 @@ implements GridFacet {
         return layoutFacetLazy.get()!=null;
     }
 
-    private BSGrid load(final @NonNull String layoutPrefix) {
+    private BSGrid load(final String layoutPrefix) {
         var domainClass = objSpec().getCorrespondingClass();
-        var bsGrid = gridService.loadAndNormalize(new LayoutKey(domainClass, _Strings.emptyToNull(layoutPrefix)));
+        var bsGrid = gridService.load(new LayoutKey(domainClass, _Strings.emptyToNull(layoutPrefix)));
         return bsGrid;
     }
 

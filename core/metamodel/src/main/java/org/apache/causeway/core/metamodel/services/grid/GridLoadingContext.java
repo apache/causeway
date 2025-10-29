@@ -35,7 +35,6 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 /**
@@ -48,7 +47,6 @@ public record GridLoadingContext(
     Provider<SpecificationLoader> specLoaderProvider,
     Map<CommonMimeType, GridMarshaller> marshallersByMime,
     Can<LayoutResourceLoader> layoutResourceLoaders,
-    Can<FallbackLayoutDataSource> fallbackLayoutDataSources,
     /**
      * Whether dynamic reloading of layouts is enabled.
      *
@@ -64,8 +62,7 @@ public record GridLoadingContext(
         final MessageService messageService,
         final Provider<SpecificationLoader> specLoaderProvider,
         final List<GridMarshaller> registeredMarshallers,
-        final List<LayoutResourceLoader> layoutResourceLoaders,
-        final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
+        final List<LayoutResourceLoader> layoutResourceLoaders) {
 
         var marshallers = Can.ofCollection(registeredMarshallers);
         var marshallersByMime = new HashMap<CommonMimeType, GridMarshaller>();
@@ -82,7 +79,6 @@ public record GridLoadingContext(
             specLoaderProvider,
             Collections.unmodifiableMap(marshallersByMime),
             Can.ofCollection(layoutResourceLoaders),
-            Can.ofCollection(fallbackLayoutDataSources),
             causewaySystemEnvironment.isPrototyping());
     }
 

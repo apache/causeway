@@ -24,18 +24,15 @@ import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**
  * Loads the layout (grid) for any domain class.
  * Also supports various formats {@link LayoutExportStyle} for export.
+ *
+ * <p> Using DTOs based on <a href="https://getbootstrap.com>Bootstrap</a> design system.
  *
  * @since 1.x revised for 4.0 {@index}
  */
@@ -43,7 +40,11 @@ public interface GridService {
 
     public record LayoutKey(
         @NonNull Class<?> domainClass,
-        /** layout suffix */
+        /**
+         *<p>The optional layout name can for example be returned by the
+         * domain object's <code>layout()</code> method, whereby - based on the
+         * state of the domain object - it requests a different layout be used.
+         */
         @Nullable String layoutIfAny) {
     }
 
@@ -62,63 +63,16 @@ public interface GridService {
     void invalidate(Class<?> domainClass);
 
     /**
-     * Returns a normalized grid for the domain class.
-     *
-     * <p>The alternative layout name can for example be returned by the
-     * domain object's <code>layout()</code> method, whereby - based on the
-     * state of the domain object - it requests a different layout be used.
+     * Returns a {@link BSGrid} for given {@link LayoutKey}.
      *
      * <p>The default implementation uses the layout name to search for a differently
      * named layout file, <code>[domainClass].layout.[layout].xml</code>.
      *
      * <p>When no specific grid layout is found returns a generic fallback.
-     *
-     * <p>If a 'normalized' grid is persisted as the <code>layout.xml</code>, then the expectation is that
-     * any ordering metadata from layout annotations can be removed from the domain class
-     * because the binding of properties/collections/actions will be within the XML.  However, the layout
-     * annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and
-     * {@link CollectionLayout}) (if present) will continue to be used to provide additional layout metadata.  Of
-     * course, there is nothing to prevent the developer from extending the layout XML to also include the
-     * layout XML (in other words moving towards a {@link #complete(BSGrid) complete} grid.  Metadata within the
-     * <code>layout.xml</code> file takes precedence over any annotations.
      */
-    BSGrid loadAndNormalize(LayoutKey layoutKey);
-
-    /**
-     * Modifies the provided {@link BSGrid} with additional metadata, broadly speaking corresponding to the
-     * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
-     *
-     * <p>If a 'complete' grid is persisted as the <code>layout.xml</code>, then there should be no need
-     * for any of the layout annotations,
-     * to be required in the domain class itself.
-     */
-    BSGrid complete(BSGrid grid);
-
-    /**
-     * Modifies the provided {@link BSGrid}, removing all metadata except the basic grid structure.
-     *
-     * <p>If a 'minimal' grid is persisted as the <code>layout.xml</code>, then the expectation is that
-     * most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},
-     * {@link CollectionLayout} will still be retained in the domain class code.
-     *
-     */
-    BSGrid minimal(BSGrid grid);
-
-    // -- LAYOUT EXPORT
+    BSGrid load(LayoutKey layoutKey);
 
     EnumSet<CommonMimeType> supportedFormats();
     Optional<GridMarshaller> marshaller(CommonMimeType format);
-
-    default BSGrid toGridForExport(
-            final Class<?> domainClass,
-            final LayoutExportStyle style) {
-
-        var grid = loadAndNormalize(new LayoutKey(domainClass, null));
-
-        if (style == LayoutExportStyle.COMPLETE) return complete(grid);
-        if (style == LayoutExportStyle.MINIMAL) return minimal(grid);
-
-        throw _Exceptions.unmatchedCase(style);
-    }
 
 }

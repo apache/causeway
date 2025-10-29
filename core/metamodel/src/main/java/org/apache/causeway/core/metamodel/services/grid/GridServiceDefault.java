@@ -47,7 +47,8 @@ public record GridServiceDefault(
     GridLoadingContext context,
     LayoutResourceLookup layoutLookup,
     GridLoader loader,
-    GridObjectMemberResolver memberResolver,
+    FallbackGridProvider fallback,
+    ObjectMemberResolverForGrid memberResolver,
     GridCache cache) implements GridService {
 
     @Inject
@@ -56,7 +57,8 @@ public record GridServiceDefault(
         this(gridLoadingContext,
             new LayoutResourceLookup(gridLoadingContext.layoutResourceLoaders()),
             new GridLoader(gridLoadingContext),
-            new GridObjectMemberResolver(gridLoadingContext),
+            new FallbackGridProvider(gridLoadingContext),
+            new ObjectMemberResolverForGrid(gridLoadingContext),
             new GridCache(gridLoadingContext));
     }
 
@@ -81,30 +83,18 @@ public record GridServiceDefault(
     }
 
     @Override
-    public BSGrid loadAndNormalize(final LayoutKey layoutKey) {
-        return cache.computeIfAbsent(layoutKey, this::loadAndNormalizeNoCache);
-    }
-
-    @Override
-    public BSGrid complete(final BSGrid grid) {
-        memberResolver().complete(grid, grid.domainClass());
-        return grid;
-    }
-
-    @Override
-    public BSGrid minimal(final BSGrid grid) {
-        memberResolver().minimal(grid, grid.domainClass());
-        return grid;
+    public BSGrid load(final LayoutKey layoutKey) {
+        return cache.computeIfAbsent(layoutKey, this::loadNoCache);
     }
 
     // -- HELPER
 
-    private BSGrid loadAndNormalizeNoCache(final LayoutKey layoutKey) {
+    private BSGrid loadNoCache(final LayoutKey layoutKey) {
         return Try.call(()->layoutLookup.lookupLayoutResource(layoutKey, context.supportedFormats()).orElse(null))
             .flatMapSuccessWhenPresent(layoutResource->loader.tryLoad(layoutKey, layoutResource))
-            .mapSuccess(gridOpt->gridOpt.orElseGet(()->memberResolver.defaultGrid(layoutKey.domainClass())))
+            .mapSuccess(gridOpt->gridOpt.orElseGet(()->fallback.defaultGrid(layoutKey.domainClass())))
             // at this point we have a grid
-            .mapSuccessWhenPresent(grid->memberResolver.normalize(grid, layoutKey.domainClass()).orElse(null))
+            .mapSuccessWhenPresent(grid->memberResolver.resolve(grid, layoutKey.domainClass()).orElse(null))
             .valueAsNonNullElseFail();
     }
 

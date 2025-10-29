@@ -18,6 +18,10 @@
  */
 package org.apache.causeway.applib.services.layout;
 
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 
@@ -34,8 +38,15 @@ public enum LayoutExportStyle {
 
     /**
      * Format that yields a full representation for the <code>layout.xml</code>,
-     * such that any layout metadata annotations could be removed from the code,
+     * such that any layout metadata annotations could be removed from code,
      * without affecting the resulting {@link BSGrid}, when loaded from <code>layout.xml</code>.
+     *
+     * The resulting {@link BSGrid} has all the metadata, broadly speaking corresponding to the
+     * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
+     *
+     * <p>In other words: if a 'complete' grid is persisted as the <code>layout.xml</code>, then there should be no need
+     * for any of the layout annotations,
+     * to be required in the domain class itself.
      */
     COMPLETE,
 
@@ -43,11 +54,27 @@ public enum LayoutExportStyle {
      * Format that yields a minimal representation for the <code>layout.xml</code>,
      * such that layout annotations are required in code to at least 'bind'
      * the properties/collections/actions to their regions (groups and tabs).
-     * <p>
-     * In other words: the <code>layout.xml</code> is used only to specify the positioning of the
-     * groups and tabs.
+     *
+     * <p>In other words: the <code>layout.xml</code> is used only to specify the positioning of the
+     * groups and tabs, but has no additional meta data. The expectation is that
+     * most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},
+     * {@link CollectionLayout} will still be retained in the domain class code.
      */
-    MINIMAL,;
+    MINIMAL,
+
+// not used as an export format anymore
+//    /**
+//     * If a 'normalized' grid is persisted as the <code>layout.xml</code>, then the expectation is that
+//     * any ordering metadata from layout annotations can be removed from the domain class
+//     * because the binding of properties/collections/actions will be within the XML.  However, the layout
+//     * annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and
+//     * {@link CollectionLayout}) (if present) will continue to be used to provide additional layout metadata.  Of
+//     * course, there is nothing to prevent the developer from extending the layout XML to also include the
+//     * layout XML (in other words moving towards a {@link #complete(BSGrid) complete} grid.  Metadata within the
+//     * <code>layout.xml</code> file takes precedence over any annotations.
+//     */
+//    NORMALIZED
+    ;
 
     public static LayoutExportStyle defaults() {
         return MINIMAL;

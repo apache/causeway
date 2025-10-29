@@ -92,7 +92,6 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
 import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
@@ -461,8 +460,7 @@ implements MetaModelContext {
             getMessageService(),
             ()->getSpecificationLoader(),
             List.of(getGridMarshaller()),
-            List.of(new LayoutResourceLoaderDefault()),
-            List.<FallbackLayoutDataSource>of());
+            List.of(new LayoutResourceLoaderDefault()));
     }
 
     @Getter(lazy = true)

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,7 +35,6 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
@@ -48,13 +46,10 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
@@ -93,7 +88,6 @@ import org.apache.causeway.core.metamodel.facets.properties.propertylayout.Rende
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
-import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -107,32 +101,30 @@ import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetI
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Encapsulates a single layout grid system which can be used to customize the layout
- * of domain objects.
- *
- * <p>In particular this means being able to return a "normalized" form
- * (validating and associating domain object members into the various regions
- * of the grid) and in providing a default grid if there is no other metadata
- * available.
- *
- * <p> Using DTOs based on
- * <a href="https://getbootstrap.com>Bootstrap</a> design system.
- *
+ * Associates domain object members into the various regions
+ * of the grid.
  */
 @Slf4j
-public record GridObjectMemberResolver(
+public record ObjectMemberResolverForGrid(
     GridLoadingContext gridLoadingContext) {
 
-    /**
-     * SPI to customize layout fallback behavior on a per class basis.
-     */
-    public static interface FallbackLayoutDataSource {
-        /**
-         * Implementing beans may provide custom defaults (for specific types) if required.<br>
-         * Implementing beans may chose to be indifferent by returning an empty {@link Try}.
-         */
-        Try<String> tryLoadAsStringUtf8(Class<?> domainClass);
+    public Optional<BSGrid> resolve(final BSGrid grid, final Class<?> domainClass) {
+        final boolean valid = validateAndNormalize(grid, domainClass);
+        if (valid) {
+            overwriteFacets(grid, domainClass);
+            if(log.isDebugEnabled()) {
+                log.debug("Grid:\n\n{}\n\n", toXml(grid));
+            }
+            return Optional.of(grid);
+        }
+        if(gridLoadingContext.causewaySystemEnvironment().isPrototyping()) {
+            gridLoadingContext.messageService().warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
+        }
+        log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
+        return Optional.empty();
     }
+
+    // -- HELPER
 
     @Deprecated
     private GridMarshaller marshaller() {
@@ -144,88 +136,8 @@ public record GridObjectMemberResolver(
             .marshal(grid, CommonMimeType.XML);
     }
 
-    public BSGrid defaultGrid(final Class<?> domainClass) {
-        final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
-        try {
-            return content.getValue()
-                    .flatMap(xml -> marshaller().unmarshal(domainClass, xml, CommonMimeType.XML)
-                        .getValue())
-                    .filter(BSGrid.class::isInstance)
-                    .map(BSGrid.class::cast)
-                    .map(_Functions.peek(bsGrid -> bsGrid.setFallback(true)))
-                    .orElseGet(() -> fallback(domainClass));
-        } catch (final Exception e) {
-            return fallback(domainClass);
-        }
-    }
-
-    private Try<String> loadFallbackLayoutAsStringUtf8(final Class<?> domainClass) {
-        return gridLoadingContext.fallbackLayoutDataSources().stream()
-            .map(ds->ds.tryLoadAsStringUtf8(domainClass))
-            .filter(tried->tried.getValue().isPresent())
-            .findFirst()
-            .orElseGet(()->{
-                return Try.call(()->_Resources.loadAsStringUtf8(GridObjectMemberResolver.class, "GridFallbackLayout.xml"));
-            });
-    }
-
-    //
-    // only ever called if fail to load GridFallbackLayout.xml,
-    // which *really* shouldn't happen
-    //
-    private BSGrid fallback(final Class<?> domainClass) {
-        final BSGrid bsGrid = new BSGrid();
-        bsGrid.domainClass(domainClass);
-        bsGrid.setFallback(true);
-
-        final BSRow headerRow = new BSRow();
-        bsGrid.getRows().add(headerRow);
-        final BSCol headerRowCol = new BSCol();
-        headerRowCol.setSpan(12);
-        headerRowCol.setUnreferencedActions(true);
-        headerRowCol.setDomainObject(new DomainObjectLayoutData());
-        headerRow.getRowContents().add(headerRowCol);
-
-        final BSRow propsRow = new BSRow();
-        bsGrid.getRows().add(propsRow);
-
-        // if no layout hints
-        addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
-
-        final BSCol col = new BSCol();
-        col.setUnreferencedCollections(true);
-        col.setSpan(12);
-        propsRow.getRowContents().add(col);
-
-        return bsGrid;
-    }
-
-    static void addFieldSetsToColumn(
-            final BSRow propsRow,
-            final int span,
-            final List<String> memberGroupNames,
-            final boolean unreferencedProperties) {
-
-        if(span > 0 || unreferencedProperties) {
-            final BSCol col = new BSCol();
-            col.setSpan(span); // in case we are here because of 'unreferencedProperties' needs setting
-            propsRow.getRowContents().add(col);
-            final List<String> leftMemberGroups = memberGroupNames;
-            for (String memberGroup : leftMemberGroups) {
-                final FieldSet fieldSet = new FieldSet();
-                fieldSet.setName(memberGroup);
-                // fieldSet's id will be derived from the name later
-                // during normalization phase.
-                if(unreferencedProperties && col.getFieldSets().isEmpty()) {
-                    fieldSet.setUnreferencedProperties(true);
-                }
-                col.getFieldSets().add(fieldSet);
-            }
-        }
-    }
-
     /**
-     * Mandatory hook method for subclasses, where they must ensure that all object members (properties, collections
+     * We must ensure that all object members (properties, collections
      * and actions) are in the grid metadata, typically by deriving this information from other existing metadata
      * (eg facets from annotations) or just by applying default rules.
      */
@@ -581,7 +493,7 @@ public record GridObjectMemberResolver(
         }
     }
 
-    protected void addActionsTo(
+    private void addActionsTo(
             final BSCol bsCol,
             final Collection<String> actionIds,
             final Function<String, ActionLayoutData> layoutFactory,
@@ -612,23 +524,6 @@ public record GridObjectMemberResolver(
             final ActionLayoutData actionLayoutData) {
         owner.getActions().add(actionLayoutData);
         actionLayoutData.owner(owner);
-    }
-
-    public Optional<BSGrid> normalize(final BSGrid grid, final Class<?> domainClass) {
-        final boolean valid = validateAndNormalize(grid, domainClass);
-        if (valid) {
-            overwriteFacets(grid, domainClass);
-            if(log.isDebugEnabled()) {
-                log.debug("Grid:\n\n{}\n\n", toXml(grid));
-            }
-            return Optional.of(grid);
-        }
-        if(gridLoadingContext.causewaySystemEnvironment().isPrototyping()) {
-            gridLoadingContext.messageService().warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
-        }
-        log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
-        return Optional.empty();
-
     }
 
     /**
@@ -865,40 +760,6 @@ public record GridObjectMemberResolver(
 
                 updateFacet(LayoutOrderFacetForLayoutXml
                         .create(collectionSequence++, oneToManyAssociation, precedence));
-            }
-        });
-    }
-
-    // --
-
-    public void complete(final BSGrid grid, final Class<?> domainClass) {
-        normalize(grid, domainClass);
-        var objectSpec = gridLoadingContext.specLoaderProvider().get().specForTypeElseFail(domainClass);
-        grid.visit(new MetamodelToGridOverridingVisitor(objectSpec));
-    }
-
-    public void minimal(final BSGrid grid, final Class<?> domainClass) {
-        normalize(grid, domainClass);
-        grid.visit(new BSElementVisitor() {
-            @Override
-            public void visit(final ActionLayoutData actionLayoutData) {
-                actionLayoutData.owner().getActions().remove(actionLayoutData);
-            }
-
-            @Override
-            public void visit(final CollectionLayoutData collectionLayoutData) {
-                collectionLayoutData.owner().getCollections().remove(collectionLayoutData);
-            }
-
-            @Override
-            public void visit(final PropertyLayoutData propertyLayoutData) {
-                propertyLayoutData.owner().getProperties().remove(propertyLayoutData);
-            }
-
-            @Override
-            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                final DomainObjectLayoutDataOwner owner = domainObjectLayoutData.owner();
-                owner.setDomainObject(new DomainObjectLayoutData());
             }
         });
     }

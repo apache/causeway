@@ -22,8 +22,12 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
+import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -110,6 +114,36 @@ public class BSUtil {
         var ownerOpt = Optional.ofNullable(row.owner());
         ownerOpt.ifPresent(owner->owner.getRows().remove(row));
         row.owner(null);
+        return ownerOpt;
+    }
+
+    /** removes the action layout from its owner and returns the owner */
+    public Optional<ActionLayoutDataOwner> remove(final ActionLayoutData actionLayoutData) {
+        var ownerOpt = Optional.ofNullable(actionLayoutData.owner());
+        ownerOpt.ifPresent(owner->owner.getActions().remove(actionLayoutData));
+        actionLayoutData.owner(null);
+        return ownerOpt;
+    }
+    /** removes the property layout from its owner and returns the owner */
+    public Optional<FieldSet> remove(final PropertyLayoutData propertyLayoutData) {
+        var ownerOpt = Optional.ofNullable(propertyLayoutData.owner());
+        ownerOpt.ifPresent(owner->owner.getProperties().remove(propertyLayoutData));
+        propertyLayoutData.owner(null);
+        return ownerOpt;
+    }
+    /** removes the collection layout from its owner and returns the owner */
+    public Optional<CollectionLayoutDataOwner> remove(final CollectionLayoutData collectionLayoutData) {
+        var ownerOpt = Optional.ofNullable(collectionLayoutData.owner());
+        ownerOpt.ifPresent(owner->owner.getCollections().remove(collectionLayoutData));
+        collectionLayoutData.owner(null);
+        return ownerOpt;
+    }
+
+    /** replaces the domain object layout with an empty one and returns the owner */
+    public Optional<DomainObjectLayoutDataOwner> replaceWithEmpty(final DomainObjectLayoutData domainObjectLayoutData) {
+        var ownerOpt = Optional.ofNullable(domainObjectLayoutData.owner());
+        ownerOpt.ifPresent(owner->owner.setDomainObject(new DomainObjectLayoutData()));
+        domainObjectLayoutData.owner(null);
         return ownerOpt;
     }
 

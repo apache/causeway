@@ -33,9 +33,11 @@ public interface LayoutResourceLoader {
 
     /**
      * Try to locate and load a {@link LayoutResource} by type and name.
+     *
+     * <p>Implementing beans may chose to be indifferent by returning an empty {@link Try}
      */
     Try<LayoutResource> tryLoadLayoutResource(
-            final @NonNull Class<?> domainObject,
+            final @NonNull Class<?> domainClass,
             final @NonNull String candidateResourceName);
 
     /**
@@ -46,9 +48,9 @@ public interface LayoutResourceLoader {
      * <p>Silently ignores exceptions underneath, if any.
      */
     default Optional<LayoutResource> lookupLayoutResource(
-            final @NonNull Class<?> domainObject,
+            final @NonNull Class<?> domainClass,
             final @NonNull String candidateResourceName) {
-        return tryLoadLayoutResource(domainObject, candidateResourceName)
+        return tryLoadLayoutResource(domainClass, candidateResourceName)
                 .getValue();
     }
 

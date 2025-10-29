@@ -58,7 +58,6 @@ import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.exceprecog.ExceptionRecognizerForRecoverableException;
 import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
 import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
-import org.apache.causeway.core.metamodel.services.grid.GridObjectMemberResolver.FallbackLayoutDataSource;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
@@ -217,10 +216,9 @@ public class CausewayModuleCoreMetamodel {
         final MessageService messageService,
         final Provider<SpecificationLoader> specLoaderProvider,
         final List<GridMarshaller> marshallers,
-        final List<LayoutResourceLoader> layoutResourceLoaders,
-        final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
+        final List<LayoutResourceLoader> layoutResourceLoaders) {
         return GridLoadingContext.create(causewaySystemEnvironment, causewayConfiguration, messageService,
-            specLoaderProvider, marshallers, layoutResourceLoaders, fallbackLayoutDataSources);
+            specLoaderProvider, marshallers, layoutResourceLoaders);
     }
 
     @Bean
