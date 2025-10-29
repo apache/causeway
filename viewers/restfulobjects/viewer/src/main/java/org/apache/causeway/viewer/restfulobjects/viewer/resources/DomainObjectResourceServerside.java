@@ -32,7 +32,8 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -250,7 +251,7 @@ implements DomainObjectResource {
                 .orElseGet(ResponseFactory::notFound));
     }
 
-    private Optional<Grid> layoutAsGrid(
+    private Optional<BSGrid> layoutAsGrid(
             final String domainType,
             final String instanceId) {
 
@@ -267,9 +268,9 @@ implements DomainObjectResource {
             final ResourceContext resourceContext,
             final String domainType,
             final String instanceId,
-            final Grid grid) {
+            final BSGrid grid) {
 
-        grid.visit(new Grid.Visitor() {
+        grid.visit(new BSElementVisitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 Link link = newLink(

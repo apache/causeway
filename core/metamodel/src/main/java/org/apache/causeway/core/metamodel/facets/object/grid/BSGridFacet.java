@@ -19,16 +19,15 @@
 package org.apache.causeway.core.metamodel.facets.object.grid;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -64,12 +63,7 @@ implements GridFacet {
     @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
-    public boolean supports(Class<? extends Grid> gridClass) {
-        return BSGrid.class.equals(gridClass);
-    }
-
-    @Override
-    public Grid getGrid(final @Nullable ManagedObject mo) {
+    public BSGrid getGrid(final @Nullable ManagedObject mo) {
         guardAgainstObjectOfDifferentType(mo);
         return normalized(mo);
     }
@@ -118,14 +112,9 @@ implements GridFacet {
         return layoutFacetLazy.get()!=null;
     }
 
-    private BSGrid load(final @NonNull String layoutPrefix) {
+    private BSGrid load(final String layoutPrefix) {
         var domainClass = objSpec().getCorrespondingClass();
-        var grid = Optional.ofNullable(
-                // loads from object's XML if available
-                gridService.load(domainClass, _Strings.emptyToNull(layoutPrefix)))
-                // loads from default-XML if available
-                .orElseGet(()->gridService.defaultGridFor(domainClass));
-        var bsGrid = (BSGrid) gridService.normalize(grid);
+        var bsGrid = gridService.load(new LayoutKey(domainClass, _Strings.emptyToNull(layoutPrefix)));
         return bsGrid;
     }
 
@@ -140,17 +129,12 @@ implements GridFacet {
         @Override public Precedence getPrecedence() { return precedence(); }
         @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
-        @Override public void visitAttributes(BiConsumer<String, Object> visitor) {
+        @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
             visitor.accept("precedence", getPrecedence().name());
         }
-        @Override public Grid getGrid(@Nullable ManagedObject mo) {
-            return Grid.empty();
+        @Override public BSGrid getGrid(@Nullable final ManagedObject mo) {
+            return null;
         }
-        @Override
-        public boolean supports(Class<? extends Grid> gridClass) {
-            return false;
-        }
-
     }
 
 }

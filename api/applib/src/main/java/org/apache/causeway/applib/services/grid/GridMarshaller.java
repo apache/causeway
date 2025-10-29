@@ -23,37 +23,38 @@ import java.util.EnumSet;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.marshal.Marshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 
 /**
- * Supports {@link Grid} marshaling and unmarshaling.
+ * Supports {@link BSGrid} marshaling and unmarshaling.
  *
  * @apiNote almost a copy of {@link Marshaller}
  *
  * @since 2.0 revised for 4.0 {@index}
  */
-public interface GridMarshaller<T extends Grid> {
-
-    Class<T> supportedClass();
+public interface GridMarshaller {
 
     /**
-     * Supported format(s) for {@link #unmarshal(String, CommonMimeType)}
-     * and {@link #marshal(Object, CommonMimeType)}.
+     * Supported format(s) for {@link #unmarshal(Class, String, CommonMimeType)}
+     * and {@link #marshal(BSGrid, CommonMimeType)}.
+     *
+     * @apiNote also used by {@link LayoutService} to lookup different formats
      */
     EnumSet<CommonMimeType> supportedFormats();
 
     /**
      * @throws UnsupportedOperationException when format is not supported
      */
-    String marshal(@NonNull T value, @NonNull CommonMimeType format);
+    String marshal(@NonNull BSGrid value, @NonNull CommonMimeType format);
 
     /**
      * Returns a new de-serialized instance wrapped in a {@link Try}.
      * @throws UnsupportedOperationException when format is not supported (not wrapped)
      */
-    Try<T> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
+    Try<BSGrid> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
 
 }

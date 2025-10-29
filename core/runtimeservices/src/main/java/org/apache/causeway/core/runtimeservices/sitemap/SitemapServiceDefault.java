@@ -34,7 +34,7 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.services.sitemap.SitemapService;
@@ -120,7 +120,7 @@ public class SitemapServiceDefault implements SitemapService {
                     var grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
                                 .flatMap(mo->Facets.bootstrapGrid(mo))
                                 .orElse(null);
-                    grid.visit(new Grid.Visitor() {
+                    grid.visit(new BSElementVisitor() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
                             actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
                             .ifPresent(action->{

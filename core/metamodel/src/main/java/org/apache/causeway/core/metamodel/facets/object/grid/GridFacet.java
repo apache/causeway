@@ -20,8 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.grid;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.grid.GridSystemService;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -30,11 +29,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * Obtain the current grid, derived either from a <code>.layout.xml</code> file, and normalized, or synthesized from
  * existing layout metadata (annotations or <code>layout.json</code>).
  * <p>
- * Most of the heavy lifting is done by delegating to the {@link LayoutService} and {@link GridSystemService} services.
+ * Most of the heavy lifting is done by delegating to the {@link LayoutService} services.
  */
 public interface GridFacet extends Facet {
 
-    boolean supports(Class<? extends Grid> gridClass);
-    Grid getGrid(@Nullable ManagedObject mo);
+    BSGrid getGrid(@Nullable ManagedObject mo);
 
 }

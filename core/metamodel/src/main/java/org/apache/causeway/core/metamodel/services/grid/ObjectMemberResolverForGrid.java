@@ -16,29 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.bootstrap;
+package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
@@ -46,216 +37,119 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
-import org.apache.causeway.applib.services.grid.GridMarshaller;
-import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.functions._Functions;
-import org.apache.causeway.commons.internal.resources._Resources;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.CssClassFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.causeway.core.metamodel.facets.collections.layout.CssClassFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.MemberDescribedFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.MemberNamedFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.PagedFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.SortedByFacetForCollectionLayoutXml;
+import org.apache.causeway.core.metamodel.facets.collections.layout.tabledec.TableDecoratorFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
+import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetForLayoutXml;
+import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.CssClassFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberDescribedFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberNamedFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyLayoutXml;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
-import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Default implementation of {@link org.apache.causeway.applib.services.grid.GridSystemService} using DTOs based on
- * <a href="https://getbootstrap.com>Bootstrap</a> design system.
- *
- * @since 2.0 {@index}
+ * Associates domain object members into the various regions
+ * of the grid.
  */
-@Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridSystemServiceBootstrap")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Bootstrap")
 @Slf4j
-public class GridSystemServiceBootstrap
-extends GridSystemServiceAbstract<BSGrid> {
-
-    public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
-    public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
+record ObjectMemberResolverForGrid(
+    GridLoadingContext context) {
 
     /**
-     * SPI to customize layout fallback behavior on a per class basis.
+     * Returns either a valid (left) or invalid (right) {@link BSGrid}
      */
-    public static interface FallbackLayoutDataSource {
-        /**
-         * Implementing beans may provide custom defaults (for specific types) if required.<br>
-         * Implementing beans may chose to be indifferent by returning an empty {@link Try}.
-         */
-        Try<String> tryLoadAsStringUtf8(Class<?> domainClass);
-    }
-
-    @Inject @Lazy // circular dependency (late binding)
-    @Setter @Accessors(chain = true) // JUnit support
-    private GridMarshaller<BSGrid> marshaller;
-
-    private final CausewayConfiguration config;
-    private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;
-
-    @Inject
-    public GridSystemServiceBootstrap(
-            final CausewayConfiguration causewayConfiguration,
-            final Provider<SpecificationLoader> specLoaderProvider,
-            final TranslationService translationService,
-            final JaxbService jaxbService,
-            final MessageService messageService,
-            final CausewaySystemEnvironment causewaySystemEnvironment,
-            final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
-        super(specLoaderProvider, translationService, messageService, causewaySystemEnvironment);
-        this.config = causewayConfiguration;
-        this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
-    }
-
-    @Override
-    public Class<BSGrid> gridImplementation() {
-        return BSGrid.class;
-    }
-
-    @Override
-    public String tns() {
-        return TNS;
-    }
-
-    @Override
-    public String schemaLocation() {
-        return SCHEMA_LOCATION;
-    }
-
-    @Override
-    protected String toXml(Grid grid) {
-        return marshaller.marshal((BSGrid) grid, CommonMimeType.XML);
-    }
-
-    @Override
-    public BSGrid defaultGrid(final Class<?> domainClass) {
-        final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
-        try {
-            return content.getValue()
-                    .flatMap(xml -> marshaller.unmarshal(domainClass, xml, CommonMimeType.XML)
-                        .getValue())
-                    .filter(BSGrid.class::isInstance)
-                    .map(BSGrid.class::cast)
-                    .map(_Functions.peek(bsGrid -> bsGrid.setFallback(true)))
-                    .orElseGet(() -> fallback(domainClass));
-        } catch (final Exception e) {
-            return fallback(domainClass);
-        }
-    }
-
-    private Try<String> loadFallbackLayoutAsStringUtf8(final Class<?> domainClass) {
-        return fallbackLayoutDataSources.stream()
-            .map(ds->ds.tryLoadAsStringUtf8(domainClass))
-            .filter(tried->tried.getValue().isPresent())
-            .findFirst()
-            .orElseGet(()->{
-                return Try.call(()->_Resources.loadAsStringUtf8(GridSystemServiceBootstrap.class, "GridFallbackLayout.xml"));
-            });
-    }
-
-    //
-    // only ever called if fail to load GridFallbackLayout.xml,
-    // which *really* shouldn't happen
-    //
-    private BSGrid fallback(final Class<?> domainClass) {
-        final BSGrid bsGrid = new BSGrid();
-        bsGrid.domainClass(domainClass);
-        bsGrid.setFallback(true);
-
-        final BSRow headerRow = new BSRow();
-        bsGrid.getRows().add(headerRow);
-        final BSCol headerRowCol = new BSCol();
-        headerRowCol.setSpan(12);
-        headerRowCol.setUnreferencedActions(true);
-        headerRowCol.setDomainObject(new DomainObjectLayoutData());
-        headerRow.getRowContents().add(headerRowCol);
-
-        final BSRow propsRow = new BSRow();
-        bsGrid.getRows().add(propsRow);
-
-        // if no layout hints
-        addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
-
-        final BSCol col = new BSCol();
-        col.setUnreferencedCollections(true);
-        col.setSpan(12);
-        propsRow.getRowContents().add(col);
-
-        return bsGrid;
-    }
-
-    static void addFieldSetsToColumn(
-            final BSRow propsRow,
-            final int span,
-            final List<String> memberGroupNames,
-            final boolean unreferencedProperties) {
-
-        if(span > 0 || unreferencedProperties) {
-            final BSCol col = new BSCol();
-            col.setSpan(span); // in case we are here because of 'unreferencedProperties' needs setting
-            propsRow.getRowContents().add(col);
-            final List<String> leftMemberGroups = memberGroupNames;
-            for (String memberGroup : leftMemberGroups) {
-                final FieldSet fieldSet = new FieldSet();
-                fieldSet.setName(memberGroup);
-                // fieldSet's id will be derived from the name later
-                // during normalization phase.
-                if(unreferencedProperties && col.getFieldSets().isEmpty()) {
-                    fieldSet.setUnreferencedProperties(true);
-                }
-                col.getFieldSets().add(fieldSet);
+    public Either<BSGrid, BSGrid> resolve(final BSGrid grid, final Class<?> domainClass) {
+        final boolean valid = validateAndNormalize(grid, domainClass);
+        if (valid) {
+            overwriteFacets(grid, domainClass);
+            if(log.isDebugEnabled()) {
+                log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }
+            return Either.left(grid);
         }
+        return Either.right(grid);
     }
 
-    @Override
-    protected boolean validateAndNormalize(
-            final Grid grid,
-            final Class<?> domainClass) {
+    // -- HELPER
 
-        var bsGrid = (BSGrid) grid;
+    private String toXml(final BSGrid grid) {
+        return context().gridMarshaller(CommonMimeType.XML).orElseThrow()
+            .marshal(grid, CommonMimeType.XML);
+    }
+
+    /**
+     * We must ensure that all object members (properties, collections
+     * and actions) are in the grid metadata, typically by deriving this information from other existing metadata
+     * (eg facets from annotations) or just by applying default rules.
+     */
+    private boolean validateAndNormalize(
+            final BSGrid bsGrid,
+            final Class<?> domainClass) {
 
         var gridModelIfValid = GridInitializationModel.createFrom(bsGrid);
         if(!gridModelIfValid.isPresent()) return false; // only present if valid
 
         var gridModel = gridModelIfValid.get();
-        var objSpec = specLoaderProvider.get().specForTypeElseFail(domainClass);
+        var objSpec = context().specLoaderProvider().get().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objSpec.streamCollections(MixedIn.INCLUDED));
         var objectActionById = ObjectMember.mapById(objSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
-        var layoutDataFactory = LayoutDataFactory.of(objSpec);
+        var layoutDataFactory = new LayoutDataFactory(objSpec);
 
         // * left  ... those defined in the grid model but not available with the meta-model
         // * right ... those available with the meta-model but missing in the grid-model
@@ -339,7 +233,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
                 // add unbound properties respecting configured sequence policy
                 var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
-                    .sortProperties(config, unboundPropertyIds.stream()
+                    .sortProperties(context.causewayConfiguration(), unboundPropertyIds.stream()
                             .map(oneToOneAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -362,7 +256,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
             // add missing collections respecting configured sequence policy
             var sortedMissingCollectionIds = _UnreferencedSequenceUtil
-                    .sortCollections(config, collectionDisjunction.right().stream()
+                    .sortCollections(context.causewayConfiguration(), collectionDisjunction.right().stream()
                             .map(oneToManyAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -519,7 +413,7 @@ extends GridSystemServiceAbstract<BSGrid> {
                 });
         }
 
-        bsGrid.setNormalized(true);
+        bsGrid.valid(true);
         return true;
     }
 
@@ -593,7 +487,7 @@ extends GridSystemServiceAbstract<BSGrid> {
         }
     }
 
-    protected void addActionsTo(
+    private void addActionsTo(
             final BSCol bsCol,
             final Collection<String> actionIds,
             final Function<String, ActionLayoutData> layoutFactory,
@@ -624,6 +518,244 @@ extends GridSystemServiceAbstract<BSGrid> {
             final ActionLayoutData actionLayoutData) {
         owner.getActions().add(actionLayoutData);
         actionLayoutData.owner(owner);
+    }
+
+    /**
+     * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
+     *
+     * @implNote This code uses {@link FacetUtil#updateFacet(Facet)}
+     * because the layout might be reloaded from XML if reloading is supported.
+     */
+    private void overwriteFacets(
+            final BSGrid bsGrid,
+            final Class<?> domainClass) {
+
+        var objectSpec = context.specLoaderProvider().get().specForTypeElseFail(domainClass);
+
+        var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
+        var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
+        var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
+
+        // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
+        var precedence = bsGrid.fallback()
+                ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
+                : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
+
+        final AtomicInteger propertySequence = new AtomicInteger(0);
+        bsGrid.visit(new BSElementVisitor() {
+            private int collectionSequence = 1;
+
+            private int actionDomainObjectSequence = 1;
+            private int actionPropertyGroupSequence = 1;
+            private int actionPropertySequence = 1;
+            private int actionCollectionSequence = 1;
+
+            @Override
+            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+
+                updateFacetIfPresent(
+                        BookmarkPolicyFacetForDomainObjectLayoutXml
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
+                        CssClassFacetForDomainObjectLayoutXml
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
+                        FaFacetForDomainObjectLayoutXml
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
+                        ObjectDescribedFacetForDomainObjectLayoutXml
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
+                        ObjectNamedFacetForDomainObjectLayoutXml
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+                updateFacetIfPresent(
+                        TableDecoratorFacetForDomainObjectLayoutXml
+                            .create(domainObjectLayoutData, objectSpec, precedence));
+            }
+
+            @Override
+            public void visit(final ActionLayoutData actionLayoutData) {
+
+                var actionLayoutDataOwner = actionLayoutData.owner();
+                var objectAction = objectActionById.get(actionLayoutData.getId());
+                if(objectAction == null) return;
+
+                {
+                    GroupIdAndName groupIdAndName = null;
+                    int memberOrderSequence;
+                    if(actionLayoutDataOwner instanceof FieldSet) {
+                        var fieldSet = (FieldSet) actionLayoutDataOwner;
+                        for (var propertyLayoutData : fieldSet.getProperties()) {
+                            // any will do; choose the first one that we know is valid
+                            if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
+                                groupIdAndName = GroupIdAndName
+                                        .forPropertyLayoutData(propertyLayoutData)
+                                        .orElse(null);
+                                break;
+                            }
+                        }
+                        memberOrderSequence = actionPropertyGroupSequence++;
+                    } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
+                        groupIdAndName = GroupIdAndName
+                                .forPropertyLayoutData((PropertyLayoutData) actionLayoutDataOwner)
+                                .orElse(null);
+                        memberOrderSequence = actionPropertySequence++;
+                    } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
+                        groupIdAndName = GroupIdAndName
+                                .forCollectionLayoutData((CollectionLayoutData) actionLayoutDataOwner)
+                                .orElse(null);
+                        memberOrderSequence = actionCollectionSequence++;
+                    } else {
+                        // don't add: any existing metadata should be preserved
+                        groupIdAndName = null;
+                        memberOrderSequence = actionDomainObjectSequence++;
+                    }
+                    updateFacet(
+                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
+
+                    //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
+                    var precedenceHotfix = bsGrid.fallback()
+                            ? Facet.Precedence.DEFAULT
+                            : Facet.Precedence.HIGH;
+
+                    updateFacetIfPresent(
+                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix));
+                }
+
+                // fix up the action position if required
+                if(actionLayoutDataOwner instanceof FieldSet) {
+                    if(actionLayoutData.getPosition() == null ||
+                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.BELOW ||
+                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.RIGHT) {
+                        actionLayoutData.setPosition(org.apache.causeway.applib.annotation.ActionLayout.Position.PANEL);
+                    }
+                } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
+                    if(actionLayoutData.getPosition() == null ||
+                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
+                            actionLayoutData.getPosition() == org.apache.causeway.applib.annotation.ActionLayout.Position.PANEL) {
+                        actionLayoutData.setPosition(org.apache.causeway.applib.annotation.ActionLayout.Position.BELOW);
+                    }
+                } else {
+                    // doesn't do anything for DomainObject or Collection
+                    actionLayoutData.setPosition(null);
+                }
+
+                updateFacetIfPresent(
+                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+
+                updateFacetIfPresent(
+                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+
+                updateFacetIfPresent(
+                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+
+                updateFacetIfPresent(
+                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+
+                updateFacetIfPresent(
+                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+
+                updateFacetIfPresent(
+                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+
+                updateFacetIfPresent(
+                    Optional.ofNullable(actionLayoutData)
+                        .map(ActionLayoutData::getPromptStyle)
+                        .map(promptStyle->new PromptStyleFacet("ActionLayoutXml", promptStyle, objectAction, precedence, true)));
+
+            }
+
+            @Override
+            public void visit(final PropertyLayoutData propertyLayoutData) {
+                var oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
+                if(oneToOneAssociation == null) return;
+
+                updateFacetIfPresent(
+                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        Optional.ofNullable(propertyLayoutData)
+                            .map(PropertyLayoutData::getPromptStyle)
+                            .map(promptStyle->new PromptStyleFacet("PropertyLayoutXml", promptStyle, oneToOneAssociation, precedence, true)));
+
+                updateFacetIfPresent(
+                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+
+                // Layout group-name based on owning property group, Layout sequence monotonically increasing
+                // nb for any given field set the sequence won't reset to zero; however this is what we want so that
+                // table columns are shown correctly (by fieldset, then property order within that fieldset).
+                final FieldSet fieldSet = propertyLayoutData.owner();
+
+                updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence));
+
+                updateFacetIfPresent(
+                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence));
+            }
+
+            @Override
+            public void visit(final CollectionLayoutData collectionLayoutData) {
+                var oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
+                if(oneToManyAssociation == null) {
+                    return;
+                }
+
+                updateFacetIfPresent(
+                        CssClassFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        DefaultViewFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        TableDecoratorFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        MemberDescribedFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        HiddenFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        MemberNamedFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        PagedFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacetIfPresent(
+                        SortedByFacetForCollectionLayoutXml
+                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+
+                updateFacet(LayoutOrderFacetForLayoutXml
+                        .create(collectionSequence++, oneToManyAssociation, precedence));
+            }
+        });
     }
 
 }

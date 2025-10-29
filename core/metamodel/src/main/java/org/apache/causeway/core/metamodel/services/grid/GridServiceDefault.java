@@ -18,101 +18,131 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.List;
+import java.util.EnumSet;
+import java.util.Optional;
 
 import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridSystemService;
-import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link GridService}.
- *
- * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
+@Slf4j
 public record GridServiceDefault(
-    GridLoaderService gridLoaderService,
-    GridMarshaller<? extends Grid> marshaller,
-    List<GridSystemService<? extends Grid>> gridSystemServices) implements GridService {
+    GridLoadingContext context,
+    LayoutResourceLookup layoutLookup,
+    GridLoader loader,
+    FallbackGridProvider fallback,
+    ObjectMemberResolverForGrid memberResolver,
+    GridCache cache) implements GridService {
+
+    @Inject
+    public GridServiceDefault(
+            final GridLoadingContext gridLoadingContext) {
+        this(gridLoadingContext,
+            new LayoutResourceLookup(gridLoadingContext.layoutResourceLoaders()),
+            new GridLoader(gridLoadingContext),
+            new FallbackGridProvider(gridLoadingContext),
+            new ObjectMemberResolverForGrid(gridLoadingContext),
+            new GridCache(gridLoadingContext));
+    }
+
+    @Override
+    public EnumSet<CommonMimeType> supportedFormats() {
+        return context.supportedFormats();
+    }
+
+    @Override
+    public Optional<GridMarshaller> marshaller(final CommonMimeType format) {
+        return context.gridMarshaller(format);
+    }
 
     @Override
     public boolean supportsReloading() {
-        return gridLoaderService.supportsReloading();
+        return context.supportsReloading();
     }
 
+    // e.g. triggered by {@link Object_rebuildMetamodel} mixin action
     @Override
-    public void remove(final Class<?> domainClass) {
-        gridLoaderService.remove(domainClass);
-    }
-
-    @Override
-    public boolean existsFor(final Class<?> domainClass) {
-        return gridLoaderService.existsFor(domainClass, marshaller.supportedFormats());
-    }
-
-    @Override
-    public Grid load(final Class<?> domainClass) {
-        return gridLoaderService.load(domainClass, marshaller).orElse(null);
-    }
-
-    @Override
-    public Grid load(final Class<?> domainClass, final String layout) {
-        return gridLoaderService.load(domainClass, layout, marshaller).orElse(null);
-    }
-
-    // --
-
-    @Override
-    public Grid defaultGridFor(final Class<?> domainClass) {
-        for (var gridSystemService : gridSystemServices()) {
-            var grid = gridSystemService.defaultGrid(domainClass);
-            if(grid != null) return grid;
+    public void invalidate(final Class<?> domainClass) {
+        if(supportsReloading()) {
+            layoutLookup.unmarkInvalid(domainClass);
+            cache.remove(domainClass);
         }
-        throw new IllegalStateException(
-                "No GridSystemService available to create grid for '" + domainClass.getName() + "'");
     }
 
     @Override
-    public Grid normalize(final Grid grid) {
-        if(grid.isNormalized()) return grid;
-
-        var domainClass = grid.domainClass();
-        for (var gridSystemService : gridSystemServices()) {
-            gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
-        }
-        return grid;
+    public BSGrid load(final LayoutKey layoutKey) {
+        return cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
+            .valueAsNonNullElseFail(); // at least we should have a fallback, otherwise there is some serious issue
     }
 
-    @Override
-    public Grid complete(final Grid grid) {
-        var domainClass = grid.domainClass();
-        for (var gridSystemService : gridSystemServices()) {
-            gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
-        }
-        return grid;
+    // -- HELPER
+
+    private Try<BSGrid> tryLoadNoCache(final LayoutKey layoutKey) {
+        return Try.call(()->layoutLookup.lookupLayoutResource(layoutKey, context.supportedFormats()).orElse(null))
+            // on the success rail we optionally have a LayoutResource
+            .flatMapSuccessWhenPresent(layoutResource->loader.tryLoad(layoutKey, layoutResource)
+                .ifFailure(ex->onFailureWhileLoadingResource(layoutKey, layoutResource, ex)))
+            // on the success rail we optionally have a raw BSGrid (not yet validated), if present validate
+            .mapSuccessWhenPresent(grid->memberResolver.resolve(grid, layoutKey.domainClass())
+                .<BSGrid>fold(a->a, b->{ onValidationFailure(layoutKey, b); return null; }))
+            // on the success rail we optionally have a valid BSGrid, if absent use fallback and validate
+            .mapSuccess(gridOpt->gridOpt.orElseGet(()->memberResolver.resolve(
+                fallback.defaultGrid(layoutKey.domainClass()), layoutKey.domainClass())
+                    .<BSGrid>fold(a->a, b->{ onFallbackValidationFailure(b); return null; })));
     }
 
-    @Override
-    public Grid minimal(final Grid grid) {
-        var domainClass = grid.domainClass();
-        for (var gridSystemService : gridSystemServices()) {
-            gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
+    private void onFailureWhileLoadingResource(
+            final LayoutKey layoutKey,
+            final LayoutResource layoutResource,
+            final Throwable ex) {
+        layoutLookup.markInvalid(layoutKey);
+        final String message = "Failed to parse %s, cause (%s)"
+            .formatted(layoutResource.resourceName(), ex.getMessage());
+        if(context.causewaySystemEnvironment().isPrototyping()) {
+            context.messageService().warnUser(message);
         }
-        return grid;
+        log.warn(message);
+    }
+
+    private void onValidationFailure(final LayoutKey layoutKey, final BSGrid bsGrid) {
+        layoutLookup.markInvalid(layoutKey);
+        if(context.causewaySystemEnvironment().isPrototyping()) {
+            context.messageService().warnUser("Grid metadata errors for " + bsGrid.domainClass().getName() + "; check the error log");
+        }
+        log.error("Grid metadata errors in {}:\n\n{}\n\n", bsGrid.domainClass().getName(), toXml(bsGrid));
+    }
+
+    private void onFallbackValidationFailure(final BSGrid bsGrid) {
+        if(context.causewaySystemEnvironment().isPrototyping()) {
+            context.messageService().warnUser("Grid metadata errors for " + bsGrid.domainClass().getName() + "; check the error log");
+        }
+        log.error("Grid metadata errors in {}:\n\n{}\n\n", bsGrid.domainClass().getName(), toXml(bsGrid));
+    }
+
+    private String toXml(final BSGrid grid) {
+        return context().gridMarshaller(CommonMimeType.XML).orElseThrow()
+            .marshal(grid, CommonMimeType.XML);
     }
 
 }

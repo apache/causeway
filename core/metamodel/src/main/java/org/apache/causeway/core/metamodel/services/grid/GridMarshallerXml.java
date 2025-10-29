@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.bootstrap;
+package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -42,27 +42,23 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
 
 /**
- * Default implementation of {@link GridMarshaller} using DTOs based on
- * <a href="https://getbootstrap.com>Bootstrap</a> design system.
- *
- * @since 2.0 {@index}
+ * Default implementation of {@link GridMarshaller}.
  */
 @Service
-@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerServiceBootstrap")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerXml")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-public record GridMarshallerServiceBootstrap(
+public record GridMarshallerXml(
         JaxbService jaxbService,
         XsiSchemaLocationProviderForGrid schemaLocationProvider,
         EnumSet<CommonMimeType> supportedFormats
-    ) implements GridMarshaller<BSGrid> {
+    ) implements GridMarshaller {
 
     @Inject
-    public GridMarshallerServiceBootstrap(final JaxbService jaxbService, final XsiSchemaLocationProviderForGrid schemaLocationProvider) {
-        this(jaxbService, schemaLocationProvider, EnumSet.of(CommonMimeType.XML));
+    public GridMarshallerXml(final JaxbService jaxbService) {
+        this(jaxbService, new XsiSchemaLocationProviderForGrid(), EnumSet.of(CommonMimeType.XML));
         // eagerly create a JAXBContext for this grid type (and cache it)
         JaxbUtils.jaxbContextFor(BSGrid.class, true);
     }
@@ -73,18 +69,13 @@ public record GridMarshallerServiceBootstrap(
     }
 
     @Override
-    public Class<BSGrid> supportedClass() {
-        return BSGrid.class;
-    }
-
-    @Override
     public String marshal(final @NonNull BSGrid bsGrid, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
         switch(format) {
         case XML:{
             return jaxbService.toXml(bsGrid,
                     Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
-                        schemaLocationProvider.xsiSchemaLocation(BSGrid.class)));
+                        schemaLocationProvider.xsiSchemaLocation()));
         }
         default:
             throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());

@@ -34,12 +34,9 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.util.ClassUtils;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.factory.FactoryService;
-import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -73,6 +70,7 @@ import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
@@ -91,11 +89,9 @@ import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstit
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.services.command.CommandDtoFactory;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
+import org.apache.causeway.core.metamodel.services.grid.GridLoadingContext;
+import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
-import org.apache.causeway.core.metamodel.services.grid.XsiSchemaLocationProviderForGrid;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridMarshallerServiceBootstrap;
-import org.apache.causeway.core.metamodel.services.grid.bootstrap.GridSystemServiceBootstrap;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.message.MessageServiceNoop;
@@ -301,7 +297,6 @@ implements MetaModelContext {
                 discoveredServices.stream(),
                 Stream.of(
                     // support for lazy bean providers,
-                    SingletonBeanProvider.forTestingLazy(GridLoaderService.class, this::getGridLoaderService),
                     SingletonBeanProvider.forTestingLazy(GridService.class, this::getGridService),
                     SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
                     SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
@@ -457,45 +452,31 @@ implements MetaModelContext {
     }
 
     @Getter(lazy = true)
-    private final GridMarshaller gridMarshallerService = createGridMarshallerService();
-    //XXX lombok issue: won't compile if inlined
-    private final GridMarshaller<? extends Grid> createGridMarshallerService() {
-        return new GridMarshallerServiceBootstrap(getJaxbService(), new XsiSchemaLocationProviderForGrid(List.of()));
+    private final GridLoadingContext gridLoadingContext = createGridLoadingContext();
+    private final GridLoadingContext createGridLoadingContext() {
+        return new CausewayModuleCoreMetamodel().gridLoadingContext(
+            getSystemEnvironment(),
+            getConfiguration(),
+            getMessageService(),
+            ()->getSpecificationLoader(),
+            List.of(getGridMarshaller()),
+            List.of(new LayoutResourceLoaderDefault()));
     }
 
     @Getter(lazy = true)
-    private final List<GridSystemService<? extends Grid>> gridSystemServices = List.of(
-        new GridSystemServiceBootstrap(
-            getConfiguration(),
-            ()->getSpecificationLoader(),
-            getTranslationService(),
-            getJaxbService(),
-            getMessageService(),
-            getSystemEnvironment(),
-            List.of())
-            .setMarshaller(getGridMarshallerService()));
-
-    @Getter(lazy = true)
-    private final GridLoaderService gridLoaderService = createGridLoaderService();
-    //XXX lombok issue: won't compile if inlined
-    private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
+    private final GridMarshaller gridMarshaller = createGridMarshaller();
+    private final GridMarshaller createGridMarshaller() {
+        return new GridMarshallerXml(getJaxbService());
     }
 
     @Getter(lazy = true)
     private final GridService gridService = createGridService();
-    //XXX lombok issue: won't compile if inlined
-    @SuppressWarnings("unchecked")
     private final GridService createGridService() {
-        return new GridServiceDefault(
-            getGridLoaderService(),
-            getGridMarshallerService(),
-            getGridSystemServices());
+        return new GridServiceDefault(getGridLoadingContext());
     }
 
     @Getter(lazy = true)
     private final LayoutService layoutService = createLayoutService();
-    //XXX lombok issue: won't compile if inlined
     private final LayoutService createLayoutService() {
         return new LayoutServiceDefault(
                 getSpecificationLoader(),

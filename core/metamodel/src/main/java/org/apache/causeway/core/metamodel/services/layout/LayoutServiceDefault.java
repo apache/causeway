@@ -22,7 +22,6 @@ import java.io.File;
 import java.util.EnumSet;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.jspecify.annotations.Nullable;
@@ -31,38 +30,43 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Default implementation of {@link LayoutService}
- *
- * @since 1.x revised for 2.0 {@index}
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".LayoutServiceDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Slf4j
-public class LayoutServiceDefault implements LayoutService {
-
-    private final SpecificationLoader specificationLoader;
-    private final GridService gridService;
-    private final MenuBarsService menuBarsService;
+public record LayoutServiceDefault(
+        SpecificationLoader specLoader,
+        GridService gridService,
+        MenuBarsService menuBarsService)
+implements LayoutService {
 
     // -- MENUBARS LAYOUT
 
@@ -83,7 +87,7 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
-        return gridService.marshaller().supportedFormats();
+        return gridService.supportedFormats();
     }
 
     @Override
@@ -96,7 +100,7 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public byte[] toZip(final LayoutExportStyle style, final CommonMimeType format) {
-        var domainObjectSpecs = specificationLoader.snapshotSpecifications()
+        var domainObjectSpecs = specLoader.snapshotSpecifications()
                 .filter(spec ->
                         !spec.isAbstract()
                         && (spec.isEntity() || spec.isViewModel()));
@@ -108,12 +112,12 @@ public class LayoutServiceDefault implements LayoutService {
 
             tryGridToFormatted(domainClass, style, format)
             .accept(
-                    failure->
-                        log.warn("failed to generate layout file for {}", domainClass),
-                    contentIfAny->{
-                        contentIfAny.ifPresent(contentString->
-                            zipBuilder.addAsUtf8(zipEntryNameFor(objectSpec, format), contentString));
-                    });
+                failure->
+                    log.warn("failed to generate layout file for {}", domainClass),
+                contentIfAny->{
+                    contentIfAny.ifPresent(contentString->
+                        zipBuilder.addAsUtf8(zipEntryNameFor(objectSpec, format), contentString));
+                });
         }
 
         return zipBuilder.toBytes();
@@ -121,19 +125,56 @@ public class LayoutServiceDefault implements LayoutService {
 
     // -- HELPER
 
+    private BSGrid toGridForExport(
+        final Class<?> domainClass,
+        final LayoutExportStyle style) {
+        // making a deep copy so, we don't modify the cached grid
+        var grid = BSUtil.deepCopy(gridService.load(new LayoutKey(domainClass, null)));
+
+        if (style == LayoutExportStyle.COMPLETE) return toComplete(grid, domainClass);
+        if (style == LayoutExportStyle.MINIMAL) return toMinimal(grid, domainClass);
+
+        throw _Exceptions.unmatchedCase(style);
+    }
+
+    private BSGrid toComplete(final BSGrid grid, final Class<?> domainClass) {
+        var objectSpec = specLoader().specForTypeElseFail(domainClass);
+        grid.visit(new MetamodelToGridOverridingVisitor(objectSpec));
+        return grid;
+    }
+
+    private BSGrid toMinimal(final BSGrid grid, final Class<?> domainClass) {
+        grid.visit(new BSElementVisitor() {
+            @Override public void visit(final ActionLayoutData actionLayoutData) {
+                BSUtil.remove(actionLayoutData);
+            }
+            @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+
+                BSUtil.remove(collectionLayoutData);
+            }
+            @Override public void visit(final PropertyLayoutData propertyLayoutData) {
+                BSUtil.remove(propertyLayoutData);
+            }
+            @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                BSUtil.replaceWithEmpty(domainObjectLayoutData);
+            }
+        });
+        return grid;
+    }
+
     private Try<String> tryGridToFormatted(
             final Class<?> domainClass,
             final LayoutExportStyle style,
             final CommonMimeType format) {
         return Try.call(()->
-            gridToFormatted(gridService.toGridForExport(domainClass, style), format));
+            gridToFormatted(toGridForExport(domainClass, style), format));
     }
 
-    private String gridToFormatted(final @Nullable Grid grid, final CommonMimeType format) {
-        if(grid==null) {
-            return null;
-        }
-        return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
+    private String gridToFormatted(final @Nullable BSGrid grid, final CommonMimeType format) {
+        if(grid==null) return null;
+        return gridService.marshaller(format)
+            .map(marshaller->marshaller.marshal(grid, format))
+            .orElse(null);
     }
 
     private static String zipEntryNameFor(

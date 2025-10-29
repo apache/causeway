@@ -20,7 +20,11 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.io.Serializable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.FieldSet;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 
 /**
  * @since 1.x {@index}
@@ -35,23 +39,24 @@ public interface BSElement extends Serializable {
     String getCssClass();
     void setCssClass(final String cssClass);
 
-    public interface Visitor extends Grid.Visitor {
-        default void preVisit(final BSGrid bsGrid) {}
-        default void visit(final BSGrid bsGrid) {}
-        default void postVisit(final BSGrid bsGrid) {}
-        default void preVisit(final BSRow bsRow) {}
-        default void visit(final BSRow bsRow) {}
-        default void postVisit(final BSRow bsRow) {}
-        default void preVisit(final BSCol bsCol) {}
-        default void visit(final BSCol bsCol) {}
-        default void postVisit(final BSCol bsCol) {}
+    public interface BSElementVisitor {
+        default void enter(final BSGrid bsGrid) {}
+        default void exit(final BSGrid bsGrid) {}
+        default void enter(final BSRow bsRow) {}
+        default void exit(final BSRow bsRow) {}
+        default void enter(final BSCol bsCol) {}
+        default void exit(final BSCol bsCol) {}
         default void visit(final BSClearFix bsClearFix) {}
-        default void preVisit(final BSTabGroup bsTabGroup) {}
-        default void visit(final BSTabGroup bsTabGroup) {}
-        default void postVisit(final BSTabGroup bsTabGroup) {}
-        default void preVisit(final BSTab bsTab) {}
-        default void visit(final BSTab bsTab) {}
-        default void postVisit(final BSTab bsTab) {}
+        default void enter(final BSTabGroup bsTabGroup) {}
+        default void exit(final BSTabGroup bsTabGroup) {}
+        default void enter(final BSTab bsTab) {}
+        default void exit(final BSTab bsTab) {}
+
+        default void visit(final DomainObjectLayoutData domainObjectLayoutData) {}
+        default void visit(final ActionLayoutData actionLayoutData) {}
+        default void visit(final PropertyLayoutData propertyLayoutData) {}
+        default void visit(final CollectionLayoutData collectionLayoutData) {}
+        default void visit(final FieldSet fieldSet) {}
     }
 
 }

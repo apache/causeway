@@ -16,43 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.spi;
+package org.apache.causeway.applib.layout.resource;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault;
-
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.commons.functional.Try;
+
 /**
- * A simpler SPI for {@link GridLoaderServiceDefault}.
+ * SPI for grid loading.
  *
- * @since 2.0 {@index}
+ * @since 4.0 {@index}
  */
 public interface LayoutResourceLoader {
 
     /**
      * Try to locate and load a {@link LayoutResource} by type and name.
+     *
+     * <p>Implementing beans may chose to be indifferent by returning an empty {@link Try}
      */
-    @Programmatic
     Try<LayoutResource> tryLoadLayoutResource(
-            final @NonNull Class<?> type,
+            final @NonNull Class<?> domainClass,
             final @NonNull String candidateResourceName);
 
     /**
      * Optionally returns a {@link LayoutResource} based
      * on whether it could be resolved by type and name
      * and successfully read.
-     * <p>
-     * Silently ignores exceptions underneath, if any.
+     *
+     * <p>Silently ignores exceptions underneath, if any.
      */
-    @Programmatic
     default Optional<LayoutResource> lookupLayoutResource(
-            final @NonNull Class<?> type,
+            final @NonNull Class<?> domainClass,
             final @NonNull String candidateResourceName) {
-        return tryLoadLayoutResource(type, candidateResourceName)
+        return tryLoadLayoutResource(domainClass, candidateResourceName)
                 .getValue();
     }
 

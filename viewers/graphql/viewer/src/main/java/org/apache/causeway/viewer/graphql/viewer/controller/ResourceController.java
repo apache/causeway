@@ -41,7 +41,6 @@ import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -190,7 +189,7 @@ public record ResourceController(
     private Optional<String> gridAsXml(final ManagedObject managedObject) {
         return managedObject.objSpec().lookupFacet(GridFacet.class)
             .map(facet->facet.getGrid(managedObject))
-            .map(grid->gridService().marshaller().marshal(_Casts.uncheckedCast(grid), CommonMimeType.XML))
+            .flatMap(grid->gridService().marshaller(CommonMimeType.XML).map(mars->mars.marshal(grid, CommonMimeType.XML)))
             .map(x -> x.replaceAll("(\r\n)", "\n"));
     }
 
