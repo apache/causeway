@@ -71,7 +71,7 @@ final class GridInitializationModel {
 
         bsGrid.visit(new BSElementVisitor() {
             @Override
-            public void visit(final BSRow bsRow) {
+            public void enter(final BSRow bsRow) {
                 final String id = bsRow.getId();
                 if(id == null) return;
 
@@ -84,7 +84,7 @@ final class GridInitializationModel {
             }
 
             @Override
-            public void visit(final BSCol bsCol) {
+            public void enter(final BSCol bsCol) {
                 final String id = bsCol.getId();
                 if(id == null) return;
 
@@ -121,7 +121,7 @@ final class GridInitializationModel {
         bsGrid.visit(new BSElementVisitor(){
 
             @Override
-            public void visit(final BSCol bsCol) {
+            public void enter(final BSCol bsCol) {
                 if(isSet(bsCol.isUnreferencedActions())) {
                     if(gridModel.colForUnreferencedActionsRef != null) {
                         bsCol.setMetadataError("More than one col with 'unreferencedActions' attribute set");
@@ -170,7 +170,7 @@ final class GridInitializationModel {
             }
 
             @Override
-            public void visit(final BSTabGroup bsTabGroup) {
+            public void enter(final BSTabGroup bsTabGroup) {
                 if(isSet(bsTabGroup.isUnreferencedCollections())) {
                     if(gridModel.tabGroupForUnreferencedCollectionsRef != null) {
                         bsTabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");

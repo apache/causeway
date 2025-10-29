@@ -33,12 +33,11 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisit
 
 public record BSWalker(BSRowOwner root) {
 
-    public void walk(final BSElementVisitor visitor) {
+    public void walkDepthFirst(final BSElementVisitor visitor) {
         if(root instanceof BSGrid bsGrid) {
-            visitor.preVisit(bsGrid);
-            visitor.visit(bsGrid);
+            visitor.enter(bsGrid);
             traverseRows(root, visitor);
-            visitor.postVisit(bsGrid);
+            visitor.exit(bsGrid);
         } else {
             traverseRows(root, visitor);
         }
@@ -47,10 +46,9 @@ public record BSWalker(BSRowOwner root) {
     private void traverseRows(final BSRowOwner rowOwner, final BSElementVisitor visitor) {
         final List<BSRow> rows = rowOwner.getRows();
         for (BSRow bsRow : new ArrayList<>(rows)) {
-            visitor.preVisit(bsRow);
-            visitor.visit(bsRow);
+            visitor.enter(bsRow);
             traverseCols(bsRow, visitor);
-            visitor.postVisit(bsRow);
+            visitor.exit(bsRow);
         }
     }
 
@@ -58,15 +56,14 @@ public record BSWalker(BSRowOwner root) {
         final List<BSRowContent> cols = bsRow.getRowContents();
         for (BSRowContent rowContent : new ArrayList<>(cols)) {
             if(rowContent instanceof BSCol bsCol) {
-                visitor.preVisit(bsCol);
-                visitor.visit(bsCol);
+                visitor.enter(bsCol);
                 traverseDomainObject(bsCol, visitor);
                 traverseTabGroups(bsCol, visitor);
                 traverseActions(bsCol, visitor);
                 traverseFieldSets(bsCol, visitor);
                 traverseCollections(bsCol, visitor);
                 traverseRows(bsCol, visitor);
-                visitor.postVisit(bsCol);
+                visitor.exit(bsCol);
             } else if (rowContent instanceof BSClearFix bsClearFix) {
                 visitor.visit(bsClearFix);
             } else {
@@ -85,20 +82,18 @@ public record BSWalker(BSRowOwner root) {
     private void traverseTabGroups(final BSTabGroupOwner bsTabGroupOwner, final BSElementVisitor visitor) {
         final List<BSTabGroup> tabGroups = bsTabGroupOwner.getTabGroups();
         for (BSTabGroup bsTabGroup : new ArrayList<>(tabGroups)) {
-            visitor.preVisit(bsTabGroup);
-            visitor.visit(bsTabGroup);
+            visitor.enter(bsTabGroup);
             traverseTabs(bsTabGroup, visitor);
-            visitor.postVisit(bsTabGroup);
+            visitor.exit(bsTabGroup);
         }
     }
 
     private void traverseTabs(final BSTabOwner bsTabOwner, final BSElementVisitor visitor) {
         final List<BSTab> tabs = bsTabOwner.getTabs();
         for (BSTab tab : new ArrayList<>(tabs)) {
-            visitor.preVisit(tab);
-            visitor.visit(tab);
+            visitor.enter(tab);
             traverseRows(tab, visitor);
-            visitor.postVisit(tab);
+            visitor.exit(tab);
         }
     }
 

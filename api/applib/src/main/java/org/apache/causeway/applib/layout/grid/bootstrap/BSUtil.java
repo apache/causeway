@@ -51,7 +51,7 @@ public class BSUtil {
      */
     public boolean hasContent(final BSTab thisBsTab) {
         final AtomicBoolean foundContent = new AtomicBoolean(false);
-        new BSWalker(thisBsTab).walk(new BSElementVisitor() {
+        new BSWalker(thisBsTab).walkDepthFirst(new BSElementVisitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 foundContent.set(true);

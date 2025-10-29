@@ -527,7 +527,7 @@ record ObjectMemberResolverForGrid(
      * because the layout might be reloaded from XML if reloading is supported.
      */
     private void overwriteFacets(
-            final BSGrid fcGrid,
+            final BSGrid bsGrid,
             final Class<?> domainClass) {
 
         var objectSpec = context.specLoaderProvider().get().specForTypeElseFail(domainClass);
@@ -537,12 +537,12 @@ record ObjectMemberResolverForGrid(
         var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
         // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
-        var precedence = fcGrid.fallback()
+        var precedence = bsGrid.fallback()
                 ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
-        fcGrid.visit(new BSElementVisitor() {
+        bsGrid.visit(new BSElementVisitor() {
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -614,7 +614,7 @@ record ObjectMemberResolverForGrid(
                             LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
-                    var precedenceHotfix = fcGrid.fallback()
+                    var precedenceHotfix = bsGrid.fallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
 

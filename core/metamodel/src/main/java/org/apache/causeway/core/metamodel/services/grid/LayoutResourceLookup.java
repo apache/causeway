@@ -59,7 +59,7 @@ record LayoutResourceLookup(
     }
 
     /**
-     * if known bad - don't load
+     * if known invalid returns {@link Optional#empty()}
      */
     public Optional<LayoutResource> lookupLayoutResource(
             final LayoutKey layoutKey,

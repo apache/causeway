@@ -89,7 +89,7 @@ public final class BSGrid implements BSElement, Dto, BSRowOwner {
     @Getter private final List<String> metadataErrors = new ArrayList<>();
 
     public void visit(final BSElementVisitor visitor) {
-        new BSWalker(this).walk(visitor);
+        new BSWalker(this).walkDepthFirst(visitor);
     }
 
     public Stream<PropertyLayoutData> streamPropertyLayoutData() {

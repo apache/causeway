@@ -63,10 +63,10 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                     if(_NullSafe.isEmpty(collectionLayoutData.getMetadataError())) keep();
                 }
 
-                @Override public void visit(final BSTab bsTab) {
+                @Override public void enter(final BSTab bsTab) {
                     stack.push(new Flag());
                 }
-                @Override public void postVisit(final BSTab bsTab) {
+                @Override public void exit(final BSTab bsTab) {
                     var flag = stack.pop();
                     if(!flag.keep) {
                         // collecting empty tabs
@@ -120,10 +120,10 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                     if(_NullSafe.isEmpty(collectionLayoutData.getMetadataError())) keep();
                 }
 
-                @Override public void visit(final BSRow bsRow) {
+                @Override public void enter(final BSRow bsRow) {
                     stack.push(new Flag());
                 }
-                @Override public void postVisit(final BSRow bsRow) {
+                @Override public void exit(final BSRow bsRow) {
                     var flag = stack.pop();
                     if(!flag.keep) {
                         // collecting into list, so we don't risk a ConcurrentModificationException,
@@ -155,7 +155,7 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
         public BSGrid apply(final BSGrid bsGrid) {
             bsGrid.visit(new BSElementVisitor() {
                 @Override
-                public void visit(final BSTabGroup bsTabGroup) {
+                public void enter(final BSTabGroup bsTabGroup) {
                     if(bsTabGroup.getTabs().size()!=1) return; // when has no tabs is also a no-op
 
                     // opt-out semantics: absence of the attribute results in participation
