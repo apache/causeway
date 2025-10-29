@@ -44,10 +44,7 @@ import org.apache.causeway.commons.io.JaxbUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 
 /**
- * Default implementation of {@link GridMarshaller} using DTOs based on
- * <a href="https://getbootstrap.com>Bootstrap</a> design system.
- *
- * @since 2.0 {@index}
+ * Default implementation of {@link GridMarshaller}.
  */
 @Service
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".GridMarshallerXml")

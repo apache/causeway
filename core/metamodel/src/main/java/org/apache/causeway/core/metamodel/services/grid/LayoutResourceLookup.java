@@ -19,7 +19,9 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,11 +47,26 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 record LayoutResourceLookup(
-        Can<LayoutResourceLoader> layoutResourceLoaders) {
+        Can<LayoutResourceLoader> layoutResourceLoaders,
+        /**
+         * In effect is used as a Set<LayoutKey>. (there is no concurrent hash set)
+         */
+        Map<LayoutKey, LayoutKey> knownInvalidKeys) {
 
+    public LayoutResourceLookup(
+            final Can<LayoutResourceLoader> layoutResourceLoaders) {
+        this(layoutResourceLoaders, new ConcurrentHashMap<>());
+    }
+
+    /**
+     * if known bad - don't load
+     */
     public Optional<LayoutResource> lookupLayoutResource(
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
+
+        if(isKnownInvalid(layoutKey)) return Optional.empty();
+
         var layoutResourceOpt = _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.EXCLUDE)
             .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
             .findFirst();
@@ -67,6 +84,21 @@ record LayoutResourceLookup(
                 .collect(Collectors.joining(", ")));
 
         return Optional.empty();
+    }
+
+    boolean isKnownInvalid(final LayoutKey layoutKey) {
+        return knownInvalidKeys.get(layoutKey)!=null;
+    }
+
+    public void markInvalid(final LayoutKey layoutKey) {
+        knownInvalidKeys.put(layoutKey, layoutKey);
+    }
+
+    /**
+     * To support metamodel invalidation/rebuilding of spec.
+     */
+    public void unmarkInvalid(final Class<?> domainClass) {
+        knownInvalidKeys.entrySet().removeIf(entry->entry.getKey().domainClass().equals(domainClass));
     }
 
     // -- HELPER
@@ -121,6 +153,5 @@ record LayoutResourceLookup(
             .flatMap(loader->loader.lookupLayoutResource(type, candidateResourceName).stream())
             .findFirst();
     }
-
 
 }

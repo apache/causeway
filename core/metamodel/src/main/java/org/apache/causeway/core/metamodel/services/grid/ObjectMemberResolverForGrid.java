@@ -44,8 +44,8 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
-import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
@@ -105,34 +105,28 @@ import lombok.extern.slf4j.Slf4j;
  * of the grid.
  */
 @Slf4j
-public record ObjectMemberResolverForGrid(
-    GridLoadingContext gridLoadingContext) {
+record ObjectMemberResolverForGrid(
+    GridLoadingContext context) {
 
-    public Optional<BSGrid> resolve(final BSGrid grid, final Class<?> domainClass) {
+    /**
+     * Returns either a valid (left) or invalid (right) {@link BSGrid}
+     */
+    public Either<BSGrid, BSGrid> resolve(final BSGrid grid, final Class<?> domainClass) {
         final boolean valid = validateAndNormalize(grid, domainClass);
         if (valid) {
             overwriteFacets(grid, domainClass);
             if(log.isDebugEnabled()) {
                 log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }
-            return Optional.of(grid);
+            return Either.left(grid);
         }
-        if(gridLoadingContext.causewaySystemEnvironment().isPrototyping()) {
-            gridLoadingContext.messageService().warnUser("Grid metadata errors for " + grid.domainClass().getName() + "; check the error log");
-        }
-        log.error("Grid metadata errors in {}:\n\n{}\n\n", grid.domainClass().getName(), toXml(grid));
-        return Optional.empty();
+        return Either.right(grid);
     }
 
     // -- HELPER
 
-    @Deprecated
-    private GridMarshaller marshaller() {
-        return gridLoadingContext().gridMarshaller(CommonMimeType.XML).orElseThrow();
-    }
-
     private String toXml(final BSGrid grid) {
-        return marshaller()
+        return context().gridMarshaller(CommonMimeType.XML).orElseThrow()
             .marshal(grid, CommonMimeType.XML);
     }
 
@@ -149,7 +143,7 @@ public record ObjectMemberResolverForGrid(
         if(!gridModelIfValid.isPresent()) return false; // only present if valid
 
         var gridModel = gridModelIfValid.get();
-        var objSpec = gridLoadingContext().specLoaderProvider().get().specForTypeElseFail(domainClass);
+        var objSpec = context().specLoaderProvider().get().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objSpec.streamCollections(MixedIn.INCLUDED));
@@ -239,7 +233,7 @@ public record ObjectMemberResolverForGrid(
 
                 // add unbound properties respecting configured sequence policy
                 var sortedUnboundPropertyIds = _UnreferencedSequenceUtil
-                    .sortProperties(gridLoadingContext.causewayConfiguration(), unboundPropertyIds.stream()
+                    .sortProperties(context.causewayConfiguration(), unboundPropertyIds.stream()
                             .map(oneToOneAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -262,7 +256,7 @@ public record ObjectMemberResolverForGrid(
 
             // add missing collections respecting configured sequence policy
             var sortedMissingCollectionIds = _UnreferencedSequenceUtil
-                    .sortCollections(gridLoadingContext.causewayConfiguration(), collectionDisjunction.right().stream()
+                    .sortCollections(context.causewayConfiguration(), collectionDisjunction.right().stream()
                             .map(oneToManyAssociationById::get)
                             .filter(_NullSafe::isPresent));
 
@@ -419,7 +413,7 @@ public record ObjectMemberResolverForGrid(
                 });
         }
 
-        bsGrid.setNormalized(true);
+        bsGrid.valid(true);
         return true;
     }
 
@@ -536,14 +530,14 @@ public record ObjectMemberResolverForGrid(
             final BSGrid fcGrid,
             final Class<?> domainClass) {
 
-        var objectSpec = gridLoadingContext.specLoaderProvider().get().specForTypeElseFail(domainClass);
+        var objectSpec = context.specLoaderProvider().get().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
         var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
         // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
-        var precedence = fcGrid.isFallback()
+        var precedence = fcGrid.fallback()
                 ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
@@ -620,7 +614,7 @@ public record ObjectMemberResolverForGrid(
                             LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
-                    var precedenceHotfix = fcGrid.isFallback()
+                    var precedenceHotfix = fcGrid.fallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
 

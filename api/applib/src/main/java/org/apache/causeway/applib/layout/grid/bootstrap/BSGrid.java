@@ -57,13 +57,12 @@ public final class BSGrid implements BSElement, Dto, BSRowOwner {
 
     /**
      * Indicates whether or not this grid is a fallback.
-     * {@code True}, if this Grid originates from
-     * {@link org.apache.causeway.applib.services.grid.GridSystemService#defaultGrid(Class)}.
-     * <p>
-     * Governs meta-model facet precedence, that is,
+     * {@code True}, that is, no grid resource could be found.
+     *
+     * <p>Governs meta-model facet precedence, that is,
      * facets from annotations should overrule those from fallback XML grids.
      */
-    @XmlTransient @Getter @Setter private boolean fallback;
+    @XmlTransient @Getter @Setter @Accessors(fluent=true) private boolean fallback;
 
     /**
      * Arbitrary additional 'runtime' data attributed to this grid,
@@ -72,7 +71,11 @@ public final class BSGrid implements BSElement, Dto, BSRowOwner {
      */
     @XmlTransient @Getter @Accessors(fluent=true) private final Map<String, Serializable> attributes = Map.of();
 
-    @XmlTransient @Getter @Setter private boolean normalized;
+    /**
+     * Indicates whether or not this grid is a valid or not.
+     * Invalid grids may hold metadata errors for error feedback.
+     */
+    @XmlTransient @Getter @Setter @Accessors(fluent=true) private boolean valid;
 
     @XmlAttribute(required = false)
     @Getter @Setter private String cssClass;

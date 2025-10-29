@@ -28,13 +28,12 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.commons.internal.resources._Resources;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public record FallbackGridProvider(
+record FallbackGridProvider(
     GridLoadingContext context) {
 
     public BSGrid defaultGrid(final Class<?> domainClass) {
@@ -46,7 +45,7 @@ public record FallbackGridProvider(
                         .getValue())
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
-                    .map(_Functions.peek(bsGrid -> bsGrid.setFallback(true)))
+                    .map(bsGrid->bsGrid.fallback(true))
                     .orElseGet(() -> fallback(domainClass));
         } catch (final Exception e) {
             return fallback(domainClass);
@@ -65,8 +64,7 @@ public record FallbackGridProvider(
     //
     private BSGrid fallback(final Class<?> domainClass) {
         final BSGrid bsGrid = new BSGrid();
-        bsGrid.domainClass(domainClass);
-        bsGrid.setFallback(true);
+        bsGrid.domainClass(domainClass).fallback(true);
 
         final BSRow headerRow = new BSRow();
         bsGrid.getRows().add(headerRow);
