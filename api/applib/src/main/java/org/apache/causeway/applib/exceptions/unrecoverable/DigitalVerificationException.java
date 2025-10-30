@@ -22,32 +22,36 @@ import org.apache.causeway.applib.exceptions.UnrecoverableException;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 
 /**
- * Indicates that a bookmark cannot be found.
+ * Indicates that a digital verification failed.
  *
- * @since 2.1, 3.1 {@index}
+ * <p>E.g. could be an invalid (or no longer valid) bookmark.
+ *
+ * @since 3.5 {@index}
+ *
  */
-public class BookmarkNotFoundException extends UnrecoverableException {
+public class DigitalVerificationException extends UnrecoverableException {
     private static final long serialVersionUID = 1L;
 
-    public BookmarkNotFoundException(final String msg) {
+    public DigitalVerificationException(final String msg) {
         super(msg);
     }
 
-    public BookmarkNotFoundException(final TranslatableString translatableMessage,
+    public DigitalVerificationException(final TranslatableString translatableMessage,
             final Class<?> translationContextClass, final String translationContextMethod) {
         super(translatableMessage, translationContextClass, translationContextMethod);
     }
 
-    public BookmarkNotFoundException(final Throwable cause) {
+    public DigitalVerificationException(final Throwable cause) {
         super(cause);
     }
 
-    public BookmarkNotFoundException(final String msg, final Throwable cause) {
+    public DigitalVerificationException(final String msg, final Throwable cause) {
         super(msg, cause);
     }
 
-    public BookmarkNotFoundException(final TranslatableString translatableMessage,
+    public DigitalVerificationException(final TranslatableString translatableMessage,
             final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause) {
         super(translatableMessage, translationContextClass, translationContextMethod, cause);
     }
+
 }

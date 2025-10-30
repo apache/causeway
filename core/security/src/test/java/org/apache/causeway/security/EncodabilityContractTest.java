@@ -18,11 +18,7 @@
  */
 package org.apache.causeway.security;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,11 +28,10 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import org.springframework.util.SerializationUtils;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.commons.internal.base._Casts;
-
-import lombok.SneakyThrows;
 
 public abstract class EncodabilityContractTest {
 
@@ -67,23 +62,8 @@ public abstract class EncodabilityContractTest {
 
     @Test
     public void shouldRoundTrip() throws IOException, ClassNotFoundException {
-        var decodedObject = doRoundTrip(serializable);
+        var decodedObject = SerializationUtils.clone(serializable);
         assertRoundtripped(decodedObject, serializable);
-    }
-
-    @SneakyThrows
-    private static <T extends Serializable> T doRoundTrip(final T serializable) {
-
-        var buffer = new ByteArrayOutputStream();
-
-        try(var out = new ObjectOutputStream(buffer)) {
-            out.writeObject(serializable);
-        }
-
-        try(var in = new ObjectInputStream(new ByteArrayInputStream(buffer.toByteArray()))) {
-            var decodedObject = in.readObject();
-            return _Casts.uncheckedCast(decodedObject);
-        }
     }
 
     protected abstract void assertRoundtripped(Object decodedEncodable, Object originalEncodable);

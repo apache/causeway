@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.valuesemantics;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.stereotype.Component;
 
@@ -31,16 +33,19 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreeNode;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.graph.tree.TreeState;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.value.semantics.Renderer;
 import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsAbstract;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.Memento;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.apache.causeway.core.metamodel.util.hmac.Memento;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
 import org.apache.causeway.schema.common.v2.ValueType;
 
 @Component
@@ -51,9 +56,27 @@ extends ValueSemanticsAbstract<TreeNode<?>>
 implements
     Renderer<TreeNode<?>> {
 
-    @Inject UrlEncodingService urlEncodingService;
-    @Inject SerializingAdapter serializingAdapter;
-    @Inject FactoryService factoryService;
+    private final FactoryService factoryService;
+    private final MementoHmacContext mementoContext;
+
+    @Inject
+    public TreeNodeValueSemantics(
+        final HmacAuthority hmacAuthority,
+        final UrlEncodingService urlEncodingService,
+        final FactoryService factoryService,
+        final BookmarkService bookmarkService,
+        final Provider<ValueSemanticsResolver> valueSemanticsResolverProvider,
+        final ValueCodec valueCodec) {
+
+        Objects.requireNonNull(hmacAuthority);
+        Objects.requireNonNull(urlEncodingService);
+        Objects.requireNonNull(bookmarkService);
+        Objects.requireNonNull(valueSemanticsResolverProvider);
+        this.factoryService = Objects.requireNonNull(factoryService);
+
+        this.mementoContext = new MementoHmacContext(
+            new HmacUrlCodec(hmacAuthority, urlEncodingService), valueCodec);
+    }
 
     @Override
     public Class<TreeNode<?>> getCorrespondingClass() {
@@ -78,17 +101,17 @@ implements
     }
 
     private String toEncodedString(final TreeNode<?> treeNode) {
-        final Memento memento = newMemento();
+        final Memento memento = mementoContext.newMemento();
         memento.put("rootValue", treeNode.rootValue());
         memento.put("adapterClass", treeNode.treeAdapter().getClass());
         memento.put("treeState", treeNode.treeState());
         memento.put("treePath", treeNode.treePath());
-        return memento.asString();
+        return memento.toExternalForm();
     }
 
     @SuppressWarnings("unchecked")
     private TreeNode<?> fromEncodedString(final String input) {
-        final Memento memento = parseMemento(input);
+        final Memento memento = mementoContext.parseDigitallySignedMemento(input);
         final TreeNode<?> rootNode = TreeNode.root(
                 memento.get("rootValue", Object.class),
                 memento.get("adapterClass", Class.class),
@@ -125,16 +148,6 @@ implements
         return Can.of(
                 TreeNode.root("TreeRoot", new TreeAdapterString(), TreeState.rootCollapsed()),
                 TreeNode.root("another TreeRoot", new TreeAdapterString(), TreeState.rootCollapsed()));
-    }
-
-    // -- HELPER
-
-    private _Mementos.Memento newMemento(){
-        return _Mementos.create(urlEncodingService, serializingAdapter);
-    }
-
-    private _Mementos.Memento parseMemento(final String input){
-        return _Mementos.parse(urlEncodingService, serializingAdapter, input);
     }
 
 }

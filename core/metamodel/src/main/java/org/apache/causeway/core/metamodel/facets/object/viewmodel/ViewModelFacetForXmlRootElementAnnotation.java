@@ -18,83 +18,58 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
-
-public class ViewModelFacetForXmlRootElementAnnotation
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForXmlRootElementAnnotation
+extends SecureViewModelFacet {
 
     public static Optional<ViewModelFacet> create(
             final boolean hasRootElementAnnotation,
+            final HmacUrlCodec hmacUrlCodec,
+            final JaxbService jaxbService,
             final FacetHolder facetHolder) {
 
         return hasRootElementAnnotation
-                ? Optional.of(new ViewModelFacetForXmlRootElementAnnotation(facetHolder))
-                : Optional.empty();
+                && hmacUrlCodec!=null
+                && jaxbService!=null
+            ? Optional.of(new ViewModelFacetForXmlRootElementAnnotation(hmacUrlCodec, jaxbService, facetHolder))
+            : Optional.empty();
     }
+
+    private final JaxbService jaxbService;
 
     private ViewModelFacetForXmlRootElementAnnotation(
+            final HmacUrlCodec hmacUrlCodec,
+            final JaxbService jaxbService,
             final FacetHolder facetHolder) {
         // overruled by other non fallback ViewModelFacet types
-        super(facetHolder, Precedence.DEFAULT);
+        super(hmacUrlCodec, facetHolder, Precedence.DEFAULT);
+        this.jaxbService = jaxbService;
     }
 
     @Override
-    protected ManagedObject createViewmodel(
+    protected Object createViewmodelPojo(
             final @NonNull ObjectSpecification viewmodelSpec,
-            final @NonNull Bookmark bookmark) {
-        final String xmlStr = getUrlEncodingService().decodeToString(bookmark.identifier());
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
 
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[JAXB] de-serializing viewmodel %s\n"
-                    + "--- XML ---\n"
-                    + "%s"
-                    + "-----------\n",
-                    viewmodelSpec.logicalTypeName(),
-                    xmlStr);
-        });
-
-        var viewmodelPojo = getJaxbService().fromXml(viewmodelSpec.getCorrespondingClass(), xmlStr);
-        return viewmodelPojo!=null
-                ? ManagedObject.bookmarked(viewmodelSpec, viewmodelPojo, bookmark)
-                : ManagedObject.empty(viewmodelSpec);
+        var trustedXml = new String(trustedBookmarkIdAsBytes, StandardCharsets.UTF_8);
+        var viewmodelPojo = jaxbService.fromXml(viewmodelSpec.getCorrespondingClass(), trustedXml);
+        return viewmodelPojo;
     }
 
     @Override
-    protected String serialize(final ManagedObject managedObject) {
-
-        final String xml = getJaxbService().toXml(managedObject.getPojo());
-        final String encoded = getUrlEncodingService().encodeString(xml);
-        _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("[JAXB] serializing viewmodel %s\n"
-                    + "--- XML ---\n"
-                    + "%s"
-                    + "-----------\n",
-                    managedObject.objSpec().logicalTypeName(),
-                    xml);
-        });
-        return encoded;
+    protected byte[] encodeState(final ManagedObject managedObject) {
+        final String xml = jaxbService.toXml(managedObject.getPojo());
+        return xml.getBytes(StandardCharsets.UTF_8);
     }
-
-    // -- DEPENDENCIES
-
-    @Getter(lazy=true)
-    private final JaxbService jaxbService =
-        getServiceRegistry().lookupServiceElseFail(JaxbService.class);
-
-    @Getter(lazy=true)
-    private final UrlEncodingService urlEncodingService =
-        getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
 
 }

@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.errors;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.wicket.AttributeModifier;
@@ -88,16 +89,22 @@ extends PanelBase<ExceptionModel> {
 
         super(id, Model.of(exceptionModel));
 
-        var ticketOptional = lookupService(ErrorReportingService.class)
-            .map(errorReportingService->
-                errorReportingService.reportError(exceptionModel.asErrorDetails()));
+        final boolean unautorizedOrRecognized =
+            exceptionModel.isAuthorizationException()
+            || exceptionModel.isRecognized();
 
-        var mainMessage = ticketOptional
+        var ticketOpt = unautorizedOrRecognized
+            ? Optional.<Ticket>empty()
+            : lookupService(ErrorReportingService.class)
+                .map(errorReportingService->
+                    errorReportingService.reportError(exceptionModel.asErrorDetails()));
+
+        var mainMessage = ticketOpt
             .map(Ticket::getUserMessage)
             .orElseGet(exceptionModel::getMainMessage);
         Wkt.labelAdd(this, ID_MAIN_MESSAGE, mainMessage);
 
-        ticketOptional
+        ticketOpt
             .map(Ticket::getMarkup)
             .ifPresentOrElse(ticketMarkup->{
                 Wkt.markupAdd(this, ID_TICKET_MARKUP, ticketMarkup);
@@ -105,10 +112,8 @@ extends PanelBase<ExceptionModel> {
                 WktComponents.permanentlyHide(this, ID_TICKET_MARKUP);
             });
 
-        final boolean suppressExceptionDetail =
-                exceptionModel.isAuthorizationException()
-                || exceptionModel.isRecognized()
-                || ticketOptional
+        final boolean suppressExceptionDetail = unautorizedOrRecognized
+                || ticketOpt
                     .map(Ticket::getStackTracePolicy)
                     .map(Ticket.StackTracePolicy.HIDE::equals)
                     .orElse(false);
@@ -150,7 +155,7 @@ extends PanelBase<ExceptionModel> {
 
     // -- HELPER
 
-    private static String convertToHtml(ExceptionModel exceptionModel) {
+    private static String convertToHtml(final ExceptionModel exceptionModel) {
         var html = new StringBuilder();
         _NullSafe.stream(exceptionModel.causalChain())
             .filter(Objects::nonNull)
@@ -175,7 +180,7 @@ extends PanelBase<ExceptionModel> {
         return html.toString();
     }
 
-    private static String convertMessageToHtml(Throwable cause) {
+    private static String convertMessageToHtml(final Throwable cause) {
         return StringUtils.hasLength(cause.getMessage())
             ? org.springframework.web.util.HtmlUtils.htmlEscape(cause.getMessage().replace("\n", "<br>"))
             : "";

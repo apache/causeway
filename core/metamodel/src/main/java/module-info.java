@@ -130,6 +130,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.services.grid.spi;
     exports org.apache.causeway.core.metamodel.specloader.validator;
     exports org.apache.causeway.core.metamodel.util;
+    exports org.apache.causeway.core.metamodel.util.hmac;
     exports org.apache.causeway.core.metamodel.util.pchain;
     exports org.apache.causeway.core.metamodel.util.snapshot;
     exports org.apache.causeway.core.metamodel.valuesemantics;

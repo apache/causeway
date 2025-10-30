@@ -21,6 +21,8 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.springframework.util.SerializationUtils;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -30,9 +32,6 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.resources._Serializables;
-
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -76,9 +75,7 @@ public class BSUtil {
      * Creates a deep copy of given original grid.
      */
     public BSGrid deepCopy(final BSGrid orig) {
-        var bytes = _Serializables.write(orig);
-        return _Casts.uncheckedCast(
-                _Serializables.read(BSGrid.class, bytes));
+        return SerializationUtils.clone(orig);
     }
 
     public BSGrid resolveOwners(final BSGrid grid) {

@@ -50,7 +50,6 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.html;
     exports org.apache.causeway.commons.internal.image;
     exports org.apache.causeway.commons.internal.ioc;
-    exports org.apache.causeway.commons.internal.memento;
     exports org.apache.causeway.commons.internal.os;
     exports org.apache.causeway.commons.internal.primitives;
     exports org.apache.causeway.commons.internal.proxy;

@@ -195,6 +195,12 @@ public final class _Bytes {
         return ofHexDump(hexDump, " ");
     }
 
+    // -- NULLABLE
+
+    public static byte[] nullToEmpty(final byte[] bytes) {
+        return bytes!=null ? bytes : new byte[0];
+    }
+
     // -- PREPEND/APPEND
 
     /**

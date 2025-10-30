@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices;
 
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.OrderComparator;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.core.codegen.bytebuddy.CausewayModuleCoreCodegenByteBuddy;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -57,7 +61,6 @@ import org.apache.causeway.core.runtimeservices.recognizer.dae.ExceptionRecogniz
 import org.apache.causeway.core.runtimeservices.render.PlaceholderRenderServiceDefault;
 import org.apache.causeway.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
-import org.apache.causeway.core.runtimeservices.serializing.SerializingAdapterDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
 import org.apache.causeway.core.runtimeservices.sitemap.SitemapServiceDefault;
@@ -109,7 +112,6 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         LifecycleCallbackNotifier.class,
         SchemaValueMarshallerDefault.class,
         ScratchpadDefault.class,
-        SerializingAdapterDefault.class,
         SitemapServiceDefault.class,
         SpringBeansService.class,
         TransactionServiceSpring.class,
@@ -129,6 +131,9 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         // Exception Recognizers
         ExceptionRecognizerForDataAccessException.class,
 
+        // auto configuration
+        CausewayModuleCoreRuntimeServices.HmacAutorityAutoconfigure.class
+
 })
 @ComponentScan(basePackages = "org.apache.causeway.core.runtimeservices.icons")
 public class CausewayModuleCoreRuntimeServices {
@@ -138,6 +143,16 @@ public class CausewayModuleCoreRuntimeServices {
     @Bean // also used by _Spring utility
     public OrderComparator orderComparator() {
         return new AnnotationAwareOrderComparator();
+    }
+
+    @AutoConfigureOrder(PriorityPrecedence.LATE)
+    @Configuration
+    static class HmacAutorityAutoconfigure {
+        @Bean(NAMESPACE + ".fallbackHmacAuthority")
+        @ConditionalOnMissingBean(HmacAuthority.class)
+        public HmacAuthority fallbackHmacAuthority() {
+            return HmacAuthority.HmacSHA256.randomInstance();
+        }
     }
 
 }

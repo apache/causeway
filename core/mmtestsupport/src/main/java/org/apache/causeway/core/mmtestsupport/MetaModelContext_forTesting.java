@@ -30,10 +30,10 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 import org.jspecify.annotations.NonNull;
-
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.util.ClassUtils;
 
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
 import org.apache.causeway.applib.services.grid.GridService;
@@ -50,6 +50,7 @@ import org.apache.causeway.applib.services.render.ObjectRenderService;
 import org.apache.causeway.applib.services.render.PlaceholderRenderService;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
@@ -103,6 +104,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantic
 import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
@@ -301,8 +303,11 @@ implements MetaModelContext {
                     SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
                     SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
                     SingletonBeanProvider.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
-                )
+                    SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader),
+                    SingletonBeanProvider.forTestingLazy(HmacAuthority.class, HmacAuthority::forTesting),
+                    SingletonBeanProvider.forTestingLazy(UrlEncodingService.class, UrlEncodingService::forTestingNoCompression),
+                    SingletonBeanProvider.forTestingLazy(ValueCodec.class, ()->ValueCodec.forTesting())
+                    )
                 );
     }
 
