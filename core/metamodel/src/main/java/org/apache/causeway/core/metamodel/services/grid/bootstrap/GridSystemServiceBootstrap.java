@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
@@ -67,7 +68,6 @@ import org.apache.causeway.commons.internal.resources._Resources;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -79,6 +79,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -123,14 +124,15 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Inject
     public GridSystemServiceBootstrap(
-            final MetaModelContext metaModelContext,
+            final CausewayConfiguration config,
+            final Provider<SpecificationLoader> specLoaderProvider,
             final TranslationService translationService,
             final JaxbService jaxbService,
             final MessageService messageService,
             final CausewaySystemEnvironment causewaySystemEnvironment,
             final List<FallbackLayoutDataSource> fallbackLayoutDataSources) {
-        super(metaModelContext.getSpecificationLoader(), translationService, jaxbService, messageService, causewaySystemEnvironment);
-        this.config = metaModelContext.getConfiguration();
+        super(specLoaderProvider, translationService, jaxbService, messageService, causewaySystemEnvironment);
+        this.config = config;
         this.fallbackLayoutDataSources = Can.ofCollection(fallbackLayoutDataSources);
     }
 
@@ -240,7 +242,7 @@ extends GridSystemServiceAbstract<BSGrid> {
             final Class<?> domainClass) {
 
         var bsGrid = (BSGrid) grid;
-        var objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+        var objectSpec = specificationLoader().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));

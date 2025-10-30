@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.urlencoding;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -32,11 +31,12 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.Memento;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.apache.causeway.core.metamodel.util.hmac.Memento;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 
 class MementosTest {
 
@@ -46,26 +46,13 @@ class MementosTest {
 
     UrlEncodingServiceWithCompression serviceWithCompression;
     UrlEncodingService serviceBaseEncoding;
-    SerializingAdapter serializingAdapter;
+    ValueCodec valueCodec;
 
     @BeforeEach
     void setUp() throws Exception {
         serviceWithCompression = new UrlEncodingServiceWithCompression();
-        serviceBaseEncoding = UrlEncodingService.forTestingNoCompression();;
-
-        serializingAdapter = new SerializingAdapter() {
-
-            @Override
-            public Serializable write(final Object value) {
-                return (Serializable) value;
-            }
-
-            @Override
-            public <T> T read(final Class<T> cls, final Serializable value) {
-                return _Casts.castToOrElseNull(value, cls);
-            }
-        };
-
+        serviceBaseEncoding = UrlEncodingService.forTestingNoCompression();
+        valueCodec = ValueCodec.forTesting();
     }
 
     @Test
@@ -79,7 +66,8 @@ class MementosTest {
     }
 
     private void roundtrip(final UrlEncodingService codec) {
-        final Memento memento = _Mementos.create(codec, serializingAdapter);
+        final var mementoContext = new MementoHmacContext(new HmacUrlCodec(HmacAuthority.HmacSHA256.randomInstance(), codec), valueCodec);
+        final Memento memento = mementoContext.newMemento();
 
         memento.put("someString", "a string");
         memento.put("someStringWithDoubleSpaces", "a  string");
@@ -101,9 +89,9 @@ class MementosTest {
 
         memento.put("someEnum", DOW.Wed);
 
-        final String str = memento.asString();
+        final String str = memento.toExternalForm();
 
-        final Memento memento2 = _Mementos.parse(codec, serializingAdapter, str);
+        final Memento memento2 = mementoContext.parseDigitallySignedMemento(str);
 
         assertThat(memento2.get("someString", String.class), is("a string"));
         assertThat(memento2.get("someStringWithDoubleSpaces", String.class), is("a  string"));

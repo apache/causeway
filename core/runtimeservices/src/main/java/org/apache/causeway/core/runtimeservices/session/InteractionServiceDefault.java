@@ -30,6 +30,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -67,7 +69,6 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -94,7 +95,7 @@ implements
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
     final MetamodelEventService runtimeEventService;
-    final SpecificationLoader specificationLoader;
+    final Provider<SpecificationLoader> specificationLoaderProvider;
     final ServiceInjector serviceInjector;
 
     final ClockService clockService;
@@ -109,7 +110,7 @@ implements
     @Inject
     public InteractionServiceDefault(
             final MetamodelEventService runtimeEventService,
-            final SpecificationLoader specificationLoader,
+            final Provider<SpecificationLoader> specificationLoaderProvider,
             final ServiceInjector serviceInjector,
             final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
@@ -117,7 +118,7 @@ implements
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
         this.runtimeEventService = runtimeEventService;
-        this.specificationLoader = specificationLoader;
+        this.specificationLoaderProvider = specificationLoaderProvider;
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
@@ -135,6 +136,8 @@ implements
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
         runtimeEventService.fireBeforeMetamodelLoading();
+
+        var specificationLoader = specificationLoaderProvider.get();
 
         var taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)

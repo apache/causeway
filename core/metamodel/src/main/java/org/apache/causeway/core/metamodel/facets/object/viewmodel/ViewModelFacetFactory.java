@@ -18,8 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
+import java.util.Objects;
+
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -29,16 +34,37 @@ import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 
 public class ViewModelFacetFactory
 extends FacetFactoryAbstract
 implements
     MetaModelRefiner {
 
-    @Inject
+    // self-managed injection point resolving via constructor ..
+    @Inject HmacAuthority hmacAuthority;
+    @Inject UrlEncodingService urlCodec;
+    @Inject JaxbService jaxbService;
+    @Inject ValueCodec valueCodec;
+
+    private final HmacUrlCodec hmacUrlCodec;
+    private final MementoHmacContext mementoHmacContext;
+
     public ViewModelFacetFactory(
             final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
+
+        mmc.getServiceInjector().injectServicesInto(this);
+        Objects.requireNonNull(hmacAuthority);
+        Objects.requireNonNull(urlCodec);
+
+        Objects.requireNonNull(jaxbService);
+        Objects.requireNonNull(valueCodec);
+
+        this.hmacUrlCodec = new HmacUrlCodec(hmacAuthority, urlCodec);
+        this.mementoHmacContext = new MementoHmacContext(hmacUrlCodec, valueCodec);
     }
 
     /**
@@ -58,23 +84,23 @@ implements
         FacetUtil
         .addFacetIfPresent(
                 ViewModelFacetForXmlRootElementAnnotation
-                .create(hasXmlRootElementAnnotation, facetHolder));
+                .create(hasXmlRootElementAnnotation, hmacUrlCodec, jaxbService, facetHolder));
 
         // (with high precedence)
         FacetUtil
         .addFacetIfPresent(
             // either ViewModel interface (highest precedence)
-            ViewModelFacetForViewModelInterface.create(type, facetHolder)
+            ViewModelFacetForViewModelInterface.create(type, hmacUrlCodec, facetHolder)
             // or Serializable interface (if any)
-            .or(()->ViewModelFacetForSerializableInterface.create(type, facetHolder))
+            .or(()->ViewModelFacetForSerializableInterface.create(type, hmacUrlCodec, facetHolder))
             // or else Java record (if any)
-            .or(()->ViewModelFacetForJavaRecord.create(type, facetHolder))
+            .or(()->ViewModelFacetForJavaRecord.create(type, mementoHmacContext, facetHolder))
         );
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectAnnotationFacetFactory as a fallback strategy
     }
 
-    // //////////////////////////////////////
+    // --
 
     @Override
     public void refineProgrammingModel(final ProgrammingModel programmingModel) {

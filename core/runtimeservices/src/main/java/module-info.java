@@ -38,7 +38,6 @@ module org.apache.causeway.core.runtimeservices {
     exports org.apache.causeway.core.runtimeservices.recognizer.dae;
     exports org.apache.causeway.core.runtimeservices.routing;
     exports org.apache.causeway.core.runtimeservices.scratchpad;
-    exports org.apache.causeway.core.runtimeservices.serializing;
     exports org.apache.causeway.core.runtimeservices.session;
     exports org.apache.causeway.core.runtimeservices.sitemap;
     exports org.apache.causeway.core.runtimeservices.spring;
@@ -79,7 +78,8 @@ module org.apache.causeway.core.runtimeservices {
     requires org.apache.causeway.core.codegen.bytebuddy;
     requires spring.aop;
     requires java.management;
-    
+    requires spring.boot.autoconfigure;
+
     opens org.apache.causeway.core.runtimeservices;
     opens org.apache.causeway.core.runtimeservices.wrapper;
     opens org.apache.causeway.core.runtimeservices.wrapper.handlers; //to org.apache.causeway.core.codegen.bytebuddy

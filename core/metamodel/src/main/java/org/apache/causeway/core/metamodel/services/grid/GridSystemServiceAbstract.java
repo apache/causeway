@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -91,11 +92,15 @@ import lombok.extern.log4j.Log4j2;
 public abstract class GridSystemServiceAbstract<G extends org.apache.causeway.applib.layout.grid.Grid>
 implements GridSystemService<G> {
 
-    protected final SpecificationLoader specificationLoader;
+    protected final Provider<SpecificationLoader> specLoaderProvider;
     protected final TranslationService translationService;
     protected final JaxbService jaxbService;
     protected final MessageService messageService;
     protected final CausewaySystemEnvironment causewaySystemEnvironment;
+
+    protected SpecificationLoader specificationLoader() {
+        return specLoaderProvider.get();
+    }
 
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {
@@ -137,7 +142,7 @@ implements GridSystemService<G> {
             final G fcGrid,
             final Class<?> domainClass) {
 
-        var objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+        var objectSpec = specificationLoader().specForTypeElseFail(domainClass);
 
         var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
         var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
@@ -384,7 +389,7 @@ implements GridSystemService<G> {
     @Override
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        var objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+        var objectSpec = specificationLoader().specForTypeElseFail(domainClass);
         grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
     }
 

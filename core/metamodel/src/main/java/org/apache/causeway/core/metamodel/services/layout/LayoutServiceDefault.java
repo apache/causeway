@@ -24,9 +24,11 @@ import java.util.EnumSet;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -59,30 +61,30 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LayoutServiceDefault implements LayoutService {
 
-    private final SpecificationLoader specificationLoader;
-    private final GridService gridService;
-    private final MenuBarsService menuBarsService;
+    private final Provider<SpecificationLoader> specificationLoaderProvider;
+    private final Provider<GridService> gridServiceProvider;
+    private final Provider<MenuBarsService> menuBarsServiceProvider;
 
     // -- MENUBARS LAYOUT
 
     @Override
     public EnumSet<CommonMimeType> supportedMenuBarsLayoutFormats() {
-        return menuBarsService.marshaller().supportedFormats();
+        return menuBarsServiceProvider.get().marshaller().supportedFormats();
     }
 
     @Override
     public String menuBarsLayout(
             final MenuBarsService.Type type,
             final CommonMimeType format) {
-        var menuBars = menuBarsService.menuBars(type);
-        return menuBarsService.marshaller().marshal(_Casts.uncheckedCast(menuBars), format);
+        var menuBars = menuBarsServiceProvider.get().menuBars(type);
+        return menuBarsServiceProvider.get().marshaller().marshal(_Casts.uncheckedCast(menuBars), format);
     }
 
     // -- OBJECT LAYOUT
 
     @Override
     public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
-        return gridService.marshaller().supportedFormats();
+        return gridServiceProvider.get().marshaller().supportedFormats();
     }
 
     @Override
@@ -95,6 +97,9 @@ public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public byte[] toZip(final LayoutExportStyle style, final CommonMimeType format) {
+
+        var specificationLoader = specificationLoaderProvider.get();
+
         var domainObjectSpecs = specificationLoader.snapshotSpecifications()
                 .filter(spec ->
                         !spec.isAbstract()
@@ -125,14 +130,14 @@ public class LayoutServiceDefault implements LayoutService {
             final LayoutExportStyle style,
             final CommonMimeType format) {
         return Try.call(()->
-            gridToFormatted(gridService.toGridForExport(domainClass, style), format));
+            gridToFormatted(gridServiceProvider.get().toGridForExport(domainClass, style), format));
     }
 
     private String gridToFormatted(final @Nullable Grid grid, final CommonMimeType format) {
         if(grid==null) {
             return null;
         }
-        return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
+        return gridServiceProvider.get().marshaller().marshal(_Casts.uncheckedCast(grid), format);
     }
 
     private static String zipEntryNameFor(

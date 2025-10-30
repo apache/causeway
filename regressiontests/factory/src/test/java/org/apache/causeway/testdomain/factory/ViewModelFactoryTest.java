@@ -34,9 +34,12 @@ import org.apache.causeway.applib.ViewModel;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTestAbstract;
 
@@ -125,6 +128,9 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
 
     // -- TESTS
 
+    @Inject HmacAuthority hmacAuthority;
+    @Inject UrlEncodingService urlEncodingService;
+
     @Test
     void sampleViewModel_shouldHave_injectionPointsResolved() {
         var sampleViewModel = factoryService.viewModel(SimpleViewModel.class);
@@ -142,7 +148,8 @@ class ViewModelFactoryTest extends CausewayIntegrationTestAbstract {
         ViewModelWithInjectableConstructorArgs viewModel = factoryService.viewModel(ViewModelWithInjectableConstructorArgs.class,
                 Bookmark.forLogicalTypeNameAndIdentifier(
                         ViewModelWithInjectableConstructorArgs.class.getName(),
-                        "aName"));
+                        new HmacUrlCodec(hmacAuthority, urlEncodingService).encodeForUrlAsUtf8("aName")
+                        ));
         viewModel.assertInitialized();
     }
 

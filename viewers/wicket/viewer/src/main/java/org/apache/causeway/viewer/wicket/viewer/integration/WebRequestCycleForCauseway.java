@@ -46,6 +46,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.exceptions.unrecoverable.BookmarkNotFoundException;
+import org.apache.causeway.applib.exceptions.unrecoverable.DigitalVerificationException;
+import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
@@ -412,13 +414,17 @@ implements
 
     // special case handling for PageExpiredException, otherwise infinite loop
     private static final ExceptionRecognizerForType pageExpiredExceptionRecognizer =
-            new ExceptionRecognizerForType(
-                    PageExpiredException.class,
-                    __->"Requested page is no longer available.");
+        new ExceptionRecognizerForType(
+            PageExpiredException.class, __->"Requested page is no longer available.");
+
+    private static final ExceptionRecognizerForType exceptionRecognizerForDigitalVerificationException =
+        new ExceptionRecognizerForType(Category.NOT_FOUND,
+            DigitalVerificationException.class, __->"Digital verification failed for this request. "
+                + "Perhaps bookmark is not (or no longer) valid.");
 
     private static final ExceptionRecognizerForType exceptionRecognizerForBookmarkNotFoundException =
-            new ExceptionRecognizerForType(
-                    BookmarkNotFoundException.class, __ -> "Bookmark is not found.");
+        new ExceptionRecognizerForType(Category.NOT_FOUND,
+            BookmarkNotFoundException.class, __->"Bookmark is not found.");
 
     protected IRequestablePage errorPageFor(final Exception ex) {
 
@@ -430,20 +436,21 @@ implements
         }
 
         // using side-effect free access to MM validation result
-        var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+        var validationResult = mmc.getSpecificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
         }
 
-        var exceptionRecognizerService = getMetaModelContext().getServiceRegistry()
+        var exceptionRecognizerService = mmc.getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
 
         final Optional<Recognition> recognition = exceptionRecognizerService
                 .recognizeFromSelected(
                         Can.<ExceptionRecognizer>of(
                                         pageExpiredExceptionRecognizer,
+                                        exceptionRecognizerForDigitalVerificationException,
                                         exceptionRecognizerForBookmarkNotFoundException)
                                 .addAll(exceptionRecognizerService.getExceptionRecognizers()),
                         ex);

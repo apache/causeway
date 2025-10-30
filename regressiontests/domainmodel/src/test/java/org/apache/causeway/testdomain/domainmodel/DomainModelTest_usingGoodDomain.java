@@ -108,7 +108,6 @@ import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action4
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action5;
 import org.apache.causeway.testdomain.model.good.ProperMixinContribution_action6;
 import org.apache.causeway.testdomain.model.good.ProperObjectWithAlias;
-import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModel;
 import org.apache.causeway.testdomain.model.good.ProperRecordAsViewModelUsingAnnotations;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithAlias;
 import org.apache.causeway.testdomain.model.good.ProperServiceWithMixin;
@@ -1003,9 +1002,10 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
 
     @RequiredArgsConstructor
     enum RecordScenario {
-        PLAIN(ProperRecordAsViewModel.class, Can.of(
-                    new ProperRecordAsViewModel("Hello!", 3, true)
-                )),
+        /*
+         * PLAIN(ProperRecordAsViewModel.class, Can.of( new
+         * ProperRecordAsViewModel("Hello!", 3, true) )),
+         */
         ANNOTATED(ProperRecordAsViewModelUsingAnnotations.class, Can.of(
                     new ProperRecordAsViewModelUsingAnnotations("Hello!", 3, true)
                 ));

@@ -21,25 +21,25 @@ package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 import java.lang.reflect.Constructor;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.ViewModel;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedConsumer;
-import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
-import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
@@ -50,16 +50,16 @@ import lombok.experimental.Accessors;
 /**
  * Corresponds to {@link ViewModel} interface.
  */
-public class ViewModelFacetForViewModelInterface
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForViewModelInterface
+extends SecureViewModelFacet {
 
     public static <T> Optional<ViewModelFacet> create(
             final Class<T> cls,
+            final HmacUrlCodec hmacUrlCodec,
             final FacetHolder holder) {
 
-        if(!ViewModel.class.isAssignableFrom(cls)) {
-            return Optional.empty();
-        }
+        if(!ViewModel.class.isAssignableFrom(cls)) return Optional.empty();
+        if(hmacUrlCodec==null) return Optional.empty();
 
         ResolvedConstructor pickedConstructor = null; // not used for abstract types
 
@@ -103,15 +103,16 @@ extends ViewModelFacetAbstract {
 
         }
 
-        return Optional.of(new ViewModelFacetForViewModelInterface(holder, pickedConstructor));
+        return Optional.of(new ViewModelFacetForViewModelInterface(pickedConstructor, hmacUrlCodec, holder));
     }
 
-    private ResolvedConstructor constructorAnyArgs;
+    private final ResolvedConstructor constructorAnyArgs;
 
     protected ViewModelFacetForViewModelInterface(
-            final FacetHolder holder,
-            final @Nullable ResolvedConstructor constructorAnyArgs) {
-        super(holder, Precedence.HIGH);
+            final @Nullable ResolvedConstructor constructorAnyArgs,
+            final HmacUrlCodec hmacUrlCodec,
+            final FacetHolder holder) {
+        super(hmacUrlCodec, holder, Precedence.HIGH);
         this.constructorAnyArgs = constructorAnyArgs;
     }
 
@@ -126,19 +127,31 @@ extends ViewModelFacetAbstract {
 
     @SneakyThrows
     @Override
-    protected ManagedObject createViewmodel(
+    protected Object createViewmodelPojo(
             final @NonNull ObjectSpecification viewmodelSpec,
-            final @NonNull Bookmark bookmark) {
-        return ManagedObject.bookmarked(
-                        viewmodelSpec,
-                        deserialize(viewmodelSpec, bookmark.identifier()),
-                        bookmark);
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
+
+        var mementoDecoded = new String(trustedBookmarkIdAsBytes, StandardCharsets.UTF_8);
+
+        if(SpecialMemento.NULL.matches(mementoDecoded)) {
+            mementoDecoded = null;
+        } else if(SpecialMemento.EMPTY.matches(mementoDecoded)) {
+            mementoDecoded = "";
+        }
+
+        return deserialize(viewmodelSpec, mementoDecoded);
     }
 
     @Override
-    public String serialize(final ManagedObject viewModel) {
+    public byte[] encodeState(final ManagedObject viewModel) {
         final ViewModel viewModelPojo = (ViewModel) viewModel.getPojo();
-        return SpecialMemento.encode(viewModelPojo.viewModelMemento());
+        String memento = viewModelPojo.viewModelMemento();
+        if(memento==null) {
+            memento = SpecialMemento.NULL.representationInUrl();
+        } else if(memento.isEmpty()) {
+            memento = SpecialMemento.EMPTY.representationInUrl();
+        }
+        return memento.getBytes(StandardCharsets.UTF_8);
     }
 
     // -- HELPER
@@ -153,25 +166,11 @@ extends ViewModelFacetAbstract {
      *      hence gets processed by {@link URLEncoder} and {@link URLDecoder},
      *      which makes it safe for us to use with special meaning
      */
-    @Getter @Accessors(fluent=true)
     @RequiredArgsConstructor
-    enum SpecialMemento {
+    private enum SpecialMemento {
         EMPTY("||"),
         NULL("|");
-        static String encode(final @Nullable String memento) {
-            return memento==null
-                    ? NULL.representationInUrl()
-                    : memento.isEmpty()
-                            ? EMPTY.representationInUrl()
-                            : UrlUtils.urlEncodeUtf8(memento);
-        }
-        static String decode(final @Nullable String memento) {
-            return NULL.matches(memento)
-                    ? null
-                    : EMPTY.matches(memento)
-                            ? ""
-                            : UrlUtils.urlDecodeUtf8(memento);
-        }
+        @Getter @Accessors(fluent=true)
         final String representationInUrl;
         boolean matches(final String other) {
             return representationInUrl.equals(other);
@@ -181,13 +180,12 @@ extends ViewModelFacetAbstract {
     @SneakyThrows
     private Object deserialize(
             final @NonNull ObjectSpecification viewmodelSpec,
-            final @Nullable String mementoEncoded) {
+            final @Nullable String trustedMemento) {
 
-        _Assert.assertNotNull(constructorAnyArgs, ()->"framework bug: required non-null, "
-                + "this can only happen, if we try to deserialize an abstract type");
+        Objects.requireNonNull(constructorAnyArgs, ()->"framework bug: required non-null, "
+            + "this can only happen, if we try to deserialize an abstract type");
 
-        var memento = SpecialMemento.decode(mementoEncoded);
-        var resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), memento);
+        var resolvedArgs = resolveArgsForConstructor(constructorAnyArgs, getServiceRegistry(), trustedMemento);
         var viewmodelPojo = constructorAnyArgs.constructor().newInstance(resolvedArgs);
         return viewmodelPojo;
     }

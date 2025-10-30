@@ -66,7 +66,7 @@ extends PanelBase<List<StackTraceDetail>> {
         public ExternalImageUrl(final String id, final String imageUrl) {
             super(id);
             add(new AttributeModifier("src", new Model<>(imageUrl)));
-            setVisible(!(imageUrl==null || imageUrl.equals("")));
+            setVisible(((imageUrl != null) && !imageUrl.equals("")));
         }
 
         @Override

@@ -18,79 +18,59 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.viewmodel;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.commons.internal.base._Bytes;
-import org.apache.causeway.commons.internal.base._Strings;
+import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.resources._Serializables;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import org.jspecify.annotations.NonNull;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
 import lombok.SneakyThrows;
 
 /**
  * Corresponds to {@link Serializable} interface.
+ *
+ * <p> requires a {@link HmacAuthority}, otherwise disabled.
  */
-public class ViewModelFacetForSerializableInterface
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForSerializableInterface
+extends SecureViewModelFacet {
 
-    public static Optional<ViewModelFacet> create(
+    static Optional<ViewModelFacet> create(
             final Class<?> cls,
+            final HmacUrlCodec hmacUrlCodec,
             final FacetHolder holder) {
 
-        return Serializable.class.isAssignableFrom(cls)
-                ? Optional.of(new ViewModelFacetForSerializableInterface(holder))
+        return hmacUrlCodec!=null
+            && Serializable.class.isAssignableFrom(cls)
+                ? Optional.of(new ViewModelFacetForSerializableInterface(hmacUrlCodec, holder))
                 : Optional.empty();
     }
 
     protected ViewModelFacetForSerializableInterface(
+            final HmacUrlCodec hmacUrlCodec,
             final FacetHolder holder) {
-        super(holder, Precedence.HIGH);
+        super(hmacUrlCodec, holder, Precedence.HIGH);
     }
 
     @SneakyThrows
     @Override
-    protected ManagedObject createViewmodel(
+    protected Object createViewmodelPojo(
             final @NonNull ObjectSpecification viewmodelSpec,
-            final @NonNull Bookmark bookmark) {
-        return ManagedObject.bookmarked(
-                        viewmodelSpec,
-                        deserialize(viewmodelSpec, bookmark.identifier()),
-                        bookmark);
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
+
+        Class<? extends Serializable> expectedType = _Casts.uncheckedCast(viewmodelSpec.getCorrespondingClass());
+        return _Serializables.read(expectedType, trustedBookmarkIdAsBytes);
     }
 
     @SneakyThrows
     @Override
-    public String serialize(final ManagedObject viewModel) {
-        var baos = new ByteArrayOutputStream();
-        try(var oos = new ObjectOutputStream(baos)) {
-            oos.writeObject(viewModel.getPojo());
-            var mementoStr = _Strings.ofBytes(
-                    _Bytes.asUrlBase64.apply(baos.toByteArray()),
-                    StandardCharsets.UTF_8);
-            return mementoStr;
-        }
-    }
-
-    // -- HELPER
-
-    @SneakyThrows
-    private Object deserialize(
-            final @NonNull ObjectSpecification viewmodelSpec,
-            final @NonNull String memento) {
-        var bytes = _Bytes.ofUrlBase64.apply(_Strings.toBytes(memento, StandardCharsets.UTF_8));
-        try(var ois = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            var viewModelPojo = ois.readObject();
-            return viewModelPojo;
-        }
+    public byte[] encodeState(final ManagedObject viewModel) {
+        return _Serializables.write((Serializable) viewModel.getPojo());
     }
 
 }

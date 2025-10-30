@@ -16,20 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.serializing;
+package org.apache.causeway.core.metamodel.valuesemantics;
 
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Optional;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import jakarta.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.bookmark.idstringifiers.PredefinedSerializables;
@@ -37,38 +34,35 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
-import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
-
-import org.jspecify.annotations.NonNull;
 
 /**
- * Default implementation of {@link SerializingAdapter}, intended as an 'internal' service.
+ * Coder/Decoder from {@link Object} to {@link Serializable}
+ * As used to encode values to bookmarks.
  *
- * <p>
  * @implNote uses {@link Bookmark} or {@link ValueDecomposition}
  * for identifiable objects or value types,
  * while some predefined serializable types that implement {@link Serializable}
  * are written/read directly
- * </p>
  *
  * @see PredefinedSerializables
  *
- * @since 2.0 {@index}
+ * @since 3.5 (refactored from SerializingAdapter)
  */
-@Service
-@Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".SerializingAdapterDefault")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
-public class SerializingAdapterDefault implements SerializingAdapter {
+public record ValueCodec(
+    BookmarkService bookmarkService,
+    Provider<ValueSemanticsResolver> valueSemanticsResolverProvider) {
 
-    @Inject private BookmarkService bookmarkService;
+    /** JUnit testing default */
+    public static ValueCodec forTesting() {
+        return new ValueCodec(null, () -> null);
+    }
 
-    @Lazy
-    @Inject private ValueSemanticsResolver valueSemanticsResolver;
-
-    @Override
-    public Serializable write(final @NonNull Object value) {
+    /**
+     * Converts the value into a {@link Serializable} that is write-able to an {@link ObjectOutput}.
+     *
+     * <p>Note: write and read are complementary operations
+     */
+    public Serializable encode(final @NonNull Object value) {
         if(PredefinedSerializables.isPredefinedSerializable(value.getClass())) {
             // the value can be stored/written directly without conversion to a bookmark
             return (Serializable) value;
@@ -83,8 +77,15 @@ public class SerializingAdapterDefault implements SerializingAdapter {
                     _Exceptions.unrecoverable("cannot create a memento for object of type %s", value.getClass()));
     }
 
-    @Override
-    public <T> T read(final @NonNull Class<T> valueClass, final @NonNull Serializable value) {
+    /**
+     * Converts the {@link Serializable} {@code value} as read from an {@link ObjectInput} back into its
+     * original (typically a Pojo).
+     *
+     * <p>Note: write and read are complementary operations
+     *
+     * @param valueClass the expected type which to cast the {@code value} to (required)
+     */
+    public <T> T decode(final @NonNull Class<T> valueClass, final @NonNull Serializable value) {
 
         // see if required/desired value-class is Bookmark, then just cast
         if(Bookmark.class.equals(valueClass)) {
@@ -120,7 +121,7 @@ public class SerializingAdapterDefault implements SerializingAdapter {
 
         final Class<T> valueClass = _Casts.uncheckedCast(value.getClass());
 
-        return valueSemanticsResolver.streamValueSemantics(valueClass)
+        return valueSemanticsResolverProvider().get().streamValueSemantics(valueClass)
                 .findFirst()
                 .map(vs->vs.decompose(value));
     }
@@ -129,7 +130,7 @@ public class SerializingAdapterDefault implements SerializingAdapter {
             final @NonNull Class<T> valueClass,
             final @NonNull ValueDecomposition decomposition) {
 
-        return valueSemanticsResolver.streamValueSemantics(valueClass)
+        return valueSemanticsResolverProvider().get().streamValueSemantics(valueClass)
                 .findFirst()
                 .map(vs->vs.compose(decomposition));
     }

@@ -22,13 +22,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.DomainObject;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.metamodel.BeanSort;
-import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -36,17 +34,19 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.core.metamodel.util.hmac.Memento;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
 
-import org.jspecify.annotations.NonNull;
-
-public class ViewModelFacetForDomainObjectAnnotation
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForDomainObjectAnnotation
+extends SecureViewModelFacet {
 
     public static Optional<ViewModelFacetForDomainObjectAnnotation> create(
             final Optional<DomainObject> domainObjectIfAny,
+            final MementoHmacContext mementoContext,
             final FacetHolder holder) {
 
-        return domainObjectIfAny
+        return mementoContext!=null
+            ? domainObjectIfAny
                 .map(DomainObject::nature)
                 .map(nature -> {
                     switch (nature) {
@@ -70,36 +70,36 @@ extends ViewModelFacetAbstract {
                         }
                         // else fall through
                     case VIEW_MODEL:
-                        return new ViewModelFacetForDomainObjectAnnotation(holder);
+                        return new ViewModelFacetForDomainObjectAnnotation(mementoContext, holder);
                     }
                     // shouldn't happen, the above switch should match all cases
                     throw new IllegalArgumentException("nature of '" + nature + "' not recognized");
                 })
-                .filter(Objects::nonNull);
+                .filter(Objects::nonNull)
+            : Optional.empty();
     }
 
-    private UrlEncodingService codec;
-    private SerializingAdapter serializer;
+    private final MementoHmacContext mementoContext;
 
     protected ViewModelFacetForDomainObjectAnnotation(
-            final FacetHolder holder) {
+            final MementoHmacContext mementoContext, final FacetHolder holder) {
         // is overruled by any other ViewModelFacet type
-        super(holder, Precedence.LOW);
+        super(mementoContext.hmacUrlCodec(), holder, Precedence.LOW);
+        this.mementoContext = mementoContext;
     }
 
     @Override
-    protected ManagedObject createViewmodel(
+    protected Object createViewmodelPojo(
             final @NonNull ObjectSpecification viewmodelSpec,
-            final @NonNull Bookmark bookmark) {
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
+
+        // throws on de-marshalling failure
+        var memento = mementoContext.parseTrustedMemento(trustedBookmarkIdAsBytes);
 
         var viewmodel = viewmodelSpec.createObject();
-
-        var memento = parseMemento(bookmark);
         var mementoKeys = memento.keySet();
 
-        if(mementoKeys.isEmpty()) {
-            return viewmodel;
-        }
+        if(mementoKeys.isEmpty()) return viewmodel.getPojo();
 
         var objectManager = super.getObjectManager();
 
@@ -119,13 +119,13 @@ extends ViewModelFacetAbstract {
             property.set(viewmodel, propertyValue, InteractionInitiatedBy.PASS_THROUGH);
         });
 
-        return viewmodel;
+        return viewmodel.getPojo();
     }
 
     @Override
-    public String serialize(final ManagedObject viewModel) {
+    public byte[] encodeState(final ManagedObject viewModel) {
 
-        final _Mementos.Memento memento = newMemento();
+        final Memento memento = mementoContext.newMemento();
 
         var viewmodelSpec = viewModel.objSpec();
 
@@ -141,7 +141,7 @@ extends ViewModelFacetAbstract {
             }
         });
 
-        return memento.asString();
+        return memento.stateAsBytes();
     }
 
     // -- HELPER
@@ -153,28 +153,6 @@ extends ViewModelFacetAbstract {
                 .filter(property->property.containsNonFallbackFacet(PropertySetterFacet.class))
                 // ignore those explicitly annotated as @Property(snapshot = Snapshot.EXCLUDED)
                 .filter(property->property.isIncludedWithSnapshots());
-    }
-
-    private void initDependencies() {
-        var serviceRegistry = getServiceRegistry();
-        this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
-        this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
-    }
-
-    private void ensureDependenciesInited() {
-        if(codec==null) {
-            initDependencies();
-        }
-    }
-
-    private _Mementos.Memento newMemento() {
-        ensureDependenciesInited();
-        return _Mementos.create(codec, serializer);
-    }
-
-    private _Mementos.Memento parseMemento(final Bookmark bookmark) {
-        ensureDependenciesInited();
-        return _Mementos.parse(codec, serializer, bookmark.identifier());
     }
 
 }

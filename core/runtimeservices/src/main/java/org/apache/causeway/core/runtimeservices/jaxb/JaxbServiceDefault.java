@@ -21,12 +21,13 @@ package org.apache.causeway.core.runtimeservices.jaxb;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ import org.apache.causeway.applib.domain.DomainObjectList;
 import org.apache.causeway.applib.jaxb.PersistentEntitiesAdapter;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.jaxb.JaxbService.Simple;
 import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.io.JaxbUtils;
@@ -43,7 +45,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -59,12 +60,12 @@ import lombok.SneakyThrows;
 public class JaxbServiceDefault extends Simple {
 
     private final ServiceInjector serviceInjector;
-    private final SpecificationLoader specLoader;
+    private final Provider<SpecificationLoader> specLoaderProvider;
 
     @SneakyThrows
     @Override
     protected JAXBContext jaxbContextForList(final @NonNull DomainObjectList domainObjectList) {
-        var elementType = specLoader
+        var elementType = specLoaderProvider.get()
                 .specForType(_Context.loadClass(domainObjectList.getElementTypeFqcn()))
                 .map(ObjectSpecification::getCorrespondingClass)
                 .orElse(null);

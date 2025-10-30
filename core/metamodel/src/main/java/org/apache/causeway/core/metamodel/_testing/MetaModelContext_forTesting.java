@@ -30,10 +30,13 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
@@ -50,6 +53,7 @@ import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.title.TitleService;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
@@ -102,13 +106,13 @@ import org.apache.causeway.core.metamodel.valuesemantics.BigDecimalValueSemantic
 import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.Singular;
 
 @Builder @Getter
@@ -283,7 +287,10 @@ extends MetaModelContext {
                     _SingletonBeanProvider.forTestingLazy(JaxbService.class, this::getJaxbService),
                     _SingletonBeanProvider.forTestingLazy(MenuBarsService.class, this::getMenuBarsService),
                     _SingletonBeanProvider.forTestingLazy(LayoutService.class, this::getLayoutService),
-                    _SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader)
+                    _SingletonBeanProvider.forTestingLazy(SpecificationLoader.class, this::getSpecificationLoader),
+                    _SingletonBeanProvider.forTestingLazy(HmacAuthority.class, HmacAuthority::forTesting),
+                    _SingletonBeanProvider.forTestingLazy(UrlEncodingService.class, UrlEncodingService::forTestingNoCompression),
+                    _SingletonBeanProvider.forTestingLazy(ValueCodec.class, ()->ValueCodec.forTesting())
                 )
                 );
     }
@@ -365,6 +372,7 @@ extends MetaModelContext {
 
     private final _Lazy<ProgrammingModel> programmingModelRef =
             _Lazy.threadSafe(()->initProgrammingModel());
+    @Override
     public ProgrammingModel getProgrammingModel() {
         return programmingModelRef.get();
     }
@@ -494,7 +502,8 @@ extends MetaModelContext {
             getGridMarshallerService(),
             List.of(
                     new GridSystemServiceBootstrap(
-                            this,
+                            getConfiguration(),
+                            ()->getSpecificationLoader(),
                             getTranslationService(),
                             getJaxbService(),
                             getMessageService(),
@@ -509,9 +518,9 @@ extends MetaModelContext {
     //XXX lombok issue: won't compile if inlined
     private final LayoutService createLayoutService() {
         return new LayoutServiceDefault(
-                getSpecificationLoader(),
-                getGridService(),
-                getMenuBarsService());
+                ()->getSpecificationLoader(),
+                ()->getGridService(),
+                ()->getMenuBarsService());
     }
 
     // -- SERVICE REGISTRY HELPER

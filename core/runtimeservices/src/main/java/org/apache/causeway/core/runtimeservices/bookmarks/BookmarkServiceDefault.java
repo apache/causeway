@@ -26,9 +26,11 @@ import java.util.stream.Collectors;
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -60,7 +62,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 @Qualifier("Default")
 public class BookmarkServiceDefault implements BookmarkService {
 
-    @Inject private SpecificationLoader specificationLoader;
+    @Inject private Provider<SpecificationLoader> specificationLoaderProvider;
     @Inject private WrapperFactory wrapperFactory;
     @Inject private ObjectManager objectManager;
     @Inject private MetaModelContext mmc;
@@ -122,7 +124,7 @@ public class BookmarkServiceDefault implements BookmarkService {
                 || cls==null) {
             return Optional.empty();
         }
-        return specificationLoader.specForType(cls)
+        return specificationLoaderProvider.get().specForType(cls)
                 .map(ObjectSpecification::logicalType)
                 .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
@@ -135,7 +137,7 @@ public class BookmarkServiceDefault implements BookmarkService {
                         ()->_Exceptions.illegalArgument(
                         "cannot create bookmark for type %s",
                         domainObject!=null
-                            ? specificationLoader.specForType(domainObject.getClass())
+                            ? specificationLoaderProvider.get().specForType(domainObject.getClass())
                                     .map(spec->spec.toString())
                                     .orElseGet(()->domainObject.getClass().getName())
                             : "<null>"));

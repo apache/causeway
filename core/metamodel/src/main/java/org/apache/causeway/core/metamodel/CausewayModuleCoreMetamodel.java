@@ -18,7 +18,12 @@
  */
 package org.apache.causeway.core.metamodel;
 
+import java.util.Objects;
 import java.util.stream.Stream;
+
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +33,8 @@ import org.springframework.context.annotation.Primary;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
@@ -74,7 +81,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.ClobValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.CommandDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.DoubleValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.FloatValueSemantics;
-import org.apache.causeway.core.metamodel.valuesemantics.IdStringifierForSerializable;
 import org.apache.causeway.core.metamodel.valuesemantics.IntValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.InteractionDtoValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.LocalResourcePathValueSemantics;
@@ -89,6 +95,7 @@ import org.apache.causeway.core.metamodel.valuesemantics.TreeNodeValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.TreePathValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.URLValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.UUIDValueSemantics;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateTimeValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.LocalTimeValueSemantics;
@@ -101,8 +108,6 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaSql
 import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUtilDateValueSemantics;
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
-
-import org.jspecify.annotations.NonNull;
 
 @Configuration
 @Import({
@@ -166,8 +171,6 @@ import org.jspecify.annotations.NonNull;
         JavaUtilDateValueSemantics.class,
         // Value Semantics (meta-model)
         ApplicationFeatureIdValueSemantics.class,
-        // fallback IdStringifier
-        IdStringifierForSerializable.class,
 
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,
@@ -221,15 +224,21 @@ public class CausewayModuleCoreMetamodel {
 
     @Bean
     public PreloadableTypes treeAdapterTypes() {
-        return ()->Stream.of(
-                TreeAdapter.class);
+        return ()->Stream.of(TreeAdapter.class);
     }
 
     @Bean
     public PreloadableTypes metamodelViewTypes() {
-        return ()->Stream.of(
-                MetamodelInspectView.class
-                );
+        return ()->Stream.of(MetamodelInspectView.class);
+    }
+
+    @Bean
+    public ValueCodec valueCodec(
+            final BookmarkService bookmarkService,
+            final Provider<ValueSemanticsResolver> valueSemanticsResolverProvider) {
+        Objects.requireNonNull(bookmarkService);
+        Objects.requireNonNull(valueSemanticsResolverProvider);
+        return new ValueCodec(bookmarkService, valueSemanticsResolverProvider);
     }
 
 }

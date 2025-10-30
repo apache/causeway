@@ -25,8 +25,10 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -45,8 +47,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Default implementation of {@link FactoryService}.
  *
@@ -59,7 +59,7 @@ import org.jspecify.annotations.NonNull;
 public class FactoryServiceDefault implements FactoryService {
 
     @Inject InteractionService interactionService; // dependsOn
-    @Inject private SpecificationLoader specificationLoader;
+    @Inject private Provider<SpecificationLoader> specificationLoaderRef;
     @Inject private CausewaySystemEnvironment causewaySystemEnvironment;
     @Inject private Provider<ObjectLifecyclePublisher> objectLifecyclePublisherProvider;
     private ObjectLifecyclePublisher objectLifecyclePublisher() { return objectLifecyclePublisherProvider.get(); }
@@ -156,7 +156,7 @@ public class FactoryServiceDefault implements FactoryService {
     // -- HELPER
 
     private ObjectSpecification loadSpecElseFail(final @NonNull Class<?> type) {
-        return specificationLoader.specForTypeElseFail(type);
+        return specificationLoaderRef.get().specForTypeElseFail(type);
     }
 
     /** handles injection, post-construct and publishing */
@@ -184,8 +184,8 @@ public class FactoryServiceDefault implements FactoryService {
     }
 
     @Override
-    public <T> TreeNode<T> treeNode(T root) {
-        return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(specificationLoader)));
+    public <T> TreeNode<T> treeNode(final T root) {
+        return TreeNode.root(root, _Casts.uncheckedCast(new ObjectTreeAdapter(specificationLoaderRef.get())));
     }
 
 }

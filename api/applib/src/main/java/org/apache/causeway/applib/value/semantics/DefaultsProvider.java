@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
-
 /**
  * Provides a mechanism for providing a default value for an object.
  *
@@ -40,7 +38,6 @@ import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
  * the object reflectively.
  *
  * @see Parser
- * @see EncoderDecoder
  * @see ValueSemanticsProvider
  *
  * @since 1.x {@index}
