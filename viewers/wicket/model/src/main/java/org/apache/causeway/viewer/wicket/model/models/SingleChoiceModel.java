@@ -40,6 +40,12 @@ implements
 
     @Override
     public ObjectMemento getObject() {
+        if(pendingValue().getValue().getValue()==null) {
+            // trigger reinitialize
+            if(attributeModel instanceof PropertyModel propertyModel) {
+                propertyModel.getUiProperty().detach();
+            }
+        }
         return pendingValue().getValue().getValue().getMemento().orElseThrow();
     }
 
