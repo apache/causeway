@@ -29,8 +29,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelBase;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
-@SuppressWarnings("rawtypes")
-abstract class MenuActionPanel extends PanelBase {
+abstract class MenuActionPanel extends PanelBase<Object> {
 
     private static final long serialVersionUID = 1L;
 
