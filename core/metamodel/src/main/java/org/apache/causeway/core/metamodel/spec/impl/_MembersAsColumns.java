@@ -129,6 +129,7 @@ class _MembersAsColumns implements HasMetaModelContext {
 
         // don't pass in any object, just need the meta-data
         var elementTypeGrid = elementTypeGridFacet.getGrid(null);
+        if(elementTypeGrid ==null) return Optional.empty();
 
         final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
         elementTypeGrid.streamPropertyLayoutData()
