@@ -112,4 +112,9 @@ implements HasUiProperty {
         return getManagedProperty().getAssociatedActions();
     }
 
+    @Override
+    public void detach() {
+        uiProperty.detach();
+    }
+
 }
