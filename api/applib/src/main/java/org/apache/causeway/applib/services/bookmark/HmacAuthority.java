@@ -29,7 +29,7 @@ import org.jspecify.annotations.Nullable;
 import lombok.SneakyThrows;
 
 /**
- * Can be registered with Spring, to override the build in default, which has an application scoped random secret.
+ * Can be registered with Spring, to override the built in default, which has an application scoped random secret.
  *
  * <pre>
  * {@code @Configuration}
@@ -41,10 +41,12 @@ import lombok.SneakyThrows;
  * }
  * </pre>
  *
- * <p>Note that bookmark's validity is bound to the (server-side) secret key of the {@link HmacAuthority}.
+ * <p>Used to generate the bookmark of view models so that they are not susceptible to forgery or de-serialization attacks.
+ * (Bookmarks of entities are not susceptible).
+ * Note though, that the bookmarks' validity is bound to the (server-side) secret key of the {@link HmacAuthority}.
  * Once the secret changes, bookmarks that are stored client-side for later use, will be rendered invalid.
  *
- * @apiNote the default bean is auto-configured with 'CausewayModuleCoreRuntimeServices.HmacAutorityAutoconfigure'
+ * @apiNote the default bean is auto-configured with 'CausewayModuleCoreRuntimeServices.HmacAuthorityAutoconfigure'
  *
  * @since 3.5
  */
@@ -71,7 +73,7 @@ public interface HmacAuthority {
     /**
      * Whether HMAC length in bytes is expected/valid.
      */
-    boolean isValidHmacLength(final int hmacLength);
+    boolean isValidHmacLength(int hmacLength);
 
     // -- IMPL
 
@@ -116,6 +118,6 @@ public interface HmacAuthority {
     // JUNIT SUPPORT
 
     static HmacAuthority forTesting() {
-        return new HmacSHA256("secret for testing onyl".getBytes());
+        return new HmacSHA256("secret for testing only".getBytes());
     }
 }

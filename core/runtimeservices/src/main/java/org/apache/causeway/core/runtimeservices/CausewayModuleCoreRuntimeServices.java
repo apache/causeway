@@ -132,7 +132,7 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         ExceptionRecognizerForDataAccessException.class,
 
         // auto configuration
-        CausewayModuleCoreRuntimeServices.HmacAutorityAutoconfigure.class
+        CausewayModuleCoreRuntimeServices.HmacAuthorityAutoconfigure.class
 
 })
 @ComponentScan(basePackages = "org.apache.causeway.core.runtimeservices.icons")
@@ -147,7 +147,7 @@ public class CausewayModuleCoreRuntimeServices {
 
     @AutoConfigureOrder(PriorityPrecedence.LATE)
     @Configuration
-    static class HmacAutorityAutoconfigure {
+    static class HmacAuthorityAutoconfigure {
         @Bean(NAMESPACE + ".fallbackHmacAuthority")
         @ConditionalOnMissingBean(HmacAuthority.class)
         public HmacAuthority fallbackHmacAuthority() {
