@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
-
 /**
  * Provides an ordering relation for a given value-type.
  * <p>
@@ -36,7 +34,6 @@ import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
  *
  * @see DefaultsProvider
  * @see Parser
- * @see EncoderDecoder
  * @see ValueSemanticsProvider
  *
  * @since 2.x {@index}

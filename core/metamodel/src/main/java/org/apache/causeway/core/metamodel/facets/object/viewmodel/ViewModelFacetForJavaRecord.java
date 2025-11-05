@@ -24,76 +24,73 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.memento._Mementos;
-import org.apache.causeway.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.util.hmac.Memento;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 /**
  * @since 3.0.0
  */
-public class ViewModelFacetForJavaRecord
-extends ViewModelFacetAbstract {
+public final class ViewModelFacetForJavaRecord
+extends SecureViewModelFacet {
 
-    public static Optional<ViewModelFacetForJavaRecord> create(
+    static Optional<ViewModelFacetForJavaRecord> create(
             final Class<?> cls,
+            final MementoHmacContext mementoContext,
             final FacetHolder holder) {
-        return cls.isRecord()
-                ? Optional.of(new ViewModelFacetForJavaRecord(cls, holder))
-                : Optional.empty();
+        return mementoContext!=null
+                && cls.isRecord()
+            ? Optional.of(new ViewModelFacetForJavaRecord(cls, mementoContext, holder))
+            : Optional.empty();
     }
 
-    private UrlEncodingService codec;
-    private SerializingAdapter serializer;
-
+    private final MementoHmacContext mementoContext;
     private final Constructor<?> canonicalConstructor;
 
     protected ViewModelFacetForJavaRecord(
             final Class<?> recordClass,
+            final MementoHmacContext mementoContext,
             final FacetHolder holder) {
         // is overruled by ViewModel interface semantics
-        super(holder, Precedence.DEFAULT);
+        super(mementoContext.hmacUrlCodec(), holder, Precedence.DEFAULT);
+        this.mementoContext = mementoContext;
         this.canonicalConstructor = canonicalConstructor(recordClass);
     }
 
     @Override @SneakyThrows
-    protected ManagedObject createViewmodel(
+    protected Object createViewmodelPojo(
             final @NonNull ObjectSpecification viewmodelSpec,
-            final @NonNull Bookmark bookmark) {
+            final @NonNull byte[] trustedBookmarkIdAsBytes) {
 
-        var memento = parseMemento(bookmark);
+        // throws on de-marshalling failure
+        var memento = mementoContext.parseTrustedMemento(trustedBookmarkIdAsBytes);
 
         var recordComponentPojos = streamRecordComponents(viewmodelSpec)
         .map(association->{
-            var associationId = association.getId();
-            var elementType = association.getElementType();
-            var elementClass = elementType.getCorrespondingClass();
             var associationPojo = association.isProperty()
-                    ? memento.get(associationId, elementClass)
-                    //TODO collection values not yet supported by memento (as workaround use Serializable record)
-                    : null;
+                ? memento.get(association.getId(), association.getElementType().getCorrespondingClass())
+                //TODO collection values not yet supported by memento (as workaround use Serializable record)
+                : null;
             return associationPojo;
         }).toArray();
 
-        return ManagedObject.viewmodel(viewmodelSpec,
-                canonicalConstructor.newInstance(recordComponentPojos),
-                Optional.of(bookmark));
+        return canonicalConstructor.newInstance(recordComponentPojos);
     }
 
     @Override
-    public String serialize(final ManagedObject viewModel) {
+    public byte[] encodeState(final ManagedObject viewModel) {
 
-        final _Mementos.Memento memento = newMemento();
+        final Memento memento = mementoContext.newMemento();
 
         var viewmodelSpec = viewModel.objSpec();
 
@@ -111,7 +108,7 @@ extends ViewModelFacetAbstract {
             }
         });
 
-        return memento.asString();
+        return memento.stateAsBytes();
     }
 
     // -- HELPER
@@ -123,28 +120,6 @@ extends ViewModelFacetAbstract {
             this.recordComponentsAsAssociations = recordComponentsAsAssociations(viewmodelSpec);
         }
         return recordComponentsAsAssociations.stream();
-    }
-
-    private void initDependencies() {
-        var serviceRegistry = getServiceRegistry();
-        this.codec = serviceRegistry.lookupServiceElseFail(UrlEncodingService.class);
-        this.serializer = serviceRegistry.lookupServiceElseFail(SerializingAdapter.class);
-    }
-
-    private void ensureDependenciesInited() {
-        if(codec==null) {
-            initDependencies();
-        }
-    }
-
-    private _Mementos.Memento newMemento() {
-        ensureDependenciesInited();
-        return _Mementos.create(codec, serializer);
-    }
-
-    private _Mementos.Memento parseMemento(final Bookmark bookmark) {
-        ensureDependenciesInited();
-        return _Mementos.parse(codec, serializer, bookmark.identifier());
     }
 
     private static Can<ObjectAssociation> recordComponentsAsAssociations(

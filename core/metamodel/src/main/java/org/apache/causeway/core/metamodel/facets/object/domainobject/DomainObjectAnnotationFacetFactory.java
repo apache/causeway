@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.object.domainobject;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,8 @@ import org.apache.causeway.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.causeway.applib.id.LogicalType;
+import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.applib.services.urlencoding.UrlEncodingService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -80,6 +83,9 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
+import org.apache.causeway.core.metamodel.util.hmac.HmacUrlCodec;
+import org.apache.causeway.core.metamodel.util.hmac.MementoHmacContext;
+import org.apache.causeway.core.metamodel.valuesemantics.ValueCodec;
 
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
@@ -95,10 +101,24 @@ implements
     private final MetaModelValidatorForMixinTypes mixinTypeValidator =
             new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
-    @Inject
+    // self-managed injection point resolving via constructor ..
+    @Inject HmacAuthority hmacAuthority;
+    @Inject UrlEncodingService urlCodec;
+    @Inject ValueCodec valueCodec;
+
+    private final MementoHmacContext mementoContext;
+
     public DomainObjectAnnotationFacetFactory(
             final MetaModelContext mmc) {
         super(mmc, FeatureType.OBJECTS_ONLY);
+
+        mmc.getServiceInjector().injectServicesInto(this);
+        Objects.requireNonNull(hmacAuthority);
+        Objects.requireNonNull(urlCodec);
+        Objects.requireNonNull(valueCodec);
+
+        this.mementoContext = new MementoHmacContext(
+            new HmacUrlCodec(hmacAuthority, urlCodec), valueCodec);
     }
 
     @Override
@@ -332,6 +352,7 @@ implements
                 ViewModelFacetForDomainObjectAnnotation
                 .create(
                         domainObjectIfAny,
+                        mementoContext,
                         facetHolder))
                 .isPresent()) {
             return;

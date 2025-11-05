@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.applib.value.semantics;
 
-import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
-
 /**
  * Provides forth and back conversion between 2 types.
  *
@@ -28,7 +26,6 @@ import org.apache.causeway.commons.internal.memento._Mementos.EncoderDecoder;
  *
  * @see DefaultsProvider
  * @see Parser
- * @see EncoderDecoder
  * @see ValueSemanticsProvider
  *
  * @since 2.x {@index}
