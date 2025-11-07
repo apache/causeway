@@ -15,7 +15,7 @@ updates:
 
   # Maintain dependencies for Maven (v3 branch)
   - package-ecosystem: "maven"
-    target-branch: "main"
+    target-branch: "v3"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -28,7 +28,7 @@ updates:
 
   # Maintain dependencies for Maven (v4 branch)
   - package-ecosystem: "maven"
-    target-branch: "v4"
+    target-branch: "main"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"

@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - v4
+      - v3
   pull_request:
     branches:
       - main
-      - v4
+      - v3
 
 jobs:
   # This is a matrix build {'java', 'javascript'},
@@ -64,12 +64,12 @@ jobs:
         java-version: 25
 
     - name: Set up Maven (3.9.11)
-      if: matrix.language == 'java' && env.BRANCH_NAME == 'main'
+      if: matrix.language == 'java' && env.BRANCH_NAME == 'v3'
       uses: stCarolas/setup-maven@v5
       with:
         maven-version: 3.9.11
     - name: Set up Maven (4.0.0-rc-4)
-      if: matrix.language == 'java' && env.BRANCH_NAME == 'v4'
+      if: matrix.language == 'java' && env.BRANCH_NAME == 'main'
       uses: stCarolas/setup-maven@v5
       with:
         maven-version: 4.0.0-rc-4
@@ -107,7 +107,7 @@ jobs:
     # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
     - name: "CodeQL: Initialize"
       if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: ${{ matrix.language }}
 
@@ -138,11 +138,11 @@ jobs:
     # If this step fails, then you should remove it and run the build manually
     - name: "CodeQL: Autobuild"
       if: env.SKIP_CODE_QL != 'true' && matrix.language == 'javascript'
-      uses: github/codeql-action/autobuild@v3
+      uses: github/codeql-action/autobuild@v4
 
     - name: "CodeQL: Perform Analysis"
       if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
       with:
         category: "/language:${{matrix.language}}"
 
