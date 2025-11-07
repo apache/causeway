@@ -49,7 +49,7 @@
 
 /* https://fontawesome.com/icons/chevron-down?style=solid */
 .tree-theme-bootstrap .tree-junction-expanded:before {
-  font-family: "Font Awesome 6 Free", sans-serif;
+  font-family: "Font Awesome 7 Free", sans-serif;
   font-weight: 900;
   content: "\f078";
 }
@@ -68,7 +68,7 @@
 
 /* https://fontawesome.com/icons/chevron-right?style=solid */
 .tree-theme-bootstrap .tree-junction-collapsed:before {
-  font-family: "Font Awesome 6 Free", sans-serif;
+  font-family: "Font Awesome 7 Free", sans-serif;
   font-weight: 900;
   content: "\f054";
 }
