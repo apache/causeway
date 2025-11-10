@@ -48,7 +48,7 @@ type Mutation {
   causeway_testing_fixtures_FixtureResult__key(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__object(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): rich__causeway_testing_fixtures_FixtureResult
   org_apache_causeway_core_metamodel_inspect_model_MMNode__details(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): String
-  org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input, details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): String
+  org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input, details: String!): String
   org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes(_target: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__friendlyName(_target: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input, friendlyName: String!): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu__actionWithDisabledParam(firstParam: String!, secondParam: String!, thirdParameter: String!): String
@@ -102,7 +102,6 @@ type RICHSchema {
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
@@ -145,7 +144,6 @@ type SIMPLESchema {
   java_util_stream_Stream(object: simple__java_util_stream_Stream__gqlv_input): simple__java_util_stream_Stream
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): simple__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: simple__university_admin_AdminMenu
   university_calc_Calculator: simple__university_calc_Calculator
@@ -198,7 +196,6 @@ type ScenarioStep {
   java_util_stream_Stream(object: rich__java_util_stream_Stream__gqlv_input): rich__java_util_stream_Stream
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView(object: rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input): rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView
   org_apache_causeway_core_metamodel_inspect_model_MMNode(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details(object: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript(object: rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript__gqlv_input): rich__org_apache_causeway_testing_fixtures_applib_fixturescripts_FixtureScript
   university_admin_AdminMenu: rich__university_admin_AdminMenu
   university_calc_Calculator: rich__university_calc_Calculator
@@ -1392,31 +1389,6 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode {
   streamChildNodes: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__streamChildNodes__gqlv_action
 }
 
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details {
-  "Object metadata"
-  _meta: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta
-  "Map"
-  map: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__map__gqlv_collection
-}
-
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__map__gqlv_collection {
-  datatype: String
-  disabled: String
-  get: [String]
-  hidden: Boolean
-}
-
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__details__gqlv_action {
   disabled: String
   hidden: Boolean
@@ -1442,7 +1414,7 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__details__gqlv_action_parameter {
   datatype: String
-  disabled(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): String
+  disabled(details: String): String
   hidden: Boolean
   validity: String
 }
@@ -1450,14 +1422,14 @@ type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action {
   disabled: String
   hidden: Boolean
-  invokeNonIdempotent(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke
+  invokeNonIdempotent(details: String!): rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke
   "Parameters of this action"
   params: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_params
-  validate(details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input): String
+  validate(details: String): String
 }
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_args {
-  details: rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
+  details: String
 }
 
 type rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__putDetails__gqlv_action_invoke {
@@ -5338,27 +5310,9 @@ type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode {
   "Details"
   details: String
   "Put Details"
-  putDetails(details: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input!): String
+  putDetails(details: String!): String
   "Stream Child Nodes"
   streamChildNodes: simple__java_util_stream_Stream
-}
-
-type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details {
-  "Object metadata"
-  _meta: simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta
-  "Map"
-  map: [String]
-}
-
-type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
 }
 
 type simple__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_meta {
@@ -5691,8 +5645,6 @@ enum logicalTypeNames__gqlv_enum {
   causeway_testing_fixtures_FixtureResult
   "org.apache.causeway.applib.graph.tree.MasterDetailTreeView"
   org_apache_causeway_applib_graph_tree_MasterDetailTreeView
-  "org.apache.causeway.core.metamodel.inspect.model.MMNode.Details"
-  org_apache_causeway_core_metamodel_inspect_model_MMNode_Details
   "university.dept.Department"
   university_dept_Department
   "university.dept.DeptHead"
@@ -5952,15 +5904,6 @@ input rich__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_inp
   ref: String
 }
 
-input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input rich__org_apache_causeway_core_metamodel_inspect_model_MMNode__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -6205,15 +6148,6 @@ input simple__java_util_stream_Stream__gqlv_input {
 }
 
 input simple__org_apache_causeway_applib_graph_tree_MasterDetailTreeView__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input simple__org_apache_causeway_core_metamodel_inspect_model_MMNode_Details__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
