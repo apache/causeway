@@ -55,7 +55,9 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 import org.jspecify.annotations.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 record FacetProcessor(
         ProgrammingModel programmingModel,
         /**
@@ -288,6 +290,13 @@ implements HasMetaModelContext {
                         featureType,
                         method,
                         removerElseNoopRemover(methodRemover), facetedMethod, isMixinMain);
+        
+        // warn on parameter names NOT reflectable
+        if(processMethodContext.hasPotentialNonReflectableParameterNames()) {
+    		log.warn("potential missing -parameters compiler flag with method {}#{}",
+    				cls.getName(),
+    				method.getName());
+    	}
 
         for (FacetFactory facetFactory : factoriesByFeatureType.getOrElseEmpty(featureType)) {
             facetFactory.process(processMethodContext);

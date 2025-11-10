@@ -24,9 +24,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import org.springframework.core.MethodParameter;
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
@@ -41,9 +38,11 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facetapi.MethodRemover;
 import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.core.MethodParameter;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -125,6 +124,18 @@ public interface FacetFactory {
             this.method = method;
             this.methodRemover = methodRemover;
         }
+        
+    	/**
+    	 * Whether the method's underlying byte code was NOT compiled with the {@code -parameters} flag.
+    	 * Might have false positives, hence 'potential' in the name.
+    	 */
+		public boolean hasPotentialNonReflectableParameterNames() {
+    		for(int i=0; i<method.getParameterCount(); ++i) {
+    			var paramName = method.getParameterName(i);
+    			if(paramName.equals("arg" + i)) return true;
+    		}
+    		return false;
+    	}
 
         @Override
         public void removeMethod(final ResolvedMethod method) {
