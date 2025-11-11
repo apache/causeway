@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel;
 
+import org.apache.causeway.core.metamodel.facets.object.ignore.eclipselink.RemoveEclipseLinkStaticWeaverPrefixedMethodsFacetFactory;
+
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
@@ -29,8 +31,6 @@ import org.apache.causeway.persistence.jpa.metamodel.facets.prop.column.MaxLengt
 import org.apache.causeway.persistence.jpa.metamodel.facets.prop.transients.JpaTransientAnnotationFacetFactory;
 import org.apache.causeway.persistence.jpa.metamodel.object.table.JpaTableAnnotationFacetFactory;
 
-import lombok.val;
-
 @Component
 public class JpaProgrammingModel implements MetaModelRefiner {
 
@@ -39,14 +39,17 @@ public class JpaProgrammingModel implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {
 
-        val step = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
-        val mmc = pm.getMetaModelContext();
+        var mmc = pm.getMetaModelContext();
 
-        pm.addFactory(step, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step, new BigDecimalFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step, new MaxLengthFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        var step1 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        pm.addFactory(step1, new RemoveEclipseLinkStaticWeaverPrefixedMethodsFacetFactory(mmc), Marker.JPA);
+
+        var step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
+        pm.addFactory(step2, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step2, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step2, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step2, new BigDecimalFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step2, new MaxLengthFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
 
     }
 
