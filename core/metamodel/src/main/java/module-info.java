@@ -151,6 +151,7 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.spi;
     exports org.apache.causeway.core.metamodel.services.deadlock;
     exports org.apache.causeway.core.metamodel.facets.object.autocomplete;
+    exports org.apache.causeway.core.metamodel.facets.object.ignore.eclipselink to org.apache.causeway.persistence.jdo.metamodel, org.apache.causeway.persistence.jpa.metamodel;
 
     requires jakarta.activation;
     requires jakarta.annotation;
