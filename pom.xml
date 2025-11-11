@@ -24,7 +24,7 @@
 
 	<groupId>org.apache.causeway</groupId>
 	<artifactId>causeway-all</artifactId>
-	<version>3.5.0-SNAPSHOT</version>
+	<version>3.6.0-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 
