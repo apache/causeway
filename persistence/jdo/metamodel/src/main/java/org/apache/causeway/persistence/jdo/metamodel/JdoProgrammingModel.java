@@ -54,8 +54,8 @@ public class JdoProgrammingModel implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {
 
-        val step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
-        val mmc = pm.getMetaModelContext();
+        var mmc = pm.getMetaModelContext();
+        var step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
 
         // come what may, we have to ignore the PersistenceCapable supertype.
         pm.addFactory(step1, new RemoveJdoEnhancementTypesFacetFactory(mmc), Marker.JDO);
