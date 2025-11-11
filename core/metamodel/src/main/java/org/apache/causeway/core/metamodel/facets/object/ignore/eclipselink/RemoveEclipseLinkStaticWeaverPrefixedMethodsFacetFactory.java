@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ignore.eclipselink;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
