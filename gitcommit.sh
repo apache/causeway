@@ -4,7 +4,6 @@ usage() {
   echo "  -A : suppress adding automatically, ie don't call 'git add .'" >&2
   echo "  -p : also push" >&2
   echo "" >&2
-  echo "  Cannot specify -1 and -2 together, obvs. " >&2
 }
 
 PUSH=""
