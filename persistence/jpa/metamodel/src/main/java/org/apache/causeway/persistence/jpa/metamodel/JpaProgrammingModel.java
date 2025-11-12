@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.persistence.jpa.metamodel;
 
-import org.apache.causeway.core.metamodel.facets.object.ignore.eclipselink.RemoveEclipseLinkStaticWeaverPrefixedMethodsFacetFactory;
-
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.core.metamodel.facetapi.MetaModelRefiner;
@@ -39,17 +37,14 @@ public class JpaProgrammingModel implements MetaModelRefiner {
     @Override
     public void refineProgrammingModel(final ProgrammingModel pm) {
 
+        var step = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
         var mmc = pm.getMetaModelContext();
 
-        var step1 = ProgrammingModel.FacetProcessingOrder.C2_AFTER_METHOD_REMOVING;
-        pm.addFactory(step1, new RemoveEclipseLinkStaticWeaverPrefixedMethodsFacetFactory(mmc), Marker.JPA);
-
-        var step2 = ProgrammingModel.FacetProcessingOrder.A2_AFTER_FALLBACK_DEFAULTS;
-        pm.addFactory(step2, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step2, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step2, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step2, new BigDecimalFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
-        pm.addFactory(step2, new MaxLengthFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new JpaTableAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new JpaTransientAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new MandatoryFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new BigDecimalFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
+        pm.addFactory(step, new MaxLengthFromJpaColumnAnnotationFacetFactory(mmc), Marker.JPA);
 
     }
 
