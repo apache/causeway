@@ -39,6 +39,7 @@ import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -49,6 +50,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
@@ -105,6 +107,7 @@ implements MemberExecutorService {
     private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
+    private final @Getter RepositoryService repositoryService;
     private final Provider<CommandPublisher> commandPublisherProvider;
 
     private MetricsService metricsService() {
@@ -140,6 +143,12 @@ implements MemberExecutorService {
 
         final ObjectAction owningAction = actionExecutor.getOwningAction();
         final InteractionHead head = actionExecutor.getHead();
+        
+        //CAUSEWAY-3944: make sure entities are in sync with the db before passing them to actions
+        if(head.owner().objSpec().isEntity()) {
+        	repositoryService.refresh(head.owner().getPojo());
+        }
+        
         final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
         final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
         //            final MethodFacade methodFacade,
