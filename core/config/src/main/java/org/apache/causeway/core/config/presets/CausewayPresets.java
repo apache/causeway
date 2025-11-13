@@ -44,6 +44,8 @@ public final class CausewayPresets  {
     public static final String SilenceMetaModel = "classpath:/org/apache/causeway/core/config/presets/SilenceMetaModel.properties";
 
     public static final String DebugCausewayInteraction = "classpath:/org/apache/causeway/core/config/presets/DebugCausewayInteraction.properties";
+    
+    public static final String DebugJpaEntityEvents = "classpath:/org/apache/causeway/core/config/presets/DebugJpaEntityEvents.properties";
 
     public static final String SilenceWicket = "classpath:/org/apache/causeway/core/config/presets/SilenceWicket.properties";
 

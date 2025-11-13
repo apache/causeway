@@ -484,6 +484,13 @@ implements DataTableInteractive {
                 this.selectedRowIndexes = tableInteractive.getSelectedRowIndexes();
             });
         }
+        
+        @Override
+        public String toString() {
+        	return "Memento[featureId=%s,dataTable.rowCount=%d]".formatted(
+        			featureId.memberLogicalName(),
+        			dataTable.dataRows().size());
+        }
 
     }
 
