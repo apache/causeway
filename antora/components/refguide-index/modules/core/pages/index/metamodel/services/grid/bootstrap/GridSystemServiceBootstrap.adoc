@@ -11,7 +11,7 @@ Default implementation of _org.apache.causeway.applib.services.grid.GridSystemSe
 class GridSystemServiceBootstrap {
   public static final String TNS;
   public static final String SCHEMA_LOCATION;
-  GridSystemServiceBootstrap(MetaModelContext metaModelContext, TranslationService translationService, JaxbService jaxbService, MessageService messageService, CausewaySystemEnvironment causewaySystemEnvironment, List<FallbackLayoutDataSource> fallbackLayoutDataSources)
+  GridSystemServiceBootstrap(CausewayConfiguration config, Provider<SpecificationLoader> specLoaderProvider, TranslationService translationService, JaxbService jaxbService, MessageService messageService, CausewaySystemEnvironment causewaySystemEnvironment, List<FallbackLayoutDataSource> fallbackLayoutDataSources)
   Class<BSGrid> gridImplementation()
   String tns()
   String schemaLocation()
