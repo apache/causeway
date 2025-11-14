@@ -40,4 +40,4 @@ Obtain a memento of the view-model. (Optional)
 
 Captures the state of this view-model as _String_ , which can be passed in to this view-model's constructor for later re-construction.
 
-The framework automatically takes care of non-URL-safe strings, by passing them through _java.net.URLEncoder_ / _java.net.URLDecoder_ for encoding and decoding respectively.
+The framework automatically takes care of non-URL-safe strings, null and the empty String. Those view-model mementos are also digitally signed, before the are handed out to clients.
