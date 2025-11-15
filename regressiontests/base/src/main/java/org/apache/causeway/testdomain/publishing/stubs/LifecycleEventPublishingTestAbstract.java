@@ -180,7 +180,7 @@ extends PublishingTestAbstract {
             case ACTION_INVOCATION: // double the book's price action -> 198.0
 
                 assertHasCreatedLifecycleEvents(Can.empty());
-                assertHasLoadedLifecycleEvents(Can.empty());
+                assertHasLoadedLifecycleEvents(bookSample1); //was empty before CAUSEWAY-3944
                 assertHasPersistingLifecycleEvents(Can.empty());
                 assertHasPersistedLifecycleEvents(Can.empty());
                 assertHasUpdatingLifecycleEvents(bookSample3);
