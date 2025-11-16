@@ -41,5 +41,11 @@ class AttributeModelDefaultChangeBehavior extends AjaxFormComponentUpdatingBehav
         super.onError(target, e);
         scalarPanel.getAttributeModelChangeDispatcher().notifyError(target);
     }
-
+    
+    @Override
+    public String toString() {
+    	return "AttributeModelDefaultChangeBehavior[attributeModel=%s]"
+    			.formatted(scalarPanel.attributeModel());
+    }
+    
 }

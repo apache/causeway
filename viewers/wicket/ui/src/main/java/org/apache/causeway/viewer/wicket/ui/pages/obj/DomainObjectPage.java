@@ -46,6 +46,7 @@ import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.model.whereAmI.WhereAmI;
 import org.apache.causeway.viewer.wicket.ui.components.object.icontitle.ObjectIconAndTitlePanelFactory;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
@@ -203,12 +204,22 @@ public class DomainObjectPage extends PageAbstract {
         whereAmIContainer.addOrReplace(listItems);
     }
 
+    @Override
+    protected void onDetach() {
+    	super.onDetach();
+    	model.detach();
+    }
+    
     // -- REFRESH ENTITIES
 
     @Override
     public void onNewRequestCycle() {
-        var objectModel = (UiObjectWkt) getUiHintContainerIfAny();
-        ManagedObjects.refreshViewmodel(objectModel.getObject(),
+        var mo = model.getObject();
+        if(!PageUtils.isAjax()) {
+        	//CAUSEWAY-3944: on normal page request, make sure entities are in sync with the db before rendering
+        	ManagedObjects.refreshEntity(mo);	
+        }
+        ManagedObjects.refreshViewmodel(mo,
                 ()->PageParameterUtils
                         .toBookmark(getPageParameters())
                         .orElseThrow());

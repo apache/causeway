@@ -18,17 +18,9 @@
  */
 package org.apache.causeway.core.runtimeservices.executor;
 
+import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
+
 import java.util.Optional;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -39,6 +31,7 @@ import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -72,9 +65,14 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
-
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -105,6 +103,7 @@ implements MemberExecutorService {
     private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
     private final @Getter MetamodelEventService metamodelEventService;
     private final @Getter TransactionService transactionService;
+    private final @Getter RepositoryService repositoryService;
     private final Provider<CommandPublisher> commandPublisherProvider;
 
     private MetricsService metricsService() {
@@ -140,6 +139,7 @@ implements MemberExecutorService {
 
         final ObjectAction owningAction = actionExecutor.getOwningAction();
         final InteractionHead head = actionExecutor.getHead();
+        
         final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
         final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
         //            final MethodFacade methodFacade,
