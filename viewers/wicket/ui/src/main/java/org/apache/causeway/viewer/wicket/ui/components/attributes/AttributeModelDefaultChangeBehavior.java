@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 
@@ -41,15 +40,6 @@ class AttributeModelDefaultChangeBehavior extends AjaxFormComponentUpdatingBehav
     protected void onError(final AjaxRequestTarget target, final RuntimeException e) {
         super.onError(target, e);
         scalarPanel.getAttributeModelChangeDispatcher().notifyError(target);
-    }
-
-    @Override
-    public boolean canCallListener(Component component) {
-    	var res = super.canCallListener(component);
-    	if(!res) {
-    		// debug code here
-    	}
-    	return res;
     }
     
     @Override
