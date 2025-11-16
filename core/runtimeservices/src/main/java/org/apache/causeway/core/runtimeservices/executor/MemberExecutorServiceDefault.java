@@ -18,17 +18,9 @@
  */
 package org.apache.causeway.core.runtimeservices.executor;
 
+import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
+
 import java.util.Optional;
-
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -50,7 +42,6 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
@@ -74,9 +65,14 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
-import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
-
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -143,11 +139,6 @@ implements MemberExecutorService {
 
         final ObjectAction owningAction = actionExecutor.getOwningAction();
         final InteractionHead head = actionExecutor.getHead();
-        
-        //CAUSEWAY-3944: make sure entities are in sync with the db before passing them to actions
-        if(head.owner().objSpec().isEntity()) {
-        	repositoryService.refresh(head.owner().getPojo());
-        }
         
         final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
         final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();

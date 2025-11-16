@@ -23,11 +23,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
@@ -39,6 +34,9 @@ import org.apache.causeway.commons.internal.reflection._GenericResolver.Resolved
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.util.ClassUtils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -428,6 +426,14 @@ public final class ManagedObjects {
 
         if(mo instanceof ManagedObjectViewmodel viewmodel) {
             viewmodel.refreshViewmodel(bookmarkSupplier);
+        }
+    }
+    
+    public void refreshEntity(
+            final @Nullable ManagedObject mo) {
+        if(mo instanceof ManagedObjectEntity entity) {
+        	// call to getPojo as a side-effect makes the entity managed (JPA terminology), if not already
+        	mo.getRepositoryService().refresh(entity.getPojo());
         }
     }
 
