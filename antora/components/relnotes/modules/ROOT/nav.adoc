@@ -3,6 +3,7 @@
 
 
 * 2025
+** xref:relnotes:ROOT:2025/3.5.0/relnotes.adoc[3.5.0]
 ** xref:relnotes:ROOT:2025/4.0.0-M1/relnotes.adoc[4.0.0-M1]
 ** xref:relnotes:ROOT:2025/3.4.0/relnotes.adoc[3.4.0]
 ** xref:relnotes:ROOT:2025/3.3.0/relnotes.adoc[3.3.0]
