@@ -23,6 +23,7 @@ import static de.agilecoders.wicket.jquery.JQuery.$;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Serializable;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -678,6 +679,7 @@ public class Wkt {
         }
         RequestCycle.get().scheduleRequestHandlerAfterCurrent(
                 Wkt.fileResourceStreamRequestHandler(file, mime)
+                .setCacheDuration(Duration.ZERO)
                 .setFileName(fileName)
                 .setContentDisposition(ContentDisposition.ATTACHMENT));
     }
