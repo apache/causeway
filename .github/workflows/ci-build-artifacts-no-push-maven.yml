@@ -56,11 +56,11 @@ jobs:
       run: |
         echo BRANCH_NAME      \: $BRANCH_NAME
 
-    - name: Set up JDK (zulu 25)
+    - name: Set up JDK (temurin 25)
       if: matrix.language == 'java'
       uses: actions/setup-java@v5
       with:
-        distribution: 'zulu'
+        distribution: 'temurin'
         java-version: 25
 
     - name: Set up Maven (3.9.11)
