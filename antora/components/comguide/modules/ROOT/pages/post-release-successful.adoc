@@ -606,24 +606,18 @@ git checkout -b {page-causewayreleaseversion}
 +
 [source,bash,subs="attributes+"]
 ----
-git reset --hard v3
-----
-
-* Set the version using the `setver.sh` script (basically just runs `mvn versions:set`).
-+
-[source,bash,subs="attributes+"]
-----
-./setver.sh -v {page-causewayreleaseversion}
+git reset --hard origin/v3
 ----
 
 * Create the new tags using `tagger.sh`:
 +
 [source,bash,subs="attributes+"]
 ----
-PREV_VERSION=...                              # <.>
-./tagger.sh -p $PREV_VERSION -v {page-causewayreleaseversion}
+PREV_VERSION=...                                                  # <.>
+./tagger.sh -p $PREV_VERSION -v {page-causewayreleaseversion} -y  # <.>
 ----
 <.> adjust as necessary; should be the immediately previous version.
+<.> omit `-y` flag for a dry run.
 
 * confirm that the last tag builds and runs ok.
 +
