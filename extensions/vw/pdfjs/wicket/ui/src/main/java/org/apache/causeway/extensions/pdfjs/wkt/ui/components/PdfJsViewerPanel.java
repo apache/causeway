@@ -182,17 +182,20 @@ implements IRequestListener {
             return createShallowRegularFrame();
         }
 
-        val scalarModel = scalarModel();
+        val attributeModel = scalarModel();
 
         val regularFrame = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
 
+        var documentUrl = urlFor(
+                new ListenerRequestHandler(
+                        new PageAndComponentProvider(getPage(), this)))
+                // adds a hash to the URL, such that browser caching works as desired
+                + "&md5=" + blob.md5Hex();
         val pdfJsConfig =
-                scalarModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
+                attributeModel.getMetaModel().lookupFacet(PdfJsViewerFacet.class)
                 .map(pdfJsViewerFacet->pdfJsViewerFacet.configFor(buildKey()))
                 .orElseGet(PdfJsConfig::new)
-                .withDocumentUrl(urlFor(
-                        new ListenerRequestHandler(
-                                new PageAndComponentProvider(getPage(), this))));
+                .withDocumentUrl(documentUrl);
 
         val pdfJsPanel = new PdfJsPanel(ID_SCALAR_VALUE, pdfJsConfig);
 
