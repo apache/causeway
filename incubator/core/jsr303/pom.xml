@@ -23,7 +23,7 @@
 	<name>Metamodel Examples: JSR303 Validation</name>
     <groupId>org.apache.causeway.examples.misc</groupId>
 	<artifactId>metamodel-jsr303</artifactId>
-    <version>3.5.0-SNAPSHOT</version>
+    <version>3.6.0-SNAPSHOT</version>
 
     <repositories>
         <repository>
@@ -48,7 +48,7 @@
 		<dependency>
       		<groupId>org.apache.causeway.core</groupId>
 			<artifactId>causeway-core-metamodel</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
+            <version>3.6.0-SNAPSHOT</version>
 	 	</dependency>
 
 		<dependency>
