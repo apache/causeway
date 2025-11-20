@@ -19,6 +19,7 @@
 package org.apache.causeway.testdomain.viewers.common.wkt;
 
 import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -79,7 +80,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 @DirtiesContext(methodMode = MethodMode.BEFORE_METHOD, classMode = ClassMode.BEFORE_CLASS)
 class InteractionTestWkt extends InteractionTestAbstract {
 
-    @Inject private WicketTesterFactory wicketTesterFactory;
+    @Inject private Provider<WicketTesterFactory> wicketTesterFactoryProvider;
     private WicketTester wktTester;
 
     private ManagedObject domainObject;
@@ -92,7 +93,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @BeforeEach
     void setUp() {
         wktTester = wktTesterHolder.computeIfAbsent(()->
-                wicketTesterFactory.createTester(dto->null));
+        	wicketTesterFactoryProvider.get().createTester(dto->null));
         domainObject = newViewmodel(InteractionDemo.class);
         pageParameters = PageParameterUtils.createPageParametersForObject(domainObject);
     }

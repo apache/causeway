@@ -23,8 +23,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.IPageFactory;
 import org.apache.wicket.Page;
@@ -54,7 +52,6 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.testdomain.util.dto.BookDto;
 import org.apache.causeway.testdomain.util.dto.IBook;
-import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -79,20 +76,12 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 @Configuration
 @Import({
     CausewayModuleViewerWicketViewer.class,
-    Configuration_usingWicket.WicketViewerOutputMarkupContainerClassNameEnable.class
 })
 public class Configuration_usingWicket {
-
-    @Configuration
-    public class WicketViewerOutputMarkupContainerClassNameEnable
-    implements WicketApplicationInitializer {
-
-        @Override
-        public void init(final WebApplication webApplication) {
-            webApplication.getDebugSettings()
-                .setComponentPathAttributeName("wicket-tester-path")
-                .setOutputMarkupContainerClassNameStrategy(ClassOutputStrategy.HTML_COMMENT);
-        }
+	
+    @Bean
+    public WicketTesterFactory wicketTesterFactory(final MetaModelContext mmc) {
+        return new WicketTesterFactory(mmc);
     }
 
     public static class DomainObjectPageTester
@@ -189,18 +178,13 @@ public class Configuration_usingWicket {
 
         // --
 
-        @Getter
-        private final MetaModelContext metaModelContext;
         private final Function<BookDto, IBook> bookFactory;
 
         public DomainObjectPageTester(
-                final MetaModelContext metaModelContext,
+                final MetaModelContext mmc,
                 final Function<BookDto, IBook> bookFactory) {
-            super(newWicketApplication(metaModelContext));
-            this.metaModelContext = metaModelContext;
-            metaModelContext.injectServicesInto(this);
+            super(newWicketApplication(mmc));
             this.bookFactory = bookFactory;
-
         }
 
         public PageParameters createPageParameters(final Object entityOrVm) {
@@ -277,21 +261,16 @@ public class Configuration_usingWicket {
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static class WicketTesterFactory {
-        private final MetaModelContext commonContext;
+        private final MetaModelContext mmc;
         public DomainObjectPageTester createTester(final Function<BookDto, IBook> bookFactory) {
-            return new DomainObjectPageTester(commonContext, bookFactory);
+            return new DomainObjectPageTester(mmc, bookFactory);
         }
-    }
-
-    @Bean @Inject
-    public WicketTesterFactory wicketTesterFactory(final MetaModelContext commonContext) {
-        return new WicketTesterFactory(commonContext);
     }
 
     // -- HELPER -- APPLICATION (WICKET)
 
-    private static WebApplication newWicketApplication(final MetaModelContext commonContext) {
-        var wicketApplication = new WicketApplication_forTesting(commonContext);
+    private static WebApplication newWicketApplication(final MetaModelContext mmc) {
+        var wicketApplication = new WicketApplication_forTesting(mmc);
         ThreadContext.setApplication(wicketApplication);
         return wicketApplication;
     }
@@ -344,6 +323,9 @@ public class Configuration_usingWicket {
                 new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS")));
             //XXX set to false for less strict testing
             getDebugSettings().setComponentUseCheck(false);
+            getDebugSettings()
+		        .setComponentPathAttributeName("wicket-tester-path")
+		        .setOutputMarkupContainerClassNameStrategy(ClassOutputStrategy.HTML_COMMENT);
         }
 
         @Getter
