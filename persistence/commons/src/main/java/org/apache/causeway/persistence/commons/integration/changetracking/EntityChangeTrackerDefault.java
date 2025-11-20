@@ -131,7 +131,7 @@ implements
             final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
 
         if(log.isDebugEnabled()) {
-            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElseGet(null);
+            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.new xactn={} interactionId={} thread={}", transactionCounter.incrementAndGet(), interactionId, Thread.currentThread().getName());
         }
 
