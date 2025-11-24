@@ -50,7 +50,7 @@ jobs:
       SKIP_CODE_QL: true
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Print Branch Name
       if: matrix.language == 'java'
       run: |
