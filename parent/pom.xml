@@ -1305,7 +1305,7 @@
                     <plugin>
                         <groupId>io.opentelemetry.contrib</groupId>
                         <artifactId>opentelemetry-maven-extension</artifactId>
-                        <version>1.51.0-alpha</version>
+                        <version>1.52.0-alpha</version>
                         <extensions>true</extensions>
                     </plugin>
                 </plugins>
