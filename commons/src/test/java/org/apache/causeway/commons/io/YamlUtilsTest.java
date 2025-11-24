@@ -66,7 +66,7 @@ class YamlUtilsTest {
         var yaml = person.java8Time().interpolator().applyTo(yamlTemplate);
 
         // debug
-        //System.err.printf("%s%n", yaml);
+        System.err.printf("%s%n", yaml);
 
         var person = YamlUtils.tryRead(Person.class, yaml)
                 .valueAsNonNullElseFail();

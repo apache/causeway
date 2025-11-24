@@ -25,8 +25,7 @@ import java.net.URI;
 
 import jakarta.inject.Inject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
@@ -192,21 +191,17 @@ public abstract class CausewayViewerRestfulObjectsIntegTestAbstract {
             options = new Options();
         }
         return options.withScrubber(s -> {
-                    try {
-                        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
-                        if (bookmarkOptions == BookmarkOptions.SCRUB) {
-                            prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
-                            prettyJson = prettyJson.replaceAll(":\\d+\"", ":NNN\"");    // "oid" : "university.dept.Department:33" ; "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:33",
-                            prettyJson = prettyJson.replaceAll("/\\d+/", "/NNN/");
-                            prettyJson = prettyJson.replaceAll("/\\d+\"", "/NNN\"");
-                            prettyJson = prettyJson.replaceAll(": \"\\d+\"", ": \"NNN\""); // "instanceId" : "33",
-                        }
-                        return prettyJson;
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .forFile().withExtension(".json");
+                String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(objectMapper.readTree(s));
+                if (bookmarkOptions == BookmarkOptions.SCRUB) {
+                    prettyJson = prettyJson.replaceAll(":\\d+/", ":NNN/");
+                    prettyJson = prettyJson.replaceAll(":\\d+\"", ":NNN\"");    // "oid" : "university.dept.Department:33" ; "href" : "http://0.0.0.0:NNN/restful/objects/university.dept.Department:33",
+                    prettyJson = prettyJson.replaceAll("/\\d+/", "/NNN/");
+                    prettyJson = prettyJson.replaceAll("/\\d+\"", "/NNN\"");
+                    prettyJson = prettyJson.replaceAll(": \"\\d+\"", ": \"NNN\""); // "instanceId" : "33",
+                }
+                return prettyJson;
+            })
+            .forFile().withExtension(".json");
     }
 
     protected void beforeEach() {}

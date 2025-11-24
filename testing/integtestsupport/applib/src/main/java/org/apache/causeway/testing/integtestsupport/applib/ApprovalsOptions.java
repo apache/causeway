@@ -20,7 +20,7 @@ package org.apache.causeway.testing.integtestsupport.applib;
 
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;

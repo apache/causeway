@@ -34,12 +34,12 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapperUtil;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
 public record ResponseFactory(
     @Nullable ClockService clockService,
-    JsonMapper.PrettyPrinting prettyPrinting) {
+    JsonMapperUtil.PrettyPrinting prettyPrinting) {
 
     // non-canonical constructor
     public ResponseFactory(MetaModelContext mmc) {
@@ -134,11 +134,11 @@ public record ResponseFactory(
         return DATE_FORMAT.format(now);
     }
 
-    private static JsonMapper.PrettyPrinting prettyPrinting(@Nullable CausewaySystemEnvironment env) {
+    private static JsonMapperUtil.PrettyPrinting prettyPrinting(@Nullable CausewaySystemEnvironment env) {
         return env!=null
                 && env.isPrototyping()
-            ? JsonMapper.PrettyPrinting.ENABLE
-            : JsonMapper.PrettyPrinting.DISABLE;
+            ? JsonMapperUtil.PrettyPrinting.ENABLE
+            : JsonMapperUtil.PrettyPrinting.DISABLE;
     }
 
 }

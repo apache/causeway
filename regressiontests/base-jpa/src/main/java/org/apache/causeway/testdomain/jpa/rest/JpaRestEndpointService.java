@@ -21,10 +21,9 @@ package org.apache.causeway.testdomain.jpa.rest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
 import jakarta.inject.Inject;
 import jakarta.xml.bind.JAXBException;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
 
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -68,6 +67,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+
+import tools.jackson.databind.DeserializationFeature;
 
 @Service
 @Slf4j

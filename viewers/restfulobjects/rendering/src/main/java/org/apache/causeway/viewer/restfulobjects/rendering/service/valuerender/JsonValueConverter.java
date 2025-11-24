@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.restfulobjects.rendering.service.valuerender;
 
 import java.util.OptionalInt;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.NullNode;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;

@@ -22,21 +22,20 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.LineBreak;
 import org.yaml.snakeyaml.LoaderOptions;
 
-import org.jspecify.annotations.Nullable;
-
 import org.apache.causeway.commons.functional.Try;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+
+import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 
 /**
  * Utilities to convert from and to YAML format.
@@ -178,46 +177,49 @@ public class YamlUtils {
      * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
      * @param loadCustomizer
      */
-    private ObjectMapper createJacksonReader(
+    private YAMLMapper createJacksonReader(
             final Optional<YamlLoadCustomizer> loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         var yamlFactory = YAMLFactory.builder()
-                .loaderOptions(loadCustomizer
-                        .map(YamlUtils::createLoaderOptions)
-                        .orElseGet(YamlUtils::createLoaderOptions))
+//                .loaderOptions(loadCustomizer
+//                        .map(YamlUtils::createLoaderOptions)
+//                        .orElseGet(YamlUtils::createLoaderOptions)) // FIXME
                 .build();
-        var mapper = new ObjectMapper(yamlFactory);
-        mapper = JsonUtils.jdk8Support(mapper);
-        mapper = JsonUtils.readingJavaTimeSupport(mapper);
-        mapper = JsonUtils.readingCanSupport(mapper);
+        
+        var builder = YAMLMapper.builder(yamlFactory);
+        JsonUtils.readingJavaTimeSupport(builder);
+        JsonUtils.readingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	Optional.ofNullable(customizer.apply(builder))
+                    .orElse(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
     /**
      * Use Jackson to write YAML.
      */
-    private ObjectMapper createJacksonWriter(
+    private YAMLMapper createJacksonWriter(
             final Optional<YamlDumpCustomizer> dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         var yamlFactory = YAMLFactory.builder()
-                .dumperOptions(dumpCustomizer
-                        .map(YamlUtils::createDumperOptions)
-                        .orElseGet(YamlUtils::createDumperOptions))
-                .build()
-                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
-        var mapper = new ObjectMapper(yamlFactory);
-        mapper = JsonUtils.jdk8Support(mapper);
-        mapper = JsonUtils.writingJavaTimeSupport(mapper);
-        mapper = JsonUtils.writingCanSupport(mapper);
+        		.disable(YAMLWriteFeature.WRITE_DOC_START_MARKER)
+//                .dumperOptions(dumpCustomizer
+//                        .map(YamlUtils::createDumperOptions)
+//                        .orElseGet(YamlUtils::createDumperOptions)) // FIXME
+                .build();
+        
+        var builder = YAMLMapper.builder(yamlFactory);
+        
+        
+        
+        JsonUtils.writingJavaTimeSupport(builder);
+        JsonUtils.writingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	Optional.ofNullable(customizer.apply(builder))
+                .orElse(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
     private DumperOptions createDumperOptions(final YamlDumpCustomizer ... dumpCustomizers) {

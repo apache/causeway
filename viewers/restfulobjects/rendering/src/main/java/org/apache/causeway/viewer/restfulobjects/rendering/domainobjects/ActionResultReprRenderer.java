@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.NullNode;
 
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;

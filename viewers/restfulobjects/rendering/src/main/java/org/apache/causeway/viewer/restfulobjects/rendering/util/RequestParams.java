@@ -22,9 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -33,8 +30,10 @@ import org.springframework.http.HttpStatus;
 import org.apache.causeway.commons.internal.base._Bytes;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapperUtil;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+
+import tools.jackson.core.JacksonException;
 
 public record RequestParams(
         RequestParams.@NonNull Nature nature,
@@ -88,16 +87,13 @@ public record RequestParams(
         }
 
         try {
-            final JsonRepresentation jsonRepr = JsonMapper.instance().read(rawArgs);
+            final JsonRepresentation jsonRepr = JsonMapperUtil.instance().read(rawArgs);
             if (!jsonRepr.isMap()) {
                 throw RestfulObjectsApplicationException
                 .createWithMessage(HttpStatus.BAD_REQUEST, "could not read %s as a JSON map".formatted(argsNature));
             }
             return jsonRepr;
-        } catch (final JsonParseException e) {
-            throw RestfulObjectsApplicationException
-                .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not parse %s".formatted(argsNature));
-        } catch (final JsonMappingException e) {
+        } catch (final JacksonException e) {
             throw RestfulObjectsApplicationException
                 .createWithCauseAndMessage(HttpStatus.BAD_REQUEST, e, "could not read %s as JSON".formatted(argsNature));
         } catch (final IOException e) {

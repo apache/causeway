@@ -21,14 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.fasterxml.jackson.databind.node.BigIntegerNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.DecimalNode;
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.LongNode;
-import com.fasterxml.jackson.databind.node.TextNode;
-
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +34,14 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
+
+import tools.jackson.databind.node.BigIntegerNode;
+import tools.jackson.databind.node.BooleanNode;
+import tools.jackson.databind.node.DecimalNode;
+import tools.jackson.databind.node.DoubleNode;
+import tools.jackson.databind.node.IntNode;
+import tools.jackson.databind.node.LongNode;
+import tools.jackson.databind.node.StringNode;
 
 class JsonValueEncoderTest
 extends JsonValueEncoderTestAbstract {
@@ -60,7 +60,7 @@ extends JsonValueEncoderTestAbstract {
 
     @Test
     void whenSpecIsNull() throws Exception {
-        var representation = new JsonRepresentation(TextNode.valueOf("aString"));
+        var representation = new JsonRepresentation(StringNode.valueOf("aString"));
         assertThrows(IllegalArgumentException.class, ()->{
             jsonValueEncoder.asAdapter(null, representation, null);
         });
@@ -90,7 +90,7 @@ extends JsonValueEncoderTestAbstract {
 
     @Test
     void whenSpecDoesNotHaveAnEncodableFacet() throws Exception {
-        var representation = new JsonRepresentation(TextNode.valueOf("aString"));
+        var representation = new JsonRepresentation(StringNode.valueOf("aString"));
         var spec = specFor(Object.class); // arbitrary non-value class, pick any
         assertThrows(IllegalArgumentException.class, ()->{
             assertNull(jsonValueEncoder.asAdapter(spec, representation, null));
@@ -114,7 +114,7 @@ extends JsonValueEncoderTestAbstract {
 
         // when repr is 'string'
         assertThrows(IllegalArgumentException.class, ()->{
-            var representation = new JsonRepresentation(TextNode.valueOf("aString"));
+            var representation = new JsonRepresentation(StringNode.valueOf("aString"));
             jsonValueEncoder.asAdapter(spec, representation, null);
         });
 
@@ -217,7 +217,7 @@ extends JsonValueEncoderTestAbstract {
     void whenReprIsString() throws Exception {
         // given
         var spec = specFor(String.class);
-        var representation = new JsonRepresentation(TextNode.valueOf("aString"));
+        var representation = new JsonRepresentation(StringNode.valueOf("aString"));
 
         // when
         var adapter = jsonValueEncoder.asAdapter(spec, representation, null);

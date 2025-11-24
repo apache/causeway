@@ -22,15 +22,15 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.datetime.DatetimePickerIconConfig;
 import de.agilecoders.wicket.jquery.AbstractConfig;
 import de.agilecoders.wicket.jquery.IKey;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Configuration holder for all {@link TextFieldWithDateTimePicker} configurations.
@@ -428,10 +428,10 @@ public class DateTimeConfig extends AbstractConfig {
     /**
      * Serializer for TodayButton
      */
-    private static class TodayButtonSerializer extends JsonSerializer<TodayButton> {
+    private static class TodayButtonSerializer extends ValueSerializer<TodayButton> {
 
         @Override
-        public void serialize(final TodayButton value, final JsonGenerator jgen, final SerializerProvider provider) throws IOException {
+        public void serialize(final TodayButton value, final JsonGenerator jgen, final SerializationContext provider) throws JacksonException {
             switch (value) {
             case TRUE:
                 jgen.writeBoolean(true);
@@ -444,5 +444,6 @@ public class DateTimeConfig extends AbstractConfig {
                 break;
             }
         }
+
     }
 }

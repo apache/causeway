@@ -25,8 +25,6 @@ import java.util.Optional;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.client.RepresentationTypeSimplifiedV2;
@@ -37,6 +35,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.dtos.ScalarValueDtoV2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+
+import tools.jackson.databind.ObjectMapper;
 
 interface ResponseDigester {
 

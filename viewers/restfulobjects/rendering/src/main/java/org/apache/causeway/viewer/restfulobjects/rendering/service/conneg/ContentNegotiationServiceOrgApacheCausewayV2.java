@@ -27,7 +27,7 @@ import jakarta.inject.Named;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import com.fasterxml.jackson.databind.node.POJONode;
+import tools.jackson.databind.node.POJONode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

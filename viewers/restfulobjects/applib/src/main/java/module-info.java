@@ -34,12 +34,12 @@ module org.apache.causeway.viewer.restfulobjects.applib {
     requires static lombok;
 
     requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
     requires transitive org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires spring.context;
     requires spring.core;
     requires transitive spring.web;
-    requires com.fasterxml.jackson.datatype.jsr310;
+
 }

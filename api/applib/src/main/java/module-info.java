@@ -128,8 +128,6 @@ module org.apache.causeway.applib {
 
     requires static lombok;
 
-    requires com.fasterxml.jackson.core;
-    requires com.fasterxml.jackson.databind;
     requires transitive java.desktop;
     requires transitive java.instrument;
     requires transitive jakarta.activation;
@@ -137,6 +135,8 @@ module org.apache.causeway.applib {
     requires transitive jakarta.inject;
     requires transitive jakarta.persistence;
     requires transitive jakarta.xml.bind;
+    requires tools.jackson.core;
+    requires tools.jackson.databind;
 
     requires transitive org.apache.causeway.commons;
     requires transitive org.apache.causeway.schema;
