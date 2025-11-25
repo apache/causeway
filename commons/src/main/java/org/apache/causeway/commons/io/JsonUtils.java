@@ -21,7 +21,7 @@ package org.apache.causeway.commons.io;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -61,7 +61,7 @@ import tools.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 /**
  * Utilities to convert from and to JSON format.
  *
- * @since 2.0 {@index}
+ * @since 2.0 refined for 4.0 {@index}
  */
 @UtilityClass
 @Slf4j
@@ -83,7 +83,7 @@ public class JsonUtils {
 
     @SuppressWarnings("rawtypes")
 	@FunctionalInterface
-    public interface JacksonCustomizer extends UnaryOperator<MapperBuilder> {
+    public interface JacksonCustomizer extends Consumer<MapperBuilder> {
         public static <T> JacksonCustomizer wrapXmlAdapter(final XmlAdapter<String, T> xmlAdapter) {
             @SuppressWarnings("unchecked")
             var type = (Class<T>) _Generics.streamGenericTypeArgumentsOfType(xmlAdapter.getClass(), XmlAdapter.class)
@@ -297,8 +297,7 @@ public class JsonUtils {
 		readingJavaTimeSupport(builder);
 		readingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-        	Optional.ofNullable(customizer.apply(builder))
-                    .orElse(builder);
+        	customizer.accept(builder);
         }
         return builder.build();
     }
@@ -309,8 +308,7 @@ public class JsonUtils {
     	writingJavaTimeSupport(builder);
     	writingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-        	Optional.ofNullable(customizer.apply(builder))
-                    .orElse(builder);
+        	customizer.accept(builder);
         }
         return builder.build();
     }
