@@ -36,6 +36,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 

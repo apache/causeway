@@ -28,7 +28,7 @@ class ApplicationSecurityDtoTest {
     /**
      * Read DTO from accompanied YAML file, then re-export and see whether those 2 match.
      */
-    //@Test //FIXME
+    @Test
     void roundtripViaYaml() {
 
         if(this.getClass().getName().contains(".isis.")) return; // disabled for legacy CI build

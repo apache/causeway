@@ -18,25 +18,28 @@
  */
 package org.apache.causeway.commons.internal.testing;
 
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.dataformat.yaml.YAMLFactory;
+import java.io.StringWriter;
 
-import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.codec._DocumentFactories;
-
-import org.jspecify.annotations.NonNull;
-
-import org.springframework.util.Assert;
-
-import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
-
-import org.w3c.dom.Document;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
+
+import org.jspecify.annotations.NonNull;
+import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.w3c.dom.Document;
+
+import org.springframework.util.Assert;
+
+import org.apache.causeway.commons.internal.assertions._Assert;
+import org.apache.causeway.commons.internal.codec._DocumentFactories;
+
+import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
+
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 
 @UtilityClass
 public class _DocumentTester {
@@ -62,8 +65,19 @@ public class _DocumentTester {
 
     @SneakyThrows
     public void assertYamlEqualsIgnoreOrder(final @NonNull String yaml1, final @NonNull String yaml2) {
-        var mapper = new ObjectMapper(new YAMLFactory());
-        _Assert.assertEquals(mapper.readTree(yaml1), mapper.readTree(yaml2));
+    	var mapper = YAMLMapper.builder(YAMLFactory.builder()
+    			.loadSettings(LoadSettings.builder()
+    					.setParseComments(false)
+    					.build())
+    			.build())
+			.build();
+        
+//debug    	
+//    	System.err.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readTree(yaml1)));
+//    	System.err.println("-------------------------------");
+//    	System.err.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readTree(yaml2)));
+    	
+    	_Assert.assertEquals(mapper.readTree(yaml1), mapper.readTree(yaml2));
     }
 
     private static String convertDocumentToString(final Document doc) {

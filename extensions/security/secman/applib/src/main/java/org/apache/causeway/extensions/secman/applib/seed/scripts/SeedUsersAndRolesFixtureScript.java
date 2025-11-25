@@ -176,7 +176,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
                 }
                 @Override
                 protected void execute(final ExecutionContext executionContext) {
-                    create(tenancyDto.get__name(), tenancyDto.getPath(),
+                    create(tenancyDto.getName(), tenancyDto.getPath(),
                             tenancyDto.getParentPath(), executionContext);
                 }
             });
@@ -188,7 +188,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         .forEach(roleDto->{
             executionContext.executeChildren(this,
                     new AbstractRoleAndPermissionsFixtureScript(
-                            roleDto.get__name(), roleDto.getDescription()) {
+                            roleDto.getName(), roleDto.getDescription()) {
                 @Override
                 public FixtureScripts.MultipleExecutionStrategy getMultipleExecutionStrategy() {
                     return FixtureScripts.MultipleExecutionStrategy.EXECUTE;
@@ -220,7 +220,7 @@ public class SeedUsersAndRolesFixtureScript extends FixtureScript {
         .forEach(userDto->{
             executionContext.executeChildren(this,
                     new AbstractUserAndRolesFixtureScript(
-                            userDto.get__username(),
+                            userDto.getUsername(),
                             "pass", // to be overwritten below
                             userDto.getAccountType(),
                             Can.ofCollection(userDto.getRoleNames())) {
