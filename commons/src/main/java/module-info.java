@@ -59,14 +59,14 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.internal.testing;
 
     requires static lombok;
-    requires transitive com.fasterxml.jackson.annotation;
-    requires transitive com.fasterxml.jackson.core;
-    requires transitive com.fasterxml.jackson.databind;
-    requires transitive com.fasterxml.jackson.module.jakarta.xmlbind;
     requires transitive java.desktop;
     requires transitive java.sql;
     requires transitive java.xml;
     requires transitive java.management;
+    requires transitive com.fasterxml.jackson.annotation;
+    requires transitive tools.jackson.core;
+    requires transitive tools.jackson.databind;
+    requires transitive tools.jackson.module.jakarta.xmlbind;
     requires transitive org.jdom2;
     requires transitive org.jspecify;
     requires transitive org.jsoup;
@@ -78,10 +78,10 @@ module org.apache.causeway.commons {
     requires transitive jakarta.inject;
     requires jakarta.annotation;
     requires com.sun.xml.bind;
-    requires com.fasterxml.jackson.dataformat.yaml;
-    requires com.fasterxml.jackson.datatype.jsr310;
-    requires com.fasterxml.jackson.datatype.jdk8;
+    requires tools.jackson.dataformat.yaml;
+    //requires tools.jackson.datatype.javatime;
     requires org.slf4j;
+	requires org.snakeyaml.engine.v2;
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;

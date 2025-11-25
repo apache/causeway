@@ -64,7 +64,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
+			<groupId>tools.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 			<scope>test</scope>
 		</dependency>

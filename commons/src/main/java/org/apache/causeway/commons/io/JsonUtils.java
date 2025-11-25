@@ -18,34 +18,16 @@
  */
 package org.apache.causeway.commons.io;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
 
 import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.BeanProperty;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -55,15 +37,31 @@ import org.apache.causeway.commons.internal.context._Context;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._Generics;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.BeanProperty;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.cfg.MapperBuilder;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+import tools.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
+
 /**
  * Utilities to convert from and to JSON format.
  *
- * @since 2.0 {@index}
+ * @since 2.0 refined for 4.0 {@index}
  */
 @UtilityClass
 @Slf4j
@@ -83,8 +81,9 @@ public class JsonUtils {
                 .map(x->x);
     }
 
-    @FunctionalInterface
-    public interface JacksonCustomizer extends UnaryOperator<ObjectMapper> {
+    @SuppressWarnings("rawtypes")
+	@FunctionalInterface
+    public interface JacksonCustomizer extends Consumer<MapperBuilder> {
         public static <T> JacksonCustomizer wrapXmlAdapter(final XmlAdapter<String, T> xmlAdapter) {
             @SuppressWarnings("unchecked")
             var type = (Class<T>) _Generics.streamGenericTypeArgumentsOfType(xmlAdapter.getClass(), XmlAdapter.class)
@@ -98,8 +97,8 @@ public class JsonUtils {
             return wrapXmlAdapter(type, xmlAdapter);
         }
         public static <T> JacksonCustomizer wrapXmlAdapter(final Class<T> type, final XmlAdapter<String, T> xmlAdapter) {
-            return mapper->
-                mapper.registerModule(new SimpleModule()
+            return builder->
+                builder.addModule(new SimpleModule()
                         .addSerializer(new XSerializer<T>(type, xmlAdapter))
                         .addDeserializer(type, new XDeserializer<T>(type, xmlAdapter)));
         }
@@ -179,48 +178,41 @@ public class JsonUtils {
     // -- CUSTOMIZERS
 
     /** enable indentation for the underlying generator */
-    public ObjectMapper indentedOutput(final ObjectMapper mapper) {
-        return mapper.enable(SerializationFeature.INDENT_OUTPUT);
+    public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> indentedOutput(final MapperBuilder<M, B> builder) {
+        return builder.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     /** only properties with non-null values are to be included */
-    public ObjectMapper onlyIncludeNonNull(final ObjectMapper mapper) {
-        return mapper.setSerializationInclusion(Include.NON_NULL);
-    }
-
-    /** add support for JDK 8, e.g. {@link Optional} */
-    public ObjectMapper jdk8Support(final ObjectMapper mapper) {
-        return mapper.registerModule(new Jdk8Module());
+    public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> onlyIncludeNonNull(final MapperBuilder<M, B> builder) {
+    	return builder.changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(JsonInclude.Include.NON_NULL));
     }
 
     /** add support for JAXB annotations */
-    public ObjectMapper jaxbAnnotationSupport(final ObjectMapper mapper) {
-        return mapper.registerModule(new JakartaXmlBindAnnotationModule());
+    public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> jaxbAnnotationSupport(final MapperBuilder<M, B> builder) {
+        return builder.addModule(new JakartaXmlBindAnnotationModule());
     }
 
     /** add support for reading java.time (ISO) */
-    public ObjectMapper readingJavaTimeSupport(final ObjectMapper mapper) {
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
-        return mapper;
+    public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> readingJavaTimeSupport(final MapperBuilder<M, B> builder) {
+        builder.disable(DateTimeFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+        return builder;
     }
 
     /** add support for writing java.time (ISO) */
-    public ObjectMapper writingJavaTimeSupport(final ObjectMapper mapper) {
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return mapper;
+    public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> writingJavaTimeSupport(final MapperBuilder<M, B> builder) {
+    	builder.disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return builder;
     }
 
     // -- CAN SUPPORT
 
-    static class CanDeserializer extends JsonDeserializer<Can<?>> implements ContextualDeserializer {
+    static class CanDeserializer extends ValueDeserializer<Can<?>> {
         private Class<?> elementType;
         public CanDeserializer(final @NonNull Class<?> elementType) {
             this.elementType = elementType;
         }
         @Override
-        public JsonDeserializer<?> createContextual(final DeserializationContext ctxt, final BeanProperty beanProperty) throws JsonMappingException {
+        public CanDeserializer createContextual(DeserializationContext ctxt, BeanProperty beanProperty) {
             var type = ctxt.getContextualType() != null
                 ? ctxt.getContextualType()
                 : beanProperty!=null
@@ -233,99 +225,92 @@ public class JsonUtils {
         }
         @Override
         public Can<?> deserialize(
-                final JsonParser p, final DeserializationContext ctxt) throws IOException {
+                final JsonParser p, final DeserializationContext ctxt) {
             var listType = ctxt.getTypeFactory().constructCollectionType(List.class, elementType);
             var list = ctxt.readValue(p, listType);
             return Can.ofCollection(_Casts.uncheckedCast(list));
         }
     }
     /** add support for reading Can<T> */
-    public ObjectMapper readingCanSupport(final ObjectMapper mapper) {
-        mapper.registerModule(new SimpleModule().addDeserializer(Can.class, new CanDeserializer(Object.class)));
-        return mapper;
+	public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> readingCanSupport(final MapperBuilder<M, B> builder) {
+    	builder.addModule(new SimpleModule().addDeserializer(Can.class, new CanDeserializer(Object.class)));
+        return builder;
     }
 
     static class CanSerializer extends StdSerializer<Can<?>> {
-        private static final long serialVersionUID = 1L;
-        protected CanSerializer() { super(Can.class, false); }
+        protected CanSerializer() { super(Can.class); }
         @Override
         public void serialize(final Can<?> value, final JsonGenerator gen,
-                final SerializerProvider provider) throws IOException {
-            gen.writeObject(value.toList());
+                final SerializationContext context) throws JacksonException {
+            gen.writePOJO(value.toList());
         }
     }
     /** add support for writing Can<T> */
-    public ObjectMapper writingCanSupport(final ObjectMapper mapper) {
-        mapper.registerModule(new SimpleModule().addSerializer(new CanSerializer()));
-        return mapper;
+    public <M extends ObjectMapper, B extends MapperBuilder<M,B>> MapperBuilder<M, B> writingCanSupport(final MapperBuilder<M, B> builder) {
+    	builder.addModule(new SimpleModule().addSerializer(new CanSerializer()));
+        return builder;
     }
 
     // -- XML ADAPTER SUPPORT
 
     static class XSerializer<T> extends StdSerializer<T> {
-        private static final long serialVersionUID = 1L;
         private final XmlAdapter<String, T> xmlAdapter;
         protected XSerializer(final Class<T> type, final XmlAdapter<String, T> xmlAdapter) {
-            super(type, false);
+            super(type);
             this.xmlAdapter = xmlAdapter;
         }
         @Override
         public void serialize(final T value, final JsonGenerator gen,
-                final SerializerProvider provider) throws IOException {
+                final SerializationContext context) throws JacksonException {
             String stringified;
             try {
                 stringified = this.xmlAdapter.marshal(value);
             } catch (Exception e) {
-                throw new JsonMappingException(gen, "Unable to marshal: " + e.getMessage(), e);
+                throw _Exceptions.unrecoverable("Unable to marshal: " + e.getMessage(), e);
             }
-            gen.writeObject(stringified);
+            gen.writeString(stringified);
         }
     }
 
     static class XDeserializer<T> extends StdDeserializer<T> {
-        private static final long serialVersionUID = 1L;
         private final XmlAdapter<String, T> xmlAdapter;
         protected XDeserializer(final Class<T> type, final XmlAdapter<String, T> xmlAdapter) {
             super(type);
             this.xmlAdapter = xmlAdapter;
         }
         @Override
-        public T deserialize(final JsonParser p, final DeserializationContext ctxt) throws IOException, JacksonException {
+        public T deserialize(final JsonParser p, final DeserializationContext ctxt) throws JacksonException {
             String stringified = ctxt.readValue(p, String.class);
             try {
                 return xmlAdapter.unmarshal(stringified);
             } catch (Exception e) {
-                throw new JsonMappingException(p, "Unable to unmarshal (to type " + _valueType + "): " + e.getMessage(), e);
+                throw _Exceptions.unrecoverable("Unable to unmarshal (to type " + _valueType + "): " + e.getMessage(), e);
             }
         }
     }
 
     // -- MAPPER FACTORY
 
-    private ObjectMapper createJacksonReader(
+    private JsonMapper createJacksonReader(
             final JsonUtils.JacksonCustomizer ... customizers) {
-        var mapper = new ObjectMapper();
-        mapper = jdk8Support(mapper);
-        mapper = readingJavaTimeSupport(mapper);
-        mapper = readingCanSupport(mapper);
+		var builder = JsonMapper.builder();
+		readingJavaTimeSupport(builder);
+		readingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	customizer.accept(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
-    private ObjectMapper createJacksonWriter(
+    private JsonMapper createJacksonWriter(
             final JsonUtils.JacksonCustomizer ... customizers) {
-        var mapper = new ObjectMapper();
-        mapper = jdk8Support(mapper);
-        mapper = writingJavaTimeSupport(mapper);
-        mapper = writingCanSupport(mapper);
+    	var builder = JsonMapper.builder();
+    	writingJavaTimeSupport(builder);
+    	writingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	customizer.accept(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
 }

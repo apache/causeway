@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;

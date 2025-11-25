@@ -364,9 +364,10 @@ class JsonValueEncoderTest {
     void whenBlob() {
         var value = Blob.of("a Blob", CommonMimeType.BIN, new byte[] {1, 2, 3});
         var representation = representationFor(value, osObj->assertEquals(
-                    JsonRepresentation.newMap("name", "a Blob.bin",
+                    JsonRepresentation.newMap(
+                    		"bytes", "AQID",
                             "mimeType", "application/octet-stream",
-                            "bytes", "AQID").toString(),
+                            "name", "a Blob.bin").toString(),
                     osObj.toString()));
 
         assertThat(representation.getString("extensions.x-causeway-format"), is("blob"));
@@ -376,9 +377,10 @@ class JsonValueEncoderTest {
     void whenClob() {
         var value = Clob.of("a Clob", CommonMimeType.TXT, "abc");
         var representation = representationFor(value, osObj->assertEquals(
-                    JsonRepresentation.newMap("name", "a Clob.txt",
+                    JsonRepresentation.newMap(
+                            "chars", "abc",
                             "mimeType", "text/plain",
-                            "chars", "abc").toString(),
+                            "name", "a Clob.txt").toString(),
                     osObj.toString()));
 
         assertThat(representation.getString("extensions.x-causeway-format"), is("clob"));
@@ -397,8 +399,9 @@ class JsonValueEncoderTest {
         var value = SampleEnum.HALLO;
         var representation = representationFor(value, osObj->assertEquals(
                     JsonRepresentation.newMap(
-                            "enumType", SampleEnum.class.getName(),
-                            "enumName", value.name()).toString(),
+                    		"enumName", value.name(),
+                            "enumType", SampleEnum.class.getName()
+                            ).toString(),
                     osObj.toString()));
 
         // assert emum is amended with "enumTitle"

@@ -47,11 +47,6 @@
             <artifactId>causeway-viewer-wicket-ui</artifactId>
         </dependency>
         
-        <dependency>
-        	<groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        
      	<dependency>
 		    <groupId>org.webjars</groupId>
 			<artifactId>fullcalendar</artifactId>

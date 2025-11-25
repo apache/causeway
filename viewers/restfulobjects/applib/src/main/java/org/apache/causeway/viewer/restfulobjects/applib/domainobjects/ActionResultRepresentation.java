@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.domainobjects;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import tools.jackson.databind.JsonNode;
 
 /**
  * @since 1.x {@index}

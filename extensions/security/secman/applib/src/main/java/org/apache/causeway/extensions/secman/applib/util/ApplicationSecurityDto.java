@@ -24,6 +24,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
@@ -77,7 +79,7 @@ public class ApplicationSecurityDto {
 
         static RoleDto from(final ApplicationRole role) {
             var roleDto = new RoleDto();
-            roleDto.set__name(role.getName());
+            roleDto.setName(role.getName());
             roleDto.setDescription(role.getDescription());
             role.getPermissions().stream()
             .map(PermissionDto::from)
@@ -85,7 +87,7 @@ public class ApplicationSecurityDto {
             return roleDto;
         }
 
-        String __name; // secondary key - ensure earliest alphabetic order
+        @JsonProperty("__name") String name; // secondary key - ensure earliest alphabetic order 
         String description;
         List<PermissionDto> permissions = new ArrayList<>();
     }
@@ -95,7 +97,7 @@ public class ApplicationSecurityDto {
 
         static UserDto from(final ApplicationUser user, Function<Locale, String> localeStringifier) {
             var userDto = new UserDto();
-            userDto.set__username(user.getUsername());
+            userDto.setUsername(user.getUsername());
             userDto.setEncryptedPassword(user.getEncryptedPassword());
             userDto.setAccountType(user.getAccountType());
             
@@ -118,7 +120,7 @@ public class ApplicationSecurityDto {
             return userDto;
         }
 
-        String __username; // secondary key - ensure earliest alphabetic order
+        @JsonProperty("__username") String username; // secondary key - ensure earliest alphabetic order
         String encryptedPassword;
         AccountType accountType;
         
@@ -142,7 +144,7 @@ public class ApplicationSecurityDto {
 
         static TenancyDto from(final ApplicationTenancy tenancy) {
             var tenancyDto = new TenancyDto();
-            tenancyDto.set__name(tenancy.getName());
+            tenancyDto.setName(tenancy.getName());
             tenancyDto.setPath(tenancy.getPath());
 
             Optional.ofNullable(tenancy.getParent())
@@ -151,7 +153,7 @@ public class ApplicationSecurityDto {
             return tenancyDto;
         }
 
-        String __name; // secondary key - ensure earliest alphabetic order
+        @JsonProperty("__name") String name; // secondary key - ensure earliest alphabetic order
         String path;
         @Nullable String parentPath;
     }

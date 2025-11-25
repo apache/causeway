@@ -20,36 +20,38 @@ package org.apache.causeway.commons.io;
 
 import java.io.InputStream;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
+import java.util.function.Consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.DumperOptions.LineBreak;
-import org.yaml.snakeyaml.LoaderOptions;
-
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.snakeyaml.engine.v2.api.DumpSettings;
+import org.snakeyaml.engine.v2.api.DumpSettingsBuilder;
+import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.snakeyaml.engine.v2.api.LoadSettingsBuilder;
+import org.yaml.snakeyaml.DumperOptions;
 
 import org.apache.causeway.commons.functional.Try;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+
+import tools.jackson.dataformat.yaml.YAMLFactory;
+import tools.jackson.dataformat.yaml.YAMLFactoryBuilder;
+import tools.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.dataformat.yaml.YAMLWriteFeature;
 
 /**
  * Utilities to convert from and to YAML format.
  *
- * @since 2.0 {@index}
+ * @since 2.0 refined for 4.0 {@index}
  */
 @UtilityClass
 public class YamlUtils {
 
     @FunctionalInterface
-    public interface YamlDumpCustomizer extends UnaryOperator<DumperOptions> {}
+    public interface YamlDumpCustomizer extends Consumer<DumpSettingsBuilder> {}
     @FunctionalInterface
-    public interface YamlLoadCustomizer extends UnaryOperator<LoaderOptions> {}
+    public interface YamlLoadCustomizer extends Consumer<LoadSettingsBuilder> {}
 
     // -- READING
 
@@ -178,68 +180,65 @@ public class YamlUtils {
      * SnakeYaml as of 2.2 does not support Java records. So we use Jackson instead.
      * @param loadCustomizer
      */
-    private ObjectMapper createJacksonReader(
+    private YAMLMapper createJacksonReader(
             final Optional<YamlLoadCustomizer> loadCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         var yamlFactory = YAMLFactory.builder()
-                .loaderOptions(loadCustomizer
-                        .map(YamlUtils::createLoaderOptions)
-                        .orElseGet(YamlUtils::createLoaderOptions))
+                .loadSettings(loadCustomizer
+                        .map(YamlUtils::createLoadSettings)
+                        .orElseGet(YamlUtils::createLoadSettings))
                 .build();
-        var mapper = new ObjectMapper(yamlFactory);
-        mapper = JsonUtils.jdk8Support(mapper);
-        mapper = JsonUtils.readingJavaTimeSupport(mapper);
-        mapper = JsonUtils.readingCanSupport(mapper);
+        
+        var builder = YAMLMapper.builder(yamlFactory);
+        JsonUtils.readingJavaTimeSupport(builder);
+        JsonUtils.readingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	customizer.accept(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
     /**
      * Use Jackson to write YAML.
      */
-    private ObjectMapper createJacksonWriter(
+    private YAMLMapper createJacksonWriter(
             final Optional<YamlDumpCustomizer> dumpCustomizer,
             final JsonUtils.JacksonCustomizer ... customizers) {
         var yamlFactory = YAMLFactory.builder()
+        		.disable(YAMLWriteFeature.WRITE_DOC_START_MARKER)
                 .dumperOptions(dumpCustomizer
-                        .map(YamlUtils::createDumperOptions)
-                        .orElseGet(YamlUtils::createDumperOptions))
-                .build()
-                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER);
-        var mapper = new ObjectMapper(yamlFactory);
-        mapper = JsonUtils.jdk8Support(mapper);
-        mapper = JsonUtils.writingJavaTimeSupport(mapper);
-        mapper = JsonUtils.writingCanSupport(mapper);
+                        .map(YamlUtils::createDumpSettings)
+                        .orElseGet(YamlUtils::createDumpSettings))
+                .build();
+        
+        var builder = YAMLMapper.builder(yamlFactory);
+        JsonUtils.writingJavaTimeSupport(builder);
+        JsonUtils.writingCanSupport(builder);
         for(JsonUtils.JacksonCustomizer customizer : customizers) {
-            mapper = Optional.ofNullable(customizer.apply(mapper))
-                    .orElse(mapper);
+        	customizer.accept(builder);
         }
-        return mapper;
+        return builder.build();
     }
 
-    private DumperOptions createDumperOptions(final YamlDumpCustomizer ... dumpCustomizers) {
-        var dumperOptions = new DumperOptions();
-        dumperOptions.setIndent(2);
-        dumperOptions.setLineBreak(LineBreak.UNIX); // fixated for consistency
-        //options.setPrettyFlow(true);
-        //options.setDefaultFlowStyle(FlowStyle.BLOCK);
+    /**
+     * @see YAMLFactoryBuilder#dumperOptions(DumpSettings)
+     */
+    private DumpSettings createDumpSettings(final YamlDumpCustomizer ... dumpCustomizers) {
+    	var builder = DumpSettings.builder()
+			.setIndent(2)
+			.setBestLineBreak("\n"); // fixated for consistency
         for(YamlUtils.YamlDumpCustomizer customizer : dumpCustomizers) {
-            dumperOptions = Optional.ofNullable(customizer.apply(dumperOptions))
-                    .orElse(dumperOptions);
+            customizer.accept(builder);
         }
-        return dumperOptions;
+        return builder.build();
     }
 
-    private LoaderOptions createLoaderOptions(final YamlLoadCustomizer ... loadCustomizers) {
-        var loaderOptions = new LoaderOptions();
+    private LoadSettings createLoadSettings(final YamlLoadCustomizer ... loadCustomizers) {
+        var builder = LoadSettings.builder();
         for(YamlUtils.YamlLoadCustomizer customizer : loadCustomizers) {
-            loaderOptions = Optional.ofNullable(customizer.apply(loaderOptions))
-                    .orElse(loaderOptions);
+            customizer.accept(builder);
         }
-        return loaderOptions;
+        return builder.build();
     }
 
 }

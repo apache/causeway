@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.NullNode;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Lists;

@@ -18,7 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.NullNode;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -35,8 +37,6 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
-
-import org.jspecify.annotations.NonNull;
 
 public abstract class AbstractObjectMemberReprRenderer<T extends ObjectMember>
 extends ReprRendererAbstract<ManagedMember> {

@@ -18,11 +18,6 @@
  */
 package org.apache.causeway.commons.internal.resources;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +49,7 @@ class JsonYamlReaderTest {
     }
 
     @Test
-    void loadCustomerFromJson() throws JsonParseException, JsonMappingException, IOException {
+    void loadCustomerFromJson() {
         var customer = JsonUtils.tryRead(Customer.class, DataSource.ofResource(this.getClass(), "customer.json"))
                 .ifFailureFail()
                 .getValue()

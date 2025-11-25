@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.restfulobjects.rendering.util;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapperUtil;
 
 import lombok.SneakyThrows;
 
@@ -31,14 +31,14 @@ import lombok.experimental.UtilityClass;
 public final class JsonWriterUtil {
 
     @SneakyThrows
-    public String jsonFor(final Object object, final JsonMapper.PrettyPrinting prettyPrinting) {
-        return JsonMapper.instance(prettyPrinting).write(object);
+    public String jsonFor(final Object object, final JsonMapperUtil.PrettyPrinting prettyPrinting) {
+        return JsonMapperUtil.instance(prettyPrinting).write(object);
     }
 
     public String jsonFor(final Object object, final @Nullable CausewaySystemEnvironment systemEnvironment) {
         var prettyPrinting = (systemEnvironment!=null && systemEnvironment.isPrototyping())
-                ? JsonMapper.PrettyPrinting.ENABLE
-                : JsonMapper.PrettyPrinting.DISABLE;
+                ? JsonMapperUtil.PrettyPrinting.ENABLE
+                : JsonMapperUtil.PrettyPrinting.DISABLE;
         return jsonFor(object, prettyPrinting);
     }
 

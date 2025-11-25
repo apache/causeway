@@ -18,22 +18,20 @@
  */
 package org.apache.causeway.viewer.restfulobjects.client.auth.oauth2.azure;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.causeway.commons.functional.Railway;
 
 import lombok.Data;
+
+import tools.jackson.databind.ObjectMapper;
 
 class TokenParser {
 
     static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    Railway<IOException,TokenSuccessResponse> parseTokenEntity(final String entity) {
+    Railway<Exception,TokenSuccessResponse> parseTokenEntity(final String entity) {
         try {
             return Railway.success(OBJECT_MAPPER.readerFor(TokenSuccessResponse.class).readValue(entity));
-        } catch (IOException e) {
+        } catch (Exception e) {
             return Railway.failure(e);
         }
     }

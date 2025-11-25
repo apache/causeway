@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domaintypes;
 
-import com.fasterxml.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.NullNode;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;

@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.viewer.restfulobjects.applib.domaintypes;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
 import org.apache.causeway.viewer.restfulobjects.applib.domainobjects.DomainRepresentation;
+
+import tools.jackson.databind.JsonNode;
 
 /**
  * @since 1.x {@index}

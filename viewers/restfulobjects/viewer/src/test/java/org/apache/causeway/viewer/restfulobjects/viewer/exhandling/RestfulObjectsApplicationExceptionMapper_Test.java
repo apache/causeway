@@ -33,7 +33,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapper;
+import org.apache.causeway.viewer.restfulobjects.applib.util.JsonMapperUtil;
 import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.causeway.viewer.restfulobjects.rendering.exhandling.ExceptionResponseFactory;
 
@@ -100,7 +100,7 @@ class RestfulObjectsApplicationExceptionMapper_Test {
         var response = exceptionMapper.buildResponse(ex, mockHttpHeaders);
         final String entity = (String) response.getBody();
         assertThat(entity, is(not(nullValue())));
-        final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
+        final JsonRepresentation jsonRepr = JsonMapperUtil.instance().read(entity, JsonRepresentation.class);
 
         // then
         assertThat(response.getHeaders().get("Warning").get(0), is("199 RestfulObjects foobar"));
@@ -121,7 +121,7 @@ class RestfulObjectsApplicationExceptionMapper_Test {
         var response = exceptionMapper.buildResponse(ex, mockHttpHeaders);
         final String entity = (String) response.getBody();
         assertThat(entity, is(not(nullValue())));
-        final JsonRepresentation jsonRepr = JsonMapper.instance().read(entity, JsonRepresentation.class);
+        final JsonRepresentation jsonRepr = JsonMapperUtil.instance().read(entity, JsonRepresentation.class);
 
         // then
         assertThat(response.getHeaders().get("Warning").get(0), is("199 RestfulObjects foobar"));
