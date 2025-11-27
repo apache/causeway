@@ -19,7 +19,8 @@
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
-public interface HiddenTypeFacet extends Facet, HiddenInstanceFacet {
+public interface HiddenTypeFacet extends Facet, HidingInteractionAdvisor {
 
 }
