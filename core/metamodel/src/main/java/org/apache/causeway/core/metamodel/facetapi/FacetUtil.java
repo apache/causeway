@@ -34,6 +34,9 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.DisablingOrEnabling;
+import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrShowing;
+import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.Validating;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.experimental.UtilityClass;
@@ -47,7 +50,7 @@ public final class FacetUtil {
      * @return the argument as is
      */
     public static <F extends Facet> F addFacet(final @NonNull F facet) {
-        facet.getFacetHolder().addFacet(facet);
+        facet.facetHolder().addFacet(facet);
         return facet;
     }
 
@@ -61,7 +64,7 @@ public final class FacetUtil {
         if (facetIfAny == null) return Optional.empty();
 
         facetIfAny
-            .ifPresent(facet->facet.getFacetHolder().addFacet(facet));
+            .ifPresent(facet->facet.facetHolder().addFacet(facet));
         return facetIfAny;
     }
 
@@ -109,14 +112,14 @@ public final class FacetUtil {
     public static void updateFacet(final @Nullable Facet facet) {
         if(facet==null) return;
 
-        final boolean skip = facet.getFacetHolder().lookupFacet(facet.facetType())
-                .map(Facet::getPrecedence)
+        final boolean skip = facet.facetHolder().lookupFacet(facet.facetType())
+                .map(Facet::precedence)
                 .map(Facet.Precedence::ordinal)
-                .map(ordinal -> ordinal>facet.getPrecedence().ordinal())
+                .map(ordinal -> ordinal>facet.precedence().ordinal())
                 .orElse(false);
         if(skip) return;
 
-        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
+        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.facetHolder());
         addFacet(facet);
     }
 
@@ -180,7 +183,7 @@ public final class FacetUtil {
         .filter(_NullSafe::isPresent)
         .map(facetHolder->facetHolder.getFacet(facetType))
         .filter(_NullSafe::isPresent)
-        .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
+        .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
                 ? b
                 : a);
     }
@@ -199,7 +202,7 @@ public final class FacetUtil {
         .filter(x -> !excluded.test(x))
         .map(facetHolder->facetHolder.getFacet(facetType))
         .filter(_NullSafe::isPresent)
-        .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
+        .reduce((a, b)->b.precedence().ordinal()>a.precedence().ordinal()
                 ? b
                 : a);
     }
@@ -222,11 +225,30 @@ public final class FacetUtil {
         if(winnerFacet==null) return Optional.of(addFacet(facetFactory.apply(facetHolder)));
         if(winnerFacet.getClass().equals(facetExactClass)) return Optional.of(winnerFacet).map(facetExactClass::cast);
         // check if we are allowed to override based on precedence
-        if(winnerFacet.getPrecedence().ordinal()<=overrideUpToIncluding.ordinal()) {
+        if(winnerFacet.precedence().ordinal()<=overrideUpToIncluding.ordinal()) {
             return Optional.of(addFacet(facetFactory.apply(facetHolder)));
         }
         // not allowed to override
         return Optional.empty();
+    }
+
+	public static void visitAttributes(Facet facet, BiConsumer<String, Object> visitor) {
+        visitor.accept("facet", ClassUtils.getShortName(facet.getClass()));
+        visitor.accept("precedence", facet.precedence().name());
+
+        var interactionAdvisors = interactionAdvisors(facet, ", ");
+
+        // suppress 'advisors' if none
+        if(!interactionAdvisors.isEmpty()) {
+            visitor.accept("interactionAdvisors", interactionAdvisors);
+        }
+	}
+	
+    private String interactionAdvisors(Facet facet, final String delimiter) {
+        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
+	        .filter(marker->marker.isAssignableFrom(facet.getClass()))
+	        .map(Class::getSimpleName)
+	        .collect(Collectors.joining(delimiter));
     }
 
 }

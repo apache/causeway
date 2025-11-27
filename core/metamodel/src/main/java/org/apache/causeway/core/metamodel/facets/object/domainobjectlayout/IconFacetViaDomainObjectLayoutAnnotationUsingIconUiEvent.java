@@ -21,8 +21,6 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.events.EventObjectBase;
@@ -61,9 +59,8 @@ implements IconFacet {
             });
     }
 
-    @Override public FacetHolder getFacetHolder() { return facetHolder; }
     @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
-    @Override public Precedence getPrecedence() { return Precedence.EVENT; }
+    @Override public Precedence precedence() { return Precedence.EVENT; }
 
     @Override
     public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, ObjectSupport.IconSize iconSize) {
@@ -89,8 +86,7 @@ implements IconFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
+    	IconFacet.super.visitAttributes(visitor);
         visitor.accept("iconUiEventClass", iconUiEventClass);
     }
 

@@ -116,18 +116,19 @@ extends
     /**
      * The {@link FacetHolder holder} of this facet.
      */
-    FacetHolder getFacetHolder();
+    FacetHolder facetHolder();
+    //@Deprecated default FacetHolder getFacetHolder() { return facetHolder(); }
 
     /**
      * Identifier of the feature this facet is associated with.
      * @see FacetHolder#getFeatureIdentifier()
      */
     default Identifier getFeatureIdentifier() {
-        return getFacetHolder().getFeatureIdentifier();
+        return facetHolder().getFeatureIdentifier();
     }
 
     default Optional<FacetRanking> getSharedFacetRanking() {
-        return getFacetHolder().getFacetRanking(facetType());
+        return facetHolder().getFacetRanking(facetType());
     }
 
     default FacetRanking getSharedFacetRankingElseFail() {
@@ -169,7 +170,7 @@ extends
      * Facets with higher precedence override facets with lower precedence.
      * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
-    public Precedence getPrecedence();
+    Precedence precedence();
 
     /**
      * Whether this {@link Facet} acts in a domain-object-type specific manner,
@@ -193,7 +194,7 @@ extends
      * for the associated <i>Mixee</i>.
      * @see FacetHolderLayered
      */
-    public default boolean isObjectTypeSpecific() {
+    default boolean isObjectTypeSpecific() {
         return false;
     }
 

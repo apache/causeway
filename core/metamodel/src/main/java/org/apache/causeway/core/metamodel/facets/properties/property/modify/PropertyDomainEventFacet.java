@@ -139,7 +139,7 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.head(),
+                        facetHolder(), ic.head(),
                         null, null);
         if (event != null && event.isHidden()) return "Hidden by subscriber";
 
@@ -154,7 +154,7 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.head(),
+                        facetHolder(), ic.head(),
                         null, null);
         if (event != null
                 && event.isDisabled()) {
@@ -188,7 +188,7 @@ implements
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
                         _Casts.uncheckedCast(getEventType()), null,
-                        getFacetHolder(), ic.head(),
+                        facetHolder(), ic.head(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();

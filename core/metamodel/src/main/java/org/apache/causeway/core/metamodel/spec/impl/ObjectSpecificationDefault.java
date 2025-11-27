@@ -923,7 +923,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             if(facet==null) {
                 return false;
             }
-            if(!facet.getPrecedence().isFallback()) {
+            if(!facet.precedence().isFallback()) {
                 return true;
             }
             if(noopFacet == null) {

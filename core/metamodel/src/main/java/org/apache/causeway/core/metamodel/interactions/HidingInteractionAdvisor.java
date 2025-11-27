@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.HidingOrShowing;
+import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrShowing;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 /**

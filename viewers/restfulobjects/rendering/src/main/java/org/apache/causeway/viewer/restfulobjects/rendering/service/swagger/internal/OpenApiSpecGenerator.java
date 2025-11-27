@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.service.swagger.internal;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,54 +35,34 @@ import io.swagger.v3.oas.models.OpenAPI;
 
 @Component
 @Named(CausewayModuleViewerRestfulObjectsApplib.NAMESPACE + ".OpenApiSpecGenerator")
-public class OpenApiSpecGenerator {
-
-    private final SpecificationLoader specificationLoader;
-    private final Tagger tagger;
-    private final ClassExcluder classExcluder;
-    private final ValueSchemaFactory valuePropertyFactory;
-
-    @Inject
-    public OpenApiSpecGenerator(
-            final SpecificationLoader specificationLoader,
-            final Tagger tagger,
-            final ClassExcluder classExcluder,
-            final ValueSchemaFactory valuePropertyFactory) {
-        this.specificationLoader = specificationLoader;
-        this.tagger = tagger;
-        this.classExcluder = classExcluder;
-        this.valuePropertyFactory = valuePropertyFactory;
-    }
+public record OpenApiSpecGenerator(
+        SpecificationLoader specificationLoader,
+        Tagger tagger,
+        ClassExcluder classExcluder,
+        ValueSchemaFactory valuePropertyFactory) {
 
     public String generate(
             final String basePath,
             final Visibility visibility,
             final Format format) {
 
-        final _OpenApiModelFactory generation = newGeneration(basePath, visibility);
-        final OpenAPI swagger = generation.generate();
-
-        switch (format) {
-        case JSON:
-            return Json.pretty(swagger);
-        case YAML:
-            try {
-                return Yaml.pretty().writeValueAsString(swagger);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        default:
-            throw new IllegalArgumentException("Unrecognized format: " + format);
-        }
-    }
-
-    protected _OpenApiModelFactory newGeneration(final String basePath, final Visibility visibility) {
-        return new _OpenApiModelFactory(
+        var factory = new OpenApiModelFactory(
                 basePath, visibility,
                 specificationLoader,
                 tagger,
                 classExcluder,
                 valuePropertyFactory);
+        final OpenAPI swagger = factory.generate();
+
+        return switch (format) {
+	        case JSON -> Json.pretty(swagger);
+	        case YAML -> {
+	            try {
+	                yield Yaml.pretty().writeValueAsString(swagger);
+	            } catch (JsonProcessingException e) {
+	                throw new RuntimeException(e);
+	            }}
+        	};
     }
 
 }

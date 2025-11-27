@@ -98,12 +98,12 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         var owningSpec = getSpecificationLoader().loadSpecification(owningClass);
 
         owningSpec.lookupFacet(DisabledObjectFacet.class)
-        .map(disabledObjectFacet->disabledObjectFacet.clone(member))
-        .ifPresent(FacetUtil::addFacet);
+	        .map(disabledObjectFacet->disabledObjectFacet.clone(member))
+	        .ifPresent(FacetUtil::addFacet);
 
         owningSpec.lookupFacet(HiddenObjectFacet.class)
-        .map(hiddenObjectFacet->hiddenObjectFacet.clone(member))
-        .ifPresent(FacetUtil::addFacet);
+	        .map(hiddenObjectFacet->hiddenObjectFacet.copyTo(member))
+	        .ifPresent(FacetUtil::addFacet);
     }
 
     // -- HELPER

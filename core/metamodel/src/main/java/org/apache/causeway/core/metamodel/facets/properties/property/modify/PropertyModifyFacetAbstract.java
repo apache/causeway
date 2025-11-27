@@ -79,7 +79,7 @@ implements
 
         final InteractionHead head = InteractionHead.regular(targetAdapter);
 
-        return memberExecutorService.clearProperty(getFacetHolder(), interactionInitiatedBy,
+        return memberExecutorService.clearProperty(facetHolder(), interactionInitiatedBy,
                 head, owningProperty, getterFacet, clearFacet, this);
     }
 
@@ -92,7 +92,7 @@ implements
 
         final InteractionHead head = InteractionHead.regular(targetAdapter);
 
-        return memberExecutorService.setProperty(getFacetHolder(), interactionInitiatedBy,
+        return memberExecutorService.setProperty(facetHolder(), interactionInitiatedBy,
                 head, newValueAdapter, owningProperty, getterFacet, setterFacet, this);
     }
 

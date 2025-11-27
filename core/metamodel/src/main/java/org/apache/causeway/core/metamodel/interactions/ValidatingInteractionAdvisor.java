@@ -19,7 +19,7 @@
 package org.apache.causeway.core.metamodel.interactions;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.Validating;
+import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.Validating;
 import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
 /**

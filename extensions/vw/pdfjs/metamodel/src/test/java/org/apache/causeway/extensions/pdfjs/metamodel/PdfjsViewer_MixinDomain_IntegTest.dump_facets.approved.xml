@@ -136,6 +136,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="InferSafeForMixedInProperty"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
@@ -185,6 +186,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -255,6 +257,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="IDEMPOTENT"/>
@@ -309,6 +312,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -410,6 +414,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
@@ -464,6 +469,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -669,6 +675,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
@@ -723,6 +730,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -831,6 +839,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
@@ -885,6 +894,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -940,6 +950,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
@@ -994,6 +1005,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -1049,6 +1061,7 @@
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="ActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="IDEMPOTENT"/>
@@ -1103,6 +1116,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
@@ -1168,6 +1182,7 @@
         <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+        <mml:attr name="facet" value="BSGridFacet.NoLayout"/>
         <mml:attr name="precedence" value="LOW"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
@@ -1253,6 +1268,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
+            <mml:attr name="facet" value="ActionSemanticsFacet"/>
             <mml:attr name="origin" value="InferSafeForMixedInProperty"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="value" value="SAFE"/>
@@ -1291,6 +1307,7 @@
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
             <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>

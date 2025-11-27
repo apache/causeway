@@ -49,7 +49,7 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
 
         // skip validation if null value and optional property.
         if(proposed == null
-            && MandatoryFacet.isMandatory(getFacetHolder())) return null;
+            && MandatoryFacet.isMandatory(facetHolder())) return null;
 
         return invalidReason(propertyModifyContext.target(), proposed);
     }

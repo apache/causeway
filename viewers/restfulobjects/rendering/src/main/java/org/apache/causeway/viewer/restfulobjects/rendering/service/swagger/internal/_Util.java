@@ -27,7 +27,6 @@ import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -138,14 +137,10 @@ final class _Util {
     }
 
     ImmutableEnumSet<ActionScope> actionScopesFor(final Visibility visibility) {
-        switch (visibility) {
-        case PUBLIC:
-        case PRIVATE:
-            return ActionScope.PRODUCTION_ONLY;
-        case PRIVATE_WITH_PROTOTYPING:
-            return ActionScope.ANY;
-        }
-        throw _Exceptions.unmatchedCase(visibility);
+        return switch (visibility) {
+	        case PUBLIC, PRIVATE -> ActionScope.PRODUCTION_ONLY;
+	        case PRIVATE_WITH_PROTOTYPING -> ActionScope.ANY;
+    	};
     }
 
 }

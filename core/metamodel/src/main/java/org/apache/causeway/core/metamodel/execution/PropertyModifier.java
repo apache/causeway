@@ -171,7 +171,7 @@ implements
                 getDomainEventHelper().postEventForProperty(
                         AbstractDomainEvent.Phase.EXECUTING,
                         getEventType(), null,
-                        propertySetterOrClearFacetForDomainEventAbstract.getFacetHolder(), head,
+                        propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
                         oldValuePojo, newValuePojo);
 
         var newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
@@ -198,7 +198,7 @@ implements
                     AbstractDomainEvent.Phase.EXECUTED,
                     getEventType(),
                     uncheckedCast(propertyDomainEvent),
-                    propertySetterOrClearFacetForDomainEventAbstract.getFacetHolder(), head,
+                    propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
                     oldValuePojo, actualNewValue);
         }
 

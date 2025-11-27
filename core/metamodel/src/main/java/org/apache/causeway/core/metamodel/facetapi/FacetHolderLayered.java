@@ -96,10 +96,10 @@ implements FacetHolder {
         if(sharedFacet==null) {
             return localFacet;
         }
-        if(localFacet.getPrecedence().ordinal() > sharedFacet.getPrecedence().ordinal()) {
+        if(localFacet.precedence().ordinal() > sharedFacet.precedence().ordinal()) {
             return localFacet;
         }
-        if(sharedFacet.getPrecedence().ordinal() > localFacet.getPrecedence().ordinal()) {
+        if(sharedFacet.precedence().ordinal() > localFacet.precedence().ordinal()) {
             return sharedFacet;
         }
         if(localFacet.semanticEquals(sharedFacet)) {

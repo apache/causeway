@@ -46,8 +46,6 @@ public record PromptStyleFacet(
    }
 
    @Override public Class<? extends Facet> facetType() { return getClass(); }
-   @Override public Precedence getPrecedence() { return precedence(); }
-   @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
    public PromptStyleFacet(final String origin, final PromptStyle of, final FacetHolder holder) {
        this(origin, of, holder, Precedence.DEFAULT, false);
@@ -59,8 +57,8 @@ public record PromptStyleFacet(
 
    @Override
    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+	   Facet.super.visitAttributes(visitor);
        visitor.accept("origin", origin());
-       visitor.accept("precedence", getPrecedence().name());
        visitor.accept("promptStyle", value);
    }
 

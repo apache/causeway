@@ -65,8 +65,6 @@ public record LayoutPrefixFacetForUiEvent(
     // -- METHODS
 
     @Override public Class<? extends Facet> facetType() { return LayoutPrefixFacet.class; }
-    @Override public Precedence getPrecedence() { return precedence(); }
-    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
     public String layoutPrefix(final ManagedObject managedObject) {
@@ -88,8 +86,8 @@ public record LayoutPrefixFacetForUiEvent(
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	LayoutPrefixFacet.super.visitAttributes(visitor);
         visitor.accept("origin", origin());
-        visitor.accept("precedence", getPrecedence().name());
         visitor.accept("layoutUiEventClass", layoutUiEventClass);
     }
 

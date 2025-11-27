@@ -91,7 +91,7 @@ extends HasMetaModelContext, HasTranslationContext {
 
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             final @NonNull Class<T> facetType) {
-        return lookupFacet(facetType, facet->!facet.getPrecedence().isFallback());
+        return lookupFacet(facetType, facet->!facet.precedence().isFallback());
     }
 
     // -- CONTAINS
@@ -111,7 +111,7 @@ extends HasMetaModelContext, HasTranslationContext {
     default boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
         var facet = getFacet(facetType);
         return facet != null
-                && !facet.getPrecedence().isFallback();
+                && !facet.precedence().isFallback();
     }
 
     /**
@@ -121,8 +121,8 @@ extends HasMetaModelContext, HasTranslationContext {
     default boolean containsExplicitNonFallbackFacet(final Class<? extends Facet> facetType) {
         var facet = getFacet(facetType);
         return facet != null
-                && !facet.getPrecedence().isFallback()
-                && !facet.getPrecedence().isInferred();
+                && !facet.precedence().isFallback()
+                && !facet.precedence().isInferred();
     }
 
     Stream<Facet> streamFacets();

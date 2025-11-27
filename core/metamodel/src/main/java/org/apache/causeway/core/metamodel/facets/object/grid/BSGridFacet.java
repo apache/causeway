@@ -59,8 +59,6 @@ implements GridFacet {
     // -- METHODS
 
     @Override public Class<? extends Facet> facetType() { return GridFacet.class; }
-    @Override public Precedence getPrecedence() { return precedence(); }
-    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
     public BSGrid getGrid(final @Nullable ManagedObject mo) {
@@ -70,7 +68,7 @@ implements GridFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("precedence", getPrecedence().name());
+        visitor.accept("precedence", precedence().name());
     }
 
     // -- HELPER
@@ -119,18 +117,16 @@ implements GridFacet {
     }
 
     private ObjectSpecification objSpec() {
-        return (ObjectSpecification) getFacetHolder();
+        return (ObjectSpecification) facetHolder();
     }
 
     record NoLayout(
             @NonNull FacetHolder facetHolder,
             Facet.@NonNull Precedence precedence) implements GridFacet {
         @Override public Class<? extends Facet> facetType() { return GridFacet.class; }
-        @Override public Precedence getPrecedence() { return precedence(); }
-        @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
         @Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
-            visitor.accept("precedence", getPrecedence().name());
+        	GridFacet.super.visitAttributes(visitor);
         }
         @Override public BSGrid getGrid(@Nullable final ManagedObject mo) {
             return null;

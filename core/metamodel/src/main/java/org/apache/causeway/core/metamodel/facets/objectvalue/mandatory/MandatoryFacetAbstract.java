@@ -134,14 +134,14 @@ implements MandatoryFacet {
 
         if(mandatoryFacet == null
                 || !PRECEDENCE_ORDINALS_CONSIDERED_FOR_CONFLICTING_OPTIONALITY
-                    .contains(mandatoryFacet.getPrecedence().ordinal())) {
+                    .contains(mandatoryFacet.precedence().ordinal())) {
             return; // ignore
         }
 
         final Can<MandatoryFacet> conflictingFacets = findConflictingMandatoryFacets(mandatoryFacet);
 
         if(conflictingFacets.isNotEmpty()) {
-            var holder = mandatoryFacet.getFacetHolder();
+            var holder = mandatoryFacet.facetHolder();
 
             ValidationFailure.raiseFormatted(holder,
                     ProgrammingModelConstants.MessageTemplate.CONFLICTING_OPTIONALITY.builder()
@@ -162,7 +162,7 @@ implements MandatoryFacet {
 
         // assumes that given mandatoryFacet is one of the top ranking
 
-        var isTopRanking = mandatoryFacet.getPrecedence()
+        var isTopRanking = mandatoryFacet.precedence()
                 .equals(facetRanking.getTopPrecedence().orElse(null));
         if(!isTopRanking) {
             // ignore validation of lower than top-rank

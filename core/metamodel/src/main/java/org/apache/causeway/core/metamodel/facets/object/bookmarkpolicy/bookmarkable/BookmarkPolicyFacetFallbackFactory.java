@@ -69,7 +69,7 @@ implements MetaModelRefiner {
             .forEach(objectAction->{
                 var actionSemanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                 if(actionSemanticsFacet == null
-                        || actionSemanticsFacet.getPrecedence().isFallback()
+                        || actionSemanticsFacet.precedence().isFallback()
                         || !actionSemanticsFacet.value().isSafeInNature()) {
                     ValidationFailure.raiseFormatted(
                             objectAction,
@@ -89,7 +89,7 @@ implements MetaModelRefiner {
         return objectAction->{
             var bookmarkPolicyFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
             if(bookmarkPolicyFacet == null
-                    || bookmarkPolicyFacet.getPrecedence().isFallback()
+                    || bookmarkPolicyFacet.precedence().isFallback()
                     || bookmarkPolicyFacet.value() == BookmarkPolicy.NEVER) {
                 return false;
             }

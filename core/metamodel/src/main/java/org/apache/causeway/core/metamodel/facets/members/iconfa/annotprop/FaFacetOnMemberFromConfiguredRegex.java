@@ -65,9 +65,8 @@ public record FaFacetOnMemberFromConfiguredRegex(
     FacetHolder facetHolder
 ) implements FaImperativeFacet {
 
-    @Override public FacetHolder getFacetHolder() { return facetHolder; }
     @Override public Class<? extends Facet> facetType() { return FaFacet.class; }
-    @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
     @Override
     public Either<FaStaticFacet, FaImperativeFacet> getSpecialization() {
@@ -77,7 +76,7 @@ public record FaFacetOnMemberFromConfiguredRegex(
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
+        visitor.accept("precedence", precedence().name());
         visitor.accept("position", "!imperative");
         visitor.accept("classes", "!imperative");
     }

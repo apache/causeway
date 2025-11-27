@@ -71,8 +71,8 @@ extends MetaModelPostProcessorAbstract {
 
     private static boolean canOverwrite(final @Nullable Facet existingFacet) {
         return existingFacet == null
-                || existingFacet.getPrecedence().isFallback()
-                || existingFacet.getPrecedence().isInferred();
+                || existingFacet.precedence().isFallback()
+                || existingFacet.precedence().isInferred();
     }
 
 }

@@ -31,26 +31,13 @@ record NavigableSubtreeSequenceFacetRecord(
     FacetHolder facetHolder)
 implements NavigableSubtreeSequenceFacet {
 
-    @Override
-    public Class<? extends Facet> facetType() {
-        return NavigableSubtreeSequenceFacet.class;
-    }
-
-    @Override
-    public Precedence getPrecedence() {
-        return Precedence.DEFAULT;
-    }
-
-    @Override
-    public FacetHolder getFacetHolder() {
-        return facetHolder;
-    }
+    @Override public Class<? extends Facet> facetType() { return NavigableSubtreeSequenceFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", "NavigableSubtreeSequenceFacet");
+    	NavigableSubtreeSequenceFacet.super.visitAttributes(visitor);
         visitor.accept("origin", origin);
-        visitor.accept("precedence", getPrecedence().name());
         visitor.accept("sequence", sequence);
         visitor.accept("methodHandle", methodHandle);
     }

@@ -22,6 +22,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 public interface ClassExcluder {
-    boolean exclude(final ObjectSpecification objectSpec);
+    boolean exclude(ObjectSpecification objectSpec);
     boolean exclude(ObjectAction objectAction);
 }

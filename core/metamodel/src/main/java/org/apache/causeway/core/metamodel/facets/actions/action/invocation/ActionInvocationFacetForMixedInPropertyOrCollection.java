@@ -62,7 +62,7 @@ extends ActionInvocationFacetAbstract {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return memberExecutorService.invokeAction(getFacetHolder(), interactionInitiatedBy,
+        return memberExecutorService.invokeAction(facetHolder(), interactionInitiatedBy,
                 head, argumentAdapters, owningAction, this);
     }
 

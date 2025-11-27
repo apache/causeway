@@ -18,25 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.springframework.util.ClassUtils;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
+	@Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull Class<? extends Facet> facetType;
 
-    @Getter(onMethod_ = {@Override}) private final Facet.@NonNull Precedence precedence;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final Facet.@NonNull Precedence precedence;
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull FacetHolder facetHolder;
 
     public FacetAbstract(
@@ -56,51 +54,8 @@ implements Facet, HasMetaModelContext {
     }
 
     @Override
-    public final Class<? extends Facet> facetType() {
-        return facetType;
-    }
-
-    @Override
     public String toString() {
         return FacetUtil.toString(this);
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
-
-        var interactionAdvisors = interactionAdvisors(", ");
-
-        // suppress 'advisors' if none
-        if(!interactionAdvisors.isEmpty()) {
-            visitor.accept("interactionAdvisors", interactionAdvisors);
-        }
-    }
-
-    /**
-     * Marker interface used within {@link #toString()}.
-     */
-    public static interface HidingOrShowing {
-    }
-
-    /**
-     * Marker interface used within {@link #toString()}.
-     */
-    public static interface DisablingOrEnabling {
-    }
-
-    /**
-     * Marker interface used within {@link #toString()}.
-     */
-    public static interface Validating {
-    }
-
-    private String interactionAdvisors(final String delimiter) {
-        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
-        .filter(marker->marker.isAssignableFrom(getClass()))
-        .map(Class::getSimpleName)
-        .collect(Collectors.joining(delimiter));
     }
 
 }

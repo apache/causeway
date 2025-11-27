@@ -45,7 +45,8 @@ public record LayoutPrefixFacetViaMethod(
         final @Nullable ResolvedMethod methodIfAny,
         final FacetHolder holder) {
 
-        System.err.printf("methodIfAny %s%n", methodIfAny);
+    	//debug
+        //System.err.printf("methodIfAny %s%n", methodIfAny);
 
         return Optional.ofNullable(methodIfAny)
             .map(method->ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT))
@@ -56,8 +57,6 @@ public record LayoutPrefixFacetViaMethod(
     // -- METHODS
 
     @Override public Class<? extends Facet> facetType() { return LayoutPrefixFacet.class; }
-    @Override public Precedence getPrecedence() { return precedence(); }
-    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
     public String layoutPrefix(final ManagedObject managedObject) {
@@ -76,8 +75,8 @@ public record LayoutPrefixFacetViaMethod(
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	LayoutPrefixFacet.super.visitAttributes(visitor);
         visitor.accept("origin", origin());
-        visitor.accept("precedence", getPrecedence().name());
         imperativeAspect.visitAttributes(visitor);
     }
 

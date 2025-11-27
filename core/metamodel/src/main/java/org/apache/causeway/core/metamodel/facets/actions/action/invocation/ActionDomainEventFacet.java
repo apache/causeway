@@ -130,7 +130,8 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(),
-                        actionFrom(ic), getFacetHolder(),
+                        actionFrom(ic),
+                        facetHolder(),
                         ic.head(),
                         // corresponds to programming model 'hidePlaceOrder()',
                         // which does no longer consider args
@@ -151,7 +152,8 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(),
-                        actionFrom(ic), getFacetHolder(),
+                        actionFrom(ic), 
+                        facetHolder(),
                         ic.head(),
                         // corresponds to programming model 'disablePlaceOrder()',
                         // which does no longer consider args
@@ -181,7 +183,8 @@ implements
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(),
-                        actionFrom(ic), getFacetHolder(),
+                        actionFrom(ic), 
+                        facetHolder(),
                         ic.head(), aic.args(),
                         null);
         if (event != null && event.isInvalid()) {

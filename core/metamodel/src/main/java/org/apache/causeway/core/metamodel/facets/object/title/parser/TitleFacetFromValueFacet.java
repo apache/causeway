@@ -61,7 +61,7 @@ implements TitleFacet {
             return Enums.getFriendlyNameOf((Enum<?>)pojo);
         }
 
-        var featureId = getFacetHolder().getFeatureIdentifier();
+        var featureId = facetHolder().getFeatureIdentifier();
         var feature = getSpecificationLoader().loadFeature(featureId).orElse(null);
 
         // support for qualified value semantics, requires a 'where' context, that is,

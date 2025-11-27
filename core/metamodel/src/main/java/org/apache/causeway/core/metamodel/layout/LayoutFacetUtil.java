@@ -411,7 +411,7 @@ public class LayoutFacetUtil {
 
     private static boolean isNonFallback(final Facet facet) {
         return facet != null
-            && !facet.getPrecedence().isFallback();
+            && !facet.precedence().isFallback();
     }
 
 }

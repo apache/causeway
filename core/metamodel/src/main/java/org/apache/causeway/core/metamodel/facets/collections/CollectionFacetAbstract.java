@@ -32,7 +32,7 @@ implements CollectionFacet {
 
     @Override
     public final TypeOfFacet getTypeOfFacet() {
-        return getFacetHolder().getFacet(TypeOfFacet.class);
+        return facetHolder().getFacet(TypeOfFacet.class);
     }
 
 }

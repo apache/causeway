@@ -23,8 +23,6 @@ import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.NonNull;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -37,9 +35,8 @@ public record IconFacetFromProjectionFacet(
     FacetHolder facetHolder)
 implements IconFacet {
 
-    @Override public FacetHolder getFacetHolder() { return facetHolder; }
     @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
-    @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
     @Override
     public Optional<ObjectSupport.IconResource> icon(final ManagedObject targetAdapter, final ObjectSupport.IconSize iconSize) {
@@ -49,8 +46,7 @@ implements IconFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
+    	IconFacet.super.visitAttributes(visitor);
         visitor.accept("projectionFacet", projectionFacet.getClass().getName());
     }
 

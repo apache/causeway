@@ -22,8 +22,6 @@ import java.lang.invoke.MethodHandle;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -38,20 +36,8 @@ record NavigableSubtreeFacetRecord (
     FacetHolder facetHolder)
 implements NavigableSubtreeFacet {
 
-    @Override
-    public Class<? extends Facet> facetType() {
-        return NavigableSubtreeFacet.class;
-    }
-
-    @Override
-    public Precedence getPrecedence() {
-        return Precedence.DEFAULT;
-    }
-
-    @Override
-    public FacetHolder getFacetHolder() {
-        return facetHolder;
-    }
+    @Override public Class<? extends Facet> facetType() { return NavigableSubtreeFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
     @Override
     public final int childCountOf(final Object node) {
@@ -82,10 +68,8 @@ implements NavigableSubtreeFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
+    	NavigableSubtreeFacet.super.visitAttributes(visitor);
         visitor.accept("subNodesMethodHandles", subNodesMethodHandles.map(MethodHandle::toString));
     }
 
 }
-

@@ -68,7 +68,7 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public HiddenObjectFacetViaMethod clone(final FacetHolder holder) {
+    public HiddenObjectFacetViaMethod copyTo(final FacetHolder holder) {
         return new HiddenObjectFacetViaMethod(imperativeAspect, holder);
     }
 

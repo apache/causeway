@@ -39,8 +39,6 @@ public record ActionSemanticsFacet(
     ) implements Facet {
 
     @Override public Class<? extends Facet> facetType() { return getClass(); }
-    @Override public Precedence getPrecedence() { return precedence(); }
-    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     public ActionSemanticsFacet(final String origin, final SemanticsOf of, final FacetHolder holder) {
         this(origin, of, holder, Precedence.DEFAULT);
@@ -48,8 +46,8 @@ public record ActionSemanticsFacet(
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	Facet.super.visitAttributes(visitor);
         visitor.accept("origin", origin());
-        visitor.accept("precedence", precedence().name());
         visitor.accept("value", value);
     }
 

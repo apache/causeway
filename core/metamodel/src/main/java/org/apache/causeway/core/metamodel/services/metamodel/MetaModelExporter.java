@@ -402,7 +402,7 @@ class MetaModelExporter {
 
         final List<org.apache.causeway.schema.metamodel.v2.Facet> facetList = facets.getFacet();
         facetHolder.streamFacets()
-        .filter(facet -> (!config.isIgnoreFallbackFacets() || !facet.getPrecedence().isFallback()))
+        .filter(facet -> (!config.isIgnoreFallbackFacets() || !facet.precedence().isFallback()))
         .map(facet -> asXsdType(facet, config))
         .forEach(facetList::add);
 

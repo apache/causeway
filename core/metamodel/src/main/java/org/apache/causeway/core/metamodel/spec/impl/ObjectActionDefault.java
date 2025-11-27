@@ -496,7 +496,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             var paramSpec = param.getElementType();
             var paramFacet = param.getFacet(ActionParameterChoicesFacet.class);
 
-            if (paramFacet != null && !paramFacet.getPrecedence().isFallback()) {
+            if (paramFacet != null && !paramFacet.precedence().isFallback()) {
 
                 var visibleChoices = paramFacet.getChoices(
                         paramSpec,

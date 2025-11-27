@@ -76,14 +76,14 @@ implements
         if(target == null) return null;
 
         // ensure that the target is of the correct type (unexpected)
-        if(!(getFacetHolder() instanceof ObjectSpecification)) return null;
+        if(!(facetHolder() instanceof ObjectSpecification)) return null;
 
         final ObjectSpecification objectSpec = getObjectSpecification();
         return objectSpec == target.objSpec()? null: "Invalid type";
     }
 
     private ObjectSpecification getObjectSpecification() {
-        return (ObjectSpecification) getFacetHolder();
+        return (ObjectSpecification) facetHolder();
     }
 
     @Override

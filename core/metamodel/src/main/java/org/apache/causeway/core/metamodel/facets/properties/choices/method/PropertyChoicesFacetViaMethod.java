@@ -62,7 +62,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var method = methods.getFirstElseFail().asMethodElseFail(); // expected regular
-        var elementSpec = ((FacetedMethod) getFacetHolder()).elementSpecification();
+        var elementSpec = ((FacetedMethod) facetHolder()).elementSpecification();
         var optionPojos = MmInvokeUtils.invokeNoArg(method.method(), owningAdapter);
         var visibleChoices = ManagedObjects
                 .adaptMultipleOfTypeThenFilterByVisibility(

@@ -23,8 +23,6 @@ import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.Nullable;
 
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport.IconSize;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -50,9 +48,8 @@ implements IconFacet, HasImperativeAspect {
                         holder));
     }
 
-    @Override public FacetHolder getFacetHolder() { return facetHolder; }
     @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
-    @Override public Precedence getPrecedence() { return Precedence.DEFAULT; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
     @Override public ImperativeAspect getImperativeAspect() { return imperativeAspect; }
 
     @Override
@@ -62,8 +59,7 @@ implements IconFacet, HasImperativeAspect {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
+    	IconFacet.super.visitAttributes(visitor);
         imperativeAspect.visitAttributes(visitor);
     }
 

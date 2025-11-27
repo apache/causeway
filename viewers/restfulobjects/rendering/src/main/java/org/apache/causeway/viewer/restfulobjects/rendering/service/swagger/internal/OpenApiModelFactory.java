@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,8 +35,6 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.services.swagger.Visibility;
 import org.apache.causeway.commons.internal.base._Refs;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -62,59 +61,49 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.servers.Server;
 
-class _OpenApiModelFactory {
+record OpenApiModelFactory(
+		String basePath,
+        Visibility visibility,
+        SpecificationLoader specificationLoader,
+        Tagger tagger,
+        ClassExcluder classExcluder,
+        ValueSchemaFactory valueSchemaFactory,
+        Set<String> references,
+	    Set<String> definitions
+		) {
 
     // double quotes
     private static final String DQ = ""; // empty seems the only variant that works
 
-    private final String basePath;
-    private final Visibility visibility;
-    private final SpecificationLoader specificationLoader;
-
-    private final ValueSchemaFactory valueSchemaFactory;
-    private final Tagger tagger;
-    private final ClassExcluder classExcluder;
-
-    private final Set<String> references = _Sets.newLinkedHashSet();
-    private final Set<String> definitions = _Sets.newLinkedHashSet();
-    private OpenAPI oa3;
-
-    public _OpenApiModelFactory(
+    public OpenApiModelFactory(
             final String basePath,
             final Visibility visibility,
             final SpecificationLoader specificationLoader,
             final Tagger tagger,
             final ClassExcluder classExcluder,
             final ValueSchemaFactory valuePropertyFactory) {
-        this.basePath = basePath;
-        this.visibility = visibility;
-        this.specificationLoader = specificationLoader;
-        this.tagger = tagger;
-        this.classExcluder = classExcluder;
-        this.valueSchemaFactory = valuePropertyFactory;
+    	this(basePath, visibility, specificationLoader, tagger, classExcluder, valuePropertyFactory, 
+    			new LinkedHashSet<>(), new LinkedHashSet<>());
     }
 
     OpenAPI generate() {
-        this.oa3 = new OpenAPI();
+        var oa3 = new OpenAPI();
 
-        final String swaggerVersionInfo =
-                String.format("swagger.io (%s)",
-                        OpenAPI.class.getPackage().getImplementationVersion()
-                        );
+        final String swaggerVersionInfo = "swagger.io (%s)"
+        		.formatted(OpenAPI.class.getPackage().getImplementationVersion());
 
         oa3.addServersItem(new Server()
                 .url(basePath));
         oa3.info(new Info()
                 .version(swaggerVersionInfo)
-                .title(visibility.name() + " API")
-                );
+                .title(visibility.name() + " API"));
         oa3.setComponents(new Components());
 
-        appendRestfulObjectsSupportingPathsAndDefinitions();
-        appendLinkModelDefinition();
-        appendServicePathsAndDefinitions();
-        appendObjectPathsAndDefinitions();
-        appendDefinitionsForOrphanedReferences();
+        appendRestfulObjectsSupportingPathsAndDefinitions(oa3);
+        appendLinkModelDefinition(oa3);
+        appendServicePathsAndDefinitions(oa3);
+        appendObjectPathsAndDefinitions(oa3);
+        appendDefinitionsForOrphanedReferences(oa3);
 
         oa3.setPaths(sorted(oa3.getPaths()));
 
@@ -153,7 +142,7 @@ class _OpenApiModelFactory {
         return _paths;
     }
 
-    void appendServicePathsAndDefinitions() {
+    void appendServicePathsAndDefinitions(OpenAPI oa3) {
 
         for (var spec : specificationLoader.snapshotSpecifications()) {
 
@@ -162,10 +151,10 @@ class _OpenApiModelFactory {
                 continue;
             }
 
-            appendServicePath(spec);
+            appendServicePath(oa3, spec);
 
             for (var serviceAction : serviceActions) {
-                appendServiceActionInvokePath(spec, serviceAction);
+                appendServiceActionInvokePath(oa3, spec, serviceAction);
             }
         }
     }
@@ -180,7 +169,7 @@ class _OpenApiModelFactory {
         }
     }
 
-    void appendObjectPathsAndDefinitions() {
+    void appendObjectPathsAndDefinitions(OpenAPI oa3) {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
         for (final ObjectSpecification objectSpec : specificationLoader.snapshotSpecifications()) {
@@ -212,20 +201,20 @@ class _OpenApiModelFactory {
                     && objectCollections.isEmpty()) {
                 continue;
             }
-            var causewayModel = appendObjectPathAndModelDefinitions(objectSpec);
+            var causewayModel = appendObjectPathAndModelDefinitions(oa3, objectSpec);
             updateObjectModel(causewayModel, objectSpec, objectProperties, objectCollections);
 
             for (final OneToManyAssociation objectCollection : objectCollections) {
-                appendCollectionTo(objectSpec, objectCollection);
+                appendCollectionTo(oa3, objectSpec, objectCollection);
             }
 
             for (final ObjectAction objectAction : objectActions) {
-                appendObjectActionInvokePath(objectSpec, objectAction);
+                appendObjectActionInvokePath(oa3, objectSpec, objectAction);
             }
         }
     }
 
-    void appendRestfulObjectsSupportingPathsAndDefinitions() {
+    void appendRestfulObjectsSupportingPathsAndDefinitions(OpenAPI oa3) {
 
         final String tag = "… asf restful objects supporting resources";
 
@@ -238,7 +227,7 @@ class _OpenApiModelFactory {
                                 response->response.description("OK"))
                             .addTagsItem(tag)
                             .description(RoSpec.HOMEPAGE_GET.fqSection())));
-        addDefinition("RestfulObjectsSupportingHomePageRepr", newModel(RoSpec.HOMEPAGE_REPR.fqSection()));
+        addDefinition(oa3, "RestfulObjectsSupportingHomePageRepr", newModel(RoSpec.HOMEPAGE_REPR.fqSection()));
 
         oa3.path("/user",
                 new PathItem()
@@ -249,7 +238,7 @@ class _OpenApiModelFactory {
                                 response->response.description("OK"))
                             .addTagsItem(tag)
                             .description(RoSpec.USER_GET.fqSection())));
-        addDefinition("RestfulObjectsSupportingUserRepr",
+        addDefinition(oa3, "RestfulObjectsSupportingUserRepr",
                 newModel(RoSpec.USER_REPR.fqSection())
                 .addProperty("userName", stringProperty())
                 .addProperty("roles", arrayOfStrings())
@@ -266,7 +255,7 @@ class _OpenApiModelFactory {
                                 response->response.description("OK"))
                             .addTagsItem(tag)
                             .description(RoSpec.DOMAIN_SERVICES_GET.fqSection())));
-        addDefinition("RestfulObjectsSupportingServicesRepr",
+        addDefinition(oa3, "RestfulObjectsSupportingServicesRepr",
                 newModel(RoSpec.DOMAIN_SERVICES_REPR.fqSection())
                 .addProperty("value", arrayOfLinks())
                 .addRequiredItem("userName")
@@ -298,7 +287,7 @@ class _OpenApiModelFactory {
                 .addRequiredItem("roles"));
     }
 
-    void appendLinkModelDefinition() {
+    void appendLinkModelDefinition(OpenAPI oa3) {
         oa3.getComponents().addSchemas("LinkRepr",
                 new ObjectSchema()
                 .addProperty("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
@@ -322,7 +311,7 @@ class _OpenApiModelFactory {
 
     }
 
-    void appendServicePath(final ObjectSpecification objectSpec) {
+    void appendServicePath(OpenAPI oa3, final ObjectSpecification objectSpec) {
 
         final String serviceId = objectSpec.logicalTypeName();
 
@@ -346,16 +335,16 @@ class _OpenApiModelFactory {
                 .addProperty("serviceId", stringProperty()._default(serviceId))
                 .addProperty("members", new ObjectSchema());
 
-        addDefinition(serviceModelDefinition, model);
+        addDefinition(oa3, serviceModelDefinition, model);
     }
 
-    ObjectSchema appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
+    ObjectSchema appendObjectPathAndModelDefinitions(OpenAPI oa3, final ObjectSpecification objectSpec) {
 
         final String logicalTypeName = objectSpec.logicalTypeName();
 
         var causewayModel = new ObjectSchema();
         var causewayModelDefinition = logicalTypeName + "Repr";
-        addDefinition(causewayModelDefinition, causewayModel);
+        addDefinition(oa3, causewayModelDefinition, causewayModel);
 
         final PathItem path = new PathItem();
         oa3.path(String.format("/objects/%s/{objectId}", logicalTypeName), path);
@@ -419,6 +408,7 @@ class _OpenApiModelFactory {
     }
 
     void appendServiceActionInvokePath(
+    		OpenAPI oa3,
             final ObjectSpecification serviceSpec,
             final ObjectAction serviceAction) {
 
@@ -490,6 +480,7 @@ class _OpenApiModelFactory {
     }
 
     void appendCollectionTo(
+    		OpenAPI oa3,
             final ObjectSpecification objectSpec,
             final OneToManyAssociation collection) {
 
@@ -516,6 +507,7 @@ class _OpenApiModelFactory {
     }
 
     void appendObjectActionInvokePath(
+    		OpenAPI oa3,
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction) {
 
@@ -591,7 +583,7 @@ class _OpenApiModelFactory {
 
     }
 
-    void appendDefinitionsForOrphanedReferences() {
+    void appendDefinitionsForOrphanedReferences(OpenAPI oa3) {
         for (String reference : getReferencesWithoutDefinition()) {
             oa3.getComponents().addSchemas(reference, new Schema<>());
         }
@@ -737,7 +729,7 @@ class _OpenApiModelFactory {
         return _OpenApi.refSchema(model);
     }
 
-    private void addDefinition(final String key, final Schema<?> model) {
+    private void addDefinition(OpenAPI oa3, final String key, final Schema<?> model) {
         addSwaggerDefinition(key);
         oa3.getComponents().addSchemas(key, model);
     }
@@ -751,7 +743,7 @@ class _OpenApiModelFactory {
     }
 
     Set<String> getReferencesWithoutDefinition() {
-        var referencesCopy = _Sets.<String>newLinkedHashSet(references);
+        var referencesCopy = new LinkedHashSet<String>(references);
         referencesCopy.removeAll(definitions);
         return referencesCopy;
     }
@@ -782,7 +774,7 @@ class _OpenApiModelFactory {
     // -- CONTENT NEGOTIATION
 
     private static List<String> supportedFormats(final List<String> reprTypes) {
-        var supportedFormats = _Lists.<String>newArrayList();
+        var supportedFormats = new ArrayList<String>();
         supportedFormats.add("application/json");
         var supportsV1 = _Refs.booleanRef(false);
         reprTypes.forEach(reprType->{

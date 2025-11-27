@@ -75,7 +75,7 @@ public final class FacetRanking {
         _Assert.assertEquals(this.facetType, facetType);
 
         // guard against invalidly mocked facets
-        var facetPreference = Objects.requireNonNull(facet.getPrecedence(),
+        var facetPreference = Objects.requireNonNull(facet.precedence(),
                 ()->String.format("facet %s declares no precedence", facet.getClass()));
 
         // handle top priority (EVENT) facets separately

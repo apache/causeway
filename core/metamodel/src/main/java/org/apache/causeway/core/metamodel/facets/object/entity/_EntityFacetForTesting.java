@@ -40,7 +40,6 @@ record _EntityFacetForTesting(
     FacetHolder facetHolder) implements EntityFacet {
 
     @Override public PersistenceStack getPersistenceStack() { return persistenceStack(); }
-    @Override public FacetHolder getFacetHolder() { return facetHolder(); }
 
     @Override
     public Class<? extends Facet> facetType() {
@@ -48,7 +47,7 @@ record _EntityFacetForTesting(
     }
 
     @Override
-    public Precedence getPrecedence() {
+    public Precedence precedence() {
         return Precedence.DEFAULT;
     }
 

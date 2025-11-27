@@ -63,7 +63,7 @@ class FacetAbstractTest {
 
     @Test
     void foo_getFacetHolder() {
-        assertEquals(facetHolder, fooFacet.getFacetHolder());
+        assertEquals(facetHolder, fooFacet.facetHolder());
     }
 
     @Test

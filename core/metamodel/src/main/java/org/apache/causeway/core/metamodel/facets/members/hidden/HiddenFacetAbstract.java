@@ -51,7 +51,7 @@ implements HiddenFacet {
 
     // to instantiate contributed facets
     private HiddenFacetAbstract(final HiddenFacetAbstract toplevelFacet) {
-        super(type(), toplevelFacet.getFacetHolder(), toplevelFacet.where());
+        super(type(), toplevelFacet.facetHolder(), toplevelFacet.where());
     }
 
     @Override

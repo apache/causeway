@@ -25,12 +25,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 public interface HiddenObjectFacet extends HiddenInstanceFacet {
 
     /**
-     * Clone this facet onto another {@link FacetHolder}.
+     * Copy this facet to another {@link FacetHolder}.
      *
-     * @apiNote Introduced to allow this facet to be installed onto the
+     * @apiNote Introduced to allow this facet to be copied to the
      * {@link ObjectSpecification}, and then copied down onto each of the spec's
      * {@link ObjectMember}s.
      */
-    public HiddenObjectFacet clone(FacetHolder holder);
+    public HiddenObjectFacet copyTo(FacetHolder holder);
 
 }
