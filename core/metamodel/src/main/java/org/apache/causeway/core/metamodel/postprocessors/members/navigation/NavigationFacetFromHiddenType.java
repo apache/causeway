@@ -24,7 +24,6 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
@@ -32,26 +31,21 @@ import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityConte
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public class NavigationFacetFromHiddenType
-extends FacetAbstract
-implements
-    NavigationFacet {
+public record NavigationFacetFromHiddenType(
+		ObjectSpecification navigatedType,
+		FacetHolder facetHolder
+		) implements NavigationFacet {
 
-    private final ObjectSpecification navigatedType;
+	public static Optional<NavigationFacet> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
+		return navigatedType.isValue()
+				? Optional.empty() // don't create for value types (optimization, not strictly required)
+						: Optional.of(new NavigationFacetFromHiddenType(navigatedType, holder));
+	}
 
-    private static final Class<? extends Facet> type() {
-        return NavigationFacet.class;
-    }
+	@Override public Class<? extends Facet> facetType() { return NavigationFacet.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
 
-    public static Optional<NavigationFacet> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
-        return navigatedType.isValue()
-                ? Optional.empty() // don't create for value types (optimization, not strictly required)
-                : Optional.of(new NavigationFacetFromHiddenType(navigatedType, holder));
-    }
-
-    private NavigationFacetFromHiddenType(final ObjectSpecification navigatedType, final FacetHolder holder) {
-        super(type(), holder);
-        this.navigatedType = navigatedType;
+    public NavigationFacetFromHiddenType {
         _Assert.assertTrue(navigatedType.isSingular(), ()->String.format(
                 "framework bug: elementType must not match any supported plural (collection) types, "
                 + "nevertheless got %s", navigatedType));
@@ -77,7 +71,7 @@ implements
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	NavigationFacet.super.visitAttributes(visitor);
         visitor.accept("navigatedType", navigatedType.logicalTypeName());
         visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
     }
