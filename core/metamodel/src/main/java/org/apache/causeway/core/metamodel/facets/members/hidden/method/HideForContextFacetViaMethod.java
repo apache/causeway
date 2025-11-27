@@ -23,29 +23,27 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+public record HideForContextFacetViaMethod(
+		Can<MethodFacade> methods,
+		FacetHolder facetHolder
+		) implements HideForContextFacet, ImperativeFacet {
+	
+	@Override public Class<? extends Facet> facetType() { return HideForContextFacet.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
+	@Override public Intent getIntent() { return Intent.CHECK_IF_HIDDEN;}
 
-public class HideForContextFacetViaMethod
-extends HideForContextFacetAbstract
-implements ImperativeFacet {
-
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    public Can<MethodFacade> getMethods() { return methods(); }
 
     public HideForContextFacetViaMethod(final ResolvedMethod method, final FacetHolder holder) {
-        super(holder);
-        this.methods = ImperativeFacet.singleRegularMethod(method);
-    }
-
-    @Override
-    public Intent getIntent() {
-        return Intent.CHECK_IF_HIDDEN;
+        this(ImperativeFacet.singleRegularMethod(method), holder);
     }
 
     @Override
@@ -60,8 +58,13 @@ implements ImperativeFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	HideForContextFacet.super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
+    }
+    
+    @Override
+    public String toString() {
+        return FacetUtil.toString(this);
     }
 
 }

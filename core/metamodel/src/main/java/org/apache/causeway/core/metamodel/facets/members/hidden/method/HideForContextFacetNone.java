@@ -18,15 +18,19 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
-public class HideForContextFacetNone
-extends HideForContextFacetAbstract {
-
-    public HideForContextFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
-    }
+public record HideForContextFacetNone(FacetHolder facetHolder)
+implements HideForContextFacet, ImperativeFacet {
+    
+    @Override public Class<? extends Facet> facetType() { return HideForContextFacet.class; }
+	@Override public Precedence precedence() { return Precedence.FALLBACK; }
+	@Override public Intent getIntent() { return Intent.CHECK_IF_HIDDEN;}
 
     /**
      * Always returns <tt>null</tt>.
@@ -35,5 +39,10 @@ extends HideForContextFacetAbstract {
     public String hides(final VisibilityContext ic) {
         return null;
     }
+
+	@Override
+	public Can<MethodFacade> getMethods() {
+		return Can.empty();
+	}
 
 }
