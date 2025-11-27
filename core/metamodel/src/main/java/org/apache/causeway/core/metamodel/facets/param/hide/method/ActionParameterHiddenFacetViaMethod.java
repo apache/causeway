@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.param.hide.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -28,33 +30,42 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
-import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
+import org.apache.causeway.core.metamodel.interactions.vis.ParamVisibilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+public record ActionParameterHiddenFacetViaMethod(
+		Can<MethodFacade> methods,
+		Optional<ResolvedConstructor> patConstructor,
+		FacetHolder facetHolder
+		) implements ActionParameterHiddenFacet, ImperativeFacet {
+	
+    @Override public Class<? extends Facet> facetType() { return ActionParameterHiddenFacet.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
+	@Override public Intent getIntent() { return Intent.CHECK_IF_VALID;}
 
-public class ActionParameterHiddenFacetViaMethod
-extends ActionParameterHiddenFacetAbstract
-implements ImperativeFacet {
-
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
-    private final @NonNull Optional<ResolvedConstructor> patConstructor;
+    public Can<MethodFacade> getMethods() { return methods(); }
 
     public ActionParameterHiddenFacetViaMethod(
             final ResolvedMethod method,
             final Optional<ResolvedConstructor> patConstructor,
             final FacetHolder holder) {
-
-        super(holder);
-        this.methods = ImperativeFacet.singleMethod(method, patConstructor);
-        this.patConstructor = patConstructor;
+    	this(ImperativeFacet.singleMethod(method, patConstructor), patConstructor, holder);
     }
 
     @Override
-    public Intent getIntent() {
-        return Intent.CHECK_IF_VALID;
+    public String hides(final VisibilityContext context) {
+        if (!(context instanceof ParamVisibilityContext)) {
+            return null;
+        }
+        var actionArgVisibilityContext = (ParamVisibilityContext) context;
+        return isHidden(
+                    actionArgVisibilityContext.target(),
+                    actionArgVisibilityContext.args())
+                ? "Hidden"
+                : null;
     }
 
     @Override
@@ -85,7 +96,7 @@ implements ImperativeFacet {
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	ActionParameterHiddenFacet.super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
     }
 
