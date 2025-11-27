@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.extensions.secman.integration.facets;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
@@ -27,7 +26,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
  * depending on the tenancy.
  */
 public interface TenantedAuthorizationFacet
-extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+extends HidingInteractionAdvisor, DisablingInteractionAdvisor {
 
     @Override
     public default boolean isObjectTypeSpecific() {

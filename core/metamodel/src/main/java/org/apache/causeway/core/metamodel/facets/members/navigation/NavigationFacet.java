@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.navigation;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
@@ -26,5 +25,5 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
  * Hides object members that would allow navigation to a domain type that is
  * {@link HiddenTypeFacet hidden} (typically due to security permissions).
  */
-public interface NavigationFacet extends Facet, HidingInteractionAdvisor {
+public interface NavigationFacet extends HidingInteractionAdvisor {
 }

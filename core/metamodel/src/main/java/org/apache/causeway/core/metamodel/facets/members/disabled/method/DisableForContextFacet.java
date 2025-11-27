@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.disabled.method;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -30,6 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>disableXxx</tt> support method for the member.
  */
-public interface DisableForContextFacet extends Facet, DisablingInteractionAdvisor {
+public interface DisableForContextFacet extends DisablingInteractionAdvisor {
 
 }

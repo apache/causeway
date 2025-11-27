@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -30,6 +29,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>hideXxx</tt> support method for the member.
  */
-public interface HideForContextFacet extends Facet, HidingInteractionAdvisor {
+public interface HideForContextFacet extends HidingInteractionAdvisor {
 
 }

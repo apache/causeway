@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
+import java.util.function.BiConsumer;
+
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -28,11 +31,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 
 class InteractionResultTest {
 
     private InteractionResult.Builder builder = InteractionResult.builder(Mockito.mock(InteractionEvent.class));
 
+    private static interface InteractionAdvisorFacet 
+    extends InteractionAdvisor, Facet {
+    }
+    
+    public static InteractionAdvisor interactionAdvisor() {
+    	return new InteractionAdvisorFacet() {
+    		@Override public boolean semanticEquals(final @NonNull Facet other) {
+    			return this == other;
+    		}
+    		@Override public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    		}
+    		@Override public Class<? extends Facet> facetType() {
+    			return null;
+    		}
+    		@Override public org.apache.causeway.core.metamodel.facetapi.FacetHolder facetHolder() {
+    			return null;
+    		}
+    		@Override public Precedence precedence() {
+    			return Facet.Precedence.FALLBACK;
+    		}
+    	};
+    }
+    
     @Test
     void shouldHaveNullReasonWhenJustInstantiated() {
         var result = builder.build();
@@ -48,22 +75,22 @@ class InteractionResultTest {
 
     @Test
     void shouldHaveNonNullReasonWhenAdvisedWithNonNull() {
-        advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        advise(vetoReason("foo"), interactionAdvisor());
         var result = builder.build();
         assertEquals("foo", extractReason(result));
     }
 
     @Test
     void shouldConcatenateAdviseWhenAdvisedWithNonNull() {
-        advise(vetoReason("foo"), InteractionAdvisor.forTesting());
-        advise(vetoReason("bar"), InteractionAdvisor.forTesting());
+        advise(vetoReason("foo"), interactionAdvisor());
+        advise(vetoReason("bar"), interactionAdvisor());
         var result = builder.build();
         assertEquals("foo; bar", extractReason(result));
     }
 
     @Test
     void shouldNotBeEmptyWhenAdvisedWithNonNull() {
-        advise(vetoReason("foo"), InteractionAdvisor.forTesting());
+        advise(vetoReason("foo"), interactionAdvisor());
         var result = builder.build();
         assertTrue(result.isVetoing());
         assertFalse(result.isAllowing());
@@ -71,7 +98,7 @@ class InteractionResultTest {
 
     @Test
     void shouldThrowWhenAdvisedWithNull() {
-        assertThrowsExactly(NullPointerException.class, ()->advise(null, InteractionAdvisor.forTesting()));
+        assertThrowsExactly(NullPointerException.class, ()->advise(null, interactionAdvisor()));
         assertThrowsExactly(NullPointerException.class, ()->advise(vetoReason("foo"), null));
     }
 

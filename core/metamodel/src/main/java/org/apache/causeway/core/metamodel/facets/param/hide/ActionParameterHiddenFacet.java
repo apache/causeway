@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.facets.param.hide;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -32,7 +31,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * <tt>hideNXxx</tt> support method for an action.
  */
 public interface ActionParameterHiddenFacet
-extends Facet, HidingInteractionAdvisor {
+extends HidingInteractionAdvisor {
 
     /**
      * Whether the parameter is hidden.

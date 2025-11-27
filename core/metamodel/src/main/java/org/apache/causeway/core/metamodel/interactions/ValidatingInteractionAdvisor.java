@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
+import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 
@@ -32,7 +33,8 @@ import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
  * @see DisablingInteractionAdvisor
  * @see HidingInteractionAdvisor
  */
-public interface ValidatingInteractionAdvisor extends InteractionAdvisorFacet {
+public interface ValidatingInteractionAdvisor 
+extends InteractionAdvisor, Facet {
 
     /**
      * Whether the validation represented by this facet passes or fails.

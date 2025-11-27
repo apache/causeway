@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
+import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
@@ -42,7 +44,7 @@ import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
  * failed, because both facets must co-exist, where each has veto power (not one overruling the other).
  */
 public interface HidingInteractionAdvisor
-extends InteractionAdvisorFacet {
+extends InteractionAdvisor, Facet {
 
     /**
      * Whether the rule represented by this facet hides the member to which it

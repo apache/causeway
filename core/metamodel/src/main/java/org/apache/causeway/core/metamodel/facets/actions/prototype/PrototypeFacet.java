@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.prototype;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
  * Indicates that the action should only be available in <i>prototype</i> mode.
  */
-public interface PrototypeFacet extends Facet, HidingInteractionAdvisor {
+public interface PrototypeFacet extends HidingInteractionAdvisor {
 
 }

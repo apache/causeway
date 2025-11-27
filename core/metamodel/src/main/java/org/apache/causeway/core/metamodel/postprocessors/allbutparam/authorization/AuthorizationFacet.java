@@ -18,12 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.vis.ActionVisibilityContext;
@@ -34,14 +34,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Optionally hide or disable an object, property, collection or action
  * depending on the authorization.
  */
 public interface AuthorizationFacet
-extends Facet, HidingInteractionAdvisor, DisablingInteractionAdvisor {
+extends HidingInteractionAdvisor, DisablingInteractionAdvisor {
 
     public static boolean hidesProperty(
             final @NonNull OneToOneAssociation property,

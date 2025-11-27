@@ -18,13 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-public interface HiddenObjectFacet extends Facet, HidingInteractionAdvisor {
+public interface HiddenObjectFacet extends HidingInteractionAdvisor {
 
     /**
      * Copy this facet to another {@link FacetHolder}.
