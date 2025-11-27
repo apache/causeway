@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-public interface HiddenTypeFacet extends HiddenInstanceFacet {
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+
+public interface HiddenTypeFacet extends Facet, HiddenInstanceFacet {
 
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
@@ -38,6 +37,6 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
  * @apiNote An unification attempt on HiddenTypeFacet and HiddenObjectFacet into a single,
  * failed, because both facets must co-exist, where each has veto power (not one overruling the other).
  */
-public interface HiddenInstanceFacet extends Facet, HidingInteractionAdvisor {
+public interface HiddenInstanceFacet extends HidingInteractionAdvisor {
 
 }

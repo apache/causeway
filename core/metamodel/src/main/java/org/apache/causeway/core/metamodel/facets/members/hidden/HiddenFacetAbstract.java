@@ -55,7 +55,7 @@ implements HiddenFacet {
     }
 
     @Override
-    public String hides(final VisibilityContext ic) {
+    public final String hides(final VisibilityContext ic) {
         return hiddenReason(ic.target(), ic.where());
     }
 
@@ -68,7 +68,6 @@ implements HiddenFacet {
     @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("semantics", getSemantics());
     }
 
 }

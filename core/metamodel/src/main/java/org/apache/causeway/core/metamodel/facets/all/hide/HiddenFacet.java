@@ -30,28 +30,6 @@ import org.jspecify.annotations.NonNull;
 public interface HiddenFacet
 extends WhereValueFacet, HidingInteractionAdvisor {
 
-    public enum Semantics {
-
-        /** regular semantics */
-        HIDDEN,
-
-        /** inverted semantics */
-        SHOWN;
-
-        public boolean isHidden() {
-            return this == HIDDEN;
-        }
-
-        public boolean isShown() {
-            return this == SHOWN;
-        }
-    }
-
-    // default semantics unless inverted
-    default Semantics getSemantics() {
-        return Semantics.HIDDEN;
-    }
-
     // -- PREDICATES
 
     static boolean isAlwaysHidden(final @NonNull FacetHolder facetHolder) {
