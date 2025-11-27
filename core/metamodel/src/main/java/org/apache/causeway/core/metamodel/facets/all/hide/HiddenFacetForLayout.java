@@ -25,15 +25,15 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.jspecify.annotations.NonNull;
 
 /**
- * Hide a property, collection or action.
+ * Optionally hides a property, collection or action via layout.
  */
-public interface HiddenFacet
+public interface HiddenFacetForLayout
 extends WhereValueFacet, HidingInteractionAdvisor {
 
     // -- PREDICATES
 
     static boolean isAlwaysHidden(final @NonNull FacetHolder facetHolder) {
-        return WhereValueFacet.isAlways(facetHolder, HiddenFacet.class);
+        return WhereValueFacet.isAlways(facetHolder, HiddenFacetForLayout.class);
     }
 
 }

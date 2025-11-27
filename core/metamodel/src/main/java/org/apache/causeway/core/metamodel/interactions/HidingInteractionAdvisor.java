@@ -20,9 +20,9 @@ package org.apache.causeway.core.metamodel.interactions;
 
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForObject;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 /**
@@ -34,9 +34,9 @@ import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
  * <p>In the standard Apache Causeway Programming Model, typically corresponds to the
  * <tt>hidden</tt> method.
  *
- * @see HiddenFacet
- * @see HiddenObjectFacet
- * @see HiddenTypeFacet
+ * @see HiddenFacetForLayout
+ * @see HiddenFacetForObject
+ * @see HiddenFacetForNoMembersAuthorized
  * @see DisablingInteractionAdvisor
  * @see ValidatingInteractionAdvisor
  *

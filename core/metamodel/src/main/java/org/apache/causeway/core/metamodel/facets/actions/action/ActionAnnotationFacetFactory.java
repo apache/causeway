@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facets.actions.action.explicit.ActionE
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForAction;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForMixedInPropertyOrCollection;
-import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
+import org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.fileaccept.FileAcceptFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -145,10 +145,10 @@ extends FacetFactoryAbstract {
 
         // search for @Action(restrictTo=...)
         addFacetIfPresent(
-                PrototypeFacetForActionAnnotation
+                HiddenFacetForDeploymentTypeViaActionAnnotation
                 .create(
                         actionIfAny, facetedMethod,
-                        ()->super.getSystemEnvironment().deploymentType()));
+                        super.getSystemEnvironment().deploymentType()));
     }
 
     void processSemantics(final ProcessMethodContext processMethodContext, final Optional<Action> actionIfAny) {

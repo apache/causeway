@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -212,8 +212,8 @@ public final class Facets {
     }
 
     public Optional<Where> hiddenWhere(final ObjectFeature feature) {
-        return feature.lookupFacet(HiddenFacet.class)
-            .map(HiddenFacet::where);
+        return feature.lookupFacet(HiddenFacetForLayout.class)
+            .map(HiddenFacetForLayout::where);
     }
 
     public Predicate<ObjectFeature> hiddenWhereMatches(final Predicate<Where> matcher) {

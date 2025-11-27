@@ -16,14 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.navigation;
+package org.apache.causeway.core.metamodel.facets.actions.prototype;
 
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Hides object members that would allow navigation to a domain type that is
- * {@link HiddenTypeFacet hidden} (typically due to security permissions).
+ * Indicates that the action should only be available in <i>prototype</i> mode.
  */
-public interface NavigationFacet extends HidingInteractionAdvisor {
+public interface HiddenFacetForDeploymentType extends HidingInteractionAdvisor {
+
 }

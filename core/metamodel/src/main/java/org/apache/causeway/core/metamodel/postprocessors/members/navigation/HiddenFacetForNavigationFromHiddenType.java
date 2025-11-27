@@ -25,27 +25,27 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
+import org.apache.causeway.core.metamodel.facets.members.navigation.HiddenFacetForNavigation;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
 import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public record NavigationFacetFromHiddenType(
+public record HiddenFacetForNavigationFromHiddenType(
 		ObjectSpecification navigatedType,
 		FacetHolder facetHolder
-		) implements NavigationFacet {
+		) implements HiddenFacetForNavigation {
 
-	public static Optional<NavigationFacet> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
+	public static Optional<HiddenFacetForNavigation> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
 		return navigatedType.isValue()
 				? Optional.empty() // don't create for value types (optimization, not strictly required)
-						: Optional.of(new NavigationFacetFromHiddenType(navigatedType, holder));
+						: Optional.of(new HiddenFacetForNavigationFromHiddenType(navigatedType, holder));
 	}
 
-	@Override public Class<? extends Facet> facetType() { return NavigationFacet.class; }
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForNavigation.class; }
 	@Override public Precedence precedence() { return Precedence.DEFAULT; }
 
-    public NavigationFacetFromHiddenType {
+    public HiddenFacetForNavigationFromHiddenType {
         _Assert.assertTrue(navigatedType.isSingular(), ()->String.format(
                 "framework bug: elementType must not match any supported plural (collection) types, "
                 + "nevertheless got %s", navigatedType));
@@ -53,7 +53,7 @@ public record NavigationFacetFromHiddenType(
 
     @Override
     public String hides(final VisibilityContext ic) {
-        var facet = navigatedType.getFacet(HiddenTypeFacet.class);
+        var facet = navigatedType.getFacet(HiddenFacetForNoMembersAuthorized.class);
         if(facet == null) {
             // not expected to happen; this facet should only be installed for object members
             // that navigate to a class that has the HiddenTypeFacet
@@ -71,7 +71,7 @@ public record NavigationFacetFromHiddenType(
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-    	NavigationFacet.super.visitAttributes(visitor);
+    	HiddenFacetForNavigation.super.visitAttributes(visitor);
         visitor.accept("navigatedType", navigatedType.logicalTypeName());
         visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
     }

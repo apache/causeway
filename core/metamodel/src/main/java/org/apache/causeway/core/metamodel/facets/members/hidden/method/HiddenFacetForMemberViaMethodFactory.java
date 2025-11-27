@@ -26,11 +26,11 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-public class HideForContextFacetViaMethodFactory
+public class HiddenFacetForMemberViaMethodFactory
 extends MemberSupportFacetFactoryAbstract {
 
     @Inject
-    public HideForContextFacetViaMethodFactory(final MetaModelContext mmc) {
+    public HiddenFacetForMemberViaMethodFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.HIDE);
     }
 
@@ -44,7 +44,7 @@ extends MemberSupportFacetFactoryAbstract {
         .peek(processMethodContext::removeMethod)
         .forEach(hideMethod->{
             addFacet(
-                    new HideForContextFacetViaMethod(
+                    new HiddenFacetForMemberViaMethod(
                             hideMethod, processMethodContext.getFacetHolder()));
         });
 

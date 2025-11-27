@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
- * Optionally hide or disable an object, property, collection or action
+ * Optionally hides or disables an object, property, collection or action
  * depending on the authorization.
  */
 public interface AuthorizationFacet

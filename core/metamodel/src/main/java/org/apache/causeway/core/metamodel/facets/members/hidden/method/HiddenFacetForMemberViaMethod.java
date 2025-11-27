@@ -31,18 +31,18 @@ import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
-public record HideForContextFacetViaMethod(
+public record HiddenFacetForMemberViaMethod(
 		Can<MethodFacade> methods,
 		FacetHolder facetHolder
-		) implements HideForContextFacet, ImperativeFacet {
+		) implements HiddenFacetForMember, ImperativeFacet {
 	
-	@Override public Class<? extends Facet> facetType() { return HideForContextFacet.class; }
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForMember.class; }
 	@Override public Precedence precedence() { return Precedence.DEFAULT; }
-	@Override public Intent getIntent() { return Intent.CHECK_IF_HIDDEN;}
+	@Override public Intent intent() { return Intent.CHECK_IF_HIDDEN;}
 
     public Can<MethodFacade> getMethods() { return methods(); }
 
-    public HideForContextFacetViaMethod(final ResolvedMethod method, final FacetHolder holder) {
+    public HiddenFacetForMemberViaMethod(final ResolvedMethod method, final FacetHolder holder) {
         this(ImperativeFacet.singleRegularMethod(method), holder);
     }
 
@@ -58,7 +58,7 @@ public record HideForContextFacetViaMethod(
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-    	HideForContextFacet.super.visitAttributes(visitor);
+    	HiddenFacetForMember.super.visitAttributes(visitor);
         ImperativeFacet.visitAttributes(this, visitor);
     }
     

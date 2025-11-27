@@ -43,7 +43,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
 import org.apache.causeway.core.metamodel.facets.actions.action.choicesfrom.ChoicesFromFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -480,10 +480,10 @@ public interface ObjectAction extends ObjectMember {
         }
 
         /**
-         * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+         * Returns true if no {@link HiddenFacetForLayout} is found that vetoes visibility.
          * <p>
          * However, whereHidden={@link Where#ALL_TABLES} is used as default
-         * when no {@link HiddenFacet} is found.
+         * when no {@link HiddenFacetForLayout} is found.
          *
          * @see ObjectAssociation.Predicates#visibleAccordingToHiddenFacet(Where)
          *
@@ -491,7 +491,7 @@ public interface ObjectAction extends ObjectMember {
          *      however the current approach is more heap friendly
          */
         public static Predicate<ObjectAction> visibleAccordingToHiddenFacet(final Where whereContext) {
-            return (final ObjectAction act) -> act.lookupFacet(HiddenFacet.class)
+            return (final ObjectAction act) -> act.lookupFacet(HiddenFacetForLayout.class)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)
                     // whereHidden=ALL_TABLES is the default when not specified otherwise

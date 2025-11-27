@@ -28,7 +28,7 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Installs the {@link HiddenTypeFacetFromAuthorization} on the
+ * Installs the {@link HiddenFacetForNoMembersAuthorizedImpl} on the
  * {@link ObjectSpecification}.
  */
 public class HiddenTypeFacetFromAuthorizationFactory
@@ -42,7 +42,7 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenTypeFacetFromAuthorization(facetHolder));
+        FacetUtil.addFacet(new HiddenFacetForNoMembersAuthorizedImpl(facetHolder));
     }
 
 }

@@ -42,7 +42,7 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -201,7 +201,7 @@ implements
 
     @Override
     public boolean isAlwaysHidden() {
-        return HiddenFacet.isAlwaysHidden(getFacetHolder());
+        return HiddenFacetForLayout.isAlwaysHidden(getFacetHolder());
     }
 
     /**

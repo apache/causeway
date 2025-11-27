@@ -28,30 +28,26 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForObject;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public record HiddenObjectFacetViaMethod(
+public record HiddenFacetForObjectViaMethod(
 		ImperativeAspect imperativeAspect,
 		FacetHolder facetHolder
-		) implements HiddenObjectFacet, HasImperativeAspect {
+		) implements HiddenFacetForObject, HasImperativeAspect {
 
-	public static Optional<HiddenObjectFacet> create(
+	public static Optional<HiddenFacetForObject> create(
 			final @Nullable ResolvedMethod methodIfAny,
 			final FacetHolder holder) {
 		
 		return Optional.ofNullable(methodIfAny)
 				.map(method->ImperativeAspect.singleRegularMethod(method, Intent.CHECK_IF_HIDDEN))
-				.map(imperativeAspect->new HiddenObjectFacetViaMethod(imperativeAspect, holder));
+				.map(imperativeAspect->new HiddenFacetForObjectViaMethod(imperativeAspect, holder));
 	}
 	
-	@Override public Class<? extends Facet> facetType() { return HiddenObjectFacet.class; }
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForObject.class; }
 	@Override public Precedence precedence() { return Precedence.DEFAULT;}
-	
-    public ImperativeAspect getImperativeAspect() {
-    	return imperativeAspect;
-    }
 
     @Override
     public String hides(final VisibilityContext ic) {
@@ -60,13 +56,13 @@ public record HiddenObjectFacetViaMethod(
     }
 
     @Override
-    public HiddenObjectFacetViaMethod copyTo(final FacetHolder holder) {
-        return new HiddenObjectFacetViaMethod(imperativeAspect, holder);
+    public HiddenFacetForObjectViaMethod copyTo(final FacetHolder holder) {
+        return new HiddenFacetForObjectViaMethod(imperativeAspect, holder);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-    	HiddenObjectFacet.super.visitAttributes(visitor);
+    	HiddenFacetForObject.super.visitAttributes(visitor);
         imperativeAspect.visitAttributes(visitor);
     }
     

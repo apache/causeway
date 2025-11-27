@@ -16,25 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.param.hide;
+package org.apache.causeway.core.metamodel.facets.members.navigation;
 
-import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
- * The mechanism by which a single parameter of the action can be hidden
- * before the action itself is invoked.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to invoking the
- * <tt>hideNXxx</tt> support method for an action.
+ * Hides object members that would allow navigation to a domain type that is
+ * {@link HiddenFacetForNoMembersAuthorized hidden} (typically due to security permissions).
  */
-public interface ActionParameterHiddenFacet
-extends HidingInteractionAdvisor {
-
-    /**
-     * Whether the parameter is hidden.
-     */
-    public boolean isHidden(ManagedObject target, Can<ManagedObject> arguments);
+public interface HiddenFacetForNavigation extends HidingInteractionAdvisor {
 }

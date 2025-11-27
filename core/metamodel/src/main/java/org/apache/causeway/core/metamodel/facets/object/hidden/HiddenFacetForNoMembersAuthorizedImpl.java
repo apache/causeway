@@ -25,11 +25,11 @@ import org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorizati
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-public record HiddenTypeFacetFromAuthorization(
+public record HiddenFacetForNoMembersAuthorizedImpl(
 		FacetHolder facetHolder
-		) implements HiddenTypeFacet {
+		) implements HiddenFacetForNoMembersAuthorized {
 	
-	@Override public Class<? extends Facet> facetType() { return HiddenTypeFacet.class; }
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForNoMembersAuthorized.class; }
 	@Override public Precedence precedence() { return Precedence.HIGH; }
 	
     @Override

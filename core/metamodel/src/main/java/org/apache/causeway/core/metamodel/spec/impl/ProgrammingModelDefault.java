@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.causeway.core.metamodel.facets.members.described.method.DescribedAsFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
+import org.apache.causeway.core.metamodel.facets.members.hidden.method.HiddenFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.members.named.method.NamedFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
@@ -181,7 +181,7 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new NamedFacetForMemberViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DescribedAsFacetForMemberViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisableForContextFacetViaMethodFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HideForContextFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenFacetForMemberViaMethodFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CallbackFacetFactory(mmc));
 

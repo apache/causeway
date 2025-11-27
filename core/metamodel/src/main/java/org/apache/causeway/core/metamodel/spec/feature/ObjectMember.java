@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
@@ -80,8 +80,8 @@ public interface ObjectMember extends ObjectFeature {
      * When the member is always hidden.
      *
      * <p>
-     * Determined as per the {@link HiddenFacet} being present and
-     * {@link HiddenFacet#where()} returning {@link Where#ANYWHERE}.
+     * Determined as per the {@link HiddenFacetForLayout} being present and
+     * {@link HiddenFacetForLayout#where()} returning {@link Where#ANYWHERE}.
      */
     boolean isAlwaysHidden();
 

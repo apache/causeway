@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Adapter superclass for {@link Facet}s for {@link CallbackFacet}.
@@ -36,7 +37,7 @@ public abstract class CallbackFacetAbstract
 extends FacetAbstract
 implements CallbackFacet {
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final Can<MethodFacade> methods;
     private final Can<ResolvedMethod> asRegularMethods;
 
@@ -50,7 +51,7 @@ implements CallbackFacet {
     }
 
     @Override
-    public final Intent getIntent() {
+    public final Intent intent() {
         return Intent.LIFECYCLE;
     }
 

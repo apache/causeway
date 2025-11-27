@@ -24,16 +24,16 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFaca
 public interface HasImperativeAspect
 extends ImperativeFacet {
 
-    ImperativeAspect getImperativeAspect();
+    ImperativeAspect imperativeAspect();
 
     @Override
-    default Can<MethodFacade> getMethods() {
-        return getImperativeAspect().methods();
+    default Can<MethodFacade> methods() {
+        return imperativeAspect().methods();
     }
 
     @Override
-    default Intent getIntent() {
-        return getImperativeAspect().intent();
+    default Intent intent() {
+        return imperativeAspect().intent();
     }
 
 }

@@ -48,7 +48,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -202,7 +202,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     }
 
     private static ActionScope getScope(final FacetHolder facetHolder) {
-        return facetHolder.containsFacet(PrototypeFacet.class)
+        return facetHolder.containsFacet(HiddenFacetForDeploymentType.class)
             ? ActionScope.PROTOTYPE
             : ActionScope.PRODUCTION;
     }

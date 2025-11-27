@@ -18,20 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-public interface HiddenObjectFacet extends HidingInteractionAdvisor {
-
-    /**
-     * Copy this facet to another {@link FacetHolder}.
-     *
-     * @apiNote Introduced to allow this facet to be copied to the
-     * {@link ObjectSpecification}, and then copied down onto each of the spec's
-     * {@link ObjectMember}s.
-     */
-    public HiddenObjectFacet copyTo(FacetHolder holder);
+/**
+ * Optionally hides an object, based on whether non of its properties, collections and actions is visible. 
+ */
+public interface HiddenFacetForNoMembersAuthorized extends HidingInteractionAdvisor {
 
 }

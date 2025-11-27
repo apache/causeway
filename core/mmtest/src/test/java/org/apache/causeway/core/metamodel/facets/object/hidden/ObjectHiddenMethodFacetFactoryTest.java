@@ -34,7 +34,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
                 return true;
             }
         }
-        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.HIDDEN, HiddenObjectFacet.class);
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.HIDDEN, HiddenFacetForObject.class);
     }
 
 }

@@ -20,33 +20,32 @@ package org.apache.causeway.core.metamodel.facets.actions.action.prototype;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
-public record PrototypeFacetForActionAnnotation(
+public record HiddenFacetForDeploymentTypeViaActionAnnotation(
 		DeploymentType deploymentType,
 		FacetHolder facetHolder
-		) implements PrototypeFacet {
+		) implements HiddenFacetForDeploymentType {
 
-    public static Optional<PrototypeFacetForActionAnnotation> create(
+    public static Optional<HiddenFacetForDeploymentTypeViaActionAnnotation> create(
             final Optional<Action> actionsIfAny,
             final FacetHolder holder,
-            final Supplier<DeploymentType> lazyDeploymentType) {
+            final DeploymentType deploymentType) {
 
         return actionsIfAny
             .map(Action::restrictTo)
             .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
-            .map(restrictTo -> new PrototypeFacetForActionAnnotation(lazyDeploymentType.get(), holder));
+            .map(restrictTo -> new HiddenFacetForDeploymentTypeViaActionAnnotation(deploymentType, holder));
     }
 
-	@Override public Class<? extends Facet> facetType() { return PrototypeFacet.class; }
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForDeploymentType.class; }
 	@Override public Precedence precedence() { return Precedence.DEFAULT; }
 
 	@Override
@@ -58,7 +57,7 @@ public record PrototypeFacetForActionAnnotation(
 
 	@Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-		PrototypeFacet.super.visitAttributes(visitor);
+		HiddenFacetForDeploymentType.super.visitAttributes(visitor);
         visitor.accept("deploymentType", deploymentType.name());
     }
 	

@@ -16,13 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.prototype;
+package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
- * Indicates that the action should only be available in <i>prototype</i> mode.
+ * Optionally hides a property, collection or action based on the state of the target
+ * {@link ManagedObject object}.
+ *
+ * <p>In the standard Apache Causeway Programming Model, corresponds to invoking the
+ * <tt>hideXxx</tt> support method for the member.
  */
-public interface PrototypeFacet extends HidingInteractionAdvisor {
+public interface HiddenFacetForMember extends HidingInteractionAdvisor {
 
 }

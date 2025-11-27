@@ -16,19 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.core.metamodel.facets.object.hidden;
 
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-/**
- * Hide a property, collection or action based on the state of the target
- * {@link ManagedObject object}.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to invoking the
- * <tt>hideXxx</tt> support method for the member.
- */
-public interface HideForContextFacet extends HidingInteractionAdvisor {
+public interface HiddenFacetForObject extends HidingInteractionAdvisor {
+
+    /**
+     * Copy this facet to another {@link FacetHolder}.
+     *
+     * @apiNote Introduced to allow this facet to be copied to the
+     * {@link ObjectSpecification}, and then copied down onto each of the spec's
+     * {@link ObjectMember}s.
+     */
+    public HiddenFacetForObject copyTo(FacetHolder holder);
 
 }
