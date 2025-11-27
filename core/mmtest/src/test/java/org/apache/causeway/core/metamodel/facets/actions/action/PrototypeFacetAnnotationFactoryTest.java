@@ -31,7 +31,6 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
 
 class PrototypeFacetAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
@@ -66,7 +65,7 @@ extends FacetFactoryTestAbstract {
             //then
             final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof PrototypeFacetAbstract);
+            assertTrue(facet instanceof PrototypeFacet);
             assertNoMethodsRemoved();
         });
     }

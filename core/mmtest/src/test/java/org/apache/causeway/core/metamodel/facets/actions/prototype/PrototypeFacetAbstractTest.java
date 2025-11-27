@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 class PrototypeFacetAbstractTest {
@@ -40,7 +41,8 @@ class PrototypeFacetAbstractTest {
 
     protected void givenWhenThen(final DeploymentType deploymentType, final String expected) {
         // given
-        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(mockFacetHolder, deploymentType){};
+        var facet = new PrototypeFacetForActionAnnotation(
+        		deploymentType, mockFacetHolder);
 
         // when
         final String reason = facet.hides(mockVisibilityContext);

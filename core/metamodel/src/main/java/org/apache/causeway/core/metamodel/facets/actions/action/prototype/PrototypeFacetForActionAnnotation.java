@@ -19,16 +19,21 @@
 package org.apache.causeway.core.metamodel.facets.actions.action.prototype;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.core.config.environment.DeploymentType;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
-public class PrototypeFacetForActionAnnotation
-extends PrototypeFacetAbstract {
+public record PrototypeFacetForActionAnnotation(
+		DeploymentType deploymentType,
+		FacetHolder facetHolder
+		) implements PrototypeFacet {
 
     public static Optional<PrototypeFacetForActionAnnotation> create(
             final Optional<Action> actionsIfAny,
@@ -36,14 +41,25 @@ extends PrototypeFacetAbstract {
             final Supplier<DeploymentType> lazyDeploymentType) {
 
         return actionsIfAny
-                .map(Action::restrictTo)
-                .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
-                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, lazyDeploymentType.get()));
-
+            .map(Action::restrictTo)
+            .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
+            .map(restrictTo -> new PrototypeFacetForActionAnnotation(lazyDeploymentType.get(), holder));
     }
 
-    private PrototypeFacetForActionAnnotation(final FacetHolder holder, final DeploymentType deploymentType) {
-        super(holder, deploymentType);
-    }
+	@Override public Class<? extends Facet> facetType() { return PrototypeFacet.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
 
+	@Override
+	public String hides(VisibilityContext ic) {
+		return deploymentType.isProduction()
+            ? "Prototyping action not visible in production mode"
+            : null;
+	}
+
+	@Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+		PrototypeFacet.super.visitAttributes(visitor);
+        visitor.accept("deploymentType", deploymentType.name());
+    }
+	
 }
