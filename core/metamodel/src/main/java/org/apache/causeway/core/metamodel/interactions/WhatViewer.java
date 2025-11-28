@@ -16,20 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
 /**
- * Hide a property, collection or action based on the state of the target
- * {@link ManagedObject object}.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to invoking the
- * <tt>hideXxx</tt> support method for the member.
+ * Viewer identifier, used for viewer specific feature filtering.
  */
-public interface HideForContextFacet extends Facet, HidingInteractionAdvisor {
+public record WhatViewer(
+		String viewerId) {
 
+	/**
+	 * Used by {@link WrapperFactory}, {@link CommandExecutorService} and Object title interaction.
+	 */
+	public static WhatViewer noViewer() {
+		return new WhatViewer("NoViewer");
+	}
+
+	/**
+	 * @deprecated for refactoring only
+	 */
+	@Deprecated
+	public static WhatViewer invalid() {
+		return new WhatViewer("invalid");
+	}
 }

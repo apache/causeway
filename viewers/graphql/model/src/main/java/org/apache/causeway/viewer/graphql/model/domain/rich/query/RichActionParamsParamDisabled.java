@@ -22,7 +22,6 @@ import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -57,9 +56,8 @@ public class RichActionParamsParamDisabled extends Element {
 
         var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return "Disabled";
-        }
+        if (objectSpecification == null)
+			return "Disabled";
 
         var objectAction = actionParamInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -69,7 +67,8 @@ public class RichActionParamsParamDisabled extends Element {
         var objectActionParameter = objectAction.getParameterById(objectFeature.asciiId());
         var argumentManagedObjects = actionParamInteractor.argumentManagedObjectsFor(new Environment.For(dataFetchingEnvironment), objectAction, context.bookmarkService);
 
-        var usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var iConstraint = Context.iConstraint();
+        var usable = objectActionParameter.isUsable(actionInteractionHead, argumentManagedObjects, iConstraint);
         return usable.isVetoed() ? usable.getReasonAsString().orElse("Disabled") : null;
     }
 

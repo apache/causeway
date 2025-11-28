@@ -16,26 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.param.hide;
+package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
-/**
- * The mechanism by which a single parameter of the action can be hidden
- * before the action itself is invoked.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to invoking the
- * <tt>hideNXxx</tt> support method for an action.
- */
-public interface ActionParameterHiddenFacet
-extends Facet, HidingInteractionAdvisor {
+public record InteractionConstraint(
+		WhatViewer whatViewer,
+		InteractionInitiatedBy initiatedBy,
+		Where where
+		) {
 
-    /**
-     * Whether the parameter is hidden.
-     */
-    public boolean isHidden(ManagedObject target, Can<ManagedObject> arguments);
+	public InteractionConstraint withWhere(final Where where) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
 }

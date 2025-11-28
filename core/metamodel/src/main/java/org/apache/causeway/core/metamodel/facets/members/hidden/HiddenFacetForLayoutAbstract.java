@@ -24,25 +24,25 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public abstract class HiddenFacetAbstract
+public abstract class HiddenFacetForLayoutAbstract
 extends WhereValueFacetAbstract
-implements HiddenFacet {
+implements HiddenFacetForLayout {
 
-    public static final Class<HiddenFacet> type() {
-        return HiddenFacet.class;
+    public static final Class<HiddenFacetForLayout> type() {
+        return HiddenFacetForLayout.class;
     }
 
-    public HiddenFacetAbstract(
+    public HiddenFacetForLayoutAbstract(
             final Where where,
             final FacetHolder holder) {
         super(type(), holder, where);
     }
 
-    public HiddenFacetAbstract(
+    public HiddenFacetForLayoutAbstract(
             final Where where,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
@@ -50,13 +50,13 @@ implements HiddenFacet {
     }
 
     // to instantiate contributed facets
-    private HiddenFacetAbstract(final HiddenFacetAbstract toplevelFacet) {
+    private HiddenFacetForLayoutAbstract(final HiddenFacetForLayoutAbstract toplevelFacet) {
         super(type(), toplevelFacet.facetHolder(), toplevelFacet.where());
     }
 
     @Override
-    public String hides(final VisibilityContext ic) {
-        return hiddenReason(ic.target(), ic.where());
+    public final String hides(final VisibilityContext ic) {
+        return hiddenReason(ic.target(), ic.iConstraint().where());
     }
 
     /**
@@ -68,7 +68,6 @@ implements HiddenFacet {
     @Override
     public final void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("semantics", getSemantics());
     }
 
 }

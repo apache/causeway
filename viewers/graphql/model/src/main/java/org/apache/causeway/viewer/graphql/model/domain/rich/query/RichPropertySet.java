@@ -24,8 +24,6 @@ import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -64,9 +62,8 @@ public class RichPropertySet extends Element {
 
         var sourcePojoClass = sourcePojo.getClass();
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            return null;
-        }
+        if (objectSpecification == null)
+			return null;
 
         var otoa = propertyInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -75,22 +72,20 @@ public class RichPropertySet extends Element {
         Object argumentValue = arguments.get(otoa.asciiId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
-        var visibleConsent = otoa.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(otoa.getFeatureIdentifier());
-        }
+        var iConstraint = Context.iConstraint();
+        var visibleConsent = otoa.isVisible(managedObject, iConstraint);
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(otoa.getFeatureIdentifier());
 
-        var usableConsent = otoa.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(otoa.getFeatureIdentifier());
-        }
+        var usableConsent = otoa.isUsable(managedObject, iConstraint);
+        if (usableConsent.isVetoed())
+			throw new DisabledException(otoa.getFeatureIdentifier());
 
-        var validityConsent = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new InvalidException(validityConsent);
-        }
+        var validityConsent = otoa.isAssociationValid(managedObject, argumentManagedObject, iConstraint);
+        if (validityConsent.isVetoed())
+			throw new InvalidException(validityConsent);
 
-        otoa.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        otoa.set(managedObject, argumentManagedObject, iConstraint.initiatedBy());
 
         return managedObject; // return the original object because setters return void
     }

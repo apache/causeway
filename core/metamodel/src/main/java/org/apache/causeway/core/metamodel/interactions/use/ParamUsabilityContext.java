@@ -19,13 +19,12 @@
 package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.ActionArgumentUsabilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -42,8 +41,7 @@ public record ParamUsabilityContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     RenderPolicy renderPolicy,
     ObjectAction objectAction,
     Can<ManagedObject> args,
@@ -56,11 +54,11 @@ implements UsabilityContext, ActionInteractionContext {
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy initiatedBy,
+            final InteractionConstraint iConstraint,
             final RenderPolicy renderPolicy) {
 
         this(InteractionContextType.ACTION_PARAMETER_USABLE,
-            head, id, initiatedBy, Where.OBJECT_FORMS, renderPolicy,
+            head, id, iConstraint, renderPolicy,
             objectAction, args, position);
     }
 
@@ -76,7 +74,7 @@ implements UsabilityContext, ActionInteractionContext {
     @Override
     public ParamVisibilityContext asVisibilityContext() {
         return new ParamVisibilityContext(head(), objectAction(), identifier(),
-                args, position, initiatedBy(), renderPolicy());
+                args, position, iConstraint, renderPolicy());
     }
 
 }

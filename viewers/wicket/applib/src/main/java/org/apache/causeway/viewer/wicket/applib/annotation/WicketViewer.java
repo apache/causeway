@@ -16,24 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.viewer.wicket.applib.annotation;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class HideForContextFacetNone
-extends HideForContextFacetAbstract {
+import org.springframework.beans.factory.annotation.Qualifier;
 
-    public HideForContextFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
-    }
-
-    /**
-     * Always returns <tt>null</tt>.
-     */
-    @Override
-    public String hides(final VisibilityContext ic) {
-        return null;
-    }
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier("Wicket")
+public @interface WicketViewer {
 
 }

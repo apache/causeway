@@ -16,14 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.prototype;
+package org.apache.causeway.core.metamodel.facets.all.hide;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureFilter;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Indicates that the action should only be available in <i>prototype</i> mode.
+ * Optionally hides a feature via {@link ApplicationFeatureFilter}.
  */
-public interface PrototypeFacet extends Facet, HidingInteractionAdvisor {
+public interface HiddenFacetForFeatureFilter
+extends HidingInteractionAdvisor {
 
 }

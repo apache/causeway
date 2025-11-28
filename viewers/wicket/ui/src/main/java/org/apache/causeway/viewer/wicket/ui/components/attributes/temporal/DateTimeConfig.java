@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes.temporal;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 

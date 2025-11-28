@@ -16,24 +16,28 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.applib.services.appfeat;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+/**
+ * The various viewer implementations will individually honor any filters registered with Spring,
+ * based on a matching qualifier ('graphql', 'restful', etc.). 
+ *
+ * <p>All filters that match a qualifier are consulted until any one rejects the {@link ApplicationFeature}.
+ *    
+ * <p>In no filters match a qualifier, all {@link ApplicationFeature} are accepted.
+ *
+ * @since 4.0 {@index}
+ */
+@FunctionalInterface
+public interface ApplicationFeatureFilter {
 
-public abstract class HideForContextFacetAbstract extends FacetAbstract implements HideForContextFacet {
+	public final static String GRAPHQL_VIEWER = "graphql";
+	public final static String RESTFUL_VIEWER = "restful";
+	public final static String WICKET_VIEWER = "wicket";
 
-    private static final Class<? extends Facet> type() {
-        return HideForContextFacet.class;
-    }
-
-    public HideForContextFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    public HideForContextFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
-
+	/**
+	 * Whether to include given {@link ApplicationFeature}.
+	 */
+	boolean filter(ApplicationFeature feature);
+	
 }

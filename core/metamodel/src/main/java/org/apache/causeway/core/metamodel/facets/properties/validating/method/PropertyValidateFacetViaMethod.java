@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.properties.validating.method;
 
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.i18n.TranslatableString;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
@@ -32,11 +34,12 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstract implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final @NonNull Can<MethodFacade> methods;
     private final TranslationContext translationContext;
 
     public PropertyValidateFacetViaMethod(
@@ -48,7 +51,7 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     }
 
     @Override
-    public Intent getIntent() {
+    public Intent intent() {
         return Intent.CHECK_IF_VALID;
     }
 

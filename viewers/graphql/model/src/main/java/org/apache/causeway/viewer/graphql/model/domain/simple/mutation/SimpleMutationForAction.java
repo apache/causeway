@@ -33,10 +33,8 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -158,35 +156,32 @@ public class SimpleMutationForAction extends Element {
                     var key = ObjectFeatureUtils.keyFor(refValue);
                     BookmarkedPojo value = environment.getGraphQlContext().get(key);
                     result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-                } else {
-                    throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-                }
+                } else
+					throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
             }
             sourcePojo = result
                     .orElseThrow(); // TODO: better error handling if no such object found.
         }
 
         ManagedObject managedObject = ManagedObject.adaptSingular(objectSpec, sourcePojo);
+        var iConstraint = Context.iConstraint();
 
-        var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
-        }
+        var visibleConsent = objectAction.isVisible(managedObject, iConstraint);
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(objectAction.getFeatureIdentifier());
 
-        var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
-        }
+        var usableConsent = objectAction.isUsable(managedObject, iConstraint);
+        if (usableConsent.isVetoed())
+			throw new DisabledException(objectAction.getFeatureIdentifier());
 
         var head = objectAction.interactionHead(managedObject);
         var argumentManagedObjects = argumentManagedObjectsFor(environment, objectAction);
 
-        var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
+        var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, iConstraint);
+        if (validityConsent.isVetoed())
+			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
-        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, iConstraint);
         return resultManagedObject.getPojo();
     }
 

@@ -176,11 +176,9 @@ implements
         if(!isPostable()) return null; // bale out
 
         // if this is a mixin, then this ain't true.
-        if(!(ic instanceof ProposedHolder)) return null;
+        if(!(ic instanceof final ProposedHolder ph)) return null;
 
-        final ProposedHolder ph = (ProposedHolder) ic;
-
-        final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.target(), ic.initiatedBy());
+        final Object oldValue = getterFacetIfAny.getAssociationValueAsPojo(ic.target(), ic.iConstraint().initiatedBy());
         final ManagedObject proposedAdapter = ph.proposed();
         final Object proposedValue = proposedAdapter != null ? proposedAdapter.getPojo() : null;
 
@@ -192,9 +190,8 @@ implements
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
-            if(reasonTranslatable != null) {
-                return reasonTranslatable.translate(translationService, translationContext);
-            }
+            if(reasonTranslatable != null)
+				return reasonTranslatable.translate(translationService, translationContext);
             return event.getInvalidityReason();
         }
 

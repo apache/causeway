@@ -51,7 +51,6 @@ implements IconFacet, HasImperativeAspect {
 
     @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
     @Override public Precedence precedence() { return Precedence.LOW; }
-    @Override public ImperativeAspect getImperativeAspect() { return imperativeAspect; }
 
     @Override
     public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, IconSize iconSize) {

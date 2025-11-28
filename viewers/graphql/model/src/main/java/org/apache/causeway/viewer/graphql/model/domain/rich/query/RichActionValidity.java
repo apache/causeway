@@ -26,7 +26,6 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
@@ -70,10 +69,9 @@ public class RichActionValidity extends Element {
         var sourcePojoClass = sourcePojo.getClass();
         var specificationLoader = objectAction.getSpecificationLoader();
         var objectSpecification = specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
+        if (objectSpecification == null)
+			// not expected
             return null;
-        }
 
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
         var actionInteractionHead = objectAction.interactionHead(managedObject);
@@ -86,7 +84,8 @@ public class RichActionValidity extends Element {
                     return ManagedObject.adaptParameter(oap, argumentValue);
                 });
 
-        Consent consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var iConstraint = Context.iConstraint();
+        Consent consent = objectAction.isArgumentSetValid(actionInteractionHead, argumentManagedObjects, iConstraint);
 
         return consent.isVetoed() ? consent.getReasonAsString().orElse("Invalid") : null;
     }

@@ -19,10 +19,8 @@
 package org.apache.causeway.core.metamodel.interactions;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.InteractionEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -71,10 +69,13 @@ public interface InteractionContext {
      */
     InteractionContextType interactionType();
 
+
     /**
+     * Which viewer.<br>
+     * Where the element is to be rendered.<br>
      * How the interaction was initiated.
      */
-    InteractionInitiatedBy initiatedBy();
+    InteractionConstraint iConstraint();
 
     /**
      * The identifier of the object or member that this interaction is being
@@ -92,11 +93,6 @@ public interface InteractionContext {
      * Model that holds the objects involved with the interaction.
      */
     InteractionHead head();
-
-    /**
-     * Where the element is to be rendered.
-     */
-    Where where();
 
     /**
      * The target object that this interaction is associated with.

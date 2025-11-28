@@ -16,8 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.hidden;
+package org.apache.causeway.core.metamodel.facets.members.navigation;
 
-public interface HiddenTypeFacet extends HiddenInstanceFacet {
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
+import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
+/**
+ * Hides object members that would allow navigation to a domain type that is
+ * {@link HiddenFacetForNoMembersAuthorized hidden} (typically due to security permissions).
+ */
+public interface HiddenFacetForNavigation extends HidingInteractionAdvisor {
 }

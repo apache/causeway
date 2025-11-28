@@ -18,12 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.interactions.vis;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -38,22 +39,29 @@ public record ActionVisibilityContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     RenderPolicy renderPolicy,
     ObjectAction objectAction)
 implements VisibilityContext, ActionInteractionContext  {
 
     public ActionVisibilityContext(
+    		final @NonNull ObjectAction action,
+    		final @NonNull VisibilityContext vc) {
+    	this(InteractionContextType.ACTION_VISIBLE,
+			vc.head(),
+            action.getFeatureIdentifier(),
+            vc.iConstraint(),
+            vc.renderPolicy(),
+            action);
+    }
+
+    public ActionVisibilityContext(
             final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier identifier,
-            final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final InteractionConstraint iConstraint,
             final RenderPolicy renderPolicy) {
-        this(InteractionContextType.ACTION_VISIBLE,
-            head, identifier, initiatedBy, where, renderPolicy,
-            objectAction);
+        this(InteractionContextType.ACTION_VISIBLE, head, identifier, iConstraint, renderPolicy, objectAction);
     }
 
     @Override

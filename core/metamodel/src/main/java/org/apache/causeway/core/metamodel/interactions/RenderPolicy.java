@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 
 /**
  * <h1>Troubleshooting Visibility and Usability</h1>
@@ -66,7 +67,22 @@ public record RenderPolicy(
      */
     CausewayConfiguration.Prototyping.@NonNull IfDisabledPolicy ifDisabledPolicy
     ) implements Serializable {
-
+	
+	/**
+	 * Counterpart to {@link #forActionParameters()}, that is objects and members, but not parameters. 
+	 */
+    public static RenderPolicy forNonActionParam(MetaModelContext mmc) {
+    	return new RenderPolicy(
+			switch (mmc.getSystemEnvironment().deploymentType()) {
+                case PROTOTYPING->mmc.getConfiguration().prototyping().ifHiddenPolicy();
+                case PRODUCTION->CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
+            },
+			switch (mmc.getSystemEnvironment().deploymentType()) {
+	            case PROTOTYPING -> mmc.getConfiguration().prototyping().ifDisabledPolicy();
+	            case PRODUCTION -> CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE;
+	        });
+    }
+    
     /**
      * Always HIDE and DISABLE.
      */

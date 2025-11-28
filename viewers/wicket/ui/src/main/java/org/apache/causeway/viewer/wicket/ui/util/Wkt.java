@@ -102,6 +102,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -113,6 +114,9 @@ import org.apache.causeway.commons.internal.functions._Functions.SerializableFun
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
@@ -146,13 +150,15 @@ import de.agilecoders.wicket.jquery.Key;
 public class Wkt {
 
     public <T extends Component> T add(final @NonNull MarkupContainer container, final @Nullable T component) {
-        if(component==null) return null;
+        if(component==null)
+			return null;
         container.addOrReplace((Component)component);
         return component;
     }
 
     public <T extends Behavior> T add(final @NonNull Component component, final @Nullable T behavior) {
-        if(behavior==null) return null;
+        if(behavior==null)
+			return null;
         component.add((Behavior)behavior);
         return behavior;
     }
@@ -200,9 +206,8 @@ public class Wkt {
             final @Nullable String attributeName,
             final @Nullable String attributeValue) {
         if(component==null
-                || _Strings.isEmpty(attributeName)) {
-            return component;
-        }
+                || _Strings.isEmpty(attributeName))
+			return component;
         if(_Strings.isEmpty(attributeValue)) {
             component.add(AttributeModifier.remove(attributeName));
             return component;
@@ -270,9 +275,8 @@ public class Wkt {
         private static final long serialVersionUID = 1L;
         @Override public void onComponentTag(final Component component, final ComponentTag tag) {
             super.onComponentTag(component, tag);
-            if(component.isEnabled()) {
-                return;
-            }
+            if(component.isEnabled())
+				return;
             tag.remove("disabled");
             tag.put("readonly","readonly");
         }
@@ -305,9 +309,8 @@ public class Wkt {
     }
 
     public void behaviorAddReplaceDisabledTagWithReadonlyTag(final @Nullable Component component) {
-        if(component==null) {
-            return;
-        }
+        if(component==null)
+			return;
         if (component.getBehaviors(ReplaceDisabledTagWithReadonlyTagBehavior.class).isEmpty()) {
             component.add(new ReplaceDisabledTagWithReadonlyTagBehavior());
         }
@@ -321,7 +324,7 @@ public class Wkt {
             final PageParameters pageParameters,
             final SerializableBooleanSupplier dynamicVisibility) {
 
-        return new BookmarkablePageLink<Void>(
+        return new BookmarkablePageLink<>(
                 id, pageClass, pageParameters) {
 
             private static final long serialVersionUID = 1L;
@@ -510,7 +513,8 @@ public class Wkt {
              * Hence we intercept such events and reset check-boxes to un-checked.
              */
             @Override public void onEvent(final IEvent<?> event) {
-                if(event==null) return; // just in case
+                if(event==null)
+					return; // just in case
                 _Casts.castTo(CausewayEnvelopeEvent.class, event.getPayload())
                 .ifPresent(envelopeEvent->{
                     if(envelopeEvent.getLetter() instanceof CausewayActionCompletedEvent) {
@@ -534,9 +538,8 @@ public class Wkt {
              */
             private boolean hasMemoizedDataRow(final IModel<Boolean> model) {
                 if(model instanceof DataRowToggleWkt dataRowToggleWkt) {
-                    if(dataRowToggleWkt.delegate() instanceof DataRowWkt dataRowWkt) {
-                        return dataRowWkt.isTableDataLoaded();
-                    }
+                    if(dataRowToggleWkt.delegate() instanceof DataRowWkt dataRowWkt)
+						return dataRowWkt.isTableDataLoaded();
                 }
                 return false;
             }
@@ -646,7 +649,7 @@ public class Wkt {
     public <T extends Serializable> DropDownChoice<T> dropDownChoice(final String id,
             final IModel<T> model,
             final List<? extends T> choices) {
-        return new DropDownChoice<T>(id, model, choices);
+        return new DropDownChoice<>(id, model, choices);
     }
 
     public <T extends Serializable> DropDownChoice<T> dropDownChoiceWithAjaxUpdate(final String id,
@@ -674,9 +677,8 @@ public class Wkt {
      */
     public void fileDownloadClickHandler(final IModel<File> model, final CommonMimeType mime, final String fileName) {
         final File file = model.getObject();
-        if (file == null) {
-            throw _Exceptions.illegalState("Failed to retrieve a File object from model %s", model.getClass().getName());
-        }
+        if (file == null)
+			throw _Exceptions.illegalState("Failed to retrieve a File object from model %s", model.getClass().getName());
         RequestCycle.get().scheduleRequestHandlerAfterCurrent(
                 Wkt.fileResourceStreamRequestHandler(file, mime)
                 .setCacheDuration(Duration.ZERO)
@@ -803,7 +805,7 @@ public class Wkt {
     // -- FORM
 
     public static Form<Object> form(final String id) {
-        return new Form<Object>(id);
+        return new Form<>(id);
     }
 
     public static Form<Object> formAdd(final MarkupContainer container, final String id) {
@@ -834,7 +836,7 @@ public class Wkt {
         return new Image(id, "embedded") {
             private static final long serialVersionUID = 1L;
             @Override protected boolean shouldAddAntiCacheParameter() { return false; }
-            @Override protected String buildSrcAttribute(ComponentTag tag) {
+            @Override protected String buildSrcAttribute(final ComponentTag tag) {
                 return dataUri.toExternalForm();
             }
         };
@@ -919,7 +921,7 @@ public class Wkt {
     public ResourceLink<Void> link(final String id, final BufferedImage buffImg) {
         var imageResource = new BufferedDynamicImageResource();
         imageResource.setImage(buffImg);
-        return new ResourceLink<Void>(id, imageResource);
+        return new ResourceLink<>(id, imageResource);
     }
 
     public AjaxLinkNoPropagate link(final String id, final SerializableConsumer<AjaxRequestTarget> onClick) {
@@ -966,7 +968,7 @@ public class Wkt {
             final String id,
             final List<T> list,
             final SerializableConsumer<ListItem<T>> itemPopulator) {
-        return new ListView<T>(id, list) {
+        return new ListView<>(id, list) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
                 itemPopulator.accept(item);
@@ -978,7 +980,7 @@ public class Wkt {
             final String id,
             final IModel<? extends List<T>> listModel,
             final SerializableConsumer<ListItem<T>> itemPopulator) {
-        return new ListView<T>(id, listModel) {
+        return new ListView<>(id, listModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void populateItem(final ListItem<T> item) {
                 itemPopulator.accept(item);
@@ -1051,7 +1053,7 @@ public class Wkt {
             final String id, final int index, final IModel<T> model,
             final SerializableFunction<T, String> cssClassProvider) {
 
-        return new OddEvenItem<T>(id, index, model) {
+        return new OddEvenItem<>(id, index, model) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -1065,11 +1067,11 @@ public class Wkt {
     // -- TEXT AREA
 
     public TextArea<String> textArea(final String id, final IModel<String> textModel) {
-        return new TextArea<String>(id, textModel);
+        return new TextArea<>(id, textModel);
     }
 
     public TextArea<String> textAreaNoTab(final String id, final IModel<String> textModel) {
-        return new TextArea<String>(id, textModel) {
+        return new TextArea<>(id, textModel) {
             private static final long serialVersionUID = 1L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
@@ -1091,7 +1093,7 @@ public class Wkt {
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
             final @NonNull Optional<IConverter<T>> converter) {
-        return new TextAreaWithConverter<T>(id, model, type, converter);
+        return new TextAreaWithConverter<>(id, model, type, converter);
     }
 
     // -- TEXT FIELD
@@ -1104,7 +1106,7 @@ public class Wkt {
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
             final @NonNull Optional<IConverter<T>> converter) {
-        return new TextFieldWithConverter<T>(id, model, type, converter);
+        return new TextFieldWithConverter<>(id, model, type, converter);
     }
 
     public <T> TextField<T> passwordFieldWithConverter(
@@ -1112,7 +1114,7 @@ public class Wkt {
             final @NonNull IModel<T> model,
             final @NonNull Class<T> type,
             final @NonNull Optional<IConverter<T>> converter) {
-        return new TextFieldWithConverter<T>(id, model, type, converter) {
+        return new TextFieldWithConverter<>(id, model, type, converter) {
             private static final long serialVersionUID = 2L;
             @Override protected void onComponentTag(final ComponentTag tag) {
                 Attributes.set(tag, "type", "password");
@@ -1192,9 +1194,8 @@ public class Wkt {
             final @Nullable FormComponent<?> formComponent,
             final @Nullable IValidationError error) {
         if(formComponent==null
-                || error==null) {
-            return true;
-        }
+                || error==null)
+			return true;
         if(error instanceof ValidationError) {
             var message = ((ValidationError)error).getMessage();
             // use plain error message from ConversionException, circumventing resource bundles.
@@ -1265,5 +1266,13 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
+
+    // -- INTERACTION
+
+    private static WhatViewer WHAT_VIEWER = new WhatViewer("Wicket");
+	public WhatViewer whatViewer() { return WHAT_VIEWER; }
+	public static InteractionConstraint iConstraint(final InteractionInitiatedBy user, final Where where) {
+		return new InteractionConstraint(whatViewer(), user, where);
+	}
 
 }

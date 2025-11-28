@@ -19,8 +19,8 @@
 package org.apache.causeway.core.metamodel.spec.feature;
 
 import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
@@ -34,7 +34,7 @@ extends
     MutableCurrentHolder {
 
     /**
-     * Initialise this field in the specified object with the specified
+     * Initialize this field in the specified object with the specified
      * reference - this call should only affect the specified object, and not
      * any related objects. It should also not be distributed. This is strictly
      * for re-initialising the object and not specifying an association, which
@@ -47,9 +47,9 @@ extends
      * the specified object, represented as a {@link Consent}.
      */
     Consent isAssociationValid(
-            final ManagedObject targetAdapter,
-            final ManagedObject proposedAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetAdapter,
+            ManagedObject proposedAdapter,
+            InteractionConstraint iConstraint);
 
     /**
      * Returns true if calculated from other data in the object, that is, should

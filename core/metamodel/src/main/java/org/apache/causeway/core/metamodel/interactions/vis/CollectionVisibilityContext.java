@@ -19,10 +19,9 @@
 package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -36,19 +35,30 @@ public record CollectionVisibilityContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     RenderPolicy renderPolicy)
 implements VisibilityContext {
+
+//    public CollectionVisibilityContext(
+//    		final @NonNull OneToManyAssociation collection,
+//    		final @NonNull VisibilityContext vc) {
+//    	this(InteractionContextType.COLLECTION_VISIBLE,
+//			vc.head(),
+//			collection.getFeatureIdentifier(),
+//            vc.initiatedBy(),
+//            vc.where(),
+//            vc.whatViewer(),
+//            vc.renderPolicy(),
+//            collection);
+//    }
 
     public CollectionVisibilityContext(
             final InteractionHead head,
             final Identifier identifierAdapter,
-            final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final InteractionConstraint iConstraint,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.COLLECTION_VISIBLE,
-            head, identifierAdapter, initiatedBy, where, renderPolicy);
+            head, identifierAdapter, iConstraint, renderPolicy);
     }
 
     @Override

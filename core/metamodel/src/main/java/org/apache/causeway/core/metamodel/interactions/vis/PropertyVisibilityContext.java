@@ -19,10 +19,9 @@
 package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -36,20 +35,18 @@ public record PropertyVisibilityContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     RenderPolicy renderPolicy
     ) implements VisibilityContext {
 
     public PropertyVisibilityContext(
             final InteractionHead head,
             final Identifier identifier,
-            final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final InteractionConstraint iConstraint,
             final RenderPolicy renderPolicy) {
 
         this(InteractionContextType.PROPERTY_VISIBLE,
-            head, identifier, initiatedBy, where, renderPolicy);
+            head, identifier, iConstraint, renderPolicy);
     }
 
     @Override
