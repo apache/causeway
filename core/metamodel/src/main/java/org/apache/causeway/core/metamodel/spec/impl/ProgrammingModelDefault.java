@@ -25,6 +25,7 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.derived.Co
 import org.apache.causeway.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForFeatureFilterFactory;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
@@ -47,7 +48,7 @@ import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.Domai
 import org.apache.causeway.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacetFactory;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorizationFactory;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorizedFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
@@ -213,7 +214,7 @@ extends ProgrammingModelAbstract {
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ContributingFacetFromMixinFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenTypeFacetFromAuthorizationFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenFacetForNoMembersAuthorizedFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ValueSemanticsAnnotationFacetFactory(mmc));
 
@@ -242,6 +243,7 @@ extends ProgrammingModelAbstract {
 
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(FacetProcessingOrder.Z1_FINALLY, new DisabledFacetOnPropertyInferredFactory(mmc));
+        addFactory(FacetProcessingOrder.Z1_FINALLY, new HiddenFacetForFeatureFilterFactory(mmc));
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ViewModelSemanticCheckingFacetFactory(mmc));
     }

@@ -31,7 +31,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.interactions.use.CollectionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.CollectionVisibilityContext;
@@ -83,7 +83,7 @@ implements OneToManyAssociation {
 
         return new CollectionVisibilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.renderPolicy(ownerAdapter));
+                RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     @Override
@@ -93,7 +93,7 @@ implements OneToManyAssociation {
             final Where where) {
         return new CollectionUsabilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.renderPolicy(ownerAdapter));
+                RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     // -- get, isEmpty, add, clear

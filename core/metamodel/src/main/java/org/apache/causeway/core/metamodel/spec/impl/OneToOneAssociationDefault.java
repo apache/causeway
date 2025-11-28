@@ -44,6 +44,7 @@ import org.apache.causeway.core.metamodel.facets.properties.update.init.Property
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.interactions.use.PropertyUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
@@ -91,7 +92,7 @@ implements OneToOneAssociation, Serializable {
             final Where where) {
         return new PropertyVisibilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.renderPolicy(ownerAdapter));
+                RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     @Override
@@ -101,7 +102,7 @@ implements OneToOneAssociation, Serializable {
             final Where where) {
         return new PropertyUsabilityContext(
                 headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.renderPolicy(ownerAdapter));
+                RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     // -- VALIDITY

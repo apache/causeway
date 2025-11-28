@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -58,7 +57,7 @@ implements VisibilityContext, ProposedHolder {
                 domainObject.objSpec().getFeatureIdentifier(),
                 initiatedBy,
                 where,
-                InteractionUtils.renderPolicy(domainObject));
+                RenderPolicy.forNonActionParam(domainObject));
     }
 
     // -- CONSTRUCTION

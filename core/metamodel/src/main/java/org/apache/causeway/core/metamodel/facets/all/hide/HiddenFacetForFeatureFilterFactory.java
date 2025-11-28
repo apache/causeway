@@ -16,33 +16,41 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.hidden;
+package org.apache.causeway.core.metamodel.facets.all.hide;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureFilter;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 /**
- * Installs the {@link HiddenFacetForNoMembersAuthorizedImpl} on the
+ * Installs the {@link HiddenFacetForFeatureFilterImpl} on the
  * {@link ObjectSpecification}.
  */
-public class HiddenTypeFacetFromAuthorizationFactory
+public class HiddenFacetForFeatureFilterFactory
 extends FacetFactoryAbstract {
 
     @Inject
-    public HiddenTypeFacetFromAuthorizationFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY);
+    public HiddenFacetForFeatureFilterFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS);
+        mmc.getServiceRegistry().select(ApplicationFeatureFilter.class);
     }
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenFacetForNoMembersAuthorizedImpl(facetHolder));
+        var facetHolder = processClassContext.getFacetHolder();
+        //TODO WIP FacetUtil.addFacet(new HiddenFacetForFeatureFilterImpl(facetHolder));
     }
-
+    
+    @Override
+    public void process(ProcessMethodContext processMethodContext) {
+    	var facetHolder = processMethodContext.getFacetHolder();
+    	//TODO WIP processMethodContext.getFeatureType().isProperty();
+    	//TODO WIP FacetUtil.addFacet(new HiddenFacetForFeatureFilterImpl(facetHolder));
+    }
+    
 }

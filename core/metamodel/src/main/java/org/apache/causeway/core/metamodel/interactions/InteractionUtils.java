@@ -25,8 +25,6 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
@@ -39,7 +37,6 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -139,12 +136,6 @@ public final class InteractionUtils {
         return resultSet.add(isValidResult(facetHolder, context));
     }
 
-    public RenderPolicy renderPolicy(final ManagedObject ownerAdapter) {
-        return new RenderPolicy(
-                determineIfHiddenPolicyFrom(ownerAdapter),
-                determineIfDisabledPolicyFrom(ownerAdapter));
-    }
-
     // -- HELPER
 
     /**
@@ -181,25 +172,4 @@ public final class InteractionUtils {
         return advisor instanceof DomainEventFacetAbstract;
     }
 
-    private CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
-        switch (deploymentType) {
-            case PROTOTYPING:
-                return ownerAdapter.getConfiguration().prototyping().ifHiddenPolicy();
-            case PRODUCTION:
-            default:
-                return CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
-        }
-    }
-
-    private CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
-        switch (deploymentType) {
-            case PROTOTYPING:
-                return ownerAdapter.getConfiguration().prototyping().ifDisabledPolicy();
-            case PRODUCTION:
-            default:
-                return CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE;
-        }
-    }
 }
