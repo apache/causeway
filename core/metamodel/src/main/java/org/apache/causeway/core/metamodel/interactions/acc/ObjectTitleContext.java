@@ -23,8 +23,10 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ObjectTitleEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
@@ -36,8 +38,7 @@ public record ObjectTitleContext(
     InteractionContextType interactionType,
     Identifier identifier,
     InteractionHead head,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     String title)
 implements AccessContext {
 
@@ -46,9 +47,9 @@ implements AccessContext {
             final Identifier identifier,
             final String title,
             final InteractionInitiatedBy initiatedBy) {
-
         this(InteractionContextType.OBJECT_TITLE,
-            identifier, InteractionHead.regular(targetAdapter), initiatedBy, Where.NOT_SPECIFIED,
+            identifier, InteractionHead.regular(targetAdapter),
+            new InteractionConstraint(WhatViewer.noViewer(), initiatedBy, Where.NOT_SPECIFIED),
             title);
     }
 

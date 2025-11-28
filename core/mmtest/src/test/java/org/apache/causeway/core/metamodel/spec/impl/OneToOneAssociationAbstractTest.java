@@ -28,7 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -38,6 +37,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -73,7 +73,7 @@ class OneToOneAssociationAbstractTest {
                 facetedMethod.getFeatureIdentifier(),
                 facetedMethod, objectSpecification) {
             private static final long serialVersionUID = 1L;
-            
+
             @Override
             public ManagedObject get(
                     final ManagedObject fromObject,
@@ -103,18 +103,16 @@ class OneToOneAssociationAbstractTest {
             }
 
             @Override
-            public UsabilityContext createUsableInteractionContext(
-                    final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
-                return null;
-            }
+			public UsabilityContext createUsableInteractionContext(final ManagedObject ownerAdapter,
+					final InteractionConstraint iConstraint) {
+				return super.createUsableInteractionContext(ownerAdapter, iConstraint);
+			}
 
             @Override
-            public VisibilityContext createVisibleInteractionContext(
-                    final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
-                return null;
-            }
+    		public VisibilityContext createVisibleInteractionContext(final ManagedObject ownerAdapter,
+    				final InteractionConstraint iConstraint) {
+    			return super.createVisibleInteractionContext(ownerAdapter, iConstraint);
+    		}
 
             @Override
             public boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {

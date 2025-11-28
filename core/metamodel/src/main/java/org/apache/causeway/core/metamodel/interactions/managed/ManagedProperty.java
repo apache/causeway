@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -30,12 +31,13 @@ import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -64,11 +66,6 @@ extends ManagedMember {
 
     @Getter private final OneToOneAssociation property;
 
-    //XXX suggestion: instead of holding the 'owner' object, let it hold a supplier of the 'owner' object,
-    //such that the supplier always returns the actual owner evaluated lazily without memoization.
-    //Such a change would better support eg.
-    //org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel.getManagedProperty()
-    //Or as an alternative use a memento instead of the ManagedObject.
     private ManagedProperty(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
@@ -95,19 +92,16 @@ extends ManagedMember {
     // -- INTERACTION
 
     public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, getWhere());
         try {
             var validityConsent =
-                    property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
-
+                property.isAssociationValid(getOwner(), proposedNewValue, iConstraint);
             return validityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.invalid(validityConsent))
-                    : Optional.empty();
-
+                ? Optional.of(InteractionVeto.invalid(validityConsent))
+                : Optional.empty();
         } catch (final Exception ex) {
-
             log.warn(ex.getLocalizedMessage(), ex);
             return Optional.of(InteractionVeto.invalid(new Veto("failure during validity evaluation")));
-
         }
     }
 
@@ -133,8 +127,11 @@ extends ManagedMember {
         var property = getProperty();
         var owner = getOwner();
 
-        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
-                && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
+        var iConstraint1 = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.FRAMEWORK, getWhere());
+        var iConstraint2 = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, getWhere());
+
+        return property.isVisible(owner, iConstraint1).isAllowed() //TODO strange API
+                && property.isVisible(owner, iConstraint2).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getElementType());
     }

@@ -54,16 +54,14 @@ public record HiddenFacetForNavigationFromHiddenType(
     @Override
     public String hides(final VisibilityContext ic) {
         var facet = navigatedType.getFacet(HiddenFacetForNoMembersAuthorized.class);
-        if(facet == null) {
-            // not expected to happen; this facet should only be installed for object members
+        if(facet == null)
+			// not expected to happen; this facet should only be installed for object members
             // that navigate to a class that has the HiddenTypeFacet
             return null;
-        }
         var objVisibilityContext = new ObjectVisibilityContext(
                 ic.head(),
                 Identifier.classIdentifier(navigatedType.logicalType()),
-                ic.initiatedBy(),
-                ic.where(),
+                ic.iConstraint(),
                 ic.renderPolicy());
         final String hides = facet.hides(objVisibilityContext);
         return hides;

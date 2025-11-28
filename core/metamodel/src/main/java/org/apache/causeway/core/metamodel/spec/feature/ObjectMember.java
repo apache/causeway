@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -53,16 +54,12 @@ public interface ObjectMember extends ObjectFeature {
      * Returns the {@link ObjectSpecification} representing the class or interface
      * that declares the member represented by this object.
      *
-     * <p>
-     *     If the member is a regular member, declared on a class, then this returns that type.
-     *     But if the member is a mixin, then this will return the {@link ObjectSpecification} representing the mixin type.
-     * </p>
+     * <p>If the member is a regular member, declared on a class, then this returns that type.
+     * But if the member is a mixin, then this will return the {@link ObjectSpecification} representing the mixin type.
      */
     ObjectSpecification getDeclaringType();
 
-    // /////////////////////////////////////////////////////////////
-    // Name, Description, Help (convenience for facets)
-    // /////////////////////////////////////////////////////////////
+    // -- Name, Description, Help (convenience for facets)
 
     /**
      * Return the help text for this member - the field or action - to
@@ -72,15 +69,12 @@ public interface ObjectMember extends ObjectFeature {
      */
     String getHelp();
 
-    // /////////////////////////////////////////////////////////////
-    // Hidden (or visible)
-    // /////////////////////////////////////////////////////////////
+    // -- Hidden (or visible)
 
     /**
      * When the member is always hidden.
      *
-     * <p>
-     * Determined as per the {@link HiddenFacetForLayout} being present and
+     * <p>Determined as per the {@link HiddenFacetForLayout} being present and
      * {@link HiddenFacetForLayout#where()} returning {@link Where#ANYWHERE}.
      */
     boolean isAlwaysHidden();
@@ -91,15 +85,13 @@ public interface ObjectMember extends ObjectFeature {
      *            may be <tt>null</tt> if just checking for authorization.
      * @param interactionInitiatedBy
      * @param where
+     * @param whatViewer 
      */
     Consent isVisible(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
+            ManagedObject target,
+            InteractionConstraint iConstraint);
 
-    // /////////////////////////////////////////////////////////////
-    // Disabled (or enabled)
-    // /////////////////////////////////////////////////////////////
+    // -- Disabled (or enabled)
 
     /**
      * Determines whether this member is usable (not disabled), represented as a
@@ -110,19 +102,15 @@ public interface ObjectMember extends ObjectFeature {
      * @param where
      */
     Consent isUsable(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
+            ManagedObject target,
+            InteractionConstraint iConstraint);
 
-    // /////////////////////////////////////////////////////////////
-    // isAssociation, isAction
-    // /////////////////////////////////////////////////////////////
+    // -- PREDICATES
 
     /**
      * Whether this member represents a {@link ObjectAssociation}.
      *
-     * <p>
-     * If so, can be safely downcast to {@link ObjectAssociation}.
+     * <p>If so, can be safely downcast to {@link ObjectAssociation}.
      */
     boolean isPropertyOrCollection();
     default boolean isProperty() { return isOneToOneAssociation(); }
@@ -131,16 +119,14 @@ public interface ObjectMember extends ObjectFeature {
     /**
      * Whether this member represents a {@link OneToManyAssociation}.
      *
-     * <p>
-     * If so, can be safely downcast to {@link OneToManyAssociation}.
+     * <p>If so, can be safely downcast to {@link OneToManyAssociation}.
      */
     boolean isOneToManyAssociation();
 
     /**
      * Whether this member represents a {@link OneToOneAssociation}.
      *
-     * <p>
-     * If so, can be safely downcast to {@link OneToOneAssociation}.
+     * <p>If so, can be safely downcast to {@link OneToOneAssociation}.
      */
     boolean isOneToOneAssociation();
 
@@ -166,24 +152,17 @@ public interface ObjectMember extends ObjectFeature {
      */
     boolean isExplicitlyAnnotated();
 
-    // /////////////////////////////////////////////////////////////
-    // Debugging
-    // /////////////////////////////////////////////////////////////
+    // -- DEBUGGING
 
     /**
      * Thrown if the user is not authorized to access an action or any property/collection of an entity.
      *
-     * <p>
-     *     For the former case, is thrown by
-     *     {@link ObjectAction#executeWithRuleChecking(org.apache.causeway.core.metamodel.interactions.InteractionHead, org.apache.causeway.commons.collections.Can, InteractionInitiatedBy, Where)}
-     *     when the action being executed is not visible or not usable for the specified session.  One reason this
-     *     might occur if there was an attempt to construct a URL (eg a bookmarked action) and invoke in an unauthenticated session.
-     * </p>
-     *
-     * <p>
-     *     For the latter case, is thrown by <tt>DomainObjectPage</tt>
-     *
-     * </p>
+     * <p>For the former case, is thrown by
+     * {@link ObjectAction#executeWithRuleChecking(org.apache.causeway.core.metamodel.interactions.InteractionHead, org.apache.causeway.commons.collections.Can, InteractionInitiatedBy, Where)}
+     * when the action being executed is not visible or not usable for the specified session.  One reason this
+     * might occur if there was an attempt to construct a URL (eg a bookmarked action) and invoke in an unauthenticated session.
+     *     
+     * <p>For the latter case, is thrown by <tt>DomainObjectPage</tt>
      */
     class AuthorizationException extends RuntimeException {
         private static final long serialVersionUID = 1L;

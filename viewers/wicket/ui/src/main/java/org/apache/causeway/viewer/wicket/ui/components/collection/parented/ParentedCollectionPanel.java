@@ -127,7 +127,7 @@ implements HasDynamicallyVisibleContent {
 
         var objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
-                .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                .isVisible(objectAdapter, Wkt.iConstraint(InteractionInitiatedBy.USER, Where.OBJECT_FORMS));
 
         if(visibility.isAllowed()) {
 

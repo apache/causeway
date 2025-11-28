@@ -20,19 +20,18 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
 import org.apache.causeway.core.metamodel.consent.Allow;
 import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
@@ -68,20 +67,20 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
     // -- OBJECT ACTION MOCKUP
 
-    @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
-    @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
+    @Override default Consent isVisible(final ManagedObject a, final InteractionConstraint iConstraint) { return Allow.DEFAULT; }
+    @Override default Consent isUsable(final ManagedObject a, final InteractionConstraint iConstraint) { return Allow.DEFAULT; }
     @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
     @Override default SemanticsOf getSemantics() { return SemanticsOf.SAFE; }
 
     @Override default ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
         return map(simpleExecute(head, parameters));
     }
     @Override default ManagedObject executeWithRuleChecking(
         final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
-        return execute(head, parameters, interactionInitiatedBy);
+        final InteractionConstraint iConstraint) throws AuthorizationException {
+        return execute(head, parameters, iConstraint);
     }
 
     // -- IMPLEMENTATIONS

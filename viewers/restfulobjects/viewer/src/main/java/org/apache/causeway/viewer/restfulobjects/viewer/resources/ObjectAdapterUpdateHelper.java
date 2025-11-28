@@ -20,7 +20,6 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import org.apache.causeway.commons.internal.base._Refs;
 import org.apache.causeway.core.metamodel.consent.Consent;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -85,17 +84,10 @@ public class ObjectAdapterUpdateHelper {
         final ObjectSpecification propertySpec = property.getElementType();
         final String id = property.getId();
         final JsonRepresentation propertyRepr = propertiesMap.getRepresentation(id);
-        final Consent visibility = property.isVisible(
-                objectAdapter,
-                resourceContext.interactionInitiatedBy(),
-                resourceContext.where());
-        final Consent usability = property.isUsable(
-                objectAdapter,
-                resourceContext.interactionInitiatedBy(),
-                resourceContext.where()
-                );
+        final Consent visibility = property.isVisible(objectAdapter, resourceContext.iConstraint());
+        final Consent usability = property.isUsable(objectAdapter, resourceContext.iConstraint());
 
-        final boolean invisible = visibility.isVetoed();
+        final boolean hidden = visibility.isVetoed();
         final boolean disabled = usability.isVetoed();
         final boolean valueProvided = propertyRepr != null;
 
@@ -103,15 +95,13 @@ public class ObjectAdapterUpdateHelper {
 
             // no value provided
             if(intent.shouldValidate()) {
-                if(invisible || disabled) {
-                    // that's ok, indeed expected
+                if(hidden || disabled)
+					// that's ok, indeed expected
                     return allOk;
-                }
             }
-            if (!property.isMandatory()) {
-                // optional, so also not a problem
+            if (!property.isMandatory())
+				// optional, so also not a problem
                 return allOk;
-            }
 
             // otherwise, is an error.
             final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
@@ -127,11 +117,10 @@ public class ObjectAdapterUpdateHelper {
 
             if(intent.shouldValidate()) {
                 // value has been provided
-                if (invisible) {
-                    // silently ignore; don't want to acknowledge the
+                if (hidden)
+					// silently ignore; don't want to acknowledge the
                     // existence of this property to the caller
                     return allOk;
-                }
                 if (disabled) {
                     // not allowed to update
                     propertyRepr.mapPutString("invalidReason", usability.getReasonAsString().orElse(null));
@@ -151,13 +140,12 @@ public class ObjectAdapterUpdateHelper {
                 return allOk;
             }
             // check if the proposed value is valid
-            final Consent validity = property.isAssociationValid(objectAdapter, valueAdapter,
-                    InteractionInitiatedBy.USER);
+            final Consent validity = property.isAssociationValid(objectAdapter, valueAdapter, resourceContext.iConstraint());
             if (validity.isAllowed()) {
                 try {
                     property.set(
                             objectAdapter, valueAdapter,
-                            resourceContext.interactionInitiatedBy());
+                            resourceContext.iConstraint().initiatedBy());
                 } catch (final IllegalArgumentException ex) {
                     propertyRepr.mapPutString("invalidReason", ex.getMessage());
                     allOk = false;

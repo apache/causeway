@@ -16,22 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.val;
+package org.apache.causeway.viewer.wicket.applib.annotation;
 
-import java.util.function.Supplier;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
-import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
+import org.springframework.beans.factory.annotation.Qualifier;
 
-public sealed interface ValidityContext
-extends InteractionContext, InteractionEventSupplier<ValidityEvent>
-permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, PropertyModifyContext {
-
-    Supplier<String> friendlyNameProvider();
-
-    default String friendlyName() {
-        return friendlyNameProvider().get();
-    }
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Qualifier("Wicket")
+public @interface WicketViewer {
 
 }

@@ -20,8 +20,9 @@ package org.apache.causeway.applib.services.wrapper.control;
 
 import java.util.UUID;
 
-import org.jspecify.annotations.Nullable;
+import org.springframework.util.StringUtils;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -50,7 +51,12 @@ public record SyncControl(
          *
          * <p>The default behaviour is to rethrow the exception.
          */
-        ExceptionHandler exceptionHandler) {
+        ExceptionHandler exceptionHandler,
+        /**
+         * Simulated viewerId, honoring feature filtering.
+         */
+        String viewerId,
+        Where where) {
 
     //TODO can this be further simplified, or is there already an API we can reuse?
 
@@ -79,22 +85,22 @@ public record SyncControl(
     }
 
     public static SyncControl defaults() {
-        return new SyncControl(false, false, null, null);
+        return new SyncControl(false, false, null, null, null, null);
     }
 
-    public SyncControl(
-            boolean isSkipRules,
-            boolean isSkipExecute,
-            @Nullable Can<CommandListener> commandListeners,
-            @Nullable ExceptionHandler exceptionHandler) {
-        this.isSkipRules = isSkipRules;
-        this.isSkipExecute = isSkipExecute;
-        this.commandListeners = commandListeners!=null
-                ? commandListeners
-                : Can.empty();
-        this.exceptionHandler = exceptionHandler!=null
-                ? exceptionHandler
-                : exception -> { throw exception; };
+    public SyncControl {
+        commandListeners = commandListeners!=null
+            ? commandListeners
+            : Can.empty();
+        exceptionHandler = exceptionHandler!=null
+            ? exceptionHandler
+            : exception -> { throw exception; };
+        viewerId = StringUtils.hasText(viewerId)
+            ? viewerId
+            : "NoViewer";
+    	where = where!=null
+            ? where
+            : Where.ANYWHERE;
     }
 
     /**
@@ -102,27 +108,27 @@ public record SyncControl(
      * executing the underlying property or action
      */
     public SyncControl withSkipRules() {
-        return new SyncControl(true, isSkipExecute, commandListeners, exceptionHandler);
+        return new SyncControl(true, isSkipExecute, commandListeners, exceptionHandler, viewerId, where);
     }
     public SyncControl withCheckRules() {
-        return new SyncControl(false, isSkipExecute, commandListeners, exceptionHandler);
+        return new SyncControl(false, isSkipExecute, commandListeners, exceptionHandler, viewerId, where);
     }
 
     /**
      * Explicitly set the action to be executed.
      */
     public SyncControl withExecute() {
-        return new SyncControl(isSkipRules, false, commandListeners, exceptionHandler);
+        return new SyncControl(isSkipRules, false, commandListeners, exceptionHandler, viewerId, where);
     }
     /**
      * Explicitly set the action to <i>not</i> be executed, in other words a 'dry run'.
      */
     public SyncControl withNoExecute() {
-        return new SyncControl(isSkipRules, true, commandListeners, exceptionHandler);
+        return new SyncControl(isSkipRules, true, commandListeners, exceptionHandler, viewerId, where);
     }
 
-    public SyncControl listen(@NonNull CommandListener commandListener) {
-        return new SyncControl(isSkipRules, isSkipExecute, commandListeners.add(commandListener), exceptionHandler);
+    public SyncControl listen(@NonNull final CommandListener commandListener) {
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners.add(commandListener), exceptionHandler, viewerId, where);
     }
 
     /**
@@ -131,13 +137,21 @@ public record SyncControl(
      * <p>The default behaviour is to rethrow the exception.
      */
     public SyncControl withExceptionHandler(final @NonNull ExceptionHandler exceptionHandler) {
-        return new SyncControl(isSkipRules, isSkipExecute, commandListeners, exceptionHandler);
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners, exceptionHandler, viewerId, where);
+    }
+
+    public SyncControl withViewerId(final String viewerId) {
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners, exceptionHandler, viewerId, where);
+    }
+
+    public SyncControl withWhere(final Where where) {
+        return new SyncControl(isSkipRules, isSkipExecute, commandListeners, exceptionHandler, viewerId, where);
     }
 
     /**
      * @return whether this and other share the same execution mode, ignoring exceptionHandling
      */
-    public boolean isEquivalent(SyncControl other) {
+    public boolean isEquivalent(final SyncControl other) {
         return this.isSkipExecute == other.isSkipExecute
                 && this.isSkipRules == other.isSkipRules;
     }

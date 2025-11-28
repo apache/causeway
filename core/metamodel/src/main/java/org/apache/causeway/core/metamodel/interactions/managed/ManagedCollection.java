@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
@@ -32,7 +34,6 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public final class ManagedCollection extends ManagedMember {
 
@@ -90,11 +91,11 @@ public final class ManagedCollection extends ManagedMember {
 
     /**
      * If visibility is vetoed, returns an empty Stream.
-     * @param interactionInitiatedBy
+     * @param interactionConstraint
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
-    public Stream<ManagedObject> streamElements(final InteractionInitiatedBy interactionInitiatedBy) {
-        var valueAdapter = getCollection().get(getOwner(), interactionInitiatedBy);
+    public Stream<ManagedObject> streamElements(final InteractionInitiatedBy initiatedBy) {
+        var valueAdapter = getCollection().get(getOwner(), initiatedBy);
         return CollectionFacet.streamAdapters(valueAdapter);
     }
 

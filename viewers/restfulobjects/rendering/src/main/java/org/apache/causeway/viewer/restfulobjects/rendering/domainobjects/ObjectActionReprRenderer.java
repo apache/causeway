@@ -21,8 +21,6 @@ package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 import java.util.List;
 import java.util.Map;
 
-import tools.jackson.databind.node.NullNode;
-
 import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -39,6 +37,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 
+import tools.jackson.databind.node.NullNode;
+
 public class ObjectActionReprRenderer
 extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
@@ -51,8 +51,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
             final LinkFollowSpecs linkFollowSpecs,
             final String actionId,
             final JsonRepresentation representation) {
-        super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation,
-                Where.OBJECT_FORMS);
+        super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
     }
 
     @Override
@@ -75,9 +74,10 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        var where = resourceContext.where();
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
-        renderer.with(ManagedAction.of(objectAdapter, objectMember, where)).usingLinkTo(linkTo).asFollowed();
+        renderer.with(ManagedAction.of(objectAdapter, objectMember, resourceContext.iConstraint().where()))
+        	.usingLinkTo(linkTo)
+        	.asFollowed();
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 
@@ -85,9 +85,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     @Override
     protected void addMutatorLinksIfEnabled() {
-        if (usability().isVetoed()) {
-            return;
-        }
+        if (usability().isVetoed())
+			return;
         final Map<String, MutatorSpec> mutators = objectMemberType.getMutators();
 
         final SemanticsOf actionSemantics = objectMember.getSemantics();
@@ -157,9 +156,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
             final ParameterNegotiationModel paramNeg) {
         var paramMeta = paramMod.getMetaModel();
         var choiceAdapters = paramMeta.getChoices(paramNeg, getInteractionInitiatedBy());
-        if (choiceAdapters == null || choiceAdapters.isEmpty()) {
-            return null;
-        }
+        if (choiceAdapters == null || choiceAdapters.isEmpty())
+			return null;
         final List<Object> list = _Lists.newArrayList();
         for (var choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
@@ -171,9 +169,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     private Object defaultFor(final ManagedParameter paramMod) {
         var defaultAdapter = paramMod.getValue().getValue();
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter)) {
-            return null;
-        }
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(defaultAdapter))
+			return null;
         // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
         // final ObjectSpecification defaultSpec = param.getSpecification();
         var paramMeta = paramMod.getMetaModel();
@@ -184,9 +181,8 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().suppressDescribedByLinks()) {
-            return;
-        }
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
         final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }

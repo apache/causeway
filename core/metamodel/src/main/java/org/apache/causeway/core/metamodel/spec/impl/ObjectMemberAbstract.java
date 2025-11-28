@@ -26,6 +26,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
@@ -47,6 +49,7 @@ import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
@@ -61,7 +64,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 abstract class ObjectMemberAbstract
 implements
@@ -84,9 +86,8 @@ implements
         this.featureIdentifier = featureIdentifier;
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
-        if (getId() == null) {
-            throw new IllegalArgumentException("Id must always be set");
-        }
+        if (getId() == null)
+			throw new IllegalArgumentException("Id must always be set");
     }
 
     // -- IDENTIFIERS
@@ -113,13 +114,12 @@ implements
 
         var namedFacet = getFacet(MemberNamedFacet.class);
 
-        if(namedFacet==null) {
-            throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
-        }
+        if(namedFacet==null)
+			throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
 
         return namedFacet
             .getSpecialization()
-            .fold(  textFacet->textFacet.translated(),
+            .fold(  HasStaticText::translated,
                     textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target()));
     }
 
@@ -138,7 +138,7 @@ implements
         return lookupFacet(MemberDescribedFacet.class)
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
-                .fold(textFacet->textFacet.translated(),
+                .fold(HasStaticText::translated,
                       textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target())));
     }
 
@@ -195,9 +195,8 @@ implements
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract VisibilityContext createVisibleInteractionContext(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
+            ManagedObject target,
+            InteractionConstraint iConstraint);
 
     @Override
     public boolean isAlwaysHidden() {
@@ -209,16 +208,13 @@ implements
      * returns <tt>true</tt> only if none hide the member.
      */
     @Override
-    public Consent isVisible(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        var visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
+    public final Consent isVisible(final ManagedObject target, final InteractionConstraint iConstraint) {
+        var visibilityContext = createVisibleInteractionContext(target, iConstraint);
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
 
     // -- Disabled (or enabled)
+
     /**
      * Create an {@link InteractionContext} to represent an attempt to
      * use this member (that is, to check if it is usable or not).
@@ -230,21 +226,16 @@ implements
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract UsabilityContext createUsableInteractionContext(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
+            ManagedObject target,
+            InteractionConstraint iConstraint);
 
     /**
      * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and
      * returns <tt>true</tt> only if none disables the member.
      */
     @Override
-    public Consent isUsable(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        var usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
+    public final Consent isUsable(final ManagedObject target, final InteractionConstraint iConstraint) {
+        var usabilityContext = createUsableInteractionContext(target, iConstraint);
         return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
     }
 
@@ -277,9 +268,8 @@ implements
             final @NonNull ManagedObject mixee) {
 
         // nullable for action parameter mixins
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee)) {
-            return ManagedObject.empty(mixinSpec);
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee))
+			return ManagedObject.empty(mixinSpec);
 
         var mixinPojo = getFactoryService().mixin(mixinSpec.getCorrespondingClass(), mixee.getPojo());
         return ManagedObject.mixin(mixinSpec, mixinPojo);

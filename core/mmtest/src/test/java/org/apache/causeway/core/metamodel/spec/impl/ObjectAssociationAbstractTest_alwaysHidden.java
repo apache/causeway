@@ -40,6 +40,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetForLayoutAbstract;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -103,18 +104,16 @@ class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public UsabilityContext createUsableInteractionContext(
-                    final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
-                return null;
-            }
+    		protected UsabilityContext createUsableInteractionContext(final ManagedObject target,
+    				final InteractionConstraint iConstraint) {
+    			return null;
+    		}
 
             @Override
-            public VisibilityContext createVisibleInteractionContext(
-                    final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
-                return null;
-            }
+    		protected VisibilityContext createVisibleInteractionContext(final ManagedObject target,
+    				final InteractionConstraint iConstraint) {
+    			return null;
+    		}
 
             @Override
             public boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {

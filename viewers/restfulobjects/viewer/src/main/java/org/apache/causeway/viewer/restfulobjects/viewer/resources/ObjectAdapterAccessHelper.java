@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
@@ -30,7 +32,6 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteracti
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -45,7 +46,7 @@ public class ObjectAdapterAccessHelper {
             final ManagedObject managedObject) {
         return new ObjectAdapterAccessHelper(
                 managedObject,
-                resourceContext.where());
+                resourceContext.iConstraint().where());
     }
 
     private final ManagedObject managedObject;
@@ -85,7 +86,6 @@ public class ObjectAdapterAccessHelper {
                 .checkVisibility()
                 .checkUsability(intent)
                 .getManagedCollectionElseThrow(InteractionFailureHandler::onFailure);
-
     }
 
 }

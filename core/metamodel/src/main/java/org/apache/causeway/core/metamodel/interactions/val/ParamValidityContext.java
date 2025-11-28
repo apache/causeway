@@ -24,8 +24,8 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
@@ -42,7 +42,7 @@ public record ParamValidityContext(
     InteractionHead head,
     Identifier identifier,
     Supplier<String> friendlyNameProvider,
-    InteractionInitiatedBy initiatedBy,
+    InteractionConstraint iConstraint,
     ObjectAction objectAction,
     ManagedObject proposed,
     Can<ManagedObject> args,
@@ -54,11 +54,11 @@ public record ParamValidityContext(
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy initiatedBy) {
+            final InteractionConstraint iConstraint) {
         this(InteractionContextType.ACTION_PROPOSED_ARGUMENT,
             head, id,
             ()->objectAction.getParameters().getElseFail(position).getFriendlyName(head::target),
-            initiatedBy,
+            iConstraint,
             objectAction,
             args.getElseFail(position),
             args,

@@ -24,8 +24,8 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -41,7 +41,7 @@ public record ActionValidityContext(
     InteractionHead head,
     Identifier identifier,
     Supplier<String> friendlyNameProvider,
-    InteractionInitiatedBy initiatedBy,
+    InteractionConstraint iConstraint,
     ObjectAction objectAction,
     Can<ManagedObject> args
     ) implements ValidityContext, ActionInteractionContext {
@@ -51,11 +51,10 @@ public record ActionValidityContext(
             final ObjectAction objectAction,
             final Identifier id,
             final Can<ManagedObject> args,
-            final InteractionInitiatedBy initiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         this(InteractionContextType.ACTION_INVOKE,
-            head, id, ()->objectAction.getFriendlyName(head::target), initiatedBy,
-            objectAction, args);
+            head, id, ()->objectAction.getFriendlyName(head::target), iConstraint, objectAction, args);
     }
 
     @Override

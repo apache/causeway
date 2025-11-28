@@ -18,11 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.facets.all.hide;
 
+import java.util.Optional;
+
 import jakarta.inject.Inject;
 
-import org.apache.causeway.applib.services.appfeat.ApplicationFeatureFilter;
+import org.apache.causeway.commons.internal.ioc.SpringContextHolder;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -34,10 +35,15 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 public class HiddenFacetForFeatureFilterFactory
 extends FacetFactoryAbstract {
 
+	private final ApplicationFeatureFilters applicationFeatureFilters;
+
     @Inject
     public HiddenFacetForFeatureFilterFactory(final MetaModelContext mmc) {
         super(mmc, FeatureType.EVERYTHING_BUT_PARAMETERS);
-        mmc.getServiceRegistry().select(ApplicationFeatureFilter.class);
+        var springContext = Optional.ofNullable(mmc.getSystemEnvironment().springContextHolder())
+        		.map(SpringContextHolder::springContext)
+        		.orElse(null);
+        this.applicationFeatureFilters = ApplicationFeatureFilters.collectFrom(springContext);
     }
 
     @Override
@@ -45,12 +51,12 @@ extends FacetFactoryAbstract {
         var facetHolder = processClassContext.getFacetHolder();
         //TODO WIP FacetUtil.addFacet(new HiddenFacetForFeatureFilterImpl(facetHolder));
     }
-    
+
     @Override
-    public void process(ProcessMethodContext processMethodContext) {
+    public void process(final ProcessMethodContext processMethodContext) {
     	var facetHolder = processMethodContext.getFacetHolder();
     	//TODO WIP processMethodContext.getFeatureType().isProperty();
     	//TODO WIP FacetUtil.addFacet(new HiddenFacetForFeatureFilterImpl(facetHolder));
     }
-    
+
 }

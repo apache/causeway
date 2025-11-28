@@ -157,14 +157,12 @@ public final class InteractionUtils {
     }
 
     private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
-        if(ic.initiatedBy().isPassThrough()
-                && isDomainEventAdvisor(advisor)) {
-            //[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
+        if(ic.iConstraint().initiatedBy().isPassThrough()
+                && isDomainEventAdvisor(advisor))
+			//[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
             return false;
-        }
-        if(advisor instanceof ActionDomainEventFacet) {
-            return ic instanceof ActionInteractionContext;
-        }
+        if(advisor instanceof ActionDomainEventFacet)
+			return ic instanceof ActionInteractionContext;
         return true;
     }
 

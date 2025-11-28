@@ -16,22 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.val;
+package org.apache.causeway.core.metamodel.interactions;
 
-import java.util.function.Supplier;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
-import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
-import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
+public record InteractionConstraint(
+		WhatViewer whatViewer,
+		InteractionInitiatedBy initiatedBy,
+		Where where
+		) {
 
-public sealed interface ValidityContext
-extends InteractionContext, InteractionEventSupplier<ValidityEvent>
-permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, PropertyModifyContext {
-
-    Supplier<String> friendlyNameProvider();
-
-    default String friendlyName() {
-        return friendlyNameProvider().get();
-    }
+	public InteractionConstraint withWhere(final Where where) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
 
 }

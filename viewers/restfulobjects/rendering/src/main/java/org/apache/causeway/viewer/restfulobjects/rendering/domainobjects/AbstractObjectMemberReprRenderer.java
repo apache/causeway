@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.viewer.restfulobjects.rendering.domainobjects;
 
-import tools.jackson.databind.node.NullNode;
-
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -37,6 +36,8 @@ import org.apache.causeway.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.causeway.viewer.restfulobjects.rendering.IResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.causeway.viewer.restfulobjects.rendering.ReprRendererAbstract;
+
+import tools.jackson.databind.node.NullNode;
 
 public abstract class AbstractObjectMemberReprRenderer<T extends ObjectMember>
 extends ReprRendererAbstract<ManagedMember> {
@@ -86,7 +87,7 @@ extends ReprRendererAbstract<ManagedMember> {
      * Used to determine whether to follow links; only populated for {@link Mode#INLINE inline} Mode.
      */
     private String memberId;
-    protected final Where where;
+    protected final InteractionConstraint iConstraint;
 
     public AbstractObjectMemberReprRenderer(
             final IResourceContext resourceContext,
@@ -97,7 +98,7 @@ extends ReprRendererAbstract<ManagedMember> {
             final Where where) {
         super(resourceContext, linkFollower, representationType, representation);
         this.memberId = memberId;
-        this.where = where;
+        this.iConstraint = new InteractionConstraint(resourceContext.iConstraint().whatViewer(), resourceContext.iConstraint().initiatedBy(), where);
     }
 
     protected String getMemberId() {
@@ -221,9 +222,8 @@ extends ReprRendererAbstract<ManagedMember> {
      * mutators}.
      */
     protected void addLinkFor(final @NonNull MutatorSpec mutatorSpec) {
-        if (!mutatorSpec.appliesTo(objectMember)) {
-            return;
-        }
+        if (!mutatorSpec.appliesTo(objectMember))
+			return;
         final JsonRepresentation arguments = mutatorArgs(mutatorSpec);
         final RepresentationType representationType = objectMemberType.getRepresentationType();
         final JsonRepresentation mutatorLink = linkToForMutatorInvoke().memberBuilder(mutatorSpec.rel, objectMemberType, objectMember, representationType, mutatorSpec.suffix).withHttpMethod(mutatorSpec.httpMethod).withArguments(arguments).build();
@@ -243,9 +243,8 @@ extends ReprRendererAbstract<ManagedMember> {
      * overridden (ie by actions) if required.
      */
     protected JsonRepresentation mutatorArgs(final MutatorSpec mutatorSpec) {
-        if (mutatorSpec.arguments.isNone()) {
-            return null;
-        }
+        if (mutatorSpec.arguments.isNone())
+			return null;
         if (mutatorSpec.arguments.isOne()) {
             final JsonRepresentation repr = JsonRepresentation.newMap();
             repr.mapPutJsonNode("value", NullNode.getInstance()); // force a null into
@@ -257,9 +256,8 @@ extends ReprRendererAbstract<ManagedMember> {
     }
 
     private void addDetailsLinkIfPersistent() {
-        if (!ManagedObjects.isIdentifiable(objectAdapter)) {
-            return;
-        }
+        if (!ManagedObjects.isIdentifiable(objectAdapter))
+			return;
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();
         getLinks().arrayAdd(link);
 
@@ -278,9 +276,8 @@ extends ReprRendererAbstract<ManagedMember> {
     protected abstract void followDetailsLink(JsonRepresentation detailsLink);
 
     protected final void putDisabledReasonIfDisabled() {
-        if(resourceContext.config().suppressMemberDisabledReason()) {
-            return;
-        }
+        if(resourceContext.config().suppressMemberDisabledReason())
+			return;
         final String disabledReasonRep = usability().getReasonAsString().orElse(null);
         representation.mapPutString("disabledReason", disabledReasonRep);
     }
@@ -304,11 +301,11 @@ extends ReprRendererAbstract<ManagedMember> {
     }
 
     protected Consent usability() {
-        return objectMember.isUsable(objectAdapter, getInteractionInitiatedBy(), where);
+        return objectMember.isUsable(objectAdapter, iConstraint);
     }
 
     protected Consent visibility() {
-        return objectMember.isVisible(objectAdapter, getInteractionInitiatedBy(), where);
+        return objectMember.isVisible(objectAdapter, iConstraint);
     }
 
 }

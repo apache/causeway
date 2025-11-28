@@ -16,22 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.val;
+package org.apache.causeway.core.metamodel.interactions;
 
-import java.util.function.Supplier;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
-import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
-import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
+/**
+ * Viewer identifier, used for viewer specific feature filtering.
+ */
+public record WhatViewer(
+		String viewerId) {
 
-public sealed interface ValidityContext
-extends InteractionContext, InteractionEventSupplier<ValidityEvent>
-permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, PropertyModifyContext {
+	/**
+	 * Used by {@link WrapperFactory}, {@link CommandExecutorService} and Object title interaction.
+	 */
+	public static WhatViewer noViewer() {
+		return new WhatViewer("NoViewer");
+	}
 
-    Supplier<String> friendlyNameProvider();
-
-    default String friendlyName() {
-        return friendlyNameProvider().get();
-    }
-
+	/**
+	 * @deprecated for refactoring only
+	 */
+	@Deprecated
+	public static WhatViewer invalid() {
+		return new WhatViewer("invalid");
+	}
 }

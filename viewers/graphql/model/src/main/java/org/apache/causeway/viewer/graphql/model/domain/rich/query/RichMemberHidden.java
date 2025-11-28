@@ -22,8 +22,6 @@ import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.applib.annotation.Where;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.viewer.graphql.model.context.Context;
@@ -58,15 +56,15 @@ public class RichMemberHidden<T extends ObjectMember> extends Element {
 
         var sourcePojoClass = sourcePojo.getClass();
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            // not expected
+        if (objectSpecification == null)
+			// not expected
             return true;
-        }
 
         var objectMember = memberInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
 
-        var visibleConsent = objectMember.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var iConstraint = Context.iConstraint();
+        var visibleConsent = objectMember.isVisible(managedObject, iConstraint);
         return visibleConsent.isVetoed();
     }
 

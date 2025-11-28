@@ -27,6 +27,8 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -110,47 +112,34 @@ permits ManagedAction, ManagedCollection, ManagedProperty {
      * @return non-empty if hidden
      */
     public Optional<InteractionVeto> checkVisibility() {
-
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, where);
         try {
-            var visibilityConsent =
-                    getMetaModel()
-                    .isVisible(getOwner(), InteractionInitiatedBy.USER, where);
-
+            var visibilityConsent = getMetaModel()
+                .isVisible(getOwner(), iConstraint);
             return visibilityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.hidden(visibilityConsent))
-                    : Optional.empty();
-
+                ? Optional.of(InteractionVeto.hidden(visibilityConsent))
+                : Optional.empty();
         } catch (final Exception ex) {
-
             log.warn(ex.getLocalizedMessage(), ex);
             return Optional.of(InteractionVeto.hidden(new Veto("failure during visibility evaluation")));
-
         }
-
     }
 
     /**
      * @return non-empty if not usable/editable (meaning if read-only)
      */
     public Optional<InteractionVeto> checkUsability() {
-
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, where);
         try {
-
-            var usabilityConsent =
-                    getMetaModel()
-                    .isUsable(getOwner(), InteractionInitiatedBy.USER, where);
-
+            var usabilityConsent = getMetaModel()
+                .isUsable(getOwner(), iConstraint);
             return usabilityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.readonly(usabilityConsent))
-                    : Optional.empty();
-
+                ? Optional.of(InteractionVeto.readonly(usabilityConsent))
+                : Optional.empty();
         } catch (final Exception ex) {
-
             log.warn(ex.getLocalizedMessage(), ex);
             return Optional.of(InteractionVeto.readonly(new Veto("failure during usability evaluation")));
-
         }
-
     }
 
     protected static <T extends ObjectMember> Optional<T> lookup(

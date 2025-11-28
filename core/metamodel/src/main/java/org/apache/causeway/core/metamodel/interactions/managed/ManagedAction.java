@@ -35,7 +35,9 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -136,11 +138,12 @@ public final class ManagedAction extends ManagedMember {
     public Railway<InteractionVeto, ManagedObject> invoke(
             final @NonNull Can<ManagedObject> actionParameters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), interactionInitiatedBy, getWhere());
 
         final ManagedObject actionResult = getAction()
                 // under the hood intercepts cases, where the owner is a value-type;
                 // executions on value-types have no rule checking and trigger no domain events
-                .execute(interactionHead(), actionParameters, interactionInitiatedBy);
+                .execute(interactionHead(), actionParameters, iConstraint);
 
         return Railway.success(route(actionResult));
     }
@@ -153,12 +156,13 @@ public final class ManagedAction extends ManagedMember {
     @SneakyThrows
     public final ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, getWhere());
 
         final ManagedObject actionResult = getAction()
                 // under the hood intercepts cases, where the owner is a value-type;
                 // executions on value-types have no rule checking and trigger no domain events
                 .executeWithRuleChecking(
-                        interactionHead(), actionParameters, InteractionInitiatedBy.USER, getWhere());
+                        interactionHead(), actionParameters, iConstraint);
 
         return route(actionResult);
     }
@@ -167,9 +171,8 @@ public final class ManagedAction extends ManagedMember {
 
     private ManagedObject route(final @Nullable ManagedObject actionResult) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult)) {
-            return ManagedObject.empty(action.getReturnType());
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionResult))
+			return ManagedObject.empty(action.getReturnType());
 
         var resultPojo = actionResult.getPojo();
         var objManager = mmc().getObjectManager();

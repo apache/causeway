@@ -56,7 +56,7 @@ implements HiddenFacetForLayout {
 
     @Override
     public final String hides(final VisibilityContext ic) {
-        return hiddenReason(ic.target(), ic.where());
+        return hiddenReason(ic.target(), ic.iConstraint().where());
     }
 
     /**

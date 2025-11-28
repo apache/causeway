@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.spec.feature;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Domain;
@@ -30,6 +31,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.interactions.val.ParamValidityContext;
@@ -38,7 +40,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
@@ -109,7 +110,7 @@ extends ObjectFeature, CurrentHolder {
             InteractionHead head,
             Can<ManagedObject> args,
             int position,
-            InteractionInitiatedBy interactionInitiatedBy);
+            InteractionConstraint iConstraint);
 
     /**
      * Whether there is an autoComplete provided (eg <tt>autoCompleteXxx</tt> supporting
@@ -203,7 +204,7 @@ extends ObjectFeature, CurrentHolder {
     Consent isVisible(
             InteractionHead head,
             Can<ManagedObject> pendingArgs,
-            InteractionInitiatedBy interactionInitiatedBy);
+            InteractionConstraint iConstraint);
 
     /**
      * Whether this parameter is disabled given the entered previous arguments
@@ -214,7 +215,7 @@ extends ObjectFeature, CurrentHolder {
     Consent isUsable(
             InteractionHead head,
             Can<ManagedObject> pendingArgs,
-            InteractionInitiatedBy interactionInitiatedBy);
+            InteractionConstraint iConstraint);
 
     /**
      * Whether proposed value for this parameter is valid.
@@ -226,7 +227,7 @@ extends ObjectFeature, CurrentHolder {
     Consent isValid(
             InteractionHead head,
             Can<ManagedObject> pendingArgs,
-            InteractionInitiatedBy interactionInitiatedBy);
+            InteractionConstraint iConstraint);
 
     @Domain.Exclude
     @UtilityClass
