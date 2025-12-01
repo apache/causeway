@@ -65,7 +65,7 @@
 
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
         <maven-release-plugin.version>3.2.0</maven-release-plugin.version>
-        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
         <maven-surefire-report-plugin.version>3.5.4</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
@@ -134,7 +134,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>3.7.1</version>    <!--bumped-->
+                    <version>3.8.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -316,7 +316,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.3.1</version>    <!--bumped-->
+                    <version>3.4.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

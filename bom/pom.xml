@@ -66,7 +66,7 @@ identified
         <asciidoctorj.version>3.0.1</asciidoctorj.version>
         <asm.version>9.9</asm.version> <!-- keep in sync with
         org.eclipse.persistence:org.eclipse.persistence.asm -->
-        <approvaltests.version>25.7.0</approvaltests.version>
+        <approvaltests.version>25.8.0</approvaltests.version>
 
         <assertj-guava.version>3.27.6</assertj-guava.version>
 
@@ -85,7 +85,7 @@ identified
 
         <easymock.version>5.6.0</easymock.version>
         <eclipselink.version>4.0.8</eclipselink.version>
-        <error_prone_annotations.version>2.44.0</error_prone_annotations.version>
+        <error_prone_annotations.version>2.45.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <graaljs.version>25.0.1</graaljs.version>
@@ -125,12 +125,12 @@ identified
         <momentjs.version>2.30.1-1</momentjs.version> <!-- keep in sync:
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
-        <ognl.version>3.4.8</ognl.version>
+        <ognl.version>3.4.9</ognl.version>
         <osgi.version>8.0.0</osgi.version>
 
         <pdfbox.version>3.0.6</pdfbox.version>
         <picocontainer.version>2.15.2</picocontainer.version>
-        <poi.version>5.5.0</poi.version>
+        <poi.version>5.5.1</poi.version>
 
         <prismjs.version>1.29.0</prismjs.version>
 
@@ -152,7 +152,7 @@ identified
         </surefire-plugin.argLine>
         <surefire.useModulePath>false</surefire.useModulePath> <!-- disable
         module-path for testing, that is, put everything on the class-path -->
-        <swagger-core.version>2.2.40</swagger-core.version>
+        <swagger-core.version>2.2.41</swagger-core.version>
 
         <wicket.version>10.7.0</wicket.version>
         <wicket-bootstrap.version>7.0.13</wicket-bootstrap.version> <!--
