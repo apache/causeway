@@ -125,7 +125,7 @@ identified
 
         <easymock.version>5.6.0</easymock.version>
         <eclipselink.version>4.0.8</eclipselink.version>
-        <error_prone_annotations.version>2.44.0</error_prone_annotations.version>
+        <error_prone_annotations.version>2.45.0</error_prone_annotations.version>
 
         <git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
         <graaljs.version>25.0.1</graaljs.version>
