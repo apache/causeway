@@ -140,6 +140,8 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
     @Override
     public boolean isVisible() {
+    	getManagedAction().checkVisibility();
+
         return getActionModel().getVisibilityConsent().isAllowed();
     }
 

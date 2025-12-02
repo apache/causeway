@@ -24,10 +24,10 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
@@ -42,17 +42,16 @@ public final class ManagedCollection extends ManagedMember {
     public static final ManagedCollection of(
             final @NonNull ManagedObject owner,
             final @NonNull OneToManyAssociation collection,
-            final @NonNull Where where) {
-        return new ManagedCollection(owner, collection, where);
+            final @NonNull InteractionConstraint iConstraint) {
+        return new ManagedCollection(owner, collection, iConstraint);
     }
 
     public static final Optional<ManagedCollection> lookupCollection(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
-
+            final @NonNull InteractionConstraint iConstraint) {
         return ManagedMember.<OneToManyAssociation>lookup(owner.objSpec(), Identifier.Type.COLLECTION, memberId)
-            .map(objectAction -> of(owner, objectAction, where));
+            .map(coll -> of(owner, coll, iConstraint));
     }
 
     // -- IMPLEMENTATION
@@ -62,9 +61,8 @@ public final class ManagedCollection extends ManagedMember {
     private ManagedCollection(
             final @NonNull ManagedObject owner,
             final @NonNull OneToManyAssociation collection,
-            final @NonNull Where where) {
-
-        super(owner, where);
+            final @NonNull InteractionConstraint iConstraint) {
+        super(owner, iConstraint);
         this.collection = collection;
     }
 

@@ -24,7 +24,7 @@ import java.util.function.Function;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public record PropertyInteraction(
@@ -34,9 +34,9 @@ implements MemberInteraction<ManagedProperty, PropertyInteraction> {
     public static final PropertyInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
+            final @NonNull InteractionConstraint iConstraint) {
 
-        var managedProperty = ManagedProperty.lookupProperty(owner, memberId, where);
+        var managedProperty = ManagedProperty.lookupProperty(owner, memberId, iConstraint);
 
         final InteractionRailway<ManagedProperty> railway = managedProperty.isPresent()
                 ? InteractionRailway.success(managedProperty.get())

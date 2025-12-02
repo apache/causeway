@@ -137,7 +137,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final JsonRepresentation representation = JsonRepresentation.newMap();
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, representation);
-        renderer.with(ManagedProperty.of(objectAdapter, objectMember, super.iConstraint.where())).asFollowed();
+        renderer.with(ManagedProperty.of(objectAdapter, objectMember, super.iConstraint)).asFollowed();
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
     }
 

@@ -102,7 +102,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -114,9 +113,6 @@ import org.apache.causeway.commons.internal.functions._Functions.SerializableFun
 import org.apache.causeway.commons.internal.functions._Functions.SerializableSupplier;
 import org.apache.causeway.commons.net.DataUri;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
-import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiString;
 import org.apache.causeway.viewer.wicket.model.hints.CausewayActionCompletedEvent;
@@ -1266,13 +1262,5 @@ public class Wkt {
             tag.put("disabled", "disabled");
         }
     }
-
-    // -- INTERACTION
-
-    private static WhatViewer WHAT_VIEWER = new WhatViewer("Wicket");
-	public WhatViewer whatViewer() { return WHAT_VIEWER; }
-	public static InteractionConstraint iConstraint(final InteractionInitiatedBy user, final Where where) {
-		return new InteractionConstraint(whatViewer(), user, where);
-	}
 
 }

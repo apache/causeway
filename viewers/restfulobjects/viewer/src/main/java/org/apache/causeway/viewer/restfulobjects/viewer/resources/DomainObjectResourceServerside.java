@@ -345,7 +345,7 @@ implements DomainObjectResource {
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
         PropertyInteraction
-            .start(objectAdapter, propertyId, resourceContext.iConstraint().where())
+            .start(objectAdapter, propertyId, resourceContext.iConstraint())
             .checkVisibility()
             .checkUsability(AccessIntent.MUTATE)
             .modifyProperty(property->{
@@ -376,7 +376,7 @@ implements DomainObjectResource {
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "DELETE /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
-        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.iConstraint().where())
+        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.iConstraint())
         .checkVisibility()
         .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->null)

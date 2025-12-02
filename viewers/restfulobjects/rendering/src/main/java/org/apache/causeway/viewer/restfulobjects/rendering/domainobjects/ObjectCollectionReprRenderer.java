@@ -128,7 +128,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         var objectCollectionReprRenderer =
             new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap())
-                .with(ManagedCollection.of(objectAdapter, objectMember, resourceContext.iConstraint().where()))
+                .with(ManagedCollection.of(objectAdapter, objectMember, resourceContext.iConstraint()))
                 .asFollowed();
         detailsLink.mapPutJsonRepresentation("value", objectCollectionReprRenderer.render());
     }

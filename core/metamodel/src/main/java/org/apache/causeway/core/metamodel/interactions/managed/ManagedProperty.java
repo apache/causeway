@@ -24,7 +24,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Observables;
@@ -32,7 +31,6 @@ import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
-import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -49,17 +47,16 @@ extends ManagedMember {
     public static final ManagedProperty of(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
-            final @NonNull Where where) {
-        return new ManagedProperty(owner, property, where);
+            final @NonNull InteractionConstraint iConstraint) {
+        return new ManagedProperty(owner, property, iConstraint);
     }
 
     public static final Optional<ManagedProperty> lookupProperty(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
-
+            final @NonNull InteractionConstraint iConstraint) {
         return ManagedMember.<OneToOneAssociation>lookup(owner.objSpec(), Identifier.Type.PROPERTY, memberId)
-            .map(objectAction -> of(owner, objectAction, where));
+            .map(prop -> of(owner, prop, iConstraint));
     }
 
     // -- IMPLEMENTATION
@@ -69,8 +66,8 @@ extends ManagedMember {
     private ManagedProperty(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
-            final @NonNull Where where) {
-        super(owner, where);
+            final @NonNull InteractionConstraint iConstraint) {
+        super(owner, iConstraint);
         this.property = property;
         observablePropValue = _Observables.lazy(this::reassessPropertyValue);
     }
@@ -92,10 +89,9 @@ extends ManagedMember {
     // -- INTERACTION
 
     public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, getWhere());
         try {
             var validityConsent =
-                property.isAssociationValid(getOwner(), proposedNewValue, iConstraint);
+                property.isAssociationValid(getOwner(), proposedNewValue, iConstraint());
             return validityConsent.isVetoed()
                 ? Optional.of(InteractionVeto.invalid(validityConsent))
                 : Optional.empty();
@@ -126,12 +122,8 @@ extends ManagedMember {
     private ManagedObject reassessPropertyValue() {
         var property = getProperty();
         var owner = getOwner();
-
-        var iConstraint1 = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.FRAMEWORK, getWhere());
-        var iConstraint2 = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, getWhere());
-
-        return property.isVisible(owner, iConstraint1).isAllowed() //TODO strange API
-                && property.isVisible(owner, iConstraint2).isAllowed()
+        return property.isVisible(owner, iConstraint().withInitiatedBy(InteractionInitiatedBy.FRAMEWORK)).isAllowed() //TODO strange API
+                && property.isVisible(owner, iConstraint()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getElementType());
     }

@@ -75,7 +75,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
-        renderer.with(ManagedAction.of(objectAdapter, objectMember, resourceContext.iConstraint().where()))
+        renderer.with(ManagedAction.of(objectAdapter, objectMember, resourceContext.iConstraint()))
         	.usingLinkTo(linkTo)
         	.asFollowed();
         detailsLink.mapPutJsonRepresentation("value", renderer.render());
@@ -121,7 +121,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
     private ObjectActionReprRenderer addParameterDetails() {
         final Map<String,Object> parameters = _Maps.newLinkedHashMap();
         if(objectMember.getParameterCount()>0) {
-            var act = ManagedAction.of(objectAdapter, objectMember, Where.ANYWHERE);
+            var act = ManagedAction.of(objectAdapter, objectMember, resourceContext.iConstraint());
             var paramNeg = act.startParameterNegotiation();
             for(var paramMod : paramNeg.getParamModels()) {
                 var paramMeta = paramMod.getMetaModel();

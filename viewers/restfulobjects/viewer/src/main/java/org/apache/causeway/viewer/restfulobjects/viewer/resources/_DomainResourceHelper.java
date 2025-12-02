@@ -200,10 +200,8 @@ record _DomainResourceHelper(
             final @NonNull JsonRepresentation arguments,
             final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
 
-        var where = resourceContext.iConstraint().where();
-
         // lombok issue, needs explicit cast here
-        var actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
+        var actionInteraction = ActionInteraction.start(objectAdapter, actionId, resourceContext.iConstraint())
         .checkVisibility()
         .checkUsability(intent)
         .checkSemanticConstraint(semanticConstraint);

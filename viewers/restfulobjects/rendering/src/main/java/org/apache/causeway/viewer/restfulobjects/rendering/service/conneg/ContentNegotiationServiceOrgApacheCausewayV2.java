@@ -324,7 +324,7 @@ extends ContentNegotiationServiceAbstract {
             var visibilityConsent = collection.isVisible(owner, resourceContext.iConstraint());
             if (!visibilityConsent.isAllowed()) return;
 
-            var managedCollection = ManagedCollection.of(owner, collection, resourceContext.iConstraint().where());
+            var managedCollection = ManagedCollection.of(owner, collection, resourceContext.iConstraint());
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
         });
@@ -337,7 +337,6 @@ extends ContentNegotiationServiceAbstract {
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
 
-        var where = resourceContext.iConstraint().where();
         final Stream<OneToOneAssociation> properties = objectAdapter.objSpec()
                 .streamProperties(MixedIn.INCLUDED);
 
@@ -349,7 +348,7 @@ extends ContentNegotiationServiceAbstract {
             var renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
                     .asStandalone()
-                    .with(ManagedProperty.of(objectAdapter, property, where));
+                    .with(ManagedProperty.of(objectAdapter, property, resourceContext.iConstraint()));
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
 

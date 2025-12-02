@@ -31,4 +31,8 @@ public record InteractionConstraint(
 		return new InteractionConstraint(whatViewer, initiatedBy, where);
 	}
 
+	public InteractionConstraint withInitiatedBy(final InteractionInitiatedBy initiatedBy) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
 }

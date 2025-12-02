@@ -322,7 +322,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(getResourceContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
-            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.iConstraint().where())).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.iConstraint())).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
                 renderer.asArguments();
@@ -359,7 +359,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            renderer.with(ManagedCollection.of(objectAdapter, collection, resourceContext.iConstraint().where()))
+            renderer.with(ManagedCollection.of(objectAdapter, collection, resourceContext.iConstraint()))
             	.usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
                 renderer.asEventSerialization();
@@ -385,7 +385,7 @@ extends ReprRendererAbstract<ManagedObject> {
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(),
                             JsonRepresentation.newMap());
 
-            renderer.with(ManagedAction.of(objectAdapter, action, resourceContext.iConstraint().where()))
+            renderer.with(ManagedAction.of(objectAdapter, action, resourceContext.iConstraint()))
             	.usingLinkTo(linkToBuilder);
             members.mapPutJsonRepresentation(action.getId(), renderer.render());
         });

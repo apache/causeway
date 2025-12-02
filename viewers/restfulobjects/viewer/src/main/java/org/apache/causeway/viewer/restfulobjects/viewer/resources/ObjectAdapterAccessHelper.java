@@ -20,7 +20,7 @@ package org.apache.causeway.viewer.restfulobjects.viewer.resources;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction.SemanticConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
@@ -46,11 +46,11 @@ public class ObjectAdapterAccessHelper {
             final ManagedObject managedObject) {
         return new ObjectAdapterAccessHelper(
                 managedObject,
-                resourceContext.iConstraint().where());
+                resourceContext.iConstraint());
     }
 
     private final ManagedObject managedObject;
-    private final Where where;
+    private final InteractionConstraint iConstraint;
 
     public ManagedAction getObjectActionThatIsVisibleForIntentAndSemanticConstraint(
             final @NonNull String actionId,
@@ -58,7 +58,7 @@ public class ObjectAdapterAccessHelper {
             final @NonNull SemanticConstraint semanticConstraint) {
 
         return ActionInteraction
-                .start(managedObject, actionId, where)
+                .start(managedObject, actionId, iConstraint)
                 .checkVisibility()
                 .checkUsability(AccessIntent.MUTATE)
                 .checkSemanticConstraint(semanticConstraint)
@@ -70,7 +70,7 @@ public class ObjectAdapterAccessHelper {
             final @NonNull AccessIntent intent) {
 
         return PropertyInteraction
-                .start(managedObject, propertyId, where)
+                .start(managedObject, propertyId, iConstraint)
                 .checkVisibility()
                 .checkUsability(intent)
                 .getManagedPropertyElseThrow(InteractionFailureHandler::onFailure);
@@ -82,7 +82,7 @@ public class ObjectAdapterAccessHelper {
             final @NonNull AccessIntent intent) {
 
         return CollectionInteraction
-                .start(managedObject, collectionId, where)
+                .start(managedObject, collectionId, iConstraint)
                 .checkVisibility()
                 .checkUsability(intent)
                 .getManagedCollectionElseThrow(InteractionFailureHandler::onFailure);

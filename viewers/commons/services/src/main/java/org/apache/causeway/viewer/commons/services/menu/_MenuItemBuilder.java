@@ -20,18 +20,22 @@ package org.apache.causeway.viewer.commons.services.menu;
 
 import java.util.concurrent.atomic.LongAdder;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenu;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,8 +60,8 @@ final class _MenuItemBuilder {
             final BSMenuBar menuBar,
             final Visitor menuBuilder) {
 
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.ANYWHERE);
         var itemsPerSectionCounter = new LongAdder();
-
         var menuVisitor = MenuProcessor.of(mmc, menuBuilder);
 
         for (var menu : menuBar.getMenus()) {
@@ -78,7 +82,7 @@ final class _MenuItemBuilder {
                     }
 
                     var managedAction = ManagedAction
-                            .lookupAction(serviceAdapter, actionLayoutData.getId(), Where.EVERYWHERE)
+                            .lookupAction(serviceAdapter, actionLayoutData.getId(), iConstraint)
                             .orElse(null);
                     if (managedAction == null) {
                         log.warn("No such action: bean-name '{}' action-id '{}'",

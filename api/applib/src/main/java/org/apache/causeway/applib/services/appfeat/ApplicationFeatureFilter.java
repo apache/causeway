@@ -20,24 +20,22 @@ package org.apache.causeway.applib.services.appfeat;
 
 /**
  * The various viewer implementations will individually honor any filters registered with Spring,
- * based on a matching qualifier ('graphql', 'restful', etc.). 
+ * based on a matching qualifier ('Graphql', 'Restful', etc.).
  *
  * <p>All filters that match a qualifier are consulted until any one rejects the {@link ApplicationFeature}.
- *    
- * <p>In no filters match a qualifier, all {@link ApplicationFeature} are accepted.
+ *
+ * <p>If no filters match a qualifier, any {@link ApplicationFeature} is accepted.
+ *
+ * <p>'NoViewer' is a reserved string internally used to mean 'no filtering', hence it should not be used to qualify a filter.
  *
  * @since 4.0 {@index}
  */
 @FunctionalInterface
 public interface ApplicationFeatureFilter {
 
-	public final static String GRAPHQL_VIEWER = "graphql";
-	public final static String RESTFUL_VIEWER = "restful";
-	public final static String WICKET_VIEWER = "wicket";
-
 	/**
 	 * Whether to include given {@link ApplicationFeature}.
 	 */
 	boolean filter(ApplicationFeature feature);
-	
+
 }

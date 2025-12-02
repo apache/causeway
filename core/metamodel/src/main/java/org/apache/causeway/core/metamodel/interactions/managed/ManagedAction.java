@@ -25,7 +25,6 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.routing.RoutingService;
 import org.apache.causeway.commons.collections.Can;
@@ -37,7 +36,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -57,27 +55,26 @@ public final class ManagedAction extends ManagedMember {
     public static final ManagedAction of(
             final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
-            final @NonNull Where where) {
-        return new ManagedAction(owner, action, where, Can::empty);
+            final @NonNull InteractionConstraint iConstraint) {
+        return new ManagedAction(owner, action, iConstraint, Can::empty);
     }
 
     public static final Optional<ManagedAction> lookupAction(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
+            final @NonNull InteractionConstraint iConstraint) {
 
         return ManagedMember.<ObjectAction>lookup(owner.objSpec(), Identifier.Type.ACTION, memberId)
-        .map(objectAction -> of(owner, objectAction, where));
+    		.map(objectAction -> of(owner, objectAction, iConstraint));
     }
 
     public static final Optional<ManagedAction> lookupActionWithMultiselect(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where,
+            final @NonNull InteractionConstraint iConstraint,
             final @NonNull MultiselectChoices multiselectChoices) {
-
         return ManagedMember.<ObjectAction>lookup(owner.objSpec(), Identifier.Type.ACTION, memberId)
-                .map(objectAction -> new ManagedAction(owner, objectAction, where, multiselectChoices));
+            .map(objectAction -> new ManagedAction(owner, objectAction, iConstraint, multiselectChoices));
     }
 
     // -- IMPLEMENTATION
@@ -88,10 +85,10 @@ public final class ManagedAction extends ManagedMember {
     private ManagedAction(
             final @NonNull ManagedObject owner,
             final @NonNull ObjectAction action,
-            final @NonNull Where where,
+            final @NonNull InteractionConstraint iConstraint,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        super(owner, where);
+        super(owner, iConstraint);
         /* entities might become removed, but even though removed, an entity delete mixin say,
             may still want to provide an action result, that does not need the mixee instance to be produced;
             eg. delete ApplicationUser mixin that returns a collection of all remaining users
@@ -138,12 +135,10 @@ public final class ManagedAction extends ManagedMember {
     public Railway<InteractionVeto, ManagedObject> invoke(
             final @NonNull Can<ManagedObject> actionParameters,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy) {
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), interactionInitiatedBy, getWhere());
-
         final ManagedObject actionResult = getAction()
                 // under the hood intercepts cases, where the owner is a value-type;
                 // executions on value-types have no rule checking and trigger no domain events
-                .execute(interactionHead(), actionParameters, iConstraint);
+                .execute(interactionHead(), actionParameters, iConstraint());
 
         return Railway.success(route(actionResult));
     }
@@ -156,13 +151,11 @@ public final class ManagedAction extends ManagedMember {
     @SneakyThrows
     public final ManagedObject invokeWithRuleChecking(
             final @NonNull Can<ManagedObject> actionParameters) throws AuthorizationException {
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, getWhere());
-
         final ManagedObject actionResult = getAction()
                 // under the hood intercepts cases, where the owner is a value-type;
                 // executions on value-types have no rule checking and trigger no domain events
                 .executeWithRuleChecking(
-                        interactionHead(), actionParameters, iConstraint);
+                        interactionHead(), actionParameters, iConstraint());
 
         return route(actionResult);
     }

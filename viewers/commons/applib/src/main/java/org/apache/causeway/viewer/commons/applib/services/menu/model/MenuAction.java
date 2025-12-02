@@ -27,8 +27,12 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -57,7 +61,7 @@ public record MenuAction (
                 .isPrototype(action.isPrototype())
                 .paramCount(action.getParameterCount())
                 .interactionVetoOpt(managedAction.checkUsability()
-                    .flatMap(veto->veto.getReason()))
+                    .flatMap(InteractionVeto::getReason))
                 .fontAwesomeLayersOpt(ObjectAction.Util.cssClassFaFactoryFor(
                     managedAction.getAction(),
                     managedAction.getOwner())
@@ -80,7 +84,8 @@ public record MenuAction (
     public Optional<ManagedAction> managedAction(){
         var mmc = MetaModelContext.instanceElseFail();
         var service = mmc.getObjectManager().debookmark(serviceBookmark);
-        return ManagedAction.lookupAction(service, actionId.memberLogicalName(), Where.NOT_SPECIFIED);
+        var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
+        return ManagedAction.lookupAction(service, actionId.memberLogicalName(), iConstraint);
     }
 
 }

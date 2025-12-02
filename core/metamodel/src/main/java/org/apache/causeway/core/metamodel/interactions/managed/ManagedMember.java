@@ -23,12 +23,9 @@ import java.util.Optional;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
-import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -36,6 +33,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -60,8 +58,7 @@ permits ManagedAction, ManagedCollection, ManagedProperty {
     }
 
     @Getter @NonNull private ManagedObject owner;
-
-    @Getter @NonNull private final Where where;
+    @Getter @Accessors(fluent = true) @NonNull private final InteractionConstraint iConstraint;
 
     /**
      * Allows a managed property of a view model to replace its owner with a clone.
@@ -112,7 +109,6 @@ permits ManagedAction, ManagedCollection, ManagedProperty {
      * @return non-empty if hidden
      */
     public Optional<InteractionVeto> checkVisibility() {
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, where);
         try {
             var visibilityConsent = getMetaModel()
                 .isVisible(getOwner(), iConstraint);
@@ -129,7 +125,6 @@ permits ManagedAction, ManagedCollection, ManagedProperty {
      * @return non-empty if not usable/editable (meaning if read-only)
      */
     public Optional<InteractionVeto> checkUsability() {
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, where);
         try {
             var usabilityConsent = getMetaModel()
                 .isUsable(getOwner(), iConstraint);
