@@ -25,7 +25,6 @@ import org.apache.causeway.core.metamodel.facets.actions.contributing.derived.Co
 import org.apache.causeway.core.metamodel.facets.actions.homepage.annotation.HomePageFacetAnnotationFactory;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForFeatureFilterFactory;
 import org.apache.causeway.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.causeway.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
 import org.apache.causeway.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
@@ -243,7 +242,6 @@ extends ProgrammingModelAbstract {
 
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(FacetProcessingOrder.Z1_FINALLY, new DisabledFacetOnPropertyInferredFactory(mmc));
-        addFactory(FacetProcessingOrder.Z1_FINALLY, new HiddenFacetForFeatureFilterFactory(mmc));
 
         addFactory(FacetProcessingOrder.Z1_FINALLY, new ViewModelSemanticCheckingFacetFactory(mmc));
     }
