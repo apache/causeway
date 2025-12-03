@@ -44,14 +44,14 @@ extends
 
     // -- USABILITY
 
-    default Consent getUsabilityConsent() {
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+    default Consent getUsabilityConsent(final WhatViewer whatViewer) {
+    	var iConstraint = new InteractionConstraint(whatViewer, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
         return getAction().isUsable(getActionOwner(), iConstraint);
     }
 
     // -- VISABILITY
 
-    default Consent getVisibilityConsent() {
+    default Consent getVisibilityConsent(final WhatViewer whatViewer) {
 
         // guard against missing action owner
         var actionOwner = getActionOwner();
@@ -62,13 +62,13 @@ extends
         if (getActionOwner().objSpec().isHidden())
 			return Veto.DEFAULT;
 
-        var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+        var iConstraint = new InteractionConstraint(whatViewer, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
         return getAction().isVisible(actionOwner, iConstraint);
     }
 
     // -- VALIDITY
 
-    default Consent getValidityConsent() {
+    default Consent getValidityConsent(final WhatViewer whatViewer) {
 
         var proposedArguments = streamPendingParamUiModels()
                 .map(UiParameter::getValue)
@@ -78,7 +78,7 @@ extends
 
         var head = getAction().interactionHead(getActionOwner());
 
-        var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+        var iConstraint = new InteractionConstraint(whatViewer, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
         return getAction().isArgumentSetValid(head, proposedArguments, iConstraint);
     }
 

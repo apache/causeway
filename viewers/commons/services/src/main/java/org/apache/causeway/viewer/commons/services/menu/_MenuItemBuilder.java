@@ -57,10 +57,11 @@ final class _MenuItemBuilder {
 
     static void buildMenuItems(
             final MetaModelContext mmc,
+            final WhatViewer whatViewer,
             final BSMenuBar menuBar,
             final Visitor menuBuilder) {
 
-    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.ANYWHERE);
+    	var iConstraint = new InteractionConstraint(whatViewer, InteractionInitiatedBy.USER, Where.ANYWHERE);
         var itemsPerSectionCounter = new LongAdder();
         var menuVisitor = MenuProcessor.of(mmc, menuBuilder);
 

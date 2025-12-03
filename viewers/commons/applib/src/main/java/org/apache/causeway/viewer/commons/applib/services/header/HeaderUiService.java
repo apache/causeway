@@ -18,11 +18,13 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.header;
 
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
+
 /**
  * @since 2.0 {@index}}
  */
 public interface HeaderUiService {
 
-    HeaderUiModel getHeader();
+    HeaderUiModel getHeader(WhatViewer whatViewer);
 
 }

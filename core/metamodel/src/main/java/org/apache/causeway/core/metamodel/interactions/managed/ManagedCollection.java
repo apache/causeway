@@ -89,7 +89,6 @@ public final class ManagedCollection extends ManagedMember {
 
     /**
      * If visibility is vetoed, returns an empty Stream.
-     * @param interactionConstraint
      * @return Stream of this collection's element values as to be used by the UI for representation
      */
     public Stream<ManagedObject> streamElements(final InteractionInitiatedBy initiatedBy) {

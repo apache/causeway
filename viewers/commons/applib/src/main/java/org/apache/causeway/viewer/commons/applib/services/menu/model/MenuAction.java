@@ -81,10 +81,10 @@ public record MenuAction (
                 DecorationModel.of(managedAction));
     }
 
-    public Optional<ManagedAction> managedAction(){
+    public Optional<ManagedAction> managedAction(final WhatViewer whatViewer){
         var mmc = MetaModelContext.instanceElseFail();
         var service = mmc.getObjectManager().debookmark(serviceBookmark);
-        var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
+        var iConstraint = new InteractionConstraint(whatViewer, InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
         return ManagedAction.lookupAction(service, actionId.memberLogicalName(), iConstraint);
     }
 
