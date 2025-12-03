@@ -16,26 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.appfeat;
+package org.apache.causeway.core.interaction.core;
+
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
 /**
- * The various viewer implementations will individually honor any filters registered with Spring,
- * based on a matching qualifier ('Graphql', 'Restful', etc.).
- *
- * <p>All filters that match a qualifier are consulted until any one rejects the {@link ApplicationFeature}.
- *
- * <p>If no filters match a qualifier, any {@link ApplicationFeature} is accepted.
- *
- * <p>'NoViewer' is a reserved string internally used to mean 'no filtering', hence it should not be used to qualify a filter.
- *
- * @since 4.0 {@index}
+ * Viewer identifier, used for viewer specific feature filtering.
  */
-@FunctionalInterface
-public interface ApplicationFeatureFilter {
+public record WhatViewer(
+		String viewerId) {
 
 	/**
-	 * Whether to include given {@link ApplicationFeature}.
+	 * Used by {@link WrapperFactory}, {@link CommandExecutorService} and Object title interaction.
 	 */
-	boolean filter(ApplicationFeature feature);
-	
+	public static WhatViewer noViewer() {
+		return new WhatViewer("NoViewer");
+	}
+
+	/**
+	 * @deprecated for refactoring only
+	 */
+	@Deprecated
+	public static WhatViewer invalid() {
+		return new WhatViewer("invalid");
+	}
 }

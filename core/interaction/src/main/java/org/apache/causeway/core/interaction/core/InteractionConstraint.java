@@ -16,26 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.appfeat;
+package org.apache.causeway.core.interaction.core;
 
-/**
- * The various viewer implementations will individually honor any filters registered with Spring,
- * based on a matching qualifier ('Graphql', 'Restful', etc.).
- *
- * <p>All filters that match a qualifier are consulted until any one rejects the {@link ApplicationFeature}.
- *
- * <p>If no filters match a qualifier, any {@link ApplicationFeature} is accepted.
- *
- * <p>'NoViewer' is a reserved string internally used to mean 'no filtering', hence it should not be used to qualify a filter.
- *
- * @since 4.0 {@index}
- */
-@FunctionalInterface
-public interface ApplicationFeatureFilter {
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 
-	/**
-	 * Whether to include given {@link ApplicationFeature}.
-	 */
-	boolean filter(ApplicationFeature feature);
-	
+public record InteractionConstraint(
+		WhatViewer whatViewer,
+		InteractionInitiatedBy initiatedBy,
+		Where where
+		) {
+
+	public InteractionConstraint withWhere(final Where where) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
+	public InteractionConstraint withInitiatedBy(final InteractionInitiatedBy initiatedBy) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
 }
