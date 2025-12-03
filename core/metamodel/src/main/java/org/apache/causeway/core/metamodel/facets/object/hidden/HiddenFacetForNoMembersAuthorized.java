@@ -18,26 +18,11 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Mechanism for determining whether an object should be hidden.
- *
- * <p>Even though all the properties of an object may themselves be visible, there
- * could be reasons to hide the object.
- *
- * <p>In the standard Apache Causeway Programming Model, typically corresponds to the
- * <tt>hidden</tt> method.
- *
- * @see HiddenFacet
- * @see HiddenObjectFacet
- * @see HiddenTypeFacet
- *
- * @apiNote An unification attempt on HiddenTypeFacet and HiddenObjectFacet into a single,
- * failed, because both facets must co-exist, where each has veto power (not one overruling the other).
+ * Optionally hides an object, based on whether non of its properties, collections and actions is visible. 
  */
-public interface HiddenInstanceFacet extends Facet, HidingInteractionAdvisor {
+public interface HiddenFacetForNoMembersAuthorized extends HidingInteractionAdvisor {
 
 }

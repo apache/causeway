@@ -21,6 +21,10 @@ package org.apache.causeway.viewer.wicket.model;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 
 /**
@@ -32,4 +36,15 @@ import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
         CausewayModuleCoreWebapp.class,
 })
 public class CausewayModuleViewerWicketModel {
+
+    // -- INTERACTION
+
+    private static WhatViewer WHAT_VIEWER = new WhatViewer("Wicket");
+	public static WhatViewer whatViewer() { return WHAT_VIEWER; }
+	public static InteractionConstraint iConstraint(final InteractionInitiatedBy user, final Where where) {
+		return new InteractionConstraint(whatViewer(), user, where);
+	}
+	public static InteractionConstraint iConstraint(final Where where) {
+		return new InteractionConstraint(whatViewer(), InteractionInitiatedBy.USER, where);
+	}
 }

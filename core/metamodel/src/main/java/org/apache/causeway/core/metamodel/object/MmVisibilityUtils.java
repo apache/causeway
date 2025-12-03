@@ -25,7 +25,9 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
@@ -90,19 +92,16 @@ public final class MmVisibilityUtils {
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-            // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter))
+			// a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
-        }
         var spec = adapter.objSpec();
         if(spec.isEntity()) {
-            if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
-                return false;
-            }
+            if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved())
+				return false;
         }
-        if(!interactionInitiatedBy.isUser()) {
-            return true;
-        }
+        if(!interactionInitiatedBy.isUser())
+			return true;
         var visibilityContext = createVisibleInteractionContext(
                 adapter,
                 InteractionInitiatedBy.USER,
@@ -117,8 +116,10 @@ public final class MmVisibilityUtils {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), interactionInitiatedBy, where);
+
         return ObjectVisibilityContext
-                .createForRegular(objectAdapter, interactionInitiatedBy, where);
+                .createForRegular(objectAdapter, iConstraint);
     }
 
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
 import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
@@ -27,13 +26,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 public class ObjectValidPropertiesFacetImpl
 extends ObjectValidPropertiesFacetAbstract {
-
-    // REVIEW: should provide this rendering context, rather than hardcoding.
-    // the net effect currently is that class members annotated with
-    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
-    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
-    // for any other value for Where
-    private final Where where = Where.ANYWHERE;
 
     public ObjectValidPropertiesFacetImpl(final FacetHolder holder) {
         super(holder);
@@ -46,20 +38,19 @@ extends ObjectValidPropertiesFacetAbstract {
         final ManagedObject adapter = context.target();
 
         adapter.objSpec().streamProperties(MixedIn.EXCLUDED)
-        .filter(property->property.isVisible(adapter, context.initiatedBy(), where).isVetoed()) // ignore hidden properties
-        .filter(property->property.isUsable(adapter, context.initiatedBy(), where).isVetoed())  // ignore disabled properties
+        .filter(property->property.isVisible(adapter, context.iConstraint()).isVetoed()) // ignore hidden properties
+        .filter(property->property.isUsable(adapter, context.iConstraint()).isVetoed())  // ignore disabled properties
         .forEach(property->{
-            final ManagedObject value = property.get(adapter, context.initiatedBy());
-            if (property.isAssociationValid(adapter, value, context.initiatedBy()).isVetoed()) {
+            final ManagedObject value = property.get(adapter, context.iConstraint().initiatedBy());
+            if (property.isAssociationValid(adapter, value, context.iConstraint()).isVetoed()) {
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }
                 buf.append(property.getFriendlyName(context::target));
             }
         });
-        if (buf.length() > 0) {
-            return "Invalid properties: " + buf.toString();
-        }
+        if (buf.length() > 0)
+			return "Invalid properties: " + buf.toString();
         return null;
     }
 

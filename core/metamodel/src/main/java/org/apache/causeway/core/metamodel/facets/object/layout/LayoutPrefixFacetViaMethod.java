@@ -69,11 +69,6 @@ public record LayoutPrefixFacetViaMethod(
     }
 
     @Override
-    public ImperativeAspect getImperativeAspect() {
-        return imperativeAspect();
-    }
-
-    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
     	LayoutPrefixFacet.super.visitAttributes(visitor);
         visitor.accept("origin", origin());

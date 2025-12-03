@@ -25,6 +25,8 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Title;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -35,8 +37,8 @@ import org.apache.causeway.commons.internal.reflection._MethodFacades;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 import org.apache.causeway.commons.internal.reflection._Reflect.TypeHierarchyPolicy;
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.Evaluators;
 import org.apache.causeway.core.metamodel.facets.Evaluators.MethodEvaluator;
@@ -49,8 +51,8 @@ import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -85,7 +87,8 @@ implements ImperativeFacet {
     }
 
     @Getter private final Can<TitleComponent> components;
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final @NonNull Can<MethodFacade> methods;
 
     protected TitleFacetViaTitleAnnotation(final Can<TitleComponent> components, final FacetHolder holder) {
         super(holder);
@@ -109,7 +112,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Intent getIntent() {
+    public Intent intent() {
         return Intent.UI_HINT;
     }
 

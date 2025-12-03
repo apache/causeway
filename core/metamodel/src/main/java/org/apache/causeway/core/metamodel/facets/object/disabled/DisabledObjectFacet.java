@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.disabled;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
@@ -39,7 +38,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
  * @see ImmutableFacet
  */
 public interface DisabledObjectFacet
-extends Facet, DisablingInteractionAdvisor {
+extends DisablingInteractionAdvisor {
 
     /**
      * Clone this facet onto another {@link FacetHolder}.

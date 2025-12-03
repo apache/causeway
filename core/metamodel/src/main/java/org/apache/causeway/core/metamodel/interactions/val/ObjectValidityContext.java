@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.ObjectValidityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
@@ -39,18 +39,18 @@ public record ObjectValidityContext(
     InteractionHead head,
     Identifier identifier,
     Supplier<String> friendlyNameProvider,
-    InteractionInitiatedBy initiatedBy
+    InteractionConstraint iConstraint
     ) implements ValidityContext, ProposedHolder {
 
     public ObjectValidityContext(
             final ManagedObject targetAdapter,
             final Identifier identifier,
-            final InteractionInitiatedBy initiatedBy) {
+            final InteractionConstraint iConstraint) {
         this(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.regular(targetAdapter),
                 identifier,
                 ()->targetAdapter.objSpec().getSingularName(),
-                initiatedBy);
+                iConstraint);
     }
 
     @Override

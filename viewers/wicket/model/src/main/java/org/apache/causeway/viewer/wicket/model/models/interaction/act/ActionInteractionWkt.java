@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -38,6 +37,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiat
 import org.apache.causeway.core.metamodel.interactions.managed.PendingParamsSnapshot;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.PropertyModel;
@@ -150,21 +150,23 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final int paramIndex = associatedWithParameterIfAny.getParameterIndex();
             // supports composite-value-types via mixin
             return ActionInteraction.startAsBoundToParameter(
-                    associatedWithParameterIfAny.getParameterNegotiationModel(), paramIndex, memberId, where);
+                    associatedWithParameterIfAny.getParameterNegotiationModel(), paramIndex, memberId,
+                    CausewayModuleViewerWicketModel.iConstraint(where));
         }
 
-        if(associatedWithCollectionIfAny!=null) {
-            return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
+        if(associatedWithCollectionIfAny!=null)
+			return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId,
+            		CausewayModuleViewerWicketModel.iConstraint(where),
                     associatedWithCollectionIfAny.getDataTableModel());
-        }
 
-        if(associatedWithPropertyIfAny!=null) {
-            // supports composite-value-types via mixin
+        if(associatedWithPropertyIfAny!=null)
+			// supports composite-value-types via mixin
             return ActionInteraction.startAsBoundToProperty(
-                    associatedWithPropertyIfAny.getManagedProperty(), memberId, where);
-        }
+                    associatedWithPropertyIfAny.getManagedProperty(), memberId,
+                    CausewayModuleViewerWicketModel.iConstraint(where));
 
-        return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
+        return ActionInteraction.start(getBookmarkedOwner(), memberId,
+        		CausewayModuleViewerWicketModel.iConstraint(where));
     }
 
     public final ActionInteraction actionInteraction() {

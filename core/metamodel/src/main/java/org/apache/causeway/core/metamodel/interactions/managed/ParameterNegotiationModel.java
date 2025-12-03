@@ -28,6 +28,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
@@ -41,7 +42,9 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed._BindingUtil.TargetFormat;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -182,11 +185,12 @@ public final class ParameterNegotiationModel {
      */
     public String validateImmediately(final int paramIndex) {
         var actionInteractionHead = actionInteractionHead();
+        var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
         return actionInteractionHead.getMetaModel().getParameterByIndex(paramIndex)
                 .isValid(
                         actionInteractionHead.interactionHead(),
                         getParamValues(),
-                        InteractionInitiatedBy.USER)
+                        iConstraint)
                 .getReasonAsString()
                 .orElse(null);
     }
@@ -220,16 +224,19 @@ public final class ParameterNegotiationModel {
 
     /** validates all, the action and each individual parameter */
     public Consent validateParameterSet() {
-        return act().isArgumentSetValid(interactionHead(), this.getParamValues(), InteractionInitiatedBy.USER);
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
+        return act().isArgumentSetValid(interactionHead(), this.getParamValues(), iConstraint);
     }
 
     public Consent validateParameterSetForAction() {
-        return act().isArgumentSetValidForAction(interactionHead(), this.getParamValues(), InteractionInitiatedBy.USER);
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
+        return act().isArgumentSetValidForAction(interactionHead(), this.getParamValues(), iConstraint);
     }
 
     public Can<Consent> validateParameterSetForParameters() {
+    	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
         return act()
-                .isArgumentSetValidForParameters(interactionHead(), this.getParamValues(), InteractionInitiatedBy.USER)
+                .isArgumentSetValidForParameters(interactionHead(), this.getParamValues(), iConstraint)
                 .stream()
                 .map(InteractionResult::createConsent)
                 .collect(Can.toCan());
@@ -411,16 +418,18 @@ public final class ParameterNegotiationModel {
                 bindableParamValueDirtyFlag().setValue(true); // set dirty whenever an update event happens
             });
 
+            var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
+
             // has either autoComplete, choices, or none
             this.observableParamChoices = metaModel().hasAutoComplete()
                 ? _Observables.lazy(()->
                     metaModel().getAutoComplete(
                             negotiationModel(),
                             bindableParamSearchArgument().getValue(),
-                            InteractionInitiatedBy.USER))
+                            iConstraint.initiatedBy()))
                 : metaModel().hasChoices()
                     ? _Observables.lazy(()->
-                        getMetaModel().getChoices(negotiationModel(), InteractionInitiatedBy.USER))
+                        getMetaModel().getChoices(negotiationModel(), iConstraint.initiatedBy()))
                     : _Observables.lazy(Can::empty);
 
             // if has autoComplete, then activate the search argument
@@ -436,16 +445,18 @@ public final class ParameterNegotiationModel {
                     ? negotiationModel().validateImmediately(paramIndex)
                     : (String)null);
 
+
+
             this.observableVisibilityConsent = _Observables.lazy(()->
                 metaModel().isVisible(
                         negotiationModel().interactionHead(),
                         negotiationModel().getParamValues(),
-                        InteractionInitiatedBy.USER));
+                        iConstraint));
             this.observableUsabilityConsent = _Observables.lazy(()->
                 metaModel().isUsable(
                         negotiationModel().interactionHead(),
                         negotiationModel().getParamValues(),
-                        InteractionInitiatedBy.USER));
+                        iConstraint));
 
             // value types should have associated rederers via value semantics
             this.observableParamAsTitle = _BindingUtil
@@ -538,10 +549,12 @@ public final class ParameterNegotiationModel {
         @Override
         public Optional<InteractionVeto> checkUsability(@NonNull final Can<ManagedObject> params) {
 
+        	var iConstraint = new InteractionConstraint(WhatViewer.invalid(), InteractionInitiatedBy.USER, Where.NOT_SPECIFIED);
+
             try {
                 var usabilityConsent =
                     getMetaModel()
-                    .isUsable(negotiationModel().interactionHead(), params, InteractionInitiatedBy.USER);
+                    .isUsable(negotiationModel().interactionHead(), params, iConstraint);
 
                 return usabilityConsent.isVetoed()
                     ? Optional.of(InteractionVeto.readonly(usabilityConsent))

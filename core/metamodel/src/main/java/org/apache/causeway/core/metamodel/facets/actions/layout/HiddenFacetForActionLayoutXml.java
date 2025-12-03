@@ -23,14 +23,14 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
+import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetForLayoutAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public class HiddenFacetForActionLayoutXml
-extends HiddenFacetAbstract {
+extends HiddenFacetForLayoutAbstract {
 
-    public static Optional<HiddenFacet> create(
+    public static Optional<HiddenFacetForLayout> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
             final Precedence precedence) {

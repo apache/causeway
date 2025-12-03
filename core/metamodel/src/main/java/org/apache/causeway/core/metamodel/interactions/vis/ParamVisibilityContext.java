@@ -19,13 +19,12 @@
 package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.ActionArgumentVisibilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -41,8 +40,7 @@ public record ParamVisibilityContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     RenderPolicy renderPolicy,
     ObjectAction objectAction,
     Can<ManagedObject> args,
@@ -55,11 +53,11 @@ implements VisibilityContext, ActionInteractionContext {
             final Identifier id,
             final Can<ManagedObject> args,
             final int position,
-            final InteractionInitiatedBy initiatedBy,
+            final InteractionConstraint iConstraint,
             final RenderPolicy renderPolicy) {
 
         this(InteractionContextType.ACTION_PARAMETER_VISIBLE,
-            head, id, initiatedBy, Where.OBJECT_FORMS, renderPolicy,
+            head, id, iConstraint, renderPolicy,
             objectAction, args, position);
     }
 

@@ -43,6 +43,9 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.functions._Functions.CheckedConsumer;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -128,73 +131,55 @@ extends PublishingTestFactoryAbstract {
         // This test does not trigger command or execution publishing, however it does trigger
         // entity-change-publishing.
 
-        switch(context.scenario()) {
-        case ENTITY_CREATION:
-
-            context.runGiven();
-            //when
+        switch (context.scenario()) {
+		case ENTITY_CREATION -> {
+			context.runGiven();
+			//when
             factoryService.detachedEntity(JpaBook.fromDto(BookDto.sample())); // should trigger an ObjectCreatedEvent
-            factoryService.detachedEntity(JpaBook.class); // should trigger a second ObjectCreatedEvent
-            break;
-
-        case ENTITY_PERSISTING:
-
-            context.runGiven();
-            //when
+			factoryService.detachedEntity(JpaBook.class); // should trigger a second ObjectCreatedEvent
+		}
+		case ENTITY_PERSISTING -> {
+			context.runGiven();
+			//when
             setupBookForJpa();
-            break;
-
-        case ENTITY_LOADING:
-
-            context.runGiven();
-            //when
+		}
+		case ENTITY_LOADING -> {
+			context.runGiven();
+			//when
             withBookDo(book->{
                 assertNotNull(book);
             });
-            break;
+		}
+		case PROPERTY_UPDATE -> withBookDo(book->{
 
-        case PROPERTY_UPDATE:
+		    context.runGiven();
 
-            withBookDo(book->{
+		    // when - direct change (circumventing the framework)
+		    context.changeProperty(()->book.setName("Book #2"));
 
-                context.runGiven();
+		    repository.persistAndFlush(book);
 
-                // when - direct change (circumventing the framework)
-                context.changeProperty(()->book.setName("Book #2"));
+		});
+		case ACTION_INVOCATION -> withBookDo(book->{
 
-                repository.persistAndFlush(book);
+		    context.runGiven();
 
-            });
+		    // when - direct action method invocation (circumventing the framework)
+		    context.executeAction(()->book.doubleThePrice());
 
-            break;
-        case ACTION_INVOCATION:
+		    repository.persistAndFlush(book);
 
-            withBookDo(book->{
+		});
+		case ENTITY_REMOVAL -> withBookDo(book->{
 
-                context.runGiven();
+		    context.runGiven();
+		    //when
+		    repository.removeAndFlush(book);
 
-                // when - direct action method invocation (circumventing the framework)
-                context.executeAction(()->book.doubleThePrice());
-
-                repository.persistAndFlush(book);
-
-            });
-
-            break;
-        case ENTITY_REMOVAL:
-
-            withBookDo(book->{
-
-                context.runGiven();
-                //when
-                repository.removeAndFlush(book);
-
-            });
-
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(context.scenario());
-        }
+		});
+		default -> throw _Exceptions.unmatchedCase(context.scenario());
+		}
+		;
 
     }
 
@@ -204,55 +189,47 @@ extends PublishingTestFactoryAbstract {
     protected void interactionApiExecution(
             final PublishingTestContext context) {
 
+    	var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+
         context.bind(commitListener);
 
-        switch(context.scenario()) {
+        switch (context.scenario()) {
+		case PROPERTY_UPDATE -> withBookDo(book->{
 
-        case PROPERTY_UPDATE:
+		    context.runGiven();
 
-            withBookDo(book->{
+		    // when
+		    context.changeProperty(()->{
+		        var bookAdapter = objectManager.adapt(book);
+		        var propertyInteraction = PropertyInteraction.start(bookAdapter, "name", iConstraint);
+		        var managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
+		        var propertyModel = managedProperty.startNegotiation();
+		        var propertySpec = managedProperty.getElementType();
+		        propertyModel.getValue().setValue(ManagedObject.value(propertySpec, "Book #2"));
+		        propertyModel.submit();
 
-                context.runGiven();
+		    });
 
-                // when
-                context.changeProperty(()->{
+		});
+		case ACTION_INVOCATION -> withBookDo(book->{
 
-                    var bookAdapter = objectManager.adapt(book);
-                    var propertyInteraction = PropertyInteraction.start(bookAdapter, "name", Where.OBJECT_FORMS);
-                    var managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
-                    var propertyModel = managedProperty.startNegotiation();
-                    var propertySpec = managedProperty.getElementType();
-                    propertyModel.getValue().setValue(ManagedObject.value(propertySpec, "Book #2"));
-                    propertyModel.submit();
+		    context.runGiven();
 
-                });
+		    // when
+		    context.executeAction(()->{
 
-            });
+		        var bookAdapter = objectManager.adapt(book);
 
-            break;
-        case ACTION_INVOCATION:
+		        var actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", iConstraint);
+		        var managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
+		        // this test action is always disabled, so don't enforce rules here, just invoke
+		        managedAction.invoke(Can.empty()); // no-arg action
+		    });
 
-            withBookDo(book->{
-
-                context.runGiven();
-
-                // when
-                context.executeAction(()->{
-
-                    var bookAdapter = objectManager.adapt(book);
-
-                    var actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", Where.OBJECT_FORMS);
-                    var managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
-                    // this test action is always disabled, so don't enforce rules here, just invoke
-                    managedAction.invoke(Can.empty()); // no-arg action
-                });
-
-            });
-
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(context.scenario());
-        }
+		});
+		default -> throw _Exceptions.unmatchedCase(context.scenario());
+		}
+		;
 
     }
 
@@ -264,37 +241,28 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        switch(context.scenario()) {
+        switch (context.scenario()) {
+		case PROPERTY_UPDATE -> withBookDo(book->{
 
-        case PROPERTY_UPDATE:
+		    context.runGiven();
 
-            withBookDo(book->{
+		    // when - running synchronous
+		    var syncControl = SyncControl.defaults().withSkipRules(); // don't enforce rules
+		    context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
 
-                context.runGiven();
+		});
+		case ACTION_INVOCATION -> withBookDo(book->{
 
-                // when - running synchronous
-                var syncControl = SyncControl.defaults().withSkipRules(); // don't enforce rules
-                context.changeProperty(()->wrapper.wrap(book, syncControl).setName("Book #2"));
+		    context.runGiven();
 
-            });
+		    // when - running synchronous
+		    var syncControl = SyncControl.defaults().withSkipRules(); // don't enforce rules
+		    context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
 
-            break;
-        case ACTION_INVOCATION:
-
-            withBookDo(book->{
-
-                context.runGiven();
-
-                // when - running synchronous
-                var syncControl = SyncControl.defaults().withSkipRules(); // don't enforce rules
-                context.executeAction(()->wrapper.wrap(book, syncControl).doubleThePrice());
-
-            });
-
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(context.scenario());
-        }
+		});
+		default -> throw _Exceptions.unmatchedCase(context.scenario());
+		}
+		;
 
     }
 
@@ -304,43 +272,34 @@ extends PublishingTestFactoryAbstract {
 
         context.bind(commitListener);
 
-        switch(context.scenario()) {
+        switch (context.scenario()) {
+		case PROPERTY_UPDATE -> withBookDo(book->{
 
-        case PROPERTY_UPDATE:
+		    context.runGiven();
 
-            withBookDo(book->{
+		    // when - running synchronous
+		    var syncControl = SyncControl.defaults().withCheckRules(); // enforce rules
 
-                context.runGiven();
+		    //assertThrows(DisabledException.class, ()->{
+		        wrapper.wrap(book, syncControl).setName("Book #2"); // should throw DisabledException
+		    //});
 
-                // when - running synchronous
-                var syncControl = SyncControl.defaults().withCheckRules(); // enforce rules
+		});
+		case ACTION_INVOCATION -> withBookDo(book->{
 
-                //assertThrows(DisabledException.class, ()->{
-                    wrapper.wrap(book, syncControl).setName("Book #2"); // should throw DisabledException
-                //});
+		    context.runGiven();
 
-            });
+		    // when - running synchronous
+		    var syncControl = SyncControl.defaults().withCheckRules(); // enforce rules
 
-            break;
-        case ACTION_INVOCATION:
+		    //assertThrows(DisabledException.class, ()->{
+		        wrapper.wrap(book, syncControl).doubleThePrice(); // should throw DisabledException
+		    //});
 
-            withBookDo(book->{
-
-                context.runGiven();
-
-                // when - running synchronous
-                var syncControl = SyncControl.defaults().withCheckRules(); // enforce rules
-
-                //assertThrows(DisabledException.class, ()->{
-                    wrapper.wrap(book, syncControl).doubleThePrice(); // should throw DisabledException
-                //});
-
-            });
-
-            break;
-        default:
-            throw _Exceptions.unmatchedCase(context.scenario());
-        }
+		});
+		default -> throw _Exceptions.unmatchedCase(context.scenario());
+		}
+		;
 
     }
 

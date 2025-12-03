@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
@@ -39,7 +39,7 @@ public record PropertyModifyContext(
     InteractionHead head,
     Identifier identifier,
     Supplier<String> friendlyNameProvider,
-    InteractionInitiatedBy initiatedBy,
+    InteractionConstraint iConstraint,
     ManagedObject proposed) implements ValidityContext, ProposedHolder {
 
     public PropertyModifyContext(
@@ -47,10 +47,9 @@ public record PropertyModifyContext(
             final Identifier id,
             final ManagedObject proposed,
             final Supplier<String> friendlyMemberNameProvider,
-            final InteractionInitiatedBy initiatedBy) {
+            final InteractionConstraint iConstraint) {
         this(InteractionContextType.PROPERTY_MODIFY,
-            head, id, friendlyMemberNameProvider, initiatedBy,
-            proposed);
+            head, id, friendlyMemberNameProvider, iConstraint, proposed);
     }
 
     @Override

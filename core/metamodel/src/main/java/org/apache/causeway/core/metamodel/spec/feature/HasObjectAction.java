@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -33,6 +32,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
@@ -55,11 +55,11 @@ public interface HasObjectAction extends ObjectAction {
     @Override default boolean isAlwaysHidden() {
         return getObjectAction().isAlwaysHidden();
     }
-    @Override default Consent isVisible(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        return getObjectAction().isVisible(target, interactionInitiatedBy, where);
+    @Override default Consent isVisible(final ManagedObject target, final InteractionConstraint iConstraint) {
+        return getObjectAction().isVisible(target, iConstraint);
     }
-    @Override default Consent isUsable(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        return getObjectAction().isUsable(target, interactionInitiatedBy, where);
+    @Override default Consent isUsable(final ManagedObject target, final InteractionConstraint iConstraint) {
+        return getObjectAction().isUsable(target, iConstraint);
     }
     @Override default boolean isPropertyOrCollection() {
         return getObjectAction().isPropertyOrCollection();
@@ -129,24 +129,25 @@ public interface HasObjectAction extends ObjectAction {
         return getObjectAction().hasReturn();
     }
     @Override default ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
-        return getObjectAction().executeWithRuleChecking(head, parameters, interactionInitiatedBy, where);
+        final InteractionConstraint iConstraint) throws AuthorizationException {
+        return getObjectAction().executeWithRuleChecking(head, parameters, iConstraint);
     }
+    @Deprecated
     @Override default ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy) {
-        return getObjectAction().execute(head, parameters, interactionInitiatedBy);
+        final InteractionConstraint iConstraint) {
+        return getObjectAction().execute(head, parameters, iConstraint);
     }
     @Override default Consent isArgumentSetValid(final InteractionHead head, final Can<ManagedObject> proposedArguments,
-        final InteractionInitiatedBy interactionInitiatedBy) {
-        return getObjectAction().isArgumentSetValid(head, proposedArguments, interactionInitiatedBy);
+        final InteractionConstraint iConstraint) {
+        return getObjectAction().isArgumentSetValid(head, proposedArguments, iConstraint);
     }
     @Override default InteractionResultSet isArgumentSetValidForParameters(final InteractionHead head,
-        final Can<ManagedObject> proposedArguments, final InteractionInitiatedBy interactionInitiatedBy) {
-        return getObjectAction().isArgumentSetValidForParameters(head, proposedArguments, interactionInitiatedBy);
+        final Can<ManagedObject> proposedArguments, final InteractionConstraint iConstraint) {
+        return getObjectAction().isArgumentSetValidForParameters(head, proposedArguments, iConstraint);
     }
     @Override default Consent isArgumentSetValidForAction(final InteractionHead head, final Can<ManagedObject> proposedArguments,
-        final InteractionInitiatedBy interactionInitiatedBy) {
-        return getObjectAction().isArgumentSetValidForAction(head, proposedArguments, interactionInitiatedBy);
+        final InteractionConstraint iConstraint) {
+        return getObjectAction().isArgumentSetValidForAction(head, proposedArguments, iConstraint);
     }
     @Override default InteractionHead interactionHead(@NonNull final ManagedObject actionOwner) {
         return getObjectAction().interactionHead(actionOwner);

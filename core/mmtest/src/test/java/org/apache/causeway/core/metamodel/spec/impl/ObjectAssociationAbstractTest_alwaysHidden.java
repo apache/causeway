@@ -35,10 +35,12 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetForLayoutAbstract;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -102,18 +104,16 @@ class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public UsabilityContext createUsableInteractionContext(
-                    final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
-                return null;
-            }
+    		protected UsabilityContext createUsableInteractionContext(final ManagedObject target,
+    				final InteractionConstraint iConstraint) {
+    			return null;
+    		}
 
             @Override
-            public VisibilityContext createVisibleInteractionContext(
-                    final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
-                return null;
-            }
+    		protected VisibilityContext createVisibleInteractionContext(final ManagedObject target,
+    				final InteractionConstraint iConstraint) {
+    			return null;
+    		}
 
             @Override
             public boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
@@ -157,7 +157,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenNoop() throws Exception {
 
         // given
-        addHiddenFacet(Where.EVERYWHERE, facetedMethod, true);
+        addHiddenFacet(Where.EVERYWHERE, facetedMethod, Precedence.FALLBACK);
 
         // when, then
         assertFalse(objectAssociation.isAlwaysHidden());
@@ -167,7 +167,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenNotAlwaysEverywhere() throws Exception {
 
         // given
-        addHiddenFacet(Where.EVERYWHERE, facetedMethod, false);
+        addHiddenFacet(Where.EVERYWHERE, facetedMethod, Precedence.DEFAULT);
 
         // when, then
         assertThat(objectAssociation.isAlwaysHidden(), is(true));
@@ -177,7 +177,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenAlwaysNotEverywhere() throws Exception {
 
         // given
-        addHiddenFacet(Where.OBJECT_FORMS, facetedMethod, false);
+        addHiddenFacet(Where.OBJECT_FORMS, facetedMethod, Precedence.DEFAULT);
 
         // when, then
         assertFalse(objectAssociation.isAlwaysHidden());
@@ -187,7 +187,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenAlwaysEverywhere() throws Exception {
 
         // given
-        addHiddenFacet(Where.EVERYWHERE, facetedMethod, false);
+        addHiddenFacet(Where.EVERYWHERE, facetedMethod, Precedence.DEFAULT);
 
         // when, then
         assertTrue(objectAssociation.isAlwaysHidden());
@@ -197,7 +197,7 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     public void whenAlwaysAnywhere() throws Exception {
 
         // given
-        addHiddenFacet(Where.ANYWHERE, facetedMethod, false);
+        addHiddenFacet(Where.ANYWHERE, facetedMethod, Precedence.DEFAULT);
 
         // when, then
         assertTrue(objectAssociation.isAlwaysHidden());
@@ -206,14 +206,10 @@ class ObjectAssociationAbstractTest_alwaysHidden {
     private static void addHiddenFacet(
             final Where where,
             final FacetedMethod holder,
-            final boolean noop) {
-
-        var precedence = noop
-                ? Facet.Precedence.FALLBACK
-                : Facet.Precedence.DEFAULT;
+            final Precedence precedence) {
 
         FacetUtil.addFacet(
-            new HiddenFacetAbstract(where, holder, precedence) {
+            new HiddenFacetForLayoutAbstract(where, holder, precedence) {
                 @Override
                 protected String hiddenReason(final ManagedObject target, final Where whereContext) {
                     return null;

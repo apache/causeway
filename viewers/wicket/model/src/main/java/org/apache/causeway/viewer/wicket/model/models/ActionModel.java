@@ -38,6 +38,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.action.UiActionForm;
+import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
@@ -153,8 +154,8 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
     public static ActionModel forPropertyOrParameter(
             final ObjectAction action,
             final UiAttributeWkt attributeModel) {
-        return attributeModel instanceof PropertyModel
-                ? forProperty(action, (PropertyModel)attributeModel)
+        return attributeModel instanceof PropertyModel p
+                ? forProperty(action, p)
                 : forParameter(action, (ParameterModel)attributeModel);
     }
 
@@ -175,14 +176,13 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
         //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
         var param = parameterModel.getMetaModel();
         if(param.isSingular()
-                && param.getElementType().isCompositeValue()) {
-            return ActionModel.forEntity(
+                && param.getElementType().isCompositeValue())
+			return ActionModel.forEntity(
                             parameterModel.getParentUiModel(),
                             action.getFeatureIdentifier(),
                             Where.OBJECT_FORMS,
                             ColumnActionModifier.NONE,
                             null, parameterModel, null);
-        }
         return null;
     }
 
@@ -262,11 +262,11 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
     }
 
     public boolean isVisible() {
-        return getVisibilityConsent().isAllowed();
+        return getVisibilityConsent(CausewayModuleViewerWicketModel.whatViewer()).isAllowed();
     }
 
     public boolean isEnabled() {
-        return getUsabilityConsent().isAllowed();
+        return getUsabilityConsent(CausewayModuleViewerWicketModel.whatViewer()).isAllowed();
     }
 
     @Override
@@ -309,11 +309,10 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
 
     private static void guardAgainstNotBookmarkable(final ManagedObject objectAdapter) {
         var isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
-        if (!isIdentifiable) {
-            throw new IllegalArgumentException(String.format(
+        if (!isIdentifiable)
+			throw new IllegalArgumentException(String.format(
                     "Object '%s' is not identifiable (has no identifier).",
                     objectAdapter.getTitle()));
-        }
     }
 
 }

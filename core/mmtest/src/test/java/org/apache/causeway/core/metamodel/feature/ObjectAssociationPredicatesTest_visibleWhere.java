@@ -35,17 +35,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 class ObjectAssociationPredicatesTest_visibleWhere {
 
     private ObjectAssociation mockObjectAssociation;
-    private HiddenFacet mockHiddenFacet;
+    private HiddenFacetForLayout mockHiddenFacet;
 
     @BeforeEach
     public void setUp() throws Exception {
-        mockHiddenFacet = Mockito.mock(HiddenFacet.class);
+        mockHiddenFacet = Mockito.mock(HiddenFacetForLayout.class);
         mockObjectAssociation = Mockito.mock(ObjectAssociation.class);
     }
 
@@ -83,7 +83,7 @@ class ObjectAssociationPredicatesTest_visibleWhere {
         final Predicate<ObjectAssociation> predicate = association -> {
             final List<Facet> facets = association.streamFacets()
                     .filter(facet -> facet instanceof WhereValueFacet
-                            && facet instanceof HiddenFacet)
+                            && facet instanceof HiddenFacetForLayout)
                     .collect(Collectors.toList());
             for (Facet facet : facets) {
                 final WhereValueFacet wawF = (WhereValueFacet) facet;

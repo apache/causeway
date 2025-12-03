@@ -35,6 +35,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -154,14 +155,14 @@ implements MixedInAction {
     public ManagedObject execute(
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         final ManagedObject owner = head.owner();
         final ManagedObject target = mixinAdapterFor(mixinSpec, owner);
         _Assert.assertEquals(target.objSpec(), head.target().objSpec(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
-        if(!interactionInitiatedBy.isPassThrough()) {
+        if(!iConstraint.initiatedBy().isPassThrough()) {
             setupCommand(head, argumentAdapters);
 
             if(log.isInfoEnabled()) {
@@ -178,7 +179,7 @@ implements MixedInAction {
 
         return mixinAction.executeInternal(
                 head, argumentAdapters,
-                interactionInitiatedBy);
+                iConstraint.initiatedBy());
     }
 
     @Override

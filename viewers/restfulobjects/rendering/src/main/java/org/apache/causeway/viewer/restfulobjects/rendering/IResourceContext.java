@@ -24,11 +24,10 @@ import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Restfulobjects;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
@@ -39,7 +38,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.service.Representatio
  * session-specific context (eg authentication) and
  * global context (eg configuration settings).
  *
- * @since 1.x  {@index}
+ * @since 1.x revised for 4.0 {@index}
  */
 public interface IResourceContext extends HasMetaModelContext {
 
@@ -62,13 +61,9 @@ public interface IResourceContext extends HasMetaModelContext {
     List<MediaType> acceptableMediaTypes();
 
     /**
-     * Whether this interaction was initiated directly by a
-     * {@link InteractionInitiatedBy#USER user} (or indirectly by the
-     * {@link InteractionInitiatedBy#FRAMEWORK framework}.
+     * @since 4.0
      */
-    InteractionInitiatedBy interactionInitiatedBy();
-
-    Where where();
+    InteractionConstraint iConstraint();
 
     ObjectAdapterLinkTo objectAdapterLinkTo();
     List<List<String>> followLinks();

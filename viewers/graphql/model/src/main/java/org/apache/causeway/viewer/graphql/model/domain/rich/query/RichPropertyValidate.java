@@ -19,11 +19,9 @@
 package org.apache.causeway.viewer.graphql.model.domain.rich.query;
 
 import graphql.schema.DataFetchingEnvironment;
-import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.graphql.model.context.Context;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
@@ -43,7 +41,7 @@ public class RichPropertyValidate extends Element {
 
         var fieldBuilder = newFieldDefinition()
                 .name("validate")
-                .type((GraphQLOutputType) context.typeMapper.outputTypeFor(String.class));
+                .type(context.typeMapper.outputTypeFor(String.class));
         propertyInteractor.addGqlArgument(propertyInteractor.getObjectMember(), fieldBuilder, TypeMapper.InputContext.VALIDATE);
 
         setField(fieldBuilder.build());
@@ -55,9 +53,8 @@ public class RichPropertyValidate extends Element {
         var sourcePojo = BookmarkedPojo.sourceFrom(dataFetchingEnvironment);
 
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
-        }
+        if (objectSpecification == null)
+			return null;
 
         var otoa = holder.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
@@ -66,7 +63,7 @@ public class RichPropertyValidate extends Element {
         var argumentValue = arguments.get(otoa.asciiId());
         var argumentManagedObject = ManagedObject.adaptProperty(otoa, argumentValue);
 
-        var valid = otoa.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
+        var valid = otoa.isAssociationValid(managedObject, argumentManagedObject, Context.iConstraint());
         return valid.isVetoed() ? valid.getReasonAsString().orElse("invalid") : null;
     }
 
