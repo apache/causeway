@@ -34,6 +34,7 @@ import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.Acti
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
@@ -107,8 +108,8 @@ class ServiceActionUtil {
         }
 
         @Override
-        public void onMenuAction(MenuAction menuAction) {
-            var menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name(), newActionLink(menuAction.managedAction().orElseThrow()));
+        public void onMenuAction(final MenuAction menuAction) {
+            var menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name(), newActionLink(menuAction.managedAction(WktVisibility.WHAT_VIEWER).orElseThrow()));
             currentTopLevelMenu.addSubMenuItem(menuItem);
         }
 

@@ -30,6 +30,7 @@ import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -79,10 +80,10 @@ public record MenuAction (
                 DecorationModel.of(managedAction));
     }
 
-    public Optional<ManagedAction> managedAction(){
+    public Optional<ManagedAction> managedAction(final WhatViewer whatViewer){
         var mmc = MetaModelContext.instanceElseFail();
         var service = mmc.getObjectManager().debookmark(serviceBookmark);
-        return ManagedAction.lookupAction(service, actionId.memberLogicalName(), VisibilityConstraint.invalid(Where.NOT_SPECIFIED));
+        return ManagedAction.lookupAction(service, actionId.memberLogicalName(), new VisibilityConstraint(whatViewer, Where.NOT_SPECIFIED));
     }
 
 }

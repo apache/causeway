@@ -27,6 +27,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.viewer.commons.model.UiModel;
@@ -43,8 +44,8 @@ extends
 
     // -- USABILITY
 
-    default Consent getUsabilityConsent() {
-    	var visibilityConstraint = VisibilityConstraint.invalid(Where.OBJECT_FORMS);
+    default Consent getUsabilityConsent(final WhatViewer whatViewer) {
+    	var visibilityConstraint = new VisibilityConstraint(whatViewer, Where.OBJECT_FORMS);
         return getAction().isUsable(
                 getActionOwner(),
                 InteractionInitiatedBy.USER,
@@ -53,7 +54,7 @@ extends
 
     // -- VISABILITY
 
-    default Consent getVisibilityConsent() {
+    default Consent getVisibilityConsent(final WhatViewer whatViewer) {
 
         // guard against missing action owner
         var actionOwner = getActionOwner();
@@ -64,7 +65,7 @@ extends
         if (getActionOwner().objSpec().isHidden())
 			return Veto.DEFAULT;
 
-        var visibilityConstraint = VisibilityConstraint.invalid(Where.OBJECT_FORMS);
+        var visibilityConstraint = new VisibilityConstraint(whatViewer, Where.OBJECT_FORMS);
         return getAction().isVisible(
                 actionOwner,
                 InteractionInitiatedBy.USER,

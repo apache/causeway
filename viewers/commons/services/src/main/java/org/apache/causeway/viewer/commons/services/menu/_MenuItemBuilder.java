@@ -30,6 +30,7 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
@@ -55,6 +56,7 @@ final class _MenuItemBuilder {
 
     static void buildMenuItems(
             final MetaModelContext mmc,
+            final WhatViewer whatViewer,
             final BSMenuBar menuBar,
             final Visitor menuBuilder) {
 
@@ -80,7 +82,7 @@ final class _MenuItemBuilder {
                     }
 
                     var managedAction = ManagedAction
-                            .lookupAction(serviceAdapter, actionLayoutData.getId(), VisibilityConstraint.invalid(Where.EVERYWHERE))
+                            .lookupAction(serviceAdapter, actionLayoutData.getId(), new VisibilityConstraint(whatViewer, Where.EVERYWHERE))
                             .orElse(null);
                     if (managedAction == null) {
                         log.warn("No such action: bean-name '{}' action-id '{}'",
