@@ -60,10 +60,6 @@ public interface ObjectMember extends ObjectFeature {
      */
     ObjectSpecification getDeclaringType();
 
-    // /////////////////////////////////////////////////////////////
-    // Name, Description, Help (convenience for facets)
-    // /////////////////////////////////////////////////////////////
-
     /**
      * Return the help text for this member - the field or action - to
      * complement the description.
@@ -71,10 +67,6 @@ public interface ObjectMember extends ObjectFeature {
      * @see #getDescription(java.util.function.Supplier)
      */
     String getHelp();
-
-    // /////////////////////////////////////////////////////////////
-    // Hidden (or visible)
-    // /////////////////////////////////////////////////////////////
 
     /**
      * When the member is always hidden.
@@ -93,13 +85,9 @@ public interface ObjectMember extends ObjectFeature {
      * @param where
      */
     Consent isVisible(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
-
-    // /////////////////////////////////////////////////////////////
-    // Disabled (or enabled)
-    // /////////////////////////////////////////////////////////////
+            ManagedObject target,
+            InteractionInitiatedBy interactionInitiatedBy,
+            Where where);
 
     /**
      * Determines whether this member is usable (not disabled), represented as a
@@ -110,13 +98,9 @@ public interface ObjectMember extends ObjectFeature {
      * @param where
      */
     Consent isUsable(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
-
-    // /////////////////////////////////////////////////////////////
-    // isAssociation, isAction
-    // /////////////////////////////////////////////////////////////
+            ManagedObject target,
+            InteractionInitiatedBy interactionInitiatedBy,
+            Where where);
 
     /**
      * Whether this member represents a {@link ObjectAssociation}.
@@ -166,9 +150,7 @@ public interface ObjectMember extends ObjectFeature {
      */
     boolean isExplicitlyAnnotated();
 
-    // /////////////////////////////////////////////////////////////
-    // Debugging
-    // /////////////////////////////////////////////////////////////
+    // -- DEBUGGING
 
     /**
      * Thrown if the user is not authorized to access an action or any property/collection of an entity.
@@ -276,9 +258,8 @@ public interface ObjectMember extends ObjectFeature {
             .map(SortedByFacet::value)
             .orElse(null);
 
-        if(sortedBy == null) {
-            return Optional.empty();
-        }
+        if(sortedBy == null)
+			return Optional.empty();
 
         var pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
                 _InstanceUtil.createInstance(sortedBy));

@@ -26,7 +26,6 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
-import org.apache.causeway.core.metamodel.interactions.vis.PropertyVisibilityContext;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
@@ -57,9 +56,4 @@ implements UsabilityContext {
         return new PropertyUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
-    @Override
-    public PropertyVisibilityContext asVisibilityContext() {
-        return new PropertyVisibilityContext(head(), identifier(),
-                initiatedBy(), where(), renderPolicy());
-    }
 }

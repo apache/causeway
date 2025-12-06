@@ -26,6 +26,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
@@ -61,7 +63,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 abstract class ObjectMemberAbstract
 implements
@@ -84,9 +85,8 @@ implements
         this.featureIdentifier = featureIdentifier;
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
-        if (getId() == null) {
-            throw new IllegalArgumentException("Id must always be set");
-        }
+        if (getId() == null)
+			throw new IllegalArgumentException("Id must always be set");
     }
 
     // -- IDENTIFIERS
@@ -113,13 +113,12 @@ implements
 
         var namedFacet = getFacet(MemberNamedFacet.class);
 
-        if(namedFacet==null) {
-            throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
-        }
+        if(namedFacet==null)
+			throw _Exceptions.unrecoverable("no MemberNamedFacet preset on %s", getFeatureIdentifier());
 
         return namedFacet
             .getSpecialization()
-            .fold(  textFacet->textFacet.translated(),
+            .fold(  HasStaticText::translated,
                     textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target()));
     }
 
@@ -138,7 +137,7 @@ implements
         return lookupFacet(MemberDescribedFacet.class)
         .map(MemberDescribedFacet::getSpecialization)
         .map(specialization->specialization
-                .fold(textFacet->textFacet.translated(),
+                .fold(HasStaticText::translated,
                       textFacet->textFacet.textElseNull(headFor(domainObjectProvider.get()).target())));
     }
 
@@ -209,7 +208,7 @@ implements
      * returns <tt>true</tt> only if none hide the member.
      */
     @Override
-    public Consent isVisible(
+    public final Consent isVisible(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
@@ -239,13 +238,14 @@ implements
      * returns <tt>true</tt> only if none disables the member.
      */
     @Override
-    public Consent isUsable(
+    public final Consent isUsable(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
         var usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
-        return InteractionUtils.isUsableResult(this, usabilityContext).createConsent();
+        return InteractionUtils.isUsableResult(this, usabilityContext, ()->createVisibleInteractionContext(target, interactionInitiatedBy, where))
+        		.createConsent();
     }
 
     // -- PREDICATES
@@ -277,9 +277,8 @@ implements
             final @NonNull ManagedObject mixee) {
 
         // nullable for action parameter mixins
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee)) {
-            return ManagedObject.empty(mixinSpec);
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mixee))
+			return ManagedObject.empty(mixinSpec);
 
         var mixinPojo = getFactoryService().mixin(mixinSpec.getCorrespondingClass(), mixee.getPojo());
         return ManagedObject.mixin(mixinSpec, mixinPojo);

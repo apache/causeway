@@ -29,7 +29,6 @@ import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
-import org.apache.causeway.core.metamodel.interactions.vis.ParamVisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -71,12 +70,6 @@ implements UsabilityContext, ActionInteractionContext {
                 identifier(),
                 MmUnwrapUtils.multipleAsArray(args().toList()),
                 position());
-    }
-
-    @Override
-    public ParamVisibilityContext asVisibilityContext() {
-        return new ParamVisibilityContext(head(), objectAction(), identifier(),
-                args, position, initiatedBy(), renderPolicy());
     }
 
 }

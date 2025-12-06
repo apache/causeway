@@ -27,7 +27,6 @@ import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
-import org.apache.causeway.core.metamodel.interactions.vis.ActionVisibilityContext;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
@@ -63,9 +62,4 @@ implements UsabilityContext, ActionInteractionContext {
         return new ActionUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
-    @Override
-    public ActionVisibilityContext asVisibilityContext() {
-        return new ActionVisibilityContext(head(), objectAction(), identifier(),
-                initiatedBy(), where(), renderPolicy());
-    }
 }
