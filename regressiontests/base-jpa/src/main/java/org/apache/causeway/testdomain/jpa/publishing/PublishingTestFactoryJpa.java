@@ -198,7 +198,7 @@ extends PublishingTestFactoryAbstract {
 		    context.changeProperty(()->{
 
 		        var bookAdapter = objectManager.adapt(book);
-		        var propertyInteraction = PropertyInteraction.start(bookAdapter, "name", VisibilityConstraint.invalid(Where.OBJECT_FORMS));
+		        var propertyInteraction = PropertyInteraction.start(bookAdapter, "name", VisibilityConstraint.noViewer(Where.OBJECT_FORMS));
 		        var managedProperty = propertyInteraction.getManagedPropertyElseThrow(__->_Exceptions.noSuchElement());
 		        var propertyModel = managedProperty.startNegotiation();
 		        var propertySpec = managedProperty.getElementType();
@@ -217,7 +217,7 @@ extends PublishingTestFactoryAbstract {
 
 		        var bookAdapter = objectManager.adapt(book);
 
-		        var actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", VisibilityConstraint.invalid(Where.OBJECT_FORMS));
+		        var actionInteraction = ActionInteraction.start(bookAdapter, "doubleThePrice", VisibilityConstraint.noViewer(Where.OBJECT_FORMS));
 		        var managedAction = actionInteraction.getManagedActionElseThrow(__->_Exceptions.noSuchElement());
 		        // this test action is always disabled, so don't enforce rules here, just invoke
 		        managedAction.invoke(Can.empty()); // no-arg action

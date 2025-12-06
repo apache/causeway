@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -52,12 +51,12 @@ implements VisibilityContext, ProposedHolder {
     public static ObjectVisibilityContext createForRegular(
             final ManagedObject domainObject,
             final InteractionInitiatedBy initiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
         return new ObjectVisibilityContext(
                 InteractionHead.regular(domainObject),
                 domainObject.objSpec().getFeatureIdentifier(),
                 initiatedBy,
-                VisibilityConstraint.invalid(where),
+                visibilityConstraint,
                 RenderPolicy.forNonActionParam(domainObject));
     }
 

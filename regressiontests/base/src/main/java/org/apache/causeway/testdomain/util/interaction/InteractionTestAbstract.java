@@ -71,19 +71,19 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     protected ActionInteraction startActionInteractionOn(final Class<?> type, final String actionId, final Where where) {
         var viewModel = factoryService.viewModel(type);
         var managedObject = objectManager.adapt(viewModel);
-        return ActionInteraction.start(managedObject, actionId, VisibilityConstraint.invalid(where));
+        return ActionInteraction.start(managedObject, actionId, VisibilityConstraint.noViewer(where));
     }
 
     protected PropertyInteraction startPropertyInteractionOn(final Class<?> type, final String propertyId, final Where where) {
         var viewModel = factoryService.viewModel(type);
         var managedObject = objectManager.adapt(viewModel);
-        return PropertyInteraction.start(managedObject, propertyId, VisibilityConstraint.invalid(where));
+        return PropertyInteraction.start(managedObject, propertyId, VisibilityConstraint.noViewer(where));
     }
 
     protected CollectionInteraction startCollectionInteractionOn(final Class<?> type, final String collectionId, final Where where) {
         var viewModel = factoryService.viewModel(type);
         var managedObject = objectManager.adapt(viewModel);
-        return CollectionInteraction.start(managedObject, collectionId, VisibilityConstraint.invalid(where));
+        return CollectionInteraction.start(managedObject, collectionId, VisibilityConstraint.noViewer(where));
     }
 
     // -- SHORTCUTS

@@ -24,6 +24,10 @@ public record VisibilityConstraint(
 		WhatViewer whatViewer,
 		Where where) {
 
+	public static VisibilityConstraint noViewer(final Where where) {
+		return new VisibilityConstraint(WhatViewer.noViewer(), where);
+	}
+
 	public VisibilityConstraint withWhere(final Where where) {
 		return new VisibilityConstraint(whatViewer, where);
 	}

@@ -26,8 +26,8 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 import lombok.experimental.UtilityClass;
 
@@ -90,35 +90,24 @@ public final class MmVisibilityUtils {
             final ManagedObject adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-            // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter))
+			// a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
-        }
         var spec = adapter.objSpec();
         if(spec.isEntity()) {
-            if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
-                return false;
-            }
+            if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved())
+				return false;
         }
-        if(!interactionInitiatedBy.isUser()) {
-            return true;
-        }
-        var visibilityContext = createVisibleInteractionContext(
+        if(!interactionInitiatedBy.isUser())
+			return true;
+
+        var visibilityContext = ObjectVisibilityContext.createForRegular(
                 adapter,
                 InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
+                VisibilityConstraint.invalid(Where.OBJECT_FORMS));
 
         return InteractionUtils.isVisibleResult(spec, visibilityContext)
                 .isAllowing();
-    }
-
-    private static VisibilityContext createVisibleInteractionContext(
-            final ManagedObject objectAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        return ObjectVisibilityContext
-                .createForRegular(objectAdapter, interactionInitiatedBy, where);
     }
 
 }

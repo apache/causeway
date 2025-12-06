@@ -50,6 +50,7 @@ import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGrou
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -356,9 +357,10 @@ public interface ObjectAction extends ObjectMember {
 
         /**
          * Returns a Stream of those to be rendered with the entity header panel.
+         * @param whatViewer
          */
         public static Stream<ObjectAction> streamTopBarActions(
-                final ManagedObject adapter) {
+                final ManagedObject adapter, final WhatViewer whatViewer) {
 
             var spec = adapter.objSpec();
 
@@ -367,7 +369,7 @@ public interface ObjectAction extends ObjectMember {
                     .isSharingAnyLayoutGroupOf(spec.streamAssociations(MixedIn.INCLUDED))
                     .negate())
             .filter(Predicates
-                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, VisibilityConstraint.invalid(Where.ANYWHERE)));
+                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, new VisibilityConstraint(whatViewer, Where.ANYWHERE)));
         }
 
         public static Stream<ObjectAction> findForAssociation(
@@ -526,12 +528,9 @@ public interface ObjectAction extends ObjectMember {
         private static Predicate<ObjectAction> dynamicallyVisible(
                 final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
-                final VisibilityConstraint visConstraint) {
+                final VisibilityConstraint visibilityConstraint) {
 
-            return (final ObjectAction objectAction) -> {
-                final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, visConstraint);
-                return visible.isAllowed();
-            };
+            return (final ObjectAction objectAction) -> objectAction.isVisible(target, interactionInitiatedBy, visibilityConstraint).isAllowed();
         }
 
     }

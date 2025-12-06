@@ -1016,7 +1016,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             super(domainObject);
             this.memberName = memberName;
             this.memberSort = memberSort;
-            this.visibilityConstraint = VisibilityConstraint.invalid(where);
+            this.visibilityConstraint = VisibilityConstraint.noViewer(where);
         }
 
         protected final MemberTester<T> init() {

@@ -104,7 +104,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
                 var spec = specLoader.specForTypeElseFail(valueMixin.getClass());
                 var interaction = ActionInteraction
-                        .start(ManagedObject.mixin(spec,  valueMixin), "act", VisibilityConstraint.invalid(Where.ANYWHERE));
+                        .start(ManagedObject.mixin(spec,  valueMixin), "act", VisibilityConstraint.noViewer(Where.ANYWHERE));
 
                 var pendingParams = interaction
                         .startParameterNegotiation()
