@@ -258,13 +258,14 @@ implements WrapperInvocationHandler {
 
         zeroArgsElseThrow(wrapperInvocation.args(), "get");
 
+        var iConstraint = iConstraint(wrapperInvocation);
         runValidationTask(wrapperInvocation, ()->{
-            checkVisibility(wrapperInvocation, targetAdapter, property);
+            checkVisibility(iConstraint, targetAdapter, property);
         });
 
         return runExecutionTask(wrapperInvocation, ()->{
 
-            var currentReferencedAdapter = property.get(targetAdapter, iConstraint(wrapperInvocation).initiatedBy());
+            var currentReferencedAdapter = property.get(targetAdapter, iConstraint.initiatedBy());
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
@@ -283,16 +284,17 @@ implements WrapperInvocationHandler {
 
         var singleArg = singleArgUnderlyingElseNull(wrapperInvocation.args(), "setter");
 
+        var iConstraint = iConstraint(wrapperInvocation);
         runValidationTask(wrapperInvocation, ()->{
-            checkVisibility(wrapperInvocation, targetAdapter, property);
-            checkUsability(wrapperInvocation, targetAdapter, property);
+            checkVisibility(iConstraint, targetAdapter, property);
+            checkUsability(iConstraint, targetAdapter, property);
         });
 
         var argumentAdapter = property.getObjectManager().adapt(singleArg);
 
         runValidationTask(wrapperInvocation, ()->{
             var interactionResult = property.isAssociationValid(
-                    targetAdapter, argumentAdapter, iConstraint(wrapperInvocation).initiatedBy())
+                    targetAdapter, argumentAdapter, iConstraint.initiatedBy())
                     .getInteractionResult();
             notifyListenersAndVetoIfRequired(interactionResult);
         });
@@ -301,7 +303,7 @@ implements WrapperInvocationHandler {
                 .forProperty(InteractionHead.regular(targetAdapter), property, argumentAdapter));
 
         return runExecutionTask(wrapperInvocation, ()->{
-            property.set(targetAdapter, argumentAdapter, iConstraint(wrapperInvocation).initiatedBy());
+            property.set(targetAdapter, argumentAdapter, iConstraint.initiatedBy());
             return null;
         }, ()->new ExceptionLogger("setter " + property.getId(), targetAdapter));
     }
@@ -314,13 +316,14 @@ implements WrapperInvocationHandler {
 
         zeroArgsElseThrow(wrapperInvocation.args(), "get");
 
+        var iConstraint = iConstraint(wrapperInvocation);
         runValidationTask(wrapperInvocation, ()->{
-            checkVisibility(wrapperInvocation, targetAdapter, collection);
+            checkVisibility(iConstraint, targetAdapter, collection);
         });
 
         return runExecutionTask(wrapperInvocation, ()->{
 
-            var currentReferencedAdapter = collection.get(targetAdapter, iConstraint(wrapperInvocation).initiatedBy());
+            var currentReferencedAdapter = collection.get(targetAdapter, iConstraint.initiatedBy());
 
             var currentReferencedObj = MmUnwrapUtils.single(currentReferencedAdapter);
 
@@ -379,9 +382,10 @@ implements WrapperInvocationHandler {
                     : ManagedObject.empty(paramSpec);
         }));
 
+        var iConstraint = iConstraint(wrapperInvocation);
         runValidationTask(wrapperInvocation, ()->{
-            checkVisibility(wrapperInvocation, targetAdapter, objectAction);
-            checkUsability(wrapperInvocation, targetAdapter, objectAction);
+            checkVisibility(iConstraint, targetAdapter, objectAction);
+            checkUsability(iConstraint, targetAdapter, objectAction);
             checkValidity(wrapperInvocation, head, objectAction, argAdapters);
         });
 
@@ -389,7 +393,7 @@ implements WrapperInvocationHandler {
                 .forAction(head, objectAction, argAdapters));
 
         return runExecutionTask(wrapperInvocation, ()->{
-            var returnedAdapter = objectAction.execute(head, argAdapters, iConstraint(wrapperInvocation).initiatedBy());
+            var returnedAdapter = objectAction.execute(head, argAdapters, iConstraint.initiatedBy());
             return MmUnwrapUtils.single(returnedAdapter);
         }, ()->new ExceptionLogger("action " + objectAction.getId(), targetAdapter));
     }
@@ -411,35 +415,20 @@ implements WrapperInvocationHandler {
 			: arg;
     }
 
-    private static InteractionConstraint iConstraint(final WrapperInvocation wrapperInvocation) {
-        return new InteractionConstraint(
-    		new WhatViewer(wrapperInvocation.syncControl().viewerId()),
-    		wrapperInvocation.syncControl().isSkipRules()
-                ? InteractionInitiatedBy.FRAMEWORK
-                : InteractionInitiatedBy.USER,
-            wrapperInvocation.syncControl().where());
-    }
-
     private void checkVisibility(
-            final WrapperInvocation wrapperInvocation,
-            final ManagedObject targetObjectAdapter,
+            final InteractionConstraint iConstraint,
+            final ManagedObject targetMo,
             final ObjectMember objectMember) {
-
-    	var iConstraint = iConstraint(wrapperInvocation);
-        var interactionResult = objectMember.isVisible(targetObjectAdapter, iConstraint.initiatedBy(), iConstraint.where())
+        var interactionResult = objectMember.isVisible(targetMo, iConstraint.initiatedBy(), iConstraint.where())
         		.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
     private void checkUsability(
-            final WrapperInvocation wrapperInvocation,
-            final ManagedObject targetObjectAdapter,
+            final InteractionConstraint iConstraint,
+            final ManagedObject targetMo,
             final ObjectMember objectMember) {
-
-
-    	var iConstraint = iConstraint(wrapperInvocation);
-
-        var interactionResult = objectMember.isUsable(targetObjectAdapter, iConstraint.initiatedBy(), iConstraint.where())
+        var interactionResult = objectMember.isUsable(targetMo, iConstraint.initiatedBy(), iConstraint.where())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
@@ -475,6 +464,15 @@ implements WrapperInvocationHandler {
 
     private MetaModelContext mmc() {
         return targetSpec.getMetaModelContext();
+    }
+
+    private static InteractionConstraint iConstraint(final WrapperInvocation wrapperInvocation) {
+        return new InteractionConstraint(
+    		new WhatViewer(wrapperInvocation.syncControl().viewerId()),
+    		wrapperInvocation.syncControl().isSkipRules()
+                ? InteractionInitiatedBy.FRAMEWORK
+                : InteractionInitiatedBy.USER,
+            wrapperInvocation.syncControl().where());
     }
 
     private void runValidationTask(final WrapperInvocation wrapperInvocation, final Runnable task) {
