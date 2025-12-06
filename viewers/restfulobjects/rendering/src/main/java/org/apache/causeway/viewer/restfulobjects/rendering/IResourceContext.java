@@ -24,14 +24,12 @@ import java.util.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Restfulobjects;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.viewer.restfulobjects.rendering.context.ResourceContext;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
@@ -70,11 +68,7 @@ public interface IResourceContext extends HasMetaModelContext {
      */
     InteractionInitiatedBy interactionInitiatedBy();
 
-    @Deprecated
-    Where where();
-    default VisibilityConstraint visibilityConstraint() {
-    	return ResourceContext.visibilityConstraint(where());
-    }
+    VisibilityConstraint visibilityConstraint();
 
     ObjectAdapterLinkTo objectAdapterLinkTo();
     List<List<String>> followLinks();

@@ -72,6 +72,7 @@ public record ResourceContext(
         boolean isValidateOnly,
 
         InteractionInitiatedBy interactionInitiatedBy,
+        VisibilityConstraint visibilityConstraint,
 
         JsonRepresentation queryStringAsJsonRepr,
         ObjectAdapterLinkTo objectAdapterLinkTo,
@@ -118,6 +119,7 @@ implements IResourceContext {
                 Collections.unmodifiableList(arg(requestArgsAsMap, RequestParameter.FOLLOW_LINKS)),
                 arg(requestArgsAsMap, RequestParameter.VALIDATE_ONLY),
                 interactionInitiatedBy,
+                ResourceContext.visibilityConstraint(resourceDescriptor.where()),
                 requestArgsAsMap,
                 switch(resourceDescriptor.resourceLink()) {
                 case NONE -> null;
@@ -127,10 +129,6 @@ implements IResourceContext {
                 new HashSet<>());
 
         ensureDomainModelQueryParamSupported();
-    }
-
-    @Override public Where where() {
-        return resourceDescriptor().where();
     }
 
     /**

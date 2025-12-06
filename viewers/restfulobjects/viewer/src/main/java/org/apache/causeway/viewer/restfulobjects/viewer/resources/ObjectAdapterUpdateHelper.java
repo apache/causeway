@@ -88,11 +88,11 @@ public class ObjectAdapterUpdateHelper {
         final Consent visibility = property.isVisible(
                 objectAdapter,
                 resourceContext.interactionInitiatedBy(),
-                ResourceContext.visibilityConstraint(resourceContext.where()));
+                resourceContext.visibilityConstraint());
         final Consent usability = property.isUsable(
                 objectAdapter,
                 resourceContext.interactionInitiatedBy(),
-                ResourceContext.visibilityConstraint(resourceContext.where()));
+                resourceContext.visibilityConstraint());
 
         final boolean invisible = visibility.isVetoed();
         final boolean disabled = usability.isVetoed();
