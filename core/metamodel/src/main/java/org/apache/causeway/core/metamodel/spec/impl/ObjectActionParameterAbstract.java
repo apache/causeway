@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.commons.collections.Can;
@@ -51,7 +53,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 abstract class ObjectActionParameterAbstract
 implements
@@ -188,9 +189,8 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
-        if (autoCompleteFacet == null) {
-            return Can.empty();
-        }
+        if (autoCompleteFacet == null)
+			return Can.empty();
 
         var paramSpec = getElementType();
 
@@ -226,9 +226,8 @@ implements
 
         var paramSpec = getElementType();
         var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-        if (choicesFacet == null) {
-            return Can.empty();
-        }
+        if (choicesFacet == null)
+			return Can.empty();
 
         var visibleChoices = choicesFacet.getChoices(paramSpec,
                 pendingArgs.actionInteractionHead(),
@@ -296,11 +295,10 @@ implements
             // in other words <param type> is assignable from <choices type>
 
             // TODO: should implement this instead as a MetaModelValidator (subject to [CAUSEWAY-3172])
-            if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
-                throw new DomainModelException(String.format(
+            if (!choiceWrappedSpec.isOfType(paramWrappedSpec))
+				throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",
                         paramSpec.getFullIdentifier(), choiceClass.getName()));
-            }
         }
     }
 
@@ -318,7 +316,7 @@ implements
     }
 
     @Override
-    public Consent isVisible(
+    public final Consent isVisible(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -348,7 +346,7 @@ implements
     }
 
     @Override
-    public Consent isUsable(
+    public final Consent isUsable(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {
@@ -356,8 +354,9 @@ implements
         var usabilityContext = createArgumentUsabilityContext(
                 head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
 
-        var usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
-        return usableResult.createConsent();
+        return InteractionUtils.isUsableResult(this, usabilityContext, ()->createArgumentVisibilityContext(
+                head, pendingArgs, getParameterIndex(), interactionInitiatedBy))
+    		.createConsent();
     }
 
     // -- Validation
@@ -374,7 +373,7 @@ implements
     }
 
     @Override
-    public Consent isValid(
+    public final Consent isValid(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final InteractionInitiatedBy interactionInitiatedBy) {

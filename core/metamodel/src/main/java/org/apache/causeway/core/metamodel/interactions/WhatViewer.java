@@ -16,24 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
-public class HideForContextFacetNone
-extends HideForContextFacetAbstract {
+/**
+ * Viewer identifier, used for viewer specific feature filtering.
+ */
+public record WhatViewer(
+		String viewerId) {
 
-    public HideForContextFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
-    }
+	/**
+	 * Used by {@link WrapperFactory}, {@link CommandExecutorService} and Object title interaction.
+	 */
+	public static WhatViewer noViewer() {
+		return new WhatViewer("NoViewer");
+	}
 
-    /**
-     * Always returns <tt>null</tt>.
-     */
-    @Override
-    public String hides(final VisibilityContext ic) {
-        return null;
-    }
-
+	/**
+	 * @deprecated for refactoring only
+	 */
+	@Deprecated
+	public static WhatViewer invalid() {
+		return new WhatViewer("invalid");
+	}
 }

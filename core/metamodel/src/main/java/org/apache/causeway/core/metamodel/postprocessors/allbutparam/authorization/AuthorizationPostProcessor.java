@@ -57,7 +57,7 @@ public class AuthorizationPostProcessor
     }
 
     private static void addFacet(final FacetHolder facetHolder) {
-        facetHolder.addFacet(new AuthorizationFacetImpl(facetHolder));
+        facetHolder.addFacet(new AuthorizationFacetImpl(facetHolder.getAuthorizationManager(), facetHolder));
     }
 
 }

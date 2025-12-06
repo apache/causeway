@@ -16,38 +16,33 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.core.metamodel.facets.object.hidden;
 
 import jakarta.inject.Inject;
 
-import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.methods.MethodFinder;
+import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public class HideForContextFacetViaMethodFactory
-extends MemberSupportFacetFactoryAbstract {
+/**
+ * Installs the {@link HiddenFacetForNoMembersAuthorizedImpl} on the
+ * {@link ObjectSpecification}.
+ */
+public class HiddenFacetForNoMembersAuthorizedFactory
+extends FacetFactoryAbstract {
 
     @Inject
-    public HideForContextFacetViaMethodFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.HIDE);
+    public HiddenFacetForNoMembersAuthorizedFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    protected void search(
-            final ProcessMethodContext processMethodContext,
-            final MethodFinder methodFinder) {
-
-        methodFinder
-        .streamMethodsMatchingSignature(NO_ARG)
-        .peek(processMethodContext::removeMethod)
-        .forEach(hideMethod->{
-            addFacet(
-                    new HideForContextFacetViaMethod(
-                            hideMethod, processMethodContext.getFacetHolder()));
-        });
-
+    public void process(final ProcessClassContext processClassContext) {
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        FacetUtil.addFacet(new HiddenFacetForNoMembersAuthorizedImpl(facetHolder));
     }
 
 }

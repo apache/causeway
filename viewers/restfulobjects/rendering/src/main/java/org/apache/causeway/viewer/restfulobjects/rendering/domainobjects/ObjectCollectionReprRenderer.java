@@ -55,9 +55,8 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     @Override
     public JsonRepresentation render() {
 
-        if(representation == null) {
-            return null;
-        }
+        if(representation == null)
+			return null;
 
         renderMemberContent();
 
@@ -88,9 +87,8 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     private void addValue(final LinkFollowSpecs linkFollower) {
         var valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
-        if (valueAdapter == null) {
-            return;
-        }
+        if (valueAdapter == null)
+			return;
 
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         final boolean eagerlyRender = !followHref.isTerminated()
@@ -130,7 +128,7 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
         var objectCollectionReprRenderer =
             new ObjectCollectionReprRenderer(getResourceContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap())
-                .with(ManagedCollection.of(objectAdapter, objectMember, resourceContext.where()))
+                .with(ManagedCollection.of(objectAdapter, objectMember, resourceContext.visibilityConstraint()))
                 .asFollowed();
         detailsLink.mapPutJsonRepresentation("value", objectCollectionReprRenderer.render());
     }
@@ -146,9 +144,8 @@ extends AbstractObjectMemberReprRenderer<OneToManyAssociation> {
 
     @Override
     protected void addLinksToFormalDomainModel() {
-        if(resourceContext.config().suppressDescribedByLinks()) {
-            return;
-        }
+        if(resourceContext.config().suppressDescribedByLinks())
+			return;
         final JsonRepresentation link =
                 CollectionDescriptionReprRenderer
                 .newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();

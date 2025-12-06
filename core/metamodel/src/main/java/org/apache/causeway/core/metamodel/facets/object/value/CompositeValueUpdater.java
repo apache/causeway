@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
@@ -34,6 +33,7 @@ import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleF
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForParameter;
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -68,8 +68,8 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
     // -- OBJECT ACTION MOCKUP
 
-    @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
-    @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final Where c) { return Allow.DEFAULT; }
+    @Override default Consent isVisible(final ManagedObject a, final InteractionInitiatedBy b, final VisibilityConstraint c) { return Allow.DEFAULT; }
+    @Override default Consent isUsable(final ManagedObject a, final InteractionInitiatedBy b, final VisibilityConstraint c) { return Allow.DEFAULT; }
     @Override default PromptStyle getPromptStyle() { return PromptStyle.INLINE_AS_IF_EDIT; }
     @Override default SemanticsOf getSemantics() { return SemanticsOf.SAFE; }
 
@@ -80,7 +80,7 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
     }
     @Override default ManagedObject executeWithRuleChecking(
         final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
+        final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visibilityConstraint) throws AuthorizationException {
         return execute(head, parameters, interactionInitiatedBy);
     }
 

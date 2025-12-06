@@ -19,14 +19,12 @@
 package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
-import org.apache.causeway.core.metamodel.interactions.vis.PropertyVisibilityContext;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
@@ -38,7 +36,6 @@ public record PropertyUsabilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
     RenderPolicy renderPolicy)
 implements UsabilityContext {
 
@@ -46,10 +43,9 @@ implements UsabilityContext {
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy initiatedBy,
-            final Where where,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.PROPERTY_USABLE,
-                head, identifier, initiatedBy, where, renderPolicy);
+                head, identifier, initiatedBy, renderPolicy);
     }
 
     @Override
@@ -57,9 +53,4 @@ implements UsabilityContext {
         return new PropertyUsabilityEvent(MmUnwrapUtils.single(target()), identifier());
     }
 
-    @Override
-    public PropertyVisibilityContext asVisibilityContext() {
-        return new PropertyVisibilityContext(head(), identifier(),
-                initiatedBy(), where(), renderPolicy());
-    }
 }

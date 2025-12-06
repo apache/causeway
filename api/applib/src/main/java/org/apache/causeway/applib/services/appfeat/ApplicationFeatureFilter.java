@@ -16,14 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.prototype;
-
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+package org.apache.causeway.applib.services.appfeat;
 
 /**
- * Indicates that the action should only be available in <i>prototype</i> mode.
+ * The various viewer implementations will individually honor any filters registered with Spring,
+ * based on a matching qualifier ('Graphql', 'Restful', etc.).
+ *
+ * <p>All filters that match a qualifier are consulted until any one rejects the {@link ApplicationFeature}.
+ *
+ * <p>If no filters match a qualifier, any {@link ApplicationFeature} is accepted.
+ *
+ * <p>'NoViewer' is a reserved string internally used to mean 'no filtering', hence it should not be used to qualify a filter.
+ *
+ * @since 4.0 {@index}
  */
-public interface PrototypeFacet extends Facet, HidingInteractionAdvisor {
+@FunctionalInterface
+public interface ApplicationFeatureFilter {
 
+	/**
+	 * Whether to include given {@link ApplicationFeature}.
+	 */
+	boolean filter(ApplicationFeature feature);
+	
 }

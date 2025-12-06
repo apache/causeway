@@ -31,6 +31,7 @@ import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.IconResourceReferenceFactory;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
 import org.apache.causeway.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
@@ -95,7 +96,7 @@ implements HasMetaModelContext {
     private transient HeaderUiService headerUiService;
     protected HeaderUiModel getHeaderModel() {
         headerUiService = computeIfAbsent(HeaderUiService.class, headerUiService);
-        return headerUiService.getHeader();
+        return headerUiService.getHeader(WktVisibility.WHAT_VIEWER);
     }
 
     // Hint support

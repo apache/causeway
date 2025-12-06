@@ -18,13 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.tabular.simple;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a single domain object (typically an entity instance)
@@ -41,17 +42,18 @@ public record DataRow(
     public Can<ManagedObject> getCellElements(
             final @NonNull DataColumn column,
             final InteractionInitiatedBy interactionInitiatedBy) {
+    	var visibilityConstraint = VisibilityConstraint.invalid(Where.ALL_TABLES);
         var assoc = column.metamodel();
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
                     interactionInitiatedBy.isPassThrough()
-                        || property.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                        || property.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
                                 ? property.get(rowElement(), interactionInitiatedBy)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
                     interactionInitiatedBy.isPassThrough()
-                        || collection.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                        || collection.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
                                 ? collection.get(rowElement(), interactionInitiatedBy)
                                 : null
                 ));

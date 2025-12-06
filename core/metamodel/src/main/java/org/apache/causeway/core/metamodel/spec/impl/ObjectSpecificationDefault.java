@@ -75,7 +75,7 @@ import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
@@ -352,7 +352,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         streamDeclaredAssociations(MixedIn.EXCLUDED)
         .forEach(field->
             field.streamFacets(ImperativeFacet.class)
-                .map(ImperativeFacet::getMethods)
+                .map(ImperativeFacet::methods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodElseFail) // expected regular
                 .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
@@ -363,7 +363,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         streamDeclaredActions(MixedIn.INCLUDED)
         .forEach(userAction->
             userAction.streamFacets(ImperativeFacet.class)
-                .map(ImperativeFacet::getMethods)
+                .map(ImperativeFacet::methods)
                 .flatMap(Can::stream)
                 .map(MethodFacade::asMethodForIntrospection)
                 .peek(method->_Reflect.guardAgainstSynthetic(method.method())) // expected non-synthetic
@@ -1184,7 +1184,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public boolean isHidden() {
-        return containsFacet(HiddenFacet.class);
+        return containsFacet(HiddenFacetForLayout.class);
     }
 
     @Override

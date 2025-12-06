@@ -27,8 +27,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.commons.net.DataUri;
-
 import lombok.RequiredArgsConstructor;
 
 class DataUriTest {

@@ -28,15 +28,14 @@ import graphql.schema.GraphQLOutputType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.viewer.graphql.model.context.Context;
-import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.Element;
+import org.apache.causeway.viewer.graphql.model.domain.Environment;
 import org.apache.causeway.viewer.graphql.model.domain.SchemaType;
 import org.apache.causeway.viewer.graphql.model.domain.TypeNames;
 import org.apache.causeway.viewer.graphql.model.domain.common.query.ObjectFeatureUtils;
@@ -108,9 +107,8 @@ public class RichMutationForProperty extends Element {
                 var key = ObjectFeatureUtils.keyFor(refValue);
                 BookmarkedPojo value = environment.getGraphQlContext().get(key);
                 result = Optional.of(value).map(BookmarkedPojo::getTargetPojo);
-            } else {
-                throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
-            }
+            } else
+				throw new IllegalArgumentException("Either 'id' or 'ref' must be specified for a DomainObject input type");
         }
         Object sourcePojo = result
                     .orElseThrow(); // TODO: better error handling if no such object found.
@@ -120,21 +118,19 @@ public class RichMutationForProperty extends Element {
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         Object argumentValue = arguments.get(oneToOneAssociation.asciiId());
         ManagedObject argumentManagedObject = ManagedObject.adaptProperty(oneToOneAssociation, argumentValue);
+        var visibilityConstraint = Context.visibilityConstraint();
 
-        var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
-        }
+        var visibleConsent = oneToOneAssociation.isVisible(managedObject, InteractionInitiatedBy.USER, visibilityConstraint);
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(oneToOneAssociation.getFeatureIdentifier());
 
-        var usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
-        }
+        var usableConsent = oneToOneAssociation.isUsable(managedObject, InteractionInitiatedBy.USER, visibilityConstraint);
+        if (usableConsent.isVetoed())
+			throw new DisabledException(oneToOneAssociation.getFeatureIdentifier());
 
         var validityConsent = oneToOneAssociation.isAssociationValid(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new InvalidException(validityConsent);
-        }
+        if (validityConsent.isVetoed())
+			throw new InvalidException(validityConsent);
 
         oneToOneAssociation.set(managedObject, argumentManagedObject, InteractionInitiatedBy.USER);
 

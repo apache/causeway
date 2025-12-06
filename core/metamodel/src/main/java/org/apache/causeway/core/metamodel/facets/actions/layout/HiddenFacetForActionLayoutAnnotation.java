@@ -23,10 +23,10 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetForLayoutAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public class HiddenFacetForActionLayoutAnnotation extends HiddenFacetAbstract {
+public class HiddenFacetForActionLayoutAnnotation extends HiddenFacetForLayoutAbstract {
 
     public static Optional<HiddenFacetForActionLayoutAnnotation> create(
             final Optional<ActionLayout> actionLayoutIfAny,

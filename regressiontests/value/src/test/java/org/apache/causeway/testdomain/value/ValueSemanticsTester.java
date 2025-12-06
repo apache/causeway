@@ -24,6 +24,8 @@ import java.util.function.Supplier;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.NonNull;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,6 +42,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
@@ -49,7 +52,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.testdomain.model.valuetypes.ValueTypeExample;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 
 class ValueSemanticsTester<T> {
@@ -91,7 +93,7 @@ class ValueSemanticsTester<T> {
 
                 var command = interactionService.currentInteractionElseFail().getCommand();
                 var actInteraction = ActionInteraction
-                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, VisibilityConstraint.invalid(Where.OBJECT_FORMS)));
 
                 var params = actInteraction.startParameterNegotiation().orElseThrow();
                 var singleArgPojoToUse = actionArgumentProvider.get();
@@ -111,7 +113,7 @@ class ValueSemanticsTester<T> {
 
                 var command = interactionService.currentInteractionElseFail().getCommand();
                 var actInteraction = ActionInteraction
-                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, Where.OBJECT_FORMS));
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, VisibilityConstraint.invalid(Where.OBJECT_FORMS)));
 
                 var params = actInteraction.startParameterNegotiation().orElseThrow();
 
@@ -199,7 +201,7 @@ class ValueSemanticsTester<T> {
             var command = interactionService.currentInteractionElseFail().getCommand();
 
             var propInteraction = PropertyInteraction
-                    .wrap(ManagedProperty.of(ManagedObject.adaptSingular(objSpec, domainObject), prop, Where.OBJECT_FORMS));
+                    .wrap(ManagedProperty.of(ManagedObject.adaptSingular(objSpec, domainObject), prop, VisibilityConstraint.invalid(Where.OBJECT_FORMS)));
 
             propInteraction.modifyProperty(managedProp->
                 ManagedObject.adaptSingular(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));

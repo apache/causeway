@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -28,13 +29,12 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Bindables;
 import org.apache.causeway.commons.internal.binding._Bindables.BooleanBindable;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
 import org.apache.causeway.core.metamodel.tabular.DataRow;
-
-import org.jspecify.annotations.NonNull;
 
 record DataRowInternal(
     int rowIndex,
@@ -67,14 +67,15 @@ record DataRowInternal(
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
         final ObjectAssociation assoc = column.associationMetaModel();
         var interactionInitiatedBy = InteractionInitiatedBy.PASS_THROUGH;
+        var visibilityConstraint = VisibilityConstraint.invalid(Where.ALL_TABLES);
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
-                        property.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                        property.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
                                 ? property.get(rowElement(), interactionInitiatedBy)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                        collection.isVisible(rowElement(), interactionInitiatedBy, Where.ALL_TABLES).isAllowed()
+                        collection.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
                                 ? collection.get(rowElement(), interactionInitiatedBy)
                                 : null
                 ));

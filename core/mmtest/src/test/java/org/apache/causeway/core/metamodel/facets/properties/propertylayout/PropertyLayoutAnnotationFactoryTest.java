@@ -35,7 +35,7 @@ import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -79,7 +79,7 @@ extends FacetFactoryTestAbstract {
             //when
             facetFactory.process(processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            final Facet facet = facetedMethod.getFacet(HiddenFacetForLayout.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HiddenFacetForPropertyLayoutAnnotation);
             var propLayoutFacetAnnotation = (HiddenFacetForPropertyLayoutAnnotation) facet;
