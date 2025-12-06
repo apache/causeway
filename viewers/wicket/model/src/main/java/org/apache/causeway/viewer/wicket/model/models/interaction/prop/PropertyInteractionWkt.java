@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.interactions.managed.PropertyNegotiati
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 
 /**
  * The parent (container) model of multiple <i>property models</i> which implement
@@ -119,7 +120,7 @@ extends HasBookmarkedOwnerAbstract<PropertyInteraction> {
 
     private PropertyInteraction loadPropertyInteraction() {
         return PropertyInteraction.wrap(
-            ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, where)
+            ManagedProperty.lookupProperty(getBookmarkedOwner(), memberId, WktVisibility.visibilityConstraint(where))
             .orElseThrow(()->_Exceptions.noSuchElement("property '%s' in %s",
                     memberId,
                     getBookmarkedOwner().objSpec())));

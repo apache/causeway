@@ -33,6 +33,7 @@ import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -40,6 +41,8 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -105,9 +108,8 @@ public class Context {
     }
 
     private void computeLogicalTypeNames() {
-        if (logicalTypeNames != null) {
-            return;
-        }
+        if (logicalTypeNames != null)
+			return;
         logicalTypeNames = doComputeLogicalTypeNames();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(logicalTypeNames);
     }
@@ -125,4 +127,15 @@ public class Context {
                 )
                 .build();
     }
+
+    // -- VISIBILITY CONSTRAINTS
+
+    private static WhatViewer WHAT_VIEWER = new WhatViewer("Graphql");
+	public static VisibilityConstraint visibilityConstraint(final Where where) {
+		return new VisibilityConstraint(WHAT_VIEWER, where);
+	}
+	private static VisibilityConstraint VISIBILITY_CONSTRAINT_DEFAULT = visibilityConstraint(Where.ANYWHERE);
+	public static VisibilityConstraint visibilityConstraint() {
+		return VISIBILITY_CONSTRAINT_DEFAULT;
+	}
 }

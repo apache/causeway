@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -27,6 +26,7 @@ import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
@@ -39,7 +39,7 @@ public record ActionVisibilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
+    VisibilityConstraint visibilityConstraint,
     RenderPolicy renderPolicy,
     ObjectAction objectAction)
 implements VisibilityContext, ActionInteractionContext  {
@@ -49,10 +49,10 @@ implements VisibilityContext, ActionInteractionContext  {
             final ObjectAction objectAction,
             final Identifier identifier,
             final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final VisibilityConstraint visibilityConstraint,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.ACTION_VISIBLE,
-            head, identifier, initiatedBy, where, renderPolicy,
+            head, identifier, initiatedBy, visibilityConstraint, renderPolicy,
             objectAction);
     }
 

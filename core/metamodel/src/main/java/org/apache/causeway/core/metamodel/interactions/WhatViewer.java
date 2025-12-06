@@ -16,20 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.use;
+package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
-import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.applib.services.command.CommandExecutorService;
+import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
-public sealed interface UsabilityContext
-extends InteractionContext, InteractionEventSupplier<UsabilityEvent>
-permits ActionUsabilityContext, CollectionUsabilityContext, ParamUsabilityContext, PropertyUsabilityContext {
+/**
+ * Viewer identifier, used for viewer specific feature filtering.
+ */
+public record WhatViewer(
+		String viewerId) {
 
 	/**
-	 * for debugging usability when prototyping
+	 * Used by {@link WrapperFactory}, {@link CommandExecutorService} and Object title interaction.
 	 */
-    RenderPolicy renderPolicy();
+	public static WhatViewer noViewer() {
+		return new WhatViewer("NoViewer");
+	}
 
+	/**
+	 * @deprecated for refactoring only
+	 */
+	@Deprecated
+	public static WhatViewer invalid() {
+		return new WhatViewer("invalid");
+	}
 }

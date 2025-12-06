@@ -49,6 +49,7 @@ import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -271,10 +272,9 @@ public interface ObjectAction extends ObjectMember {
                 // whereas for INLINE it would render a form with no fields
                 || getParameterCount() == 0) {
             if (promptStyle.isPresent()) {
-                if (promptStyle.get().isDialogAny()) {
-                    // preserve dialog specialization
+                if (promptStyle.get().isDialogAny())
+					// preserve dialog specialization
                     return promptStyle.get();
-                }
             }
             // fallback to generic dialog
             return PromptStyle.DIALOG;
@@ -283,16 +283,13 @@ public interface ObjectAction extends ObjectMember {
         var needsFallback = promptStyle.isEmpty()
                 || promptStyle.get() == PromptStyle.AS_CONFIGURED;
 
-        if(needsFallback) {
-            // modal vs side-bar
-            switch (getWicketViewerSettings().dialogMode()) {
-            case SIDEBAR:
-                return PromptStyle.DIALOG_SIDEBAR;
-            case MODAL:
-            default:
-                return PromptStyle.DIALOG_MODAL;
-            }
-        }
+        if(needsFallback)
+			// modal vs side-bar
+			return switch (getWicketViewerSettings().dialogMode()) {
+			case SIDEBAR -> PromptStyle.DIALOG_SIDEBAR;
+			case MODAL -> PromptStyle.DIALOG_MODAL;
+			default -> PromptStyle.DIALOG_MODAL;
+			};
         return promptStyle.get();
     }
 
@@ -309,9 +306,8 @@ public interface ObjectAction extends ObjectMember {
             if (returnType != null) {
                 Class<?> cls = returnType.getCorrespondingClass();
                 if (Blob.class.isAssignableFrom(cls)
-                        || Clob.class.isAssignableFrom(cls)) {
-                    return true;
-                }
+                        || Clob.class.isAssignableFrom(cls))
+					return true;
             }
             return false;
         }
@@ -320,18 +316,15 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAction action) {
 
             var layoutGroupFacet = action.getFacet(LayoutGroupFacet.class);
-            if (layoutGroupFacet == null) {
-                return false;
-            }
+            if (layoutGroupFacet == null)
+				return false;
             var layoutGroupId = layoutGroupFacet.getGroupId();
-            if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                return false;
-            }
+            if (_Strings.isNullOrEmpty(layoutGroupId))
+				return false;
             var prop = action.getDeclaringType().getProperty(layoutGroupId, MixedIn.INCLUDED)
                     .orElse(null);
-            if (prop == null) {
-                return false;
-            }
+            if (prop == null)
+				return false;
             return true;
         }
 
@@ -374,7 +367,7 @@ public interface ObjectAction extends ObjectMember {
                     .isSharingAnyLayoutGroupOf(spec.streamAssociations(MixedIn.INCLUDED))
                     .negate())
             .filter(Predicates
-                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE));
+                    .dynamicallyVisible(adapter, InteractionInitiatedBy.USER, VisibilityConstraint.invalid(Where.ANYWHERE)));
         }
 
         public static Stream<ObjectAction> findForAssociation(
@@ -388,15 +381,13 @@ public interface ObjectAction extends ObjectMember {
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
             PromptStyleFacet facet = objectAction.getFacet(PromptStyleFacet.class);
-            if(facet == null) {
-                // don't think this can occur, see PromptStyleFallback
+            if(facet == null)
+				// don't think this can occur, see PromptStyleFallback
                 return PromptStyle.INLINE;
-            }
             final PromptStyle promptStyle = facet.value();
-            if(promptStyle == PromptStyle.AS_CONFIGURED) {
-                // don't think this can occur, see PromptStyleConfiguration
+            if(promptStyle == PromptStyle.AS_CONFIGURED)
+				// don't think this can occur, see PromptStyleConfiguration
                 return PromptStyle.INLINE;
-            }
             return promptStyle;
         }
 
@@ -436,13 +427,11 @@ public interface ObjectAction extends ObjectMember {
             return (final ObjectAction objectAction) -> {
 
                 var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
+                if (layoutGroupFacet == null)
+					return false;
                 var layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return false;
-                }
+                if (_Strings.isNullOrEmpty(layoutGroupId))
+					return false;
                 return layoutGroupId.equals(memberId);
             };
         }
@@ -457,13 +446,11 @@ public interface ObjectAction extends ObjectMember {
             return (final ObjectAction objectAction) -> {
 
                 var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
-                if (layoutGroupFacet == null) {
-                    return false;
-                }
+                if (layoutGroupFacet == null)
+					return false;
                 var layoutGroupId = layoutGroupFacet.getGroupId();
-                if (_Strings.isNullOrEmpty(layoutGroupId)) {
-                    return false;
-                }
+                if (_Strings.isNullOrEmpty(layoutGroupId))
+					return false;
                 return associationIds.contains(layoutGroupId);
             };
         }
@@ -512,13 +499,11 @@ public interface ObjectAction extends ObjectMember {
             @Override
             public boolean test(final ObjectAction objectAction) {
                 var choicesFromFacet = objectAction.getFacet(ChoicesFromFacet.class);
-                if(choicesFromFacet == null) {
-                    return false;
-                }
+                if(choicesFromFacet == null)
+					return false;
                 var choicesFromMemberName = choicesFromFacet.value();
-                if (choicesFromMemberName == null) {
-                    return false;
-                }
+                if (choicesFromMemberName == null)
+					return false;
                 var memberNameLowerCase = choicesFromMemberName.toLowerCase();
                 return Objects.equals(memberId, memberNameLowerCase);
             }
@@ -541,10 +526,10 @@ public interface ObjectAction extends ObjectMember {
         private static Predicate<ObjectAction> dynamicallyVisible(
                 final ManagedObject target,
                 final InteractionInitiatedBy interactionInitiatedBy,
-                final Where where) {
+                final VisibilityConstraint visConstraint) {
 
             return (final ObjectAction objectAction) -> {
-                final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
+                final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, visConstraint);
                 return visible.isAllowed();
             };
         }

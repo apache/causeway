@@ -20,6 +20,8 @@ package org.apache.causeway.core.interaction.core;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 
 public record InteractionConstraint(
 		WhatViewer whatViewer,
@@ -33,6 +35,10 @@ public record InteractionConstraint(
 
 	public InteractionConstraint withInitiatedBy(final InteractionInitiatedBy initiatedBy) {
 		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
+	public VisibilityConstraint asVisibilityConstraint() {
+		return new VisibilityConstraint(whatViewer, where);
 	}
 
 }

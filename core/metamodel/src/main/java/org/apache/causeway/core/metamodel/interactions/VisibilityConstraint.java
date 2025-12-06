@@ -16,20 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.use;
+package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.causeway.core.metamodel.interactions.InteractionContext;
-import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
-import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.applib.annotation.Where;
 
-public sealed interface UsabilityContext
-extends InteractionContext, InteractionEventSupplier<UsabilityEvent>
-permits ActionUsabilityContext, CollectionUsabilityContext, ParamUsabilityContext, PropertyUsabilityContext {
+public record VisibilityConstraint(
+		WhatViewer whatViewer,
+		Where where) {
+
+	public VisibilityConstraint withWhere(final Where where) {
+		return new VisibilityConstraint(whatViewer, where);
+	}
 
 	/**
-	 * for debugging usability when prototyping
+	 * temporary for refactoring
 	 */
-    RenderPolicy renderPolicy();
+	@Deprecated
+	public static VisibilityConstraint invalid(final Where where) {
+		return new VisibilityConstraint(WhatViewer.invalid(), where);
+	}
 
 }

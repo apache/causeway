@@ -27,6 +27,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.ProposedHolder;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
@@ -39,7 +40,7 @@ public record ObjectVisibilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
+    VisibilityConstraint visibilityConstraint,
     RenderPolicy renderPolicy)
 implements VisibilityContext, ProposedHolder {
 
@@ -56,7 +57,7 @@ implements VisibilityContext, ProposedHolder {
                 InteractionHead.regular(domainObject),
                 domainObject.objSpec().getFeatureIdentifier(),
                 initiatedBy,
-                where,
+                VisibilityConstraint.invalid(where),
                 RenderPolicy.forNonActionParam(domainObject));
     }
 
@@ -66,10 +67,10 @@ implements VisibilityContext, ProposedHolder {
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final VisibilityConstraint visibilityConstraint,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.OBJECT_VISIBILITY,
-                head, identifier, initiatedBy, where, renderPolicy);
+                head, identifier, initiatedBy, visibilityConstraint, renderPolicy);
     }
 
     @Override

@@ -52,6 +52,7 @@ import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.acc.AccessContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
@@ -194,9 +195,9 @@ implements
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract VisibilityContext createVisibleInteractionContext(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
+            ManagedObject target,
+            InteractionInitiatedBy interactionInitiatedBy,
+            VisibilityConstraint visibilityConstraint);
 
     @Override
     public boolean isAlwaysHidden() {
@@ -211,9 +212,9 @@ implements
     public final Consent isVisible(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
 
-        var visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, where);
+        var visibilityContext = createVisibleInteractionContext(target, interactionInitiatedBy, visibilityConstraint);
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
 
@@ -229,9 +230,8 @@ implements
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract UsabilityContext createUsableInteractionContext(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
+            ManagedObject target,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and
@@ -241,10 +241,10 @@ implements
     public final Consent isUsable(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
 
-        var usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy, where);
-        return InteractionUtils.isUsableResult(this, usabilityContext, ()->createVisibleInteractionContext(target, interactionInitiatedBy, where))
+        var usabilityContext = createUsableInteractionContext(target, interactionInitiatedBy);
+        return InteractionUtils.isUsableResult(this, usabilityContext, ()->createVisibleInteractionContext(target, interactionInitiatedBy, visibilityConstraint))
         		.createConsent();
     }
 

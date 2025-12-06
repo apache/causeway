@@ -19,13 +19,13 @@
 package org.apache.causeway.core.metamodel.interactions.vis;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.CollectionVisibilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 
 /**
@@ -37,7 +37,7 @@ public record CollectionVisibilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
+    VisibilityConstraint visibilityConstraint,
     RenderPolicy renderPolicy)
 implements VisibilityContext {
 
@@ -45,10 +45,10 @@ implements VisibilityContext {
             final InteractionHead head,
             final Identifier identifierAdapter,
             final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final VisibilityConstraint visibilityConstraint,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.COLLECTION_VISIBLE,
-            head, identifierAdapter, initiatedBy, where, renderPolicy);
+            head, identifierAdapter, initiatedBy, visibilityConstraint, renderPolicy);
     }
 
     @Override

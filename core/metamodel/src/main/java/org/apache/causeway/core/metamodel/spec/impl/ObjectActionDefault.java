@@ -54,6 +54,7 @@ import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterCh
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.ActionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
@@ -78,9 +79,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
 
     public static ActionScope getType(final String typeStr) {
         final ActionScope type = ActionScope.valueOf(typeStr);
-        if (type == null) {
-            throw new IllegalArgumentException();
-        }
+        if (type == null)
+			throw new IllegalArgumentException();
         return type;
     }
 
@@ -135,9 +135,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
                 .map(ActionInvocationFacet::getDeclaringType);
         // JUnit support
         if(testing
-                && declaringType.isEmpty()) {
-            return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getDeclaringClass());
-        }
+                && declaringType.isEmpty())
+			return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getDeclaringClass());
         return declaringType.orElseThrow(()->_Exceptions
                 .illegalState("missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
     }
@@ -175,9 +174,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
                 .map(ActionInvocationFacet::getReturnType);
         // JUnit support
         if(testing
-                && returType.isEmpty()) {
-            return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getReturnType());
-        }
+                && returType.isEmpty())
+			return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getReturnType());
         return returType.orElseThrow(()->_Exceptions
                 .illegalState("framework bug: missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
     }
@@ -188,10 +186,9 @@ implements ObjectAction, HasSpecificationLoaderInternal {
      */
     @Override
     public boolean hasReturn() {
-        if(getReturnType() == null) {
-            // this shouldn't happen; return Type always defined, even if represents void.class
+        if(getReturnType() == null)
+			// this shouldn't happen; return Type always defined, even if represents void.class
             return false;
-        }
         return !getReturnType().isVoidPrimitive();
     }
 
@@ -269,10 +266,9 @@ implements ObjectAction, HasSpecificationLoaderInternal {
 
     ObjectActionParameter getParameter(final int position) {
         var parameters = getParameters();
-        if (position >= parameters.size()) {
-            throw new IllegalArgumentException(
+        if (position >= parameters.size())
+			throw new IllegalArgumentException(
                     "getParameter(int): only " + parameters.size() + " parameters, position=" + position);
-        }
         return parameters.getElseFail(position);
     }
 
@@ -282,13 +278,13 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     public VisibilityContext createVisibleInteractionContext(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
         return new ActionVisibilityContext(
                 headFor(target),
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where,
+                visibilityConstraint,
                 RenderPolicy.forNonActionParam(target));
     }
 
@@ -297,14 +293,12 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new ActionUsabilityContext(
                 headFor(target),
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where,
                 RenderPolicy.forNonActionParam(target));
     }
 
@@ -403,25 +397,24 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
+    	var visibilityConstraint = VisibilityConstraint.invalid(where);
+
         var target = head.owner();
 
         // see it?
-        final Consent visibility = isVisible(target, interactionInitiatedBy, where);
-        if (visibility.isVetoed()) {
-            throw new HiddenException();
-        }
+        final Consent visibility = isVisible(target, interactionInitiatedBy, visibilityConstraint);
+        if (visibility.isVetoed())
+			throw new HiddenException();
 
         // use it?
-        final Consent usability = isUsable(target, interactionInitiatedBy, where);
-        if(usability.isVetoed()) {
-            throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
-        }
+        final Consent usability = isUsable(target, interactionInitiatedBy, visibilityConstraint);
+        if(usability.isVetoed())
+			throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
 
         // do it?
         final Consent validity = isArgumentSetValid(head, arguments, interactionInitiatedBy);
-        if(validity.isVetoed()) {
-            throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
-        }
+        if(validity.isVetoed())
+			throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
 
         return execute(head, arguments, interactionInitiatedBy);
     }
@@ -531,9 +524,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        if(head.owner().objSpec().isValue()) {
-            return; // do not record value type mixin actions
-        }
+        if(head.owner().objSpec().isValue())
+			return; // do not record value type mixin actions
 
         setupCommand(head,
                 interactionId->commandDtoFor(interactionId, head, argumentAdapters));
@@ -572,9 +564,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     // -- HELPER
 
     protected String argsFor(final Can<ObjectActionParameter> parameters, final Can<ManagedObject> arguments) {
-        if(parameters.size() != arguments.size()) {
-            return "???"; // shouldn't happen
-        }
+        if(parameters.size() != arguments.size())
+			return "???"; // shouldn't happen
         return parameters.stream().map(IndexedFunction.zeroBased((i, param) -> {
             var id = param.getId();
             var argStr = argStr(id, arguments, i);

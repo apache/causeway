@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.CollectionUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -36,7 +35,6 @@ public record CollectionUsabilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
     RenderPolicy renderPolicy)
 implements UsabilityContext {
 
@@ -44,10 +42,9 @@ implements UsabilityContext {
             final InteractionHead head,
             final Identifier identifier,
             final InteractionInitiatedBy initiatedBy,
-            final Where where,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.COLLECTION_USABLE,
-                head, identifier, initiatedBy, where, renderPolicy);
+                head, identifier, initiatedBy, renderPolicy);
     }
 
     @Override

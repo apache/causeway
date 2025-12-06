@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.interactions.val;
 
 import java.util.function.Supplier;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ValidityEvent;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
@@ -33,11 +32,6 @@ permits ParamValidityContext, ActionValidityContext, ObjectValidityContext, Prop
 
     default String friendlyName() {
         return friendlyNameProvider().get();
-    }
-
-    @Override
-    default Where where() {
-        return Where.NOT_SPECIFIED;
     }
 
 }

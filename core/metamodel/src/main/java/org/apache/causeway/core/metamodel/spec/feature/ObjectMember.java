@@ -39,6 +39,7 @@ import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -87,7 +88,7 @@ public interface ObjectMember extends ObjectFeature {
     Consent isVisible(
             ManagedObject target,
             InteractionInitiatedBy interactionInitiatedBy,
-            Where where);
+            VisibilityConstraint visibilityConstraint);
 
     /**
      * Determines whether this member is usable (not disabled), represented as a
@@ -95,12 +96,12 @@ public interface ObjectMember extends ObjectFeature {
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
      * @param interactionInitiatedBy
-     * @param where
+     * @param visibilityConstraint only ever used for debugging while prototyping
      */
     Consent isUsable(
             ManagedObject target,
             InteractionInitiatedBy interactionInitiatedBy,
-            Where where);
+            VisibilityConstraint visibilityConstraint);
 
     /**
      * Whether this member represents a {@link ObjectAssociation}.

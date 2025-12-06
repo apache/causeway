@@ -22,7 +22,6 @@ import graphql.schema.DataFetchingEnvironment;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -58,14 +57,12 @@ public class RichMemberDisabled<T extends ObjectMember> extends Element {
 
         var sourcePojoClass = sourcePojo.getClass();
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojoClass);
-        if (objectSpecification == null) {
-            return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
-        }
+        if (objectSpecification == null)
+			return String.format("Disabled; could not determine target object's type ('%s')", sourcePojoClass.getName());
 
         var objectMember = memberInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
-
-        var usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
+        var usable = objectMember.isUsable(managedObject, InteractionInitiatedBy.USER, Context.visibilityConstraint());
         return usable.getReasonAsString().orElse(null);
     }
 

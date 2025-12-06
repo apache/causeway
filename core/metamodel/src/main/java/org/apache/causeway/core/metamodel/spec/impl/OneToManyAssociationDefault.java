@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedType;
@@ -32,6 +31,7 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.CollectionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.CollectionVisibilityContext;
@@ -79,20 +79,19 @@ implements OneToManyAssociation {
     public VisibilityContext createVisibleInteractionContext(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
 
         return new CollectionVisibilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, visibilityConstraint,
                 RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject ownerAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new CollectionUsabilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy,
                 RenderPolicy.forNonActionParam(ownerAdapter));
     }
 

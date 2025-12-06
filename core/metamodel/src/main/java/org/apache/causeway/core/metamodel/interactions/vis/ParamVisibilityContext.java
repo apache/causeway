@@ -29,6 +29,7 @@ import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -42,7 +43,7 @@ public record ParamVisibilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
+    VisibilityConstraint visibilityConstraint,
     RenderPolicy renderPolicy,
     ObjectAction objectAction,
     Can<ManagedObject> args,
@@ -59,7 +60,7 @@ implements VisibilityContext, ActionInteractionContext {
             final RenderPolicy renderPolicy) {
 
         this(InteractionContextType.ACTION_PARAMETER_VISIBLE,
-            head, id, initiatedBy, Where.OBJECT_FORMS, renderPolicy,
+            head, id, initiatedBy, VisibilityConstraint.invalid(Where.OBJECT_FORMS), renderPolicy,
             objectAction, args, position);
     }
 

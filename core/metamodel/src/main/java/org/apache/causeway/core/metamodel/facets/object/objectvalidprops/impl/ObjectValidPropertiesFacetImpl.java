@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -45,9 +46,11 @@ extends ObjectValidPropertiesFacetAbstract {
         final StringBuilder buf = new StringBuilder();
         final ManagedObject adapter = context.target();
 
+        var visibilityConstraint = VisibilityConstraint.invalid(where);
+
         adapter.objSpec().streamProperties(MixedIn.EXCLUDED)
-        .filter(property->property.isVisible(adapter, context.initiatedBy(), where).isVetoed()) // ignore hidden properties
-        .filter(property->property.isUsable(adapter, context.initiatedBy(), where).isVetoed())  // ignore disabled properties
+        .filter(property->property.isVisible(adapter, context.initiatedBy(), visibilityConstraint).isVetoed()) // ignore hidden properties
+        .filter(property->property.isUsable(adapter, context.initiatedBy(), visibilityConstraint).isVetoed())  // ignore disabled properties
         .forEach(property->{
             final ManagedObject value = property.get(adapter, context.initiatedBy());
             if (property.isAssociationValid(adapter, value, context.initiatedBy()).isVetoed()) {
@@ -57,9 +60,8 @@ extends ObjectValidPropertiesFacetAbstract {
                 buf.append(property.getFriendlyName(context::target));
             }
         });
-        if (buf.length() > 0) {
-            return "Invalid properties: " + buf.toString();
-        }
+        if (buf.length() > 0)
+			return "Invalid properties: " + buf.toString();
         return null;
     }
 

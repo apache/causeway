@@ -46,13 +46,13 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.interaction.core.InteractionConstraint;
-import org.apache.causeway.core.interaction.core.WhatViewer;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.InteractionResult;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet.Intent;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmAssertionUtils;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -419,7 +419,7 @@ implements WrapperInvocationHandler {
             final InteractionConstraint iConstraint,
             final ManagedObject targetMo,
             final ObjectMember objectMember) {
-        var interactionResult = objectMember.isVisible(targetMo, iConstraint.initiatedBy(), iConstraint.where())
+        var interactionResult = objectMember.isVisible(targetMo, iConstraint.initiatedBy(), iConstraint.asVisibilityConstraint())
         		.getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
@@ -428,7 +428,7 @@ implements WrapperInvocationHandler {
             final InteractionConstraint iConstraint,
             final ManagedObject targetMo,
             final ObjectMember objectMember) {
-        var interactionResult = objectMember.isUsable(targetMo, iConstraint.initiatedBy(), iConstraint.where())
+        var interactionResult = objectMember.isUsable(targetMo, iConstraint.initiatedBy(), iConstraint.asVisibilityConstraint())
                 .getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }

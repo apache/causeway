@@ -62,8 +62,10 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
+import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedMember;
@@ -94,7 +96,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
     public <T> ObjectTester<T> objectTester(
             final T domainObject) {
         var tester = getServiceInjector().injectServicesInto(
-                new ObjectTester<T>(domainObject));
+                new ObjectTester<>(domainObject));
         return tester;
     }
 
@@ -103,7 +105,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final String actionName,
             final Where where) {
         var tester = getServiceInjector().injectServicesInto(
-                new ActionTester<T>(domainObject, actionName, where));
+                new ActionTester<>(domainObject, actionName, where));
         tester.init();
         return tester;
     }
@@ -125,7 +127,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final String propertyName,
             final Where where) {
         var tester = getServiceInjector().injectServicesInto(
-                new PropertyTester<T>(domainObject, propertyName, where));
+                new PropertyTester<>(domainObject, propertyName, where));
         tester.init();
         return tester;
     }
@@ -135,7 +137,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final String collectionName,
             final Where where) {
         var tester = getServiceInjector().injectServicesInto(
-                new CollectionTester<T>(domainObject, collectionName, where));
+                new CollectionTester<>(domainObject, collectionName, where));
         tester.init();
         return tester;
     }
@@ -290,7 +292,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             super(domainObject,
                     managedAction.getId(),
                     "actionName",
-                    managedAction.getWhere());
+                    managedAction.visibilityConstraint().where());
             this.actionInteraction = actionInteraction;
             this.parameterNegotiationStarter = ()->
                 actionInteraction
@@ -350,7 +352,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         protected Optional<ManagedAction> startInteractionOn(final ManagedObject viewModel) {
             if(parameterNegotiationStarter==null) {
                 this.actionInteraction = ActionInteraction
-                        .start(viewModel, getMemberName(), Where.NOT_SPECIFIED);
+                        .start(viewModel, getMemberName(), visibilityConstraint.withWhere(Where.NOT_SPECIFIED));
             }
             assertNotNull(actionInteraction);
             return getManagedAction();
@@ -743,7 +745,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @Override
         protected Optional<ManagedProperty> startInteractionOn(final ManagedObject viewModel) {
             return this.managedPropertyIfAny = PropertyInteraction
-                    .start(viewModel, getMemberName(), where)
+                    .start(viewModel, getMemberName(), visibilityConstraint)
                     .getManagedProperty();
         }
 
@@ -954,7 +956,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @Override
         protected Optional<ManagedCollection> startInteractionOn(final ManagedObject viewModel) {
             return this.managedCollectionIfAny = CollectionInteraction
-                    .start(viewModel, getMemberName(), Where.NOT_SPECIFIED)
+                    .start(viewModel, getMemberName(), visibilityConstraint.withWhere(Where.NOT_SPECIFIED))
                     .getManagedCollection();
         }
 
@@ -1002,7 +1004,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
         @Getter private final String memberName;
         private final String memberSort;
-        protected final Where where;
+        protected final VisibilityConstraint visibilityConstraint;
 
         private Optional<? extends ManagedMember> managedMemberIfAny;
 
@@ -1014,7 +1016,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             super(domainObject);
             this.memberName = memberName;
             this.memberSort = memberSort;
-            this.where = where;
+            this.visibilityConstraint = VisibilityConstraint.invalid(where);
         }
 
         protected final MemberTester<T> init() {
@@ -1110,7 +1112,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
 
                     final String actualVetoResaon = managedCollection
                         .checkVisibility()
-                        .flatMap(veto->veto.getReasonAsString())
+                        .flatMap(InteractionVeto::getReasonAsString)
                         .orElse(null);
 
                     assertEquals(expectedVetoReason, actualVetoResaon);
@@ -1131,7 +1133,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 interactionService.runAnonymous(()->{
                     final String actualVetoReason = managedMember
                             .checkUsability()
-                            .flatMap(veto->veto.getReasonAsString())
+                            .flatMap(InteractionVeto::getReasonAsString)
                             .orElse(null);
 
                     if(!expectedVetoReasons.isEmpty()
@@ -1162,7 +1164,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
                 interactionService.runAnonymous(()->{
                     final String actualVetoReason = managedMember
                             .checkUsability()
-                            .flatMap(veto->veto.getReasonAsString())
+                            .flatMap(InteractionVeto::getReasonAsString)
                             .orElse(null);
 
                         assertEquals(expectedVetoReason, actualVetoReason);

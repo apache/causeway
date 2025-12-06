@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -55,11 +56,11 @@ public interface HasObjectAction extends ObjectAction {
     @Override default boolean isAlwaysHidden() {
         return getObjectAction().isAlwaysHidden();
     }
-    @Override default Consent isVisible(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        return getObjectAction().isVisible(target, interactionInitiatedBy, where);
+    @Override default Consent isVisible(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visConstraint) {
+        return getObjectAction().isVisible(target, interactionInitiatedBy, visConstraint);
     }
-    @Override default Consent isUsable(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        return getObjectAction().isUsable(target, interactionInitiatedBy, where);
+    @Override default Consent isUsable(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visConstraint) {
+        return getObjectAction().isUsable(target, interactionInitiatedBy, visConstraint);
     }
     @Override default boolean isPropertyOrCollection() {
         return getObjectAction().isPropertyOrCollection();

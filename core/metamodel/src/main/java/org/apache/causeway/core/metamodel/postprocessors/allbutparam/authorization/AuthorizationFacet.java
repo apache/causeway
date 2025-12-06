@@ -51,7 +51,7 @@ extends HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 vc.head(),
                                 property.getFeatureIdentifier(),
                                 vc.initiatedBy(),
-                                vc.where(),
+                                vc.visibilityConstraint(),
                                 vc.renderPolicy())) != null)
                 .orElse(false);
     }
@@ -66,7 +66,7 @@ extends HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 vc.head(),
                                 collection.getFeatureIdentifier(),
                                 vc.initiatedBy(),
-                                vc.where(),
+                                vc.visibilityConstraint(),
                                 vc.renderPolicy())) != null)
                 .orElse(false);
     }
@@ -82,7 +82,7 @@ extends HidingInteractionAdvisor, DisablingInteractionAdvisor {
                                 action,
                                 action.getFeatureIdentifier(),
                                 vc.initiatedBy(),
-                                vc.where(),
+                                vc.visibilityConstraint(),
                                 vc.renderPolicy())) != null)
                 .orElse(false);
     }

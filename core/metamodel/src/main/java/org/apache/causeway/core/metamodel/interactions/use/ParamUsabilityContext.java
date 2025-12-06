@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.events.ActionArgumentUsabilityEvent;
 import org.apache.causeway.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.causeway.commons.collections.Can;
@@ -42,7 +41,6 @@ public record ParamUsabilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
     RenderPolicy renderPolicy,
     ObjectAction objectAction,
     Can<ManagedObject> args,
@@ -59,7 +57,7 @@ implements UsabilityContext, ActionInteractionContext {
             final RenderPolicy renderPolicy) {
 
         this(InteractionContextType.ACTION_PARAMETER_USABLE,
-            head, id, initiatedBy, Where.OBJECT_FORMS, renderPolicy,
+            head, id, initiatedBy, renderPolicy,
             objectAction, args, position);
     }
 

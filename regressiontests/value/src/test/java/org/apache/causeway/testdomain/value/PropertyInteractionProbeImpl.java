@@ -45,6 +45,7 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.schema.SchemaValueMarshaller;
@@ -103,7 +104,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
                 var spec = specLoader.specForTypeElseFail(valueMixin.getClass());
                 var interaction = ActionInteraction
-                        .start(ManagedObject.mixin(spec,  valueMixin), "act", Where.ANYWHERE);
+                        .start(ManagedObject.mixin(spec,  valueMixin), "act", VisibilityConstraint.invalid(Where.ANYWHERE));
 
                 var pendingParams = interaction
                         .startParameterNegotiation()
@@ -169,9 +170,8 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
 
         });
 
-        if(example.getParseExpectations().isNotEmpty()) {
-            return; // skip round-trip test
-        }
+        if(example.getParseExpectations().isNotEmpty())
+			return; // skip round-trip test
 
         //TODO eventually all examples should have their ParseExpectations, so we can remove
         // Parser round-trip test
@@ -192,11 +192,10 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
                         //|| valueType.equals(ZonedDateTime.class)
                         ) {
 
-                    if(stringified.endsWith("Z")) {
-                        // skip format variations on UTC time-zone
+                    if(stringified.endsWith("Z"))
+						// skip format variations on UTC time-zone
                         //System.err.printf("DEBUG: skipping stringified: %s%n", stringified);
                         return;
-                    }
 
                     var with4digitZone = _Strings.substring(stringified, 0, -3) + "00";
                     var with2digitZone = _Strings.substring(stringified, 0, -3);

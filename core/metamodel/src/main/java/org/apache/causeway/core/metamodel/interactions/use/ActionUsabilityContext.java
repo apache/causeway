@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -39,7 +38,6 @@ public record ActionUsabilityContext(
     InteractionHead head,
     Identifier identifier,
     InteractionInitiatedBy initiatedBy,
-    Where where,
     RenderPolicy renderPolicy,
     ObjectAction objectAction
     )
@@ -50,10 +48,9 @@ implements UsabilityContext, ActionInteractionContext {
             final ObjectAction objectAction,
             final Identifier id,
             final InteractionInitiatedBy initiatedBy,
-            final Where where,
             final RenderPolicy renderPolicy) {
         this(InteractionContextType.ACTION_USABLE,
-            head, id, initiatedBy, where, renderPolicy,
+            head, id, initiatedBy, renderPolicy,
             objectAction);
     }
 

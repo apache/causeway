@@ -28,7 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -40,6 +39,7 @@ import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -106,15 +106,14 @@ class ObjectAssociationAbstractTest {
 
             @Override
             public UsabilityContext createUsableInteractionContext(
-                    final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
+                    final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
             @Override
             public VisibilityContext createVisibleInteractionContext(
                     final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
-                    final Where where) {
+                    final VisibilityConstraint visibilityConstraint) {
                 return null;
             }
 

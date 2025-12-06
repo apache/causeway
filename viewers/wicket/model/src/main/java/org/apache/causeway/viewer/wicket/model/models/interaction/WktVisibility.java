@@ -16,29 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.interaction.core;
+package org.apache.causeway.viewer.wicket.model.models.interaction;
 
-import org.apache.causeway.applib.services.command.CommandExecutorService;
-import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 
-/**
- * Viewer identifier, used for viewer specific feature filtering.
- */
-public record WhatViewer(
-		String viewerId) {
+import lombok.experimental.UtilityClass;
 
-	/**
-	 * Used by {@link WrapperFactory}, {@link CommandExecutorService} and Object title interaction.
-	 */
-	public static WhatViewer noViewer() {
-		return new WhatViewer("NoViewer");
+@UtilityClass
+public class WktVisibility {
+
+    // -- VISIBILITY CONSTRAINTS
+
+    public static WhatViewer WHAT_VIEWER = new WhatViewer("Wicket");
+	public static VisibilityConstraint visibilityConstraint(final Where where) {
+		return new VisibilityConstraint(WHAT_VIEWER, where);
 	}
 
-	/**
-	 * @deprecated for refactoring only
-	 */
-	@Deprecated
-	public static WhatViewer invalid() {
-		return new WhatViewer("invalid");
-	}
 }

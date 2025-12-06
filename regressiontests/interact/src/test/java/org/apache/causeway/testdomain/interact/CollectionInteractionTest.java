@@ -30,6 +30,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.config.presets.CausewayPresets;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.interaction.Configuration_usingInteractionDomain;
@@ -113,7 +114,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
         var table = tableTester.getDataTable();
 
         var actionInteraction = table
-                .startAssociatedActionInteraction("doSomethingWithItems", Where.OBJECT_FORMS);
+                .startAssociatedActionInteraction("doSomethingWithItems", VisibilityConstraint.invalid(Where.OBJECT_FORMS));
 
         var actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
         actTester.assertVisibilityIsNotVetoed();
