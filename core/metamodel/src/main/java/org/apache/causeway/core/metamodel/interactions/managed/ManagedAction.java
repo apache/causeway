@@ -158,7 +158,7 @@ public final class ManagedAction extends ManagedMember {
                 // under the hood intercepts cases, where the owner is a value-type;
                 // executions on value-types have no rule checking and trigger no domain events
                 .executeWithRuleChecking(
-                        interactionHead(), actionParameters, InteractionInitiatedBy.USER, visibilityConstraint().where());
+                        interactionHead(), actionParameters, InteractionInitiatedBy.USER, visibilityConstraint());
 
         return route(actionResult);
     }

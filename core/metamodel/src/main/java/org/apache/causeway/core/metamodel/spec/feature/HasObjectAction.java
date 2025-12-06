@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -130,8 +129,8 @@ public interface HasObjectAction extends ObjectAction {
         return getObjectAction().hasReturn();
     }
     @Override default ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
-        return getObjectAction().executeWithRuleChecking(head, parameters, interactionInitiatedBy, where);
+        final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visibilityConstraint) throws AuthorizationException {
+        return getObjectAction().executeWithRuleChecking(head, parameters, interactionInitiatedBy, visibilityConstraint);
     }
     @Override default ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
         final InteractionInitiatedBy interactionInitiatedBy) {

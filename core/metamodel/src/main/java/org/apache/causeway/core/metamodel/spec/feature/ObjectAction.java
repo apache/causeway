@@ -106,7 +106,7 @@ public interface ObjectAction extends ObjectMember {
             InteractionHead head,
             Can<ManagedObject> parameters,
             InteractionInitiatedBy interactionInitiatedBy,
-            Where where) throws AuthorizationException;
+            VisibilityConstraint visibilityConstraint) throws AuthorizationException;
 
     /**
      * Invokes the action's method on the target object given the specified set

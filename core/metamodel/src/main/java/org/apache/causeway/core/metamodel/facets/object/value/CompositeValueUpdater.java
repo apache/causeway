@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.facets.object.value;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.commons.ParameterConverters;
@@ -81,7 +80,7 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
     }
     @Override default ManagedObject executeWithRuleChecking(
         final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
+        final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visibilityConstraint) throws AuthorizationException {
         return execute(head, parameters, interactionInitiatedBy);
     }
 

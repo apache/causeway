@@ -30,7 +30,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
@@ -391,13 +390,11 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     // -- EXECUTE
 
     @Override
-    public ManagedObject executeWithRuleChecking(
+    public final ManagedObject executeWithRuleChecking(
             final InteractionHead head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-    	var visibilityConstraint = VisibilityConstraint.invalid(where);
+            final VisibilityConstraint visibilityConstraint) {
 
         var target = head.owner();
 

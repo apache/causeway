@@ -39,15 +39,15 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
  * {@link ActionArgumentEvent}.
  */
 public record ParamVisibilityContext(
-    InteractionContextType interactionType,
-    InteractionHead head,
-    Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    VisibilityConstraint visibilityConstraint,
-    RenderPolicy renderPolicy,
-    ObjectAction objectAction,
-    Can<ManagedObject> args,
-    int position)
+		InteractionContextType interactionType,
+		InteractionHead head,
+		Identifier identifier,
+		InteractionInitiatedBy initiatedBy,
+		VisibilityConstraint visibilityConstraint,
+		RenderPolicy renderPolicy,
+		ObjectAction objectAction,
+		Can<ManagedObject> args,
+		int position)
 implements VisibilityContext, ActionInteractionContext {
 
     public ParamVisibilityContext(
@@ -59,8 +59,12 @@ implements VisibilityContext, ActionInteractionContext {
             final InteractionInitiatedBy initiatedBy,
             final RenderPolicy renderPolicy) {
 
+    	// assumption: param visibility is never directly constraint by WhatViewer or Where;
+    	// instead those constraints apply only to their 'owning' actions
+    	// in other words, if an action is visible honoring WhatViewer or Where, then no further
+    	// visibility vetos for params are considered based on WhatViewer or Where.
         this(InteractionContextType.ACTION_PARAMETER_VISIBLE,
-            head, id, initiatedBy, VisibilityConstraint.invalid(Where.OBJECT_FORMS), renderPolicy,
+            head, id, initiatedBy, VisibilityConstraint.noViewer(Where.ANYWHERE), renderPolicy,
             objectAction, args, position);
     }
 
