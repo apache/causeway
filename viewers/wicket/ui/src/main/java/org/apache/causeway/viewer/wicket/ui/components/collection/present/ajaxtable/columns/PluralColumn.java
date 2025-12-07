@@ -57,13 +57,13 @@ extends AssociationColumnAbstract {
             final ObjectSpecification elementType,
             final CollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
-            final String propertyId,
+            final String collectioId,
             final String parentTypeName,
             final Optional<String> describedAs,
             final RenderOptions opts) {
         super(elementType, collectionVariant, columnNameModel,
                 Optional.empty(), // empty sortProperty (hence never sortable)
-                propertyId, parentTypeName, describedAs);
+                collectioId, parentTypeName, describedAs);
         this.opts = opts;
     }
 
@@ -74,12 +74,11 @@ extends AssociationColumnAbstract {
         var cellElements = dataRow.getCellElementsForColumn(dataColumn);
 
         // if empty, render the 'empty' badge or blank based on RenderOptions
-        if(cellElements.isEmpty()) {
-            return Wkt.markup(componentId,
+        if(cellElements.isEmpty())
+			return Wkt.markup(componentId,
                     opts.isRenderEmptyBadge()
                     ? getPlaceholderRenderService().asHtml(PlaceholderLiteral.NULL_REPRESENTATION)
                     : "");
-        }
 
         var container = new RepeatingView(componentId);
         cellElements.stream()

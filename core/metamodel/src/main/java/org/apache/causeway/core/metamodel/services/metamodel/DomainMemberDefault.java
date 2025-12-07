@@ -37,7 +37,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.actions.validate.ActionValidationFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
@@ -164,7 +164,7 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getHidden() {
-        return interpret(HiddenFacet.class);
+        return interpret(HiddenFacetForLayout.class);
     }
 
     @XmlElement @Override
@@ -271,7 +271,7 @@ public class DomainMemberDefault implements DomainMember {
         }
         if (facet instanceof ImperativeFacet) {
             ImperativeFacet imperativeFacet = (ImperativeFacet) facet;
-            return imperativeFacet.getMethods().getFirstElseFail().getName();
+            return imperativeFacet.methods().getFirstElseFail().getName();
         }
         final String name = facet.getClass().getSimpleName();
         if (ignore(name)) {

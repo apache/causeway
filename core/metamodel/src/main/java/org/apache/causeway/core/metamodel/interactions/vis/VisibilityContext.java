@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.interactions.vis;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionEventSupplier;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -32,6 +34,21 @@ extends InteractionContext, InteractionEventSupplier<VisibilityEvent>
 permits ParamVisibilityContext, ActionVisibilityContext, CollectionVisibilityContext,
     ObjectVisibilityContext, PropertyVisibilityContext {
 
+	/**
+	 * for debugging visibility when prototyping
+	 */
     RenderPolicy renderPolicy();
+
+    /**
+     * Where and by what viewer the element is to be rendered.
+     */
+    VisibilityConstraint visibilityConstraint();
+
+    /**
+     * Where the element is to be rendered.
+     */
+    default Where where() {
+    	return visibilityConstraint().where();
+    }
 
 }

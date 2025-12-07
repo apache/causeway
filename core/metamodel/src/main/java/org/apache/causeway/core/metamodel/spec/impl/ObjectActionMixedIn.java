@@ -36,6 +36,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInAction;
@@ -154,7 +155,8 @@ implements MixedInAction {
     public ManagedObject execute(
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
         final ManagedObject owner = head.owner();
         final ManagedObject target = mixinAdapterFor(mixinSpec, owner);
@@ -178,7 +180,8 @@ implements MixedInAction {
 
         return mixinAction.executeInternal(
                 head, argumentAdapters,
-                interactionInitiatedBy);
+                interactionInitiatedBy,
+                whatViewer);
     }
 
     @Override

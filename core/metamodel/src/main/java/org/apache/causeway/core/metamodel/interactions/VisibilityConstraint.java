@@ -16,24 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets;
+package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.applib.annotation.Where;
 
-public interface HasImperativeAspect
-extends ImperativeFacet {
+public record VisibilityConstraint(
+		WhatViewer whatViewer,
+		Where where) {
 
-    ImperativeAspect imperativeAspect();
+	public static VisibilityConstraint noViewer(final Where where) {
+		return new VisibilityConstraint(WhatViewer.noViewer(), where);
+	}
 
-    @Override
-    default Can<MethodFacade> methods() {
-        return imperativeAspect().methods();
-    }
-
-    @Override
-    default Intent intent() {
-        return imperativeAspect().intent();
-    }
+	public VisibilityConstraint withWhere(final Where where) {
+		return new VisibilityConstraint(whatViewer, where);
+	}
 
 }

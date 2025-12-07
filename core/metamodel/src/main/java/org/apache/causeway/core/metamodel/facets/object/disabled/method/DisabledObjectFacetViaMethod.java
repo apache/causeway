@@ -35,13 +35,16 @@ import org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectF
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
+
 import org.jspecify.annotations.NonNull;
 
 public class DisabledObjectFacetViaMethod
 extends DisabledObjectFacetAbstract
 implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull ImperativeAspect imperativeAspect;
 
     private final TranslationContext translationContext;
 

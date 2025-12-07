@@ -35,10 +35,11 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmSortUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -60,10 +61,6 @@ public interface ObjectMember extends ObjectFeature {
      */
     ObjectSpecification getDeclaringType();
 
-    // /////////////////////////////////////////////////////////////
-    // Name, Description, Help (convenience for facets)
-    // /////////////////////////////////////////////////////////////
-
     /**
      * Return the help text for this member - the field or action - to
      * complement the description.
@@ -72,16 +69,12 @@ public interface ObjectMember extends ObjectFeature {
      */
     String getHelp();
 
-    // /////////////////////////////////////////////////////////////
-    // Hidden (or visible)
-    // /////////////////////////////////////////////////////////////
-
     /**
      * When the member is always hidden.
      *
      * <p>
-     * Determined as per the {@link HiddenFacet} being present and
-     * {@link HiddenFacet#where()} returning {@link Where#ANYWHERE}.
+     * Determined as per the {@link HiddenFacetForLayout} being present and
+     * {@link HiddenFacetForLayout#where()} returning {@link Where#ANYWHERE}.
      */
     boolean isAlwaysHidden();
 
@@ -93,13 +86,9 @@ public interface ObjectMember extends ObjectFeature {
      * @param where
      */
     Consent isVisible(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
-
-    // /////////////////////////////////////////////////////////////
-    // Disabled (or enabled)
-    // /////////////////////////////////////////////////////////////
+            ManagedObject target,
+            InteractionInitiatedBy interactionInitiatedBy,
+            VisibilityConstraint visibilityConstraint);
 
     /**
      * Determines whether this member is usable (not disabled), represented as a
@@ -107,16 +96,12 @@ public interface ObjectMember extends ObjectFeature {
      * @param target
      *            may be <tt>null</tt> if just checking for authorization.
      * @param interactionInitiatedBy
-     * @param where
+     * @param visibilityConstraint only ever used for debugging while prototyping
      */
     Consent isUsable(
-            final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where);
-
-    // /////////////////////////////////////////////////////////////
-    // isAssociation, isAction
-    // /////////////////////////////////////////////////////////////
+            ManagedObject target,
+            InteractionInitiatedBy interactionInitiatedBy,
+            VisibilityConstraint visibilityConstraint);
 
     /**
      * Whether this member represents a {@link ObjectAssociation}.
@@ -166,9 +151,7 @@ public interface ObjectMember extends ObjectFeature {
      */
     boolean isExplicitlyAnnotated();
 
-    // /////////////////////////////////////////////////////////////
-    // Debugging
-    // /////////////////////////////////////////////////////////////
+    // -- DEBUGGING
 
     /**
      * Thrown if the user is not authorized to access an action or any property/collection of an entity.
@@ -276,9 +259,8 @@ public interface ObjectMember extends ObjectFeature {
             .map(SortedByFacet::value)
             .orElse(null);
 
-        if(sortedBy == null) {
-            return Optional.empty();
-        }
+        if(sortedBy == null)
+			return Optional.empty();
 
         var pojoComparator = _Casts.<Comparator<Object>>uncheckedCast(
                 _InstanceUtil.createInstance(sortedBy));

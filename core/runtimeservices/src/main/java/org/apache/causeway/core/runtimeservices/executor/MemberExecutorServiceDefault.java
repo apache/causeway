@@ -18,9 +18,17 @@
  */
 package org.apache.causeway.core.runtimeservices.executor;
 
-import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
-
 import java.util.Optional;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -49,6 +57,7 @@ import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -65,14 +74,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
-import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
+import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -139,7 +143,7 @@ implements MemberExecutorService {
 
         final ObjectAction owningAction = actionExecutor.getOwningAction();
         final InteractionHead head = actionExecutor.getHead();
-        
+
         final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
         final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
         //            final MethodFacade methodFacade,
@@ -213,7 +217,7 @@ implements MemberExecutorService {
             executionPublisher().publishActionInvocation(priorExecution);
         }
 
-        var result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
+        var result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy, actionExecutor.whatViewer());
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -275,11 +279,10 @@ implements MemberExecutorService {
         // TODO: should also sync DTO's 'threw' attribute here...?
 
         var executionExceptionIfAny = priorExecution.getThrew();
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-                ? ((RuntimeException)executionExceptionIfAny)
+        if(executionExceptionIfAny != null)
+			throw executionExceptionIfAny instanceof RuntimeException r
+                ? r
                 : new RuntimeException(executionExceptionIfAny);
-        }
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.getFacetHolder())) {
@@ -307,17 +310,14 @@ implements MemberExecutorService {
     private void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
-        if(command.getResult() != null) {
-            // don't trample over any existing result, eg subsequent mixins.
+        if(command.getResult() != null)
+			// don't trample over any existing result, eg subsequent mixins.
             return;
-        }
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
+			return;
         var entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable()) {
-            return;
-        }
+        if(!entityState.isPersistable())
+			return;
         if(entityState.isHollow()
                 || entityState.isDetached()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
@@ -335,18 +335,17 @@ implements MemberExecutorService {
 
     private ManagedObject resultFilteredHonoringVisibility(
             final ManagedObject resultAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-            return resultAdapter;
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
+			return resultAdapter;
 
         if (!getConfiguration().core().metaModel().filterVisibility()
-                || resultAdapter instanceof PackedManagedObject) {
-            return resultAdapter;
-        }
+                || resultAdapter instanceof PackedManagedObject)
+			return resultAdapter;
 
-        return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
+        return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy, whatViewer)
                 ? resultAdapter
                 : null;
     }
