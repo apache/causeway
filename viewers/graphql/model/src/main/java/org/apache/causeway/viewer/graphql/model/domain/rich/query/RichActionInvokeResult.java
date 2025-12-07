@@ -127,7 +127,7 @@ public class RichActionInvokeResult extends Element {
         if (validityConsent.isVetoed())
 			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
-        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER, visibilityConstraint.whatViewer());
         return resultManagedObject.getPojo();
     }
 

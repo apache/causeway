@@ -32,12 +32,4 @@ public record VisibilityConstraint(
 		return new VisibilityConstraint(whatViewer, where);
 	}
 
-	/**
-	 * temporary for refactoring
-	 */
-	@Deprecated
-	public static VisibilityConstraint invalid(final Where where) {
-		return new VisibilityConstraint(WhatViewer.invalid(), where);
-	}
-
 }

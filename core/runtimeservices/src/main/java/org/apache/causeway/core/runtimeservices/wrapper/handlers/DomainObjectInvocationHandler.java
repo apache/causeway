@@ -394,7 +394,7 @@ implements WrapperInvocationHandler {
                 .forAction(head, objectAction, argAdapters));
 
         return runExecutionTask(wrapperInvocation, ()->{
-            var returnedAdapter = objectAction.execute(head, argAdapters, iConstraint.initiatedBy());
+            var returnedAdapter = objectAction.execute(head, argAdapters, iConstraint.initiatedBy(), iConstraint.whatViewer());
             return MmUnwrapUtils.single(returnedAdapter);
         }, ()->new ExceptionLogger("action " + objectAction.getId(), targetAdapter));
     }

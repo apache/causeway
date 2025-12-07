@@ -140,7 +140,7 @@ public final class ManagedAction extends ManagedMember {
         final ManagedObject actionResult = getAction()
                 // under the hood intercepts cases, where the owner is a value-type;
                 // executions on value-types have no rule checking and trigger no domain events
-                .execute(interactionHead(), actionParameters, interactionInitiatedBy);
+                .execute(interactionHead(), actionParameters, interactionInitiatedBy, visibilityConstraint().whatViewer());
 
         return Railway.success(route(actionResult));
     }

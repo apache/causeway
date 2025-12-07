@@ -29,6 +29,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
@@ -69,7 +70,7 @@ implements ImperativeFacet {
         if(isConfiguredToFilterForVisibility()) {
             final ManagedObject referencedAdapter = getObjectManager().adapt(referencedObject);
             final boolean visible = MmVisibilityUtils
-                    .isVisible(referencedAdapter, interactionInitiatedBy);
+                    .isVisible(referencedAdapter, interactionInitiatedBy, WhatViewer.invalid());
             if (!visible) return null;
         }
         return referencedObject;

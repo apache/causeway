@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.commons.model.object;
 
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.viewer.commons.model.UiModel;
@@ -27,9 +28,9 @@ public interface UiObject extends UiModel {
 
     ManagedObject getManagedObject();
 
-    default boolean isVisible() {
+    default boolean isVisible(final WhatViewer whatViewer) {
         return MmVisibilityUtils
-                .isVisible(getManagedObject(), InteractionInitiatedBy.USER);
+                .isVisible(getManagedObject(), InteractionInitiatedBy.USER, whatViewer);
     }
 
 }

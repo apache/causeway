@@ -93,7 +93,7 @@ class ValueSemanticsTester<T> {
 
                 var command = interactionService.currentInteractionElseFail().getCommand();
                 var actInteraction = ActionInteraction
-                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, VisibilityConstraint.invalid(Where.OBJECT_FORMS)));
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, VisibilityConstraint.noViewer(Where.OBJECT_FORMS)));
 
                 var params = actInteraction.startParameterNegotiation().orElseThrow();
                 var singleArgPojoToUse = actionArgumentProvider.get();
@@ -113,7 +113,7 @@ class ValueSemanticsTester<T> {
 
                 var command = interactionService.currentInteractionElseFail().getCommand();
                 var actInteraction = ActionInteraction
-                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, VisibilityConstraint.invalid(Where.OBJECT_FORMS)));
+                        .wrap(ManagedAction.of(ManagedObject.adaptSingular(objSpec, domainObject), act, VisibilityConstraint.noViewer(Where.OBJECT_FORMS)));
 
                 var params = actInteraction.startParameterNegotiation().orElseThrow();
 
@@ -201,7 +201,7 @@ class ValueSemanticsTester<T> {
             var command = interactionService.currentInteractionElseFail().getCommand();
 
             var propInteraction = PropertyInteraction
-                    .wrap(ManagedProperty.of(ManagedObject.adaptSingular(objSpec, domainObject), prop, VisibilityConstraint.invalid(Where.OBJECT_FORMS)));
+                    .wrap(ManagedProperty.of(ManagedObject.adaptSingular(objSpec, domainObject), prop, VisibilityConstraint.noViewer(Where.OBJECT_FORMS)));
 
             propInteraction.modifyProperty(managedProp->
                 ManagedObject.adaptSingular(managedProp.getElementType(), newProperyValueProvider.apply(managedProp)));

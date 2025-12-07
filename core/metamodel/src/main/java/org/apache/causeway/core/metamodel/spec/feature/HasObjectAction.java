@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -133,8 +134,8 @@ public interface HasObjectAction extends ObjectAction {
         return getObjectAction().executeWithRuleChecking(head, parameters, interactionInitiatedBy, visibilityConstraint);
     }
     @Override default ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy) {
-        return getObjectAction().execute(head, parameters, interactionInitiatedBy);
+        final InteractionInitiatedBy interactionInitiatedBy, final WhatViewer whatViewer) {
+        return getObjectAction().execute(head, parameters, interactionInitiatedBy, whatViewer);
     }
     @Override default Consent isArgumentSetValid(final InteractionHead head, final Can<ManagedObject> proposedArguments,
         final InteractionInitiatedBy interactionInitiatedBy) {

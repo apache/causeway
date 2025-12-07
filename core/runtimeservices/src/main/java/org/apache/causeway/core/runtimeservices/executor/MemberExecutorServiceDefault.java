@@ -57,6 +57,7 @@ import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -216,7 +217,7 @@ implements MemberExecutorService {
             executionPublisher().publishActionInvocation(priorExecution);
         }
 
-        var result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy);
+        var result = resultFilteredHonoringVisibility(returnedAdapter, interactionInitiatedBy, actionExecutor.whatViewer());
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -334,7 +335,8 @@ implements MemberExecutorService {
 
     private ManagedObject resultFilteredHonoringVisibility(
             final ManagedObject resultAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
 			return resultAdapter;
@@ -343,7 +345,7 @@ implements MemberExecutorService {
                 || resultAdapter instanceof PackedManagedObject)
 			return resultAdapter;
 
-        return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
+        return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy, whatViewer)
                 ? resultAdapter
                 : null;
     }

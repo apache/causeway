@@ -27,6 +27,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
 
 import lombok.experimental.UtilityClass;
@@ -35,7 +36,7 @@ import lombok.experimental.UtilityClass;
 public final class MmVisibilityUtils {
 
     public static Predicate<? super ManagedObject> filterOn(final InteractionInitiatedBy interactionInitiatedBy) {
-        return $->MmVisibilityUtils.isVisible($, interactionInitiatedBy);
+        return $->MmVisibilityUtils.isVisible($, interactionInitiatedBy, WhatViewer.invalid());
     }
 
     /**
@@ -88,7 +89,8 @@ public final class MmVisibilityUtils {
      */
     public static boolean isVisible(
             final ManagedObject mo,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
 			// a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
@@ -104,7 +106,7 @@ public final class MmVisibilityUtils {
         var visibilityContext = ObjectVisibilityContext.createForRegular(
                 mo,
                 InteractionInitiatedBy.USER,
-                VisibilityConstraint.invalid(Where.OBJECT_FORMS));
+                new VisibilityConstraint(whatViewer, Where.OBJECT_FORMS));
 
         return InteractionUtils.isVisibleResult(spec, visibilityContext)
                 .isAllowing();

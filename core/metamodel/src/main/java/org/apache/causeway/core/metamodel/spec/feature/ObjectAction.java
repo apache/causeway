@@ -119,7 +119,8 @@ public interface ObjectAction extends ObjectMember {
     ManagedObject execute(
             InteractionHead head,
             Can<ManagedObject> parameters,
-            InteractionInitiatedBy interactionInitiatedBy);
+            InteractionInitiatedBy interactionInitiatedBy,
+            WhatViewer whatViewer);
 
     // -- isArgumentSetValid, isArgumentSetValidForParameters, isArgumentSetValidForAction
 

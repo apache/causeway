@@ -28,6 +28,7 @@ import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -61,9 +62,10 @@ extends ActionInvocationFacetAbstract {
             final ObjectAction owningAction,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
         return memberExecutorService.invokeAction(facetHolder(), interactionInitiatedBy,
-                head, argumentAdapters, owningAction, this);
+        		whatViewer, head, argumentAdapters, owningAction, this);
     }
 
 }

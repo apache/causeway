@@ -54,6 +54,7 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.use.ActionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
@@ -413,7 +414,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
         if(validity.isVetoed())
 			throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
 
-        return execute(head, arguments, interactionInitiatedBy);
+        return execute(head, arguments, interactionInitiatedBy, visibilityConstraint.whatViewer());
     }
 
     /**
@@ -424,7 +425,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     public ManagedObject execute(
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
@@ -446,7 +448,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             }
         }
 
-        return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
+        return this.executeInternal(head, argumentAdapters, interactionInitiatedBy, whatViewer);
     }
 
     /**
@@ -455,10 +457,11 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     protected ManagedObject executeInternal(
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
         var actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
-                .invoke(this, head, argumentAdapters, interactionInitiatedBy);
+                .invoke(this, head, argumentAdapters, interactionInitiatedBy, whatViewer);
     }
 
     protected Optional<ActionInvocationFacet> getActionInvocationFacet() {

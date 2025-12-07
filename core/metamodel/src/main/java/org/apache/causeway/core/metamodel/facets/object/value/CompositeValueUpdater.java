@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpda
 import org.apache.causeway.core.metamodel.facets.object.value.CompositeValueUpdater.CompositeValueUpdaterForProperty;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.interactions.managed.ParameterNegotiationModel;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -75,13 +76,15 @@ permits CompositeValueUpdaterForProperty, CompositeValueUpdaterForParameter {
 
     @Override default ManagedObject execute(
             final InteractionHead head, final Can<ManagedObject> parameters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
         return map(simpleExecute(head, parameters));
     }
     @Override default ManagedObject executeWithRuleChecking(
         final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visibilityConstraint) throws AuthorizationException {
-        return execute(head, parameters, interactionInitiatedBy);
+        final InteractionInitiatedBy interactionInitiatedBy,
+        final VisibilityConstraint visibilityConstraint) throws AuthorizationException {
+        return execute(head, parameters, interactionInitiatedBy, visibilityConstraint.whatViewer());
     }
 
     // -- IMPLEMENTATIONS

@@ -34,6 +34,7 @@ import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.causeway.core.metamodel.facets.properties.update.SnapshotExcludeFacetFromImmutableMember;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -131,9 +132,8 @@ implements MixedInMember {
     private DisabledFacet disabledFacet() {
         final DisabledFacet originalFacet = facetHolder.getFacet(DisabledFacet.class);
         if( originalFacet != null &&
-                originalFacet.where().isAlways()) {
-            return originalFacet;
-        }
+                originalFacet.where().isAlways())
+			return originalFacet;
         // ensure that the contributed association is always disabled
         return new DisabledFacetForContributee(VetoReason.mixedinCollection(), this);
     }
@@ -145,7 +145,7 @@ implements MixedInMember {
 
         return executionPublisher().withPublishingSuppressed(
                 () -> mixinAction.executeInternal(
-                        headFor(ownerAdapter), Can.empty(), interactionInitiatedBy));
+                        headFor(ownerAdapter), Can.empty(), interactionInitiatedBy, WhatViewer.invalid()));
     }
 
     @Override
