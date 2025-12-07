@@ -82,27 +82,27 @@ public final class MmVisibilityUtils {
     }
 
     /**
-     * @param adapter - wrapper of domain object whose visibility is being checked,
+     * @param mo - wrapper of domain object whose visibility is being checked,
      *      must not be a mixin
      * @param interactionInitiatedBy
      */
     public static boolean isVisible(
-            final ManagedObject adapter,
+            final ManagedObject mo,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter))
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
 			// a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
-        var spec = adapter.objSpec();
-        if(spec.isEntity()) {
-            if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved())
-				return false;
-        }
+        var spec = mo.objSpec();
+        if(spec.isEntity()
+    		&& MmEntityUtils.getEntityState(mo).isTransientOrRemoved())
+			return false;
+
         if(!interactionInitiatedBy.isUser())
 			return true;
 
         var visibilityContext = ObjectVisibilityContext.createForRegular(
-                adapter,
+                mo,
                 InteractionInitiatedBy.USER,
                 VisibilityConstraint.invalid(Where.OBJECT_FORMS));
 
