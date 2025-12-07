@@ -60,35 +60,30 @@ record DataRowInternal(
                 .findFirst();
     }
 
-    /**
-     * Can be none, one or many per table cell.
-     */
     @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull DataColumn column) {
         final ObjectAssociation assoc = column.associationMetaModel();
-        var interactionInitiatedBy = InteractionInitiatedBy.PASS_THROUGH;
-        var visibilityConstraint = VisibilityConstraint.invalid(Where.ALL_TABLES);
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
-                        property.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
-                                ? property.get(rowElement(), interactionInitiatedBy)
+                        property.isVisible(rowElement(), InteractionInitiatedBy.USER, VISIBILITY_CONSTRAINT).isAllowed()
+                                ? property.get(rowElement(), InteractionInitiatedBy.USER)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                        collection.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
-                                ? collection.get(rowElement(), interactionInitiatedBy)
+                        collection.isVisible(rowElement(), InteractionInitiatedBy.USER, VISIBILITY_CONSTRAINT).isAllowed()
+                                ? collection.get(rowElement(), InteractionInitiatedBy.USER)
                                 : null
                 ));
     }
 
-    /**
-     * Can be none, one or many per table cell. (returns empty Can if column not found)
-     */
     @Override
     public Can<ManagedObject> getCellElementsForColumn(final @NonNull String columnId) {
         return lookupColumnById(columnId)
                 .map(this::getCellElementsForColumn)
                 .orElseGet(Can::empty);
     }
+
+    // we are always checking whether a property is visible, constraint by Where.ALL_TABLES (but not by WhatViewer)
+    private final static VisibilityConstraint VISIBILITY_CONSTRAINT = VisibilityConstraint.noViewer(Where.ALL_TABLES);
 
 }

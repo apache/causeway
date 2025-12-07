@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -39,7 +40,6 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.commons.tabular.TabularModel.TabularSheet;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
@@ -49,8 +49,6 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a collection of domain objects (typically entity instances).
@@ -204,7 +202,7 @@ public record DataTable(
      */
     public DataTable withDataElements(final @Nullable Iterable<ManagedObject> dataElements) {
         var newDataRows = Can.ofIterable(dataElements)
-            .map(domainObject->new DataRow(domainObject));
+            .map(DataRow::new);
         return new DataTable(elementType, dataColumns, newDataRows, tableFriendlyName);
     }
     /**
@@ -254,16 +252,16 @@ public record DataTable(
         void onCell(DataColumn column, Can<ManagedObject> cellValues);
     }
 
-    public DataTable visit(final CellVisitor visitor) {
-        return visit(visitor, _Predicates.alwaysTrue());
+    public DataTable visit(final CellVisitor visitor, final DataTable.AccessMode accessMode) {
+        return visit(visitor, accessMode, _Predicates.alwaysTrue());
     }
-    public DataTable visit(final CellVisitor visitor, final Predicate<DataColumn> columnFilter) {
+    public DataTable visit(final CellVisitor visitor, final DataTable.AccessMode accessMode, final Predicate<DataColumn> columnFilter) {
         var columnsOfInterest = dataColumns().filter(columnFilter);
         if(columnsOfInterest.isNotEmpty()) {
             dataRows().forEach(row->{
                 visitor.onRowEnter(row);
                 columnsOfInterest.forEach(col->{
-                    visitor.onCell(col, row.getCellElements(col, InteractionInitiatedBy.PASS_THROUGH));
+                    visitor.onCell(col, row.getCellElements(col, accessMode));
                 });
                 visitor.onRowLeave(row);
             });
@@ -327,7 +325,7 @@ public record DataTable(
 
     public final static Predicate<ObjectAssociation> columnFilterIncludingEnabledForSnapshot() {
         return (final ObjectAssociation assoc) -> _Casts.castTo(OneToOneAssociation.class, assoc)
-                .map(prop->prop.isIncludedWithSnapshots())
+                .map(OneToOneAssociation::isIncludedWithSnapshots)
                 .orElse(false);
     }
 

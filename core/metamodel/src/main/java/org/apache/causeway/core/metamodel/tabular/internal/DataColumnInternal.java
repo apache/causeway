@@ -20,12 +20,12 @@ package org.apache.causeway.core.metamodel.tabular.internal;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.tabular.DataColumn;
-
-import org.jspecify.annotations.NonNull;
 
 record DataColumnInternal(
     @NonNull String columnId,

@@ -38,25 +38,37 @@ public record DataRow(
 
     /**
      * Can be none, one or many per table cell.
+     * @param column for which to get the cell elements (none, one or many)
+     * @param accessMode use PASS_THROUGH for faster processing, when you know,
+     * 	that you don't need the full access check processing and also can skip associated event processing
      */
     public Can<ManagedObject> getCellElements(
             final @NonNull DataColumn column,
-            final InteractionInitiatedBy interactionInitiatedBy) {
-    	var visibilityConstraint = VisibilityConstraint.invalid(Where.ALL_TABLES);
+            final DataTable.AccessMode accessMode) {
+
+    	var initiatedBy = switch(accessMode) {
+		    case PASS_THROUGH -> InteractionInitiatedBy.PASS_THROUGH;
+		    default -> InteractionInitiatedBy.USER;
+		};
+
         var assoc = column.metamodel();
         return assoc.getSpecialization().fold(
                 property-> Can.of(
-                        // similar to ManagedProperty#reassessPropertyValue
-                    interactionInitiatedBy.isPassThrough()
-                        || property.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
-                                ? property.get(rowElement(), interactionInitiatedBy)
-                                : ManagedObject.empty(property.getElementType())),
+                		// similar to ManagedProperty#reassessPropertyValue
+                		initiatedBy.isPassThrough()
+            			|| property.isVisible(rowElement(), InteractionInitiatedBy.USER, VISIBILITY_CONSTRAINT).isAllowed()
+                            ? property.get(rowElement(), initiatedBy)
+                            : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                    interactionInitiatedBy.isPassThrough()
-                        || collection.isVisible(rowElement(), interactionInitiatedBy, visibilityConstraint).isAllowed()
-                                ? collection.get(rowElement(), interactionInitiatedBy)
-                                : null
+                		initiatedBy.isPassThrough()
+                    	|| collection.isVisible(rowElement(), InteractionInitiatedBy.USER, VISIBILITY_CONSTRAINT).isAllowed()
+                            ? collection.get(rowElement(), initiatedBy)
+                            : null
                 ));
     }
+
+    // we are checking whether a property is visible, constraint by Where.ALL_TABLES (but not by WhatViewer)
+    // when accessMode is PASS_THROUGH, we simply assume, that the Where.ALL_TABLES constraint is already honored by previous column filtering logic.
+    private final static VisibilityConstraint VISIBILITY_CONSTRAINT = VisibilityConstraint.noViewer(Where.ALL_TABLES);
 
 }
