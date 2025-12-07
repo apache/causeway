@@ -165,7 +165,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
         // naturally supports attribute inheritance from the type's hierarchy
         this.introspectionPolicy = this.lookupFacet(IntrospectionPolicyFacet.class)
-                .map(introspectionPolicyFacet->introspectionPolicyFacet.getIntrospectionPolicy())
+                .map(IntrospectionPolicyFacet::getIntrospectionPolicy)
                 .orElseGet(()->mmc.getConfiguration().core().metaModel().introspector().policy());
 
         this.facetedMethodsBuilder =
@@ -273,13 +273,12 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
-        if (facetMethod.featureType().isCollection()) {
-            return OneToManyAssociationDefault.forMethod(facetMethod);
-        } else if (facetMethod.featureType().isProperty()) {
-            return OneToOneAssociationDefault.forMethod(facetMethod);
-        } else {
-            return null;
-        }
+        if (facetMethod.featureType().isCollection())
+			return OneToManyAssociationDefault.forMethod(facetMethod);
+		else if (facetMethod.featureType().isProperty())
+			return OneToOneAssociationDefault.forMethod(facetMethod);
+		else
+			return null;
     }
 
     private Stream<ObjectAction> createActions() {
@@ -302,9 +301,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             return this.isMixin()
                     ? ObjectActionDefault.forMixinMain(facetedMethod)
                     : ObjectActionDefault.forMethod(facetedMethod);
-        } else {
-            return null;
-        }
+        } else
+			return null;
     }
 
     // -- getObjectAction
@@ -375,7 +373,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     private final _Lazy<Optional<ObjectSpecification>> elementSpecification =
             _Lazy.threadSafe(()->lookupFacet(TypeOfFacet.class)
-                    .map(typeOfFacet -> typeOfFacet.elementSpec()));
+                    .map(TypeOfFacet::elementSpec));
 
     @Override
     public Optional<ObjectSpecification> getElementSpecification() {
@@ -555,7 +553,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public void introspect(IntrospectionRequest request) {
+    public void introspect(final IntrospectionRequest request) {
         switch (request) {
             case REGISTER -> introspectUpTo(IntrospectionState.NOT_INTROSPECTED,
                 ()->"introspect(%s)".formatted(request));
@@ -592,7 +590,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     /**
      * @param introspectionContextProvider keeps track of the causal chain of introspection requests
      */
-    private void introspectUpTo(final IntrospectionState upTo, Supplier<String> introspectionContextProvider) {
+    private void introspectUpTo(final IntrospectionState upTo, final Supplier<String> introspectionContextProvider) {
         if(!isLessThan(upTo)) return; // optimization
 
         if(log.isDebugEnabled()) {
@@ -645,9 +643,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     protected void loadSpecOfSuperclass(final Class<?> superclass) {
-        if (superclass == null) {
-            return;
-        }
+        if (superclass == null)
+			return;
         superclassSpec = specLoaderInternal().loadSpecification(superclass);
         if (superclassSpec != null) {
             if (log.isDebugEnabled()) {
@@ -803,7 +800,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     // -- ICON
 
     @Override
-    public Optional<ObjectSupport.IconResource> getIcon(final ManagedObject domainObject, ObjectSupport.IconSize iconSize) {
+    public Optional<ObjectSupport.IconResource> getIcon(final ManagedObject domainObject, final ObjectSupport.IconSize iconSize) {
         if(ManagedObjects.isSpecified(domainObject)) {
             _Assert.assertEquals(domainObject.objSpec(), this);
         }
@@ -849,7 +846,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     @Override
     public String getSingularName() {
         return lookupFacet(ObjectNamedFacet.class)
-            .flatMap(textFacet->textFacet.translated())
+            .flatMap(ObjectNamedFacet::translated)
             // unexpected code reach, however keep for JUnit testing
             .orElseGet(()->String.format(
                     "(%s has neither title- nor object-named-facet)",
@@ -920,12 +917,10 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
         @Override
         public boolean test(final Q facet) {
-            if(facet==null) {
-                return false;
-            }
-            if(!facet.precedence().isFallback()) {
-                return true;
-            }
+            if(facet==null)
+				return false;
+            if(!facet.precedence().isFallback())
+				return true;
             if(noopFacet == null) {
                 noopFacet = facet;
             }
@@ -957,9 +952,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Override
     public Can<ObjectSpecification> subclasses(final Depth depth) {
-        if (depth == Depth.DIRECT) {
-            return directSubclasses.snapshot();
-        }
+        if (depth == Depth.DIRECT)
+			return directSubclasses.snapshot();
 
         // depth == Depth.TRANSITIVE)
         if (transitiveSubclasses == null) {
@@ -1061,9 +1055,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
      * Creates all mixed in properties and collections for this spec.
      */
     private Stream<ObjectAssociation> createMixedInAssociations() {
-        if (isInjectable() || isValue()) {
-            return Stream.empty();
-        }
+        if (isInjectable() || isValue())
+			return Stream.empty();
         return getCausewayBeanTypeRegistry().streamMixinTypes()
                 .flatMap(this::createMixedInAssociation);
     }
@@ -1072,17 +1065,14 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
                 IntrospectionRequest.FULL);
         if (mixinSpec == null
-                || mixinSpec == this) {
-            return Stream.empty();
-        }
+                || mixinSpec == this)
+			return Stream.empty();
         var mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if(mixinFacet == null) {
-            // this shouldn't happen; to be covered by meta-model validation later
+        if(mixinFacet == null)
+			// this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
-        }
-        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
-            return Stream.empty();
-        }
+        if(!mixinFacet.isMixinFor(getCorrespondingClass()))
+			return Stream.empty();
         var mixinMethodName = mixinFacet.getMainMethodName();
 
         return mixinSpec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
@@ -1106,22 +1096,18 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
                 IntrospectionRequest.FULL);
         if (mixinSpec == null
-                || mixinSpec == this) {
-            return Stream.empty();
-        }
+                || mixinSpec == this)
+			return Stream.empty();
         var mixinFacet = mixinSpec.mixinFacet().orElse(null);
-        if(mixinFacet == null) {
-            // this shouldn't happen; to be covered by meta-model validation later
+        if(mixinFacet == null)
+			// this shouldn't happen; to be covered by meta-model validation later
             return Stream.empty();
-        }
-        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
-            return Stream.empty();
-        }
+        if(!mixinFacet.isMixinFor(getCorrespondingClass()))
+			return Stream.empty();
         // don't mixin Object_ mixins to domain services
         if(getBeanSort().isManagedBeanContributing()
-                && mixinFacet.isMixinFor(java.lang.Object.class)) {
-            return Stream.empty();
-        }
+                && mixinFacet.isMixinFor(java.lang.Object.class))
+			return Stream.empty();
 
         var mixinMethodName = mixinFacet.getMainMethodName();
 
@@ -1152,7 +1138,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     public Consent isValid(
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
         return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
     }
 
@@ -1160,9 +1145,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     public InteractionResult isValidResult(
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        var validityContext =
-                createValidityInteractionContext(
-                        targetAdapter, interactionInitiatedBy);
+        var validityContext = createValidityInteractionContext(targetAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -1172,7 +1155,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
      */
     @Override
     public ObjectValidityContext createValidityInteractionContext(
-            final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+            final ManagedObject targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getFeatureIdentifier(), interactionInitiatedBy);
     }
 
@@ -1205,14 +1189,12 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 || getBeanSort().isManagedBeanContributing()
                 // in support of composite value-type constructor mixins
                 || getBeanSort().isValue();
-        if(!include) {
-            return;
-        }
+        if(!include)
+			return;
         var mixedInActions = createMixedInActions()
                 .collect(Collectors.toList());
-        if(mixedInActions.isEmpty()) {
-           return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
-        }
+        if(mixedInActions.isEmpty())
+			return; // nothing to do (this spec has no mixed-in actions, regular actions have already been added)
 
         var regularActions = _Lists.newArrayList(objectActions); // defensive copy
 
@@ -1228,14 +1210,12 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
      * one-shot: must be no-op, if already created
      */
     private void createMixedInAssociationsAndResort() {
-        if(!isEntityOrViewModelOrAbstract()) {
-            return;
-        }
+        if(!isEntityOrViewModelOrAbstract())
+			return;
         var mixedInAssociations = createMixedInAssociations()
                 .collect(Collectors.toList());
-        if(mixedInAssociations.isEmpty()) {
-           return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
-        }
+        if(mixedInAssociations.isEmpty())
+			return; // nothing to do (this spec has no mixed-in associations, regular associations have already been added)
 
         var regularAssociations = _Lists.newArrayList(associations); // defensive copy
 

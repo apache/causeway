@@ -236,8 +236,9 @@ implements WrapperInvocationHandler {
             final ObjectSpecification targetNoSpec) {
 
         runValidationTask(wrapperInvocation, ()->{
+        	var iConstraint = iConstraint(wrapperInvocation);
             var interactionResult =
-                    targetNoSpec.isValidResult(targetAdapter, iConstraint(wrapperInvocation).initiatedBy());
+                    targetNoSpec.isValidResult(targetAdapter, iConstraint.initiatedBy());
             notifyListenersAndVetoIfRequired(interactionResult);
         });
 

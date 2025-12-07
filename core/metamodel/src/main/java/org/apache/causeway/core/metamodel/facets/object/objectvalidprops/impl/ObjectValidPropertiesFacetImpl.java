@@ -19,50 +19,64 @@
 package org.apache.causeway.core.metamodel.facets.object.objectvalidprops.impl;
 
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
+import org.apache.causeway.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet;
 import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.val.ObjectValidityContext;
+import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
-public class ObjectValidPropertiesFacetImpl
-extends ObjectValidPropertiesFacetAbstract {
+public record ObjectValidPropertiesFacetImpl(
+		FacetHolder facetHolder)
+implements ObjectValidPropertiesFacet {
 
-    // REVIEW: should provide this rendering context, rather than hardcoding.
-    // the net effect currently is that class members annotated with
-    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
-    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
-    // for any other value for Where
-    private final Where where = Where.ANYWHERE;
+    @Override public Class<? extends Facet> facetType() { return ObjectValidPropertiesFacet.class; }
+    @Override public Precedence precedence() { return Precedence.DEFAULT; }
 
-    public ObjectValidPropertiesFacetImpl(final FacetHolder holder) {
-        super(holder);
+    @Override
+    public String toString() {
+        return FacetUtil.toString(this);
     }
 
     @Override
-    public String invalidReason(
-            final ObjectValidityContext context) {
-        final StringBuilder buf = new StringBuilder();
-        final ManagedObject adapter = context.target();
-
-        var visibilityConstraint = VisibilityConstraint.invalid(where);
-
-        adapter.objSpec().streamProperties(MixedIn.EXCLUDED)
-        .filter(property->property.isVisible(adapter, context.initiatedBy(), visibilityConstraint).isVetoed()) // ignore hidden properties
-        .filter(property->property.isUsable(adapter, context.initiatedBy(), visibilityConstraint).isVetoed())  // ignore disabled properties
-        .forEach(property->{
-            final ManagedObject value = property.get(adapter, context.initiatedBy());
-            if (property.isAssociationValid(adapter, value, context.initiatedBy()).isVetoed()) {
-                if (buf.length() > 0) {
-                    buf.append(", ");
-                }
-                buf.append(property.getFriendlyName(context::target));
-            }
-        });
-        if (buf.length() > 0)
-			return "Invalid properties: " + buf.toString();
-        return null;
+    public String invalidates(final ValidityContext ic) {
+        return (ic instanceof final ObjectValidityContext validityContext)
+    		? invalidReason(validityContext)
+			: null;
     }
+
+    @Override
+    public String invalidReason(final ObjectValidityContext context) {
+        final ManagedObject mo = context.target();
+        var sb = new StringBuilder();
+
+        mo.objSpec().streamProperties(MixedIn.EXCLUDED)
+	        .filter(property->property.isVisible(mo, context.initiatedBy(), VISIBILITY_CONSTRAINT).isVetoed()) // ignore hidden properties
+	        .filter(property->property.isUsable(mo, context.initiatedBy(), VISIBILITY_CONSTRAINT).isVetoed())  // ignore disabled properties
+	        .forEach(property->{
+	            final ManagedObject value = property.get(mo, context.initiatedBy());
+	            if (property.isAssociationValid(mo, value, context.initiatedBy()).isVetoed()) {
+	                if (sb.length() > 0) {
+	                    sb.append(", ");
+	                }
+	                sb.append(property.getFriendlyName(context::target));
+	            }
+	        });
+        return (sb.length() > 0)
+			? "Invalid properties: " + sb.toString()
+        	: null;
+    }
+
+    // REVIEW: should provide the rendering context, rather than hardcoding.
+    // The net effect currently is that class members annotated with
+    // @Hidden(where=Where.ANYWHERE) or @Disabled(where=Where.ANYWHERE) will indeed
+    // be hidden/disabled, but will be visible/enabled (perhaps incorrectly)
+    // for any other value for Where.
+    // However, ultimately we do check, whether the object is valid prior to persisting,
+    // I think, this should not be constraint by WhatViewer or Where.
+    private final static VisibilityConstraint VISIBILITY_CONSTRAINT = VisibilityConstraint.noViewer(Where.ANYWHERE);
 
 }

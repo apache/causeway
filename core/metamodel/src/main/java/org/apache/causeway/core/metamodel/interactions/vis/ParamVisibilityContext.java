@@ -60,7 +60,7 @@ implements VisibilityContext, ActionInteractionContext {
             final RenderPolicy renderPolicy) {
 
     	// assumption: param visibility is never directly constraint by WhatViewer or Where;
-    	// instead those constraints apply only to their 'owning' actions
+    	// instead those constraints apply only to their 'owning' action
     	// in other words, if an action is visible honoring WhatViewer or Where, then no further
     	// visibility vetos for params are considered based on WhatViewer or Where.
         this(InteractionContextType.ACTION_PARAMETER_VISIBLE,

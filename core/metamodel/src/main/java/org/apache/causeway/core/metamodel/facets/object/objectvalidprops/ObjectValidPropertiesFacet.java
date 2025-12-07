@@ -35,6 +35,6 @@ public interface ObjectValidPropertiesFacet extends Facet, ValidatingInteraction
      *
      * <p>If the object is actually valid, should return <tt>null</tt>.
      */
-    public String invalidReason(ObjectValidityContext context);
+    String invalidReason(ObjectValidityContext context);
 
 }

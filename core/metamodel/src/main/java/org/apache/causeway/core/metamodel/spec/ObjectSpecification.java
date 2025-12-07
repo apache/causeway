@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -78,7 +79,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -301,24 +301,24 @@ extends
 
     // internal API
     ObjectValidityContext createValidityInteractionContext(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetAdapter,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link Consent}.
      */
     Consent isValid(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetAdapter,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link InteractionResult}.
      */
     InteractionResult isValidResult(
-            final ManagedObject targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy);
+            ManagedObject targetAdapter,
+            InteractionInitiatedBy interactionInitiatedBy);
 
     // -- FACETS
 
@@ -515,14 +515,12 @@ extends
      */
     default Object instantiatePojo() {
         final Class<?> correspondingClass = getCorrespondingClass();
-        if (correspondingClass.isArray()) {
-            return Array.newInstance(correspondingClass.getComponentType(), 0);
-        }
+        if (correspondingClass.isArray())
+			return Array.newInstance(correspondingClass.getComponentType(), 0);
 
         final Class<?> cls = correspondingClass;
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new UnrecoverableException("Cannot create an instance of an abstract class: " + cls);
-        }
+        if (Modifier.isAbstract(cls.getModifiers()))
+			throw new UnrecoverableException("Cannot create an instance of an abstract class: " + cls);
 
         final Object newInstance;
         try {
@@ -590,9 +588,8 @@ extends
     default public boolean isAssignableFrom(final Class<?> actualType) {
         var expectedType = getCorrespondingClass();
         if(expectedType.isAssignableFrom(actualType)
-                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
-            return true;
-        }
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
+			return true;
         return false;
     }
 
@@ -603,9 +600,8 @@ extends
         var actualType = pojo.getClass();
 
         if(expectedType.isAssignableFrom(actualType)
-                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
-            return true;
-        }
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
+			return true;
 
         var elementSpec = getElementSpecification()
                 .orElse(this);
@@ -646,12 +642,10 @@ extends
 
         var cls_a = a.getCorrespondingClass();
         var cls_b = b.getCorrespondingClass();
-        if(cls_a.isAssignableFrom(cls_b)) {
-            return a;
-        }
-        if(cls_b.isAssignableFrom(cls_a)) {
-            return b;
-        }
+        if(cls_a.isAssignableFrom(cls_b))
+			return a;
+        if(cls_b.isAssignableFrom(cls_a))
+			return b;
         // assuming the algorithm is correct: if non of the above is true,
         // we must be able to walk up the tree on both branches
         _Assert.assertNotNull(a.superclass());
