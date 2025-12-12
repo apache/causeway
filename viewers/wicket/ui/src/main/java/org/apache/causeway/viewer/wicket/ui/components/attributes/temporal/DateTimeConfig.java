@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes.temporal;
 
-import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -433,16 +432,11 @@ public class DateTimeConfig extends AbstractConfig {
         @Override
         public void serialize(final TodayButton value, final JsonGenerator jgen, final SerializationContext provider) throws JacksonException {
             switch (value) {
-            case TRUE:
-                jgen.writeBoolean(true);
-                break;
-            case FALSE:
-                jgen.writeBoolean(false);
-                break;
-            case LINKED:
-                jgen.writeString("linked");
-                break;
-            }
+			case TRUE -> jgen.writeBoolean(true);
+			case FALSE -> jgen.writeBoolean(false);
+			case LINKED -> jgen.writeString("linked");
+			}
+			;
         }
 
     }

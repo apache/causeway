@@ -27,8 +27,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.causeway.commons.net.DataUri;
-
 import lombok.RequiredArgsConstructor;
 
 class DataUriTest {
@@ -53,7 +51,7 @@ class DataUriTest {
 
     @ParameterizedTest
     @EnumSource(Scenario.class)
-    void rundtrip(Scenario scenario) {
+    void rundtrip(final Scenario scenario) {
         var ref = new DataUri(scenario.mediaType, scenario.parameters, scenario.encoding, scenario.data);
         var parsed = DataUri.parse(scenario.externalForm);
         assertEquals(scenario.externalForm, ref.toExternalForm());

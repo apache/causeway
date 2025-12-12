@@ -24,7 +24,6 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -206,9 +205,7 @@ public class JaxbUtils {
 
             @Override
             public T read(final DataSource source) {
-                return source.tryReadAll((final InputStream is)->{
-                    return Try.call(()->opts.unmarshal(jaxbContext, mappedType, is));
-                })
+                return source.tryReadAll((final InputStream is) -> Try.call(()->opts.unmarshal(jaxbContext, mappedType, is)))
                 .ifFailureFail()
                 .getValue().orElseThrow();
             }
@@ -281,9 +278,8 @@ public class JaxbUtils {
         write(pojo, DataSink.ofStringUtf8Consumer(sb), customizers);
 
         var xml = sb.toString();
-        if (isFormattedOutput(customizers)) {
-            return prettyPrint(customizers, xml);
-        }
+        if (isFormattedOutput(customizers))
+			return prettyPrint(customizers, xml);
 
         return xml;
     }
@@ -313,8 +309,7 @@ public class JaxbUtils {
 
     private static void apply(final JaxbCustomizer[] customizers, final TransformerFactory transformerFactory) {
         for (var customizer : customizers) {
-            if (customizer instanceof  TransformerFactoryCustomizer) {
-                var transformerFactoryCustomizer = (TransformerFactoryCustomizer) customizer;
+            if (customizer instanceof TransformerFactoryCustomizer transformerFactoryCustomizer) {
                 transformerFactoryCustomizer.apply(transformerFactory);
             }
         }
@@ -396,10 +391,9 @@ public class JaxbUtils {
     private static Class<?>[] open(final Class<?>[] classes) throws JAXBException {
         final Module coreModule = JAXB_CONTEXT_FACTORY.getClass().getModule();
         final Module rtModule = JAXBContextFactory.class.getModule();
-        if (rtModule == coreModule || !rtModule.isNamed()) {
-            //we're either in a bundle or on the classpath
+        if (rtModule == coreModule || !rtModule.isNamed())
+			//we're either in a bundle or on the classpath
             return classes;
-        }
         for (Class<?> cls : classes) {
             Class<?> jaxbClass = cls.isArray() ? cls.getComponentType() : cls;
             final Module classModule = jaxbClass.getModule();
@@ -411,11 +405,10 @@ public class JaxbUtils {
 
             if (classModule.isOpen(packageName, rtModule)) {
                 classModule.addOpens(packageName, coreModule);
-            } else {
-                throw new JAXBException(java.text.MessageFormat.format(
+            } else
+				throw new JAXBException(java.text.MessageFormat.format(
                         "Package {0} with class {1} defined in a module {2} must be open to at least {3} module.",
                         packageName, jaxbClass.getName(), classModule.getName(), rtModule.getName()));
-            }
         }
         return classes;
     }
@@ -429,8 +422,8 @@ public class JaxbUtils {
         if(cause instanceof IllegalAnnotationsException annotEx) {
             // report a better error if possible
             var errors = annotEx.getErrors();
-            if(_NullSafe.size(errors)>0) {
-                return _Exceptions.unrecoverable(cause,
+            if(_NullSafe.size(errors)>0)
+				return _Exceptions.unrecoverable(cause,
                     "Error %s, "
                     + "due to illegal annotations on object class '%s'; "
                     + "%d error(s) reported: %s",
@@ -440,7 +433,6 @@ public class JaxbUtils {
                     errors.stream()
                         .map(IllegalAnnotationException::toString)
                         .collect(Collectors.joining("; ")));
-            }
         }
 
         return _Exceptions.unrecoverable(cause,
