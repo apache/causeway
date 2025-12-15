@@ -232,10 +232,9 @@ public final class _Assert {
      * Asserts, that given {@code type} is an instance of {@code requiredType}.
      */
     public void assertTypeIsInstanceOf(final @NonNull Class<?> type, final @NonNull Class<?> requiredType) {
-        if(!requiredType.isAssignableFrom(type)) {
-            throw _Exceptions.assertionError(
+        if(!requiredType.isAssignableFrom(type))
+			throw _Exceptions.assertionError(
                     "unexpected type: '%s' is not an instance of '%s' ", ""+type, ""+requiredType);
-        }
     }
 
     /**
@@ -285,19 +284,17 @@ public final class _Assert {
      */
     public void assertNumberEquals(final double a, final double b, final double delta,
             final Supplier<String> lazyMessage) {
-        if (Double.isNaN(delta) || delta < 0.0) {
-            throw _Exceptions.assertionError(
+        if (Double.isNaN(delta) || delta < 0.0)
+			throw _Exceptions.assertionError(
                     "%sinvalid delta: '%s'",
                     _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
                     String.valueOf(delta));
-        }
         if((Double.doubleToLongBits(a) != Double.doubleToLongBits(b))
-                || Math.abs(a - b) > delta) {
-            throw _Exceptions.assertionError(
+                && Math.abs(a - b) > delta)
+			throw _Exceptions.assertionError(
                     "%snumbers %s and %s are not equal within delta %s",
                     _Strings.nonEmpty(lazyMessage.get()).map(msg->msg + ": ").orElse(""),
                     String.valueOf(a), String.valueOf(b), String.valueOf(delta));
-        }
     }
 
     /**
