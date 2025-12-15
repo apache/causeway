@@ -27,6 +27,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import org.springframework.boot.test.context.SpringBootTest;
+
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.internal.base._Blackhole;
 import org.apache.causeway.commons.internal.debug._MemoryUsage;
@@ -83,20 +84,20 @@ class WrapperFactoryMetaspaceMemoryLeakTest extends CausewayIntegrationTestAbstr
     //  exercise(20000, 0);    //.115,729 KB
     @RequiredArgsConstructor
     enum Scenario {
-        TWO_K_TIMES_ONE(2000, 0, 4000),
-        TWO_K_TIMES_TEN(2000, 10, 4000),;
+        TWO_K_TIMES_ONE(2000, 0, 4*1000),
+        TWO_K_TIMES_TEN(2000, 10, 4*1000);
         final int instances;
         final int loops;
-        final int thresholdKibi;
+        final int thresholdKB;
     }
 
     @ParameterizedTest
     @EnumSource(Scenario.class)
     void testWrapper_waitingOnDomainEventScenario(final Scenario scenario) throws InterruptedException {
-        var usage = _MemoryUsage.measureMetaspace(()->
+        var usage = _MemoryUsage.measure(()->
             exercise(scenario.instances, scenario.loops));
-        Assertions.assertTrue(usage.usedInKibiBytes() < scenario.thresholdKibi,
-            ()->"%s exceeds expected %dKB threshold".formatted(usage, scenario.thresholdKibi));
+        Assertions.assertTrue(usage.metaspaceUsed() < 1000 * scenario.thresholdKB,
+            ()->"%s exceeds expected %dKB threshold".formatted(usage, scenario.thresholdKB));
         System.out.printf("scenario %s usage %s%n", scenario.name(), usage);
     }
 
