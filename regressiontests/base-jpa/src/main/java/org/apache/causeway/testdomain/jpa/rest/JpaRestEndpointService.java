@@ -47,6 +47,7 @@ import org.apache.causeway.applib.value.semantics.ValueDecomposition;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Bytes;
+import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.commons.io.JsonUtils;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
@@ -143,7 +144,12 @@ public class JpaRestEndpointService {
 
     protected Builder restClient() {
         return RestClient.builder()
-            .messageConverters(converters->converters.add(0, new CausewayMessageConverter()))
+            .configureMessageConverters(builder->{
+                builder
+                    .registerDefaults()
+                    .addCustomConverter(new CausewayMessageConverter());
+            })
+            //.messageConverters(converters->converters.add(0, new CausewayMessageConverter()))
             .baseUrl(baseUrl())
             .defaultHeaders(headers -> headers.setBasicAuth(LdapConstants.SVEN_PRINCIPAL, "pass"));
     }
@@ -180,8 +186,12 @@ public class JpaRestEndpointService {
         var response = request(client.post(), "/actions/recommendedBookOfTheWeek/invoke", actParamModel())
             .retrieve();
 
-        var entity = response.body(JpaBook.class);
-        return Try.success(entity);
+      //TODO seems broken since Spring Boot 4.0.1
+//      var entity = response.body(JpaBook.class);
+//      return Try.success(entity);
+
+        var json = response.body(String.class);
+        return JsonUtils.tryRead(JpaBook.class, json);
     }
 
     public Try<BookDto> getRecommendedBookOfTheWeekDto(final RestClient client) {
@@ -197,10 +207,15 @@ public class JpaRestEndpointService {
                 .addActionParameter("nrOfBooks", 3))
             .retrieve();
 
-        List<JpaBook> books = response
-            .body(new ParameterizedTypeReference<List<JpaBook>>() {});
+        var json = response.body(String.class);
+        return JsonUtils.tryReadAsList(JpaBook.class, DataSource.ofStringUtf8(json))
+                .mapSuccessWhenPresent(Can::ofCollection);
 
-        return Try.success(Can.ofCollection(books));
+        //TODO seems broken since Spring Boot 4.0.1
+//        List<JpaBook> books = response
+//            .body(new ParameterizedTypeReference<List<JpaBook>>() {});
+//
+//        return Try.success(Can.ofCollection(books));
     }
 
     public Try<JpaBook> storeBook(final RestClient client, final JpaBook newBook) throws JAXBException {
@@ -208,8 +223,12 @@ public class JpaRestEndpointService {
             .addActionParameter("newBook", BookDto.from(newBook).encode()))
             .retrieve();
 
-        var entity = response.body(JpaBook.class);
-        return Try.success(entity);
+        var json = response.body(String.class);
+        return JsonUtils.tryRead(JpaBook.class, json);
+
+        //TODO seems broken since Spring Boot 4.0.1
+//        var entity = response.body(JpaBook.class);
+//        return Try.success(entity);
     }
 
     public Try<BookDto> getRecommendedBookOfTheWeekAsDto(final RestClient client) {
@@ -256,10 +275,15 @@ public class JpaRestEndpointService {
             .body(actParamModel().toJson())
             .retrieve();
 
-        List<JpaBook> books = response
-            .body(new ParameterizedTypeReference<List<JpaBook>>() {});
+        var json = response.body(String.class);
+        return JsonUtils.tryReadAsList(JpaBook.class, DataSource.ofStringUtf8(json))
+                .mapSuccessWhenPresent(Can::ofCollection);
 
-        return Try.success(Can.ofCollection(books));
+      //TODO seems broken since Spring Boot 4.0.1
+//        List<JpaBook> books = response
+//            .body(new ParameterizedTypeReference<List<JpaBook>>() {});
+//
+//        return Try.success(Can.ofCollection(books));
     }
 
     public Try<CalendarEvent> echoCalendarEvent(

@@ -88,10 +88,8 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(2)
     void bookOfTheWeek_viaRestEndpoint() {
-        var entity = restService.getRecommendedBookOfTheWeek(restClient)
-                .ifFailureFail();
-
-        var bookOfTheWeek = entity.valueAsNonNullElseFail();
+        var bookOfTheWeek = restService.getRecommendedBookOfTheWeek(restClient)
+                .valueAsNonNullElseFail();
 
         assertNotNull(bookOfTheWeek);
         assertEquals("Book of the week", bookOfTheWeek.getName());
@@ -160,10 +158,8 @@ class RestServiceTest extends RegressionTestWithJpaFixtures {
 
     @Test @Order(8)
     void listBooks_fromInventoryAsJaxbVm_viaRestEndpoint() {
-        var entity = restService.getBooksFromInventoryAsJaxbVm(restClient)
-                .ifFailure(Assertions::fail);
-
-        var books = entity.valueAsNonNullElseFail();
+        var books = restService.getBooksFromInventoryAsJaxbVm(restClient)
+                .valueAsNonNullElseFail();
 
         var expectedBookTitles = JpaTestFixtures.expectedBookTitles();
 

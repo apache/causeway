@@ -156,9 +156,8 @@ implements
     @Override
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(super.getMetaModelContext(), component, keyName);
-        if(componentHintKey != null) {
+        if(componentHintKey != null)
             return componentHintKey.get(getOwnerBookmark());
-        }
         return null;
     }
 
@@ -181,7 +180,7 @@ implements
     }
 
     @Override
-    public ObjectIcon getIcon(IconSize iconSize) {
+    public ObjectIcon getIcon(final IconSize iconSize) {
         return getManagedObject().getIcon(iconSize);
     }
 
@@ -218,17 +217,14 @@ implements
         // in other words: this guard only works if every entity has at least a property
         var ownerPojo = bookmarkedObjectModel.managedObject()
                 .getPojo();
-        if(ownerPojo==null) {
-            throw new ObjectNotFoundException(
-                    bookmarkedObjectModel.bookmark().identifier());
-        }
+        if(ownerPojo==null)
+            throw new ObjectNotFoundException(bookmarkedObjectModel.bookmark());
 
         var propIdentifier = property.getFeatureIdentifier();
         var propertyModels = propertyModels();
         final UiAttributeWkt existingPropertyModel = propertyModels.get(propIdentifier);
-        if (existingPropertyModel != null) {
+        if (existingPropertyModel != null)
             return existingPropertyModel;
-        }
 
         var propertyInteractionModel = new PropertyInteractionWkt(
                 bookmarkedObjectModel,
