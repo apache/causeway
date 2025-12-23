@@ -114,15 +114,15 @@ public interface Consent {
         /**
          * {@code Pi}: origin=PROGRAMMING_MODEL, nature=implicit (NO_ICON_UNLESS_PROTOTYPING)<br>
          * {@code Pe}: origin=PROGRAMMING_MODEL, nature=explicit (SHOW_BAN_ICON)<br>
-         * {@code S(e)}: origin=SECURITY, nature=explicit (SHOW_BAN_ICON)<br>
+         * {@code Se}: origin=SECURITY, nature=explicit (SHOW_BAN_ICON)<br>
          * <p>
          * {@code Pi ৹ Pi := pick any or concat}<br>
          * {@code Pe ৹ Pe := pick any or concat}<br>
-         * {@code S(e) ৹ S(e) := pick any or concat}<br>
+         * {@code Se ৹ Se := pick any or concat}<br>
          * <br>
          * {@code Pi ৹ Pe := Pe}<br>
-         * {@code Pi ৹ S(e) := Pi}<br>
-         * {@code Pe ৹ S(e) := Pe}<br>
+         * {@code Pi ৹ Se := Pi}<br>
+         * {@code Pe ৹ Se := Pe}<br>
          * In other words: winner picking is driven by <i>origin</i> first and <i>nature</i> second.
          */
         public VetoReason reduce(final VetoReason other) {
@@ -187,8 +187,8 @@ public interface Consent {
 
     /**
      * Optionally the {@link VetoReason}, why consent is being vetoed, based on whether not allowed.
-     * <p>
-     * Will correspond to the {@link InteractionResult#getReason() reason} in
+     *
+     * <p>Will correspond to the {@link InteractionResult#getReason() reason} in
      * the contained {@link #getInteractionResult() InteractionResult} (if one
      * was specified).
      */
@@ -204,8 +204,7 @@ public interface Consent {
     /**
      * Description of the interaction that this consent represents.
      *
-     * <p>
-     * May be <tt>null</tt>.
+     * <p>May be <tt>null</tt>.
      */
     String getDescription();
 
@@ -222,7 +221,6 @@ public interface Consent {
      * The {@link InteractionResult} that created this {@link Consent}.
      *
      * @return - may be <tt>null</tt> if created as a legacy {@link Consent}.
-     *
      */
     public InteractionResult getInteractionResult();
 

@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType;
 
 class ActionAnnotationFacetFactoryTest_RestrictTo
 extends ActionAnnotationFacetFactoryTest {
@@ -49,7 +49,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processRestrictTo(facetFactory, processMethodContext);
             // then
-            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final HiddenFacetForDeploymentType facet = facetedMethod.getFacet(HiddenFacetForDeploymentType.class);
             assertNotNull(facet);
         });
     }
@@ -67,7 +67,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processRestrictTo(facetFactory, processMethodContext);
             // then
-            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final HiddenFacetForDeploymentType facet = facetedMethod.getFacet(HiddenFacetForDeploymentType.class);
             assertNull(facet);
         });
     }
@@ -85,7 +85,7 @@ extends ActionAnnotationFacetFactoryTest {
             // when
             processRestrictTo(facetFactory, processMethodContext);
             // then
-            final PrototypeFacet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final HiddenFacetForDeploymentType facet = facetedMethod.getFacet(HiddenFacetForDeploymentType.class);
             assertNull(facet);
         });
     }

@@ -51,7 +51,7 @@ import org.apache.causeway.core.config.metamodel.services.ApplicationFeaturesIni
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.SingleIntValueFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -359,7 +359,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
     }
 
     protected boolean isHidden(final ObjectSpecification spec) {
-        return HiddenFacet.isAlwaysHidden(spec);
+        return HiddenFacetForLayout.isAlwaysHidden(spec);
     }
 
     protected boolean isBuiltIn(final ObjectSpecification spec) {

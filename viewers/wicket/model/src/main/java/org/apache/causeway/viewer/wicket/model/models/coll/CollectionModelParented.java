@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.model.models.coll;
 
 import org.apache.wicket.Component;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -29,9 +30,9 @@ import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public final class CollectionModelParented
 extends CollectionModelAbstract
@@ -55,7 +56,7 @@ implements
                         .getCollectionElseFail(layoutData.getId()); // collection's member-id
         var bookmarkedObject = objectModel.bookmarkedObjectModel();
         var tableInteractive = DataTableInteractive.forCollection(
-            ManagedCollection.of(bookmarkedObject.getObject(), coll, Where.NOT_SPECIFIED));
+            ManagedCollection.of(bookmarkedObject.getObject(), coll, WktVisibility.visibilityConstraint(Where.NOT_SPECIFIED)));
 
         return new CollectionModelParented(
                 bookmarkedObject,

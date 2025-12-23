@@ -45,6 +45,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 import org.apache.causeway.viewer.wicket.model.util.PageUtils;
 import org.apache.causeway.viewer.wicket.model.whereAmI.WhereAmI;
@@ -85,9 +86,8 @@ public class DomainObjectPage extends PageAbstract {
      */
     public static DomainObjectPage forPageParameters(final PageParameters pageParameters) {
         var bookmark = PageParameterUtils.toBookmark(pageParameters);
-        if(!bookmark.isPresent()) {
-            throw new RestartResponseException(Application.get().getHomePage());
-        }
+        if(!bookmark.isPresent())
+			throw new RestartResponseException(Application.get().getHomePage());
         return new DomainObjectPage(
                 pageParameters,
                 UiObjectWkt.ofPageParameters(pageParameters));
@@ -143,9 +143,8 @@ public class DomainObjectPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!model.isVisible()) {
-            throw new ObjectMember.AuthorizationException();
-        }
+        if(!model.isVisible(WktVisibility.WHAT_VIEWER))
+			throw new ObjectMember.AuthorizationException();
 
         var objectSpec = model.getTypeOfSpecification();
 
@@ -209,7 +208,7 @@ public class DomainObjectPage extends PageAbstract {
     	super.onDetach();
     	model.detach();
     }
-    
+
     // -- REFRESH ENTITIES
 
     @Override
@@ -217,7 +216,7 @@ public class DomainObjectPage extends PageAbstract {
         var mo = model.getObject();
         if(!PageUtils.isAjax()) {
         	//CAUSEWAY-3944: on normal page request, make sure entities are in sync with the db before rendering
-        	ManagedObjects.refreshEntity(mo);	
+        	ManagedObjects.refreshEntity(mo);
         }
         ManagedObjects.refreshViewmodel(mo,
                 ()->PageParameterUtils
@@ -245,9 +244,8 @@ public class DomainObjectPage extends PageAbstract {
             final Can<PageRenderSubscriber> pageRenderSubscribers,
             final BiFunction<PageRenderSubscriber, Bookmark, Void> handler) {
 
-        if(pageRenderSubscribers.isEmpty()) {
-            return;
-        }
+        if(pageRenderSubscribers.isEmpty())
+			return;
 
         // guard against unspecified
         ManagedObjects.asSpecified(model.getObject())

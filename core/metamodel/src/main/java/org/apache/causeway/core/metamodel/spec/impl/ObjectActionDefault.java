@@ -30,7 +30,6 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.RecoverableException;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.command.Command;
@@ -48,11 +47,14 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.use.ActionUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.ActionValidityContext;
@@ -77,9 +79,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
 
     public static ActionScope getType(final String typeStr) {
         final ActionScope type = ActionScope.valueOf(typeStr);
-        if (type == null) {
-            throw new IllegalArgumentException();
-        }
+        if (type == null)
+			throw new IllegalArgumentException();
         return type;
     }
 
@@ -134,9 +135,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
                 .map(ActionInvocationFacet::getDeclaringType);
         // JUnit support
         if(testing
-                && declaringType.isEmpty()) {
-            return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getDeclaringClass());
-        }
+                && declaringType.isEmpty())
+			return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getDeclaringClass());
         return declaringType.orElseThrow(()->_Exceptions
                 .illegalState("missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
     }
@@ -174,9 +174,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
                 .map(ActionInvocationFacet::getReturnType);
         // JUnit support
         if(testing
-                && returType.isEmpty()) {
-            return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getReturnType());
-        }
+                && returType.isEmpty())
+			return specLoaderInternal().loadSpecification(getFacetedMethod().methodFacade().getReturnType());
         return returType.orElseThrow(()->_Exceptions
                 .illegalState("framework bug: missing ActionInvocationFacet on action %s", getFeatureIdentifier()));
     }
@@ -187,10 +186,9 @@ implements ObjectAction, HasSpecificationLoaderInternal {
      */
     @Override
     public boolean hasReturn() {
-        if(getReturnType() == null) {
-            // this shouldn't happen; return Type always defined, even if represents void.class
+        if(getReturnType() == null)
+			// this shouldn't happen; return Type always defined, even if represents void.class
             return false;
-        }
         return !getReturnType().isVoidPrimitive();
     }
 
@@ -202,7 +200,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     }
 
     private static ActionScope getScope(final FacetHolder facetHolder) {
-        return facetHolder.containsFacet(PrototypeFacet.class)
+        return facetHolder.containsFacet(HiddenFacetForDeploymentType.class)
             ? ActionScope.PROTOTYPE
             : ActionScope.PRODUCTION;
     }
@@ -268,10 +266,9 @@ implements ObjectAction, HasSpecificationLoaderInternal {
 
     ObjectActionParameter getParameter(final int position) {
         var parameters = getParameters();
-        if (position >= parameters.size()) {
-            throw new IllegalArgumentException(
+        if (position >= parameters.size())
+			throw new IllegalArgumentException(
                     "getParameter(int): only " + parameters.size() + " parameters, position=" + position);
-        }
         return parameters.getElseFail(position);
     }
 
@@ -281,14 +278,14 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     public VisibilityContext createVisibleInteractionContext(
             final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
         return new ActionVisibilityContext(
                 headFor(target),
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where,
-                InteractionUtils.renderPolicy(target));
+                visibilityConstraint,
+                RenderPolicy.forNonActionParam(target));
     }
 
     // -- USABLE
@@ -296,15 +293,13 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject target,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new ActionUsabilityContext(
                 headFor(target),
                 this,
                 getFeatureIdentifier(),
                 interactionInitiatedBy,
-                where,
-                InteractionUtils.renderPolicy(target));
+                RenderPolicy.forNonActionParam(target));
     }
 
     // -- VALIDATE
@@ -396,33 +391,30 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     // -- EXECUTE
 
     @Override
-    public ManagedObject executeWithRuleChecking(
+    public final ManagedObject executeWithRuleChecking(
             final InteractionHead head,
             final Can<ManagedObject> arguments,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
 
         var target = head.owner();
 
         // see it?
-        final Consent visibility = isVisible(target, interactionInitiatedBy, where);
-        if (visibility.isVetoed()) {
-            throw new HiddenException();
-        }
+        final Consent visibility = isVisible(target, interactionInitiatedBy, visibilityConstraint);
+        if (visibility.isVetoed())
+			throw new HiddenException();
 
         // use it?
-        final Consent usability = isUsable(target, interactionInitiatedBy, where);
-        if(usability.isVetoed()) {
-            throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
-        }
+        final Consent usability = isUsable(target, interactionInitiatedBy, visibilityConstraint);
+        if(usability.isVetoed())
+			throw new DisabledException(usability.getReasonAsString().orElse("no reason given"));
 
         // do it?
         final Consent validity = isArgumentSetValid(head, arguments, interactionInitiatedBy);
-        if(validity.isVetoed()) {
-            throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
-        }
+        if(validity.isVetoed())
+			throw new RecoverableException(validity.getReasonAsString().orElse("no reason given"));
 
-        return execute(head, arguments, interactionInitiatedBy);
+        return execute(head, arguments, interactionInitiatedBy, visibilityConstraint.whatViewer());
     }
 
     /**
@@ -433,7 +425,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     public ManagedObject execute(
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
         _Assert.assertEquals(this.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
@@ -455,7 +448,7 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             }
         }
 
-        return this.executeInternal(head, argumentAdapters, interactionInitiatedBy);
+        return this.executeInternal(head, argumentAdapters, interactionInitiatedBy, whatViewer);
     }
 
     /**
@@ -464,10 +457,11 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     protected ManagedObject executeInternal(
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
         var actionInvocationFacet = getFacet(ActionInvocationFacet.class);
         return actionInvocationFacet
-                .invoke(this, head, argumentAdapters, interactionInitiatedBy);
+                .invoke(this, head, argumentAdapters, interactionInitiatedBy, whatViewer);
     }
 
     protected Optional<ActionInvocationFacet> getActionInvocationFacet() {
@@ -530,9 +524,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        if(head.owner().objSpec().isValue()) {
-            return; // do not record value type mixin actions
-        }
+        if(head.owner().objSpec().isValue())
+			return; // do not record value type mixin actions
 
         setupCommand(head,
                 interactionId->commandDtoFor(interactionId, head, argumentAdapters));
@@ -571,9 +564,8 @@ implements ObjectAction, HasSpecificationLoaderInternal {
     // -- HELPER
 
     protected String argsFor(final Can<ObjectActionParameter> parameters, final Can<ManagedObject> arguments) {
-        if(parameters.size() != arguments.size()) {
-            return "???"; // shouldn't happen
-        }
+        if(parameters.size() != arguments.size())
+			return "???"; // shouldn't happen
         return parameters.stream().map(IndexedFunction.zeroBased((i, param) -> {
             var id = param.getId();
             var argStr = argStr(id, arguments, i);

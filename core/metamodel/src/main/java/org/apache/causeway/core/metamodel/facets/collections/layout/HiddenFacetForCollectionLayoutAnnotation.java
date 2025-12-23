@@ -24,11 +24,11 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetForLayoutAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public class HiddenFacetForCollectionLayoutAnnotation
-extends HiddenFacetAbstract {
+extends HiddenFacetForLayoutAbstract {
 
     public static Optional<HiddenFacetForCollectionLayoutAnnotation> create(
             final Optional<CollectionLayout> collectionLayoutIfAny,

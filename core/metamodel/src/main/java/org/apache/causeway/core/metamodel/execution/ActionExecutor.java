@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -42,6 +44,7 @@ import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
@@ -52,9 +55,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
 //@Slf4j
@@ -68,6 +71,7 @@ implements
     public static ActionExecutor forAction(
             final @NonNull FacetHolder facetHolder,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
+            final @NonNull WhatViewer whatViewer,
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters,
             final @NonNull ObjectAction owningAction,
@@ -77,15 +81,14 @@ implements
                 "action's parameter count and provided argument count must match");
 
         // guard against malformed argumentAdapters
-        argumentAdapters.forEach(arg->{if(!ManagedObjects.isSpecified(arg)) {
-            throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
-        }});
+        argumentAdapters.forEach(arg->{if(!ManagedObjects.isSpecified(arg))
+			throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);});
 
-        var method = actionInvocationFacetAbstract.getMethods().getFirstElseFail();
+        var method = actionInvocationFacetAbstract.methods().getFirstElseFail();
 
         return new ActionExecutor(
                 owningAction.getMetaModelContext(), facetHolder,
-                interactionInitiatedBy, owningAction, method, head, argumentAdapters, actionInvocationFacetAbstract);
+                interactionInitiatedBy, whatViewer, owningAction, method, head, argumentAdapters, actionInvocationFacetAbstract);
     }
 
     // -- CONSTRUCTION
@@ -97,6 +100,9 @@ implements
     private final @NonNull FacetHolder facetHolder;
     @Getter
     private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
+    @Getter @Accessors(fluent = true)
+    private final @NonNull WhatViewer whatViewer;
+
     @Getter
     private final @NonNull ObjectAction owningAction;
     @Getter
@@ -225,9 +231,8 @@ implements
                     ()->CanonicalInvoker.invoke(method, targetPojo, executionParameters),
                     targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
 
-        } else {
-            return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
-        }
+        } else
+			return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
     }
 
     private static Can<ManagedObject> updateArguments(

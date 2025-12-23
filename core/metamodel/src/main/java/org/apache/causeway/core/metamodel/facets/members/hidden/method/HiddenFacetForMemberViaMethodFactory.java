@@ -16,33 +16,38 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.hidden;
+package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
 import jakarta.inject.Inject;
 
+import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
-import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.facets.members.support.MemberSupportFacetFactoryAbstract;
+import org.apache.causeway.core.metamodel.methods.MethodFinder;
 
-/**
- * Installs the {@link HiddenTypeFacetFromAuthorization} on the
- * {@link ObjectSpecification}.
- */
-public class HiddenTypeFacetFromAuthorizationFactory
-extends FacetFactoryAbstract {
+public class HiddenFacetForMemberViaMethodFactory
+extends MemberSupportFacetFactoryAbstract {
 
     @Inject
-    public HiddenTypeFacetFromAuthorizationFactory(final MetaModelContext mmc) {
-        super(mmc, FeatureType.OBJECTS_ONLY);
+    public HiddenFacetForMemberViaMethodFactory(final MetaModelContext mmc) {
+        super(mmc, FeatureType.MEMBERS, MemberSupportPrefix.HIDE);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContext) {
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
-        FacetUtil.addFacet(new HiddenTypeFacetFromAuthorization(facetHolder));
+    protected void search(
+            final ProcessMethodContext processMethodContext,
+            final MethodFinder methodFinder) {
+
+        methodFinder
+        .streamMethodsMatchingSignature(NO_ARG)
+        .peek(processMethodContext::removeMethod)
+        .forEach(hideMethod->{
+            addFacet(
+                    new HiddenFacetForMemberViaMethod(
+                            hideMethod, processMethodContext.getFacetHolder()));
+        });
+
     }
 
 }

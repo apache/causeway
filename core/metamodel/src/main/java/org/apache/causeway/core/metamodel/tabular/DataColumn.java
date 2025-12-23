@@ -29,8 +29,8 @@ public interface DataColumn {
      * Corresponds to the association's id.
      */
     String columnId();
+
     ObjectAssociation associationMetaModel();
     Observable<String> columnFriendlyNameObservable();
     Observable<Optional<String>> columnDescriptionObservable();
-
 }

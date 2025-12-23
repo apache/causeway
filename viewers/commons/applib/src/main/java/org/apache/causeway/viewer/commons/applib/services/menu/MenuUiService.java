@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.viewer.commons.applib.services.menu;
 
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 
 /**
@@ -25,6 +26,6 @@ import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiMod
  */
 public interface MenuUiService {
 
-    NavbarUiModel getMenu();
+    NavbarUiModel getMenu(WhatViewer whatViewer);
 
 }
