@@ -187,8 +187,8 @@ public interface Consent {
 
     /**
      * Optionally the {@link VetoReason}, why consent is being vetoed, based on whether not allowed.
-     * <p>
-     * Will correspond to the {@link InteractionResult#getReason() reason} in
+     * 
+     * <p>Will correspond to the {@link InteractionResult#getReason() reason} in
      * the contained {@link #getInteractionResult() InteractionResult} (if one
      * was specified).
      */
@@ -204,8 +204,7 @@ public interface Consent {
     /**
      * Description of the interaction that this consent represents.
      *
-     * <p>
-     * May be <tt>null</tt>.
+     * <p>May be <tt>null</tt>.
      */
     String getDescription();
 
@@ -222,7 +221,6 @@ public interface Consent {
      * The {@link InteractionResult} that created this {@link Consent}.
      *
      * @return - may be <tt>null</tt> if created as a legacy {@link Consent}.
-     *
      */
     public InteractionResult getInteractionResult();
 

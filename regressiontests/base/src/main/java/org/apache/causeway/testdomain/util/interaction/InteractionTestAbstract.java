@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
 
+import org.jspecify.annotations.Nullable;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -38,6 +38,9 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Sets;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.CollectionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.PropertyInteraction;
@@ -70,19 +73,22 @@ public abstract class InteractionTestAbstract extends CausewayIntegrationTestAbs
     protected ActionInteraction startActionInteractionOn(final Class<?> type, final String actionId, final Where where) {
         var viewModel = factoryService.viewModel(type);
         var managedObject = objectManager.adapt(viewModel);
-        return ActionInteraction.start(managedObject, actionId, where);
+        var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.USER, where);
+        return ActionInteraction.start(managedObject, actionId, iConstraint);
     }
 
     protected PropertyInteraction startPropertyInteractionOn(final Class<?> type, final String propertyId, final Where where) {
         var viewModel = factoryService.viewModel(type);
         var managedObject = objectManager.adapt(viewModel);
-        return PropertyInteraction.start(managedObject, propertyId, where);
+        var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.USER, where);
+        return PropertyInteraction.start(managedObject, propertyId, iConstraint);
     }
 
     protected CollectionInteraction startCollectionInteractionOn(final Class<?> type, final String collectionId, final Where where) {
         var viewModel = factoryService.viewModel(type);
         var managedObject = objectManager.adapt(viewModel);
-        return CollectionInteraction.start(managedObject, collectionId, where);
+        var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.USER, where);
+        return CollectionInteraction.start(managedObject, collectionId, iConstraint);
     }
 
     // -- SHORTCUTS

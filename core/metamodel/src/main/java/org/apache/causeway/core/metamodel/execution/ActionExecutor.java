@@ -81,7 +81,7 @@ implements
             throw _Exceptions.illegalArgument("arguments must be specified for action %s", owningAction);
         }});
 
-        var method = actionInvocationFacetAbstract.getMethods().getFirstElseFail();
+        var method = actionInvocationFacetAbstract.methods().getFirstElseFail();
 
         return new ActionExecutor(
                 owningAction.getMetaModelContext(), facetHolder,

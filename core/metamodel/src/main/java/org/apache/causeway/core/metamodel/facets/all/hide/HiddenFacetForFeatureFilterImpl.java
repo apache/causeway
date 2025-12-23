@@ -16,36 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.param.hide;
+package org.apache.causeway.core.metamodel.facets.all.hide;
 
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.vis.ParamVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
-public abstract class ActionParameterHiddenFacetAbstract
-extends FacetAbstract
-implements ActionParameterHiddenFacet {
-
-    private static final Class<? extends Facet> type() {
-        return ActionParameterHiddenFacet.class;
-    }
-
-    public ActionParameterHiddenFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
+public record HiddenFacetForFeatureFilterImpl(
+		FacetHolder facetHolder
+		) implements HiddenFacetForFeatureFilter {
+	
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForFeatureFilter.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
+	
     @Override
-    public String hides(final VisibilityContext context) {
-        if (!(context instanceof ParamVisibilityContext)) {
-            return null;
-        }
-        var actionArgVisibilityContext = (ParamVisibilityContext) context;
-        return isHidden(
-                    actionArgVisibilityContext.target(),
-                    actionArgVisibilityContext.args())
-                ? "Hidden"
-                : null;
+    public String hides(final VisibilityContext vc) {
+    	return null;
     }
+
 }

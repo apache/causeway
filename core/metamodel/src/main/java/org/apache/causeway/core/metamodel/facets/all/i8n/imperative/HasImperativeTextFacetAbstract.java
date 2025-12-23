@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.all.i8n.imperative;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -34,7 +36,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public class HasImperativeTextFacetAbstract
 extends FacetAbstract
@@ -44,7 +46,8 @@ implements
 
     protected final TranslationContext translationContext;
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull Can<MethodFacade> methods;
 
     protected HasImperativeTextFacetAbstract(
             final Class<? extends Facet> facetType,
@@ -64,7 +67,7 @@ implements
     }
 
     @Override
-    public final Intent getIntent() {
+    public final Intent intent() {
         return Intent.UI_HINT;
     }
 

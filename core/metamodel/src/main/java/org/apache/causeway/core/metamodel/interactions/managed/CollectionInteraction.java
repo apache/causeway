@@ -24,7 +24,7 @@ import java.util.function.Function;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public record CollectionInteraction(
@@ -34,9 +34,9 @@ implements MemberInteraction<ManagedCollection, CollectionInteraction> {
     public static final CollectionInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
+            final @NonNull InteractionConstraint iConstraint) {
 
-        var managedCollection = ManagedCollection.lookupCollection(owner, memberId, where);
+        var managedCollection = ManagedCollection.lookupCollection(owner, memberId, iConstraint);
 
         final InteractionRailway<ManagedCollection> railway = managedCollection.isPresent()
                 ? InteractionRailway.success(managedCollection.get())

@@ -16,24 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets;
+package org.apache.causeway.core.metamodel.facets.members.hidden.method;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
+import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public interface HasImperativeAspect
-extends ImperativeFacet {
-
-    ImperativeAspect imperativeAspect();
-
-    @Override
-    default Can<MethodFacade> methods() {
-        return imperativeAspect().methods();
-    }
-
-    @Override
-    default Intent intent() {
-        return imperativeAspect().intent();
-    }
+/**
+ * Optionally hides a property, collection or action based on the state of the target
+ * {@link ManagedObject object}.
+ *
+ * <p>In the standard Apache Causeway Programming Model, corresponds to invoking the
+ * <tt>hideXxx</tt> support method for the member.
+ */
+public interface HiddenFacetForMember extends HidingInteractionAdvisor {
 
 }

@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.facets.param.defaults.methodnum;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
@@ -34,13 +36,14 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public class ActionParameterDefaultsFacetViaMethod
 extends ActionParameterDefaultsFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull Can<MethodFacade> methods;
     private final int paramNum;
     private final Optional<ResolvedConstructor> patConstructor;
 
@@ -63,7 +66,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Intent getIntent() {
+    public Intent intent() {
         return Intent.DEFAULTS;
     }
 

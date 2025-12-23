@@ -200,22 +200,19 @@ record _DomainResourceHelper(
             final @NonNull JsonRepresentation arguments,
             final ActionResultReprRenderer.@NonNull SelfLink selfLink) {
 
-        var where = resourceContext.where();
-
         // lombok issue, needs explicit cast here
-        var actionInteraction = ActionInteraction.start(objectAdapter, actionId, where)
+        var actionInteraction = ActionInteraction.start(objectAdapter, actionId, resourceContext.iConstraint())
         .checkVisibility()
         .checkUsability(intent)
         .checkSemanticConstraint(semanticConstraint);
 
         var pendingArgs = actionInteraction.startParameterNegotiation().orElse(null);
 
-        if(pendingArgs==null) {
-            // no such action or not visible or not usable
+        if(pendingArgs==null)
+			// no such action or not visible or not usable
             throw InteractionFailureHandler.onFailure(actionInteraction
                     .getInteractionVeto()
                     .orElseGet(()->InteractionVeto.notFound(Identifier.Type.ACTION, actionId))); // unexpected code reach
-        }
 
         var hasParams = pendingArgs.getParamCount()>0;
 
@@ -238,10 +235,9 @@ record _DomainResourceHelper(
 
             });
 
-            if(vetoCount.intValue()>0) {
-                throw InteractionFailureHandler.onParameterListInvalid(
+            if(vetoCount.intValue()>0)
+				throw InteractionFailureHandler.onParameterListInvalid(
                         InteractionVeto.actionParamInvalid("error parsing arguments"), arguments);
-            }
 
             var argAdapters = paramsOrVetos.map(Railway::getSuccessElseFail);
             pendingArgs.setParamValues(argAdapters);
@@ -258,25 +254,22 @@ record _DomainResourceHelper(
                 }
             });
 
-            if(vetoCount.intValue()>0) {
-                throw InteractionFailureHandler.onParameterListInvalid(
+            if(vetoCount.intValue()>0)
+				throw InteractionFailureHandler.onParameterListInvalid(
                         InteractionVeto.actionParamInvalid(
                                 String.format("%d argument(s) failed validation", vetoCount.intValue())),
                             arguments);
-            }
 
         }
 
         var actionConsent = pendingArgs.validateParameterSetForAction();
-        if(actionConsent.isVetoed()) {
-            throw InteractionFailureHandler.onParameterListInvalid(
+        if(actionConsent.isVetoed())
+			throw InteractionFailureHandler.onParameterListInvalid(
                     InteractionVeto.invalid(actionConsent),
                     arguments);
-        }
 
-        if(resourceContext.isValidateOnly()) {
-            return ResponseEntity.noContent().build(); // do not progress any further
-        }
+        if(resourceContext.isValidateOnly())
+			return ResponseEntity.noContent().build(); // do not progress any further
 
         var resultOrVeto = actionInteraction.invokeWith(pendingArgs);
 

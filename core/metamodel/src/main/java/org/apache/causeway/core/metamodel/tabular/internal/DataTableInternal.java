@@ -42,6 +42,9 @@ import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.commons.internal.collections._Streams;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
@@ -74,7 +77,7 @@ implements DataTableInteractive {
 
     public static DataTableInternal forCollection(
             final ManagedCollection managedCollection) {
-        return new DataTableInternal(managedCollection, managedCollection.getWhere(),
+        return new DataTableInternal(managedCollection, managedCollection.iConstraint().where(),
             managedCollection
             .streamElements()
             .collect(Can.toCan()));
@@ -85,16 +88,15 @@ implements DataTableInteractive {
             final ManagedObject actionResult) {
 
         if(actionResult==null) {
-            new DataTableInternal(managedAction, managedAction.getWhere(), Can.empty());
+            new DataTableInternal(managedAction, managedAction.iConstraint().where(), Can.empty());
         }
-        if(!(actionResult instanceof PackedManagedObject)) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        if(!(actionResult instanceof PackedManagedObject))
+			throw _Exceptions.unexpectedCodeReach();
 
         var elements = ((PackedManagedObject)actionResult).unpack();
         elements.forEach(ManagedObject::getBookmark);
 
-        return new DataTableInternal(managedAction, managedAction.getWhere(), elements);
+        return new DataTableInternal(managedAction, managedAction.iConstraint().where(), elements);
     }
 
     // -- CONSTRUCTION
@@ -356,22 +358,20 @@ implements DataTableInteractive {
     }
 
     @Override
-    public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
+    public ActionInteraction startAssociatedActionInteraction(final String actionId, final InteractionConstraint iConstraint) {
 
         if(managedMember.getOwner().specialization().isEmpty()
-            || managedMember.getOwner().getEntityState().isTransientOrRemoved()) {
-            throw _Exceptions.illegalArgument("cannot start action interaction on missing or deleted action owner");
-        }
+            || managedMember.getOwner().getEntityState().isTransientOrRemoved())
+			throw _Exceptions.illegalArgument("cannot start action interaction on missing or deleted action owner");
 
         var featureId = managedMember.getIdentifier();
-        if(!featureId.type().isPropertyOrCollection()) {
-            return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
+        if(!featureId.type().isPropertyOrCollection())
+			return ActionInteraction.empty(String.format("[no such collection %s; instead got %s;"
                     + "(while searching for an associated action %s)]",
                     featureId,
                     featureId.type(),
                     actionId));
-        }
-        return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, where, this);
+        return ActionInteraction.startWithMultiselect(managedMember.getOwner(), actionId, iConstraint, this);
     }
 
     // -- EXPORT
@@ -385,7 +385,7 @@ implements DataTableInteractive {
                     .map(DataColumn::associationMetaModel),
                 dataRowsFilteredAndSortedObservable().getValue()
                     .stream()
-                    .map(dr->dr.rowElement())
+                    .map(DataRow::rowElement)
                     .collect(Can.toCan()));
     }
 
@@ -446,11 +446,11 @@ implements DataTableInteractive {
         @Override
         public DataTableInternal recreateDataTableModel(final ManagedObject owner) {
             var memberId = featureId.memberLogicalName();
-
+            var iConstraint = new InteractionConstraint(WhatViewer.noViewer(), InteractionInitiatedBy.FRAMEWORK, where);
             final ManagedMember managedMember = featureId.type().isPropertyOrCollection()
-                    ? ManagedCollection.lookupCollection(owner, memberId, where)
+                    ? ManagedCollection.lookupCollection(owner, memberId, iConstraint)
                         .orElseThrow()
-                    : ManagedAction.lookupAction(owner, memberId, where)
+                    : ManagedAction.lookupAction(owner, memberId, iConstraint)
                         .orElseThrow();
 
             var dataTableInteractive = new DataTableInternal(managedMember, where,
@@ -484,7 +484,7 @@ implements DataTableInteractive {
                 this.selectedRowIndexes = tableInteractive.getSelectedRowIndexes();
             });
         }
-        
+
         @Override
         public String toString() {
         	return "Memento[featureId=%s,dataTable.rowCount=%d]".formatted(

@@ -479,7 +479,7 @@ implements HasMetaModelContext {
     protected final void assertMethodEqualsFirstIn(
             final @NonNull ResolvedMethod method,
             final @NonNull ImperativeFacet imperativeFacet) {
-        _Utils.assertMethodEquals(method, imperativeFacet.getMethods().getFirstElseFail().asMethodElseFail());
+        _Utils.assertMethodEquals(method, imperativeFacet.methods().getFirstElseFail().asMethodElseFail());
     }
 
 }

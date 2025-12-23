@@ -33,6 +33,7 @@ import static graphql.schema.GraphQLEnumValueDefinition.newEnumValueDefinition;
 
 import org.springframework.stereotype.Component;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
@@ -40,6 +41,9 @@ import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -104,10 +108,22 @@ public class Context {
                 .toList();
     }
 
+    // -- UTILITY
+
+    private static WhatViewer WHAT_VIEWER = new WhatViewer("Graphql");
+	public static InteractionConstraint iConstraint(final Where where) {
+		return new InteractionConstraint(WHAT_VIEWER, InteractionInitiatedBy.USER, where);
+	}
+	private static InteractionConstraint DEFAULT_INTERACTION_CONSTRAINT = iConstraint(Where.ANYWHERE);
+    public static InteractionConstraint iConstraint() {
+    	return DEFAULT_INTERACTION_CONSTRAINT;
+    }
+
+    // -- HELPER
+
     private void computeLogicalTypeNames() {
-        if (logicalTypeNames != null) {
-            return;
-        }
+        if (logicalTypeNames != null)
+			return;
         logicalTypeNames = doComputeLogicalTypeNames();
         graphQLTypeRegistry.addTypeIfNotAlreadyPresent(logicalTypeNames);
     }

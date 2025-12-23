@@ -21,7 +21,10 @@ package org.apache.causeway.core.metamodel.spec.impl;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.exceptions.unrecoverable.DomainModelException;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -37,6 +40,7 @@ import org.apache.causeway.core.metamodel.facets.param.autocomplete.ActionParame
 import org.apache.causeway.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.causeway.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.causeway.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -51,7 +55,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 abstract class ObjectActionParameterAbstract
 implements
@@ -188,9 +191,8 @@ implements
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var autoCompleteFacet = getFacet(ActionParameterAutoCompleteFacet.class);
-        if (autoCompleteFacet == null) {
-            return Can.empty();
-        }
+        if (autoCompleteFacet == null)
+			return Can.empty();
 
         var paramSpec = getElementType();
 
@@ -226,9 +228,8 @@ implements
 
         var paramSpec = getElementType();
         var choicesFacet = getFacet(ActionParameterChoicesFacet.class);
-        if (choicesFacet == null) {
-            return Can.empty();
-        }
+        if (choicesFacet == null)
+			return Can.empty();
 
         var visibleChoices = choicesFacet.getChoices(paramSpec,
                 pendingArgs.actionInteractionHead(),
@@ -296,11 +297,10 @@ implements
             // in other words <param type> is assignable from <choices type>
 
             // TODO: should implement this instead as a MetaModelValidator (subject to [CAUSEWAY-3172])
-            if (!choiceWrappedSpec.isOfType(paramWrappedSpec)) {
-                throw new DomainModelException(String.format(
+            if (!choiceWrappedSpec.isOfType(paramWrappedSpec))
+				throw new DomainModelException(String.format(
                         "Type incompatible with parameter type; expected %s, but was %s",
                         paramSpec.getFullIdentifier(), choiceClass.getName()));
-            }
         }
     }
 
@@ -310,10 +310,10 @@ implements
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         return new ParamVisibilityContext(
-                head, parentAction, getFeatureIdentifier(), pendingArgs, position, interactionInitiatedBy,
+                head, parentAction, getFeatureIdentifier(), pendingArgs, position, iConstraint.withWhere(Where.OBJECT_FORMS),
                 RenderPolicy.forActionParameters());
     }
 
@@ -321,10 +321,10 @@ implements
     public Consent isVisible(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         var visibilityContext = createArgumentVisibilityContext(
-                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), iConstraint);
 
         return InteractionUtils.isVisibleResult(this, visibilityContext).createConsent();
     }
@@ -335,7 +335,7 @@ implements
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         return new ParamUsabilityContext(
                 head,
@@ -343,7 +343,7 @@ implements
                 getFeatureIdentifier(),
                 pendingArgs,
                 position,
-                interactionInitiatedBy,
+                iConstraint,
                 RenderPolicy.forActionParameters());
     }
 
@@ -351,10 +351,10 @@ implements
     public Consent isUsable(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         var usabilityContext = createArgumentUsabilityContext(
-                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), iConstraint);
 
         var usableResult = InteractionUtils.isUsableResult(this, usabilityContext);
         return usableResult.createConsent();
@@ -367,20 +367,20 @@ implements
             final InteractionHead head,
             final Can<ManagedObject> proposedArguments,
             final int position,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         return new ParamValidityContext(
-                head, parentAction, getFeatureIdentifier(), proposedArguments, position, interactionInitiatedBy);
+                head, parentAction, getFeatureIdentifier(), proposedArguments, position, iConstraint);
     }
 
     @Override
     public Consent isValid(
             final InteractionHead head,
             final Can<ManagedObject> pendingArgs,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionConstraint iConstraint) {
 
         var validityContext = createProposedArgumentInteractionContext(
-                head, pendingArgs, getParameterIndex(), interactionInitiatedBy);
+                head, pendingArgs, getParameterIndex(), iConstraint);
 
         var validResult = InteractionUtils.isValidResult(this, validityContext);
         return validResult.createConsent();

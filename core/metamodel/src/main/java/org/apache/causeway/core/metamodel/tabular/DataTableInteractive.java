@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.binding.Bindable;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
@@ -89,7 +90,7 @@ public interface DataTableInteractive extends MultiselectChoices {
 
     // -- ASSOCIATED ACTION
 
-    ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where);
+    ActionInteraction startAssociatedActionInteraction(String actionId, InteractionConstraint iConstraint);
 
     // -- ROW COUNT
 

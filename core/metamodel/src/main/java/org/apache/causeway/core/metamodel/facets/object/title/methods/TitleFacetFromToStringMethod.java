@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.title.methods;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -33,13 +34,14 @@ import org.apache.causeway.core.metamodel.facets.object.title.TitleFacetAbstract
 import org.apache.causeway.core.metamodel.facets.object.title.TitleRenderRequest;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public class TitleFacetFromToStringMethod
 extends TitleFacetAbstract
 implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull ImperativeAspect imperativeAspect;
 
     public static Optional<TitleFacet> create(
             final @Nullable ResolvedMethod methodIfAny,

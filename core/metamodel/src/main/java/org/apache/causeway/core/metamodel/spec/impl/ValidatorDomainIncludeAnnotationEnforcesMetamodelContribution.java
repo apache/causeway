@@ -105,7 +105,7 @@ extends MetaModelValidatorAbstract {
             .flatMap(Optional::stream)
             .filter(ImperativeFacet.class::isInstance)
             .map(ImperativeFacet.class::cast)
-            .map(ImperativeFacet::getMethods)
+            .map(ImperativeFacet::methods)
             .flatMap(Can::stream)
             .map(MethodFacade::asMethodForIntrospection)
             .forEach(supportMethods::add);

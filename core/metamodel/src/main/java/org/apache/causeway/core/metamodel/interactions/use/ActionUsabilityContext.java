@@ -19,11 +19,10 @@
 package org.apache.causeway.core.metamodel.interactions.use;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.wrapper.events.ActionUsabilityEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionContextType;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.interactions.ActionInteractionContext;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.interactions.InteractionContext;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
@@ -39,8 +38,7 @@ public record ActionUsabilityContext(
     InteractionContextType interactionType,
     InteractionHead head,
     Identifier identifier,
-    InteractionInitiatedBy initiatedBy,
-    Where where,
+    InteractionConstraint iConstraint,
     RenderPolicy renderPolicy,
     ObjectAction objectAction
     )
@@ -50,12 +48,9 @@ implements UsabilityContext, ActionInteractionContext {
             final InteractionHead head,
             final ObjectAction objectAction,
             final Identifier id,
-            final InteractionInitiatedBy initiatedBy,
-            final Where where,
+            final InteractionConstraint iConstraint,
             final RenderPolicy renderPolicy) {
-        this(InteractionContextType.ACTION_USABLE,
-            head, id, initiatedBy, where, renderPolicy,
-            objectAction);
+        this(InteractionContextType.ACTION_USABLE, head, id, iConstraint, renderPolicy, objectAction);
     }
 
     @Override
@@ -66,6 +61,7 @@ implements UsabilityContext, ActionInteractionContext {
     @Override
     public ActionVisibilityContext asVisibilityContext() {
         return new ActionVisibilityContext(head(), objectAction(), identifier(),
-                initiatedBy(), where(), renderPolicy());
+        		iConstraint, renderPolicy());
     }
+
 }

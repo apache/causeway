@@ -37,6 +37,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
@@ -134,18 +135,18 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     public String getReasonDisabledIfAny() {
         // no point evaluating if not visible
         return isVisible()
-                ? getActionModel().getUsabilityConsent().getReasonAsString().orElse(null)
+                ? getActionModel().getUsabilityConsent(CausewayModuleViewerWicketModel.whatViewer()).getReasonAsString().orElse(null)
                 : null;
     }
 
     @Override
     public boolean isVisible() {
-        return getActionModel().getVisibilityConsent().isAllowed();
+    	return getActionModel().getVisibilityConsent(CausewayModuleViewerWicketModel.whatViewer()).isAllowed();
     }
 
     @Override
     public boolean isEnabled() {
-        return getActionModel().getUsabilityConsent().isAllowed();
+        return getActionModel().getUsabilityConsent(CausewayModuleViewerWicketModel.whatViewer()).isAllowed();
     }
 
     @SuppressWarnings("deprecation")

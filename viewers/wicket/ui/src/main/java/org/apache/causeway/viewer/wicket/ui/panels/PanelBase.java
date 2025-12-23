@@ -29,6 +29,7 @@ import org.apache.causeway.applib.services.userreg.EmailNotificationService;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
+import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.causeway.viewer.wicket.model.models.IconResourceReferenceFactory;
 import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -95,7 +96,7 @@ implements HasMetaModelContext {
     private transient HeaderUiService headerUiService;
     protected HeaderUiModel getHeaderModel() {
         headerUiService = computeIfAbsent(HeaderUiService.class, headerUiService);
-        return headerUiService.getHeader();
+        return headerUiService.getHeader(CausewayModuleViewerWicketModel.whatViewer());
     }
 
     // Hint support

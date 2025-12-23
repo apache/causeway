@@ -30,9 +30,9 @@ import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacet;
-import org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethod;
-import org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
+import org.apache.causeway.core.metamodel.facets.members.hidden.method.HiddenFacetForMember;
+import org.apache.causeway.core.metamodel.facets.members.hidden.method.HiddenFacetForMemberViaMethod;
+import org.apache.causeway.core.metamodel.facets.members.hidden.method.HiddenFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.propcoll.memserexcl.SnapshotExcludeFacet;
 import org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor;
@@ -312,7 +312,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void hiddenFacetFoundAndMethodRemoved() {
-        var facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new HiddenFacetForMemberViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -325,10 +325,10 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            final Facet facet = facetedMethod.getFacet(HiddenFacetForMember.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof HideForContextFacetViaMethod);
-            var hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertTrue(facet instanceof HiddenFacetForMemberViaMethod);
+            var hideForContextFacet = (HiddenFacetForMemberViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
             assertMethodWasRemoved(propertyHideMethod);
         });
@@ -336,7 +336,7 @@ extends FacetFactoryTestAbstract {
 
     @Test
     void hiddenFacetWithNoArgFoundAndMethodRemoved() {
-        var facetFactory = new HideForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactory = new HiddenFacetForMemberViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
             public String getFirstName() { return null; }
@@ -349,10 +349,10 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            final Facet facet = facetedMethod.getFacet(HiddenFacetForMember.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof HideForContextFacetViaMethod);
-            var hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertTrue(facet instanceof HiddenFacetForMemberViaMethod);
+            var hideForContextFacet = (HiddenFacetForMemberViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
             assertMethodWasRemoved(propertyHideMethod);
         });
@@ -386,7 +386,7 @@ extends FacetFactoryTestAbstract {
     @Test
     void propertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
         var facetFactory = new PropertyAccessorFacetViaAccessorFactory(getMetaModelContext());
-        var facetFactoryForHide = new HideForContextFacetViaMethodFactory(getMetaModelContext());
+        var facetFactoryForHide = new HiddenFacetForMemberViaMethodFactory(getMetaModelContext());
         var facetFactoryForDisable = new DisableForContextFacetViaMethodFactory(getMetaModelContext());
         @SuppressWarnings("unused")
         class Customer {
@@ -409,10 +409,10 @@ extends FacetFactoryTestAbstract {
             facetFactoryForHide.process(processMethodContext);
             facetFactoryForDisable.process(processMethodContext);
 
-            final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
+            final Facet facet = facetedMethod.getFacet(HiddenFacetForMember.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof HideForContextFacetViaMethod);
-            var hideForContextFacet = (HideForContextFacetViaMethod) facet;
+            assertTrue(facet instanceof HiddenFacetForMemberViaMethod);
+            var hideForContextFacet = (HiddenFacetForMemberViaMethod) facet;
             assertMethodEqualsFirstIn(propertyHideMethod, hideForContextFacet);
 
             final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);

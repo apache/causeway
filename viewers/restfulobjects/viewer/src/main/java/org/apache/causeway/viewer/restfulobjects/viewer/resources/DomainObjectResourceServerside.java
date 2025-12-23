@@ -81,45 +81,40 @@ implements DomainObjectResource {
                 RepresentationService.Intent.JUST_CREATED, ResourceLink.OBJECT));
 
         final JsonRepresentation objectRepr = RequestParams.ofRequestBody(object).asMap();
-        if (!objectRepr.isMap()) {
-            throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
+        if (!objectRepr.isMap())
+			throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
                     .createWithMessage(HttpStatus.BAD_REQUEST, "Body is not a map; got %s".formatted(objectRepr)));
-        }
 
         var domainTypeSpec = getSpecificationLoader().specForLogicalTypeName(domainType)
                 .orElse(null);
 
-        if (domainTypeSpec == null) {
-            throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
+        if (domainTypeSpec == null)
+			throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
                     .createWithMessage(HttpStatus.BAD_REQUEST,
                         "Could not determine type of domain object to persist (no class with domainType Id of '%s')".formatted(domainType)));
-        }
 
         final ManagedObject adapter = domainTypeSpec.createObject();
 
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(resourceContext, adapter);
 
         final JsonRepresentation membersMap = objectRepr.getMap("members");
-        if (membersMap == null) {
-            throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
+        if (membersMap == null)
+			throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
                     .createWithMessage(HttpStatus.BAD_REQUEST, "Could not find members map; got %s".formatted(objectRepr)));
-        }
 
-        if (!updateHelper.copyOverProperties(membersMap, ObjectAdapterUpdateHelper.Intent.PERSISTING_NEW)) {
-            throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
+        if (!updateHelper.copyOverProperties(membersMap, ObjectAdapterUpdateHelper.Intent.PERSISTING_NEW))
+			throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
                     .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, "Illegal property value"));
-        }
 
         final Consent validity = adapter.objSpec().isValid(adapter, InteractionInitiatedBy.USER);
-        if (validity.isVetoed()) {
-            throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
+        if (validity.isVetoed())
+			throw _EndpointLogging.error(log, "POST /objects/{}", domainType,
                     RestfulObjectsApplicationException
                     .createWithBody(HttpStatus.BAD_REQUEST, objectRepr, validity.getReasonAsString().orElse(null)));
-        }
 
         MmEntityUtils.persistInCurrentTransaction(adapter);
 
@@ -159,31 +154,28 @@ implements DomainObjectResource {
                 RepresentationService.Intent.ALREADY_PERSISTENT, ResourceLink.OBJECT));
 
         final JsonRepresentation argRepr = RequestParams.ofRequestBody(object).asMap();
-        if (!argRepr.isMap()) {
-            throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
+        if (!argRepr.isMap())
+			throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithMessage(
                         HttpStatus.BAD_REQUEST, "Body is not a map; got %s".formatted(argRepr)));
-        }
 
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId, roEx));
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(resourceContext, objectAdapter);
 
-        if (!updateHelper.copyOverProperties(argRepr, ObjectAdapterUpdateHelper.Intent.UPDATE_EXISTING)) {
-            throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
+        if (!updateHelper.copyOverProperties(argRepr, ObjectAdapterUpdateHelper.Intent.UPDATE_EXISTING))
+			throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
                         HttpStatus.BAD_REQUEST, argRepr, "Illegal property value"));
-        }
 
         final Consent validity = objectAdapter.objSpec().isValid(objectAdapter, InteractionInitiatedBy.USER);
-        if (validity.isVetoed()) {
-            throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
+        if (validity.isVetoed())
+			throw _EndpointLogging.error(log, "PUT /objects/{}/{}", domainType, instanceId,
                     RestfulObjectsApplicationException
                     .createWithBody(
                         HttpStatus.BAD_REQUEST, argRepr, validity.getReasonAsString().orElse(null)));
-        }
 
         var domainResourceHelper = _DomainResourceHelper.ofObjectResource(resourceContext, objectAdapter);
 
@@ -353,7 +345,7 @@ implements DomainObjectResource {
                 roEx->_EndpointLogging.error(log, "PUT /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
         PropertyInteraction
-            .start(objectAdapter, propertyId, resourceContext.where())
+            .start(objectAdapter, propertyId, resourceContext.iConstraint())
             .checkVisibility()
             .checkUsability(AccessIntent.MUTATE)
             .modifyProperty(property->{
@@ -384,7 +376,7 @@ implements DomainObjectResource {
         var objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId,
                 roEx->_EndpointLogging.error(log, "DELETE /objects/{}/{}/properties/{}", domainType, instanceId, propertyId, roEx));
 
-        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.where())
+        PropertyInteraction.start(objectAdapter, propertyId, resourceContext.iConstraint())
         .checkVisibility()
         .checkUsability(AccessIntent.MUTATE)
         .modifyProperty(property->null)

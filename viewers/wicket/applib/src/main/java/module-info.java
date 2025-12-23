@@ -18,6 +18,7 @@
  */
 module org.apache.causeway.viewer.wicket.applib {
     exports org.apache.causeway.viewer.wicket.applib;
+    exports org.apache.causeway.viewer.wicket.applib.annotation;
     exports org.apache.causeway.viewer.wicket.applib.mixins;
 
     requires jakarta.inject;

@@ -21,7 +21,8 @@ package org.apache.causeway.core.metamodel.interactions;
 import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
-import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.DisablingOrEnabling;
+import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 
 /**
@@ -32,7 +33,7 @@ import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
  * @see HidingInteractionAdvisor
  */
 public interface DisablingInteractionAdvisor
-extends InteractionAdvisorFacet, DisablingOrEnabling {
+extends InteractionAdvisor, Facet {
 
     /**
      * Whether the rule represented by this facet disables the member to which

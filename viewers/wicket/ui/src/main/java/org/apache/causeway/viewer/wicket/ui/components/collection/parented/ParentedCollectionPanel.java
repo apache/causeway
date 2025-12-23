@@ -31,6 +31,7 @@ import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.wicket.model.CausewayModuleViewerWicketModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
@@ -127,7 +128,7 @@ implements HasDynamicallyVisibleContent {
 
         var objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
-                .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                .isVisible(objectAdapter, CausewayModuleViewerWicketModel.iConstraint(InteractionInitiatedBy.USER, Where.OBJECT_FORMS));
 
         if(visibility.isAllowed()) {
 

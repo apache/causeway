@@ -20,22 +20,22 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.InteractionConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,33 +47,27 @@ extends ManagedMember {
     public static final ManagedProperty of(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
-            final @NonNull Where where) {
-        return new ManagedProperty(owner, property, where);
+            final @NonNull InteractionConstraint iConstraint) {
+        return new ManagedProperty(owner, property, iConstraint);
     }
 
     public static final Optional<ManagedProperty> lookupProperty(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
-
+            final @NonNull InteractionConstraint iConstraint) {
         return ManagedMember.<OneToOneAssociation>lookup(owner.objSpec(), Identifier.Type.PROPERTY, memberId)
-            .map(objectAction -> of(owner, objectAction, where));
+            .map(prop -> of(owner, prop, iConstraint));
     }
 
     // -- IMPLEMENTATION
 
     @Getter private final OneToOneAssociation property;
 
-    //XXX suggestion: instead of holding the 'owner' object, let it hold a supplier of the 'owner' object,
-    //such that the supplier always returns the actual owner evaluated lazily without memoization.
-    //Such a change would better support eg.
-    //org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel.getManagedProperty()
-    //Or as an alternative use a memento instead of the ManagedObject.
     private ManagedProperty(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
-            final @NonNull Where where) {
-        super(owner, where);
+            final @NonNull InteractionConstraint iConstraint) {
+        super(owner, iConstraint);
         this.property = property;
         observablePropValue = _Observables.lazy(this::reassessPropertyValue);
     }
@@ -97,17 +91,13 @@ extends ManagedMember {
     public Optional<InteractionVeto> checkValidity(final ManagedObject proposedNewValue) {
         try {
             var validityConsent =
-                    property.isAssociationValid(getOwner(), proposedNewValue, InteractionInitiatedBy.USER);
-
+                property.isAssociationValid(getOwner(), proposedNewValue, iConstraint());
             return validityConsent.isVetoed()
-                    ? Optional.of(InteractionVeto.invalid(validityConsent))
-                    : Optional.empty();
-
+                ? Optional.of(InteractionVeto.invalid(validityConsent))
+                : Optional.empty();
         } catch (final Exception ex) {
-
             log.warn(ex.getLocalizedMessage(), ex);
             return Optional.of(InteractionVeto.invalid(new Veto("failure during validity evaluation")));
-
         }
     }
 
@@ -132,9 +122,8 @@ extends ManagedMember {
     private ManagedObject reassessPropertyValue() {
         var property = getProperty();
         var owner = getOwner();
-
-        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
-                && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
+        return property.isVisible(owner, iConstraint().withInitiatedBy(InteractionInitiatedBy.FRAMEWORK)).isAllowed() //TODO strange API
+                && property.isVisible(owner, iConstraint()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getElementType());
     }

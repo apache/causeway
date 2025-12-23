@@ -24,11 +24,11 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Membe
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.causeway.core.metamodel.facets.ParameterSupport.ParamSupportingMethodSearchResult;
-import org.apache.causeway.core.metamodel.facets.param.hide.ActionParameterHiddenFacet;
+import org.apache.causeway.core.metamodel.facets.param.hide.HiddenFacetForActionParameter;
 import org.apache.causeway.core.metamodel.facets.param.support.ActionParameterSupportFacetFactoryAbstract;
 
 /**
- * Sets up {@link ActionParameterHiddenFacet}.
+ * Sets up {@link HiddenFacetForActionParameter}.
  */
 public class ActionParameterHiddenFacetViaMethodFactory
 extends ActionParameterSupportFacetFactoryAbstract {
@@ -45,7 +45,7 @@ extends ActionParameterSupportFacetFactoryAbstract {
         var hideMethod = searchResult.supportingMethod();
         var patConstructor = searchResult.patConstructor();
         addFacet(
-                new ActionParameterHiddenFacetViaMethod(
+                new HiddenFacetForActionParameterViaMethod(
                         hideMethod, patConstructor, paramAsHolder));
     }
 

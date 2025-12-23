@@ -77,7 +77,7 @@ extends FacetFactoryTestAbstract {
 
             supportMethods.forEach(method->{
                 assertMethodWasRemoved(method);
-                assertTrue(imperativeFacet.getMethods()
+                assertTrue(imperativeFacet.methods()
                         .map(MethodFacade::asMethodElseFail).contains(method));
             });
 

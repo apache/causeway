@@ -113,7 +113,7 @@ class CollectionInteractionTest extends InteractionTestAbstract {
         var table = tableTester.getDataTable();
 
         var actionInteraction = table
-                .startAssociatedActionInteraction("doSomethingWithItems", Where.OBJECT_FORMS);
+                .startAssociatedActionInteraction("doSomethingWithItems", collTester.iConstraint().withWhere(Where.OBJECT_FORMS));
 
         var actTester = testerFactory.actionTesterForSpecificInteraction(InteractionDemo.class, actionInteraction);
         actTester.assertVisibilityIsNotVetoed();

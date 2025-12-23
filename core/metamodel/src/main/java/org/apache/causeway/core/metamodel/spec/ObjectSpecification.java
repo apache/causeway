@@ -50,7 +50,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.HasFacetHolder;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.help.HelpFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.HasNoun;
 import org.apache.causeway.core.metamodel.facets.all.i8n.staatic.HasStaticText;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
@@ -391,7 +391,7 @@ extends
     boolean isImmutable();
 
     /**
-     * Whether has the {@link HiddenFacet}
+     * Whether has the {@link HiddenFacetForLayout}
      */
     boolean isHidden();
 

@@ -71,7 +71,7 @@ implements ReprRenderer<T> {
 
     private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
             final IResourceContext resourceContext) {
-        return resourceContext.interactionInitiatedBy();
+        return resourceContext.iConstraint().initiatedBy();
     }
 
     protected InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -83,9 +83,8 @@ implements ReprRenderer<T> {
     }
 
     private LinkFollowSpecs asProvidedElseCreate(final LinkFollowSpecs linkFollower) {
-        if (linkFollower != null) {
-            return linkFollower;
-        }
+        if (linkFollower != null)
+			return linkFollower;
         return LinkFollowSpecs.create(resourceContext.followLinks());
     }
 
@@ -112,9 +111,8 @@ implements ReprRenderer<T> {
 
     public <R extends ReprRendererAbstract<T>> R withLink(final Rel rel, final JsonRepresentation link) {
         final String relStr = link.getString("rel");
-        if (relStr == null || !relStr.equals(rel.getName())) {
-            throw new IllegalArgumentException("Provided link does not have a 'rel' of '" + rel.getName() + "'; was: " + link);
-        }
+        if (relStr == null || !relStr.equals(rel.getName()))
+			throw new IllegalArgumentException("Provided link does not have a 'rel' of '" + rel.getName() + "'; was: " + link);
         if (link != null) {
             getLinks().arrayAdd(link);
         }
@@ -134,9 +132,8 @@ implements ReprRenderer<T> {
     }
 
     protected void addLink(final Rel rel, final ObjectSpecification objectSpec) {
-        if (objectSpec == null) {
-            return;
-        }
+        if (objectSpec == null)
+			return;
         final LinkBuilder linkBuilder = DomainTypeReprRenderer.newLinkToBuilder(getResourceContext(), rel, objectSpec);
         JsonRepresentation link = linkBuilder.build();
         getLinks().arrayAdd(link);
@@ -163,9 +160,8 @@ implements ReprRenderer<T> {
     }
 
     public ReprRendererAbstract<T> withExtensions(final JsonRepresentation extensions) {
-        if (!extensions.isMap()) {
-            throw new IllegalArgumentException("extensions must be a map");
-        }
+        if (!extensions.isMap())
+			throw new IllegalArgumentException("extensions must be a map");
         representation.mapPutJsonRepresentation("extensions", extensions);
         return this;
     }
@@ -189,9 +185,8 @@ implements ReprRenderer<T> {
     }
 
     private void addToExtensions(final String key, final List<ManagedObject> adapters) {
-        if(adapters == null || adapters.isEmpty()) {
-            return;
-        }
+        if(adapters == null || adapters.isEmpty())
+			return;
         final JsonRepresentation adapterList = JsonRepresentation.newArray();
         getExtensions().mapPutJsonRepresentation(key, adapterList);
         for (var adapter : adapters) {

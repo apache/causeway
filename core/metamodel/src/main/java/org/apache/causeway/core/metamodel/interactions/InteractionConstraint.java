@@ -16,8 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.hidden;
+package org.apache.causeway.core.metamodel.interactions;
 
-public interface HiddenTypeFacet extends HiddenInstanceFacet {
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+
+public record InteractionConstraint(
+		WhatViewer whatViewer,
+		InteractionInitiatedBy initiatedBy,
+		Where where
+		) {
+
+	public InteractionConstraint withWhere(final Where where) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
+	public InteractionConstraint withInitiatedBy(final InteractionInitiatedBy initiatedBy) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
 
 }
