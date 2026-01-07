@@ -2995,7 +2995,7 @@ identified
                     <plugin>
                         <groupId>dev.pcms</groupId>
                         <artifactId>lombok-maven-plugin</artifactId>
-                        <version>1.18.36.2</version>
+                        <version>1.18.42.1</version>
                         <configuration>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
                             <outputDirectory>${delombok.output}</outputDirectory>
