@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 enum DatatablesDotNet {
 
-    VERSION("2.3.5");
+    VERSION("2.3.6");
 
     @Getter @Accessors(fluent = true)
     private final String literal;
