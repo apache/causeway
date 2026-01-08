@@ -27,7 +27,6 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
-
 import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
@@ -43,8 +42,8 @@ extends WebjarsJavaScriptResourceReference {
 
     private PdfJsWorkerReference() {
         super(String.format("%s/build/pdf.worker.min.%s",
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath(),
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType()==JavaScriptReferenceType.MODULE
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().webjarPath(),
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType()==JavaScriptReferenceType.MODULE
                     ? "mjs"
                     : "js"));
     }
@@ -54,7 +53,7 @@ extends WebjarsJavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance())
-                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType());
+                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType());
     }
 
     public static String workerUrl() {

@@ -25,7 +25,6 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.causeway.extensions.pdfjs.wkt.integration.CausewayModuleExtPdfjsWicketIntegration;
 
 import lombok.Getter;
-
 import lombok.experimental.Accessors;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
@@ -41,7 +40,7 @@ extends WebjarsJavaScriptResourceReference {
 
     private PdfJsCmapsReference() {
         super(String.format("%s/cmaps/_.bcmap",
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath()));
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().webjarPath()));
     }
 
     public static String cmapsUrl() {
