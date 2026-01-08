@@ -21,6 +21,8 @@ package org.apache.causeway.viewer.wicket.ui.components.attributes.temporal;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
+
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -35,7 +37,9 @@ public class MomentJsReference extends WebjarsJavaScriptResourceReference {
         new MomentJsReference();
 
     private MomentJsReference() {
-        super(String.format("momentjs/%s/min/moment.min.js", "2.30.1-1"));
+        super("momentjs/%s/min/moment.min.js"
+                .formatted(WebjarEnumerator.lookupElseFail("momentjs")
+                        .version()));
     }
 
     /**
