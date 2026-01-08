@@ -21,6 +21,8 @@ package org.apache.causeway.extensions.fullcalendar.wkt.integration.fc.res;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 
+import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
+
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -36,7 +38,9 @@ extends WebjarsJavaScriptResourceReference {
         new FullCalendarJsReference();
 
     private FullCalendarJsReference() {
-        super("fullcalendar/6.1.10/index.global.min.js");
+        super("fullcalendar/%s/index.global.min.js"
+                .formatted(WebjarEnumerator.lookupElseFail("fullcalendar")
+                        .version()));
     }
 
     /**
