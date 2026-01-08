@@ -18,20 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
+import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
 
-@RequiredArgsConstructor
-enum DatatablesDotNet {
-
-    VERSION("2.3.6");
-
-    @Getter @Accessors(fluent = true)
-    private final String literal;
+final class DatatablesDotNet {
 
     public static String formatWithVersion(final String format) {
-        return String.format(format, VERSION.literal());
+        var version = WebjarEnumerator.lookupElseFail("datatables")
+            .version();
+
+        return String.format(format, version);
     }
 
 }
