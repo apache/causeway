@@ -26,6 +26,7 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model.decorators;
     exports org.apache.causeway.viewer.commons.model.attrib;
     exports org.apache.causeway.viewer.commons.model.hints;
+    exports org.apache.causeway.viewer.commons.model.webjar;
 
     requires static lombok;
     requires transitive org.apache.causeway.applib;
