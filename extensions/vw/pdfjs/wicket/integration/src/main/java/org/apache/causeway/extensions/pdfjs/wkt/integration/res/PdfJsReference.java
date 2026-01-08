@@ -40,8 +40,8 @@ extends WebjarsJavaScriptResourceReference {
 
     private PdfJsReference() {
         super(String.format("%s/build/pdf.min.%s",
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getWebjarPath(),
-                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType()==JavaScriptReferenceType.MODULE
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().webjarPath(),
+                CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType()==JavaScriptReferenceType.MODULE
                     ? "mjs"
                     : "js"));
     }
@@ -51,7 +51,7 @@ extends WebjarsJavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance())
-                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType());
+                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType());
     }
 
 }

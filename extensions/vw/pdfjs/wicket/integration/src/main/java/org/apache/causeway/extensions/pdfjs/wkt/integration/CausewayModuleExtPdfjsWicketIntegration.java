@@ -23,6 +23,7 @@ import org.apache.wicket.protocol.http.WebApplication;
 
 import org.springframework.context.annotation.Configuration;
 
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 
 /**
@@ -43,8 +44,10 @@ implements WicketApplicationInitializer {
         resourceGuard.addPattern("+*.mjs");
     }
 
+    private final static _Lazy<PdfJsVersion> pdfJsVersionLazy = _Lazy.threadSafe(PdfJsVersion::new);
+
     public static PdfJsVersion getPdfJsVersion() {
-        return PdfJsVersion.V5_X;
+        return pdfJsVersionLazy.get();
     }
 
 }

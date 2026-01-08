@@ -42,8 +42,8 @@ extends JavaScriptResourceReference {
     private PdfJsIntegrationReference() {
         super(PdfJsIntegrationReference.class,
                 String.format("pdfjs-integration-%s.%s",
-                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getIntegrationScriptSuffix(),
-                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType()==JavaScriptReferenceType.MODULE
+                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().integrationScriptSuffix(),
+                        CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType()==JavaScriptReferenceType.MODULE
                         ? "mjs"
                         : "js"));
     }
@@ -53,7 +53,7 @@ extends JavaScriptResourceReference {
      */
     public static HeaderItem asHeaderItem() {
         return JavaScriptHeaderItem.forReference(instance())
-                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().getJavascriptRefType());
+                .setType(CausewayModuleExtPdfjsWicketIntegration.getPdfJsVersion().javascriptRefType());
     }
 
     public static OnDomReadyHeaderItem domReadyScript(
