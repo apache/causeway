@@ -28,6 +28,7 @@ module org.apache.causeway.viewer.commons.model {
     exports org.apache.causeway.viewer.commons.model.layout;
     exports org.apache.causeway.viewer.commons.model.mixin;
     exports org.apache.causeway.viewer.commons.model.object;
+    exports org.apache.causeway.viewer.commons.model.webjar;
 
     requires static lombok;
     requires transitive org.apache.causeway.applib;
