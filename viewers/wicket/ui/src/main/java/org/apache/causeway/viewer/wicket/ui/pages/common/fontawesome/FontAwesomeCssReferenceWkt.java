@@ -21,6 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.pages.common.fontawesome;
 import org.apache.wicket.markup.head.CssHeaderItem;
 
 import org.apache.causeway.viewer.commons.model.decorators.IconDecorator;
+import org.apache.causeway.viewer.commons.model.webjar.WebjarEnumerator;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -42,7 +43,9 @@ public class FontAwesomeCssReferenceWkt extends WebjarsCssResourceReference {
      * Private constructor.
      */
     private FontAwesomeCssReferenceWkt() {
-        super(IconDecorator.FONTAWESOME_RESOURCE);
+        super(IconDecorator.FONTAWESOME_RESOURCE_FORMAT
+                .formatted(WebjarEnumerator.lookupElseFail("font-awesome")
+                        .version()));
     }
 
 }
