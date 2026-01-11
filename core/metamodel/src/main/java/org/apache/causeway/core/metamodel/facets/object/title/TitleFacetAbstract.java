@@ -62,8 +62,8 @@ implements TitleFacet {
                 && otherFacet instanceof ImperativeFacet) {
 
             return ((ImperativeFacet)this)
-                    .getMethods()
-                    .equals(((ImperativeFacet)otherFacet).getMethods());
+                    .methods()
+                    .equals(((ImperativeFacet)otherFacet).methods());
         }
 
         return false;

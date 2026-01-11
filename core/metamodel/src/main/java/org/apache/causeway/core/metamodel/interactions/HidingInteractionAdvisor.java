@@ -18,18 +18,33 @@
  */
 package org.apache.causeway.core.metamodel.interactions;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrShowing;
+import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForObject;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 /**
- * Mix-in interface for facets that can advise as to whether a member should be
- * hidden.
+ * Mechanism for determining whether an object or member should be hidden.
  *
+ * <p>Even though all the properties of an object may themselves be visible, there
+ * could be reasons to hide the object.
+ *
+ * <p>In the standard Apache Causeway Programming Model, typically corresponds to the
+ * <tt>hidden</tt> method.
+ *
+ * @see HiddenFacetForLayout
+ * @see HiddenFacetForObject
+ * @see HiddenFacetForNoMembersAuthorized
  * @see DisablingInteractionAdvisor
  * @see ValidatingInteractionAdvisor
+ *
+ * @apiNote An unification attempt on HiddenTypeFacet and HiddenObjectFacet into a single,
+ * failed, because both facets must co-exist, where each has veto power (not one overruling the other).
  */
 public interface HidingInteractionAdvisor
-extends InteractionAdvisorFacet, HidingOrShowing {
+extends InteractionAdvisor, Facet {
 
     /**
      * Whether the rule represented by this facet hides the member to which it

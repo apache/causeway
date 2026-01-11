@@ -23,7 +23,6 @@ import java.io.Serializable;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -44,6 +43,8 @@ import org.apache.causeway.core.metamodel.facets.properties.update.init.Property
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.RenderPolicy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.use.PropertyUsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.PropertyModifyContext;
@@ -88,20 +89,19 @@ implements OneToOneAssociation, Serializable {
     public VisibilityContext createVisibleInteractionContext(
             final ManagedObject ownerAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
         return new PropertyVisibilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.renderPolicy(ownerAdapter));
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, visibilityConstraint,
+                RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     @Override
     public UsabilityContext createUsableInteractionContext(
             final ManagedObject ownerAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new PropertyUsabilityContext(
-                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy, where,
-                InteractionUtils.renderPolicy(ownerAdapter));
+                headFor(ownerAdapter), getFeatureIdentifier(), interactionInitiatedBy,
+                RenderPolicy.forNonActionParam(ownerAdapter));
     }
 
     // -- VALIDITY
@@ -157,11 +157,10 @@ implements OneToOneAssociation, Serializable {
         var referencedPojo =
                 propertyOrCollectionAccessorFacet.getAssociationValueAsPojo(ownerAdapter, interactionInitiatedBy);
 
-        if (referencedPojo == null) {
-            // TODO: perhaps this should instead return ManagedObject.empty(getSpecification()) ?
+        if (referencedPojo == null)
+			// TODO: perhaps this should instead return ManagedObject.empty(getSpecification()) ?
             //  however, that's a far-reaching change to make.
             return null;
-        }
 
         return getObjectManager().adapt(referencedPojo);
     }
@@ -194,11 +193,10 @@ implements OneToOneAssociation, Serializable {
             setupCommand(InteractionHead.regular(ownerAdapter), newValue);
         }
 
-        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
-            return clearValue(ownerAdapter, interactionInitiatedBy);
-        } else {
-            return setValue(ownerAdapter, newValue, interactionInitiatedBy);
-        }
+        if (ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue))
+			return clearValue(ownerAdapter, interactionInitiatedBy);
+		else
+			return setValue(ownerAdapter, newValue, interactionInitiatedBy);
     }
 
     private ManagedObject setValue(
@@ -207,9 +205,8 @@ implements OneToOneAssociation, Serializable {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var propertySetterFacet = getFacet(PropertySetterFacet.class);
-        if (propertySetterFacet == null) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        if (propertySetterFacet == null)
+			throw _Exceptions.unexpectedCodeReach();
 
         MmEntityUtils.requiresWhenFirstIsBookmarkableSecondIsAlso(ownerAdapter, newReferencedAdapter);
 
@@ -222,9 +219,8 @@ implements OneToOneAssociation, Serializable {
 
         var propertyClearFacet = getFacet(PropertyClearFacet.class);
 
-        if (propertyClearFacet == null) {
-            throw _Exceptions.unexpectedCodeReach();
-        }
+        if (propertyClearFacet == null)
+			throw _Exceptions.unexpectedCodeReach();
 
         return propertyClearFacet.clearProperty(this, ownerAdapter, interactionInitiatedBy);
     }
@@ -241,18 +237,16 @@ implements OneToOneAssociation, Serializable {
         if (propertyDefaultFacet == null) {
             propertyDefaultFacet = this.getElementType().getFacet(PropertyDefaultFacet.class);
         }
-        if (propertyDefaultFacet == null) {
-            return null;
-        }
+        if (propertyDefaultFacet == null)
+			return null;
         return propertyDefaultFacet.getDefault(ownerAdapter);
     }
 
     @Override
     public void toDefault(final ManagedObject ownerAdapter) {
         // default only mandatory fields
-        if (!MandatoryFacet.isMandatory(this)) {
-            return;
-        }
+        if (!MandatoryFacet.isMandatory(this))
+			return;
 
         final ManagedObject defaultValue = getDefault(ownerAdapter);
         if (defaultValue != null) {
@@ -273,9 +267,8 @@ implements OneToOneAssociation, Serializable {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         var propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        if (propertyChoicesFacet == null) {
-            return Can.empty();
-        }
+        if (propertyChoicesFacet == null)
+			return Can.empty();
 
         return propertyChoicesFacet.getChoices(
                 ownerAdapter,

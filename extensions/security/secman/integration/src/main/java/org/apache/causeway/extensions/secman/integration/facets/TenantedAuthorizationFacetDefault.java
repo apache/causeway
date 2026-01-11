@@ -27,8 +27,8 @@ import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
@@ -36,32 +36,17 @@ import org.apache.causeway.extensions.secman.applib.tenancy.spi.ApplicationTenan
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 
-public class TenantedAuthorizationFacetDefault
-extends FacetAbstract
-implements TenantedAuthorizationFacet {
+public record TenantedAuthorizationFacetDefault(
+		List<ApplicationTenancyEvaluator> evaluators,
+        ApplicationUserRepository applicationUserRepository,
+        Provider<QueryResultsCache> queryResultsCacheProvider,
+        UserService userService,
+        FacetHolder facetHolder
+		) implements TenantedAuthorizationFacet {
 
-    private static Class<? extends Facet> type() {
-        return TenantedAuthorizationFacet.class;
-    }
-
-    private final List<ApplicationTenancyEvaluator> evaluators;
-    private final ApplicationUserRepository applicationUserRepository;
-    private final UserService userService;
-    private final Provider<QueryResultsCache> queryResultsCacheProvider;
-
-    public TenantedAuthorizationFacetDefault(
-            final List<ApplicationTenancyEvaluator> evaluators,
-            final ApplicationUserRepository applicationUserRepository,
-            final Provider<QueryResultsCache> queryResultsCacheProvider,
-            final UserService userService,
-            final FacetHolder holder) {
-        super(type(), holder);
-        this.evaluators = evaluators;
-        this.applicationUserRepository = applicationUserRepository;
-        this.queryResultsCacheProvider = queryResultsCacheProvider;
-        this.userService = userService;
-    }
-
+    @Override public Class<? extends Facet> facetType() { return TenantedAuthorizationFacet.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
+    
     @Override
     public String hides(final VisibilityContext ic) {
         return evaluate(ApplicationTenancyEvaluator::hides, ic.head())
@@ -118,6 +103,11 @@ implements TenantedAuthorizationFacet {
 
     protected ApplicationUser findApplicationUserNoCache(final String userName) {
         return applicationUserRepository.findByUsername(userName).orElse(null);
+    }
+    
+    @Override
+    public String toString() {
+        return FacetUtil.toString(this);
     }
 
 }

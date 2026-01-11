@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.cssclass.method;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
@@ -32,13 +33,14 @@ import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetA
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public class CssClassFacetViaCssClassMethod
 extends CssClassFacetAbstract
 implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull ImperativeAspect imperativeAspect;
 
     public static Optional<CssClassFacet> create(
             final @Nullable ResolvedMethod methodIfAny,

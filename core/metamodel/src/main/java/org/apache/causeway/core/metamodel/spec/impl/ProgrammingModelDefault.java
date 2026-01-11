@@ -36,7 +36,7 @@ import org.apache.causeway.core.metamodel.facets.jaxb.JaxbFacetFactory;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.annotprop.CssClassFacetOnActionFromConfiguredRegexFactory;
 import org.apache.causeway.core.metamodel.facets.members.described.method.DescribedAsFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
-import org.apache.causeway.core.metamodel.facets.members.hidden.method.HideForContextFacetViaMethodFactory;
+import org.apache.causeway.core.metamodel.facets.members.hidden.method.HiddenFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.members.named.method.NamedFacetForMemberViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.object.ViewModelSemanticCheckingFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetFallbackFactory;
@@ -47,7 +47,7 @@ import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.Domai
 import org.apache.causeway.core.metamodel.facets.object.domainservice.annotation.DomainServiceFacetAnnotationFactory;
 import org.apache.causeway.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacetFactory;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorizationFactory;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorizedFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.annotation.RemoveAnnotatedMethodsFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
 import org.apache.causeway.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
@@ -181,7 +181,7 @@ extends ProgrammingModelAbstract {
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new NamedFacetForMemberViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DescribedAsFacetForMemberViaMethodFactory(mmc));
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new DisableForContextFacetViaMethodFactory(mmc));
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HideForContextFacetViaMethodFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenFacetForMemberViaMethodFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new CallbackFacetFactory(mmc));
 
@@ -213,7 +213,7 @@ extends ProgrammingModelAbstract {
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ContributingFacetFromMixinFacetFactory(mmc));
 
-        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenTypeFacetFromAuthorizationFactory(mmc));
+        addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new HiddenFacetForNoMembersAuthorizedFactory(mmc));
 
         addFactory(FacetProcessingOrder.E1_MEMBER_MODELLING, new ValueSemanticsAnnotationFacetFactory(mmc));
 

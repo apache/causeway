@@ -24,36 +24,30 @@ import java.util.function.BiConsumer;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForObject;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+public record HiddenFacetForObjectViaMethod(
+		ImperativeAspect imperativeAspect,
+		FacetHolder facetHolder
+		) implements HiddenFacetForObject, HasImperativeAspect {
 
-public class HiddenObjectFacetViaMethod
-extends HiddenObjectFacetAbstract
-implements HasImperativeAspect {
-
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
-
-    public static Optional<HiddenObjectFacet> create(
-            final @Nullable ResolvedMethod methodIfAny,
-            final FacetHolder holder) {
-
-        return Optional.ofNullable(methodIfAny)
-        .map(method->ImperativeAspect.singleRegularMethod(method, Intent.CHECK_IF_HIDDEN))
-        .map(imperativeAspect->new HiddenObjectFacetViaMethod(imperativeAspect, holder));
-    }
-
-    private HiddenObjectFacetViaMethod(final ImperativeAspect imperativeAspect, final FacetHolder holder) {
-        super(holder);
-        this.imperativeAspect = imperativeAspect;
-    }
+	public static Optional<HiddenFacetForObject> create(
+			final @Nullable ResolvedMethod methodIfAny,
+			final FacetHolder holder) {
+		
+		return Optional.ofNullable(methodIfAny)
+				.map(method->ImperativeAspect.singleRegularMethod(method, Intent.CHECK_IF_HIDDEN))
+				.map(imperativeAspect->new HiddenFacetForObjectViaMethod(imperativeAspect, holder));
+	}
+	
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForObject.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT;}
 
     @Override
     public String hides(final VisibilityContext ic) {
@@ -62,19 +56,21 @@ implements HasImperativeAspect {
     }
 
     @Override
-    public String hiddenReason(final ManagedObject target) {
-        final boolean isHidden = imperativeAspect.eval(target, false);
-        return isHidden ? "Hidden" : null;
-    }
-
-    @Override
-    public HiddenObjectFacetViaMethod copyTo(final FacetHolder holder) {
-        return new HiddenObjectFacetViaMethod(imperativeAspect, holder);
+    public HiddenFacetForObjectViaMethod copyTo(final FacetHolder holder) {
+        return new HiddenFacetForObjectViaMethod(imperativeAspect, holder);
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	HiddenFacetForObject.super.visitAttributes(visitor);
         imperativeAspect.visitAttributes(visitor);
     }
+    
+    // -- HELPER
+    
+    private String hiddenReason(final ManagedObject target) {
+    	final boolean isHidden = imperativeAspect.eval(target, false);
+    	return isHidden ? "Hidden" : null;
+    }
+
 }

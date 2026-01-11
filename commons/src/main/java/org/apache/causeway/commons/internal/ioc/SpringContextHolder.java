@@ -105,7 +105,6 @@ public record SpringContextHolder(
      * @see #select(Class, Annotation[])
      * @see #getSingletonElseFail(Class)
      */
-    @SuppressWarnings("javadoc")
     public <T> Can<T> select(final @NonNull Class<T> requiredType) {
         var allMatchingBeans = springContext.getBeanProvider(requiredType)
                 .orderedStream()
@@ -128,7 +127,6 @@ public record SpringContextHolder(
      *
      * @see #select(Class)
      */
-    @SuppressWarnings("javadoc")
     public <T> Can<T> select(
         final @NonNull Class<T> requiredType,
         final @Nullable Annotation[] qualifiers) {
@@ -165,7 +163,6 @@ public record SpringContextHolder(
      * @return IoC managed singleton
      * @throws NoSuchElementException - if the singleton is not resolvable
      */
-    @SuppressWarnings("javadoc")
     public <T> T getSingletonElseFail(final @NonNull Class<T> type) {
         var candidates = select(type);
         if (candidates.getCardinality() == Cardinality.ZERO) {

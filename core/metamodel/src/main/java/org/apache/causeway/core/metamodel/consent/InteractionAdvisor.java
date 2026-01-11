@@ -18,13 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.consent;
 
-import java.util.function.BiConsumer;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.InteractionAdvisorFacet;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Marker interface for implementations (specifically, {@link Facet}s) that can
@@ -33,38 +27,5 @@ import org.jspecify.annotations.NonNull;
  * Used within {@link Allow} and {@link Veto}.
  */
 public interface InteractionAdvisor {
-
-    /**
-     * For testing purposes only.
-     */
-    public static InteractionAdvisor forTesting() {
-        return new InteractionAdvisorFacet() {
-
-            @Override
-            public boolean semanticEquals(final @NonNull Facet other) {
-                return this == other;
-            }
-
-            @Override
-            public void visitAttributes(final BiConsumer<String, Object> visitor) {
-            }
-
-            @Override
-            public Class<? extends Facet> facetType() {
-                return null;
-            }
-
-            @Override
-            public FacetHolder facetHolder() {
-                return null;
-            }
-
-            @Override
-            public Precedence precedence() {
-                return Facet.Precedence.FALLBACK;
-            }
-
-        };
-    }
 
 }

@@ -24,14 +24,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import jakarta.inject.Named;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
-import tools.jackson.databind.node.POJONode;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.jspecify.annotations.Nullable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -57,6 +56,8 @@ import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectA
 import org.apache.causeway.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 
 import lombok.RequiredArgsConstructor;
+
+import tools.jackson.databind.node.POJONode;
 
 /**
  * @since 1.x {@index}
@@ -198,11 +199,10 @@ extends ContentNegotiationServiceAbstract {
         switch (resultType) {
         case DOMAIN_OBJECT:
 
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter)) {
-                // 404 not found
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(returnedAdapter))
+				// 404 not found
                 return ResponseFactory.notFound();
-
-            } else {
+			else {
                 rootRepresentation = JsonRepresentation.newMap();
                 appendObjectTo(resourceContext, returnedAdapter, rootRepresentation, suppression);
             }
@@ -213,11 +213,9 @@ extends ContentNegotiationServiceAbstract {
 
         case LIST:
 
-            if(!objectAndActionInvocation.hasElements()) {
-                // 404 not found
+            if(!objectAndActionInvocation.hasElements())
+				// 404 not found
                 return ResponseFactory.notFound();
-
-            }
 
             rootRepresentation = JsonRepresentation.newArray();
 
@@ -238,11 +236,9 @@ extends ContentNegotiationServiceAbstract {
 
         case SCALAR_VALUES:
 
-            if(!objectAndActionInvocation.hasElements()) {
-                // 404 not found
+            if(!objectAndActionInvocation.hasElements())
+				// 404 not found
                 return ResponseFactory.notFound();
-
-            }
 
             rootRepresentation = JsonRepresentation.newArray();
 
@@ -260,10 +256,9 @@ extends ContentNegotiationServiceAbstract {
 
         case SCALAR_VALUE:
             var dto = dtoForValue(returnedAdapter).orElse(null);
-            if(dto==null) {
-                // 404 not found
+            if(dto==null)
+				// 404 not found
                 return ResponseFactory.notFound();
-            }
 
             var jsonNode = new POJONode(dto);
             rootRepresentation = new JsonRepresentation(jsonNode);
@@ -286,9 +281,8 @@ extends ContentNegotiationServiceAbstract {
 
     private Optional<Object> dtoForValue(final @Nullable ManagedObject valueObject) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject)
-                || !valueObject.objSpec().isValue()) {
-            return Optional.empty();
-        }
+                || !valueObject.objSpec().isValue())
+			return Optional.empty();
         var valSpec = valueObject.objSpec();
         var dto = valSpec.isCompositeValue()
                 ? ScalarValueDtoV2.forValue(valueObject.getPojo(),
@@ -317,7 +311,7 @@ extends ContentNegotiationServiceAbstract {
 
         appendPropertiesTo(resourceContext, owner, rootRepresentation, suppression);
 
-        var where = resourceContext.where();
+        var visibilityConstraint = resourceContext.visibilityConstraint();
 
         owner.objSpec()
         .streamCollections(MixedIn.INCLUDED)
@@ -327,12 +321,11 @@ extends ContentNegotiationServiceAbstract {
             rootRepresentation.mapPutJsonRepresentation(collection.getId(), collectionRepresentation);
 
             var interactionInitiatedBy = resourceContext.interactionInitiatedBy();
-            var visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, where);
-            if (!visibilityConsent.isAllowed()) {
-                return;
-            }
+            var visibilityConsent = collection.isVisible(owner, interactionInitiatedBy, visibilityConstraint);
+            if (!visibilityConsent.isAllowed())
+				return;
 
-            var managedCollection = ManagedCollection.of(owner, collection, where);
+            var managedCollection = ManagedCollection.of(owner, collection, visibilityConstraint);
 
             appendCollectionTo(resourceContext, managedCollection, collectionRepresentation, suppression);
         });
@@ -346,21 +339,21 @@ extends ContentNegotiationServiceAbstract {
             final EnumSet<SuppressionType> suppression) {
 
         var interactionInitiatedBy = resourceContext.interactionInitiatedBy();
-        var where = resourceContext.where();
+        var visibilityConstraint = resourceContext.visibilityConstraint();
+
         final Stream<OneToOneAssociation> properties = objectAdapter.objSpec()
                 .streamProperties(MixedIn.INCLUDED);
 
         properties.forEach(property->{
-            final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, where);
-            if (!visibility.isAllowed()) {
-                return;
-            }
+            final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, visibilityConstraint);
+            if (!visibility.isAllowed())
+				return;
 
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             var renderer =
                     new ObjectPropertyReprRenderer(resourceContext, null, property.getId(), propertyRepresentation)
                     .asStandalone()
-                    .with(ManagedProperty.of(objectAdapter, property, where));
+                    .with(ManagedProperty.of(objectAdapter, property, visibilityConstraint));
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
 

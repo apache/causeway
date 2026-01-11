@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService;
@@ -48,11 +49,11 @@ implements HeaderUiService {
     private final MenuUiService menuUiService;
 
     @Override
-    public HeaderUiModel getHeader() {
+    public HeaderUiModel getHeader(final WhatViewer whatViewer) {
         return new HeaderUiModel(
                 brandingUiService.getHeaderBranding(),
                 userProfileUiService.userProfile(),
-                menuUiService.getMenu());
+                menuUiService.getMenu(whatViewer));
     }
 
 }
