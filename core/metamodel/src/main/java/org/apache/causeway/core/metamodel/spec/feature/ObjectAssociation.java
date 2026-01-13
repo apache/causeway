@@ -29,7 +29,7 @@ import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.internal.functions._Predicates;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.WhereValueFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
@@ -139,7 +139,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         public static Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return assoc -> {
                 var b = assoc.streamFacets()
-                        .filter(facet -> facet instanceof HiddenFacet)
+                        .filter(facet -> facet instanceof HiddenFacetForLayout)
                         .map(facet -> (WhereValueFacet) facet)
                         .anyMatch(wawF -> wawF.where().includes(where));
                 return !b;
@@ -147,10 +147,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
         /**
-         * Returns true if no {@link HiddenFacet} is found that vetoes visibility.
+         * Returns true if no {@link HiddenFacetForLayout} is found that vetoes visibility.
          * <p>
          * However, if it's a 1-to-Many, whereHidden={@link Where#ALL_TABLES} is used as default
-         * when no {@link HiddenFacet} is found.
+         * when no {@link HiddenFacetForLayout} is found.
          *
          * @see ObjectAction.Predicates#visibleAccordingToHiddenFacet(Where)
          *
@@ -158,7 +158,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          *      however the current approach is more heap friendly
          */
         public static Predicate<ObjectAssociation> visibleAccordingToHiddenFacet(final Where whereContext) {
-            return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacet.class)
+            return (final ObjectAssociation assoc) -> assoc.lookupFacet(HiddenFacetForLayout.class)
                     .map(WhereValueFacet.class::cast)
                     .map(WhereValueFacet::where)
                     // in case it's a 1-to-Many, whereHidden=ALL_TABLES is the default when not specified otherwise

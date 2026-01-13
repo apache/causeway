@@ -22,6 +22,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -39,7 +40,8 @@ public interface ActionInvocationFacet extends Facet {
             ObjectAction owningAction,
             InteractionHead head,
             Can<ManagedObject> argumentAdapters,
-            InteractionInitiatedBy interactionInitiatedBy);
+            InteractionInitiatedBy interactionInitiatedBy,
+            WhatViewer whatViewer);
 
     ObjectSpecification getReturnType();
 

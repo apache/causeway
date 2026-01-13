@@ -56,7 +56,7 @@ public interface ImperativeFacet extends Facet {
     /**
      * The {@link Method}s invoked by this {@link Facet}.
      */
-    public Can<MethodFacade> getMethods();
+    Can<MethodFacade> methods();
 
     public static enum Intent {
         CHECK_IF_HIDDEN,
@@ -79,17 +79,17 @@ public interface ImperativeFacet extends Facet {
     /**
      * The intent of this method, so that the {@link WrapperFactory} knows whether to delegate on or to reject.
      */
-    public Intent getIntent();
+    Intent intent();
 
     public static void visitAttributes(final ImperativeFacet imperativeFacet, final BiConsumer<String, Object> visitor) {
-        var methods = imperativeFacet.getMethods();
+        var methods = imperativeFacet.methods();
         visitor.accept("methods",
                 methods.stream()
                 .map(MethodFacade::toString)
                 .collect(Collectors.joining(", ")));
         methods.forEach(method->
             visitor.accept(
-                    "intent." + method.getName(), imperativeFacet.getIntent()));
+                    "intent." + method.getName(), imperativeFacet.intent()));
     }
 
     // -- UTILITIES
@@ -103,11 +103,11 @@ public interface ImperativeFacet extends Facet {
         case 0:
             break;
         case 1:
-            return imperativeFacets.get(0).getIntent();
+            return imperativeFacets.get(0).intent();
         default:
             Intent intentToReturn = null;
             for (ImperativeFacet imperativeFacet : imperativeFacets) {
-                Intent intent = imperativeFacet.getIntent();
+                Intent intent = imperativeFacet.intent();
                 if(intentToReturn == null) {
                     intentToReturn = intent;
                 } else if(intentToReturn != intent) {
@@ -143,7 +143,7 @@ public interface ImperativeFacet extends Facet {
     // -- HELPER
 
     private boolean containsMethod(final ResolvedMethod method) {
-        return getMethods().stream()
+        return methods().stream()
                 .map(MethodFacade::asMethodForIntrospection)
                 .anyMatch(method::equals);
     }

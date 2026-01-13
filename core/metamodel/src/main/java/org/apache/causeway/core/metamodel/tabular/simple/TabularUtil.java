@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.tabular.simple;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.IndexedFunction;
 import org.apache.causeway.commons.tabular.TabularModel;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.experimental.UtilityClass;
@@ -35,15 +34,10 @@ class TabularUtil {
     TabularModel.TabularSheet toTabularSheet(
             final DataTable dataTable,
             final DataTable.AccessMode accessMode) {
-        var interactionInitiatedBy = switch(accessMode) {
-            case PASS_THROUGH -> InteractionInitiatedBy.PASS_THROUGH;
-            default -> InteractionInitiatedBy.USER;
-        };
-
         var columns = dataTable.dataColumns()
                 .map(IndexedFunction.zeroBased(TabularUtil::tabularColumn));
         var rows = dataTable.dataRows()
-                .map(dr->tabularRow(dataTable.dataColumns(), dr, interactionInitiatedBy));
+                .map(dr->tabularRow(dataTable.dataColumns(), dr, accessMode));
         return new TabularModel.TabularSheet(dataTable.tableFriendlyName(), columns, rows);
     }
 
@@ -59,9 +53,9 @@ class TabularUtil {
     private TabularModel.TabularRow tabularRow(
             final Can<DataColumn> dataColumns,
             final DataRow dataRow,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final DataTable.AccessMode accessMode) {
         var cells = dataColumns.map(dataColumn->{
-            var cellElements = dataRow.getCellElements(dataColumn, interactionInitiatedBy);
+            var cellElements = dataRow.getCellElements(dataColumn, accessMode);
             final int cardinality = cellElements.size();
             final boolean forceUseTitle = !dataColumn.metamodel().getElementType().isValue();
 

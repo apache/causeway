@@ -36,6 +36,8 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
+
 import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +46,8 @@ public class TitleFacetViaTitleMethod
 extends TitleFacetAbstract
 implements HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull ImperativeAspect imperativeAspect;
     private final TranslationContext translationContext;
 
     public static Optional<TitleFacet> create(

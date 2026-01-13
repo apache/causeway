@@ -30,8 +30,7 @@ import org.apache.causeway.applib.annotation.RestrictTo;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
+import org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType;
 
 class PrototypeFacetAnnotationFactoryTest
 extends FacetFactoryTestAbstract {
@@ -64,9 +63,9 @@ extends FacetFactoryTestAbstract {
             //when
             processRestrictTo(facetFactory, processMethodContext);
             //then
-            final Facet facet = facetedMethod.getFacet(PrototypeFacet.class);
+            final Facet facet = facetedMethod.getFacet(HiddenFacetForDeploymentType.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof PrototypeFacetAbstract);
+            assertTrue(facet instanceof HiddenFacetForDeploymentType);
             assertNoMethodsRemoved();
         });
     }

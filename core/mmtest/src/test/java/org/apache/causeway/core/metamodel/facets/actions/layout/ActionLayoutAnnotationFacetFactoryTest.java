@@ -35,7 +35,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 
 class ActionLayoutAnnotationFacetFactoryTest
@@ -78,7 +78,7 @@ extends FacetFactoryTestAbstract {
         actionScenario(Customer.class, "foz", (processMethodContext, facetHolder, facetedMethod)->{
             facetFactory.process(processMethodContext);
 
-            final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+            final Facet facet = facetedMethod.getFacet(HiddenFacetForLayout.class);
             assertNotNull(facet);
             assertTrue(facet instanceof HiddenFacetForActionLayoutAnnotation);
             var actionLayoutFacetAnnotation = (HiddenFacetForActionLayoutAnnotation) facet;

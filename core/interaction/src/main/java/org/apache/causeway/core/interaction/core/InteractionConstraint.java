@@ -16,15 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.core.interaction.core;
 
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 
-/**
- * @since 2.0 {@index}}
- */
-public interface HeaderUiService {
+public record InteractionConstraint(
+		WhatViewer whatViewer,
+		InteractionInitiatedBy initiatedBy,
+		Where where
+		) {
 
-    HeaderUiModel getHeader(WhatViewer whatViewer);
+	public InteractionConstraint withWhere(final Where where) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
+	public InteractionConstraint withInitiatedBy(final InteractionInitiatedBy initiatedBy) {
+		return new InteractionConstraint(whatViewer, initiatedBy, where);
+	}
+
+	public VisibilityConstraint asVisibilityConstraint() {
+		return new VisibilityConstraint(whatViewer, where);
+	}
 
 }

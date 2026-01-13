@@ -37,8 +37,8 @@ import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.facets.object.cssclass.method.CssClassFacetViaCssClassMethod;
 import org.apache.causeway.core.metamodel.facets.object.disabled.DisabledObjectFacet;
 import org.apache.causeway.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenObjectFacet;
-import org.apache.causeway.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethod;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForObject;
+import org.apache.causeway.core.metamodel.facets.object.hidden.method.HiddenFacetForObjectViaMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconMethod;
 import org.apache.causeway.core.metamodel.facets.object.icon.method.IconFacetViaIconNameMethod;
 import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod;
@@ -51,7 +51,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
 /**
  * Installs {@link DisabledObjectFacetViaMethod}
- * and {@link HiddenObjectFacetViaMethod} on the
+ * and {@link HiddenFacetForObjectViaMethod} on the
  * {@link ObjectSpecification}, and copies this facet onto each
  * {@link ObjectMember}.
  * <p>
@@ -81,7 +81,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
         // priming 'toString()' into Precedence.INFERRED rank
         inferTitleFromToString(processClassContext);
 
-        processObjectSupport(processClassContext, ObjectSupportMethod.HIDDEN, NO_ARG, HiddenObjectFacetViaMethod::create);
+        processObjectSupport(processClassContext, ObjectSupportMethod.HIDDEN, NO_ARG, HiddenFacetForObjectViaMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.DISABLED, NO_ARG, DisabledObjectFacetViaMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.TITLE, NO_ARG, TitleFacetViaTitleMethod::create);
         processObjectSupport(processClassContext, ObjectSupportMethod.LAYOUT, NO_ARG, LayoutPrefixFacetViaMethod::create);
@@ -101,7 +101,7 @@ extends MethodPrefixBasedFacetFactoryAbstract {
 	        .map(disabledObjectFacet->disabledObjectFacet.clone(member))
 	        .ifPresent(FacetUtil::addFacet);
 
-        owningSpec.lookupFacet(HiddenObjectFacet.class)
+        owningSpec.lookupFacet(HiddenFacetForObject.class)
 	        .map(hiddenObjectFacet->hiddenObjectFacet.copyTo(member))
 	        .ifPresent(FacetUtil::addFacet);
     }

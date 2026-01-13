@@ -24,60 +24,53 @@ import java.util.function.BiConsumer;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.members.navigation.NavigationFacet;
-import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet;
+import org.apache.causeway.core.metamodel.facets.members.navigation.HiddenFacetForNavigation;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
 import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-public class NavigationFacetFromHiddenType
-extends FacetAbstract
-implements
-    NavigationFacet {
+public record HiddenFacetForNavigationFromHiddenType(
+		ObjectSpecification navigatedType,
+		FacetHolder facetHolder
+		) implements HiddenFacetForNavigation {
 
-    private final ObjectSpecification navigatedType;
+	public static Optional<HiddenFacetForNavigation> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
+		return navigatedType.isValue()
+				? Optional.empty() // don't create for value types (optimization, not strictly required)
+						: Optional.of(new HiddenFacetForNavigationFromHiddenType(navigatedType, holder));
+	}
 
-    private static final Class<? extends Facet> type() {
-        return NavigationFacet.class;
-    }
+	@Override public Class<? extends Facet> facetType() { return HiddenFacetForNavigation.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
 
-    public static Optional<NavigationFacet> create(final ObjectSpecification navigatedType, final FacetHolder holder) {
-        return navigatedType.isValue()
-                ? Optional.empty() // don't create for value types (optimization, not strictly required)
-                : Optional.of(new NavigationFacetFromHiddenType(navigatedType, holder));
-    }
-
-    private NavigationFacetFromHiddenType(final ObjectSpecification navigatedType, final FacetHolder holder) {
-        super(type(), holder);
-        this.navigatedType = navigatedType;
+    public HiddenFacetForNavigationFromHiddenType {
         _Assert.assertTrue(navigatedType.isSingular(), ()->String.format(
                 "framework bug: elementType must not match any supported plural (collection) types, "
                 + "nevertheless got %s", navigatedType));
     }
 
     @Override
-    public String hides(final VisibilityContext ic) {
-        var facet = navigatedType.getFacet(HiddenTypeFacet.class);
-        if(facet == null) {
-            // not expected to happen; this facet should only be installed for object members
+    public String hides(final VisibilityContext vc) {
+        var facet = navigatedType.getFacet(HiddenFacetForNoMembersAuthorized.class);
+        if(facet == null)
+			// not expected to happen; this facet should only be installed for object members
             // that navigate to a class that has the HiddenTypeFacet
             return null;
-        }
         var objVisibilityContext = new ObjectVisibilityContext(
-                ic.head(),
+                vc.head(),
                 Identifier.classIdentifier(navigatedType.logicalType()),
-                ic.initiatedBy(),
-                ic.where(),
-                ic.renderPolicy());
+                vc.initiatedBy(),
+                vc.visibilityConstraint(),
+                vc.renderPolicy());
         final String hides = facet.hides(objVisibilityContext);
         return hides;
     }
 
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	HiddenFacetForNavigation.super.visitAttributes(visitor);
         visitor.accept("navigatedType", navigatedType.logicalTypeName());
         visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
     }

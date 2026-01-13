@@ -31,22 +31,5 @@ public interface FacetWithAttributes {
     default void visitAttributes(final BiConsumer<String, Object> visitor) {
     	FacetUtil.visitAttributes((Facet)this, visitor);
     }
-    
-    /**
-     * Marker interface used within {@link FacetUtil#visitAttributes()}.
-     */
-    public static interface HidingOrShowing {
-    }
 
-    /**
-     * Marker interface used within {@link FacetUtil#visitAttributes()}.
-     */
-    public static interface DisablingOrEnabling {
-    }
-
-    /**
-     * Marker interface used within {@link FacetUtil#visitAttributes()}.
-     */
-    public static interface Validating {
-    }
 }

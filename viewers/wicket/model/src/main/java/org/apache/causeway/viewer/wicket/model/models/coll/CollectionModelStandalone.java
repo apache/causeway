@@ -18,14 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.model.models.coll;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.tabular.DataTableInteractive;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
-
-import org.jspecify.annotations.NonNull;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 
 public final class CollectionModelStandalone
 extends CollectionModelAbstract {
@@ -40,7 +41,7 @@ extends CollectionModelAbstract {
 
         var bookmarkedObject = BookmarkedObjectWkt.ofAdapter(actionModel.getParentObject());
         var tableInteractive = DataTableInteractive.forAction(
-            ManagedAction.of(bookmarkedObject.getObject(), actionModel.getAction(), Where.NOT_SPECIFIED),
+            ManagedAction.of(bookmarkedObject.getObject(), actionModel.getAction(), WktVisibility.visibilityConstraint(Where.NOT_SPECIFIED)),
             collectionAsAdapter);
 
         return new CollectionModelStandalone(bookmarkedObject, tableInteractive);

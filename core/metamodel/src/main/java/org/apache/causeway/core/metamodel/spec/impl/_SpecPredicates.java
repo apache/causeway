@@ -19,7 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import org.apache.causeway.core.metamodel.facets.actions.contributing.ContributingFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 
 import org.jspecify.annotations.NonNull;
@@ -42,7 +42,7 @@ final class _SpecPredicates {
     // -- HIGHER LEVEL - MIXINS
 
     static boolean isMixedInAction(final @NonNull ObjectAction mixinAction) {
-        if(HiddenFacet.isAlwaysHidden(mixinAction)) {
+        if(HiddenFacetForLayout.isAlwaysHidden(mixinAction)) {
             return false;
         }
         if(ContributingFacet.isActionContributionVetoed(mixinAction)) {
@@ -58,7 +58,7 @@ final class _SpecPredicates {
         if(!mixinAction.getSemantics().isSafeInNature()) {
             return false;
         }
-        if(HiddenFacet.isAlwaysHidden(mixinAction)) {
+        if(HiddenFacetForLayout.isAlwaysHidden(mixinAction)) {
             return false;
         }
         if(ContributingFacet.isAssociationContributionVetoed(mixinAction)) {

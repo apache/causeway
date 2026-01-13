@@ -27,7 +27,6 @@ import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -106,32 +105,29 @@ public class RichActionInvokeResult extends Element {
         var environment = new Environment.ForTunnelled(dataFetchingEnvironment);
 
         var objectSpecification = context.specificationLoader.loadSpecification(sourcePojo.getClass());
-        if (objectSpecification == null) {
-            return null;
-        }
+        if (objectSpecification == null)
+			return null;
 
         var objectAction = actionInteractor.getObjectMember();
         var managedObject = ManagedObject.adaptSingular(objectSpecification, sourcePojo);
+        var visibilityConstraint = Context.visibilityConstraint();
 
-        var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (visibleConsent.isVetoed()) {
-            throw new HiddenException(objectAction.getFeatureIdentifier());
-        }
+        var visibleConsent = objectAction.isVisible(managedObject, InteractionInitiatedBy.USER, visibilityConstraint);
+        if (visibleConsent.isVetoed())
+			throw new HiddenException(objectAction.getFeatureIdentifier());
 
-        var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, Where.ANYWHERE);
-        if (usableConsent.isVetoed()) {
-            throw new DisabledException(objectAction.getFeatureIdentifier());
-        }
+        var usableConsent = objectAction.isUsable(managedObject, InteractionInitiatedBy.USER, visibilityConstraint);
+        if (usableConsent.isVetoed())
+			throw new DisabledException(objectAction.getFeatureIdentifier());
 
         var head = objectAction.interactionHead(managedObject);
         var argumentManagedObjects = actionInteractor.argumentManagedObjectsFor(environment, objectAction, context.bookmarkService);
 
         var validityConsent = objectAction.isArgumentSetValid(head, argumentManagedObjects, InteractionInitiatedBy.USER);
-        if (validityConsent.isVetoed()) {
-            throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
-        }
+        if (validityConsent.isVetoed())
+			throw new IllegalArgumentException(validityConsent.getReasonAsString().orElse("Invalid"));
 
-        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER);
+        var resultManagedObject = objectAction.execute(head, argumentManagedObjects, InteractionInitiatedBy.USER, visibilityConstraint.whatViewer());
         return resultManagedObject.getPojo();
     }
 
