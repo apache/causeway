@@ -24,6 +24,7 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.TypedQuery;
 
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.lang.Nullable;
@@ -131,17 +132,8 @@ public class JpaEntityFacet
 
             // guard against misuse
             _Assert.assertTypeIsInstanceOf(queryEntityType, entityClass);
-
-            val entityManager = getEntityManager();
-
-            val cb = entityManager.getCriteriaBuilder();
-            val cr = cb.createQuery(entityClass);
-
-            cr.select(_Casts.uncheckedCast(cr.from(entityClass)));
-
-            val typedQuery = entityManager
-                    .createQuery(cr);
-
+            
+            val typedQuery = selectFrom(entityClass);
             if (range.hasOffset()) {
                 typedQuery.setFirstResult(range.getStartAsInt());
             }
@@ -280,6 +272,16 @@ public class JpaEntityFacet
 
     protected PersistenceUnitUtil getPersistenceUnitUtil(final EntityManager entityManager) {
         return entityManager.getEntityManagerFactory().getPersistenceUnitUtil();
+    }
+    
+    // -- HELPER
+
+    private <T> TypedQuery<T> selectFrom(Class<T> entityClass) {
+        var entityManager = getEntityManager();
+        var q = entityManager.getCriteriaBuilder().createQuery(entityClass);
+        q.select(q.from(entityClass));
+        return entityManager
+                .createQuery(q);
     }
 
 }
