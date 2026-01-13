@@ -31,8 +31,7 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
-@SuppressWarnings("rawtypes")
-public abstract class MenuActionPanel extends PanelBase {
+public abstract class MenuActionPanel extends PanelBase<Object> {
 
     private static final long serialVersionUID = 1L;
 
