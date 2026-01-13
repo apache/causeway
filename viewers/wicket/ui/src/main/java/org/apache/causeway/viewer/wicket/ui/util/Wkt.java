@@ -687,7 +687,10 @@ public class Wkt {
                     .mainClass("input-group-sm")
                     .initialCaption(initialCaption)
                     .captionClass("form-control-sm")
-                    .showUpload(false));
+                    .showUpload(false)
+                    //[CAUSEWAY-3950] preview may trigger unwanted downloads of the file that just got uploaded
+                    // we were seeing this with Chrome browser and files of type CSV
+                    .showPreview(false));
         return fileUploadField;
     }
 
