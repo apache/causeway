@@ -79,10 +79,10 @@ jobs:
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
           -Dmodule-regressiontests
-		  -Dmaven.compiler.release=11
-		  -Dmaven.compiler.proc=full
-		  -Dmaven.source.skip=true
-		  -Dlombok.version=1.18.42
+         -Dmaven.compiler.release=11
+          -Dmaven.compiler.proc=full
+          -Dmaven.source.skip=true
+          -Dlombok.version=1.18.42
           -Denforcer.failFast=true
           -Dproject.build.outputTimestamp=2026-01-01T00:00:00Z
           -e
