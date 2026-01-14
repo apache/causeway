@@ -183,7 +183,7 @@ public class AutoCompleteGeneratedDslQuery {
     }
 
     static <T> ArrayList<T> newArrayList(final T... objs) {
-        ArrayList<T> result = new ArrayList();
+        ArrayList<T> result = new ArrayList<>();
         Collections.addAll(result, objs);
         return result;
     }
