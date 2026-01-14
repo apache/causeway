@@ -253,7 +253,7 @@ implements FacetHolder {
             : streamDeclaredActions(actionScopes, mixedIn)
                 .filter(action->
                     id.equals(action.getFeatureIdentifier().getMemberNameAndParameterClassNamesIdentityString())
-                            || id.equals(action.getFeatureIdentifier().getMemberLogicalName())
+                            || id.equals(action.getFeatureIdentifier().memberLogicalName())
                 )
                 .findFirst();
     }

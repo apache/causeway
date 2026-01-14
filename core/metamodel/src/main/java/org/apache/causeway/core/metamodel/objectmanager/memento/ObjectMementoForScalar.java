@@ -38,6 +38,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 @ToString
 public final class ObjectMementoForScalar
@@ -61,7 +62,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     // --
 
-    @Getter(onMethod_ = {@Override}) final LogicalType logicalType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) final LogicalType logicalType;
 
     _Recreatable.RecreateStrategy recreateStrategy;
 
@@ -82,7 +83,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
                 .orElseThrow(()->_Exceptions.unrecoverable(
                         "cannot recreate spec from logicalTypeName %s", logicalTypeName));
 
-        this.logicalType = spec.getLogicalType();
+        this.logicalType = spec.logicalType();
 
         this.title = "?memento?"; // TODO can we do better?
 
@@ -139,7 +140,7 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
         // intercept when managed by Spring
         if(spec.getBeanSort().isManagedBeanAny()) {
-            return spec.getMetaModelContext().lookupServiceAdapterById(getLogicalTypeName());
+            return spec.getMetaModelContext().lookupServiceAdapterById(logicalTypeName());
         }
 
         return recreateStrategy.recreateObject(this, mmc);

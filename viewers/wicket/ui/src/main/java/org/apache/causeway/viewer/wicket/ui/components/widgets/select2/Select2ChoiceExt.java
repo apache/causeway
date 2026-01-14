@@ -18,16 +18,16 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
 
-import org.apache.wicket.model.IModel;
-import org.wicketstuff.select2.Select2Choice;
-
 import org.apache.causeway.applib.id.HasLogicalType;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.core.metamodel.objectmanager.memento.ObjectMemento;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.select2.providers.ChoiceProviderAbstract;
+import org.apache.wicket.model.IModel;
+import org.wicketstuff.select2.Select2Choice;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class Select2ChoiceExt
 extends Select2Choice<ObjectMemento>
@@ -43,7 +43,7 @@ implements HasLogicalType {
         return new Select2ChoiceExt(id, modelObject, scalarModel, choiceProvider);
     }
 
-    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final LogicalType logicalType;
 
     private Select2ChoiceExt(
             final String id,
@@ -52,7 +52,7 @@ implements HasLogicalType {
             final ChoiceProviderAbstract choiceProvider) {
         super(id, model, choiceProvider);
 
-        logicalType = scalarModel.getElementType().getLogicalType();
+        logicalType = scalarModel.getElementType().logicalType();
 
         getSettings().setCloseOnSelect(true);
         getSettings().setWidth("auto");

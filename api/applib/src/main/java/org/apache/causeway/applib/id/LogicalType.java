@@ -40,6 +40,7 @@ import lombok.NonNull;
 import lombok.Synchronized;
 import lombok.ToString;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * A generalization of Java's class type to also hold a logical name, which can be supplied lazily.
@@ -65,7 +66,7 @@ implements
     /**
      * Type (that is, the {@link Class} this identifier represents).
      */
-    @Getter
+    @Getter @Accessors(fluent = true)
     private final Class<?> correspondingClass;
 
     @ToString.Exclude
@@ -175,8 +176,8 @@ implements
     /**
      * Canonical name of the corresponding class.
      */
-    public String getClassName() {
-        return _Strings.nonEmpty(getCorrespondingClass().getCanonicalName())
+    public String className() {
+        return _Strings.nonEmpty(correspondingClass().getCanonicalName())
                 .orElse("inner");
     }
 
@@ -200,7 +201,7 @@ implements
      * @see SpecificationLoader
      */
     @Synchronized
-    public String getLogicalTypeName() {
+    public String logicalName() {
         if(logicalName == null) {
             logicalName = requireNonEmpty(logicalNameProvider.get());
         }
@@ -228,7 +229,7 @@ implements
      * @implNote the result is not memoized, to keep it simple
      */
     public String getNamespace() {
-        val logicalTypeName = getLogicalTypeName();
+        val logicalTypeName = logicalName();
         final int lastDot = logicalTypeName.lastIndexOf('.');
         return lastDot >= 0
             ? logicalTypeName.substring(0, lastDot)
@@ -285,7 +286,7 @@ implements
     @Override
     public int compareTo(final @Nullable LogicalType other) {
         val otherClassName = other!=null
-                ? other.getCorrespondingClass().getCanonicalName()
+                ? other.correspondingClass().getCanonicalName()
                 : null;
         return _Strings.compareNullsFirst(correspondingClass.getCanonicalName(), otherClassName);
     }
@@ -306,8 +307,8 @@ implements
         private final @NonNull String logicalTypeName;
 
         private SerializationProxy(final LogicalType typeIdentifier) {
-            this.correspondingClass = typeIdentifier.getCorrespondingClass();
-            this.logicalTypeName = typeIdentifier.getLogicalTypeName();
+            this.correspondingClass = typeIdentifier.correspondingClass();
+            this.logicalTypeName = typeIdentifier.logicalName();
         }
 
         private Object readResolve() {
@@ -315,12 +316,29 @@ implements
         }
     }
 
+    // -- DEPRECATIONS
+    
+    @Deprecated(forRemoval = true)
+    public final String getLogicalTypeName() {
+    	return logicalName();
+    }
+    
+    @Deprecated(forRemoval = true)
+    public final Class<?> getCorrespondingClass() {
+    	return correspondingClass();
+    }
+    
+    @Deprecated(forRemoval = true)
+    public String getClassName() {
+        return className();
+    }
+    
     // -- HELPER
 
     private String requireNonEmpty(final String logicalName) {
         if(_Strings.isEmpty(logicalName)) {
             throw _Exceptions.illegalArgument("logical name for type %s cannot be empty",
-                    getCorrespondingClass().getName());
+            		correspondingClass().getName());
         }
         return logicalName;
     }

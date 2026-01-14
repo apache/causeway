@@ -229,7 +229,7 @@ implements ObjectSpecification {
     }
 
     @Override
-    public final LogicalType getLogicalType() {
+    public final LogicalType logicalType() {
         return logicalType;
     }
 
