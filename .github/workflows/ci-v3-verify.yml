@@ -1,13 +1,11 @@
-name: Build, Test (JDK 25)
+name: Build, Test (3.6.0-SNAPSHOT)
 
 on:
   push:
     branches:
-      - main
       - v3
   pull_request:
     branches:
-      - main
       - v3
 
 jobs:
@@ -45,10 +43,6 @@ jobs:
       # requires 'secrets' which we don't have yet
       MVN_STAGES: install
 
-      # options
-      # CodeQL action seems broken on JDK22, waiting for updates
-      SKIP_CODE_QL: true
-
     steps:
     - uses: actions/checkout@v5
     - name: Print Branch Name
@@ -63,16 +57,11 @@ jobs:
         distribution: 'zulu'
         java-version: 25
 
-    - name: Set up Maven (3.9.11)
+    - name: Set up Maven (3.9.12)
       if: matrix.language == 'java' && env.BRANCH_NAME == 'v3'
       uses: stCarolas/setup-maven@v5
       with:
-        maven-version: 3.9.11
-    - name: Set up Maven (4.0.0-rc-4)
-      if: matrix.language == 'java' && env.BRANCH_NAME == 'main'
-      uses: stCarolas/setup-maven@v5
-      with:
-        maven-version: 4.0.0-rc-4
+        maven-version: 3.9.12
 
     - name: Print Maven Version
       if: matrix.language == 'java'
@@ -104,13 +93,6 @@ jobs:
         echo MVN_STAGES       \: $MVN_STAGES
         echo ======================================
 
-    # CodeQL Analysis (https://codeql.github.com/docs/codeql-overview/about-codeql/)
-    - name: "CodeQL: Initialize"
-      if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/init@v4
-      with:
-        languages: ${{ matrix.language }}
-
     - name: Build Artifacts
       if: matrix.language == 'java'
       shell: bash
@@ -133,19 +115,6 @@ jobs:
           -Dproject.build.outputTimestamp=2025-01-01T00:00:00Z
           -DsonatypeOssDistMgmtStagingUrl=https://jakarta.oss.sonatype.org/content/repositories/staging/
           -e
-
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
-    # If this step fails, then you should remove it and run the build manually
-    - name: "CodeQL: Autobuild"
-      if: env.SKIP_CODE_QL != 'true' && matrix.language == 'javascript'
-      uses: github/codeql-action/autobuild@v4
-
-    - name: "CodeQL: Perform Analysis"
-      if: env.SKIP_CODE_QL != 'true'
-      uses: github/codeql-action/analyze@v4
-      with:
-        category: "/language:${{matrix.language}}"
-
 
 # FOR DEBUG USE
 #   - name: Dump GitHub context
