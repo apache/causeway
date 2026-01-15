@@ -194,7 +194,7 @@ implements MenuBarsService {
 
                 val serviceActionIdentifier = objectAction.getFeatureIdentifier();
 
-                val actionId = serviceActionIdentifier.getLogicalTypeName()
+                val actionId = serviceActionIdentifier.logicalTypeName()
                         + "#" + serviceActionIdentifier.getMemberLogicalName();
 
                 val layoutData = serviceActionLayoutDataByActionId.get(actionId);
@@ -346,7 +346,7 @@ implements MenuBarsService {
 
                 val objectAction = serviceAndAction.getObjectAction();
                 //val service = serviceAndAction.getServiceAdapter();
-                val logicalTypeName = serviceAndAction.getServiceAdapter().objSpec().getLogicalTypeName();
+                val logicalTypeName = serviceAndAction.getServiceAdapter().objSpec().logicalTypeName();
                 val actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
                 val named = objectAction

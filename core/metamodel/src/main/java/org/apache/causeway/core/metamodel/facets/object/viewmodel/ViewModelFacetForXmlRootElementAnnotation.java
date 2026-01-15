@@ -62,7 +62,7 @@ extends ViewModelFacetAbstract {
                     + "--- XML ---\n"
                     + "%s"
                     + "-----------\n",
-                    viewmodelSpec.getLogicalTypeName(),
+                    viewmodelSpec.logicalTypeName(),
                     xmlStr);
         });
 
@@ -82,7 +82,7 @@ extends ViewModelFacetAbstract {
                     + "--- XML ---\n"
                     + "%s"
                     + "-----------\n",
-                    managedObject.objSpec().getLogicalTypeName(),
+                    managedObject.objSpec().logicalTypeName(),
                     xml);
         });
         return encoded;

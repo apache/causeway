@@ -69,7 +69,7 @@ extends
     }
 
     default String getCssClass(final String prefix) {
-        final String ownerObjectType = getDeclaringType().getLogicalTypeName().replace(".", "-");
+        final String ownerObjectType = getDeclaringType().logicalTypeName().replace(".", "-");
         final String memberId = getFeatureIdentifier().getMemberLogicalName();
         return prefix + ownerObjectType + "-" + memberId;
     }

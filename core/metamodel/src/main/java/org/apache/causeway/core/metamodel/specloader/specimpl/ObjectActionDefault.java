@@ -468,7 +468,7 @@ implements ObjectAction {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
                     log.info("Executing: {}#{} {} {}",
-                        getFeatureIdentifier().getLogicalTypeName(),
+                        getFeatureIdentifier().logicalTypeName(),
                         getFeatureIdentifier().getMemberLogicalName(),
                         UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                         argsFor(getParameters(), argumentAdapters));

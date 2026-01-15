@@ -232,7 +232,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
                     + "falling back to rendering as 'null'. "
                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
                     + "that implements ValueComposer<{}>}",
-                    valueSpec.getLogicalTypeName(),
+                    valueSpec.logicalTypeName(),
                     valueSpec.getCorrespondingClass().getSimpleName(),
                     valueSpec.getCorrespondingClass().getSimpleName());
         }

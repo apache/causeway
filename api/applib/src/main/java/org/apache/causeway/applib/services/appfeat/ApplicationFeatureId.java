@@ -82,7 +82,7 @@ implements
 
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
 
-        val logicalTypeName = identifier.getLogicalTypeName();
+        val logicalTypeName = identifier.logicalTypeName();
 
         if(identifier.getType().isClass()) {
             return newType(logicalTypeName);

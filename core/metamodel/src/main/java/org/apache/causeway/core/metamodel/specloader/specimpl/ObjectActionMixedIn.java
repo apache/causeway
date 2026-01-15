@@ -102,7 +102,7 @@ implements MixedInMember {
         super(Identifier.actionIdentifier(
                     LogicalType.eager(
                             mixeeSpec.getCorrespondingClass(),
-                            mixeeSpec.getLogicalTypeName()),
+                            mixeeSpec.logicalTypeName()),
                     _MixedInMemberNamingStrategy.mixinMemberId(mixinAction),
                     mixinAction.getFacetedMethod().getFeatureIdentifier().getMemberParameterClassNames()),
                 mixinAction.getFacetedMethod(), false, false);
@@ -188,7 +188,7 @@ implements MixedInMember {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
                     log.info("Executing: {}#{} {} {}",
-                            getFeatureIdentifier().getLogicalTypeName(),
+                            getFeatureIdentifier().logicalTypeName(),
                             getFeatureIdentifier().getMemberLogicalName(),
                             UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                             argsFor(getParameters(), argumentAdapters));

@@ -165,7 +165,7 @@ implements ApplicationFeatureRepository, MetamodelListener {
         }
 
 
-        val logicalType = spec.getLogicalType();
+        val logicalType = spec.logicalType();
         val logicalTypeName = logicalType.logicalName();
         val typeFeatureId = ApplicationFeatureId.newType(logicalTypeName);
 

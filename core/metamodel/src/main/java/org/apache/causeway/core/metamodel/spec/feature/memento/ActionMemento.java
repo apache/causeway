@@ -76,7 +76,7 @@ public class ActionMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getIdentifier().getLogicalTypeName() + "#"
+        return getIdentifier().logicalTypeName() + "#"
                 + getIdentifier().getMemberNameAndParameterClassNamesIdentityString();
     }
 

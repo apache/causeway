@@ -169,7 +169,7 @@ implements CollectionCountProvider {
 
     private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
-        final String parentTypeName = property.getDeclaringType().getLogicalTypeName();
+        final String parentTypeName = property.getDeclaringType().logicalTypeName();
 
         return new SingularColumn(
                 collectionModel.getVariant(),
@@ -182,7 +182,7 @@ implements CollectionCountProvider {
 
     private PluralColumn createPluralColumn(final OneToManyAssociation collection) {
         val collectionModel = getModel();
-        final String parentTypeName = collection.getDeclaringType().getLogicalTypeName();
+        final String parentTypeName = collection.getDeclaringType().logicalTypeName();
 
         return new PluralColumn(
                 collectionModel.getVariant(),

@@ -45,7 +45,6 @@ public interface HasLogicalType {
     default LogicalType getLogicalType() {
     	return logicalType();
     }
-
     /**
      * @deprecated use {@link #logicalTypeName()} instead
      */

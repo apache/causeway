@@ -233,7 +233,7 @@ extends TypedHolderAbstract {
             final MethodFacade method) {
         val logicalTypeOfDeclaringType = LogicalType.lazy(
                 declaringType,
-                ()->specificationLoader.specForTypeElseFail(declaringType).getLogicalTypeName());
+                ()->specificationLoader.specForTypeElseFail(declaringType).logicalTypeName());
         return featureType.identifierFor(logicalTypeOfDeclaringType, method);
     }
 

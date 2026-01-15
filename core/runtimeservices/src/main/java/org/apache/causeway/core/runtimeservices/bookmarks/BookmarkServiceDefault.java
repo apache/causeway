@@ -126,7 +126,7 @@ public class BookmarkServiceDefault implements BookmarkService {
             return Optional.empty();
         }
         return specificationLoader.specForType(cls)
-                .map(ObjectSpecification::getLogicalType)
+                .map(ObjectSpecification::logicalType)
                 .map(logicalType->Bookmark.forLogicalTypeAndIdentifier(logicalType, identifier));
     }
 

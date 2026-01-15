@@ -77,7 +77,7 @@ implements
                 return;
             }
 
-            val logicalType = objectSpec.getLogicalType();
+            val logicalType = objectSpec.logicalType();
 
             //XXX has a slight chance to be a false positive; would need to check whether annotated with @Named
             if(logicalType.className().equals(logicalType.logicalName())) {

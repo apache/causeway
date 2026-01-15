@@ -82,7 +82,7 @@ implements MenuUiService {
         return metaModelContext.streamServiceAdapters()
                 .filter(with(menuBarSelect))
                 .map(ManagedObject::objSpec)
-                .map(ObjectSpecification::getLogicalTypeName)
+                .map(ObjectSpecification::logicalTypeName)
                 .collect(Collectors.toList());
     }
 

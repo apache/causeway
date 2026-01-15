@@ -88,7 +88,7 @@ public final class MmSpecUtils {
         specs
                 .stream()
                 .sorted()
-                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalType()));
+                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.logicalType()));
 
         // export the list-multi-map to YAML format
         val sb = new StringBuilder();

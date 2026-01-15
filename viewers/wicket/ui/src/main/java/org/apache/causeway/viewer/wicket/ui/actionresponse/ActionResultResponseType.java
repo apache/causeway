@@ -311,7 +311,7 @@ public enum ActionResultResponseType {
 
             _Assert.assertTrue(resultSpec.isSingular());
 
-            if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.getLogicalTypeName())) {
+            if(LoginRedirect.LOGICAL_TYPE_NAME.equals(resultSpec.logicalTypeName())) {
                 return TypeAndAdapter.of(ActionResultResponseType.SIGN_IN, resultAdapter);
             }
 

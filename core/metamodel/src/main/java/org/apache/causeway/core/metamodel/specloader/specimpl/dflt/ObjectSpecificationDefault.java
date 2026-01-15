@@ -335,7 +335,7 @@ implements FacetHolder {
                 && !getBeanSort().isMixin()
                 && (getBeanSort().isManagedBeanAny()
                         || getServiceRegistry()
-                                .lookupRegisteredBeanById(getLogicalType())
+                                .lookupRegisteredBeanById(logicalType())
                                 .isPresent())
                 );
 

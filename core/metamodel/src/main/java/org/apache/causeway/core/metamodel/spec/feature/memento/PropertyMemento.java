@@ -75,7 +75,7 @@ public class PropertyMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getIdentifier().getLogicalTypeName() + "#" + getIdentifier().getMemberLogicalName();
+        return getIdentifier().logicalTypeName() + "#" + getIdentifier().getMemberLogicalName();
     }
 
 

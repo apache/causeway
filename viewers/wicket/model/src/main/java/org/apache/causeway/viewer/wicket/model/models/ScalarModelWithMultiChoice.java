@@ -84,7 +84,7 @@ implements
     @Override
     public void setObject(final ArrayList<ObjectMemento> unpackedMemento) {
         log.debug("setObject() as unpackedMemento {}", unpackedMemento);
-        val logicalType = scalarModel().getElementType().getLogicalType();
+        val logicalType = scalarModel().getElementType().logicalType();
         val packedMemento = ObjectMemento.pack(unpackedMemento, logicalType);
         pendingValue().getValue().setValue(getObjectManager().demementify(packedMemento));
     }

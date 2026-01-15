@@ -107,9 +107,9 @@ public class SitemapServiceDefault implements SitemapService {
                         adoc.append("WARNING: ");
                     }
                     if(actionReturnType.isPlural()) {
-                        adoc.append(String.format("Returns collection of: `%s`\n\n", actionElementType.getLogicalTypeName()));
+                        adoc.append(String.format("Returns collection of: `%s`\n\n", actionElementType.logicalTypeName()));
                     } else {
-                        adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.getLogicalTypeName()));
+                        adoc.append(String.format("Returns scalar of: `%s`\n\n", actionElementType.logicalTypeName()));
                     }
 
                     val groupStack = new Stack<String>();

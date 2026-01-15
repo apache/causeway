@@ -59,7 +59,7 @@ public class TitleAnnotator implements MetaModelAnnotator {
             final DomainClassDto domainClass, final ObjectSpecification specification) {
         titleAnnotation(domainClass,
                 String.format("%s: %s",
-                        specification.getLogicalTypeName(),
+                        specification.logicalTypeName(),
                         config().abbrev(specification.getCorrespondingClass())));
     }
 

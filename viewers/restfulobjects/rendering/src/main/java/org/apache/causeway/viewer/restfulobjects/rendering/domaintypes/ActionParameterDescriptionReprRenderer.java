@@ -39,7 +39,7 @@ extends AbstractTypeFeatureReprRenderer<ObjectActionParameter> {
             final Rel rel,
             final ObjectSpecification objectSpecification,
             final ObjectActionParameter objectActionParameter) {
-        final String domainType = objectSpecification.getLogicalTypeName();
+        final String domainType = objectSpecification.logicalTypeName();
         final ObjectAction objectAction = objectActionParameter.getAction();
         final String actionId = objectAction.getId();
         final String paramId = objectActionParameter.getId();
