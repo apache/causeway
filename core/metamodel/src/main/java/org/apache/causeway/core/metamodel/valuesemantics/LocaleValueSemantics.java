@@ -82,7 +82,7 @@ implements
     }
 
     private String localeToString(final ValueSemanticsProvider.Context context, final Locale value) {
-        val userLanguageLocale = context.getInteractionContext().getLocale().getLanguageLocale();
+        val userLanguageLocale = context.interactionContext().getLocale().getLanguageLocale();
 
         val language = value.getDisplayLanguage(userLanguageLocale);
         if(_Strings.isEmpty(language)) {

@@ -59,13 +59,14 @@ public interface ValueSemanticsProvider<T> {
     class Context {
         private final @Nullable Identifier featureIdentifier;
         private final @Nullable InteractionContext interactionContext;
+
+        // -- DEPRECATIONS
         
         /**
          * @deprecated use {@link #featureIdentifier()} instead
          */
         @Deprecated(forRemoval = true) // replaced by a record in future versions
         public final @Nullable Identifier getFeatureIdentifier() { return featureIdentifier; }
-        
         /**
          * @deprecated use {@link #interactionContext()} instead
          */

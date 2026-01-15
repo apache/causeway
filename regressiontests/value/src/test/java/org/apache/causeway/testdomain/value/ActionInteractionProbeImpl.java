@@ -66,7 +66,7 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
         
-        final Identifier paramId = context.getFeatureIdentifier();
+        final Identifier paramId = context.featureIdentifier();
         val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
@@ -98,7 +98,7 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
         
-        final Identifier paramId = context.getFeatureIdentifier();
+        final Identifier paramId = context.featureIdentifier();
         val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 

@@ -160,7 +160,7 @@ implements
                 "calendar-name", v.getCalendarName(),
                 "timestamp", zonedDateTimeValueSemantics
                     .htmlPresentation(context,
-                            v.asDateTime(context.getInteractionContext().getTimeZone())),
+                            v.asDateTime(context.interactionContext().getTimeZone())),
                 "notes", _Strings.nullToEmpty(v.getNotes()));
     }
 
@@ -172,7 +172,7 @@ implements
                 "calendar-name", _Strings.htmlEscape(v.getCalendarName()),
                 "timestamp", zonedDateTimeValueSemantics
                     .htmlPresentation(context,
-                            v.asDateTime(context.getInteractionContext().getTimeZone())),
+                            v.asDateTime(context.interactionContext().getTimeZone())),
                 "notes", _Strings.htmlEscape(_Strings.nullToEmpty(v.getNotes())));
     }
 
