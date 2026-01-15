@@ -327,7 +327,7 @@ class _OpenApiModelFactory {
 
     void appendServicePath(final ObjectSpecification objectSpec) {
 
-        final String serviceId = objectSpec.getLogicalTypeName();
+        final String serviceId = objectSpec.logicalTypeName();
 
         final PathItem path = new PathItem();
         oa3.path(String.format("/services/%s", serviceId), path);
@@ -354,7 +354,7 @@ class _OpenApiModelFactory {
 
     ObjectSchema appendObjectPathAndModelDefinitions(final ObjectSpecification objectSpec) {
 
-        final String logicalTypeName = objectSpec.getLogicalTypeName();
+        final String logicalTypeName = objectSpec.logicalTypeName();
 
         val causewayModel = new ObjectSchema();
         val causewayModelDefinition = logicalTypeName + "Repr";
@@ -427,7 +427,7 @@ class _OpenApiModelFactory {
             final ObjectSpecification serviceSpec,
             final ObjectAction serviceAction) {
 
-        final String serviceId = serviceSpec.getLogicalTypeName();
+        final String serviceId = serviceSpec.logicalTypeName();
         final String actionId = serviceAction.getId();
 
         val parameters = serviceAction.getParameters();
@@ -498,7 +498,7 @@ class _OpenApiModelFactory {
             final ObjectSpecification objectSpec,
             final OneToManyAssociation collection) {
 
-        final String logicalTypeName = objectSpec.getLogicalTypeName();
+        final String logicalTypeName = objectSpec.logicalTypeName();
         final String collectionId = collection.getId();
 
         final PathItem path = new PathItem();
@@ -524,7 +524,7 @@ class _OpenApiModelFactory {
             final ObjectSpecification objectSpec,
             final ObjectAction objectAction) {
 
-        final String logicalTypeName = objectSpec.getLogicalTypeName();
+        final String logicalTypeName = objectSpec.logicalTypeName();
         final String actionId = objectAction.getId();
 
         val parameters = objectAction.getParameters();
@@ -615,7 +615,7 @@ class _OpenApiModelFactory {
         if(objectSpecification != null
                 && objectSpecification.getCorrespondingClass() != Object.class) {
             arrayProperty
-            .description("List of " + objectSpecification.getLogicalTypeName())
+            .description("List of " + objectSpecification.logicalTypeName())
             .items(schemaFor(objectSpecification));
         } else {
             arrayProperty.items(new ObjectSchema());
@@ -648,7 +648,7 @@ class _OpenApiModelFactory {
                 return valueSchema.get();
             }
         }
-        return newRefProperty(specification.getLogicalTypeName() + "Repr");
+        return newRefProperty(specification.logicalTypeName() + "Repr");
     }
 
     private void updateObjectModel(
@@ -657,7 +657,7 @@ class _OpenApiModelFactory {
             final List<OneToOneAssociation> objectProperties,
             final List<OneToManyAssociation> objectCollections) {
 
-        final String logicalTypeName = objectSpecification.getLogicalTypeName();
+        final String logicalTypeName = objectSpecification.logicalTypeName();
         final String className = objectSpecification.getFullIdentifier();
 
         model

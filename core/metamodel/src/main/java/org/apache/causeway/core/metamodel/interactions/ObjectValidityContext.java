@@ -41,7 +41,7 @@ implements ProposedHolder {
         super(InteractionContextType.OBJECT_VALIDATE,
                 InteractionHead.regular(targetAdapter),
                 identifier,
-                ()->targetAdapter.getSpecification().getSingularName(),
+                ()->targetAdapter.objSpec().getSingularName(),
                 interactionInitiatedBy);
     }
 

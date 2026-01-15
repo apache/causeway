@@ -159,7 +159,7 @@ implements ManagedFeature {
             final @NonNull Identifier.Type memberType,
             final @NonNull String memberId) {
 
-        val onwerSpec = owner.getSpecification();
+        val onwerSpec = owner.objSpec();
         switch (memberType) {
         case ACTION:     return _Casts.uncheckedCast(onwerSpec.getAction(memberId));
         case PROPERTY:   return _Casts.uncheckedCast(onwerSpec.getProperty(memberId));

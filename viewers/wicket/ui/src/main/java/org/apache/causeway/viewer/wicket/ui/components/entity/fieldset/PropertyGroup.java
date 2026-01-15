@@ -166,7 +166,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         return _NullSafe.stream(propertyLayouts)
         .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
         .map(propertyLayoutData ->
-            entity.getSpecification().getProperty(propertyLayoutData.getId())
+            entity.objSpec().getProperty(propertyLayoutData.getId())
             .orElse(null)
         )
         .filter(_NullSafe::isPresent)

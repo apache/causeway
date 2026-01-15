@@ -468,8 +468,8 @@ implements ObjectAction {
                 Optional<Bookmark> bookmarkIfAny = owner.getBookmark();
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
                     log.info("Executing: {}#{} {} {}",
-                        getFeatureIdentifier().getLogicalTypeName(),
-                        getFeatureIdentifier().getMemberLogicalName(),
+                        getFeatureIdentifier().logicalTypeName(),
+                        getFeatureIdentifier().memberLogicalName(),
                         UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                         argsFor(getParameters(), argumentAdapters));
                 });
@@ -551,7 +551,7 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        if(head.getOwner().getSpecification().isValue()) {
+        if(head.getOwner().objSpec().isValue()) {
             return; // do not record value type mixin actions
         }
 

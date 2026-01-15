@@ -262,7 +262,7 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     default String getCssClass(final String prefix) {
-        final String ownerId = getDeclaringType().getLogicalTypeName().replace(".", "-");
+        final String ownerId = getDeclaringType().logicalTypeName().replace(".", "-");
         return prefix + ownerId + "-" + getId();
     }
 
@@ -380,7 +380,7 @@ public interface ObjectAction extends ObjectMember {
         public static Stream<ObjectAction> streamTopBarActions(
                 final ManagedObject adapter) {
 
-            val spec = adapter.getSpecification();
+            val spec = adapter.objSpec();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates
@@ -394,7 +394,7 @@ public interface ObjectAction extends ObjectMember {
                 final ManagedObject adapter,
                 final ObjectAssociation association) {
 
-            val spec = adapter.getSpecification();
+            val spec = adapter.objSpec();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates.isSameLayoutGroupAs(association))
@@ -423,7 +423,7 @@ public interface ObjectAction extends ObjectMember {
 
             if(mixeeAdapter != null) {
                 val mixinSpec = action.getDeclaringType();
-                val ownerSpec = mixeeAdapter.getSpecification();
+                val ownerSpec = mixeeAdapter.objSpec();
                 return ownerSpec.lookupMixedInMember(mixinSpec)
                         .map(mixedInMember->mixedInMember.getFriendlyName(mixeeAdapter.asSupplier()))
                         .orElseThrow(_Exceptions::unexpectedCodeReach);

@@ -21,15 +21,35 @@ package org.apache.causeway.applib.id;
 /**
  * @since 2.0 {@index}
  */
+@FunctionalInterface
 public interface HasLogicalType {
 
-    LogicalType getLogicalType();
+    LogicalType logicalType();
 
     /**
-     * @see LogicalType#getLogicalTypeName()
+     * @see LogicalType#logicalName()
      */
-    default String getLogicalTypeName() {
-        return getLogicalType().getLogicalTypeName();
-    }
+    default String logicalTypeName() { return logicalType().logicalName(); }
 
+    /**
+     * @see LogicalType#className()
+     */
+    default String className() { return logicalType().className(); }
+    
+    // -- DEPRECATIONS
+    
+    /**
+     * @deprecated use {@link #logicalType()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default LogicalType getLogicalType() {
+    	return logicalType();
+    }
+    /**
+     * @deprecated use {@link #logicalTypeName()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default String getLogicalTypeName() {
+        return logicalTypeName();
+    }
 }

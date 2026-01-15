@@ -108,7 +108,7 @@ final class _Xray {
                 ManagedObjects.isNullOrUnspecifiedOrEmpty(entity)
                     ? "<empty>"
                     : String.format("%s:\n%s",
-                            entity.getSpecification().getLogicalTypeName(),
+                            entity.objSpec().logicalTypeName(),
                             "" + entity.getPojo()));
 
         _XrayEvent.event(enteringLabel);

@@ -43,7 +43,7 @@ extends CssClassFacetAbstract {
     @Override
     public String cssClass(final ManagedObject targetAdapter) {
         val projectedAdapter = projectionFacet.projected(targetAdapter);
-        val cssClassFacet = projectedAdapter.getSpecification().getFacet(CssClassFacet.class);
+        val cssClassFacet = projectedAdapter.objSpec().getFacet(CssClassFacet.class);
         return cssClassFacet != null 
                 ? cssClassFacet.cssClass(projectedAdapter) 
                 : null;

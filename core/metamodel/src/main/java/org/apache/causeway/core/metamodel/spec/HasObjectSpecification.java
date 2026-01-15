@@ -28,33 +28,58 @@ import lombok.NonNull;
 /**
  * Introduced as a shortcut provider.
  */
+@FunctionalInterface
 public interface HasObjectSpecification {
 
-    ObjectSpecification getSpecification();
+    ObjectSpecification objSpec();
 
     // -- SHORTCUTS
 
     default Class<?> getCorrespondingClass() {
-        return getSpecification().getCorrespondingClass();
+        return objSpec().getCorrespondingClass();
     }
 
-    default LogicalType getLogicalType() {
-        return getSpecification().getLogicalType();
+    default LogicalType logicalType() {
+        return objSpec().logicalType();
     }
 
-    default String getLogicalTypeName() {
-        return getSpecification().getLogicalTypeName();
+    default String logicalTypeName() {
+        return objSpec().logicalTypeName();
     }
 
     /**
      * As used for the element type of collections.
      */
     default Optional<ObjectSpecification> getElementSpecification() {
-        return getSpecification().getElementSpecification();
+        return objSpec().getElementSpecification();
     }
 
     default Bookmark createBookmark(final @NonNull String urlSafeIdentifier) {
-        return Bookmark.forLogicalTypeAndIdentifier(getLogicalType(), urlSafeIdentifier);
+        return Bookmark.forLogicalTypeAndIdentifier(logicalType(), urlSafeIdentifier);
+    }
+    
+    // -- DEPRECATIONS
+    
+    /**
+     * @deprecated use {@link #objSpec()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default ObjectSpecification getSpecification() {
+    	return objSpec();
+    }
+    /**
+     * @deprecated use {@link #logicalType()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default LogicalType getLogicalType() {
+        return logicalType();
+    }
+    /**
+     * @deprecated use {@link #logicalTypeName()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default String getLogicalTypeName() {
+        return logicalTypeName();
     }
 
 }

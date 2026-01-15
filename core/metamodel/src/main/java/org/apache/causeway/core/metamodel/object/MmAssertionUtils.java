@@ -43,7 +43,7 @@ public class MmAssertionUtils {
         }
         val pojo = ManagedObjects.peekAtPojoOf(obj);
         val requiredType = pojo.getClass();
-        val actualSpec = obj.getSpecification();
+        val actualSpec = obj.objSpec();
         _Assert.assertEquals(requiredType, actualSpec.getCorrespondingClass());
     }
 
@@ -90,7 +90,7 @@ public class MmAssertionUtils {
                 return object;
             }
             val upperBound = ClassUtils.resolvePrimitiveIfNecessary(elementType.getCorrespondingClass());
-            val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+            val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().getCorrespondingClass());
             throw _Exceptions.illegalArgument("Object has incompatible type %s, "
                     + "must be an instance of %s.",
                     objectActualType.getName(),

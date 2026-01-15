@@ -62,7 +62,7 @@ implements HasUiParameter {
     @Override
     public String validate(final @NonNull ManagedObject proposedArg) {
         // workaround for FileUpload
-        if(proposedArg.getSpecification().getBeanSort().isUnknown()) {
+        if(proposedArg.objSpec().getBeanSort().isUnknown()) {
             return null;
         }
         proposedValue().getValue().setValue(proposedArg); // updates the pending parameter value

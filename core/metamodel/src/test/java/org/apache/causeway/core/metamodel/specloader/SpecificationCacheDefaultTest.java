@@ -54,10 +54,10 @@ class SpecificationCacheDefaultTest {
         orderSpec = Mockito.mock(ObjectSpecification.class);
 
         Mockito.when(customerSpec.getCorrespondingClass()).thenReturn((Class)Customer.class);
-        Mockito.when(customerSpec.getLogicalType()).thenReturn(cus);
+        Mockito.when(customerSpec.logicalType()).thenReturn(cus);
 
         Mockito.when(orderSpec.getCorrespondingClass()).thenReturn((Class)Order.class);
-        Mockito.when(orderSpec.getLogicalType()).thenReturn(ord);
+        Mockito.when(orderSpec.logicalType()).thenReturn(ord);
     }
 
     @AfterEach
@@ -97,7 +97,7 @@ class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenNotSet() {
-        val type = logicalTypeResolver.lookup(cus.getLogicalTypeName());
+        val type = logicalTypeResolver.lookup(cus.logicalName());
         assertFalse(type.isPresent());
     }
 

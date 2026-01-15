@@ -54,7 +54,7 @@ public class TableColumnVisibilityServiceForSecman implements TableColumnVisibil
         val permissionSet = me.getPermissionSet();
 
         final boolean granted = specificationLoader.specForType(elementType)
-            .map(ObjectSpecification::getLogicalTypeName)
+            .map(ObjectSpecification::logicalTypeName)
             .map(logicalTypeName->{
                 //XXX lombok val issue with lambda
                 val featureId = ApplicationFeatureId.newMember(logicalTypeName, memberId);

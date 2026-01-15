@@ -44,7 +44,7 @@ class InvocationHandlerforAsyncWrapRegular<T, R> extends InvocationHandlerforAsy
             final AsyncControl<R> asyncControl,
             final @NonNull T targetPojo,
             final ManagedObject targetAdapter) {
-        super(metaModelContext, interactionIdGenerator, commonExecutorService, asyncControl, targetPojo, targetAdapter.getSpecification());
+        super(metaModelContext, interactionIdGenerator, commonExecutorService, asyncControl, targetPojo, targetAdapter.objSpec());
         this.targetAdapter = targetAdapter;
     }
 
@@ -82,7 +82,7 @@ class InvocationHandlerforAsyncWrapRegular<T, R> extends InvocationHandlerforAsy
             final _GenericResolver.ResolvedMethod method,
             final ManagedObject targetAdapter) {
 
-        final var objectMember = targetAdapter.getSpecification().getMember(method).orElse(null);
+        final var objectMember = targetAdapter.objSpec().getMember(method).orElse(null);
         if(objectMember == null) {
             return MemberAndTarget.notFound();
         }

@@ -200,7 +200,7 @@ class MetaModelExporter {
             return true; // export all
         }
 
-        val logicalTypeName = specification.getLogicalTypeName();
+        val logicalTypeName = specification.logicalTypeName();
         for (val prefix : namespacePrefixes) {
             if(logicalTypeName.startsWith(prefix)) {
                 return true;

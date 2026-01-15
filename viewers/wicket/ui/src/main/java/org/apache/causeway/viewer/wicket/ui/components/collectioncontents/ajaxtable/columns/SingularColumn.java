@@ -51,7 +51,7 @@ extends AssociationColumnAbstract {
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
         val rowElement = dataRow.getRowElement();
         val rowElementModel = UiObjectWkt.ofAdapter(rowElement);
-        val property = rowElement.getSpecification().getPropertyElseFail(memberId);
+        val property = rowElement.objSpec().getPropertyElseFail(memberId);
 
         val scalarModel = rowElementModel
                 .getPropertyModel(

@@ -111,7 +111,7 @@ extends ModelAbstract<ManagedObject> {
      */
     public Optional<LogicalType> getLogicalElementType() {
         return Optional.ofNullable(memento)
-                .map(ObjectMemento::getLogicalType);
+                .map(ObjectMemento::logicalType);
     }
 
     private transient ObjectSpecification elementTypeSpec;

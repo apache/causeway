@@ -266,7 +266,7 @@ extends ContentNegotiationServiceAbstract {
             objectAndActionInvocation.streamElementAdapters()
             .map(elementAdapter->{
                 val dto = dtoForValue(returnedAdapter)
-                        .orElseGet(()->elementAdapter.getSpecification().getCorrespondingClass());
+                        .orElseGet(()->elementAdapter.objSpec().getCorrespondingClass());
                 return dto;
             })
             .forEach(rootRepresentation::arrayAdd);
@@ -306,10 +306,10 @@ extends ContentNegotiationServiceAbstract {
 
     private Optional<Object> dtoForValue(final @Nullable ManagedObject valueObject) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueObject)
-                || !valueObject.getSpecification().isValue()) {
+                || !valueObject.objSpec().isValue()) {
             return Optional.empty();
         }
-        val valSpec = valueObject.getSpecification();
+        val valSpec = valueObject.objSpec();
         val dto = valSpec.isCompositeValue()
                 ? ScalarValueDtoV2.forValue(valueObject.getPojo(),
                         //XXX honor value semantics context?
@@ -346,7 +346,7 @@ extends ContentNegotiationServiceAbstract {
 
         val where = resourceContext.getWhere();
 
-        owner.getSpecification()
+        owner.objSpec()
         .streamCollections(MixedIn.INCLUDED)
         .forEach(collection->{
 
@@ -374,7 +374,7 @@ extends ContentNegotiationServiceAbstract {
 
         val interactionInitiatedBy = resourceContext.getInteractionInitiatedBy();
         val where = resourceContext.getWhere();
-        final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
+        final Stream<OneToOneAssociation> properties = objectAdapter.objSpec()
                 .streamProperties(MixedIn.INCLUDED);
 
         properties.forEach(property->{

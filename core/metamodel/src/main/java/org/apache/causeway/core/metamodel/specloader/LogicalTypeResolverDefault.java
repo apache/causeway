@@ -47,7 +47,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
     @Override
     public ObjectSpecification register(final @NonNull ObjectSpecification spec) {
 
-        val logicalTypeName = spec.getLogicalTypeName();
+        val logicalTypeName = spec.logicalTypeName();
 
         if(logicalTypeByName.containsKey(logicalTypeName)) {
             return spec;
@@ -68,7 +68,7 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
         // adding aliases to the lookup map
         spec.getAliases()
         .forEach(alias->{
-                putWithWarnOnOverride(alias.getLogicalTypeName(), spec);
+                putWithWarnOnOverride(alias.logicalName(), spec);
         });
 
         return spec;
@@ -87,16 +87,16 @@ class LogicalTypeResolverDefault implements LogicalTypeResolver {
             final ObjectSpecification spec) {
 
         final LogicalType previousMapping =
-                logicalTypeByName.put(logicalTypeName, spec.getLogicalType());
+                logicalTypeByName.put(logicalTypeName, spec.logicalType());
 
         if(previousMapping!=null
-                && !spec.getLogicalType().equals(previousMapping)) {
+                && !spec.logicalType().equals(previousMapping)) {
             val msg = String.format("Overriding existing mapping\n"
                     + "%s -> %s,\n"
                     + "with\n "
                     + "%s -> %s\n "
                     + "This will result in the meta-model validation to fail.",
-                    logicalTypeName, previousMapping.getCorrespondingClass(),
+                    logicalTypeName, previousMapping.correspondingClass(),
                     logicalTypeName, spec.getCorrespondingClass());
             log.warn(msg);
         }

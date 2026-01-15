@@ -67,7 +67,7 @@ public interface ObjectManager extends HasMetaModelContext {
     default ObjectMemento mementifyElseFail(final @NonNull ManagedObject object) {
         return object.getMemento()
                 .orElseThrow(()->
-                    _Exceptions.unrecoverable("failed to create memento for  %s", object.getSpecification()));
+                    _Exceptions.unrecoverable("failed to create memento for  %s", object.objSpec()));
     }
 
     //TODO why not use loadObject(bookmark) instead
@@ -121,7 +121,7 @@ public interface ObjectManager extends HasMetaModelContext {
      */
     default Bookmark bookmark(final @NonNull ManagedObject managedObj) {
         return ManagedObjects.bookmark(managedObj)
-                .orElseGet(()->Bookmark.empty(managedObj.getLogicalType()));
+                .orElseGet(()->Bookmark.empty(managedObj.logicalType()));
     }
     /**
      * Introduced for de-serializing action parameter values from bookmarks and vice versa.

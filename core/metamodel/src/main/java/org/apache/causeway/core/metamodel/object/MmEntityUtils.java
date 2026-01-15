@@ -45,7 +45,7 @@ public final class MmEntityUtils {
         if(adapter==null) {
             return Optional.empty();
         }
-        val spec = adapter.getSpecification();
+        val spec = adapter.objSpec();
         if(spec==null || !spec.isEntity()) {
             return Optional.empty();
         }
@@ -63,14 +63,14 @@ public final class MmEntityUtils {
 
     public void persistInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        val spec = managedObject.getSpecification();
+        val spec = managedObject.objSpec();
         val entityFacet = spec.entityFacetElseFail();
         entityFacet.persist(managedObject.getPojo());
     }
 
     public void deleteInCurrentTransaction(final ManagedObject managedObject) {
         requiresEntity(managedObject);
-        val spec = managedObject.getSpecification();
+        val spec = managedObject.objSpec();
         val entityFacet = spec.entityFacetElseFail();
         entityFacet.delete(managedObject.getPojo());
     }
@@ -79,7 +79,7 @@ public final class MmEntityUtils {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) {
             throw _Exceptions.illegalArgument("requires an entity object but got null, unspecified or empty");
         }
-        val spec = managedObject.getSpecification();
+        val spec = managedObject.objSpec();
         if(!spec.isEntity()) {
             throw _Exceptions.illegalArgument("not an entity type %s (sort=%s)",
                     spec.getCorrespondingClass(),
@@ -134,7 +134,7 @@ public final class MmEntityUtils {
                     EntityState.ATTACHED,
                     entityState,
                     ()-> String.format("entity %s is required to be attached (not detached)",
-                            managedObject.getSpecification().getLogicalTypeName()));
+                            managedObject.objSpec().logicalTypeName()));
         }
         return managedObject;
     }
@@ -146,7 +146,7 @@ public final class MmEntityUtils {
         if(!ManagedObjects.isIdentifiable(first) || !ManagedObjects.isSpecified(second)) {
             return;
         }
-        val secondSpec = second.getSpecification();
+        val secondSpec = second.objSpec();
         if(secondSpec.isParented() || !secondSpec.isEntity()) {
             return;
         }
@@ -162,7 +162,7 @@ public final class MmEntityUtils {
     // -- PROPERTY CHANGE PUBLISHING
 
     public Stream<OneToOneAssociation> streamPropertiesEnabledForChangePublishing(final @NonNull ManagedObject entity) {
-        return entity.getSpecification().streamProperties(MixedIn.EXCLUDED)
+        return entity.objSpec().streamProperties(MixedIn.EXCLUDED)
             .filter(property->!EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
     }
 
@@ -174,7 +174,7 @@ public final class MmEntityUtils {
     public Optional<OneToOneAssociation> lookupPropertyEnabledForChangePublishing(
             final @NonNull ManagedObject entity, final String propertyName) {
         return entity
-                .getSpecification()
+                .objSpec()
                 .getProperty(propertyName, MixedIn.EXCLUDED)
                 .filter(property -> !EntityPropertyChangePublishingPolicyFacet.isExcludedFromPublishing(property));
     }

@@ -68,7 +68,7 @@ public class ScenarioStep
 
         context.objectSpecifications().forEach(objectSpec -> {
             if (Objects.requireNonNull(objectSpec.getBeanSort()) == BeanSort.MANAGED_BEAN_CONTRIBUTING) { // @DomainService
-                context.serviceRegistry.lookupBeanById(objectSpec.getLogicalTypeName())
+                context.serviceRegistry.lookupBeanById(objectSpec.logicalTypeName())
                         .ifPresent(servicePojo -> domainServices.add(addChildFieldFor(schemaStrategy.domainServiceFor(objectSpec, servicePojo, context))));
             }
         });

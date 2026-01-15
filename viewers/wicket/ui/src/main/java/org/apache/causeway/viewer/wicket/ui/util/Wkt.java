@@ -591,10 +591,10 @@ public class Wkt {
     public static String cssNormalize(final Identifier identifier) {
         val sb = new StringBuilder();
         sb.append("causeway-");
-        sb.append(identifier.getLogicalType().getLogicalTypeName());
-        if(_Strings.isNullOrEmpty(identifier.getMemberLogicalName())) {
+        sb.append(identifier.logicalType().logicalName());
+        if(_Strings.isNullOrEmpty(identifier.memberLogicalName())) {
             sb.append("-");
-            sb.append(identifier.getMemberLogicalName());
+            sb.append(identifier.memberLogicalName());
         }
         return cssNormalize(sb.toString());
     }

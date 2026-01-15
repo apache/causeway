@@ -60,7 +60,7 @@ class _OrphanedSupportingMethodValidator {
         .forEach(orphanedMethod->{
 
             val methodIdentifier = Identifier
-                    .methodIdentifier(spec.getFeatureIdentifier().getLogicalType(), orphanedMethod);
+                    .methodIdentifier(spec.getFeatureIdentifier().logicalType(), orphanedMethod);
 
             ValidationFailure.raise(
                     spec,

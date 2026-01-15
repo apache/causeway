@@ -77,10 +77,10 @@ implements
                 return;
             }
 
-            val logicalType = objectSpec.getLogicalType();
+            val logicalType = objectSpec.logicalType();
 
             //XXX has a slight chance to be a false positive; would need to check whether annotated with @Named
-            if(logicalType.getClassName().equals(logicalType.getLogicalTypeName())) {
+            if(logicalType.className().equals(logicalType.logicalName())) {
                 ValidationFailure.raiseFormatted(
                         objectSpec,
                         "%s: the object type must be specified explicitly ('%s' config property). "

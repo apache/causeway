@@ -94,7 +94,7 @@ public class MarkupPanelFactories {
             }
 
             return appliesIf(valueType.isAssignableFrom(
-                    objectAdapter.getSpecification().getCorrespondingClass()) );
+                    objectAdapter.objSpec().getCorrespondingClass()) );
         }
 
         @Override

@@ -168,7 +168,7 @@ public class DataTable implements Serializable {
      * Unique within application scope, can act as an id.
      */
     public String getLogicalName() {
-        return getElementType().getLogicalTypeName();
+        return getElementType().logicalTypeName();
     }
 
     /**

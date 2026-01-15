@@ -280,7 +280,7 @@ implements WrapperFactory, HasMetaModelContext {
             final AsyncControl<R> asyncControl) {
 
         val targetAdapter = adaptAndGuardAgainstWrappingNotSupported(targetPojo);
-        final var targetSpecification = targetAdapter.getSpecification();
+        final var targetSpecification = targetAdapter.objSpec();
         if(targetSpecification.isMixin()) {
             throw _Exceptions.illegalArgument("cannot wrap a mixin instance directly, "
                     + "use WrapperFactory.asyncWrapMixin(...) instead");
@@ -356,7 +356,7 @@ implements WrapperFactory, HasMetaModelContext {
 
         final var adapter = getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
+                || !adapter.objSpec().getBeanSort().isWrappingSupported()) {
             throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
                     domainObject.getClass().getName());
         }

@@ -93,7 +93,7 @@ extends FacetFactoryTestAbstract {
                 val customerBookmark = viewModelFacet.serializeToBookmark(customer);
 
                 val customerRecreated = viewModelFacet.instantiate(
-                        customer.getSpecification(), Optional.of(customerBookmark));
+                        customer.objSpec(), Optional.of(customerBookmark));
 
                 assertEquals(customerPojo.getName(), ((Customer)(customerRecreated.getPojo())).getName());
             }

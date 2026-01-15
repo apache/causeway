@@ -27,6 +27,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.experimental.Accessors;
 
 /**
  * @since 2.0
@@ -38,7 +39,7 @@ public final class ObjectMementoCollection implements ObjectMemento {
 
     private final ArrayList<ObjectMemento> container;
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     @NonNull private final LogicalType logicalType;
 
     @Override

@@ -163,7 +163,7 @@ implements
             return;
         }
 
-        val feature = specificationLoader.loadFeature(context.getFeatureIdentifier())
+        val feature = specificationLoader.loadFeature(context.featureIdentifier())
                 .orElse(null);
         if(feature==null) {
             return;

@@ -21,6 +21,8 @@ package org.apache.causeway.applib.value.semantics;
 
 import org.springframework.lang.Nullable;
 
+import lombok.experimental.Accessors;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.services.bookmark.IdStringifier;
@@ -53,10 +55,23 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
  */
 public interface ValueSemanticsProvider<T> {
 
-    @lombok.Value(staticConstructor = "of")
+    @lombok.Value(staticConstructor = "of") @Accessors(fluent = true)
     class Context {
         private final @Nullable Identifier featureIdentifier;
         private final @Nullable InteractionContext interactionContext;
+
+        // -- DEPRECATIONS
+        
+        /**
+         * @deprecated use {@link #featureIdentifier()} instead
+         */
+        @Deprecated(forRemoval = true) // replaced by a record in future versions
+        public final @Nullable Identifier getFeatureIdentifier() { return featureIdentifier; }
+        /**
+         * @deprecated use {@link #interactionContext()} instead
+         */
+        @Deprecated(forRemoval = true) // replaced by a record in future versions
+        public final @Nullable InteractionContext getInteractionContext() { return interactionContext; }
     }
 
     Class<T> getCorrespondingClass();

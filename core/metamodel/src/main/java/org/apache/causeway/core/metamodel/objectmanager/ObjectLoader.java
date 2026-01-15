@@ -71,7 +71,7 @@ public interface ObjectLoader {
             @Override
             public ManagedObject handle(final ProtoObject objectLoadRequest) {
                 val spec = objectLoadRequest.getObjectSpecification();
-                val logicalType = spec.getLogicalType();
+                val logicalType = spec.logicalType();
                 val servicePojo = spec.getServiceRegistry()
                     .lookupRegisteredBeanById(logicalType)
                     .flatMap(_SingletonBeanProvider::lookupInstance)

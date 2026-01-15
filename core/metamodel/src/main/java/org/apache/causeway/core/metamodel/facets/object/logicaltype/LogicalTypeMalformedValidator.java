@@ -46,8 +46,8 @@ extends MetaModelValidatorAbstract {
     @Override
     public void validateObjectEnter(final ObjectSpecification spec) {
 
-        val logicalType = spec.getLogicalType();
-        val logicalTypeName = logicalType.getLogicalTypeName();
+        val logicalType = spec.logicalType();
+        val logicalTypeName = logicalType.logicalName();
 
         val nameParts = _Strings.splitThenStream(logicalTypeName, ".")
                 .collect(Can.toCan());

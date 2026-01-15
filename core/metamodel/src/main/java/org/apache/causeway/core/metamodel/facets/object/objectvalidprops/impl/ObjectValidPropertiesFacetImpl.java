@@ -45,7 +45,7 @@ extends ObjectValidPropertiesFacetAbstract {
         final StringBuilder buf = new StringBuilder();
         final ManagedObject adapter = context.getTarget();
 
-        adapter.getSpecification().streamProperties(MixedIn.EXCLUDED)
+        adapter.objSpec().streamProperties(MixedIn.EXCLUDED)
         .filter(property->property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) // ignore hidden properties
         .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties
         .forEach(property->{

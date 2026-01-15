@@ -164,7 +164,7 @@ public interface SpecificationLoader {
         }
         return lookupLogicalType(logicalTypeName)
             .map(logicalType->
-                    loadSpecification(logicalType.getCorrespondingClass(), introspectionState))
+                    loadSpecification(logicalType.correspondingClass(), introspectionState))
             .orElse(null);
     }
 
@@ -179,7 +179,7 @@ public interface SpecificationLoader {
     default Optional<ObjectSpecification> specForLogicalType(
             final @Nullable LogicalType logicalType) {
         return Optional.ofNullable(logicalType)
-                .map(LogicalType::getCorrespondingClass)
+                .map(LogicalType::correspondingClass)
                 .flatMap(this::specForType);
     }
 
@@ -243,18 +243,18 @@ public interface SpecificationLoader {
         if(featureIdentifier==null) {
             return Optional.empty();
         }
-        val typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
+        val typeSpec = specForLogicalType(featureIdentifier.logicalType()).orElse(null);
         if(typeSpec==null) {
             return Optional.empty();
         }
-        val member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
+        val member = typeSpec.getMember(featureIdentifier.memberLogicalName()).orElse(null);
         if(member==null) {
             return Optional.empty();
         }
 
-        final int paramIndex = featureIdentifier.getParameterIndex();
+        final int paramIndex = featureIdentifier.parameterIndex();
 
-        return featureIdentifier.getParameterIndex()<0
+        return featureIdentifier.parameterIndex()<0
                 ? Optional.of(member)
                 : Optional.of(((ObjectAction)member).getParameters().getElseFail(paramIndex));
     }

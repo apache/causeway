@@ -128,7 +128,7 @@ extends ViewModelFacetAbstract {
 
         final _Mementos.Memento memento = newMemento();
 
-        val viewmodelSpec = viewModel.getSpecification();
+        val viewmodelSpec = viewModel.objSpec();
 
         streamPersistableProperties(viewmodelSpec)
         .forEach(property->{

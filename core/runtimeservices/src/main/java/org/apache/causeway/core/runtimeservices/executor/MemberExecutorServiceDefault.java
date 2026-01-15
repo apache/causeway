@@ -193,7 +193,7 @@ implements MemberExecutorService {
         })
         .ifPresent(scalarNonEmpty->{
             _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
-                var returnTypeSpec = scalarNonEmpty.getSpecification();
+                var returnTypeSpec = scalarNonEmpty.objSpec();
                 var violation = returnTypeSpec.isEntity()
                         ? MessageTemplate.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
                         : MessageTemplate.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;

@@ -527,7 +527,7 @@ extends MetaModelContext {
     private void registerAsService(final ServiceInstance serviceInstance) {
         val spec = serviceInstance.getSpecification();
         discoveredServices.add(_SingletonBeanProvider.forTestingLazy(
-                spec.getLogicalTypeName(),
+                spec.logicalTypeName(),
                 (Class)spec.getCorrespondingClass(),
                 serviceInstance::getPojo));
     }
@@ -552,7 +552,7 @@ extends MetaModelContext {
         services.stream()
         .map(service->ManagedObject.service(service.specification, service.pojo))
         .forEach(serviceAdapter->
-            map.put(serviceAdapter.getSpecification().getLogicalTypeName(), serviceAdapter));
+            map.put(serviceAdapter.objSpec().logicalTypeName(), serviceAdapter));
         return map;
     }
 

@@ -36,13 +36,13 @@ public final class TypeNames {
 
     public String objectTypeFieldNameFor(
             final ObjectSpecification objectSpecification) {
-        return sanitized(objectSpecification.getLogicalTypeName());
+        return sanitized(objectSpecification.logicalTypeName());
     }
 
     public String objectTypeNameFor(
             final ObjectSpecification objectSpecification,
             final SchemaType schemaType) {
-        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.getLogicalTypeName());
+        return schemaType.name().toLowerCase() + "__" + sanitized(objectSpecification.logicalTypeName());
     }
 
     public String metaTypeNameFor(

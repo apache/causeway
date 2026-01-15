@@ -314,15 +314,15 @@ implements TemporalValueSemantics<T> {
     private Temporal translateToUserLocalTimeZone(final ValueSemanticsProvider.Context context, final Temporal t) {
         if(t instanceof ZonedDateTime) {
             return _Temporals.translateToTimeZone((ZonedDateTime) t,
-                    context.getInteractionContext().getTimeZone());
+                    context.interactionContext().getTimeZone());
         }
         if(t instanceof OffsetDateTime) {
             return _Temporals.translateToTimeZone((OffsetDateTime) t,
-                    context.getInteractionContext().getTimeZone());
+                    context.interactionContext().getTimeZone());
         }
         if(t instanceof OffsetTime) {
             return _Temporals.translateToTimeOffset((OffsetTime) t,
-                    context.getInteractionContext().getTimeZoneOffsetNow());
+                    context.interactionContext().getTimeZoneOffsetNow());
         }
         return t; // otherwise acts as identity operator
     }
@@ -389,7 +389,7 @@ implements TemporalValueSemantics<T> {
                     .map(MetaModelContext::getSpecificationLoader)
                     .flatMap(specLoader->specLoader.loadFeature(
                             Optional.ofNullable(context)
-                            .map(ValueSemanticsProvider.Context::getFeatureIdentifier)
+                            .map(ValueSemanticsProvider.Context::featureIdentifier)
                             .orElse(null)));
 
             // DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofLocalizedPattern(mmc.getConfiguration().getValueTypes().getTemporal().getDisplay().getDatePattern());

@@ -82,12 +82,12 @@ implements
 
     public static ApplicationFeatureId fromIdentifier(final @NonNull Identifier identifier) {
 
-        val logicalTypeName = identifier.getLogicalTypeName();
+        val logicalTypeName = identifier.logicalTypeName();
 
-        if(identifier.getType().isClass()) {
+        if(identifier.type().isClass()) {
             return newType(logicalTypeName);
         }
-        return newMember(logicalTypeName, identifier.getMemberLogicalName());
+        return newMember(logicalTypeName, identifier.memberLogicalName());
     }
 
     public static ApplicationFeatureId newFeature(
@@ -145,11 +145,11 @@ implements
     }
 
     public static ApplicationFeatureId newType(final LogicalType logicalType) {
-        return newType(logicalType.getLogicalTypeName());
+        return newType(logicalType.logicalName());
     }
 
     public static ApplicationFeatureId newMember(final LogicalType logicalType, final String memberLogicalName) {
-        return newMember(logicalType.getLogicalTypeName(), memberLogicalName);
+        return newMember(logicalType.logicalName(), memberLogicalName);
     }
 
     public static ApplicationFeatureId newMember(final String logicalTypeName, final String memberLogicalName) {

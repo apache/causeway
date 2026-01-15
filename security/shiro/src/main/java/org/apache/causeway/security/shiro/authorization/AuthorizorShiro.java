@@ -86,8 +86,8 @@ public class AuthorizorShiro implements Authorizor {
     }
 
     private String asPermissionsString(Identifier identifier) {
-        val logicalTypeName = identifier.getLogicalType().getLogicalTypeNameFormatted(":", ":");
-        return logicalTypeName + ":" + identifier.getMemberLogicalName();
+        val logicalTypeName = identifier.logicalType().getLogicalTypeNameFormatted(":", ":");
+        return logicalTypeName + ":" + identifier.memberLogicalName();
     }
 
     // -- DEPS

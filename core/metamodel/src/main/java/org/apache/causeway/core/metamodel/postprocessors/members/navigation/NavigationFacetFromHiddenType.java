@@ -69,7 +69,7 @@ implements
         }
         val objVisibilityContext = new ObjectVisibilityContext(
                 ic.getHead(),
-                Identifier.classIdentifier(navigatedType.getLogicalType()),
+                Identifier.classIdentifier(navigatedType.logicalType()),
                 ic.getInitiatedBy(),
                 ic.getWhere(), ic.getIfHiddenPolicy(), ic.getIfDisabledPolicy());
         final String hides = facet.hides(objVisibilityContext);
@@ -79,7 +79,7 @@ implements
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
-        visitor.accept("navigatedType", navigatedType.getLogicalTypeName());
+        visitor.accept("navigatedType", navigatedType.logicalTypeName());
         visitor.accept("navigatedTypeFqcn", navigatedType.getCorrespondingClass().getName());
     }
 

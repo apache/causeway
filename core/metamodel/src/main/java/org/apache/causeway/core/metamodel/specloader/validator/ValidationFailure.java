@@ -78,7 +78,7 @@ public final class ValidationFailure implements Comparable<ValidationFailure> {
 
     private static final Comparator<ValidationFailure> comparator = Comparator
             .<ValidationFailure, String>comparing(failure->failure.getOrigin().getClassName(), nullsFirst(naturalOrder()))
-            .<String>thenComparing(failure->failure.getOrigin().getMemberLogicalName(), nullsFirst(naturalOrder()))
+            .<String>thenComparing(failure->failure.getOrigin().memberLogicalName(), nullsFirst(naturalOrder()))
             .thenComparing(ValidationFailure::getMessage);
 
     // -- CONTRACT

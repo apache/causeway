@@ -107,7 +107,7 @@ public interface CollectionFacet extends Facet {
         if(container==null) {
             return Optional.empty();
         }
-        return container.getSpecification().lookupFacet(CollectionFacet.class);
+        return container.objSpec().lookupFacet(CollectionFacet.class);
     }
 
     public static int elementCount(@Nullable final ManagedObject container) {

@@ -59,9 +59,9 @@ public abstract class CompositeValueUpdater {
         val id = delegate.getFeatureIdentifier();
         return Identifier
                 .actionIdentifier(
-                        id.getLogicalType(),
-                        id.getMemberLogicalName(),
-                        id.getMemberParameterClassNames());
+                        id.logicalType(),
+                        id.memberLogicalName(),
+                        id.memberParameterClassNames());
     }
 
     public ManagedObject executeWithRuleChecking(

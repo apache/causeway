@@ -90,7 +90,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * @see #getIdentifier
      */
     public String getMemberName() {
-        return identifier.getMemberLogicalName();
+        return identifier.memberLogicalName();
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class InteractionEvent extends EventObjectBase<Object> {
      * class name} of the {@link #getIdentifier() identifier}.
      */
     public Can<String> getMemberParameterNames() {
-        return identifier.getMemberParameterClassNames();
+        return identifier.memberParameterClassNames();
     }
 
     /**

@@ -139,7 +139,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @ParameterizedTest
@@ -154,7 +154,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @ParameterizedTest
@@ -169,7 +169,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @ParameterizedTest
@@ -184,7 +184,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @Test
@@ -198,7 +198,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
     @Test
@@ -212,7 +212,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
 
@@ -226,7 +226,7 @@ extends JsonValueEncoderTestAbstract {
         val adapter = jsonValueEncoder.asAdapter(spec, representation, null);
 
         // then
-        assertSame(spec, adapter.getSpecification());
+        assertSame(spec, adapter.objSpec());
     }
 
 }

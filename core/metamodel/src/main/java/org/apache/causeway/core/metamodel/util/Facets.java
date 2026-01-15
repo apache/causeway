@@ -306,7 +306,7 @@ public final class Facets {
 
     //XXX could be moved to ManagedObject directly
     public ManagedObject projected(final ManagedObject objectAdapter) {
-        return objectAdapter.getSpecification().lookupFacet(ProjectionFacet.class)
+        return objectAdapter.objSpec().lookupFacet(ProjectionFacet.class)
             .map(projectionFacet->projectionFacet.projected(objectAdapter))
             .orElse(objectAdapter);
     }
@@ -371,7 +371,7 @@ public final class Facets {
         return spec->
             spec.valueFacet()
             .map(ValueFacet::getLogicalType)
-            .map(LogicalType::getCorrespondingClass)
+            .map(LogicalType::correspondingClass)
             .map(typeMatcher::test)
             .orElse(false);
     }

@@ -66,11 +66,11 @@ public class CausewayBeanMetaData {
     private @NonNull ManagedBy managedBy;
 
     public Class<?> getCorrespondingClass() {
-        return logicalType.getCorrespondingClass();
+        return logicalType.correspondingClass();
     }
 
     public String getBeanName() {
-        return logicalType.getLogicalTypeName();
+        return logicalType.logicalName();
     }
 
     // -- FACTORIES

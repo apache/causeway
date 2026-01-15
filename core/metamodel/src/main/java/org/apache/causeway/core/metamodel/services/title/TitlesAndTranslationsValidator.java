@@ -125,7 +125,7 @@ extends MetaModelValidatorAbstract {
 
                     } catch (Exception e) {
 
-                        val deficiencyOrigin = Identifier.classIdentifier(objSpec.getLogicalType());
+                        val deficiencyOrigin = Identifier.classIdentifier(objSpec.logicalType());
                         val facetHolder = objSpec;
 
                         ValidationFailure.raise(
@@ -161,7 +161,7 @@ extends MetaModelValidatorAbstract {
             } catch (Exception e) {
 
                 val spec = specificationLoader.specForTypeElseFail(MessageRegistry.class);
-                val deficiencyOrigin = Identifier.classIdentifier(spec.getLogicalType());
+                val deficiencyOrigin = Identifier.classIdentifier(spec.logicalType());
 
                 ValidationFailure.raise(
                         spec.getSpecificationLoader(),

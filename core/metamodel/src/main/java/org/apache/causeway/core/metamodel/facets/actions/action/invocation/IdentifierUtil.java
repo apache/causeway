@@ -110,7 +110,7 @@ public class IdentifierUtil {
                 if (interactionHead instanceof ActionInteractionHead) {
                     ObjectAction objectActionOnMixee =
                             ((ActionInteractionHead) interactionHead).getMetaModel();
-                    ObjectSpecification specificationOfMixee = interactionHead.getOwner().getSpecification();
+                    ObjectSpecification specificationOfMixee = interactionHead.getOwner().objSpec();
                     return logicalMemberIdentifierFor(specificationOfMixee, objectActionOnMixee);
                 }
             }
@@ -123,8 +123,8 @@ public class IdentifierUtil {
 
     private String logicalMemberIdentifierFor(
             final ObjectSpecification onType, final ObjectMember objectMember) {
-        final String logicalTypeName = onType.getLogicalTypeName();
-        final String localId = objectMember.getFeatureIdentifier().getMemberLogicalName();
+        final String logicalTypeName = onType.logicalTypeName();
+        final String localId = objectMember.getFeatureIdentifier().memberLogicalName();
         return logicalTypeName + "#" + localId;
     }
 

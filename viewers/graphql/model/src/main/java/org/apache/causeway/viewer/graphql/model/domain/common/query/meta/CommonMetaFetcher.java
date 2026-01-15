@@ -68,7 +68,7 @@ public class CommonMetaFetcher {
         return managedObject()
                 .map(managedObject -> {
                     val domainPojo = managedObject.getPojo();
-                    val entityFacet = managedObject.getSpecification().getFacet(EntityFacet.class);
+                    val entityFacet = managedObject.objSpec().getFacet(EntityFacet.class);
                     if (entityFacet != null) {
                         val object = entityFacet.versionOf(domainPojo);
                         return object != null ? object.toString() : null;
@@ -91,7 +91,7 @@ public class CommonMetaFetcher {
     public String cssClass() {
         return managedObject()
                 .map(managedObject -> {
-                    val facet = managedObject.getSpecification().getFacet(CssClassFacet.class);
+                    val facet = managedObject.objSpec().getFacet(CssClassFacet.class);
                     return facet != null ? facet.cssClass(managedObject) : null;
                 })
                 .orElse(null);
@@ -100,7 +100,7 @@ public class CommonMetaFetcher {
     public String layout() {
         return managedObject()
                 .map(managedObject -> {
-                    val facet = managedObject.getSpecification().getFacet(LayoutFacet.class);
+                    val facet = managedObject.objSpec().getFacet(LayoutFacet.class);
                     return facet != null ? facet.layout(managedObject) : null;
                 })
                 .orElse(null);

@@ -65,7 +65,7 @@ public class ActionMemento implements Serializable {
     public ObjectAction getAction(final @NonNull Supplier<SpecificationLoader> specLoader) {
         if (action == null) {
             action = specLoader.get()
-                    .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+                    .specForLogicalTypeElseFail(getIdentifier().logicalType())
                     .getActionElseFail(
                             getIdentifier().getMemberNameAndParameterClassNamesIdentityString());
         }
@@ -76,7 +76,7 @@ public class ActionMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getIdentifier().getLogicalTypeName() + "#"
+        return getIdentifier().logicalTypeName() + "#"
                 + getIdentifier().getMemberNameAndParameterClassNamesIdentityString();
     }
 

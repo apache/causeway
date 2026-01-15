@@ -232,7 +232,7 @@ implements HasDynamicallyVisibleContent {
         }
 
         final UiObjectWkt entityModel = getModel();
-        val ownerSpec = entityModel.getManagedObject().getSpecification();
+        val ownerSpec = entityModel.getManagedObject().objSpec();
 
         // collection layout data by collection id (the collection's member-id)
         // preserving order, as order matters

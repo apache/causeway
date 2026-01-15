@@ -117,7 +117,7 @@ implements
         val mixinFacet = ((ObjectSpecificationAbstract)objSpec).mixinFacet().orElseThrow();
 
         val expectedMethodName = mixinFacet.getMainMethodName();
-        val actualMethodName = memberIdentifier.getMemberLogicalName();
+        val actualMethodName = memberIdentifier.memberLogicalName();
 
         if(!expectedMethodName.equals(actualMethodName)) {
             ValidationFailure.raiseFormatted(objSpec,

@@ -97,7 +97,7 @@ public final class MmVisibilityUtils {
             // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
         }
-        val spec = adapter.getSpecification();
+        val spec = adapter.objSpec();
         if(spec.isEntity()) {
             if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
                 return false;
@@ -122,7 +122,7 @@ public final class MmVisibilityUtils {
 
         return new ObjectVisibilityContext(
                 InteractionHead.regular(objectAdapter),
-                objectAdapter.getSpecification().getFeatureIdentifier(),
+                objectAdapter.objSpec().getFeatureIdentifier(),
                 interactionInitiatedBy,
                 where,
                 InteractionUtils.determineIfHiddenPolicyFrom(objectAdapter),

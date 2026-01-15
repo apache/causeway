@@ -75,7 +75,7 @@ public class ObjectManagerDefault implements ObjectManager {
 
         if(memento instanceof ObjectMementoForEmpty) {
             val objectMementoForEmpty = (ObjectMementoForEmpty) memento;
-            val logicalType = objectMementoForEmpty.getLogicalType();
+            val logicalType = objectMementoForEmpty.logicalType();
             /* note: we recover from (corresponding) class not logical-type-name,
              * as the latter can be ambiguous, when shared in a type hierarchy*/
             val spec = getSpecificationLoader().specForLogicalType(logicalType);
@@ -87,7 +87,7 @@ public class ObjectManagerDefault implements ObjectManager {
         if(memento instanceof ObjectMementoCollection) {
             val objectMementoCollection = (ObjectMementoCollection) memento;
 
-            val logicalType = objectMementoCollection.getLogicalType();
+            val logicalType = objectMementoCollection.logicalType();
             /* note: we recover from (corresponding) class not logical-type-name,
              * as the latter can be ambiguous, when shared in a type hierarchy*/
             val elementSpec = getSpecificationLoader().specForLogicalTypeElseFail(logicalType);

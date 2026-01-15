@@ -73,7 +73,7 @@ class DataTableSerializationTest implements HasMetaModelContext {
         assertNotNull(afterRoundtrip);
         assertEquals(
                 "DataTableSerializationTest.Customer",
-                afterRoundtrip.getElementType().getLogicalTypeName());
+                afterRoundtrip.getElementType().logicalTypeName());
         assertEquals(0, afterRoundtrip.getElementCount());
         assertEquals(1, afterRoundtrip.getDataColumns().size());
         assertEquals(0, afterRoundtrip.getDataRows().size());

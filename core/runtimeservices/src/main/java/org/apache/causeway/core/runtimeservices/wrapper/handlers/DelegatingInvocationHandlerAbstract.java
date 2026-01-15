@@ -71,7 +71,7 @@ public abstract class DelegatingInvocationHandlerAbstract<T> implements Delegati
         }
         val adapter = metaModelContext.getObjectManager().adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)
-                || !adapter.getSpecification().getBeanSort().isWrappingSupported()) {
+                || !adapter.objSpec().getBeanSort().isWrappingSupported()) {
             throw _Exceptions.illegalArgument("Cannot wrap an object of type %s",
                     domainObject.getClass().getName());
         }

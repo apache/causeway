@@ -113,7 +113,7 @@ ValueSemanticsProvider<T> {
      */
     protected UserLocale getUserLocale(final @Nullable ValueSemanticsProvider.Context context) {
         return Optional.ofNullable(context)
-                .map(ValueSemanticsProvider.Context::getInteractionContext)
+                .map(ValueSemanticsProvider.Context::interactionContext)
                 .map(InteractionContext::getLocale)
                 .orElseGet(UserLocale::getDefault);
     }

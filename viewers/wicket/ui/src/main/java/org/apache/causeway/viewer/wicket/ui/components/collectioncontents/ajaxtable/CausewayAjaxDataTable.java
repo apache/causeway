@@ -141,7 +141,7 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
             return null;
         }
         val rowElement = model.getRowElement();
-        return rowElement.getSpecification().getCssClass(rowElement);
+        return rowElement.objSpec().getCssClass(rowElement);
     }
 
     private static Iterator<Item<DataRow>> itemReuseStrategy(

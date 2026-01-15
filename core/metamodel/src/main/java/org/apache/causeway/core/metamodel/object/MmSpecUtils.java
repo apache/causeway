@@ -46,7 +46,7 @@ public final class MmSpecUtils {
         }
         val pojo = ManagedObjects.peekAtPojoOf(obj);
         val requiredType = pojo.getClass();
-        val currentSpec = obj.getSpecification();
+        val currentSpec = obj.objSpec();
         if(currentSpec.getCorrespondingClass().equals(requiredType)) {
             return obj;
         }
@@ -88,7 +88,7 @@ public final class MmSpecUtils {
         specs
                 .stream()
                 .sorted()
-                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.getLogicalType()));
+                .forEach(spec->specsBySort.putElement(spec.getBeanSort().name(), spec.logicalType()));
 
         // export the list-multi-map to YAML format
         val sb = new StringBuilder();
@@ -97,7 +97,7 @@ public final class MmSpecUtils {
             .forEach((key, list)->{
                 sb.append(String.format("  %s:\n", key));
                 list.forEach(logicalType->{
-                    sb.append(String.format("  - %s(%s)\n", logicalType.getLogicalTypeName(), logicalType.getClassName()));
+                    sb.append(String.format("  - %s(%s)\n", logicalType.logicalName(), logicalType.className()));
                 });
             });
 

@@ -66,11 +66,11 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
         
-        final Identifier paramId = context.getFeatureIdentifier();
+        final Identifier paramId = context.featureIdentifier();
         val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
-        assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
+        assertEquals(valueType, parameterRecorded.objSpec().getCorrespondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(parameterRecordedDto)));
 
@@ -98,11 +98,11 @@ class ActionInteractionProbeImpl<T> implements ActionInteractionProbe<T> {
         val parameterRecordedDto = actionDto.getParameters().getParameter().get(0);
         assertNotNull(parameterRecordedDto);
         
-        final Identifier paramId = context.getFeatureIdentifier();
+        final Identifier paramId = context.featureIdentifier();
         val parameterRecorded = valueMarshaller.recoverParameterFrom(paramId, parameterRecordedDto);
         assertNotNull(parameterRecorded);
 
-        assertEquals(valueType, parameterRecorded.getSpecification().getCorrespondingClass(), ()->
+        assertEquals(valueType, parameterRecorded.objSpec().getCorrespondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(parameterRecordedDto)));
 

@@ -70,7 +70,7 @@ public class TitleServiceDefault implements TitleService {
             // here we just mean NOT-ATTACHED (and not the concrete DETACHED entity state)
             return "[DETACHED]";
         } else {
-            return objectAdapter.getSpecification().getTitle(
+            return objectAdapter.objSpec().getTitle(
                     TitleRenderRequest.builder()
                     .object(objectAdapter)
                     .build());
@@ -91,7 +91,7 @@ public class TitleServiceDefault implements TitleService {
             return "unspecified";
         }
 
-        return objectAdapter.getSpecification().getIconName(objectAdapter);
+        return objectAdapter.objSpec().getIconName(objectAdapter);
     }
 
     //-- HELPER

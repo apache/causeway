@@ -27,6 +27,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * @since 2.0
@@ -37,7 +38,7 @@ public class ObjectMementoForEmpty implements ObjectMemento {
 
     private static final long serialVersionUID = 1L;
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     @NonNull private LogicalType logicalType;
 
     @Override

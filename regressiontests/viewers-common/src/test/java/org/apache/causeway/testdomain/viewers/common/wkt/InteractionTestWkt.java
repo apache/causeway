@@ -123,7 +123,7 @@ class InteractionTestWkt extends InteractionTestAbstract {
     @Test
     void propertyModels_shouldBeInSyncWithInteractionAPI() {
 
-        val objectSpec = domainObject.getSpecification();
+        val objectSpec = domainObject.objSpec();
         val entityModel = UiObjectWkt.ofAdapter(domainObject);
 
         assertEquals(domainObject.getBookmark().get(), entityModel.getOwnerBookmark());

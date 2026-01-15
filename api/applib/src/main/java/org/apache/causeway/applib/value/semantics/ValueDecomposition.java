@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.value.semantics;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 import org.apache.causeway.applib.util.schema.CommonDtoUtils;
 import org.apache.causeway.commons.functional.Either;
@@ -62,6 +63,13 @@ implements
     }
 
     @Getter private final Either<ValueWithTypeDto, TypedTupleDto> either;
+    
+    public Optional<ValueWithTypeDto> fundamentalAsOptional() {
+        return either.left();
+    }
+    public Optional<TypedTupleDto> compositeAsOptional() {
+        return either.right();
+    }
 
     // used by RO-Viewer to render values
     public String toJson() {

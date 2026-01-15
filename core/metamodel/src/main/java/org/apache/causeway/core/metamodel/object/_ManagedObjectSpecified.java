@@ -50,8 +50,8 @@ implements ManagedObject {
     @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
     private final @NonNull Specialization specialization;
 
-    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true)
-    private final @NonNull ObjectSpecification specification;
+    @Getter(onMethod_ = {@Override}) @Accessors(makeFinal = true, fluent = true)
+    private final @NonNull ObjectSpecification objSpec;
 
     @Override
     public final Supplier<ManagedObject> asSupplier() {
@@ -61,14 +61,14 @@ implements ManagedObject {
     @Override
     public final <T> T assertCompliance(final @NonNull T pojo) {
         MmAssertionUtils.assertPojoNotWrapped(pojo);
-        if(specification.isAbstract()) {
+        if(objSpec.isAbstract()) {
             _Assert.assertFalse(specialization.getTypePolicy().isExactTypeRequired(),
                     ()->String.format("Specialization %s does not allow abstract type %s",
                             specialization,
-                            specification));
+                            objSpec));
         }
         if(specialization.getTypePolicy().isExactTypeRequired()) {
-            MmAssertionUtils.assertExactType(specification, pojo);
+            MmAssertionUtils.assertExactType(objSpec, pojo);
         }
         if(getSpecialization().getInjectionPolicy().isAlwaysInject()) {
             if(!isInjectionPointsResolved()) {
@@ -103,7 +103,7 @@ implements ManagedObject {
                 .map(ObjectMemento.class::cast)
                 .orElseGet(()->
                 ManagedObjects.isSpecified(adapter)
-                ? new ObjectMementoForEmpty(adapter.getLogicalType())
+                ? new ObjectMementoForEmpty(adapter.logicalType())
                         : null);
     }
 
@@ -113,7 +113,7 @@ implements ManagedObject {
                 .collect(Collectors.toCollection(ArrayList::new)); // ArrayList is serializable
         return ObjectMementoCollection.of(
                 listOfMementos,
-                packedAdapter.getLogicalType());
+                packedAdapter.logicalType());
     }
 
     //XXX compares pojos by their 'equals' semantics -
@@ -131,7 +131,7 @@ implements ManagedObject {
         if(!this.getSpecialization().equals(other.getSpecialization())) {
             return false;
         }
-        if(!this.getSpecification().equals(other.getSpecification())) {
+        if(!this.objSpec().equals(other.objSpec())) {
             return false;
         }
         val canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
@@ -158,8 +158,8 @@ implements ManagedObject {
         val canGetPojosWithoutSideeffect = !getSpecialization().getPojoPolicy().isRefetchable();
         return canGetPojosWithoutSideeffect
                 // expected to work for packed variant just fine, as it compares lists
-                ? Objects.hash(getSpecification().getCorrespondingClass(), getPojo())
-                : Objects.hash(getSpecification().getCorrespondingClass(), sideEffectFreeBookmark());
+                ? Objects.hash(objSpec().getCorrespondingClass(), getPojo())
+                : Objects.hash(objSpec().getCorrespondingClass(), sideEffectFreeBookmark());
     }
 
     @Override
@@ -167,7 +167,7 @@ implements ManagedObject {
         // make sure toString() is without side-effects!
         return String.format("ManagedObject(%s, spec=%s, pojo=%s)",
                 getSpecialization().name(),
-                getSpecification(),
+                objSpec(),
                 !getSpecialization().getPojoPolicy().isRefetchable()
                     ? getPojo() // its safe to get pojo side-effect free
                     : isBookmarkMemoized()

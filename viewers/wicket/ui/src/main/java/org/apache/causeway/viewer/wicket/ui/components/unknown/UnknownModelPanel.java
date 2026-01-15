@@ -68,7 +68,7 @@ extends PanelAbstract<Object, IModel<Object>> {
             val scalarAdapter = scalarModel.getObject();
             if(ManagedObjects.isSpecified(scalarAdapter)) {
                 buf.append(String.format("??? spec=%s, value='%s'",
-                        scalarAdapter.getSpecification(), scalarAdapter.getPojo()));
+                        scalarAdapter.objSpec(), scalarAdapter.getPojo()));
             } else {
                 buf.append("??? scalarAdapter is NULL or UNSPECIFIED");
             }

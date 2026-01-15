@@ -58,7 +58,7 @@ implements
 
     public final ObjectSpecification getTypeOfSpecification() {
         // serving this from a potentially unattached entity seems safe
-        return bookmarkedObject.getObject().getSpecification();
+        return bookmarkedObject.getObject().objSpec();
     }
 
 }

@@ -75,7 +75,7 @@ class _BindingUtil {
             // fallback Bindable that is floating free (unbound)
             // writing to it has no effect on the domain
             _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
-                    spec.getLogicalType()))
+                    spec.logicalType()))
         );
 
     }
@@ -104,7 +104,7 @@ class _BindingUtil {
             // fallback Bindable that is floating free (unbound)
             // writing to it has no effect on the domain
             _Bindables.forValue(String.format("Could not find a ValueFacet for type %s",
-                    spec.getLogicalType()))
+                    spec.logicalType()))
         );
 
     }

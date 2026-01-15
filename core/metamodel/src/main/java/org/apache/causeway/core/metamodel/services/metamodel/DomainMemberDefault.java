@@ -110,12 +110,12 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getLogicalTypeName() {
-        return spec.getLogicalTypeName();
+        return spec.logicalTypeName();
     }
 
     @Override
     public String getNamespace() {
-        return spec.getLogicalType().getNamespace();
+        return spec.logicalType().getNamespace();
     }
 
     @XmlElement @Override

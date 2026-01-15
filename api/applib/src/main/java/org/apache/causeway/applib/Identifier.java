@@ -35,6 +35,7 @@ import org.apache.causeway.commons.internal.reflection._Reflect;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * Combines {@link LogicalType} and member identification (from properties, collections or actions),
@@ -132,20 +133,20 @@ implements
 
     // -- INSTANCE FIELDS
 
-    @Getter(onMethod_ = {@Override}) private final LogicalType logicalType;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) private final LogicalType logicalType;
 
     @Getter private final String className;
 
-    @Getter private final String memberLogicalName;
+    @Getter @Accessors(fluent = true) private final String memberLogicalName;
 
     /**
      * Optional. Used for <i>Action Parameters</i>, otherwise {@code -1}.
      */
-    @Getter private final int parameterIndex;
-
-    @Getter private final Can<String> memberParameterClassNames;
-
-    @Getter private final Type type;
+    @Getter @Accessors(fluent = true) private final int parameterIndex;
+    
+    @Getter @Accessors(fluent = true) private final Can<String> memberParameterClassNames;
+    
+    @Getter @Accessors(fluent = true) private final Type type;
 
     /**
      * Fully qualified Identity String. (class-name + member-logical-name + param-class-names)
@@ -181,7 +182,7 @@ implements
             final int parameterIndex) {
 
         this.logicalType = logicalType;
-        this.className = logicalType.getClassName();
+        this.className = logicalType.className();
         this.memberLogicalName = memberLogicalName;
         this.memberParameterClassNames = memberParameterClassNames;
         this.type = type;
@@ -210,7 +211,7 @@ implements
     // -- LOGICAL ID
 
     public String getLogicalIdentityString(final @NonNull String delimiter) {
-        return getLogicalTypeName()
+        return logicalTypeName()
                 + delimiter
                 + memberNameAndParameterClassNamesIdentityString;
     }
@@ -327,6 +328,44 @@ implements
     private static Can<String> naturalNames(final Can<String> names) {
         return names.map(Identifier::naturalName);
     }
-
+    
+    // -- DEPRECATIONS
+    
+    /**
+     * @deprecated use {@link #logicalType()} instead
+     */
+    @Deprecated(forRemoval = true)
+    public final LogicalType getLogicalType() {
+    	return logicalType();
+    }
+    /**
+     * @deprecated use {@link #memberLogicalName()} instead
+     */
+    @Deprecated(forRemoval = true)
+    public final String getMemberLogicalName() {
+    	return memberLogicalName();
+    }
+    /**
+     * @deprecated use {@link #memberParameterClassNames()} instead
+     */
+    @Deprecated(forRemoval = true)
+    public final Can<String> getMemberParameterClassNames() {
+    	return memberParameterClassNames();
+    }
+    /**
+     * @deprecated use {@link #type()} instead
+     */
+    @Deprecated(forRemoval = true)
+    public final Type getType() {
+    	return type();
+    }
+    /**
+     * @deprecated use {@link #parameterIndex()} instead
+     */
+    @Deprecated(forRemoval = true)
+    public final int getParameterIndex() {
+    	return parameterIndex();
+    }
+    
 }
 

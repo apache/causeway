@@ -46,7 +46,7 @@ public interface UiProperty extends UiScalar {
 
     @Override
     default String getIdentifier() {
-        return getMetaModel().getFeatureIdentifier().getMemberLogicalName();
+        return getMetaModel().getFeatureIdentifier().memberLogicalName();
     }
 
     @Override

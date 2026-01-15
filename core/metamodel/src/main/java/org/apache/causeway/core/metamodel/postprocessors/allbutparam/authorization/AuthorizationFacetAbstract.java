@@ -51,7 +51,7 @@ implements AuthorizationFacet {
     @Override
     public String hides(final VisibilityContext ic) {
 
-        if(ic.getHead().getOwner().getSpecification().isValue()) {
+        if(ic.getHead().getOwner().objSpec().isValue()) {
             return null; // never hide value-types
         }
 
@@ -72,7 +72,7 @@ implements AuthorizationFacet {
     @Override
     public Optional<VetoReason> disables(final UsabilityContext ic) {
 
-        if(ic.getHead().getOwner().getSpecification().isValue()) {
+        if(ic.getHead().getOwner().objSpec().isValue()) {
             return Optional.empty(); // never disable value-types
         }
 

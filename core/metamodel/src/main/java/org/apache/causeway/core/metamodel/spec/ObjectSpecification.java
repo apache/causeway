@@ -105,7 +105,7 @@ extends
 
         public final Comparator<ObjectSpecification> BY_BEANSORT_THEN_LOGICALTYPE =
                 Comparator.comparing(ObjectSpecification::getBeanSort)
-                    .thenComparing(ObjectSpecification::getLogicalType);
+                    .thenComparing(ObjectSpecification::logicalType);
 
         public final Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME =
                 Comparator.comparing(ObjectSpecification::getFullIdentifier);

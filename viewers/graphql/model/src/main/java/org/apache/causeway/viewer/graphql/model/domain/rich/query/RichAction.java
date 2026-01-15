@@ -216,7 +216,7 @@ public class RichAction
             if (!elementType.isPojoCompatible(bookmarkedPojo.getTargetPojo())) {
                 throw new IllegalArgumentException(String.format(
                     "The object referenced '%s' has a type '%s' that is not assignable to the required type '%s'",
-                    refValue, targetPojoSpec.getLogicalTypeName(), elementType.getLogicalTypeName()));
+                    refValue, targetPojoSpec.logicalTypeName(), elementType.logicalTypeName()));
             }
             return Optional.of(bookmarkedPojo).map(BookmarkedPojo::getTargetPojo);
         }
@@ -230,9 +230,9 @@ public class RichAction
                 if (objectSpecArg == null) {
                     throw new IllegalArgumentException(String.format(
                             "The 'logicalTypeName' is required along with the 'id', because the input type '%s' is abstract",
-                            elementType.getLogicalTypeName()));
+                            elementType.logicalTypeName()));
                 }
-                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.getLogicalTypeName(), idValue));
+                bookmarkIfAny = Optional.of(Bookmark.forLogicalTypeNameAndIdentifier(objectSpecArg.logicalTypeName(), idValue));
             } else {
                 bookmarkIfAny = context.bookmarkService.bookmarkFor(paramClass, idValue);
             }

@@ -237,7 +237,7 @@ class PropertyInteractionProbeImpl<T> implements PropertyInteractionProbe<T> {
         val newValueRecorded = valueMarshaller.recoverPropertyFrom(propertyDto);
         assertNotNull(newValueRecorded);
 
-        assertEquals(valueType, newValueRecorded.getSpecification().getCorrespondingClass(), ()->
+        assertEquals(valueType, newValueRecorded.objSpec().getCorrespondingClass(), ()->
             String.format("command value parsing type mismatch '%s'",
                     _Utils.valueDtoToXml(newValueRecordedDto)));
 
