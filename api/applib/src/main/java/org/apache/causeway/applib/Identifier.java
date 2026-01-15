@@ -331,22 +331,37 @@ implements
     
     // -- DEPRECATIONS
     
+    /**
+     * @deprecated use {@link #logicalType()} instead
+     */
     @Deprecated(forRemoval = true)
     public final LogicalType getLogicalType() {
     	return logicalType();
     }
+    /**
+     * @deprecated use {@link #memberLogicalName()} instead
+     */
     @Deprecated(forRemoval = true)
     public final String getMemberLogicalName() {
     	return memberLogicalName();
     }
+    /**
+     * @deprecated use {@link #memberParameterClassNames()} instead
+     */
     @Deprecated(forRemoval = true)
     public final Can<String> getMemberParameterClassNames() {
     	return memberParameterClassNames();
     }
+    /**
+     * @deprecated use {@link #type()} instead
+     */
     @Deprecated(forRemoval = true)
     public final Type getType() {
     	return type();
     }
+    /**
+     * @deprecated use {@link #parameterIndex()} instead
+     */
     @Deprecated(forRemoval = true)
     public final int getParameterIndex() {
     	return parameterIndex();

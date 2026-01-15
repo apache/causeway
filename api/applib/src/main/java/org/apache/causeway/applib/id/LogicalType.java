@@ -318,16 +318,25 @@ implements
 
     // -- DEPRECATIONS
     
+    /**
+     * @deprecated use {@link #logicalName()} instead
+     */
     @Deprecated(forRemoval = true)
     public final String getLogicalTypeName() {
     	return logicalName();
     }
     
+    /**
+     * @deprecated use {@link #correspondingClass()} instead
+     */
     @Deprecated(forRemoval = true)
     public final Class<?> getCorrespondingClass() {
     	return correspondingClass();
     }
     
+    /**
+     * @deprecated use {@link #className()} instead
+     */
     @Deprecated(forRemoval = true)
     public String getClassName() {
         return className();

@@ -60,17 +60,26 @@ public interface HasObjectSpecification {
     
     // -- DEPRECATIONS
     
+    /**
+     * @deprecated use {@link #objSpec()} instead
+     */
     @Deprecated(forRemoval = true)
     default ObjectSpecification getSpecification() {
     	return objSpec();
     }
+    /**
+     * @deprecated use {@link #logicalType()} instead
+     */
     @Deprecated(forRemoval = true)
     default LogicalType getLogicalType() {
         return logicalType();
     }
+    /**
+     * @deprecated use {@link #logicalTypeName()} instead
+     */
     @Deprecated(forRemoval = true)
     default String getLogicalTypeName() {
-        return getSpecification().logicalTypeName();
+        return logicalTypeName();
     }
 
 }
