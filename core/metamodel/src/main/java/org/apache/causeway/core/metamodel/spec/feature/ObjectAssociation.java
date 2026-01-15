@@ -161,7 +161,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         }
 
         static Where whereContextFor(final Identifier memberIdentifier) {
-            return memberIdentifier.getType().isAction()
+            return memberIdentifier.type().isAction()
                     ? STANDALONE_TABLES
                     : PARENTED_TABLES;
         }

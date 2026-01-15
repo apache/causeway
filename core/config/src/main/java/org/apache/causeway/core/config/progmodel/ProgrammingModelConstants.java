@@ -529,7 +529,7 @@ public final class ProgrammingModelConstants {
              */
             public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
                 addVariable("type", featureIdentifier.getLogicalType().className());
-                addVariable("member", featureIdentifier.getMemberLogicalName());
+                addVariable("member", featureIdentifier.memberLogicalName());
                 return this;
             }
             public String buildMessage() {

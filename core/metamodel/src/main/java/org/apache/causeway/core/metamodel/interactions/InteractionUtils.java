@@ -153,7 +153,7 @@ public final class InteractionUtils {
         if("".equals(reason)) {
             val msg = ProgrammingModelConstants.MessageTemplate.INVALID_USE_OF_VALIDATION_SUPPORT_METHOD.builder()
                 .addVariable("className", identifier.getClassName())
-                .addVariable("memberName", identifier.getMemberLogicalName())
+                .addVariable("memberName", identifier.memberLogicalName())
                 .buildMessage();
             log.error(msg);
             return msg;

@@ -85,7 +85,7 @@ implements
 
     @Override
     public final String getId() {
-        return getFeatureIdentifier().getMemberLogicalName();
+        return getFeatureIdentifier().memberLogicalName();
     }
 
     // -- INTERACTION HEAD

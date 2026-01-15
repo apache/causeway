@@ -80,7 +80,7 @@ implements HasUiProperty {
     public String toStringOf() {
         val featureId = uiProperty.getMetaModel().getFeatureIdentifier();
         return getFriendlyName() + ": " +
-                featureId.logicalTypeName() + "#" + featureId.getMemberLogicalName();
+                featureId.logicalTypeName() + "#" + featureId.memberLogicalName();
 
     }
 

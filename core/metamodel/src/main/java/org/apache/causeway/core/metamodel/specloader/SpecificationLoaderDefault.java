@@ -527,11 +527,11 @@ implements
 
     @Override
     public Optional<SemanticsOf> getActionSemanticsOf(final Identifier identifier) {
-        if(!identifier.getType().isAction()) {
+        if(!identifier.type().isAction()) {
             return Optional.empty();
         }
         return specForLogicalType(identifier.getLogicalType())
-            .flatMap(objSpec->objSpec.getAction(identifier.getMemberLogicalName()))
+            .flatMap(objSpec->objSpec.getAction(identifier.memberLogicalName()))
             .map(ObjectAction::getSemantics);
     }
 

@@ -60,8 +60,8 @@ public abstract class CompositeValueUpdater {
         return Identifier
                 .actionIdentifier(
                         id.getLogicalType(),
-                        id.getMemberLogicalName(),
-                        id.getMemberParameterClassNames());
+                        id.memberLogicalName(),
+                        id.memberParameterClassNames());
     }
 
     public ManagedObject executeWithRuleChecking(

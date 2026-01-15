@@ -59,7 +59,7 @@ public class FeatureTypeTest_identifierFor {
         final Method method = SomeDomainClass.class.getMethod("getABigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(
                 LogicalType.fqcn(SomeDomainClass.class), _MethodFacades.testing.regular(method));
-        assertThat(identifierFor.getMemberLogicalName(), is("ABigDecimal")); // very
+        assertThat(identifierFor.memberLogicalName(), is("ABigDecimal")); // very
         // odd
         // compared
         // to
@@ -82,7 +82,7 @@ public class FeatureTypeTest_identifierFor {
         final Method method = SomeDomainClass.class.getMethod("getAnotherBigDecimal");
         final Identifier identifierFor = FeatureType.PROPERTY.identifierFor(
                 LogicalType.fqcn(SomeDomainClass.class), _MethodFacades.testing.regular(method));
-        assertThat(identifierFor.getMemberLogicalName(), is("anotherBigDecimal"));
+        assertThat(identifierFor.memberLogicalName(), is("anotherBigDecimal"));
     }
 
 }

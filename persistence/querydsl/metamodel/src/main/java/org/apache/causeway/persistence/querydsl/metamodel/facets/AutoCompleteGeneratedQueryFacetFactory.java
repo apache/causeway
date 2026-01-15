@@ -108,7 +108,7 @@ public class AutoCompleteGeneratedQueryFacetFactory extends FacetFactoryAbstract
                 .ifPresent(property -> {
                     val queryDslAutoCompletePolicy = property.queryDslAutoComplete();
                     if(queryDslAutoCompletePolicy.isIncluded()) {
-                        updateAutoCompleteQueryDslFacet(declaringSpec, facetedMethod.getFeatureIdentifier().getMemberLogicalName(), queryDslAutoCompletePolicy);
+                        updateAutoCompleteQueryDslFacet(declaringSpec, facetedMethod.getFeatureIdentifier().memberLogicalName(), queryDslAutoCompletePolicy);
                     }
                 });
     }

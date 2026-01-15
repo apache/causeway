@@ -469,7 +469,7 @@ implements ObjectAction {
                 bookmarkIfAny.ifPresent(bookmark -> {   // should always be true
                     log.info("Executing: {}#{} {} {}",
                         getFeatureIdentifier().logicalTypeName(),
-                        getFeatureIdentifier().getMemberLogicalName(),
+                        getFeatureIdentifier().memberLogicalName(),
                         UtilStr.entityAsStr(bookmark, getSpecificationLoader()),
                         argsFor(getParameters(), argumentAdapters));
                 });

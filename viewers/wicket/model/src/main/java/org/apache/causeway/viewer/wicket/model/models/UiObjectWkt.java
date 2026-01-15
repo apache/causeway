@@ -242,7 +242,7 @@ implements
 
         val propertyInteractionModel = new PropertyInteractionWkt(
                 bookmarkedObjectModel,
-                pm.getIdentifier().getMemberLogicalName(),
+                pm.getIdentifier().memberLogicalName(),
                 renderingHint.asWhere());
 
         final long modelsAdded = propertyInteractionModel.streamPropertyUiModels()

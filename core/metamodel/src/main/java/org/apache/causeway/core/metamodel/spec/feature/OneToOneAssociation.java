@@ -70,7 +70,7 @@ extends
 
     default String getCssClass(final String prefix) {
         final String ownerObjectType = getDeclaringType().logicalTypeName().replace(".", "-");
-        final String memberId = getFeatureIdentifier().getMemberLogicalName();
+        final String memberId = getFeatureIdentifier().memberLogicalName();
         return prefix + ownerObjectType + "-" + memberId;
     }
 

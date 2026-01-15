@@ -592,9 +592,9 @@ public class Wkt {
         val sb = new StringBuilder();
         sb.append("causeway-");
         sb.append(identifier.getLogicalType().logicalName());
-        if(_Strings.isNullOrEmpty(identifier.getMemberLogicalName())) {
+        if(_Strings.isNullOrEmpty(identifier.memberLogicalName())) {
             sb.append("-");
-            sb.append(identifier.getMemberLogicalName());
+            sb.append(identifier.memberLogicalName());
         }
         return cssNormalize(sb.toString());
     }

@@ -66,7 +66,7 @@ public class PropertyMemento implements Serializable {
         if (property == null) {
             property = specLoader.get()
                     .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
-                    .getPropertyElseFail(getIdentifier().getMemberLogicalName());
+                    .getPropertyElseFail(getIdentifier().memberLogicalName());
         }
         return property;
     }
@@ -75,7 +75,7 @@ public class PropertyMemento implements Serializable {
 
     @Override
     public String toString() {
-        return getIdentifier().logicalTypeName() + "#" + getIdentifier().getMemberLogicalName();
+        return getIdentifier().logicalTypeName() + "#" + getIdentifier().memberLogicalName();
     }
 
 

@@ -84,10 +84,10 @@ implements
 
         val logicalTypeName = identifier.logicalTypeName();
 
-        if(identifier.getType().isClass()) {
+        if(identifier.type().isClass()) {
             return newType(logicalTypeName);
         }
-        return newMember(logicalTypeName, identifier.getMemberLogicalName());
+        return newMember(logicalTypeName, identifier.memberLogicalName());
     }
 
     public static ApplicationFeatureId newFeature(

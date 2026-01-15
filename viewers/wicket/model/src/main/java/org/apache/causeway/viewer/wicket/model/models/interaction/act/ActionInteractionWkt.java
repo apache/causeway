@@ -97,11 +97,11 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
             final EntityCollectionModel associatedWithCollectionIfAny) {
 
         val onwerSpec = parentEntityModel.getBookmarkedOwner().objSpec();
-        val objectAction = onwerSpec.getAction(actionIdentifier.getMemberLogicalName());
+        val objectAction = onwerSpec.getAction(actionIdentifier.memberLogicalName());
 
         return new ActionInteractionWkt(
                 parentEntityModel.bookmarkedObjectModel(),
-                actionIdentifier.getMemberLogicalName(),
+                actionIdentifier.memberLogicalName(),
                 where,
                 objectAction,
                 associatedWithPropertyIfAny,

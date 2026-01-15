@@ -54,7 +54,7 @@ class IdentifierTests {
     void memberParameterNames() {
         val domainClass = SomeDomainClass.class;
         identifier = Identifier.actionIdentifier(LogicalType.fqcn(domainClass), "placeOrder", int.class, String.class);
-        assertThat(identifier.getMemberParameterClassNames(), is(Can.of("int", "java.lang.String")));
+        assertThat(identifier.memberParameterClassNames(), is(Can.of("int", "java.lang.String")));
     }
 
     @Test

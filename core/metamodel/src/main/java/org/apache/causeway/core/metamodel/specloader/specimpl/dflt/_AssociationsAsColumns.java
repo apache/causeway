@@ -153,7 +153,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
                     propertyIdsInOrder)
             : tableColumnOrderService.orderParented(
                         parentObject.getPojo(),
-                        memberIdentifier.getMemberLogicalName(),
+                        memberIdentifier.memberLogicalName(),
                         elementType,
                         propertyIdsInOrder))
         .filter(_NullSafe::isPresent)
@@ -167,7 +167,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
     }
 
     static Where whereContextFor(final Identifier memberIdentifier) {
-        return memberIdentifier.getType().isAction()
+        return memberIdentifier.type().isAction()
                 ? STANDALONE_TABLES
                 : PARENTED_TABLES;
     }

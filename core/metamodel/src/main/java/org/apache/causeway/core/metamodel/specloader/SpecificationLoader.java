@@ -247,14 +247,14 @@ public interface SpecificationLoader {
         if(typeSpec==null) {
             return Optional.empty();
         }
-        val member = typeSpec.getMember(featureIdentifier.getMemberLogicalName()).orElse(null);
+        val member = typeSpec.getMember(featureIdentifier.memberLogicalName()).orElse(null);
         if(member==null) {
             return Optional.empty();
         }
 
-        final int paramIndex = featureIdentifier.getParameterIndex();
+        final int paramIndex = featureIdentifier.parameterIndex();
 
-        return featureIdentifier.getParameterIndex()<0
+        return featureIdentifier.parameterIndex()<0
                 ? Optional.of(member)
                 : Optional.of(((ObjectAction)member).getParameters().getElseFail(paramIndex));
     }
