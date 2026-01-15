@@ -1,14 +1,12 @@
-name: Build, Test (JDK 25)
+name: Build, Test (4.0.0-SNAPSHOT)
 
 on:
   push:
     branches:
       - main
-      - v3
   pull_request:
     branches:
       - main
-      - v3
 
 jobs:
   # This is a matrix build {'java', 'javascript'},
@@ -63,11 +61,6 @@ jobs:
         distribution: 'temurin'
         java-version: 25
 
-    - name: Set up Maven (3.9.12)
-      if: matrix.language == 'java' && env.BRANCH_NAME == 'v3'
-      uses: stCarolas/setup-maven@v5
-      with:
-        maven-version: 3.9.12
     - name: Set up Maven (4.0.0-rc-5)
       if: matrix.language == 'java' && env.BRANCH_NAME == 'main'
       uses: stCarolas/setup-maven@v5
