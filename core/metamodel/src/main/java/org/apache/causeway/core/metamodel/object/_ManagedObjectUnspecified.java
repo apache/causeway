@@ -41,7 +41,7 @@ implements ManagedObject, Bookmarkable.NoBookmark {
     }
 
     @Override
-    public ObjectSpecification getSpecification() {
+    public ObjectSpecification objSpec() {
         throw _Exceptions.unsupportedOperation();
     }
 

@@ -325,8 +325,7 @@ extends
     /**
      * Returns the specification that details the structure (meta-model) of this object.
      */
-    @Override
-    ObjectSpecification getSpecification();
+    @Override ObjectSpecification objSpec();
 
     /**
      * Returns the adapted domain object, the 'plain old java' object this managed object
@@ -362,11 +361,11 @@ extends
      * May return <code>null</code> if no icon is specified.
      */
     default String getIconName() {
-        return getSpecification().getIconName(this);
+        return objSpec().getIconName(this);
     }
 
     default ObjectIcon getIcon() {
-        return getSpecification().getIcon(this);
+        return objSpec().getIcon(this);
     }
 
     /**
@@ -375,7 +374,7 @@ extends
      */
     default Either<ObjectIcon, FontAwesomeLayers> eitherIconOrFaLayers() {
         val iconName = getIconName();
-        val faLayers = getSpecification().getFaLayers(this).orElse(null);
+        val faLayers = objSpec().getFaLayers(this).orElse(null);
         if (iconName != null
                 || faLayers == null) {
             return Either.left(getIcon());
