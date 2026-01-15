@@ -40,7 +40,7 @@ extends FacetFactoryTestAbstract {
         class Customer {
         }
 
-        assertThat(LogicalType.infer(Customer.class).getLogicalTypeName(), is("CUS"));
+        assertThat(LogicalType.infer(Customer.class).logicalName(), is("CUS"));
 
     }
 

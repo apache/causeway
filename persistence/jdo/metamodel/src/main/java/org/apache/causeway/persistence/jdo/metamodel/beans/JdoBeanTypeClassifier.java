@@ -56,7 +56,7 @@ public class JdoBeanTypeClassifier implements CausewayBeanTypeClassifier {
             var logicalType = LogicalType.infer(type);
 
             // don't trample over the @Named(=...) if present
-            if(logicalType.getLogicalTypeName().equals(type.getName())) {
+            if(logicalType.logicalName().equals(type.getName())) {
                 val schema = persistenceCapableAnnot.get().schema();
                 if(_Strings.isNotEmpty(schema)) {
 

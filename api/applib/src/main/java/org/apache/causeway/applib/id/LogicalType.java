@@ -215,7 +215,7 @@ implements
      * @implNote the result is not memoized, to keep it simple
      */
     public String getLogicalTypeSimpleName() {
-        val logicalTypeName = getLogicalTypeName();
+        val logicalTypeName = logicalName();
         final int lastDot = logicalTypeName.lastIndexOf('.');
         return lastDot >= 0
             ? logicalTypeName.substring(lastDot + 1)
@@ -247,7 +247,7 @@ implements
     public String getLogicalTypeNameFormatted(
             final @NonNull String root,
             final @NonNull String delimiter) {
-        val logicalTypeName = getLogicalTypeName();
+        val logicalTypeName = logicalName();
         final int lastDot = logicalTypeName.lastIndexOf('.');
         if(lastDot > 0) {
             val namespace = logicalTypeName.substring(0, lastDot);
@@ -325,7 +325,6 @@ implements
     public final String getLogicalTypeName() {
     	return logicalName();
     }
-    
     /**
      * @deprecated use {@link #correspondingClass()} instead
      */
@@ -333,7 +332,6 @@ implements
     public final Class<?> getCorrespondingClass() {
     	return correspondingClass();
     }
-    
     /**
      * @deprecated use {@link #className()} instead
      */

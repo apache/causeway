@@ -38,12 +38,12 @@ class LogicalTypeTest {
         _SerializationTester.assertEqualsOnRoundtrip(original);
         
         assertEquals(
-                original.getLogicalTypeName(),
+                original.logicalName(),
                 SomeDomainClass.class.getName());
         
         assertEquals(
-                _SerializationTester.roundtrip(original).getLogicalTypeName(), 
-                original.getLogicalTypeName());
+                _SerializationTester.roundtrip(original).logicalName(), 
+                original.logicalName());
     }
     
     @Test
@@ -54,18 +54,18 @@ class LogicalTypeTest {
         _SerializationTester.assertEqualsOnRoundtrip(original);
         
         assertEquals(
-                original.getLogicalTypeName(),
+                original.logicalName(),
                 "hello");
         
         assertEquals(
-                _SerializationTester.roundtrip(original).getLogicalTypeName(), 
-                original.getLogicalTypeName());
+                _SerializationTester.roundtrip(original).logicalName(), 
+                original.logicalName());
     }
     
     @Test
     void cannotBeEmpty() throws Exception {
         assertThrows(IllegalArgumentException.class, ()->LogicalType.eager(Object.class, ""));
-        assertThrows(IllegalArgumentException.class, ()->LogicalType.lazy(Object.class, ()->"").getLogicalTypeName());
+        assertThrows(IllegalArgumentException.class, ()->LogicalType.lazy(Object.class, ()->"").logicalName());
     }
 
     @Test

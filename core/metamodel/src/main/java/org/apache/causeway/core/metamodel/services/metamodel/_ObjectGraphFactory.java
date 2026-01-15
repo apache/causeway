@@ -94,8 +94,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                     // only register association relations if they don't cross namespace boundaries
                     // in other words: only include, if they share the same namespace
                     if(thisNs.equals(refNs)) {
-                        val thisCls = thisType.getCorrespondingClass();
-                        val refCls = refType.getCorrespondingClass();
+                        val thisCls = thisType.correspondingClass();
+                        val refCls = refType.correspondingClass();
                         if(thisCls.equals(refCls)
                                 || !refCls.isAssignableFrom(thisCls)) {
                             // we found a 1-x relation
@@ -160,8 +160,8 @@ class _ObjectGraphFactory implements ObjectGraph.Factory {
                 val type1 = e1.getKey();
                 val type2 = e2.getKey();
                 if(type1.equals(type2)) continue;
-                val cls1 = type1.getCorrespondingClass();
-                val cls2 = type2.getCorrespondingClass();
+                val cls1 = type1.correspondingClass();
+                val cls2 = type2.correspondingClass();
                 if(cls2.isAssignableFrom(cls1)) {
                     val o1 = e1.getValue();
                     val o2 = e2.getValue();

@@ -82,7 +82,7 @@ implements CausewayComponentScanInterceptor {
 
         scanMeta.setVetoedForInjection(typeMeta.getManagedBy().isVetoedForInjection());
         if(typeMeta.getManagedBy().isBeanNameOverride()) {
-            scanMeta.setBeanNameOverride(typeMeta.getLogicalType().getLogicalTypeName());
+            scanMeta.setBeanNameOverride(typeMeta.getLogicalType().logicalName());
         }
 
         val beanSort = typeMeta.getBeanSort();

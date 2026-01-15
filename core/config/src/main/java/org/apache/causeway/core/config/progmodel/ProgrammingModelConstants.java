@@ -528,7 +528,7 @@ public final class ProgrammingModelConstants {
              * Populates 'type' and 'member' keys (for template variable resolution).
              */
             public ViolationBuilder addVariablesFor(final Identifier featureIdentifier) {
-                addVariable("type", featureIdentifier.getLogicalType().getClassName());
+                addVariable("type", featureIdentifier.getLogicalType().className());
                 addVariable("member", featureIdentifier.getMemberLogicalName());
                 return this;
             }

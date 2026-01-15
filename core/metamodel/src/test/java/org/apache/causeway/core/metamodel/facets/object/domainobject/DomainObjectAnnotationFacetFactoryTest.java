@@ -547,7 +547,7 @@ extends FacetFactoryTestAbstract {
 
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
-            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).getLogicalTypeName(),
+            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).logicalName(),
                     is("CUS"));
             assertNoMethodsRemoved();
         }

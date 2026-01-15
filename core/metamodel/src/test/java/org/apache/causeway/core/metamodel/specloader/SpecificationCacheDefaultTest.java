@@ -97,7 +97,7 @@ class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenNotSet() {
-        val type = logicalTypeResolver.lookup(cus.getLogicalTypeName());
+        val type = logicalTypeResolver.lookup(cus.logicalName());
         assertFalse(type.isPresent());
     }
 
