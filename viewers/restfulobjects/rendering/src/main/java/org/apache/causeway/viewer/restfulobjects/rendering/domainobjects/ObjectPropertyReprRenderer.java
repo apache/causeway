@@ -87,7 +87,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
                 ? valueAdapterIfAny
                 : ManagedObject.empty(objectMember.getElementType());
 
-        val spec = valueAdapter.getSpecification();
+        val spec = valueAdapter.objSpec();
 
         if (spec.isValue()) {
             jsonValueEncoder
@@ -200,7 +200,7 @@ extends AbstractObjectMemberReprRenderer<OneToOneAssociation> {
         if(resourceContext.config().isSuppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link = PropertyDescriptionReprRenderer.newLinkToBuilder(getResourceContext(), Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

@@ -81,7 +81,7 @@ implements MenuUiService {
     private List<String> select(final DomainServiceLayout.MenuBar menuBarSelect) {
         return metaModelContext.streamServiceAdapters()
                 .filter(with(menuBarSelect))
-                .map(ManagedObject::getSpecification)
+                .map(ManagedObject::objSpec)
                 .map(ObjectSpecification::getLogicalTypeName)
                 .collect(Collectors.toList());
     }
@@ -89,7 +89,7 @@ implements MenuUiService {
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBarSelect) {
         return (final ManagedObject adapter) ->
 
-            Facets.domainServiceLayoutMenuBar(adapter.getSpecification())
+            Facets.domainServiceLayoutMenuBar(adapter.objSpec())
                     .orElse(DomainServiceLayout.MenuBar.PRIMARY)
                     .equals(menuBarSelect);
     }

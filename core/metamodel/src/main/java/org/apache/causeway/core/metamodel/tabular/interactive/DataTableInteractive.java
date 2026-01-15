@@ -225,7 +225,7 @@ implements MultiselectChoices {
     private boolean ignoreHidden(final ManagedObject adapter) {
         final InteractionResult visibleResult =
                 InteractionUtils.isVisibleResult(
-                        adapter.getSpecification(),
+                        adapter.objSpec(),
                         createVisibleInteractionContext(adapter));
         return visibleResult.isNotVetoing();
     }
@@ -233,7 +233,7 @@ implements MultiselectChoices {
     private VisibilityContext createVisibleInteractionContext(final ManagedObject objectAdapter) {
         return new ObjectVisibilityContext(
                 InteractionHead.regular(objectAdapter),
-                objectAdapter.getSpecification().getFeatureIdentifier(),
+                objectAdapter.objSpec().getFeatureIdentifier(),
                 InteractionInitiatedBy.USER,
                 Where.ALL_TABLES,
                 InteractionUtils.determineIfHiddenPolicyFrom(objectAdapter),

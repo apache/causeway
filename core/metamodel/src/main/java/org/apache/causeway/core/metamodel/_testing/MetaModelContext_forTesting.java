@@ -552,7 +552,7 @@ extends MetaModelContext {
         services.stream()
         .map(service->ManagedObject.service(service.specification, service.pojo))
         .forEach(serviceAdapter->
-            map.put(serviceAdapter.getSpecification().getLogicalTypeName(), serviceAdapter));
+            map.put(serviceAdapter.objSpec().getLogicalTypeName(), serviceAdapter));
         return map;
     }
 

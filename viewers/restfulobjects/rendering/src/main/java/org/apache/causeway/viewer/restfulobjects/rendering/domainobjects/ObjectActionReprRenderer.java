@@ -197,7 +197,7 @@ extends AbstractObjectMemberReprRenderer<ObjectAction> {
         if(resourceContext.config().isSuppressDescribedByLinks()) {
             return;
         }
-        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.getSpecification(), objectMember).build();
+        final JsonRepresentation link = ActionDescriptionReprRenderer.newLinkToBuilder(resourceContext, Rel.DESCRIBEDBY, objectAdapter.objSpec(), objectMember).build();
         getLinks().arrayAdd(link);
     }
 

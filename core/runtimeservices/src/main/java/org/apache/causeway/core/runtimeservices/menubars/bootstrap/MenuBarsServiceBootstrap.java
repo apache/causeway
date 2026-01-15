@@ -187,7 +187,7 @@ implements MenuBarsService {
         .filter(this::isVisibleAdapterForMenu)
         .forEach(serviceAdapter->{
 
-            val serviceSpec = serviceAdapter.getSpecification();
+            val serviceSpec = serviceAdapter.objSpec();
 
             serviceSpec.streamAnyActions(MixedIn.INCLUDED)
             .forEach(objectAction->{
@@ -288,7 +288,7 @@ implements MenuBarsService {
     }
 
     private boolean isVisibleAdapterForMenu(final ManagedObject objectAdapter) {
-        val spec = objectAdapter.getSpecification();
+        val spec = objectAdapter.objSpec();
         if (spec.isHidden()) {
             // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
             // services that have an imperative hidden() method.
@@ -346,7 +346,7 @@ implements MenuBarsService {
 
                 val objectAction = serviceAndAction.getObjectAction();
                 //val service = serviceAndAction.getServiceAdapter();
-                val logicalTypeName = serviceAndAction.getServiceAdapter().getSpecification().getLogicalTypeName();
+                val logicalTypeName = serviceAndAction.getServiceAdapter().objSpec().getLogicalTypeName();
                 val actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
                 val named = objectAction
@@ -383,7 +383,7 @@ implements MenuBarsService {
 
         // first, order as defined in causeway.properties
         for (ManagedObject serviceAdapter : serviceAdapters) {
-            val serviceSpec = serviceAdapter.getSpecification();
+            val serviceSpec = serviceAdapter.objSpec();
             // assuming services always provide singular NounForm
             String serviceName = serviceSpec.getSingularName();
             serviceNameOrder.add(serviceName);
@@ -434,7 +434,7 @@ implements MenuBarsService {
             final ManagedObject serviceAdapter,
             final ActionScope actionType) {
 
-        final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+        final ObjectSpecification serviceSpec = serviceAdapter.objSpec();
         final Stream<ObjectAction> objectActions = serviceSpec.streamDeclaredActions(actionType, MixedIn.INCLUDED);
 
         return objectActions
@@ -454,7 +454,7 @@ implements MenuBarsService {
     private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
         return (final ManagedObject input) -> {
             final DomainServiceLayoutFacet facet =
-                    input.getSpecification().getFacet(DomainServiceLayoutFacet.class);
+                    input.objSpec().getFacet(DomainServiceLayoutFacet.class);
             return facet != null && facet.getMenuBar() == menuBar;
         };
     }

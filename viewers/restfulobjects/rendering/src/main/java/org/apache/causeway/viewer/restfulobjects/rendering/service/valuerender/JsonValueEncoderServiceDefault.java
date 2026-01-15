@@ -168,7 +168,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
             final JsonRepresentation repr,
             final Context context) {
 
-        val valueSpec = valueAdapter.getSpecification();
+        val valueSpec = valueAdapter.objSpec();
         val valueClass = valueSpec.getCorrespondingClass();
         val jsonValueConverter = converterByClass.get(valueClass);
         if(jsonValueConverter != null) {
@@ -223,11 +223,11 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(valueAdapter)) {
             return Optional.empty();
         }
-        val valueClass = valueAdapter.getSpecification().getCorrespondingClass();
-        val decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.getSpecification(), valueClass)
+        val valueClass = valueAdapter.objSpec().getCorrespondingClass();
+        val decompositionIfAny = Facets.valueDefaultSemantics(valueAdapter.objSpec(), valueClass)
                 .map(composer->composer.decompose(_Casts.uncheckedCast(valueAdapter.getPojo())));
         if(decompositionIfAny.isEmpty()) {
-            val valueSpec = valueAdapter.getSpecification();
+            val valueSpec = valueAdapter.objSpec();
             log.warn("{Could not resolve a ValueComposer for {}, "
                     + "falling back to rendering as 'null'. "
                     + "Make sure the framework has access to a ValueSemanticsProvider<{}> "
@@ -243,7 +243,7 @@ public class JsonValueEncoderServiceDefault implements JsonValueEncoderService {
     @Nullable
     public Object asObject(final @NonNull ManagedObject adapter, final JsonValueConverter.Context context) {
 
-        val objectSpec = adapter.getSpecification();
+        val objectSpec = adapter.objSpec();
         val cls = objectSpec.getCorrespondingClass();
 
         val jsonValueConverter = converterByClass.get(cls);

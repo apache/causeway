@@ -66,7 +66,7 @@ implements Bookmarkable.NoBookmark, _Refetchable {
     // -- HELPER
 
     private EntityFacet entityFacet() {
-        return getSpecification().entityFacetElseFail();
+        return objSpec().entityFacetElseFail();
     }
 
 }

@@ -551,7 +551,7 @@ implements ObjectAction {
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
-        if(head.getOwner().getSpecification().isValue()) {
+        if(head.getOwner().objSpec().isValue()) {
             return; // do not record value type mixin actions
         }
 

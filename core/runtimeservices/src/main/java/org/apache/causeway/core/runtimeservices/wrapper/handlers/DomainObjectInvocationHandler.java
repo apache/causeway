@@ -294,7 +294,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
         if(domainObjectAdapter == null) {
             return null;
         }
-        val specification = domainObjectAdapter.getSpecification();
+        val specification = domainObjectAdapter.objSpec();
         val objectActions = specification.streamAnyActions(MixedIn.INCLUDED);
         val objectAssociations = specification.streamAssociations(MixedIn.INCLUDED);
 
@@ -324,7 +324,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
 
     private Object handleTitleMethod(final ManagedObject targetAdapter) {
 
-        val targetNoSpec = targetAdapter.getSpecification();
+        val targetNoSpec = targetAdapter.objSpec();
         val titleContext = targetNoSpec
                 .createTitleInteractionContext(targetAdapter, InteractionInitiatedBy.FRAMEWORK);
         val titleEvent = titleContext.createInteractionEvent();
@@ -343,7 +343,7 @@ extends DelegatingInvocationHandlerAbstract<T> {
         });
 
 
-        val spec = targetAdapter.getSpecification();
+        val spec = targetAdapter.objSpec();
         if(spec.isEntity()) {
             return runExecutionTask(proxyObject, ()->{
                 MmEntityUtils.persistInCurrentTransaction(targetAdapter);

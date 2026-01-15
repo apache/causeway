@@ -64,7 +64,7 @@ public class MmValueUtils {
             return "";
         }
 
-        val spec = adapter.getSpecification();
+        val spec = adapter.objSpec();
         val valueFacet = spec.valueFacet().orElse(null);
         if(valueFacet==null) {
             return String.format("missing ValueFacet %s", spec.getCorrespondingClass());
@@ -125,7 +125,7 @@ public class MmValueUtils {
         if(!ManagedObjects.isSpecified(valueObject)) {
             return Optional.empty();
         }
-        return valueFacet(valueObject.getSpecification());
+        return valueFacet(valueObject.objSpec());
     }
 
 }

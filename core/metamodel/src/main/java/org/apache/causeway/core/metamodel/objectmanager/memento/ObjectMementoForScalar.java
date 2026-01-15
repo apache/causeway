@@ -94,10 +94,10 @@ implements HasLogicalType, Serializable, ObjectMemento {
 
     private ObjectMementoForScalar(final @NonNull ManagedObject adapter) {
 
-        this.logicalType = adapter.getLogicalType();
+        this.logicalType = adapter.logicalType();
         this.title = MmTitleUtils.titleOf(adapter);
 
-        val spec = adapter.getSpecification();
+        val spec = adapter.objSpec();
 
         if(spec.isIdentifiable()
                 || spec.isParented() ) {

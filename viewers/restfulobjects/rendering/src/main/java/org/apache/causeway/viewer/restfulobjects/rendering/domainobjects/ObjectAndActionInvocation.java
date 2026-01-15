@@ -78,7 +78,7 @@ public class ObjectAndActionInvocation {
         //FIXME following decision tree should not depend on the returned runtime types
         // but on the returnTypeSpec,
         // which is introspected eagerly on application start and should be the binding contract
-        val actualReturnTypeSpec = returnedAdapter.getSpecification();
+        val actualReturnTypeSpec = returnedAdapter.objSpec();
 
         if (ManagedObjects.isPacked(returnedAdapter)
                 || isVector(actualReturnTypeSpec)) {
@@ -95,7 +95,7 @@ public class ObjectAndActionInvocation {
 
             // inspect the collection's elements
             val isListOfDomainObjects = streamElementAdapters()
-                    .allMatch(elementAdapter->!isScalarValue(elementAdapter.getSpecification()));
+                    .allMatch(elementAdapter->!isScalarValue(elementAdapter.objSpec()));
 
             return isListOfDomainObjects
                     ? ActionResultRepresentation.ResultType.LIST

@@ -169,14 +169,14 @@ public final class ManagedObjects {
             return ((PackedManagedObject)object).unpack().stream()
             .allMatch(element->isInstanceOf(element, elementType));
         }
-        val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.getSpecification().getCorrespondingClass());
+        val objectActualType = ClassUtils.resolvePrimitiveIfNecessary(object.objSpec().getCorrespondingClass());
         return upperBound.isAssignableFrom(objectActualType);
     }
 
     // -- IDENTIFICATION
 
     public Optional<ObjectSpecification> spec(final @Nullable ManagedObject managedObject) {
-        return isSpecified(managedObject) ? Optional.of(managedObject.getSpecification()) : Optional.empty();
+        return isSpecified(managedObject) ? Optional.of(managedObject.objSpec()) : Optional.empty();
     }
 
     public Optional<Bookmark> bookmark(final @Nullable ManagedObject managedObject) {
@@ -238,7 +238,7 @@ public final class ManagedObjects {
             final @NonNull String separator) {
         return stringify(managedObject, separator)
                 .orElseGet(()->isSpecified(managedObject)
-                        ? managedObject.getSpecification().getLogicalTypeName() + separator + "?"
+                        ? managedObject.objSpec().getLogicalTypeName() + separator + "?"
                         : "?" + separator + "?");
     }
 
@@ -436,7 +436,7 @@ public final class ManagedObjects {
             return Try.success(null);
         }
 
-        val mmc = object.getSpecification().getMetaModelContext();
+        val mmc = object.objSpec().getMetaModelContext();
 
         val result =  Try.call(()->{
             final Object returnValue = MmInvokeUtils.invokeNoArg(method.method(), object);

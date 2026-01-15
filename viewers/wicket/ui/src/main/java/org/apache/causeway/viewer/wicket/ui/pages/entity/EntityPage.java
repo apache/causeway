@@ -106,7 +106,7 @@ public class EntityPage extends PageAbstract {
             final ManagedObject adapter) {
 
         _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-            _Debug.log("new EntityPage from Adapter %s", adapter.getSpecification());
+            _Debug.log("new EntityPage from Adapter %s", adapter.objSpec());
         });
 
         return new EntityPage(

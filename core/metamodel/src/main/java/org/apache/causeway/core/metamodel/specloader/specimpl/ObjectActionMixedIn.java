@@ -178,7 +178,7 @@ implements MixedInMember {
 
         final ManagedObject owner = head.getOwner();
         final ManagedObject target = mixinAdapterFor(mixinType, owner);
-        _Assert.assertEquals(target.getSpecification(), head.getTarget().getSpecification(),
+        _Assert.assertEquals(target.objSpec(), head.getTarget().objSpec(),
                 "head has the wrong target (should be a mixed-in adapter, but is the mixee adapter)");
 
         if(!interactionInitiatedBy.isPassThrough()) {

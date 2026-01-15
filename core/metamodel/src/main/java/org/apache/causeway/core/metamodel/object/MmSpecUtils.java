@@ -46,7 +46,7 @@ public final class MmSpecUtils {
         }
         val pojo = ManagedObjects.peekAtPojoOf(obj);
         val requiredType = pojo.getClass();
-        val currentSpec = obj.getSpecification();
+        val currentSpec = obj.objSpec();
         if(currentSpec.getCorrespondingClass().equals(requiredType)) {
             return obj;
         }

@@ -88,7 +88,7 @@ implements
     }
 
     private Optional<Bookmark> createBookmark() {
-        return Optional.ofNullable(getSpecification().viewmodelFacetElseFail().serializeToBookmark(this));
+        return Optional.ofNullable(objSpec().viewmodelFacetElseFail().serializeToBookmark(this));
     }
 
     // -- REFRESH OPTIMIZATION

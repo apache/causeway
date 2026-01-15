@@ -181,7 +181,7 @@ implements
         final ManagedObject newValueAfterEventPolling =
                 isValueModifiedByEvent
                         // properly handles the pojo==null case
-                        ? ManagedObject.adaptSingular(newValue.getSpecification(), newValuePojoPossiblyUpdated)
+                        ? ManagedObject.adaptSingular(newValue.objSpec(), newValuePojoPossiblyUpdated)
                         : newValue;
 
         // set event onto the execution

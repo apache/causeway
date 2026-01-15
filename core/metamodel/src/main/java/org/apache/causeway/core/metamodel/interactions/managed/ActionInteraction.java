@@ -215,7 +215,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
-                && propertyOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                && propertyOwner.objSpec().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
             val compositeValueNullable = prop.get(propertyOwner);
             val compositeValue =
@@ -253,7 +253,7 @@ extends MemberInteraction<ManagedAction, ActionInteraction> {
                 //XXX guard against memberId collision,
                 // such that if there is a conflict, the conventional member wins
                 // (maybe improve programming model so this cannot happen)
-                && actionOwner.getSpecification().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
+                && actionOwner.objSpec().getAction(memberId, MixedIn.INCLUDED).isEmpty()) {
 
             val compositeValueNullable = parameterNegotiationModel.getParamValue(paramIndex);
             val compositeValue =

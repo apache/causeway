@@ -42,7 +42,7 @@ final class _InternalTitleUtil {
             return managedObject.getTitle();
         }
 
-        val objSpec = managedObject.getSpecification();
+        val objSpec = managedObject.objSpec();
 
         return objSpec.isSingular()
             ? objectTitleString(titleRenderRequest)
@@ -65,13 +65,13 @@ final class _InternalTitleUtil {
         if (managedObject.getPojo() instanceof String) {
             return (String) managedObject.getPojo();
         }
-        val spec = managedObject.getSpecification();
+        val spec = managedObject.objSpec();
         return Optional.ofNullable(spec.getTitle(titleRenderRequest))
                 .orElseGet(()->getDefaultTitle(managedObject));
     }
 
     private String getDefaultTitle(final ManagedObject managedObject) {
-        return "A" + (" " + managedObject.getSpecification().getSingularName()).toLowerCase();
+        return "A" + (" " + managedObject.objSpec().getSingularName()).toLowerCase();
     }
 
     private String formatAnyCardinalityAsTitle(@NonNull final ObjectSpecification objSpec, @NonNull final ManagedObject managedObject) {

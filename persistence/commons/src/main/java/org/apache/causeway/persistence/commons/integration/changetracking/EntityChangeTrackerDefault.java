@@ -313,7 +313,7 @@ implements
             return true;
         }
 
-        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.getSpecification())) {
+        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec())) {
             return true; // ignore entities that are not enabled for entity change publishing
         }
 

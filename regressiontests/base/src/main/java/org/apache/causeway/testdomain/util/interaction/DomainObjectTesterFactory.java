@@ -111,7 +111,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
             final @NonNull ActionInteraction actionInteraction) {
         val managedAction = actionInteraction.getManagedActionElseFail();
         assertEquals(domainObjectType,
-                managedAction.getOwner().getSpecification().getCorrespondingClass());
+                managedAction.getOwner().objSpec().getCorrespondingClass());
         val actionTester = getServiceInjector().injectServicesInto(
                 new ActionTester<>(domainObjectType, actionInteraction, managedAction));
         actionTester.init();
@@ -623,7 +623,7 @@ public class DomainObjectTesterFactory implements HasMetaModelContext {
         @SuppressWarnings("unchecked")
         static void updatePojo(final ManagedValue managedValue, final UnaryOperator replacer) {
             managedValue.update(v->ManagedObject.adaptSingular(
-                    v.getSpecification(),
+                    v.objSpec(),
                     replacer.apply(v.getPojo())));
         }
 

@@ -62,7 +62,7 @@ class _AssociationsAsColumns implements HasMetaModelContext {
         // the type that has the properties and collections that make up this table's columns
         val elementClass = elementType.getCorrespondingClass();
 
-        val parentSpecIfAny = parentObject.getSpecification();
+        val parentSpecIfAny = parentObject.objSpec();
 
         val assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 

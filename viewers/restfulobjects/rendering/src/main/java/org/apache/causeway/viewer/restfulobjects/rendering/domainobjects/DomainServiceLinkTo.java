@@ -28,7 +28,7 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
 
     @Override
     public ObjectAdapterLinkTo with(final ManagedObject objectAdapter) {
-        serviceId = objectAdapter.getSpecification().getLogicalTypeName();
+        serviceId = objectAdapter.objSpec().getLogicalTypeName();
         return super.with(objectAdapter);
     }
 

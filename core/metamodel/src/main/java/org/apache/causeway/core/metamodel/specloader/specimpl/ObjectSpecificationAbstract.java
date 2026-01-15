@@ -478,7 +478,7 @@ implements ObjectSpecification {
     @Override
     public String getIconName(final ManagedObject domainObject) {
         if(ManagedObjects.isSpecified(domainObject)) {
-            _Assert.assertEquals(domainObject.getSpecification(), this);
+            _Assert.assertEquals(domainObject.objSpec(), this);
         }
         return iconFacet != null
                 ? iconFacet.iconName(domainObject)

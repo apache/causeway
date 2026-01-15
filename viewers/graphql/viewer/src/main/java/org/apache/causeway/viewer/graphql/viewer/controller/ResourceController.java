@@ -194,13 +194,13 @@ public class ResourceController {
 
     @Nullable
     private static Grid gridOf(ManagedObject managedObject) {
-        val facet = managedObject.getSpecification().getFacet(GridFacet.class);
+        val facet = managedObject.objSpec().getFacet(GridFacet.class);
         return facet != null ? facet.getGrid(managedObject) : null;
     }
 
     private Optional<Object> valueOfProperty(String logicalTypeName, String id, String propertyId) {
         return lookup(logicalTypeName, id)
-                .map(managedObject -> ManagedObjectAndPropertyIfAny.of(managedObject, managedObject.getSpecification().getProperty(propertyId)))
+                .map(managedObject -> ManagedObjectAndPropertyIfAny.of(managedObject, managedObject.objSpec().getProperty(propertyId)))
                 .filter(ManagedObjectAndPropertyIfAny::isPropertyPresent)
                 .map(ManagedObjectAndProperty::of)
                 .map(ManagedObjectAndProperty::value)

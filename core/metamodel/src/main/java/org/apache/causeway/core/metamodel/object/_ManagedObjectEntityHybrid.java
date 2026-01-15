@@ -75,14 +75,14 @@ implements _Refetchable {
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityTransient _transient) {
-        super(ManagedObject.Specialization.ENTITY, _transient.getSpecification());
+        super(ManagedObject.Specialization.ENTITY, _transient.objSpec());
         this.variant = _transient;
         this.morphState = MorphState.TRANSIENT;
     }
 
     _ManagedObjectEntityHybrid(
             final @NonNull _ManagedObjectEntityBookmarked bookmarked) {
-        super(ManagedObject.Specialization.ENTITY, bookmarked.getSpecification());
+        super(ManagedObject.Specialization.ENTITY, bookmarked.objSpec());
         this.variant = bookmarked;
         this.morphState = MorphState.BOOKMARKED;
         _Assert.assertTrue(bookmarked.getBookmark().isPresent(),
@@ -152,7 +152,7 @@ implements _Refetchable {
     protected boolean isInjectionPointsResolved() {
         // overriding the default for optimization, let the EntityFacet handle injection
         // as a side-effect potentially injects if required
-        return getSpecification().entityFacetElseFail()
+        return objSpec().entityFacetElseFail()
                 .isInjectionPointsResolved(peekAtPojo());
     }
 
@@ -197,7 +197,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeBookmarked(final Object pojo) {
-        val attached = new _ManagedObjectEntityBookmarked(getSpecification(), pojo, Optional.empty());
+        val attached = new _ManagedObjectEntityBookmarked(objSpec(), pojo, Optional.empty());
         this.variant = attached;
         _Assert.assertTrue(attached.getBookmark().isPresent(),
                 ()->"bookmarked entity must have bookmark");
@@ -205,7 +205,7 @@ implements _Refetchable {
 
     // morph into attached
     private void makeRemoved() {
-        val removed = new _ManagedObjectEntityRemoved(getSpecification());
+        val removed = new _ManagedObjectEntityRemoved(objSpec());
         this.variant = removed;
     }
 

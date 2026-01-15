@@ -58,7 +58,7 @@ final class _Utils {
 
         val objectManager = mmc.getObjectManager();
         val entity = objectManager.adapt(entityPojo);
-        _Assert.assertTrue(entity.getSpecification().isEntity());
+        _Assert.assertTrue(entity.objSpec().isEntity());
         return entity;
     }
 

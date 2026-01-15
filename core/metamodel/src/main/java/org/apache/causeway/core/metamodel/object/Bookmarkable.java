@@ -44,7 +44,7 @@ public interface Bookmarkable {
 
     default Bookmark getBookmarkElseFail() {
         return getBookmark().orElseThrow(()->
-              _Exceptions.unrecoverable("failed to bookmark %s", ((ManagedObject)this).getSpecification()));
+              _Exceptions.unrecoverable("failed to bookmark %s", ((ManagedObject)this).objSpec()));
     }
 
     /**

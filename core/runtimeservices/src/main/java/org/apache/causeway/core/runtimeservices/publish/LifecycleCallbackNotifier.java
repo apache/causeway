@@ -122,7 +122,7 @@ public class LifecycleCallbackNotifier {
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
 
         ManagedObjects.asSpecified(entity)
-        .map(ManagedObject::getSpecification)
+        .map(ManagedObject::objSpec)
         .ifPresent(spec->{
 
             spec.lookupFacet(callbackFacetType)

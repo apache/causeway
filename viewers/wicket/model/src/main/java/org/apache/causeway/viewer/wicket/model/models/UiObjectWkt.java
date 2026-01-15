@@ -262,7 +262,7 @@ implements
     public Stream<Bookmark> streamPropertyBookmarks() {
         val candidateAdapter = this.getObject();
 
-        return candidateAdapter.getSpecification()
+        return candidateAdapter.objSpec()
         .streamProperties(MixedIn.EXCLUDED)
         .map(prop->
             ManagedObjects.bookmark(prop.get(candidateAdapter, InteractionInitiatedBy.PASS_THROUGH))

@@ -210,7 +210,7 @@ implements HasMetaModelContext {
 
     private void startDialogWithParams(final AjaxRequestTarget target) {
         val actionModel = this.getActionModel();
-        val actionOwnerSpec = actionModel.getActionOwner().getSpecification();
+        val actionOwnerSpec = actionModel.getActionOwner().objSpec();
         val actionPrompt = ActionPromptProvider
                 .getFrom(this.getPage())
                 .getActionPrompt(actionModel.getPromptStyle(), actionOwnerSpec.getBeanSort());

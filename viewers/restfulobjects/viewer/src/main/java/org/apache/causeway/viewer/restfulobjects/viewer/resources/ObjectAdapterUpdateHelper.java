@@ -67,7 +67,7 @@ public class ObjectAdapterUpdateHelper {
 
         val allOk = _Refs.booleanRef(true); // simply a non-thread-safe boolean reference
 
-        objectAdapter.getSpecification().streamAssociations(MixedIn.EXCLUDED)
+        objectAdapter.objSpec().streamAssociations(MixedIn.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES) // properties only
         .forEach(association->{
 

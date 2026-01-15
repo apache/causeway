@@ -274,7 +274,7 @@ public enum ActionResultResponseType {
             final @NonNull MetaModelContext commonContext,
             final @NonNull ManagedObject resultAdapter) {
 
-        if (resultAdapter.getSpecification().isSingular()) {
+        if (resultAdapter.objSpec().isSingular()) {
             return resultAdapter;
         } else {
             // will only be a single element
@@ -304,7 +304,7 @@ public enum ActionResultResponseType {
             return TypeAndAdapter.of(mapAbsentResultTo, resultAdapter);
         }
 
-        val resultSpec = resultAdapter.getSpecification();
+        val resultSpec = resultAdapter.objSpec();
         if (!(resultAdapter instanceof PackedManagedObject)) {
 
             // scalar ...
