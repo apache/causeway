@@ -66,7 +66,7 @@ public class CollectionMemento implements Serializable {
     public OneToManyAssociation getCollection(final @NonNull Supplier<SpecificationLoader> specLoader) {
         if (collection == null) {
             collection = specLoader.get()
-                    .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+                    .specForLogicalTypeElseFail(getIdentifier().logicalType())
                     .getCollectionElseFail(getIdentifier().memberLogicalName());
         }
         return collection;

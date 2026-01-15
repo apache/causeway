@@ -530,7 +530,7 @@ implements
         if(!identifier.type().isAction()) {
             return Optional.empty();
         }
-        return specForLogicalType(identifier.getLogicalType())
+        return specForLogicalType(identifier.logicalType())
             .flatMap(objSpec->objSpec.getAction(identifier.memberLogicalName()))
             .map(ObjectAction::getSemantics);
     }

@@ -175,7 +175,7 @@ public class DomainModelValidator {
 
         val logicalType = specificationLoader.specForTypeElseFail(domainType)
             .logicalType();
-        final Predicate<Identifier> filterByLogicalType = id->id.getLogicalType().equals(logicalType);
+        final Predicate<Identifier> filterByLogicalType = id->id.logicalType().equals(logicalType);
 
         boolean matchFound = streamFailures(filterByLogicalType)
                 .anyMatch(failure->

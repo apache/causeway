@@ -243,7 +243,7 @@ public interface SpecificationLoader {
         if(featureIdentifier==null) {
             return Optional.empty();
         }
-        val typeSpec = specForLogicalType(featureIdentifier.getLogicalType()).orElse(null);
+        val typeSpec = specForLogicalType(featureIdentifier.logicalType()).orElse(null);
         if(typeSpec==null) {
             return Optional.empty();
         }

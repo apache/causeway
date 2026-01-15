@@ -65,7 +65,7 @@ public class ObjectMemberMemento implements Serializable {
    public ObjectMember getObjectMember(final @NonNull Supplier<SpecificationLoader> specLoader) {
        if (objectMember == null) {
            objectMember = specLoader.get()
-                   .specForLogicalTypeElseFail(getIdentifier().getLogicalType())
+                   .specForLogicalTypeElseFail(getIdentifier().logicalType())
                    .getMemberElseFail(
                            getIdentifier().getMemberNameAndParameterClassNamesIdentityString());
        }
