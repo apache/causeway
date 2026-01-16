@@ -73,7 +73,7 @@ jobs:
         # -Dproject.build.outputTimestamp=2023-01-01T00:00:00Z see https://maven.apache.org/guides/mini/guide-reproducible-builds.html
         # -T 1C ... 1 build thread per core
         MVN_ADDITIONAL_OPTS: >-
-          -Drevision=$REVISION
+          -Drevision=${{ env.REVISION }}
           -Dmodule-regressiontests
           -Dmaven.compiler.release=11
           -Dmaven.compiler.proc=full
