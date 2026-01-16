@@ -2665,8 +2665,6 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
                             <resourceBundles>
                                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
                             </resourceBundles>
-                            <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                            <!-- APACHE CAUSEWAY customisation 12/21: end -->
                         </configuration>
                     </execution>
                 </executions>
