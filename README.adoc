@@ -31,7 +31,7 @@ Note: the `revision` parameter can be set as desired
 
 == Legacy (isis) Build
 
-Before running the the above `mvn install ...` one has to run:
+Before running the above `mvn install ...` one has to run:
 ----
 export ROOT_PATH_LEGACY=$(pwd)
 jshell scripts/ci/rename-all-published-sources.jsh
