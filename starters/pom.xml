@@ -63,6 +63,7 @@
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
 		<resteasy.version>5.0.0.Final</resteasy.version>
 
+        <maven.deploy.skip>true</maven.deploy.skip> <!-- temporarily troubleshooting deploy issue -->
 	</properties>
 
 	<build>

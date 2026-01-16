@@ -40,7 +40,6 @@
         -Drevision=2.7.8 -->
     
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.deploy.skip>true</maven.deploy.skip> <!-- don't deploy the aggregator -->
 	</properties>
 
 	<scm>
