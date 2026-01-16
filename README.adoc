@@ -5,4 +5,37 @@ This branch is in the process of being decommissioned.
 Version `2.1.0` was the very last _2.x_ release.
 
 For _Apache Causeway_ documentation see: https://causeway.apache.org/
- 
+
+== Build your own (Version `2.x`) 
+
+Here are the recommended build instructions:
+
+- use sdkman see https://sdkman.io
+- install _Maven 3.9.12_ `sdk install maven 3.9.12`
+- install _Java 25_ `sdk install java 25.0.1-tem`
+- verify Maven and Java versions are as desired: `mvn -v`
+
+Now build with _mvn_ command:
+----
+mvn install \
+ -Drevision=2.2.0-SNAPSHOT \
+ -Dmaven.compiler.release=11 \
+ -Dmaven.compiler.proc=full \
+ -Dmaven.source.skip=true \
+ -Dmodule-regressiontests \
+ -T 6 \
+ -e
+----
+
+Note: the `revision` parameter can be set as desired
+
+== Legacy (isis) Build
+
+Before running the the above `mvn install ...` one has to run:
+----
+export ROOT_PATH_LEGACY=$(pwd)
+jshell scripts/ci/rename-all-published-sources.jsh
+----
+
+This will rename artifacts and packages from `causeway` to `isis`.
+
