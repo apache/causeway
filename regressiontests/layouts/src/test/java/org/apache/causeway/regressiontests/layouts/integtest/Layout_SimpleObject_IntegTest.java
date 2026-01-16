@@ -97,12 +97,12 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("750.1"))
         ;
 
@@ -126,12 +126,12 @@ public class Layout_SimpleObject_IntegTest extends CausewayIntegrationTestAbstra
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("400.1"))
         ;
 

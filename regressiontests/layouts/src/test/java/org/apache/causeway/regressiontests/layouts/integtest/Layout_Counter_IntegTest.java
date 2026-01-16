@@ -155,12 +155,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -182,12 +182,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -209,12 +209,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -236,12 +236,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
@@ -264,12 +264,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("2"))
         ;
 
@@ -292,12 +292,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("3"))
         ;
 
@@ -320,12 +320,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("4"))
         ;
 
@@ -348,12 +348,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
@@ -375,12 +375,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("2"))
         ;
 
@@ -402,12 +402,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("3"))
         ;
 
@@ -429,12 +429,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("4"))
         ;
 
@@ -456,12 +456,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -483,12 +483,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -510,12 +510,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -537,12 +537,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo(""))
         ;
 
@@ -564,12 +564,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
@@ -591,12 +591,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("2"))
         ;
 
@@ -618,12 +618,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("3"))
         ;
 
@@ -645,12 +645,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("4"))
         ;
 
@@ -672,12 +672,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
@@ -699,12 +699,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.FALLBACK))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.FALLBACK))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.BELOW));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("1"))
         ;
 
@@ -726,12 +726,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL_DROPDOWN));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("750.1"))
         ;
 
@@ -755,12 +755,12 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
 
         var actionPositionFacet = action.getFacet(ActionPositionFacet.class);
         assertThat(actionPositionFacet)
-                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(ActionPositionFacet::position).isEqualTo(ActionLayout.Position.PANEL));
 
         var layoutOrderFacet = action.getFacet(LayoutOrderFacet.class);
         assertThat(layoutOrderFacet)
-                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getPrecedence).isEqualTo(Facet.Precedence.DEFAULT))
+                .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::precedence).isEqualTo(Facet.Precedence.DEFAULT))
                 .satisfies(f -> assertThat(f).extracting(LayoutOrderFacet::getSequence).isEqualTo("400.1"))
         ;
 

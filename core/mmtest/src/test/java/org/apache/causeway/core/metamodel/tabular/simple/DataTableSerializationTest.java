@@ -59,7 +59,7 @@ class DataTableSerializationTest implements HasMetaModelContext {
 
         @Override public String viewModelMemento() { return memento; }
     }
-    
+
     @Named("DataTableSerializationTest.CustomerRecord")
     public record CustomerRecord(@Property String memento) implements ViewModel {
 
@@ -68,8 +68,8 @@ class DataTableSerializationTest implements HasMetaModelContext {
 
     @ParameterizedTest
     @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
-    void roundtripOnEmptyTable(Class<? extends ViewModel> viewmodelClass) {
-        var original = DataTable.forDomainType(viewmodelClass);
+    void roundtripOnEmptyTable(final Class<? extends ViewModel> viewmodelClass) {
+        var original = DataTable.forDomainType(viewmodelClass); //FIXME may throw IllegalState Recursive update
         var afterRoundtrip = _SerializationTester.roundtrip(original);
 
         assertNotNull(afterRoundtrip);
@@ -83,8 +83,8 @@ class DataTableSerializationTest implements HasMetaModelContext {
 
     @ParameterizedTest
     @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
-    void roundtripOnPopulatedTable(Class<? extends ViewModel> viewmodelClass) {
-        var original = DataTable.forDomainType(viewmodelClass)
+    void roundtripOnPopulatedTable(final Class<? extends ViewModel> viewmodelClass) {
+        var original = DataTable.forDomainType(viewmodelClass) //FIXME may throw IllegalState Recursive update
             .withDataElementPojos(Can.of("cus-1", "cus-2")
                 .map(name->newInstance(viewmodelClass, name))
                 .map(getObjectManager()::adapt));
@@ -99,9 +99,9 @@ class DataTableSerializationTest implements HasMetaModelContext {
         assertEquals("cus-1", cus1.viewModelMemento());
         assertEquals("cus-2", cus2.viewModelMemento());
     }
-    
+
     @SneakyThrows
-    private static ViewModel newInstance(Class<? extends ViewModel> viewmodelClass, String memento) {
+    private static ViewModel newInstance(final Class<? extends ViewModel> viewmodelClass, final String memento) {
         return viewmodelClass.getConstructor(new Class<?>[]{String.class}).newInstance(memento);
     }
 
