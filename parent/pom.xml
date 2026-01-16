@@ -47,7 +47,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <sourceReleaseAssemblyDescriptor>source-release</sourceReleaseAssemblyDescriptor>
         <gpg.useagent>true</gpg.useagent>
-        <minimalMavenBuildVersion>3.9.9</minimalMavenBuildVersion> <!-- latest
+        <minimalMavenBuildVersion>3.9.12</minimalMavenBuildVersion> <!-- latest
         from github actions/setup-java@v3 -->
         <minimalJavaBuildVersion>17</minimalJavaBuildVersion>
         <maven.compiler.release>17</maven.compiler.release>
