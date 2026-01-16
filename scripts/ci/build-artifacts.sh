@@ -106,44 +106,6 @@ function buildDockerImage() {
 
 ### MAIN
 
-if [ ! -z "$REVISION" ]; then
-
-  echo ""
-  echo ""
-  echo ">>> mvn versions:set -DnewVersion=$REVISION ..."
-  echo ""
-  echo ""
-  cd $PROJECT_ROOT_PATH
-  mvn versions:set \
-      -DprocessAllModules \
-      -DnewVersion=$REVISION \
-      -Dmodule-all \
-      | fgrep --line-buffered -v "^Progress (1)" \
-      | fgrep --line-buffered -v "Downloading from central" \
-      | fgrep --line-buffered -v "Downloaded from central" \
-      | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
-      | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
-
-  echo ""
-  echo ""
-  echo ">>> sed'ing version in starters and parent ..."
-  echo ""
-  echo ""
-  cd $PROJECT_ROOT_PATH/starters
-  CURR=$(grep "<version>" pom.xml | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
-  sed -i "s|<version>$CURR</version>|<version>$REVISION</version>|g" pom.xml
-
-  # -- debug the version rewriting --
-  # 1) add an exit statement after the fi below
-  # exit 0
-  # 2) run this script from project root via:
-  # export REVISION=1.9.0-SNAPSHOT ; export JIB_MODE=tar ; bash scripts/ci/build-artifacts.sh
-  # 3) then inspect the pom files with following command:
-  # find . -name "pom.xml" | xargs grep '<version>.*-SNAPSHOT</version>'
-
-fi
-
-
 cd $PROJECT_ROOT_PATH
 echo ""
 echo ""
