@@ -39,7 +39,7 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
     </parent>
     <groupId>org.apache.causeway</groupId>
     <artifactId>causeway-bom</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <packaging>pom</packaging>
 
@@ -52,6 +52,9 @@ It is therefore a copy of org.apache:apache, with customisations clearly identif
 	<properties>
 
 		<!-- BUILD SPECIFICA -->
+		
+        <revision>2.2.0-SNAPSHOT</revision> <!-- can be overidden like mvn
+        -Drevision=2.7.8 -->
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
