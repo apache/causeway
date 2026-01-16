@@ -6,6 +6,12 @@ Version `2.1.0` was the very last _2.x_ release.
 
 For _Apache Causeway_ documentation see: https://causeway.apache.org/
 
+[WARNING]
+====
+This branch has vulnerabilities, see
+https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408]
+====
+
 == Build your own (Version `2.x`) 
 
 Here are the recommended build instructions:
@@ -39,3 +45,28 @@ jshell scripts/ci/rename-all-published-sources.jsh
 
 This will rename artifacts and packages from `causeway` to `isis`.
 
+== CI Build using Gitlab
+
+One can setup a gitlab repository just for the purpose of 
+building and deploying _Causeway_ artifacts.
+
+A minimal build script could look like:
+
+[source,yaml]
+..gitlab-ci.yml
+----
+image: maven:3.9.12-eclipse-temurin-25
+
+include:
+  - local: ci/causeway-v2.yml
+  - local: ci/isis-v2.yml
+
+stages:
+  - checkout-patch-deploy
+----
+
+where the actual jobs are declared in their own files in the `ci` directory: 
+
+TODO flesh out `ci/causeway-v2.yml`
+
+TODO flesh out `ci/isis-v2.yml`
