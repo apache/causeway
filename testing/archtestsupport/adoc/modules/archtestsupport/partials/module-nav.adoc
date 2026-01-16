@@ -1,6 +1,0 @@
-
-
-
-* xref:testing:archtestsupport:about.adoc[Architecture Test Support]
-
-

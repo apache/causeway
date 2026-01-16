@@ -1,6 +1,0 @@
-
-
-
-** xref:userguide:executionlog:about.adoc[Execution Log]
-
-

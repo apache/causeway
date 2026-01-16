@@ -1,4 +1,0 @@
-
-
-** xref:vw:tabular:about.adoc[Tabular Extension]
-

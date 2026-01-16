@@ -1,4 +1,0 @@
-
-
-
-* xref:docs:mavendeps:about.adoc[Aggregator POMs]

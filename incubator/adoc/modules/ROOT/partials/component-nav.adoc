@@ -1,3 +1,0 @@
-include::incubator:ROOT:partial$module-nav.adoc[]
-// include::incubator:commandreplay:partial$module-nav.adoc[Command Replay]
-

@@ -1,4 +1,0 @@
-
-** xref:userguide:layoutloaders:about.adoc[]
-
-

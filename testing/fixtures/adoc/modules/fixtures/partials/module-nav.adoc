@@ -1,4 +1,0 @@
-
-
-* xref:testing:fixtures:about.adoc[Fixture Scripts]
-

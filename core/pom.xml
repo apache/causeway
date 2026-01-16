@@ -280,8 +280,6 @@
 
 	<modules>
 
-		<module>../supplemental-model</module>
-
 		<module>../commons</module>
 
 		<module>../api/schema</module>

@@ -1,5 +1,0 @@
-
-* xref:docs:parent-pom:about.adoc[Parent POM]
-
-
-

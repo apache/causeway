@@ -1,3 +1,0 @@
-* xref:querydsl:ROOT:setup-and-configuration.adoc[]
-* xref:querydsl:ROOT:example-queries.adoc[]
-* xref:querydsl:ROOT:autocomplete-annotations.adoc[]

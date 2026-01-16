@@ -1,2 +1,0 @@
-
-* xref:testing:h2console:about.adoc[H2 Console]

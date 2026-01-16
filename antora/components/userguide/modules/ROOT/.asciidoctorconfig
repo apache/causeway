@@ -1,4 +1,0 @@
-:attachmentsdir: {asciidoctorconfigdir}/attachments
-:examplesdir: {asciidoctorconfigdir}/examples
-:imagesdir: {asciidoctorconfigdir}/images
-:partialsdir: {asciidoctorconfigdir}/partials

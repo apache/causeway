@@ -1,2 +1,0 @@
-
-** xref:tutorials:petclinic:about.adoc[Petclinic]

@@ -1,4 +1,0 @@
-
-** xref:userguide:docgen:about.adoc[DocGen]
-
-

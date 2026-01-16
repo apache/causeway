@@ -1,4 +1,0 @@
-include::vw:fullcalendar:partial$module-nav.adoc[]
-include::vw:pdfjs:partial$module-nav.adoc[]
-include::vw:sse:partial$module-nav.adoc[]
-include::vw:tabular:partial$module-nav.adoc[]

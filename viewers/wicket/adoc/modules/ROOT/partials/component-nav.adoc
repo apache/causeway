@@ -1,6 +1,0 @@
-
-include::vw:ROOT:partial$module-nav.adoc[]
-
-* Extensions
-
-include::vw:ROOT:partial$extensions.adoc[]

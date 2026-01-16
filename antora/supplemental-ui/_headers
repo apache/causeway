@@ -1,3 +1,0 @@
-# We could switch to /_/* and use an indefinite age if we append a cache buster to all asset URLs
-/_/font/*
-  Cache-Control: public,max-age=604800

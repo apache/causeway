@@ -1,2 +1,0 @@
-include::querydsl:ROOT:partial$module-nav.adoc[]
-

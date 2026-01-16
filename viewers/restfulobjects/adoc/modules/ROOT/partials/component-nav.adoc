@@ -1,8 +1,0 @@
-
-
-
-include::vro:ROOT:partial$module-nav.adoc[]
-
-* Extensions
-
-include::vro:ROOT:partial$extensions.adoc[]

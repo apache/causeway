@@ -1,6 +1,0 @@
-
-
-
-** xref:userguide:titlecache:about.adoc[Title Cache]
-
-

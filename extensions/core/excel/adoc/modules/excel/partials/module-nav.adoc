@@ -1,4 +1,0 @@
-
-** xref:userguide:excel:about.adoc[Excel Library]
-
-

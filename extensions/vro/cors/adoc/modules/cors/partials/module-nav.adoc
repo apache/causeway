@@ -1,2 +1,0 @@
-** xref:vro:cors:about.adoc[CORS]
-
