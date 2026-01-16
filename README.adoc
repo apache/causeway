@@ -21,6 +21,11 @@ Here are the recommended build instructions:
 - install _Java 25_ `sdk install java 25.0.1-tem`
 - verify Maven and Java versions are as desired: `mvn -v`
 
+First we set the desired version: 
+----
+mvn versions:set -Drevision=2.2.0-SNAPSHOT
+----
+
 Now build with _mvn_ command:
 ----
 mvn install \
