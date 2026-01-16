@@ -133,36 +133,4 @@ mvn -s $SETTINGS_XML \
     | fgrep --line-buffered -v "[INFO] No site descriptor found: nothing to attach." \
     | fgrep --line-buffered -v "[INFO] Skipping because packaging 'jar' is not pom."
 
-# now build the individual docker images
-#if [ "$JIB_CMD" != "skip"  ]; then
-#  buildDockerImage examples/demo/wicket/jdo
-#  buildDockerImage examples/demo/wicket/jpa
-#fi
-
-if [ ! -z "$REVISION" ] && [ "$REV_REVERT_FLAG" != "off" ]; then
-  cd $PROJECT_ROOT_PATH
-  echo ""
-  echo ""
-  echo ">>> mvn versions:revert ..."
-  echo ""
-  echo ""
-  mvn versions:revert \
-      -DprocessAllModules \
-      -Dmodule-all \
-      | fgrep --line-buffered -v "^Progress (1)" \
-      | fgrep --line-buffered -v "Downloading from central" \
-      | fgrep --line-buffered -v "Downloaded from central" \
-      | fgrep --line-buffered -v "Downloading from DataNucleus_2" \
-      | fgrep --line-buffered -v "Downloaded from DataNucleus_2"
-
-
-  echo ""
-  echo ""
-  echo ">>> sed'ing to revert version in starters and parent ..."
-  echo ""
-  echo ""
-  cd $PROJECT_ROOT_PATH/starters
-  sed -i "s|<version>$REVISION</version>|<version>$CURR</version>|g" pom.xml
-fi
-
 cd $PROJECT_ROOT_PATH

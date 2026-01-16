@@ -112,12 +112,6 @@
 			and deploy plugins are automatically included because they provide the default
 			bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
 		<plugins>
-			<!-- run using: mvn org.apache.rat:apache-rat-plugin:check -->
-			<plugin>
-				<groupId>org.apache.rat</groupId>
-				<artifactId>apache-rat-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
