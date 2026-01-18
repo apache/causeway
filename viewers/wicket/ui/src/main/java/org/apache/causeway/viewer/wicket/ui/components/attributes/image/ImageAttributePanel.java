@@ -63,7 +63,7 @@ extends AttributePanelWithFormField<BufferedImage> {
     @Override
     protected FormComponent createFormComponent(final String id, final UiAttributeWkt attributeModel) {
         var initialCaption = outputFormatAsString();
-        var fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
+        var fileUploadField = Wkt.fileUploadField(id, initialCaption, getWicketViewerSettings(), fileUploadModel());
         addAcceptFilterTo(fileUploadField);
         return fileUploadField;
     }

@@ -3021,6 +3021,8 @@ public record CausewayConfiguration(
             @DefaultValue
             DevelopmentUtilities developmentUtilities,
             @DefaultValue
+            FileUpload fileUpload,
+            @DefaultValue
             RememberMe rememberMe,
             @DefaultValue
             Themes themes,
@@ -3164,6 +3166,31 @@ public record CausewayConfiguration(
                  */
                 @DefaultValue("false")
                 boolean enable) {
+            }
+            
+            public record FileUpload(
+                    /**
+                     * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'], 
+                     * where 'object' enables fallback behavior. We remove this here.
+                     *  
+                     * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewTypes
+                     */
+                    @DefaultValue({"object"})
+                    List<String> disabledPreviewTypes,
+            		/**
+            		 * Some mime types can trigger unwanted download behavior, dependent on browser and or OS settings.
+            		 * 
+            		 * <p>We have seen CSV files causing issues, so we disallow those by default.
+            		 * 
+            		 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
+            		 */
+            		@DefaultValue({"text/csv"})
+                    List<String> disabledPreviewMimeTypes,
+        			/**
+        			 * If <code>false</code> disables the file upload preview frame entirely.
+        			 */
+            		@DefaultValue("true")
+        			boolean showPreview) {
             }
 
             public record RememberMe(
