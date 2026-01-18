@@ -131,6 +131,7 @@ import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.Che
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig.Sizes;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.FileInputConfig;
+import de.agilecoders.wicket.jquery.IKey;
 import de.agilecoders.wicket.jquery.Key;
 
 /**
@@ -678,20 +679,42 @@ public class Wkt {
     public FileUploadField fileUploadField(
             final String id,
             final String initialCaption,
+            final Wicket settings,
             final IModel<List<FileUpload>> model) {
         val fileUploadField = new FileUploadFieldWithNestingFix(
                 id,
                 model,
-                new FileInputConfig()
-                    .maxFileCount(1)
-                    .mainClass("input-group-sm")
-                    .initialCaption(initialCaption)
-                    .captionClass("form-control-sm")
-                    .showUpload(false)
-                    //[CAUSEWAY-3950] preview may trigger unwanted downloads of the file that just got uploaded
-                    // we were seeing this with Chrome browser and files of type CSV
-                    .showPreview(false));
+                createFileInputConfig(initialCaption, settings.getFileUpload()));
         return fileUploadField;
+    }
+    
+    /**
+     * @see https://plugins.krajee.com/file-input/plugin-options
+     */
+    static final class FileInputConfigWithPreviewControl extends FileInputConfig {
+    	private static final long serialVersionUID = 1L;
+    	static final IKey<List<String>> DisabledPreviewTypes = newKey("disabledPreviewTypes", null);
+    	static final IKey<List<String>> DisabledPreviewMimeTypes = newKey("disabledPreviewMimeTypes", null);
+    	public FileInputConfigWithPreviewControl disabledPreviewTypes(List<String> disabledPreviewTypes) {
+    		put(DisabledPreviewTypes, disabledPreviewTypes);
+    		return this;
+    	}
+    	public FileInputConfigWithPreviewControl disabledPreviewMimeTypes(List<String> disabledPreviewMimeTypes) {
+    		put(DisabledPreviewMimeTypes, disabledPreviewMimeTypes);
+    		return this;
+    	}
+    }
+
+    private FileInputConfig createFileInputConfig(final String initialCaption, final Wicket.FileUpload fileUploadSettings) {
+    	return new FileInputConfigWithPreviewControl()
+    			.disabledPreviewTypes(fileUploadSettings.getDisabledPreviewTypes())
+    			.disabledPreviewMimeTypes(fileUploadSettings.getDisabledPreviewMimeTypes())
+                .maxFileCount(1)
+                .mainClass("input-group-sm")
+                .initialCaption(initialCaption)
+                .captionClass("form-control-sm")
+                .showUpload(false)
+                .showPreview(fileUploadSettings.isShowPreview());
     }
 
     // -- FONT AWESOME

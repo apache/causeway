@@ -71,7 +71,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     @Override
     protected FormComponent createFormComponent(final String id, final ScalarModel scalarModel) {
         val initialCaption = outputFormatAsString();
-        val fileUploadField = Wkt.fileUploadField(id, initialCaption, fileUploadModel());
+        val fileUploadField = Wkt.fileUploadField(id, initialCaption, getWicketViewerSettings(), fileUploadModel());
         addAcceptFilterTo(fileUploadField);
         return fileUploadField;
     }
