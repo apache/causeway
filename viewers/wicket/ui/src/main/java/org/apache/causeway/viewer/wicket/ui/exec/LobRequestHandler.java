@@ -31,7 +31,6 @@ import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-import org.apache.wicket.util.resource.StringResourceStream;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.value.Blob;
@@ -91,7 +90,9 @@ public record LobRequestHandler(
     }
 
     private IResourceStream resourceStream(Clob clob) {
-        return new StringResourceStream(clob.chars(), clob.mimeType().toString());
+        return resourceStream(clob.toBlobUtf8());
+        // [CAUSEWAY-3958] has issues with CSV files
+		// return new StringResourceStream(clob.chars(), clob.mimeType().toString());
     }
 
     private IResourceStream resourceStreamUnmatched() {

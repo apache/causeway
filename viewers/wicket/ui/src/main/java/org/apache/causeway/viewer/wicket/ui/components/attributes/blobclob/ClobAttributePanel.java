@@ -23,20 +23,19 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CharSequenceResource;
+import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
 
+import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.viewer.wicket.model.models.FileUploadModels;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
 /**
  * Panel for rendering scalars of type {@link Clob}.
- *
- * <p>
- *    TODO: for now, this only handles {@link Clob}s encoded as UTF-8.
- *    One option might be to 'guess' the character encoding, eg akin to cpdetector?
- * </p>
+ * 
+ * <p>WARNING only handles {@link Clob}s encoded as UTF-8.
+ * For different use-cases use {@link Blob} instead.
  */
 class ClobAttributePanel extends BlobOrClobAttributePanel<Clob> {
 
@@ -53,7 +52,10 @@ class ClobAttributePanel extends BlobOrClobAttributePanel<Clob> {
 
     @Override
     protected IResource newResource(final Clob clob) {
-        return new CharSequenceResource(clob.mimeType().getBaseType(), clob.chars(), clob.name());
+    	var blob = clob.toBlobUtf8();
+    	return new ByteArrayResource(blob.mimeType().getBaseType(), blob.bytes(), blob.name());
+    	//[CAUSEWAY-3958] has issues with CSV files
+        //return new CharSequenceResource(clob.mimeType().getBaseType(), clob.chars(), clob.name());
     }
 
 }
