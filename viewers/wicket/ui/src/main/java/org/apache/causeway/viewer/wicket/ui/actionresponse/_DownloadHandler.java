@@ -81,7 +81,9 @@ final class _DownloadHandler {
     }
 
     private IResourceStream resourceStreamFor(final Clob clob) {
-        return new StringResourceStream(clob.getChars(), clob.getMimeType().toString());
+        return resourceStreamFor(clob.toBlobUtf8());
+        // [CAUSEWAY-3958] has issues with CSV files
+		// return new StringResourceStream(clob.chars(), clob.mimeType().toString());
     }
 
     private IRequestHandler handlerFor(

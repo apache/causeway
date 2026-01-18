@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CharSequenceResource;
+import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
 
 import org.apache.causeway.applib.value.Clob;
@@ -54,7 +54,10 @@ public class CausewayClobPanel extends CausewayBlobOrClobPanelAbstract<Clob> {
 
     @Override
     protected IResource newResource(final Clob clob) {
-        return new CharSequenceResource(clob.getMimeType().getBaseType(), clob.getChars(), clob.getName());
+    	var blob = clob.toBlobUtf8();
+    	return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+    	//[CAUSEWAY-3958] has issues with CSV files
+        //return new CharSequenceResource(clob.mimeType().getBaseType(), clob.chars(), clob.name());
     }
 
 }
