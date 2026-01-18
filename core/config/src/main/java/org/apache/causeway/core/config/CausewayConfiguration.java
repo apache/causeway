@@ -3408,7 +3408,7 @@ public class CausewayConfiguration {
             	 * 
             	 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
             	 */
-            	private List<String> disabledPreviewMimeTypes = List.of("object");
+            	private List<String> disabledPreviewMimeTypes = List.of("text/csv");
             	/**
             	 * If <code>false</code> disables the file upload preview frame entirely.
             	 */
