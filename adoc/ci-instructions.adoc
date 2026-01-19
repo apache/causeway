@@ -1,23 +1,115 @@
 One can setup a gitlab repository just for the purpose of 
 building and deploying _Causeway_ artifacts.
 
-A minimal build script could look like:
+A build script could look like:
 
 [source,yaml]
 ..gitlab-ci.yml
 ----
+spec:
+  inputs:
+    revision:
+      type: string
+      description: "the Maven revision (artifact version) that we are building; defaults to 2.2.0-SNAPSHOT"
+      default: "2.2.0-SNAPSHOT"
+    commit_or_branch:
+      type: string
+      description: "the commit-hash or branch name to check out; defaults to maintenance-branch"
+      default: maintenance-branch
+    java_target_version:
+      type: number
+      options: [11, 17, 21, 25]
+      description: "targeted Java compile version; defaults to 11"
+      default: 11
+    test_or_deploy:
+       type: string
+       options: ['test', 'deploy']
+       default: 'test'
+       description: "whether to just 'test' or also 'deploy' : defaults to 'test'"
+    are_you_sure:
+      type: string
+      options: ['yes', 'no']
+      default: 'no'
+      description: "only 'yes' triggers the pipeline"
+---   
+
 image: maven:3.9.12-eclipse-temurin-25
 
-include:
-  - local: ci/causeway-v2.yml
-  - local: ci/isis-v2.yml
+variables:
+  CAN_RUN: $[[ inputs.are_you_sure ]]
+  REVISION: $[[ inputs.revision ]]
+  COMMIT_OR_BRANCH: $[[ inputs.commit_or_branch ]]
+  JAVA_TARGET_VERSION: $[[ inputs.java_target_version ]]
+  TEST_OR_DEPLOY: $[[ inputs.test_or_deploy ]]
 
-stages:
-  - checkout-patch-deploy
+# Define the workflow which specifies that the entire pipeline should only be triggered manually
+workflow:
+  rules:
+    - if: $CAN_RUN == "yes"
+      when: always  # Triggers the pipeline
+    - when: never  # Do not run the pipeline if the condition is not met
+
+stages:          # List of stages for jobs, and their order of execution
+  - checkout
+  - rename
+  - test
+  - deploy
+  
+include:
+  - local: ci/checkout-v2.yml
+  - local: ci/test-and-deploy-causeway-v2.yml
+  - local: ci/test-and-deploy-isis-v2.yml
 ----
 
 where the actual jobs are declared in their own files in the `ci` directory: 
 
-TODO flesh out `ci/causeway-v2.yml`
+- `ci/checkout-v2.yml`
+- `ci/test-and-deploy-causeway-v2.yml`
+- `ci/test-and-deploy-isis-v2.yml`
 
-TODO flesh out `ci/isis-v2.yml`
+== Checkout and set Version/Revision
+
+Generates a single artifact `build.tar.gz`, which contains the sources we are about to build.
+This artifact is passed on to any follow up jobs.
+
+[source,yaml]
+.ci/checkout-v2.yml
+----
+checkout-job:       # This job runs in the build stage, which runs first.
+  stage: checkout
+  tags:
+    - maven      # signals the maven job runner to pick this up
+  allow_failure: false
+  script:
+    - git clone https://github.com/apache/causeway.git build
+    - cd build 
+    - git checkout $COMMIT_OR_BRANCH
+    - mvn -v
+    - mvn versions:set -Drevision=$REVISION
+    - cd ..
+    - tar --exclude='build/.git' -czf build.tar.gz build
+  artifacts:
+    paths:
+      - build.tar.gz
+----
+
+== Test and Deploy
+
+Deploy stage is optional, based on input.
+
+[source,yaml]
+.ci/test-and-deploy-causeway-v2.yml
+----
+TODO
+----
+
+== Rename, Test and Deploy Legacy (isis)
+
+Deploy stage is optional, based on input. 
+(Same as `Test and Deploy` above, but operating on the renamed sources.)
+
+[source,yaml]
+.ci/test-and-deploy-isis-v2.yml
+----
+TODO
+----
