@@ -12,66 +12,14 @@ This branch has vulnerabilities, see
 https://www.cve.org/CVERecord?id=CVE-2025-64408[CVE-2025-64408]
 ====
 
-== Build your own (Version `2.x`) 
+== Changelog (Version `2.x`)
 
-Here are the recommended build instructions:
+include::adoc/changelog.adoc[leveloffset=2]
 
-- use sdkman see https://sdkman.io
-- install _Maven 3.9.12_ `sdk install maven 3.9.12`
-- install _Java 25_ `sdk install java 25.0.1-tem`
-- verify Maven and Java versions are as desired: `mvn -v`
+== Build your own (Version `2.x`)
 
-First we set the desired version: 
-----
-mvn versions:set -Drevision=2.2.0-SNAPSHOT
-----
-
-Now build with _mvn_ command:
-----
-mvn install \
- -Drevision=2.2.0-SNAPSHOT \
- -Dmaven.compiler.release=11 \
- -Dmaven.compiler.proc=full \
- -Dmaven.source.skip=true \
- -Dmodule-regressiontests \
- -T 6 \
- -e
-----
-
-Note: the `revision` parameter can be set as desired
-
-== Legacy (isis) Build
-
-Before running the above `mvn install ...` one has to run:
-----
-export ROOT_PATH_LEGACY=$(pwd)
-jshell scripts/ci/rename-all-published-sources.jsh
-----
-
-This will rename artifacts and packages from `causeway` to `isis`.
+include::adoc/build-instructions.adoc[leveloffset=2]
 
 == CI Build using Gitlab
 
-One can setup a gitlab repository just for the purpose of 
-building and deploying _Causeway_ artifacts.
-
-A minimal build script could look like:
-
-[source,yaml]
-..gitlab-ci.yml
-----
-image: maven:3.9.12-eclipse-temurin-25
-
-include:
-  - local: ci/causeway-v2.yml
-  - local: ci/isis-v2.yml
-
-stages:
-  - checkout-patch-deploy
-----
-
-where the actual jobs are declared in their own files in the `ci` directory: 
-
-TODO flesh out `ci/causeway-v2.yml`
-
-TODO flesh out `ci/isis-v2.yml`
+include::adoc/ci-instructions.adoc[leveloffset=2]

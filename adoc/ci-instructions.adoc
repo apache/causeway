@@ -1,0 +1,23 @@
+One can setup a gitlab repository just for the purpose of 
+building and deploying _Causeway_ artifacts.
+
+A minimal build script could look like:
+
+[source,yaml]
+..gitlab-ci.yml
+----
+image: maven:3.9.12-eclipse-temurin-25
+
+include:
+  - local: ci/causeway-v2.yml
+  - local: ci/isis-v2.yml
+
+stages:
+  - checkout-patch-deploy
+----
+
+where the actual jobs are declared in their own files in the `ci` directory: 
+
+TODO flesh out `ci/causeway-v2.yml`
+
+TODO flesh out `ci/isis-v2.yml`

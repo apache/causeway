@@ -1,0 +1,23 @@
+= Jan 2016
+
+🐞 Bug Fixes
+
+- Wicket Viewer CSV upload issue https://issues.apache.org/jira/browse/CAUSEWAY-3950[CAUSEWAY-3950]
+- Wicket Viewer CSV download issue https://issues.apache.org/jira/browse/CAUSEWAY-3958[CAUSEWAY-3958]
+
+⭐ New Features
+
+- (re-)enables CI test jobs for v2 commits and pull requests
+- cleaning up POMs, e.g. removes release related profiles  
+
+📔 Documentation
+
+- `README` (v2) to include build instructions and changelog 
+
+🔨 Dependency Upgrades
+
+- Upgrade `archunit` 1.3.0 -> 1.3.2 (allows v2 build using JDK 25)
+
+= Up till Dec 2015
+
+- TODO
