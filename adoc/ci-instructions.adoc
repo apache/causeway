@@ -67,15 +67,99 @@ where the actual jobs are declared in their own files in the `ci` directory:
 - `ci/test-and-deploy-causeway-v2.yml`
 - `ci/test-and-deploy-isis-v2.yml`
 
+For the below deployment jobs to work, we are using a 
+custom:
+
+- `ci/m2-settings.xml`
+
+== Deployment Configuration
+
+The following exemplifies deployment to a _Nexus_ instance, using `https://nexus.example.com:PORT/` as a placeholder for you to fill in.
+Also `NEXUS_DEPLOYMENT_PASS` is used as the secret required for authenticating the user `development` against the _Nexus_ instance. 
+Usually to be configured at the gitlab's project page under `CI/CD Settings` -> `Variables`. 
+
+[source,xml]
+.ci/m2-settings.xml
+----
+<settings xmlns="http://maven.apache.org/SETTINGS/1.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+    
+    <servers>
+        <server>
+            <id>internal.repo.releases</id>
+            <username>deployment</username>
+            <password>${env.NEXUS_DEPLOYMENT_PASS}</password>
+        </server>
+        <server>
+            <id>internal.repo.snapshots</id>
+            <username>deployment</username>
+            <password>${env.NEXUS_DEPLOYMENT_PASS}</password>
+        </server>
+    </servers>
+    
+    <profiles>
+        <profile>
+            <id>internal.repo</id>
+            <activation>
+                <property>
+                    <name>internal.repo</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- your nexus urls here -->
+                <altReleaseDeploymentRepository>internal.repo.releases::https://nexus.example.com:PORT/repository/maven-releases/</altReleaseDeploymentRepository>
+                <altSnapshotDeploymentRepository>internal.repo.snapshots::https://nexus.example.com:PORT/repository/maven-snapshots/</altSnapshotDeploymentRepository>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>internal.repo.group</id>
+                    <name>nexus@example</name>
+                    <!-- your nexus url here -->
+                    <url>https://nexus.example.com:PORT/repository/maven-group/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                        <checksumPolicy>fail</checksumPolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>always</updatePolicy>
+                        <checksumPolicy>fail</checksumPolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    
+    <activeProfiles>
+        <activeProfile>internal.repo</activeProfile>
+    </activeProfiles>
+
+    <!-- optionally allows deployment to HTTP (non HTTPS) repo, use at your own risk! -->
+    <mirrors>
+        <!-- a copy of /opt/maven/conf/settings.xml, so can override with exception rules -->
+        <mirror>
+          <id>maven-default-http-blocker</id>
+          <mirrorOf>!internal.repo.group,external:http:*</mirrorOf>
+          <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
+          <url>http://0.0.0.0/</url>
+          <blocked>true</blocked>
+        </mirror>
+    </mirrors>
+
+</settings>
+----
+
 == Checkout and set Version/Revision
 
-Generates a single artifact `build.tar.gz`, which contains the sources we are about to build.
-This artifact is passed on to any follow up jobs.
+Generates a single _artifact_ `build.tar.gz`, which contains the sources we are about to build.
+This _artifact_ is passed on to any follow up jobs.
 
 [source,yaml]
 .ci/checkout-v2.yml
 ----
-checkout-job:       # This job runs in the build stage, which runs first.
+checkout-job:    # This job runs in the checkout stage, which runs first.
   stage: checkout
   tags:
     - maven      # signals the maven job runner to pick this up
@@ -100,7 +184,54 @@ Deploy stage is optional, based on input.
 [source,yaml]
 .ci/test-and-deploy-causeway-v2.yml
 ----
-TODO
+test-job: # This job runs in the test stage.
+  stage: test    # It only starts when the job in the previous stage completes successfully.
+  tags:
+    - maven      # signals the maven job runner to pick this up
+  dependencies:
+    - checkout-job
+  allow_failure: false
+  script:
+    - echo "Testing application with revision $REVISION ..."
+    - tar -xzf build.tar.gz
+    - ls build
+    - cd build
+    - mvn -v
+    - mkdir -p .mvn
+    - |
+      mvn verify \
+        -Drevision=$REVISION \
+        -Dmaven.compiler.release=$JAVA_TARGET_VERSION \
+        -Dmaven.compiler.proc=full \
+        -Dmaven.source.skip=true \
+        -DskipBrowserTests \
+        -e -T 4
+  artifacts:
+    paths:
+      - build.tar.gz
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - maven      # signals the maven job runner to pick this up
+  dependencies:
+    - test-job
+  rules:
+    - if: $TEST_OR_DEPLOY == "deploy"
+  variables:
+    M2_SETTINGS: ${CI_PROJECT_DIR}/ci/m2-settings.xml # assuming this is where we find the Maven settings to use for the deploy stage
+  script:
+    - echo "Deploying application with revision $REVISION ..."
+    - tar -xzf build.tar.gz
+    - cd build
+    - |
+      mvn deploy \
+        -s $M2_SETTINGS \
+        -Drevision=$REVISION \
+        -Dmaven.compiler.release=$JAVA_TARGET_VERSION \
+        -Dmaven.compiler.proc=full \
+        -DskipBrowserTests \
+        -e -T 4
 ----
 
 == Rename, Test and Deploy Legacy (isis)
@@ -111,5 +242,71 @@ Deploy stage is optional, based on input.
 [source,yaml]
 .ci/test-and-deploy-isis-v2.yml
 ----
-TODO
+rename-job: # This job runs in the rename stage.
+  stage: rename    # It only starts when the job in the build stage completes successfully.
+  tags:
+    - maven      # signals the maven job runner to pick this up
+  dependencies:
+    - checkout-job
+  allow_failure: false
+  script:
+    - tar -xzf build.tar.gz
+    - mv build build-isis
+    - cd build-isis
+    - |
+      export ROOT_PATH_LEGACY=$(pwd)
+      jshell scripts/ci/rename-all-published-sources.jsh
+    - cd ..
+    - tar -czf build-isis.tar.gz build-isis
+  artifacts:
+    paths:
+      - build-isis.tar.gz
+
+test-job-isis: # This job runs in the test stage.
+  stage: test    # It only starts when the job in the previous stage completes successfully.
+  tags:
+    - maven      # signals the maven job runner to pick this up
+  dependencies:
+    - rename-job
+  allow_failure: false
+  script:
+    - echo "Testing application with revision $REVISION ..."
+    - tar -xzf build-isis.tar.gz
+    - cd build-isis
+    - mvn -v
+    - mkdir -p .mvn
+    - |
+      mvn verify \
+        -Drevision=$REVISION \
+        -Dmaven.compiler.release=$JAVA_TARGET_VERSION \
+        -Dmaven.compiler.proc=full \
+        -Dmaven.source.skip=true \
+        -DskipBrowserTests \
+        -e -T 4
+  artifacts:
+    paths:
+      - build-isis.tar.gz
+
+deploy-job-isis: # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  tags:
+    - maven      # signals the maven job runner to pick this up
+  dependencies:
+    - test-job-isis
+  rules:
+    - if: $TEST_OR_DEPLOY == "deploy"
+  variables:
+    M2_SETTINGS: ${CI_PROJECT_DIR}/ci/m2-settings.xml # assuming this is where we find the Maven settings to use for the deploy stage
+  script:
+    - echo "Deploying application with revision $REVISION ..."
+    - tar -xzf build-isis.tar.gz
+    - cd build-isis
+    - |
+      mvn deploy \
+        -s $M2_SETTINGS \
+        -Drevision=$REVISION \
+        -Dmaven.compiler.release=$JAVA_TARGET_VERSION \
+        -Dmaven.compiler.proc=full \
+        -DskipBrowserTests \
+        -e -T 4
 ----
