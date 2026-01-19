@@ -18,12 +18,66 @@
  */
 package org.apache.causeway.core.metamodel.postprocessors.allbutparam.authorization;
 
+import java.util.Optional;
+
+import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
+import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
+import org.apache.causeway.core.security.authorization.manager.AuthorizationManager;
 
-public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
+import lombok.extern.slf4j.Slf4j;
 
-    public AuthorizationFacetImpl(final FacetHolder holder) {
-        super(holder);
+@Slf4j
+public record AuthorizationFacetImpl(
+		AuthorizationManager authorizationManager,
+		FacetHolder facetHolder
+		) implements AuthorizationFacet {
+	
+	@Override public Class<? extends Facet> facetType() { return AuthorizationFacet.class; }
+	@Override public Precedence precedence() { return Precedence.DEFAULT; }
+
+    @Override
+    public String hides(final VisibilityContext ic) {
+
+        if(ic.head().owner().objSpec().isValue()) {
+            return null; // never hide value-types
+        }
+
+        var hides = authorizationManager
+                .isVisible(
+                		facetHolder.getInteractionService().currentInteractionContextElseFail(),
+                        ic.identifier())
+                ? null
+                : "Not authorized to view";
+
+        if(hides!=null && log.isDebugEnabled()) {
+            log.debug("hides[{}] -> {}", ic.identifier(), hides);
+        }
+
+        return hides;
+    }
+
+    @Override
+    public Optional<VetoReason> disables(final UsabilityContext ic) {
+
+        if(ic.head().owner().objSpec().isValue()) {
+            return Optional.empty(); // never disable value-types
+        }
+
+        var disables = authorizationManager
+                .isUsable(
+                		facetHolder.getInteractionService().currentInteractionContextElseFail(),
+                        ic.identifier())
+                ? null
+                : AuthorizationFacet.formatNotAuthorizedToEdit(ic.identifier(), facetHolder.getMetaModelContext());
+
+        if(disables!=null && log.isDebugEnabled()) {
+            log.debug("disables[{}] -> {}", ic.identifier(), disables);
+        }
+
+        return Optional.ofNullable(disables).map(VetoReason::unauthorized);
     }
 
 }

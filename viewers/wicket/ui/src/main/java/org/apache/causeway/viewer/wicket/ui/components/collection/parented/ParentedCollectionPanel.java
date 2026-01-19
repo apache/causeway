@@ -35,6 +35,7 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModelParented;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 import org.apache.causeway.viewer.wicket.model.util.ComponentHintKey;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.CollectionPanel;
@@ -127,7 +128,7 @@ implements HasDynamicallyVisibleContent {
 
         var objectAdapter = getModel().getObject();
         final Consent visibility = collectionMetaModel
-                .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                .isVisible(objectAdapter, InteractionInitiatedBy.USER, WktVisibility.visibilityConstraint(Where.OBJECT_FORMS));
 
         if(visibility.isAllowed()) {
 

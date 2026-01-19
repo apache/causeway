@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.actions.prototype;
+package org.apache.causeway.core.metamodel.facets.members.navigation;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
+import org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized;
 import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
- * Indicates that the action should only be available in <i>prototype</i> mode.
+ * Hides object members that would allow navigation to a domain type that is
+ * {@link HiddenFacetForNoMembersAuthorized hidden} (typically due to security permissions).
  */
-public interface PrototypeFacet extends Facet, HidingInteractionAdvisor {
-
+public interface HiddenFacetForNavigation extends HidingInteractionAdvisor {
 }

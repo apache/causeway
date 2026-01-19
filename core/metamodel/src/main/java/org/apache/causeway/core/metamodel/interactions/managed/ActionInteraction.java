@@ -24,11 +24,11 @@ import java.util.function.Function;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
@@ -66,17 +66,17 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
     public static ActionInteraction start(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
-        return startWithMultiselect(owner, memberId, where, Can::empty);
+            final @NonNull VisibilityConstraint visibilityConstraint) {
+        return startWithMultiselect(owner, memberId, visibilityConstraint, Can::empty);
     }
 
     public static ActionInteraction startWithMultiselect(
             final @NonNull ManagedObject owner,
             final @NonNull String actionId,
-            final @NonNull Where where,
+            final @NonNull VisibilityConstraint visibilityConstraint,
             final @NonNull MultiselectChoices multiselectChoices) {
 
-        var managedAction = ManagedAction.lookupActionWithMultiselect(owner, actionId, where, multiselectChoices);
+        var managedAction = ManagedAction.lookupActionWithMultiselect(owner, actionId, visibilityConstraint, multiselectChoices);
 
         final InteractionRailway<ManagedAction> railway = managedAction.isPresent()
                 ? InteractionRailway.success(managedAction.get())
@@ -84,7 +84,7 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
 
         return new ActionInteraction(
                 actionId,
-                managedAction.map(x->x.getAction()),
+                managedAction.map(ManagedAction::getAction),
                 railway);
     }
 
@@ -92,7 +92,7 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
     public static ActionInteraction startAsBoundToProperty(
             final ManagedProperty associatedWithProperty,
             final String memberId,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
         var propertyOwner = associatedWithProperty.getOwner();
         var prop = associatedWithProperty.getMetaModel();
         var elementType = prop.getElementType();
@@ -117,12 +117,12 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
 
             var mixinAction = valueFacet.selectCompositeValueMixinForProperty(associatedWithProperty);
             if(mixinAction.isPresent()) {
-                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), visibilityConstraint);
                 return ActionInteraction.wrap(managedAction);
             }
         }
         // fallback if not a composite value
-        return ActionInteraction.start(propertyOwner, memberId, where);
+        return ActionInteraction.start(propertyOwner, memberId, visibilityConstraint);
     }
 
     /** Supports composite-value-types via mixin (in case detected). */
@@ -130,7 +130,7 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
             final ParameterNegotiationModel parameterNegotiationModel,
             final int paramIndex,
             final String memberId,
-            final Where where) {
+            final VisibilityConstraint visibilityConstraint) {
 
         var actionOwner = parameterNegotiationModel.getActionTarget();
         var param = parameterNegotiationModel.getParamModels().getElseFail(paramIndex);
@@ -155,13 +155,13 @@ implements MemberInteraction<ManagedAction, ActionInteraction> {
 
             var mixinAction = valueFacet.selectCompositeValueMixinForParameter(parameterNegotiationModel, paramIndex);
             if(mixinAction.isPresent()) {
-                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), where);
+                var managedAction = ManagedAction.of(compositeValue, mixinAction.get(), visibilityConstraint);
                 return ActionInteraction.wrap(managedAction);
             }
         }
 
         // else if not a composite value
-        return ActionInteraction.start(actionOwner, memberId, where);
+        return ActionInteraction.start(actionOwner, memberId, visibilityConstraint);
     }
 
     public static ActionInteraction wrap(final @NonNull ManagedAction managedAction) {

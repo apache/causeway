@@ -59,8 +59,8 @@
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
         <mml:attr name="precedence" value="DEFAULT"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
-        <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorizedImpl">
+        <mml:attr name="facet" value="HiddenFacetForNoMembersAuthorizedImpl"/>
         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
         <mml:attr name="precedence" value="HIGH"/>
       </mml:facet>
@@ -257,9 +257,9 @@
             <mml:attr name="position" value="PANEL_DROPDOWN"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation">
             <mml:attr name="deploymentType" value="PRODUCTION"/>
-            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="facet" value="HiddenFacetForDeploymentTypeViaActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -414,9 +414,9 @@
             <mml:attr name="position" value="PANEL_DROPDOWN"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation">
             <mml:attr name="deploymentType" value="PRODUCTION"/>
-            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="facet" value="HiddenFacetForDeploymentTypeViaActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -675,9 +675,9 @@
             <mml:attr name="position" value="PANEL_DROPDOWN"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation">
             <mml:attr name="deploymentType" value="PRODUCTION"/>
-            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="facet" value="HiddenFacetForDeploymentTypeViaActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -839,9 +839,9 @@
             <mml:attr name="position" value="PANEL_DROPDOWN"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation">
             <mml:attr name="deploymentType" value="PRODUCTION"/>
-            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="facet" value="HiddenFacetForDeploymentTypeViaActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -950,9 +950,9 @@
             <mml:attr name="position" value="PANEL_DROPDOWN"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation">
             <mml:attr name="deploymentType" value="PRODUCTION"/>
-            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="facet" value="HiddenFacetForDeploymentTypeViaActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -1061,9 +1061,9 @@
             <mml:attr name="position" value="PANEL"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.prototype.HiddenFacetForDeploymentType" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.prototype.HiddenFacetForDeploymentTypeViaActionAnnotation">
             <mml:attr name="deploymentType" value="PRODUCTION"/>
-            <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
+            <mml:attr name="facet" value="HiddenFacetForDeploymentTypeViaActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
@@ -1192,8 +1192,8 @@
         <mml:attr name="facet" value="BSGridFacet.NoLayout"/>
         <mml:attr name="precedence" value="LOW"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
-        <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorized" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenFacetForNoMembersAuthorizedImpl">
+        <mml:attr name="facet" value="HiddenFacetForNoMembersAuthorizedImpl"/>
         <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
         <mml:attr name="precedence" value="HIGH"/>
       </mml:facet>

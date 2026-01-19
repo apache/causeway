@@ -16,24 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.applib.services.appfeat;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
+/**
+ * The various viewer implementations will individually honor any filters registered with Spring,
+ * based on a matching qualifier ('Graphql', 'Restful', etc.).
+ *
+ * <p>All filters that match a qualifier are consulted until any one rejects the {@link ApplicationFeature}.
+ *
+ * <p>If no filters match a qualifier, any {@link ApplicationFeature} is accepted.
+ *
+ * <p>'NoViewer' is a reserved string internally used to mean 'no filtering', hence it should not be used to qualify a filter.
+ *
+ * @since 4.0 {@index}
+ */
+@FunctionalInterface
+public interface ApplicationFeatureFilter {
 
-public class HideForContextFacetNone
-extends HideForContextFacetAbstract {
-
-    public HideForContextFacetNone(final FacetHolder holder) {
-        super(holder, Precedence.FALLBACK);
-    }
-
-    /**
-     * Always returns <tt>null</tt>.
-     */
-    @Override
-    public String hides(final VisibilityContext ic) {
-        return null;
-    }
-
+	/**
+	 * Whether to include given {@link ApplicationFeature}.
+	 */
+	boolean filter(ApplicationFeature feature);
+	
 }

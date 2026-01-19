@@ -33,6 +33,7 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 import org.apache.causeway.viewer.commons.applib.services.menu.model.MenuDropdownBuilder;
@@ -54,23 +55,23 @@ implements MenuUiService {
     private final MenuBarsService menuBarsService;
 
     @Override
-    public NavbarUiModel getMenu() {
+    public NavbarUiModel getMenu(final WhatViewer whatViewer) {
         return new NavbarUiModel(
-                buildNavBarSection(MenuBar.PRIMARY),
-                buildNavBarSection(MenuBar.SECONDARY),
-                buildNavBarSection(MenuBar.TERTIARY));
+                buildNavBarSection(whatViewer, MenuBar.PRIMARY),
+                buildNavBarSection(whatViewer, MenuBar.SECONDARY),
+                buildNavBarSection(whatViewer, MenuBar.TERTIARY));
     }
 
     // -- HELPER
 
-    private NavbarSection buildNavBarSection(final MenuBar menuBarSelect) {
+    private NavbarSection buildNavBarSection(final WhatViewer whatViewer, final MenuBar menuBarSelect) {
 
         var menuBar = (BSMenuBar) menuBarsService.menuBars()
                 .menuBarFor(menuBarSelect);
 
         var topLevelEntries = new ArrayList<MenuDropdownBuilder>();
 
-        _MenuItemBuilder.buildMenuItems(metaModelContext, menuBar, new _MenuItemBuilder.Visitor() {
+        _MenuItemBuilder.buildMenuItems(metaModelContext, whatViewer, menuBar, new _MenuItemBuilder.Visitor() {
 
             private MenuDropdownBuilder currentMenu;
 

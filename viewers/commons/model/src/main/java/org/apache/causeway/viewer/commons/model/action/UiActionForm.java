@@ -26,6 +26,8 @@ import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmTitleUtils;
 import org.apache.causeway.viewer.commons.model.UiModel;
@@ -42,32 +44,32 @@ extends
 
     // -- USABILITY
 
-    default Consent getUsabilityConsent() {
+    default Consent getUsabilityConsent(final WhatViewer whatViewer) {
+    	var visibilityConstraint = new VisibilityConstraint(whatViewer, Where.OBJECT_FORMS);
         return getAction().isUsable(
                 getActionOwner(),
                 InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
+                visibilityConstraint);
     }
 
     // -- VISABILITY
 
-    default Consent getVisibilityConsent() {
+    default Consent getVisibilityConsent(final WhatViewer whatViewer) {
 
         // guard against missing action owner
         var actionOwner = getActionOwner();
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionOwner)) {
-            return Veto.DEFAULT; // veto, so we don't render the action
-        }
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionOwner))
+			return Veto.DEFAULT; // veto, so we don't render the action
 
         // check whether action owner type is hidden
-        if (getActionOwner().objSpec().isHidden()) {
-            return Veto.DEFAULT;
-        }
+        if (getActionOwner().objSpec().isHidden())
+			return Veto.DEFAULT;
 
+        var visibilityConstraint = new VisibilityConstraint(whatViewer, Where.OBJECT_FORMS);
         return getAction().isVisible(
                 actionOwner,
                 InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
+                visibilityConstraint);
     }
 
     // -- VALIDITY

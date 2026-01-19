@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.collections.accessor;
 
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -34,13 +36,14 @@ import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import lombok.experimental.Accessors;
 
 public class CollectionAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
 implements ImperativeFacet {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull Can<MethodFacade> methods;
 
     public CollectionAccessorFacetViaAccessor(
             final ObjectSpecification declaringType,
@@ -51,7 +54,7 @@ implements ImperativeFacet {
     }
 
     @Override
-    public Intent getIntent() {
+    public Intent intent() {
         return Intent.ACCESSOR;
     }
 

@@ -19,14 +19,13 @@
 package org.apache.causeway.core.metamodel.interactions;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.config.environment.DeploymentType;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionAdvisor;
@@ -39,7 +38,6 @@ import org.apache.causeway.core.metamodel.facets.actions.action.invocation.Actio
 import org.apache.causeway.core.metamodel.interactions.use.UsabilityContext;
 import org.apache.causeway.core.metamodel.interactions.val.ValidityContext;
 import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +71,8 @@ public final class InteractionUtils {
         return builder.build();
     }
 
-    public InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context) {
+    public InteractionResult isUsableResult(final FacetHolder facetHolder, final UsabilityContext context,
+    		final Supplier<VisibilityContext> visibilityContextSupplierForDebugging) {
 
         var builder = InteractionResult.builder(context.createInteractionEvent());
 
@@ -84,11 +83,10 @@ public final class InteractionUtils {
                 break;
             case SHOW_AS_DISABLED:
             case SHOW_AS_DISABLED_WITH_DIAGNOSTICS:
-                var visibilityContext = context.asVisibilityContext();
-                facetHolder.streamFacets(HidingInteractionAdvisor.class)
+			facetHolder.streamFacets(HidingInteractionAdvisor.class)
                     .filter(advisor->compatible(advisor, context))
                     .forEach(advisor->{
-                        _Strings.nonEmpty(advisor.hides(visibilityContext))
+                        _Strings.nonEmpty(advisor.hides(visibilityContextSupplierForDebugging.get()))
                             .map(Consent.VetoReason::explicit)
                             .ifPresent(hidingReason->{
                                 if(ifHiddenPolicy.isShowAsDisabledWithDiagnostics()) {
@@ -139,12 +137,6 @@ public final class InteractionUtils {
         return resultSet.add(isValidResult(facetHolder, context));
     }
 
-    public RenderPolicy renderPolicy(final ManagedObject ownerAdapter) {
-        return new RenderPolicy(
-                determineIfHiddenPolicyFrom(ownerAdapter),
-                determineIfDisabledPolicyFrom(ownerAdapter));
-    }
-
     // -- HELPER
 
     /**
@@ -167,13 +159,11 @@ public final class InteractionUtils {
 
     private static boolean compatible(final InteractionAdvisor advisor, final InteractionContext ic) {
         if(ic.initiatedBy().isPassThrough()
-                && isDomainEventAdvisor(advisor)) {
-            //[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
+                && isDomainEventAdvisor(advisor))
+			//[CAUSEWAY-3810] when pass-through, then don't trigger any domain events
             return false;
-        }
-        if(advisor instanceof ActionDomainEventFacet) {
-            return ic instanceof ActionInteractionContext;
-        }
+        if(advisor instanceof ActionDomainEventFacet)
+			return ic instanceof ActionInteractionContext;
         return true;
     }
 
@@ -181,25 +171,4 @@ public final class InteractionUtils {
         return advisor instanceof DomainEventFacetAbstract;
     }
 
-    private CausewayConfiguration.Prototyping.IfHiddenPolicy determineIfHiddenPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
-        switch (deploymentType) {
-            case PROTOTYPING:
-                return ownerAdapter.getConfiguration().prototyping().ifHiddenPolicy();
-            case PRODUCTION:
-            default:
-                return CausewayConfiguration.Prototyping.IfHiddenPolicy.HIDE;
-        }
-    }
-
-    private CausewayConfiguration.Prototyping.IfDisabledPolicy determineIfDisabledPolicyFrom(final ManagedObject ownerAdapter) {
-        DeploymentType deploymentType = ownerAdapter.getSystemEnvironment().deploymentType();
-        switch (deploymentType) {
-            case PROTOTYPING:
-                return ownerAdapter.getConfiguration().prototyping().ifDisabledPolicy();
-            case PRODUCTION:
-            default:
-                return CausewayConfiguration.Prototyping.IfDisabledPolicy.DISABLE;
-        }
-    }
 }

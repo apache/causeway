@@ -16,20 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.viewer.wicket.model.models.interaction;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 
-/**
- * Hide a property, collection or action based on the state of the target
- * {@link ManagedObject object}.
- *
- * <p>
- * In the standard Apache Causeway Programming Model, corresponds to invoking the
- * <tt>hideXxx</tt> support method for the member.
- */
-public interface HideForContextFacet extends Facet, HidingInteractionAdvisor {
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class WktVisibility {
+
+    // -- VISIBILITY CONSTRAINTS
+
+    public static WhatViewer WHAT_VIEWER = new WhatViewer("Wicket");
+	public static VisibilityConstraint visibilityConstraint(final Where where) {
+		return new VisibilityConstraint(WHAT_VIEWER, where);
+	}
 
 }

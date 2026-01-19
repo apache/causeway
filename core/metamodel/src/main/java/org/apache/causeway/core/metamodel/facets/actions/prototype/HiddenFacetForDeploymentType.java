@@ -16,21 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.hidden;
+package org.apache.causeway.core.metamodel.facets.actions.prototype;
 
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
 
-public interface HiddenObjectFacet extends HiddenInstanceFacet {
-
-    /**
-     * Copy this facet to another {@link FacetHolder}.
-     *
-     * @apiNote Introduced to allow this facet to be copied to the
-     * {@link ObjectSpecification}, and then copied down onto each of the spec's
-     * {@link ObjectMember}s.
-     */
-    public HiddenObjectFacet copyTo(FacetHolder holder);
+/**
+ * Indicates that the action should only be available in <i>prototype</i> mode.
+ */
+public interface HiddenFacetForDeploymentType extends HidingInteractionAdvisor {
 
 }

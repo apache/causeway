@@ -16,24 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.members.hidden.method;
+package org.apache.causeway.core.interaction.core;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import java.util.Optional;
 
-public abstract class HideForContextFacetAbstract extends FacetAbstract implements HideForContextFacet {
+import org.apache.causeway.core.metamodel.consent.Consent;
 
-    private static final Class<? extends Facet> type() {
-        return HideForContextFacet.class;
-    }
-
-    public HideForContextFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    public HideForContextFacetAbstract(final FacetHolder holder, final Facet.Precedence precedence) {
-        super(type(), holder, precedence);
-    }
-
+public record AccessRestriction(
+		boolean canView,
+		boolean canEdit,
+		Optional<Consent.VetoReason> vetoReasonOpt
+		) {
 }
+

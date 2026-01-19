@@ -43,6 +43,8 @@ import org.apache.causeway.commons.internal.primitives._Ints;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.viewer.restfulobjects.applib.JsonRepresentation;
@@ -70,6 +72,7 @@ public record ResourceContext(
         boolean isValidateOnly,
 
         InteractionInitiatedBy interactionInitiatedBy,
+        VisibilityConstraint visibilityConstraint,
 
         JsonRepresentation queryStringAsJsonRepr,
         ObjectAdapterLinkTo objectAdapterLinkTo,
@@ -116,6 +119,7 @@ implements IResourceContext {
                 Collections.unmodifiableList(arg(requestArgsAsMap, RequestParameter.FOLLOW_LINKS)),
                 arg(requestArgsAsMap, RequestParameter.VALIDATE_ONLY),
                 interactionInitiatedBy,
+                ResourceContext.visibilityConstraint(resourceDescriptor.where()),
                 requestArgsAsMap,
                 switch(resourceDescriptor.resourceLink()) {
                 case NONE -> null;
@@ -127,10 +131,6 @@ implements IResourceContext {
         ensureDomainModelQueryParamSupported();
     }
 
-    @Override public Where where() {
-        return resourceDescriptor().where();
-    }
-
     /**
      * Only applies to rendering of objects
      */
@@ -140,13 +140,12 @@ implements IResourceContext {
 
     private void ensureDomainModelQueryParamSupported() {
         final DomainModel domainModel = arg(queryStringAsJsonRepr(), RequestParameter.DOMAIN_MODEL);
-        if(domainModel != DomainModel.FORMAL) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST,
+        if(domainModel != DomainModel.FORMAL)
+			throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.BAD_REQUEST,
                     "x-ro-domain-model of '%s' is not supported".formatted(domainModel));
-        }
     }
 
-    private static JsonRepresentation requestArgsAsMap(final Map<String, String[]> params, RequestParams urlUnencodedQueryString) {
+    private static JsonRepresentation requestArgsAsMap(final Map<String, String[]> params, final RequestParams urlUnencodedQueryString) {
         if(simpleQueryArgs(params)) {
             // try to process regular params and build up JSON repr
             final JsonRepresentation map = JsonRepresentation.newMap();
@@ -164,31 +163,26 @@ implements IResourceContext {
                 }
             }
             return map;
-        } else {
-            return Optional.ofNullable(urlUnencodedQueryString)
+        } else
+			return Optional.ofNullable(urlUnencodedQueryString)
                     .orElseGet(RequestParams::ofEmptyQueryString)
                     .asMap();
-        }
     }
 
     static String stripQuotes(final String str) {
-        if(_Strings.isNullOrEmpty(str)) {
-            return str;
-        }
-        if(str.startsWith("\"") && str.endsWith("\"")) {
-            return str.substring(1, str.lastIndexOf("\""));
-        }
+        if(_Strings.isNullOrEmpty(str))
+			return str;
+        if(str.startsWith("\"") && str.endsWith("\""))
+			return str.substring(1, str.lastIndexOf("\""));
         return str;
     }
 
     private static boolean simpleQueryArgs(final Map<String, String[]> params) {
-        if(params==null || params.isEmpty()) {
-            return false;
-        }
+        if(params==null || params.isEmpty())
+			return false;
         for(String paramId: params.keySet()) {
-            if("x-causeway-querystring".equals(paramId) || paramId.startsWith("{")) {
-                return false;
-            }
+            if("x-causeway-querystring".equals(paramId) || paramId.startsWith("{"))
+				return false;
         }
         return true;
     }
@@ -237,16 +231,22 @@ implements IResourceContext {
                 .map(this::lookupServiceAdapterById)
                 .orElse(null);
 
-        if(serviceAdapter==null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.NOT_FOUND,
+        if(serviceAdapter==null)
+			throw RestfulObjectsApplicationException.createWithMessage(HttpStatus.NOT_FOUND,
                     "Could not locate service '%s'".formatted(serviceIdOrAlias));
-        }
         return serviceAdapter;
     }
 
+    // -- VISIBILITY CONSTRAINTS
+
+    public static WhatViewer WHAT_VIEWER = new WhatViewer("Restful");
+	public static VisibilityConstraint visibilityConstraint(final Where where) {
+		return new VisibilityConstraint(WHAT_VIEWER, where);
+	}
+
     // -- JUNIT
 
-    public static ResourceContext forTesting(String queryString, HttpServletRequest servletRequest) {
+    public static ResourceContext forTesting(final String queryString, final HttpServletRequest servletRequest) {
         return new ResourceContext(MetaModelContext.instanceNullable(),
                 ResourceDescriptor.empty(), null, null,
                 RequestParams.ofQueryString(UrlUtils.urlDecodeUtf8(queryString)),
@@ -255,9 +255,9 @@ implements IResourceContext {
     }
 
     public static ResourceContext forTesting(
-            ResourceDescriptor resourceDescriptor,
-            HttpServletRequest servletRequest,
-            HttpHeaders httpHeaders) {
+            final ResourceDescriptor resourceDescriptor,
+            final HttpServletRequest servletRequest,
+            final HttpHeaders httpHeaders) {
         return new ResourceContext(MetaModelContext.instanceNullable(),
                 resourceDescriptor, null, null,
                 null, //RequestParams

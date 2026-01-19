@@ -50,6 +50,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.commons.UtilStr;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
@@ -149,10 +150,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         Try<Bookmark> result = transactionService.callWithinCurrentTransactionElseCreateNew(
             () -> {
-                if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH) {
-                    // short-circuit
+                if (interactionContextPolicy == InteractionContextPolicy.NO_SWITCH)
+					// short-circuit
                     return doExecuteCommand(dto);
-                }
                 return sudoService.call(
                         context -> interactionContextPolicy.mapper.apply(context, dto),
                         () -> doExecuteCommand(dto));
@@ -199,7 +199,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             var interactionHead = objectAction.interactionHead(targetAdapter);
 
-            var resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK);
+            var resultAdapter = objectAction.execute(interactionHead, argAdapters, InteractionInitiatedBy.FRAMEWORK, WhatViewer.noViewer());
 
             // flush any PersistenceCommands pending
             // (else might get transient objects for the return value)
@@ -213,10 +213,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             // Object unused = priorExecution.getReturned();
             //
 
-            if(resultAdapter != null) {
-                return ManagedObjects.bookmark(resultAdapter)
+            if(resultAdapter != null)
+				return ManagedObjects.bookmark(resultAdapter)
                         .orElse(null);
-            }
         } else {
 
             var propertyDto = (PropertyDto) memberDto;
@@ -226,10 +225,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
             var targetAdapter = valueMarshaller.recoverReferenceFrom(targetOidDto);
 
-            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter)) {
-                throw _Exceptions.unrecoverable("cannot recreate ManagedObject from bookmark %s",
+            if(ManagedObjects.isNullOrUnspecifiedOrEmpty(targetAdapter))
+				throw _Exceptions.unrecoverable("cannot recreate ManagedObject from bookmark %s",
                         Bookmark.forOidDto(targetOidDto));
-            }
 
             var property = findOneToOneAssociation(targetAdapter, logicalMemberIdentifier);
             var newValueAdapter = valueMarshaller.recoverPropertyFrom(propertyDto);
@@ -249,12 +247,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private String argStrFor(final CommandDto dto) {
         var memberDto = dto.getMember();
-        if(memberDto instanceof ActionDto) {
-            var actionDto = (ActionDto) memberDto;
-            return paramNameArgValuesFor(actionDto);
-        }
-        if(memberDto instanceof PropertyDto) {
-            var propertyDto = (PropertyDto) memberDto;
+        if(memberDto instanceof ActionDto actionDto)
+			return paramNameArgValuesFor(actionDto);
+        if(memberDto instanceof PropertyDto propertyDto) {
             var proposedValue = valueMarshaller.recoverPropertyFrom(propertyDto);
             return proposedValue.getTitle();
         }
@@ -274,9 +269,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         var localActionId = localPartOf(logicalMemberIdentifier);
 
         var objectAction = findActionElseNull(objectSpecification, localActionId);
-        if(objectAction == null) {
-            throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
-        }
+        if(objectAction == null)
+			throw new RuntimeException(String.format("Unknown action '%s'", localActionId));
         return objectAction;
     }
 
@@ -292,9 +286,8 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         var objectSpecification = targetAdapter.objSpec();
 
         var property = findOneToOneAssociationElseNull(objectSpecification, localPropertyId);
-        if(property == null) {
-            throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
-        }
+        if(property == null)
+			throw new RuntimeException(String.format("Unknown property '%s'", localPropertyId));
         return property;
     }
 

@@ -34,9 +34,9 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
-import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.DisablingOrEnabling;
-import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.HidingOrShowing;
-import org.apache.causeway.core.metamodel.facetapi.FacetWithAttributes.Validating;
+import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
 
 import lombok.experimental.UtilityClass;
@@ -245,9 +245,17 @@ public final class FacetUtil {
 	}
 	
     private String interactionAdvisors(Facet facet, final String delimiter) {
-        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
+        return Stream.of(
+        		ValidatingInteractionAdvisor.class, 
+        		HidingInteractionAdvisor.class, 
+        		DisablingInteractionAdvisor.class)
 	        .filter(marker->marker.isAssignableFrom(facet.getClass()))
-	        .map(Class::getSimpleName)
+	        .map(cls->switch(cls.getSimpleName().substring(0, 1)) {
+	        	case "V" -> "Validating";
+	        	case "H" -> "HidingOrShowing";
+	        	case "D" -> "DisablingOrEnabling";
+	        	default -> "?";
+	        })
 	        .collect(Collectors.joining(delimiter));
     }
 

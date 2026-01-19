@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.CanVector;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -34,6 +33,8 @@ import org.apache.causeway.core.metamodel.consent.InteractionResultSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -55,11 +56,11 @@ public interface HasObjectAction extends ObjectAction {
     @Override default boolean isAlwaysHidden() {
         return getObjectAction().isAlwaysHidden();
     }
-    @Override default Consent isVisible(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        return getObjectAction().isVisible(target, interactionInitiatedBy, where);
+    @Override default Consent isVisible(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visConstraint) {
+        return getObjectAction().isVisible(target, interactionInitiatedBy, visConstraint);
     }
-    @Override default Consent isUsable(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        return getObjectAction().isUsable(target, interactionInitiatedBy, where);
+    @Override default Consent isUsable(final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visConstraint) {
+        return getObjectAction().isUsable(target, interactionInitiatedBy, visConstraint);
     }
     @Override default boolean isPropertyOrCollection() {
         return getObjectAction().isPropertyOrCollection();
@@ -129,12 +130,12 @@ public interface HasObjectAction extends ObjectAction {
         return getObjectAction().hasReturn();
     }
     @Override default ManagedObject executeWithRuleChecking(final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy, final Where where) throws AuthorizationException {
-        return getObjectAction().executeWithRuleChecking(head, parameters, interactionInitiatedBy, where);
+        final InteractionInitiatedBy interactionInitiatedBy, final VisibilityConstraint visibilityConstraint) throws AuthorizationException {
+        return getObjectAction().executeWithRuleChecking(head, parameters, interactionInitiatedBy, visibilityConstraint);
     }
     @Override default ManagedObject execute(final InteractionHead head, final Can<ManagedObject> parameters,
-        final InteractionInitiatedBy interactionInitiatedBy) {
-        return getObjectAction().execute(head, parameters, interactionInitiatedBy);
+        final InteractionInitiatedBy interactionInitiatedBy, final WhatViewer whatViewer) {
+        return getObjectAction().execute(head, parameters, interactionInitiatedBy, whatViewer);
     }
     @Override default Consent isArgumentSetValid(final InteractionHead head, final Can<ManagedObject> proposedArguments,
         final InteractionInitiatedBy interactionInitiatedBy) {

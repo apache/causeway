@@ -26,8 +26,9 @@ import org.apache.causeway.commons.internal.collections._Arrays;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facets.collections.CollectionFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionUtils;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.vis.ObjectVisibilityContext;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
 
 import lombok.experimental.UtilityClass;
 
@@ -35,7 +36,7 @@ import lombok.experimental.UtilityClass;
 public final class MmVisibilityUtils {
 
     public static Predicate<? super ManagedObject> filterOn(final InteractionInitiatedBy interactionInitiatedBy) {
-        return $->MmVisibilityUtils.isVisible($, interactionInitiatedBy);
+        return $->MmVisibilityUtils.isVisible($, interactionInitiatedBy, WhatViewer.invalid());
     }
 
     /**
@@ -82,43 +83,33 @@ public final class MmVisibilityUtils {
     }
 
     /**
-     * @param adapter - wrapper of domain object whose visibility is being checked,
+     * @param mo - wrapper of domain object whose visibility is being checked,
      *      must not be a mixin
      * @param interactionInitiatedBy
      */
     public static boolean isVisible(
-            final ManagedObject adapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+            final ManagedObject mo,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final WhatViewer whatViewer) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(adapter)) {
-            // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
+			// a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
             return true;
-        }
-        var spec = adapter.objSpec();
-        if(spec.isEntity()) {
-            if(MmEntityUtils.getEntityState(adapter).isTransientOrRemoved()) {
-                return false;
-            }
-        }
-        if(!interactionInitiatedBy.isUser()) {
-            return true;
-        }
-        var visibilityContext = createVisibleInteractionContext(
-                adapter,
+        var spec = mo.objSpec();
+        if(spec.isEntity()
+    		&& MmEntityUtils.getEntityState(mo).isTransientOrRemoved())
+			return false;
+
+        if(!interactionInitiatedBy.isUser())
+			return true;
+
+        var visibilityContext = ObjectVisibilityContext.createForRegular(
+                mo,
                 InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
+                new VisibilityConstraint(whatViewer, Where.OBJECT_FORMS));
 
         return InteractionUtils.isVisibleResult(spec, visibilityContext)
                 .isAllowing();
-    }
-
-    private static VisibilityContext createVisibleInteractionContext(
-            final ManagedObject objectAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Where where) {
-
-        return ObjectVisibilityContext
-                .createForRegular(objectAdapter, interactionInitiatedBy, where);
     }
 
 }

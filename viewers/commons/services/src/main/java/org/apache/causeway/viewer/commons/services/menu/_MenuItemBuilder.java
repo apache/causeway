@@ -20,6 +20,8 @@ package org.apache.causeway.viewer.commons.services.menu;
 
 import java.util.concurrent.atomic.LongAdder;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenu;
@@ -27,11 +29,12 @@ import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBar;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuSection;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -53,6 +56,7 @@ final class _MenuItemBuilder {
 
     static void buildMenuItems(
             final MetaModelContext mmc,
+            final WhatViewer whatViewer,
             final BSMenuBar menuBar,
             final Visitor menuBuilder) {
 
@@ -78,7 +82,7 @@ final class _MenuItemBuilder {
                     }
 
                     var managedAction = ManagedAction
-                            .lookupAction(serviceAdapter, actionLayoutData.getId(), Where.EVERYWHERE)
+                            .lookupAction(serviceAdapter, actionLayoutData.getId(), new VisibilityConstraint(whatViewer, Where.EVERYWHERE))
                             .orElse(null);
                     if (managedAction == null) {
                         log.warn("No such action: bean-name '{}' action-id '{}'",

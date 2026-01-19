@@ -44,7 +44,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
-import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacetForLayout;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
@@ -299,7 +299,7 @@ public class LayoutFacetUtil {
         final HasHidden hasHidden,
         final FacetHolder facetHolder) {
 
-        var hiddenFacet = facetHolder.getFacet(HiddenFacet.class);
+        var hiddenFacet = facetHolder.getFacet(HiddenFacetForLayout.class);
         if (isNonFallback(hiddenFacet)) {
             final Where where = hiddenFacet.where();
             if(where != null) {

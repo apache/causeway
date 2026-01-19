@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.consent.Consent.VetoReason;
-import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
@@ -33,7 +32,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * In the standard Apache Causeway Programming Model, corresponds to invoking the
  * <tt>disableNXxx</tt> support method for an action.
  */
-public interface ActionParameterDisabledFacet extends Facet, DisablingInteractionAdvisor {
+public interface ActionParameterDisabledFacet extends DisablingInteractionAdvisor {
 
     /**
      * Reason why the parameter is disabled, or <tt>Optional.empts()</tt> if okay.

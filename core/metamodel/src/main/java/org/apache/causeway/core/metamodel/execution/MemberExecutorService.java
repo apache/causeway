@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -30,11 +32,10 @@ import org.apache.causeway.core.metamodel.facets.properties.property.modify.Prop
 import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
+import org.apache.causeway.core.metamodel.interactions.WhatViewer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
@@ -70,6 +71,7 @@ public interface MemberExecutorService {
     default ManagedObject invokeAction(
             final @NonNull FacetHolder facetHolder,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
+            final @NonNull WhatViewer whatViewer,
             final @NonNull InteractionHead head,
             // action specifics
             final @NonNull Can<ManagedObject> argumentAdapters,
@@ -78,7 +80,7 @@ public interface MemberExecutorService {
         var actionExecutor = ActionExecutor.forAction(
                 facetHolder,
                 interactionInitiatedBy,
-                head,
+                whatViewer, head,
                 argumentAdapters,
                 owningAction,
                 actionInvocationFacetAbstract);

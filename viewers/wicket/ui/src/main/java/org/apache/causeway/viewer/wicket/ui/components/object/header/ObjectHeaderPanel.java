@@ -26,6 +26,7 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.WktVisibility;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
@@ -72,7 +73,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
         final UiObjectWkt model = getModel();
         var adapter = model.getObject();
         if (adapter != null) {
-            var topLevelActions = ObjectAction.Util.streamTopBarActions(adapter)
+            var topLevelActions = ObjectAction.Util.streamTopBarActions(adapter, WktVisibility.WHAT_VIEWER)
             .map(act->ActionModel.forEntity(act, model))
             .collect(Can.toCan());
 

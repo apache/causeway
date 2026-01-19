@@ -161,9 +161,8 @@ extends ReprRendererAbstract<ManagedObject> {
     @Override
     public JsonRepresentation render() {
 
-        if(representation == null) {
-            return null;
-        }
+        if(representation == null)
+			return null;
 
         final boolean isService = objectAdapter.objSpec().isInjectable();
 
@@ -310,21 +309,20 @@ extends ReprRendererAbstract<ManagedObject> {
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.visibilityConstraint());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
             }
-            if (!(assoc instanceof OneToOneAssociation)) {
+            if (!(assoc instanceof final OneToOneAssociation property)) {
                 continue;
             }
 
-            final OneToOneAssociation property = (OneToOneAssociation) assoc;
             final LinkFollowSpecs linkFollowerForProp = getLinkFollowSpecs().follow("members[" + property.getId() + "]");
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
             final ObjectPropertyReprRenderer renderer =
                     new ObjectPropertyReprRenderer(getResourceContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
-            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.where())).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedProperty.of(objectAdapter, property, resourceContext.visibilityConstraint())).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
                 renderer.asArguments();
@@ -345,17 +343,15 @@ extends ReprRendererAbstract<ManagedObject> {
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.visibilityConstraint());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
             }
 
-            if (!(assoc instanceof OneToManyAssociation)) {
+            if (!(assoc instanceof final OneToManyAssociation collection)) {
                 continue;
             }
-
-            final OneToManyAssociation collection = (OneToManyAssociation) assoc;
 
             final LinkFollowSpecs linkFollowerForColl = getLinkFollowSpecs().follow(
                     "members[" + collection.getId() + "]");
@@ -363,9 +359,7 @@ extends ReprRendererAbstract<ManagedObject> {
             final ObjectCollectionReprRenderer renderer =
                     new ObjectCollectionReprRenderer(getResourceContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
-            var where = resourceContext.where();
-
-            renderer.with(ManagedCollection.of(objectAdapter, collection, where)).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedCollection.of(objectAdapter, collection, resourceContext.visibilityConstraint())).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
                 renderer.asEventSerialization();
             }
@@ -381,7 +375,7 @@ extends ReprRendererAbstract<ManagedObject> {
 
         actions
         .filter(action->{
-            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.where());
+            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), resourceContext.visibilityConstraint());
             return visibility.isAllowed();
         })
         .forEach(action->{
@@ -390,18 +384,15 @@ extends ReprRendererAbstract<ManagedObject> {
                     new ObjectActionReprRenderer(getResourceContext(), linkFollowSpecs, action.getId(),
                             JsonRepresentation.newMap());
 
-            var where = resourceContext.where();
-
-            renderer.with(ManagedAction.of(objectAdapter, action, where)).usingLinkTo(linkToBuilder);
+            renderer.with(ManagedAction.of(objectAdapter, action, resourceContext.visibilityConstraint())).usingLinkTo(linkToBuilder);
             members.mapPutJsonRepresentation(action.getId(), renderer.render());
         });
 
     }
 
     private void addPersistLinkIfTransientAndPersistable() {
-        if (ManagedObjects.isIdentifiable(objectAdapter)) {
-            return;
-        }
+        if (ManagedObjects.isIdentifiable(objectAdapter))
+			return;
         final DomainObjectReprRenderer renderer =
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
@@ -428,16 +419,13 @@ extends ReprRendererAbstract<ManagedObject> {
     }
 
     private void addUpdatePropertiesLinkIfRequired() {
-        if(mode.isEventSerialization()) {
-            return;
-        }
-        if (!ManagedObjects.isIdentifiable(objectAdapter)) {
-            return;
-        }
+        if(mode.isEventSerialization())
+			return;
+        if (!ManagedObjects.isIdentifiable(objectAdapter))
+			return;
         final boolean isService = objectAdapter.objSpec().isInjectable();
-        if(isService) {
-            return;
-        }
+        if(isService)
+			return;
 
         final DomainObjectReprRenderer renderer =
                 new DomainObjectReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());

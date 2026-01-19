@@ -20,22 +20,22 @@ package org.apache.causeway.core.metamodel.interactions.managed;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.binding.Observable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.binding._Observables;
 import org.apache.causeway.commons.internal.binding._Observables.LazyObservable;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.consent.Veto;
+import org.apache.causeway.core.metamodel.interactions.VisibilityConstraint;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,17 +47,17 @@ extends ManagedMember {
     public static final ManagedProperty of(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
-            final @NonNull Where where) {
-        return new ManagedProperty(owner, property, where);
+            final @NonNull VisibilityConstraint visibilityConstraint) {
+        return new ManagedProperty(owner, property, visibilityConstraint);
     }
 
     public static final Optional<ManagedProperty> lookupProperty(
             final @NonNull ManagedObject owner,
             final @NonNull String memberId,
-            final @NonNull Where where) {
+            final @NonNull VisibilityConstraint visibilityConstraint) {
 
         return ManagedMember.<OneToOneAssociation>lookup(owner.objSpec(), Identifier.Type.PROPERTY, memberId)
-            .map(objectAction -> of(owner, objectAction, where));
+            .map(objectAction -> of(owner, objectAction, visibilityConstraint));
     }
 
     // -- IMPLEMENTATION
@@ -72,8 +72,8 @@ extends ManagedMember {
     private ManagedProperty(
             final @NonNull ManagedObject owner,
             final @NonNull OneToOneAssociation property,
-            final @NonNull Where where) {
-        super(owner, where);
+            final @NonNull VisibilityConstraint visibilityConstraint) {
+        super(owner, visibilityConstraint);
         this.property = property;
         observablePropValue = _Observables.lazy(this::reassessPropertyValue);
     }
@@ -132,9 +132,8 @@ extends ManagedMember {
     private ManagedObject reassessPropertyValue() {
         var property = getProperty();
         var owner = getOwner();
-
-        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, getWhere()).isAllowed()
-                && property.isVisible(owner, InteractionInitiatedBy.USER, getWhere()).isAllowed()
+        return property.isVisible(owner, InteractionInitiatedBy.FRAMEWORK, visibilityConstraint()).isAllowed()
+                && property.isVisible(owner, InteractionInitiatedBy.USER, visibilityConstraint()).isAllowed()
             ? property.get(owner, InteractionInitiatedBy.USER)
             : ManagedObject.empty(property.getElementType());
     }

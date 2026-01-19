@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import jakarta.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -79,7 +80,9 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.tabular.simple.DataTable;
+import org.apache.causeway.core.metamodel.tabular.simple.DataTable.AccessMode;
 import org.apache.causeway.schema.metamodel.v2.DomainClassDto;
 import org.apache.causeway.testdomain.conf.Configuration_headless;
 import org.apache.causeway.testdomain.model.good.Configuration_usingValidDomain;
@@ -181,7 +184,7 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
             fail(String.format("%d problems found:\n%s",
                     validationFailures.size(),
                     validationFailures.stream()
-                    .map(validationFailure->validationFailure.message())
+                    .map(ValidationFailure::message)
                     .collect(Collectors.joining("\n"))));
         }
     }
@@ -337,9 +340,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     void metamodelContributingActions_shouldBeUnique_whenOverridden(final Class<?> type) {
 
         if(type.isInterface()
-                && type.getSuperclass()==null) {
-            return; // not implemented for interface that don't extend from others
-        }
+                && type.getSuperclass()==null)
+			return; // not implemented for interface that don't extend from others
 
         var holderSpec = specificationLoader.specForTypeElseFail(type);
 
@@ -360,9 +362,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
     void metamodelContributingProperties_shouldBeUnique_whenOverridden(final Class<?> type) {
 
         if(type.isInterface()
-                && type.getSuperclass()==null) {
-            return; // not implemented for interface that don't extend from others
-        }
+                && type.getSuperclass()==null)
+			return; // not implemented for interface that don't extend from others
 
         var holderSpec = specificationLoader.specForTypeElseFail(type);
 
@@ -865,8 +866,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         // hide1PlaceOrder(y): boolean = false
         act.assertParameterVisibility(
                 false, // skip rule checking
-                arg0Visible->assertFalse(arg0Visible),
-                arg1Visible->assertTrue(arg1Visible));
+                Assertions::assertFalse,
+                Assertions::assertTrue);
 
         // disable0PlaceOrder(x): String = "my disable reason-0"
         // disable1PlaceOrder(z): String = "my disable reason-1"
@@ -1123,7 +1124,8 @@ class DomainModelTest_usingGoodDomain extends CausewayIntegrationTestAbstract {
         dataTable.visit((column, cellValues) ->
             sb.append(String.format("%s: %s\n",
                     column.columnFriendlyName(),
-                    "" + cellValues.getFirstElseFail().getPojo())));
+                    "" + cellValues.getFirstElseFail().getPojo())),
+            AccessMode.PASS_THROUGH);
         return sb.toString();
     }
 

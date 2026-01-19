@@ -18,30 +18,20 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.hidden;
 
-import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.interactions.vis.VisibilityContext;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-public abstract class HiddenObjectFacetAbstract
-extends FacetAbstract
-implements HiddenObjectFacet {
+public interface HiddenFacetForObject extends HidingInteractionAdvisor {
 
-    private static final Class<? extends Facet> type() {
-        return HiddenObjectFacet.class;
-    }
-
-    public HiddenObjectFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
-    }
-
-    @Override
-    public String hides(final VisibilityContext ic) {
-        final ManagedObject toValidate = ic.target();
-        return toValidate != null ? hiddenReason(toValidate) : null;
-    }
-
-    protected abstract String hiddenReason(ManagedObject toHide);
+    /**
+     * Copy this facet to another {@link FacetHolder}.
+     *
+     * @apiNote Introduced to allow this facet to be copied to the
+     * {@link ObjectSpecification}, and then copied down onto each of the spec's
+     * {@link ObjectMember}s.
+     */
+    public HiddenFacetForObject copyTo(FacetHolder holder);
 
 }
