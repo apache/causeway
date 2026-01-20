@@ -22,7 +22,7 @@ mvn install \
  -e
 ----
 
-Note: the `revision` parameter can be set as desired
+NOTE: the `revision` parameter can be set as desired
 
 == Legacy (isis) Build
 

@@ -1,4 +1,5 @@
 = Apache Causeway - Version 2.x (retired)
+:toc:
 
 This branch is in the process of being decommissioned.
 
