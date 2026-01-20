@@ -1,6 +1,20 @@
 One can setup a gitlab repository just for the purpose of 
 building and deploying _Causeway_ artifacts.
 
+== Gitlab Runner Configuration
+
+[source,yaml]
+.config.toml
+----
+[[runners]]
+...
+output_limit -> limits the max output log size of the build, defaults to (4096) 4MB, we recommend 10000
+----
+
+see also https://docs.gitlab.com/runner/configuration/advanced-configuration/
+
+== Pipeline Definition
+
 A build script could look like:
 
 [source,yaml]

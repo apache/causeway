@@ -7,6 +7,7 @@
 
 ⭐ New Features
 
+- bringing in some API changes from v4, deprecating API in v2 https://issues.apache.org/jira/browse/CAUSEWAY-3955[CAUSEWAY-3955] 
 - (re-)enables CI test jobs for v2 commits and pull requests
 - cleaning up POMs, e.g. removes release related profiles  
 
