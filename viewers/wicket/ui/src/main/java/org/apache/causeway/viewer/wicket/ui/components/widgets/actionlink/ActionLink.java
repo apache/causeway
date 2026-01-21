@@ -82,16 +82,6 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     private static final long serialVersionUID = 1L;
     private static final String ID_ACTION_LINK = "actionLink";
 
-    public enum ActionRenderWhere {
-        ANYWHERE_BUT_NOT_TABLE,
-        TABLE_ACTION_COLUMN
-    }
-
-    public static ActionLink create(
-            final @NonNull ActionModel actionModel) {
-        return create(actionModel, Where.OBJECT_FORMS);
-    }
-
     public static ActionLink create(
             final @NonNull ActionModel actionModel,
             final @NonNull Where where) {
@@ -155,13 +145,11 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
 
     @Override
     public boolean isVisible() {
-        //TODO honor where
         return getActionModel().getVisibilityConsent(where).isAllowed();
     }
 
     @Override
     public boolean isEnabled() {
-        //TODO honor where
         return getActionModel().getUsabilityConsent(where).isAllowed();
     }
 

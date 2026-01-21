@@ -29,6 +29,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.render.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.commons.model.components.UiString;
@@ -135,7 +136,7 @@ extends AttributePanel {
      * However, it may be overridden if required.
      */
     protected Component createComponentForOutput(final String id) {
-        if(isUsingTextarea()) {
+        if(isUsingTextarea())
             return PromptFragment.TEXTAREA
                     .createFragment(id, this, scalarValueId->{
                         var textArea = Wkt.textAreaNoTab(scalarValueId, this::outputFormatAsString);
@@ -146,7 +147,6 @@ extends AttributePanel {
                                 attributeModel::typicalLength);
                         return textArea;
                     });
-        }
         return CompactFragment.LABEL
                     .createFragment(id, this, scalarValueId->
                         Wkt.labelWithDynamicEscaping(scalarValueId, this::obtainOutputFormat));
@@ -157,9 +157,8 @@ extends AttributePanel {
     private boolean isUsingTextarea() {
         if(getRenderScenario().isCompact()
                 || getFormatModifiers().contains(FormatModifier.MARKUP)
-                || !getFormatModifiers().contains(FormatModifier.MULTILINE)) {
+                || !getFormatModifiers().contains(FormatModifier.MULTILINE))
             return false;
-        }
         // only render a text-area if it has content
         return !attributeModel().isEmpty();
     }
@@ -178,11 +177,10 @@ extends AttributePanel {
      */
     protected UiString obtainOutputFormat() {
         var proposedValue = attributeModel().proposedValue();
-        if(!proposedValue.isPresent()) {
+        if(!proposedValue.isPresent())
             return UiString.markup(
                     getPlaceholderRenderService()
                     .asHtml(PlaceholderLiteral.NULL_REPRESENTATION));
-        }
         return isUsingTextarea()
                 || getFormatModifiers().contains(FormatModifier.TEXT_ONLY)
                         ? UiString.text(proposedValue.getValueAsTitle().getValue())
@@ -229,7 +227,7 @@ extends AttributePanel {
             _Util.lookupMixinForCompositeValueUpdate(attributeModel)
             .ifPresentOrElse((final ActionModel mixinForCompositeValueEdit)->{
                 // composite value type support
-                var actionLink = ActionLink.create(mixinForCompositeValueEdit);
+                var actionLink = ActionLink.create(mixinForCompositeValueEdit, Where.OBJECT_FORMS);
                 Wkt.behaviorAddOnClick(clickReceiver, actionLink::onClick);
             },()->{
                 // we configure the prompt link if _this_ property is configured for inline edits...
@@ -240,7 +238,7 @@ extends AttributePanel {
 
             _Util.lookupPropertyActionForInlineEdit(attributeModel)
             .ifPresent((final ActionModel actionLinkInlineAsIfEdit)->{
-                var actionLink = ActionLink.create(actionLinkInlineAsIfEdit);
+                var actionLink = ActionLink.create(actionLinkInlineAsIfEdit, Where.OBJECT_FORMS);
                 Wkt.behaviorAddOnClick(clickReceiver, actionLink::onClick);
             });
         }
@@ -317,7 +315,7 @@ extends AttributePanel {
         configureInlinePromptLink(inlinePromptLink);
 
         Wkt.add(inlinePromptLink, FieldFrame.SCALAR_VALUE_CONTAINER
-                .createComponent(id->createComponentForOutput(id)));
+                .createComponent(this::createComponentForOutput));
 
         return inlinePromptLink;
     }

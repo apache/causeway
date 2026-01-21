@@ -56,7 +56,7 @@ extends MenuablePanelAbstract {
         DROPDOWN(ActionStyle.MENU_ITEM) {
             @Override
             public ActionLinksPanel newPanel(final String id, final Can<ActionLink> links) {
-                return new ActionLinksAsDropDownPanel(id, links, DROPDOWN);
+                return new ActionLinksAsDropDownPanel(id, links);
             }
         };
         abstract ActionLinksPanel newPanel(String id, Can<ActionLink> links);

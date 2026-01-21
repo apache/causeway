@@ -24,6 +24,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
@@ -107,7 +108,7 @@ class ServiceActionUtil {
         }
 
         @Override
-        public void onMenuAction(MenuAction menuAction) {
+        public void onMenuAction(final MenuAction menuAction) {
             var menuItem = CssMenuItem.newMenuItemWithLink(menuAction.name(), newActionLink(menuAction.managedAction().orElseThrow()));
             currentTopLevelMenu.addSubMenuItem(menuItem);
         }
@@ -121,7 +122,7 @@ class ServiceActionUtil {
         private ActionLink newActionLink(final ManagedAction managedAction) {
             var serviceModel = UiObjectWkt.ofAdapter(managedAction.getOwner());
             return ActionLink.create(
-                    ActionModel.forServiceAction(managedAction.getAction(), serviceModel));
+                    ActionModel.forServiceAction(managedAction.getAction(), serviceModel), Where.NOT_SPECIFIED);
         }
 
     }
