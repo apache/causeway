@@ -26,6 +26,6 @@ class ActionLinksAsButtonInlinePanel extends ActionLinksPanel {
     private static final long serialVersionUID = 1L;
 
     public ActionLinksAsButtonInlinePanel(final String id, final Can<ActionLink> links) {
-        super(id, links, Style.INLINE_LIST);
+        super(id, links, ActionPanelStyle.INLINE_LIST);
     }
 }

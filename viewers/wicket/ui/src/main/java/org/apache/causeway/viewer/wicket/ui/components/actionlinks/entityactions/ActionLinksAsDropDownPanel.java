@@ -25,7 +25,7 @@ class ActionLinksAsDropDownPanel extends ActionLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionLinksAsDropDownPanel(final String id, final Can<ActionLink> links) {
-        super(id, links, Style.DROPDOWN);
+    public ActionLinksAsDropDownPanel(final String id, final Can<ActionLink> links, final ActionPanelStyle style) {
+        super(id, links, style);
     }
 }

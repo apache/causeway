@@ -152,7 +152,7 @@ implements HasDynamicallyVisibleContent {
 
             final Can<ActionModel> links = collectionModel.getLinks();
             ActionLinksPanel.addActionLinks(
-                    div, ID_ADDITIONAL_LINKS, links, ActionLinksPanel.Style.INLINE_LIST);
+                    div, ID_ADDITIONAL_LINKS, links, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
 
             createSelectorDropdownPanel(collectionModel);
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
