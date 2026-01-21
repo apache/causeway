@@ -34,16 +34,16 @@ record PageRedirectRequest<T extends IRequestablePage>(
     @Nullable PageParameters pageParameters,
     @Nullable IRequestablePage pageInstance) {
 
-    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forPageParameters(
             final @NonNull Class<T> pageClass,
             final @NonNull PageParameters pageParameters) {
         return new PageRedirectRequest<>(pageClass, pageParameters, null);
     }
 
-    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClassAndBookmark(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forBookmark(
             final @NonNull Class<T> pageClass,
             final @NonNull Bookmark bookmark) {
-        return forPageClass(
+        return forPageParameters(
                         pageClass,
                         PageParameterUtils.createPageParametersForBookmark(bookmark));
     }
@@ -59,9 +59,19 @@ record PageRedirectRequest<T extends IRequestablePage>(
         return new PageRedirectRequest<>(pageClass, null, pageInstance);
     }
 
+    /**
+     * Relative page URL, honors either {@link #pageParameters} as directly given
+     * or indirectly from the {@link #pageInstance} if present.
+     * If neither is present, params are <code>null</code>.
+     */
     String toUrl() {
+        var pageParametersIfAny = pageParameters!=null
+                ? pageParameters
+                : pageInstance!=null
+                    ? pageInstance.getPageParameters()
+                    : null;
         var handler = new BookmarkablePageRequestHandler(
-                new PageProvider(pageClass, pageParameters));
+                new PageProvider(pageClass, pageParametersIfAny));
         return RequestCycle.get().urlFor(handler)
             .toString();
     }

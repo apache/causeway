@@ -71,7 +71,7 @@ record Mediator(
     }
 
     static Mediator toDomainObjectPage(final @NonNull ManagedObject entityOrViewmodel) {
-        var pageRedirectRequest = PageRedirectRequest.forPageClassAndBookmark(
+        var pageRedirectRequest = PageRedirectRequest.forBookmark(
                 DomainObjectPage.class, entityOrViewmodel.refreshBookmark().orElseThrow());
         return Mediator.toPage(pageRedirectRequest);
     }
