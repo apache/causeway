@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.object.header;
 
 import org.apache.wicket.Component;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -78,7 +79,7 @@ extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
             ActionLinksPanel
                     .addActionLinks(this, ID_OBJECT_ACTIONS, topLevelActions,
-                            ActionLinksPanel.Style.INLINE_LIST);
+                            ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
         } else {
             WktComponents.permanentlyHide(this, ID_OBJECT_ACTIONS);
         }

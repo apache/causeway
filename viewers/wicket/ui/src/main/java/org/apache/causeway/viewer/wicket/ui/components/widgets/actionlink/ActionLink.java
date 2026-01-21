@@ -27,6 +27,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
@@ -82,21 +83,25 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     private static final String ID_ACTION_LINK = "actionLink";
 
     public static ActionLink create(
-            final @NonNull ActionModel actionModel) {
+            final @NonNull ActionModel actionModel,
+            final @NonNull Where where) {
 
-        var actionLink = new ActionLink(ID_ACTION_LINK, actionModel);
+        var actionLink = new ActionLink(ID_ACTION_LINK, actionModel, where);
         return Wkt.cssAppend(actionLink, "noVeil");
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
+    private final Where where; // where to render the action, used to check action's usability and visibility
 
     private ActionLink(
             final String id,
-            final ActionModel model) {
+            final ActionModel model,
+            final Where where) {
         super(id, model);
 
         _Assert.assertNotNull(model.getAction(), "ActionLink requires an Action");
 
+        this.where = where;
         this.indicatorAppenderIfAny = getSettings().useIndicatorForNoArgAction()
                 ? new AjaxIndicatorAppender()
                 : null;
@@ -134,18 +139,18 @@ implements HasMetaModelContext, Menuable, HasManagedAction {
     public String getReasonDisabledIfAny() {
         // no point evaluating if not visible
         return isVisible()
-                ? getActionModel().getUsabilityConsent().getReasonAsString().orElse(null)
+                ? getActionModel().getUsabilityConsent(where).getReasonAsString().orElse(null)
                 : null;
     }
 
     @Override
     public boolean isVisible() {
-        return getActionModel().getVisibilityConsent().isAllowed();
+        return getActionModel().getVisibilityConsent(where).isAllowed();
     }
 
     @Override
     public boolean isEnabled() {
-        return getActionModel().getUsabilityConsent().isAllowed();
+        return getActionModel().getUsabilityConsent(where).isAllowed();
     }
 
     @SuppressWarnings("deprecation")

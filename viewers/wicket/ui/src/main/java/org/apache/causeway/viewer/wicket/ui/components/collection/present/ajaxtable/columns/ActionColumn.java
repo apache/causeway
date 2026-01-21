@@ -21,20 +21,20 @@ package org.apache.causeway.viewer.wicket.ui.components.collection.present.ajaxt
 import java.util.Optional;
 
 import org.apache.wicket.Component;
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel.ColumnActionModifier;
-import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel.Variant;
+import org.apache.causeway.viewer.wicket.model.models.coll.DataRowWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import org.jspecify.annotations.NonNull;
 
 public final class ActionColumn
 extends GenericColumnAbstract {
@@ -83,7 +83,7 @@ extends GenericColumnAbstract {
                     determineColumnActionModifier(act, elementType)))
             .collect(Can.toCan());
 
-        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.Style.DROPDOWN)
+        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.ActionPanelStyle.DROPDOWN, Where.ALL_TABLES)
                 .map(Component.class::cast)
                 .orElseGet(()->Wkt.label(componentId, ""));
     }

@@ -20,11 +20,11 @@ package org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityaction
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.wicket.MarkupContainer;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
@@ -36,7 +36,7 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 
 import lombok.RequiredArgsConstructor;
 
-public class ActionLinksPanel
+public abstract class ActionLinksPanel
 extends MenuablePanelAbstract {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +46,7 @@ extends MenuablePanelAbstract {
     private static final String ID_ADDITIONAL_LINK_TITLE = "additionalLinkTitle";
 
     @RequiredArgsConstructor
-    public enum Style {
+    public enum ActionPanelStyle {
         INLINE_LIST(ActionStyle.BUTTON) {
             @Override
             public ActionLinksPanel newPanel(final String id, final Can<ActionLink> links) {
@@ -71,8 +71,9 @@ extends MenuablePanelAbstract {
             final MarkupContainer markupContainer,
             final String id,
             final Can<ActionModel> links,
-            final Style style) {
-        var panel = actionLinks(id, links, style);
+            final ActionPanelStyle style,
+            final Where renderWhere) {
+        var panel = actionLinks(id, links, style, renderWhere);
         if(panel.isEmpty()) {
             WktComponents.permanentlyHide(markupContainer, id);
             return null;
@@ -82,18 +83,19 @@ extends MenuablePanelAbstract {
 
     public static Optional<ActionLinksPanel> actionLinks(
             final String id,
-            final Can<ActionModel> links,
-            final Style style) {
-        if(links.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(style.newPanel(id, links.map(ActionLink::create)));
+            final Can<ActionModel> actionModels,
+            final ActionPanelStyle style,
+            final Where renderWhere) {
+
+        return actionModels.isEmpty()
+            ? Optional.empty()
+            : Optional.of(style.newPanel(id, actionModels.map(act->ActionLink.create(act, renderWhere))));
     }
 
     protected ActionLinksPanel(
             final String id,
             final Can<ActionLink> actionLinks,
-            final Style style) {
+            final ActionPanelStyle style) {
         super(id, actionLinks);
         setOutputMarkupId(true);
 
@@ -122,7 +124,7 @@ extends MenuablePanelAbstract {
     }
 
     protected final List<ActionLink> listOfActionLinks() {
-        return streamActionLinks().collect(Collectors.toList());
+        return streamActionLinks().toList();
     }
 
     public final boolean hasAnyVisibleLink() {

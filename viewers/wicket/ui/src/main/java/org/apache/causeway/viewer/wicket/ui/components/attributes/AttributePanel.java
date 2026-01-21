@@ -39,6 +39,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -147,24 +148,19 @@ implements AttributeModelChangeListener {
 
         static RenderScenario inferFrom(final AttributePanel scalarPanel) {
             var attributeModel = scalarPanel.attributeModel();
-            if(attributeModel.getRenderingHint().isInTable()) {
+            if(attributeModel.getRenderingHint().isInTable())
                 return COMPACT;
-            }
-            if(attributeModel.isParameter()) {
+            if(attributeModel.isParameter())
                 return _Util.canParameterEnterNestedEdit(attributeModel)
                         ? EDITING_WITH_LINK_TO_NESTED // nested/embedded dialog
                         : EDITING; // for params always EDITING even if editing is vetoed
-            }
             // at this point we are processing a property (not a parameter)
-            if(attributeModel.isEditingMode()) {
+            if(attributeModel.isEditingMode())
                 return EDITING;
-            }
-            if(_Util.canPropertyEnterInlineEditDirectly(attributeModel)) {
+            if(_Util.canPropertyEnterInlineEditDirectly(attributeModel))
                 return CAN_EDIT_INLINE;
-            }
-            if(_Util.lookupPropertyActionForInlineEdit(attributeModel).isPresent()) {
+            if(_Util.lookupPropertyActionForInlineEdit(attributeModel).isPresent())
                 return CAN_EDIT_INLINE_VIA_ACTION;
-            }
             return attributeModel.disabledReason().isPresent()
                     ? READONLY
                     : CAN_EDIT;
@@ -520,7 +516,8 @@ implements AttributeModelChangeListener {
     protected final <T extends Behavior> void addOrReplaceBehavoir(
             final @NonNull Class<T> behaviorClass, final @NonNull Supplier<T> factory) {
         var validationFeedbackReceiver = getValidationFeedbackReceiver();
-        if(validationFeedbackReceiver == null) { return; }
+        if(validationFeedbackReceiver == null)
+            return;
         for (var behavior : validationFeedbackReceiver.getBehaviors(behaviorClass)) {
             validationFeedbackReceiver.remove(behavior);
         }
@@ -559,9 +556,8 @@ implements AttributeModelChangeListener {
         helper.visibleLabelId.ifPresent(visibleLabelId->{
 
             final Label scalarNameLabel = Wkt.labelAdd(container, visibleLabelId, labelCaption);
-            if(_Strings.isNullOrEmpty(labelCaption.getObject())) {
+            if(_Strings.isNullOrEmpty(labelCaption.getObject()))
                 return;
-            }
 
             WktDecorators.formLabel()
                 .decorate(scalarNameLabel, FormLabelDecorationModel
@@ -601,9 +597,8 @@ implements AttributeModelChangeListener {
     protected abstract Component getValidationFeedbackReceiver();
 
     private void addFeedbackOnlyTo(final MarkupContainer markupContainer, final Component component) {
-        if(component==null) {
+        if(component==null)
             return;
-        }
         markupContainer.addOrReplace(
                 RegularFrame.FEEDBACK.createComponent(id->
                     new NotificationPanel(id, component, new ComponentFeedbackMessageFilter(component))));
@@ -617,13 +612,13 @@ implements AttributeModelChangeListener {
                 .filter(ActionModel.isPositionedAt(ActionLayout.Position.BELOW));
         ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
-                linksBelow, ActionLinksPanel.Style.INLINE_LIST);
+                linksBelow, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
 
         var linksRight = actionModels
                 .filter(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT));
         ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId(),
-                linksRight, ActionLinksPanel.Style.DROPDOWN);
+                linksRight, ActionLinksPanel.ActionPanelStyle.DROPDOWN, Where.OBJECT_FORMS);
     }
 
     /**
@@ -698,18 +693,16 @@ implements AttributeModelChangeListener {
            onMakeNotEditable(usabilityConsent.getReasonAsString().orElse(null));
        }
 
-       if (visibilityBefore != visibilityAfter) {
-           // repaint the param panel if visibility has changed
+       if (visibilityBefore != visibilityAfter)
+        // repaint the param panel if visibility has changed
            return visibilityAfter
                    ? Repaint.REQUIRED_ON_PARENT
                    : Repaint.REQUIRED;
-       }
 
        if (usabilityBefore != usabilityAfter
-               && visibilityAfter) {
-           // repaint the param panel if usability has changed, but only if visible
+               && visibilityAfter)
+        // repaint the param panel if usability has changed, but only if visible
            return Repaint.REQUIRED;
-       }
 
        return Repaint.OPTIONAL;
    }

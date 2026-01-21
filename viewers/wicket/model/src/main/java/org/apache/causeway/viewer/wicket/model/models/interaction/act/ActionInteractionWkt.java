@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.apache.wicket.model.ChainingModel;
-
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.Identifier;
@@ -45,6 +44,9 @@ import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.coll.CollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
@@ -71,7 +73,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private static final long serialVersionUID = 1L;
 
     private final String memberId;
-    private final Where where;
+    @Getter @Accessors(fluent=true) private final Where where;
 
     /**
      * memoize, so if we only need the meta-model,
@@ -153,16 +155,14 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
                     associatedWithParameterIfAny.getParameterNegotiationModel(), paramIndex, memberId, where);
         }
 
-        if(associatedWithCollectionIfAny!=null) {
+        if(associatedWithCollectionIfAny!=null)
             return ActionInteraction.startWithMultiselect(getBookmarkedOwner(), memberId, where,
                     associatedWithCollectionIfAny.getDataTableModel());
-        }
 
-        if(associatedWithPropertyIfAny!=null) {
+        if(associatedWithPropertyIfAny!=null)
             // supports composite-value-types via mixin
             return ActionInteraction.startAsBoundToProperty(
                     associatedWithPropertyIfAny.getManagedProperty(), memberId, where);
-        }
 
         return ActionInteraction.start(getBookmarkedOwner(), memberId, where);
     }
