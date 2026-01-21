@@ -42,32 +42,30 @@ extends
 
     // -- USABILITY
 
-    default Consent getUsabilityConsent() {
+    default Consent getUsabilityConsent(final Where where) {
         return getAction().isUsable(
                 getActionOwner(),
                 InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
+                where);
     }
 
     // -- VISABILITY
 
-    default Consent getVisibilityConsent() {
+    default Consent getVisibilityConsent(final Where where) {
 
         // guard against missing action owner
         var actionOwner = getActionOwner();
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionOwner)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(actionOwner))
             return Veto.DEFAULT; // veto, so we don't render the action
-        }
 
         // check whether action owner type is hidden
-        if (getActionOwner().objSpec().isHidden()) {
+        if (getActionOwner().objSpec().isHidden())
             return Veto.DEFAULT;
-        }
 
         return getAction().isVisible(
                 actionOwner,
                 InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
+                where);
     }
 
     // -- VALIDITY

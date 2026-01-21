@@ -26,6 +26,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -132,7 +133,7 @@ implements HasDynamicallyVisibleContent {
         .collect(Can.toCan());
 
         if (!visibleActions.isEmpty()) {
-            ActionLinksPanel.addActionLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.Style.INLINE_LIST);
+            ActionLinksPanel.addActionLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
             visible = true;
         } else {
             WktComponents.permanentlyHide(actionOwner, actionIdToUse);

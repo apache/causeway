@@ -112,13 +112,15 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL,
                     memberGroupActions
                         .filter(ActionModel.isPositionedAt(ActionLayout.Position.PANEL)),
-                    ActionLinksPanel.Style.INLINE_LIST);
+                    ActionLinksPanel.ActionPanelStyle.INLINE_LIST,
+                    Where.OBJECT_FORMS);
 
             ActionLinksPanel.addActionLinks(
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
                     memberGroupActions
                         .filter(ActionModel.isPositionedAt(ActionLayout.Position.PANEL_DROPDOWN)),
-                    ActionLinksPanel.Style.DROPDOWN);
+                    ActionLinksPanel.ActionPanelStyle.DROPDOWN,
+                    Where.OBJECT_FORMS);
         }
 
         // either add the built content, or hide entire
@@ -219,15 +221,12 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
         // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
         // correct Wicket callback (probably onConfigure).
-        if(childComponents.size() > childScalarPanels.size()) {
-            return true;
-        }
-        // HACK:END
+        if(childComponents.size() > childScalarPanels.size())
+         return true;
 
         for (final AttributePanel childComponent : childScalarPanels) {
-            if(childComponent.isVisibilityAllowed()) {
+            if(childComponent.isVisibilityAllowed())
                 return true;
-            }
         }
         return false;
     }

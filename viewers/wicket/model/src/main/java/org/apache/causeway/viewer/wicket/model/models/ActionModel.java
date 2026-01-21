@@ -134,7 +134,7 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
         return ActionModel.forEntity(
                         parentEntityModel,
                         action.getFeatureIdentifier(),
-                        Where.OBJECT_FORMS,
+                        Where.ALL_TABLES,
                         columnActionModifier,
                         null, null, null);
     }
@@ -153,8 +153,8 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
     public static ActionModel forPropertyOrParameter(
             final ObjectAction action,
             final UiAttributeWkt attributeModel) {
-        return attributeModel instanceof PropertyModel
-                ? forProperty(action, (PropertyModel)attributeModel)
+        return attributeModel instanceof PropertyModel p
+                ? forProperty(action, p)
                 : forParameter(action, (ParameterModel)attributeModel);
     }
 
@@ -175,14 +175,13 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
         //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
         var param = parameterModel.getMetaModel();
         if(param.isSingular()
-                && param.getElementType().isCompositeValue()) {
+                && param.getElementType().isCompositeValue())
             return ActionModel.forEntity(
                             parameterModel.getParentUiModel(),
                             action.getFeatureIdentifier(),
                             Where.OBJECT_FORMS,
                             ColumnActionModifier.NONE,
                             null, parameterModel, null);
-        }
         return null;
     }
 
@@ -262,11 +261,11 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
     }
 
     public boolean isVisible() {
-        return getVisibilityConsent().isAllowed();
+        return getVisibilityConsent(delegate.where()).isAllowed();
     }
 
     public boolean isEnabled() {
-        return getUsabilityConsent().isAllowed();
+        return getUsabilityConsent(delegate.where()).isAllowed();
     }
 
     @Override
@@ -309,11 +308,10 @@ implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedO
 
     private static void guardAgainstNotBookmarkable(final ManagedObject objectAdapter) {
         var isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
-        if (!isIdentifiable) {
+        if (!isIdentifiable)
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not identifiable (has no identifier).",
                     objectAdapter.getTitle()));
-        }
     }
 
 }
