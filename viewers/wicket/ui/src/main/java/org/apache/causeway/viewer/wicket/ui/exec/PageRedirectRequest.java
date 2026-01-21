@@ -60,18 +60,28 @@ record PageRedirectRequest<T extends IRequestablePage>(
     }
 
     /**
-     * Relative page URL, honors either {@link #pageParameters} as directly given
+     * Canonical constructor, honors either {@link #pageParameters} as directly given
      * or indirectly from the {@link #pageInstance} if present.
-     * If neither is present, params are <code>null</code>.
+     * If neither is present, pageParameters are <code>null</code>
+     *
+     * @param pageClass page class
+     * @param pageParameters (nullable)
+     * @param pageInstance (nullable)
+     */
+    PageRedirectRequest {
+        pageParameters = pageParameters!=null
+            ? pageParameters
+            : pageInstance!=null
+                ? pageInstance.getPageParameters()
+                : null;
+    }
+
+    /**
+     * Relative page URL
      */
     String toUrl() {
-        var pageParametersIfAny = pageParameters!=null
-                ? pageParameters
-                : pageInstance!=null
-                    ? pageInstance.getPageParameters()
-                    : null;
         var handler = new BookmarkablePageRequestHandler(
-                new PageProvider(pageClass, pageParametersIfAny));
+                new PageProvider(pageClass, pageParameters));
         return RequestCycle.get().urlFor(handler)
             .toString();
     }
@@ -79,12 +89,12 @@ record PageRedirectRequest<T extends IRequestablePage>(
     void apply() {
         var requestCycle = RequestCycle.get();
         if(requestCycle==null) return;
-        if(pageParameters!=null) {
-            requestCycle.setResponsePage(pageClass, pageParameters);
-            return;
-        }
         if(pageInstance!=null) {
             requestCycle.setResponsePage(pageInstance);
+            return;
+        }
+        if(pageParameters!=null) {
+            requestCycle.setResponsePage(pageClass, pageParameters);
             return;
         }
         requestCycle.setResponsePage(pageClass);
