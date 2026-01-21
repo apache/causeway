@@ -34,16 +34,16 @@ record PageRedirectRequest<T extends IRequestablePage>(
     @Nullable PageParameters pageParameters,
     @Nullable IRequestablePage pageInstance) {
 
-    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClass(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forPageParameters(
             final @NonNull Class<T> pageClass,
             final @NonNull PageParameters pageParameters) {
         return new PageRedirectRequest<>(pageClass, pageParameters, null);
     }
 
-    static <T extends IRequestablePage> PageRedirectRequest<T> forPageClassAndBookmark(
+    static <T extends IRequestablePage> PageRedirectRequest<T> forBookmark(
             final @NonNull Class<T> pageClass,
             final @NonNull Bookmark bookmark) {
-        return forPageClass(
+        return forPageParameters(
                         pageClass,
                         PageParameterUtils.createPageParametersForBookmark(bookmark));
     }
@@ -59,6 +59,26 @@ record PageRedirectRequest<T extends IRequestablePage>(
         return new PageRedirectRequest<>(pageClass, null, pageInstance);
     }
 
+    /**
+     * Canonical constructor, honors either {@link #pageParameters} as directly given
+     * or indirectly from the {@link #pageInstance} if present.
+     * If neither is present, pageParameters are <code>null</code>
+     *
+     * @param pageClass page class
+     * @param pageParameters (nullable)
+     * @param pageInstance (nullable)
+     */
+    PageRedirectRequest {
+        pageParameters = pageParameters!=null
+            ? pageParameters
+            : pageInstance!=null
+                ? pageInstance.getPageParameters()
+                : null;
+    }
+
+    /**
+     * Relative page URL
+     */
     String toUrl() {
         var handler = new BookmarkablePageRequestHandler(
                 new PageProvider(pageClass, pageParameters));
@@ -69,12 +89,12 @@ record PageRedirectRequest<T extends IRequestablePage>(
     void apply() {
         var requestCycle = RequestCycle.get();
         if(requestCycle==null) return;
-        if(pageParameters!=null) {
-            requestCycle.setResponsePage(pageClass, pageParameters);
-            return;
-        }
         if(pageInstance!=null) {
             requestCycle.setResponsePage(pageInstance);
+            return;
+        }
+        if(pageParameters!=null) {
+            requestCycle.setResponsePage(pageClass, pageParameters);
             return;
         }
         requestCycle.setResponsePage(pageClass);
