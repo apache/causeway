@@ -16,16 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+package org.apache.causeway.core.metamodel.util;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 
-public class AdditionalLinksAsDropDownPanel extends ActionLinksPanel {
+import lombok.experimental.UtilityClass;
 
-    private static final long serialVersionUID = 1L;
+@UtilityClass
+public class WhereContexts {
 
-    public AdditionalLinksAsDropDownPanel(final String id, final Can<LinkAndLabel> links) {
-        super(id, links, ActionPanelStyle.DROPDOWN);
+    /**
+     * Utility, that detects the collection variant (standalone or parented),
+     * based on the feature {@link Identifier} of the originating feature,
+     * that is, the feature is either a plural member or a plural action result.
+     */
+    public Where collectionVariant(final Identifier featureId) {
+        var whereContext = featureId.type().isAction()
+                    ? Where.STANDALONE_TABLES
+                    : Where.PARENTED_TABLES;
+        return whereContext;
     }
+
 }

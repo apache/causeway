@@ -140,6 +140,11 @@ public interface ObjectActionContainer {
      * @param mixedIn - whether to include mixed in actions
      */
     Stream<ObjectAction> streamRuntimeActions(MixedIn mixedIn);
+    
+    /**
+     * Actions visible in dedicated actions-column, honoring order and visibility.
+     */
+    Stream<ObjectAction> streamActionsForColumnRendering(Identifier memberIdentifier);
 
     // -- ACTION STREAM (NO INHERITANCE)
 

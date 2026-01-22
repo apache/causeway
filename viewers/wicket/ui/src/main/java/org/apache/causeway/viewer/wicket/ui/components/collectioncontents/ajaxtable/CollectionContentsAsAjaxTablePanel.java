@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -27,6 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -94,12 +96,15 @@ implements CollectionCountProvider {
             : null;
 
         val collectionModel = entityCollectionModel();
+        var elementType = Objects.requireNonNull(collectionModel.getElementType(),
+                ()->"invalid: CollectionModel without element type");
 
         // first create property columns, so we know how many columns there are
         addPropertyColumnsIfRequired(columns);
         // prepend title column, which may have distinct rendering hints,
         // based on whether there are any property columns or not
         prependTitleColumn(
+        		elementType,
                 columns,
                 collectionModel.getVariant(),
                 getWicketViewerSettings());
@@ -127,6 +132,7 @@ implements CollectionCountProvider {
     }
 
     private void prependTitleColumn(
+    		final ObjectSpecification elementType,
             final List<GenericColumn> columns,
             final Variant variant,
             final Wicket wktConfig) {
@@ -144,7 +150,7 @@ implements CollectionCountProvider {
                             : -1 /* don't override */)
             .build();
 
-        columns.add(0, new TitleColumn(variant, contextBookmark, maxColumnTitleLength, opts));
+        columns.add(0, new TitleColumn(elementType, variant, contextBookmark, maxColumnTitleLength, opts));
     }
 
     private void addPropertyColumnsIfRequired(final List<GenericColumn> columns) {
@@ -172,6 +178,7 @@ implements CollectionCountProvider {
         final String parentTypeName = property.getDeclaringType().logicalTypeName();
 
         return new SingularColumn(
+        		collectionModel.getElementType(),
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
@@ -185,6 +192,7 @@ implements CollectionCountProvider {
         final String parentTypeName = collection.getDeclaringType().logicalTypeName();
 
         return new PluralColumn(
+        		collectionModel.getElementType(),
                 collectionModel.getVariant(),
                 Model.of(collection.getCanonicalFriendlyName()),
                 collection.getId(),

@@ -21,11 +21,11 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
 
-public class AdditionalLinksAsListInlinePanel extends AdditionalLinksPanel {
+public class AdditionalLinksAsListInlinePanel extends ActionLinksPanel {
 
     private static final long serialVersionUID = 1L;
 
     public AdditionalLinksAsListInlinePanel(final String id, final Can<LinkAndLabel> links) {
-        super(id, links, Style.INLINE_LIST);
+        super(id, links, ActionPanelStyle.INLINE_LIST);
     }
 }

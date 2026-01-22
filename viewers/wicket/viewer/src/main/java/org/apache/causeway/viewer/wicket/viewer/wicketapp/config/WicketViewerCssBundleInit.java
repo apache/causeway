@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.viewer.wicket.model.causeway.WicketApplicationInitializer;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication;
@@ -90,7 +90,7 @@ public class WicketViewerCssBundleInit implements WicketApplicationInitializer {
         // references.add(PanelUtil.cssResourceReferenceFor(LinksSelectorPanelAbstract.class));
 
         // components without factories
-        references.add(PanelUtil.cssResourceReferenceFor(AdditionalLinksPanel.class));
+        references.add(PanelUtil.cssResourceReferenceFor(ActionLinksPanel.class));
 
         // non-conforming component factories
         references.add(PanelUtil.cssResourceReferenceFor(MultiLineStringPanel.class));

@@ -136,7 +136,7 @@ extends Function<ObjectAction, LinkAndLabel> {
         private static final long serialVersionUID = 1L;
         @Override
         public ActionLink newActionLinkUiComponent(@NonNull final ActionModel actionModel) {
-            return ActionLink.create(AdditionalLinksPanel.ID_ADDITIONAL_LINK, actionModel);
+            return ActionLink.create(ActionLinksPanel.ID_ADDITIONAL_LINK, actionModel);
         }
     }
 

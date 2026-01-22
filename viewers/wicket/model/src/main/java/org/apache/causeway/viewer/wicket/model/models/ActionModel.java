@@ -31,6 +31,32 @@ import lombok.val;
 public interface ActionModel
 extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
 
+    /**
+     * If underlying action, originates from an action-column, it has special page redirect semantics:
+     * <ul>
+     * <li>if action return is void or matches the originating table/collection's element-type, then just RELOAD page</li>
+     * <li>otherwise open action result page in NEW browser tab</li>
+     * </ul>
+     * @since CAUSEWAY-3815
+     */
+    public enum ColumnActionModifier {
+        /**
+         * don't interfere with the default action result route
+         */
+        NONE,
+        /**
+         * reload current page, irrespective of the action result
+         */
+        FORCE_STAY_ON_PAGE,
+        /**
+         * open the action result in a new (blank) browser tab or window
+         */
+        FORCE_NEW_BROWSER_WINDOW;
+        public boolean isNone() { return this == NONE; }
+        public boolean isForceStayOnPage() { return this == FORCE_STAY_ON_PAGE; }
+        public boolean isForceNewBrowserWindow() { return this == FORCE_NEW_BROWSER_WINDOW; }
+    }
+	
     /** Resets arguments to their fixed point default values
      * @see ActionInteractionHead#defaults(org.apache.causeway.core.metamodel.interactions.managed.ManagedAction)
      */
