@@ -317,8 +317,7 @@ implements FacetHolder {
     public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
-
-        return new _AssociationsAsColumns(getMetaModelContext())
+        return new _MembersAsColumns(getMetaModelContext())
             .streamAssociationsForColumnRendering(this, memberIdentifier, parentObject);
     }
     
