@@ -26,6 +26,7 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
@@ -56,7 +57,7 @@ extends GenericColumnAbstract {
     }
 
     private final Can<String> actionIds;
-    private transient Can<ObjectAction> actions;
+    private final _StableValue<Can<ObjectAction>> actionsRef;
     private final Variant collectionVariant;
 
     private ActionColumn(
@@ -64,8 +65,8 @@ extends GenericColumnAbstract {
             final Can<ObjectAction> actionsForColumnRendering,
             final Variant collectionVariant) {
         super(elementType, "Actions");
-        this.actions = actionsForColumnRendering;
-        this.actionIds = actions.map(ObjectAction::getId);
+        this.actionsRef = new _StableValue<>(actionsForColumnRendering);
+        this.actionIds = actionsForColumnRendering.map(ObjectAction::getId);
         this.collectionVariant = collectionVariant;
     }
 
@@ -104,13 +105,7 @@ extends GenericColumnAbstract {
     }
 
     private Can<ObjectAction> actions() {
-        synchronized(this) {
-            if(actions==null) {
-                var elementType = elementType();
-                this.actions = actionIds.map(elementType::getActionElseFail);
-            }
-        }
-        return actions;
+        return actionsRef.orElseSet(()->actionIds.map(elementType()::getActionElseFail));
     }
 
 }

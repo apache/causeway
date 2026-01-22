@@ -28,6 +28,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -51,9 +52,9 @@ extends AbstractColumn<DataRow, String>
 implements GenericColumn, HasMetaModelContext {
     private static final long serialVersionUID = 1L;
 
-    private transient ComponentFactoryRegistry componentRegistry;
     private final Class<?> elementClass;
-    private transient ObjectSpecification elementType;
+    private final _StableValue<ObjectSpecification> elementTypeRef;
+    private final _StableValue<ComponentFactoryRegistry> componentRegistryRef;
 
     protected GenericColumnAbstract(
             final ObjectSpecification elementType,
@@ -66,8 +67,9 @@ implements GenericColumn, HasMetaModelContext {
             final IModel<String> columnNameModel,
             final String sortColumn) {
         super(columnNameModel, sortColumn);
-        this.elementType = elementType;
+        this.elementTypeRef = new _StableValue<>(elementType);
         this.elementClass = elementType.getCorrespondingClass();
+        this.componentRegistryRef = new _StableValue<>();
     }
 
     @Override
@@ -95,12 +97,7 @@ implements GenericColumn, HasMetaModelContext {
 
     @Override
     public final ObjectSpecification elementType() {
-        synchronized(this) {
-            if(elementType==null) {
-                this.elementType = MetaModelContext.instanceElseFail().specForTypeElseFail(elementClass);
-            }
-        }
-        return elementType;
+        return elementTypeRef.orElseSet(()->MetaModelContext.instanceElseFail().specForTypeElseFail(elementClass));
     }
 
     protected ComponentFactory findComponentFactory(final UiComponentType uiComponentType, final IModel<?> model) {
@@ -108,11 +105,8 @@ implements GenericColumn, HasMetaModelContext {
     }
 
     protected ComponentFactoryRegistry getComponentRegistry() {
-        if(componentRegistry==null) {
-            var componentFactoryRegistryAccessor = (HasComponentFactoryRegistry) Application.get();
-            componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
-        }
-        return componentRegistry;
+        return componentRegistryRef.orElseSet(()->
+            ((HasComponentFactoryRegistry) Application.get()).getComponentFactoryRegistry());
     }
 
 }
