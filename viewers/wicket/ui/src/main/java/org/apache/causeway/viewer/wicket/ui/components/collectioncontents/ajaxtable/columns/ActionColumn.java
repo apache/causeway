@@ -20,19 +20,22 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import java.util.Optional;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.model.IModel;
-import org.springframework.lang.NonNull;
 import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel.ColumnActionModifier;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
+import org.springframework.lang.NonNull;
 
 public final class ActionColumn
 extends GenericColumnAbstract {
@@ -43,10 +46,8 @@ extends GenericColumnAbstract {
             final @NonNull Identifier featureId,
             final @NonNull ObjectSpecification elementType,
             final @NonNull Variant collectionVariant) {
-    	//BACKPORT skipped
-    	//var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
-        //if(!wktConfig.isActionColumnEnabled()) return Optional.empty();
-    	//----
+    	var wktConfig = elementType.getMetaModelContext().getConfiguration().getViewer().getWicket();
+        if(!wktConfig.isActionColumnEnabled()) return Optional.empty();
 
         var actions = elementType.streamActionsForColumnRendering(featureId)
                 .collect(Can.toCan());
@@ -72,23 +73,19 @@ extends GenericColumnAbstract {
     @Override
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, IModel<Boolean> dataRowToggle) {
-    	
-        //var dataRow = dataRowWkt.getObject();
-        var rowElement = dataRow.getRowElement();
+        var rowElement = dataRow.rowElement();
 
         var objectModel = UiObjectWkt.ofAdapter(rowElement);
         var elementType = elementType();
 
-//TODO BACKPORT ...        
-//        var actionModels = actions().stream()
-//            .map(act->ActionModel.forEntityFromActionColumn(act, objectModel,
-//                    determineColumnActionModifier(act, elementType)))
-//            .collect(Can.toCan());
-//
-//        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.ActionPanelStyle.DROPDOWN, Where.ALL_TABLES)
-//                .map(Component.class::cast)
-//                .orElseGet(()->Wkt.label(componentId, ""));
-        return new Label(componentId, "TODO");
+        var actionModels = actions().stream()
+            .map(act->ActionModel.forEntityFromActionColumn(act, objectModel,
+                    determineColumnActionModifier(act, elementType)))
+            .collect(Can.toCan());
+
+        return ActionLinksPanel.actionLinks(componentId, actionModels, ActionLinksPanel.ActionPanelStyle.DROPDOWN, Where.ALL_TABLES)
+                .map(Component.class::cast)
+                .orElseGet(()->Wkt.label(componentId, ""));
     }
 
     // -- HELPER

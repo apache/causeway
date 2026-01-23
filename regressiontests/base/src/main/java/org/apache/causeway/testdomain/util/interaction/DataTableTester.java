@@ -47,14 +47,14 @@ public class DataTableTester {
     public void assertFilteredDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataRowsFiltered().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
     public void assertSelectedDataElements(final List<Object> expectedPojoElements) {
         assertEquals(expectedPojoElements,
                 dataTable.getDataRowsSelected().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 
@@ -77,10 +77,10 @@ public class DataTableTester {
     public void assertDataRowSelectionIsAll() {
         assertEquals(
                 dataTable.getDataRowsFiltered().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList(),
                 dataTable.getDataRowsSelected().getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .map(MmUnwrapUtils::single).toList());
     }
 

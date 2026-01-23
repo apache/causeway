@@ -54,7 +54,7 @@ public class ValuePage extends PageAbstract {
         this(valueModel, actionNameFrom(valueModel));
     }
 
-    private ValuePage(final ValueModel valueModel, final String actionName) {
+    public ValuePage(final ValueModel valueModel, final String actionName) {
         super(PageParameterUtils.newPageParameters(), actionName, UiComponentType.VALUE);
         this.valueModel = valueModel;
 

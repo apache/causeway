@@ -246,7 +246,7 @@ implements MultiselectChoices {
     public Can<ManagedObject> getSelected() {
       return getDataRowsSelected()
                 .getValue()
-                .map(DataRow::getRowElement);
+                .map(DataRow::rowElement);
     }
 
     public ActionInteraction startAssociatedActionInteraction(final String actionId, final Where where) {
@@ -270,7 +270,7 @@ implements MultiselectChoices {
                     .map(DataColumn::getAssociationMetaModel),
                 getDataRowsFiltered().getValue()
                     .stream()
-                    .map(dr->dr.getRowElement())
+                    .map(DataRow::rowElement)
                     .collect(Can.toCan()));
     }
 

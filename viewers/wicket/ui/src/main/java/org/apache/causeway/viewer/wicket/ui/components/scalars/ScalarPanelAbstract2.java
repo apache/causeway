@@ -18,16 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.scalars;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.repeater.RepeatingView;
-
-import org.springframework.lang.Nullable;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
@@ -40,16 +30,24 @@ import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFac
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
-import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
+import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.springframework.lang.Nullable;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.fileinput.BootstrapFileInputField;
 
 /**
  *  Adds inline prompt logic.

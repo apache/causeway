@@ -41,9 +41,8 @@ extends
     Serializable,
     Comparable<NamedWithMimeType> {
 
-    String getName();
-
-    MimeType getMimeType();
+    String name();
+    MimeType mimeType();
 
     @Override
     default int compareTo(final NamedWithMimeType o) {
@@ -243,6 +242,23 @@ extends
             return valueOfFileExtension(fileName.substring(beginIndex));
         }
 
+    }
+
+    // -- DEPRECATIONS
+    
+    /**
+     * @deprecated use {@link #name()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default String getName() {
+        return name();
+    }
+    /**
+     * @deprecated use {@link #mimeType()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default MimeType getMimeType() {
+        return mimeType();
     }
 
 }

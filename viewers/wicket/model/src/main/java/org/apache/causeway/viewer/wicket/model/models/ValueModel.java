@@ -36,6 +36,7 @@ extends ModelAbstract<ManagedObject> {
 
     // -- FACTORIES
 
+    @Deprecated
     public static ValueModel of(
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
@@ -46,7 +47,11 @@ extends ModelAbstract<ManagedObject> {
 
     private final ObjectMemento adapterMemento;
 
-    private ValueModel(
+    public ValueModel(@NonNull final ActionModel actionModel, final ManagedObject managedObject) {
+        this(actionModel.getAction(), managedObject);
+    }
+    
+    public ValueModel(
             final @NonNull ObjectMember objectMember,
             final @NonNull ManagedObject valueAdapter) {
         super();

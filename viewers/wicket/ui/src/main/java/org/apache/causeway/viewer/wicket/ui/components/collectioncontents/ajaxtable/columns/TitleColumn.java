@@ -56,7 +56,7 @@ extends GenericColumnAbstract {
     @Override
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
-        val rowElement = dataRow.getRowElement();
+        val rowElement = dataRow.rowElement();
 
         if(ManagedObjects.isValue(rowElement)) {
             val objectMember = dataRow.getParentTable().getMetaModel();

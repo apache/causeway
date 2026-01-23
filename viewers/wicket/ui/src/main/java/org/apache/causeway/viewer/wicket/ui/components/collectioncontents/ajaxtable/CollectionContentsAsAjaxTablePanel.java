@@ -21,10 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
-import org.apache.wicket.model.Model;
-
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -37,6 +33,7 @@ import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModel.Variant;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ActionColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbbreviationOptions;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.GenericColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.PluralColumn;
@@ -45,6 +42,9 @@ import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxta
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.TitleColumn;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
+import org.apache.wicket.model.Model;
 
 import lombok.val;
 
@@ -113,6 +113,9 @@ implements CollectionCountProvider {
         if(toggleboxColumn != null) {
             columns.add(0, toggleboxColumn);
         }
+        
+        // last append action column
+        addActionsColumnIfRequired(elementType, columns);
 
         val dataProvider = new CollectionContentsSortableDataProvider(collectionModel);
         val dataTable = new CausewayAjaxDataTable(
@@ -201,6 +204,14 @@ implements CollectionCountProvider {
                 collection.getCanonicalDescription(),
                 // future work: can hook up with global config
                 RenderOptions.builder().build());
+    }
+    
+    private void addActionsColumnIfRequired(
+            final ObjectSpecification elementType,
+            final List<GenericColumn> columns) {
+        var collectionModel = getModel();
+        var memberIdentifier = collectionModel.getIdentifier();
+        ActionColumn.create(memberIdentifier, elementType, collectionModel.getVariant()).ifPresent(columns::add);
     }
 
 }

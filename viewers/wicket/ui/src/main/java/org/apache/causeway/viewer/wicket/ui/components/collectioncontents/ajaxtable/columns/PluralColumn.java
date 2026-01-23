@@ -101,7 +101,7 @@ extends AssociationColumnAbstract {
         if(overflow>0) {
 
             val href = getMetaModelContext().getServiceRegistry().lookupService(DeepLinkService.class)
-                    .map(deepLinkService->deepLinkService.deepLinkFor(dataRow.getRowElement()))
+                    .map(deepLinkService->deepLinkService.deepLinkFor(dataRow.rowElement()))
                     .map(URI::toString)
                     .orElse("#");
 

@@ -137,10 +137,10 @@ public class CausewayAjaxDataTable extends DataTable<DataRow, String> {
 
     private static String cssClassForRow(final DataRow model) {
         if(model==null
-                || ManagedObjects.isNullOrUnspecifiedOrEmpty(model.getRowElement())) {
+                || ManagedObjects.isNullOrUnspecifiedOrEmpty(model.rowElement())) {
             return null;
         }
-        val rowElement = model.getRowElement();
+        val rowElement = model.rowElement();
         return rowElement.objSpec().getCssClass(rowElement);
     }
 

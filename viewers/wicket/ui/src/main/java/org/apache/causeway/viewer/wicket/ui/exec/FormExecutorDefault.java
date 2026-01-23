@@ -16,38 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.panels;
+package org.apache.causeway.viewer.wicket.ui.exec;
 
 import java.util.Optional;
-
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.form.Form;
-
-import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.services.exceprecog.Category;
 import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService;
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.commons.functional.Either;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.object.MmEntityUtils;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutor;
 import org.apache.causeway.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.causeway.viewer.wicket.model.models.HasCommonContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
-import org.apache.causeway.viewer.wicket.ui.actionresponse.ActionResultResponseType;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
-import lombok.NonNull;
-import lombok.val;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public final class FormExecutorDefault
-implements FormExecutor, HasCommonContext {
-
-    private static final long serialVersionUID = 1L;
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public final class FormExecutorDefault implements FormExecutor, HasMetaModelContext {
+	private static final long serialVersionUID = 1L;
+	
+	private final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
 
     // -- FACTORIES
 
@@ -63,15 +61,6 @@ implements FormExecutor, HasCommonContext {
         return new FormExecutorDefault(actionOrPropertyModel);
     }
 
-    // -- CONSTRUCTION
-
-    private final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel;
-
-    private FormExecutorDefault(
-            final Either<ActionModel, ScalarPropertyModel> actionOrPropertyModel) {
-        this.actionOrPropertyModel = actionOrPropertyModel;
-    }
-
     /**
      * @return <tt>false</tt> - if invalid args;
      * <tt>true</tt> if redirecting to new page, or repainting all components
@@ -84,11 +73,6 @@ implements FormExecutor, HasCommonContext {
 
         try {
 
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] start ...");
-                //formExecutorContext.getParentObject().reloadViewmodelFromMemoizedBookmark();
-            });
-
             final Optional<Recognition> invalidReasonIfAny = Recognition.of(
                     Category.CONSTRAINT_VIOLATION,
                     actionOrPropertyModel
@@ -100,15 +84,6 @@ implements FormExecutor, HasCommonContext {
                 raiseErrorMessage(ajaxTarget, feedbackFormIfAny, invalidReasonIfAny.get());
                 return FormExecutionOutcome.FAILURE_RECOVERABLE_SO_STAY_ON_PAGE; // invalid args, stay on page
             }
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                final String whatIsExecuted = actionOrPropertyModel
-                .fold(
-                        act->act.getFriendlyName(),
-                        prop->prop.getFriendlyName());
-
-                _Debug.log("[EXECUTOR] execute %s ...", whatIsExecuted);
-            });
 
             //
             // the following line will (attempt to) invoke the action, and will in turn either:
@@ -125,61 +100,27 @@ implements FormExecutor, HasCommonContext {
             //
             //XXX triggers BookmarkedObjectWkt.getObjectAndReAttach() down the call-stack
             //XXX applies the pending property
-            val resultAdapter = actionOrPropertyModel.fold(
+            var resultAdapter = actionOrPropertyModel.fold(
                     act->act.executeActionAndReturnResult(),
                     prop->prop.applyValueThenReturnOwner());
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-
-                final String whatIsExecuted = actionOrPropertyModel
-                .fold(
-                        act->act.getFriendlyName(),
-                        prop->prop.getFriendlyName());
-
-                _Debug.log("[EXECUTOR] resultAdapter created for %s", whatIsExecuted);
-            });
 
             // if we are in a nested dialog/form, that supports an action parameter,
             // the result must be fed back into the calling dialog's/form's parameter
             // negotiation model (instead of redirecting to a new page)
             if(formExecutorContext.getAssociatedParameter().isPresent()) {
                 formExecutorContext.getAssociatedParameter().get()
-                .setValue(resultAdapter);
+                    .setValue(resultAdapter);
                 return FormExecutionOutcome.SUCCESS_IN_NESTED_CONTEXT_SO_STAY_ON_PAGE;
             }
 
-            if(log.isDebugEnabled()) {
-                log.debug("about to redirect with {} after execution result {}",
-                        MmEntityUtils.getEntityState(resultAdapter),
-                        resultAdapter);
-            }
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] interpret result ...");
-            });
-
-            //XXX triggers ManagedObject.getBookmarkRefreshed()
-            val resultResponse = actionOrPropertyModel.fold(
-                    act->ActionResultResponseType
-                            .determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
-                    prop->ActionResultResponseType
-                            .toEntityPage(resultAdapter));
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] handle result ...");
-            });
+            // triggers ManagedObject.getBookmarkRefreshed()
+            var mediator = actionOrPropertyModel.fold(
+                    act->Mediator.determineAndInterpretResult(act, ajaxTarget, resultAdapter),
+                    prop->Mediator.toDomainObjectPage(resultAdapter));
 
             // redirect using associated strategy
-            // XXX note: on property edit, triggers SQL update (on JPA)
-            resultResponse
-                .getHandlingStrategy()
-                .handleResults(getMetaModelContext(), resultResponse);
-
-            _Debug.onCondition(XrayUi.isXrayEnabled(), ()->{
-                _Debug.log("[EXECUTOR] ... return\n"
-                        + " - %s\n",
-                        resultResponse.toStringMultiline());
-            });
+            // on property edit, triggers SQL update (on JPA)
+            mediator.handle();
 
             return FormExecutionOutcome.SUCCESS_AND_REDIRECED_TO_RESULT_PAGE; // success (valid args), allow redirect
 
@@ -206,7 +147,7 @@ implements FormExecutor, HasCommonContext {
             final AjaxRequestTarget target,
             final Form<?> feedbackForm) {
 
-        val recognition = getExceptionRecognizerService().recognize(ex);
+        var recognition = getExceptionRecognizerService().recognize(ex);
         recognition.ifPresent(recog->raiseErrorMessage(target, feedbackForm, recog));
         return recognition;
     }
@@ -216,7 +157,7 @@ implements FormExecutor, HasCommonContext {
             final @Nullable Form<?> feedbackFormIfAny,
             final @NonNull  Recognition recognition) {
 
-        val errorMsg = recognition.getCategory().isSuppressCategoryInUI()
+        var errorMsg = recognition.getCategory().isSuppressCategoryInUI()
                 ? recognition.toMessageNoCategory(getTranslationService())
                 : recognition.toMessage(getTranslationService());
 

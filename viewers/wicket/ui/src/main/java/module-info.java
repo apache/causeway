@@ -104,7 +104,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.pages.value;
     exports org.apache.causeway.viewer.wicket.ui;
     exports org.apache.causeway.viewer.wicket.ui.errors;
-    exports org.apache.causeway.viewer.wicket.ui.actionresponse;
+    exports org.apache.causeway.viewer.wicket.ui.exec;
     exports org.apache.causeway.viewer.wicket.ui.components.collection.count;
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
     exports org.apache.causeway.viewer.wicket.ui.components.layout.bs.clearfix;

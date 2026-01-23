@@ -79,7 +79,9 @@ implements GenericColumn, HasMetaModelContext {
             final String componentId,
             final IModel<DataRow> rowModel) {
         cellItem.add(createCellComponent(componentId, rowModel.getObject(), ((DataRowWkt)rowModel).getDataRowToggle()));
-        if(this instanceof TitleColumn) {
+        if(this instanceof ActionColumn) {
+            Wkt.cssAppend(cellItem, "action-column");
+        } else if(this instanceof TitleColumn) {
             Wkt.cssAppend(cellItem, "title-column");
             if(((TitleColumn)this).isTitleSuppressed()) {
                 // governed via CSS: render icon slightly larger, when title-suppressed e.g. 1.25em vs 0.9em (default)

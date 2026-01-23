@@ -50,7 +50,7 @@ extends PanelAbstract<DataTableInteractive, EntityCollectionModel> {
 
         val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
                 .getValue()
-                .map(DataRow::getRowElement)
+                .map(DataRow::rowElement)
                 .toList();
 
         final RepeatingView entityInstances = new RepeatingView(ID_ENTITY_INSTANCE);

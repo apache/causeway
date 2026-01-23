@@ -36,8 +36,6 @@ import javax.inject.Named;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.Value;
 import org.apache.causeway.applib.jaxb.PrimitiveJaxbAdapters;
@@ -51,10 +49,13 @@ import org.apache.causeway.commons.io.HashUtils;
 import org.apache.causeway.commons.io.HashUtils.HashAlgorithm;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.commons.io.ZipUtils.ZipOptions;
+import org.springframework.lang.Nullable;
 
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.val;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -137,9 +138,9 @@ public final class Blob implements NamedWithMimeType {
 
      // --
 
-    private final MimeType mimeType;
-    private final byte[] bytes;
-    private final String name;
+    @Getter @Accessors(fluent = true) private final MimeType mimeType;
+    @Getter @Accessors(fluent = true) private final byte[] bytes;
+    @Getter @Accessors(fluent = true) private final String name;
 
     public Blob(final String name, final String primaryType, final String subtype, final byte[] bytes) {
         this(name, CommonMimeType.newMimeType(primaryType, subtype), bytes);
@@ -167,20 +168,6 @@ public final class Blob implements NamedWithMimeType {
         this.bytes = bytes;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public MimeType getMimeType() {
-        return mimeType;
-    }
-
-    public byte[] getBytes() {
-        return bytes;
-    }
-
     // -- UTILITIES
 
     /**
@@ -188,7 +175,7 @@ public final class Blob implements NamedWithMimeType {
      * for the underlying byte[] to String conversion.
      */
     public Clob toClob(final @NonNull Charset charset) {
-        return new Clob(getName(), getMimeType(), _Strings.ofBytes(getBytes(), charset));
+        return new Clob(name(), mimeType(), _Strings.ofBytes(getBytes(), charset));
     }
 
     /**
@@ -238,7 +225,7 @@ public final class Blob implements NamedWithMimeType {
      * zipped into a zip-entry using this Blob's name.
      */
     public Blob zip() {
-        return zip(getName());
+        return zip(name());
     }
 
     /**
@@ -248,10 +235,10 @@ public final class Blob implements NamedWithMimeType {
      */
     public Blob zip(final @Nullable String zipEntryNameIfAny) {
         val zipEntryName = _Strings.nonEmpty(zipEntryNameIfAny)
-            .orElseGet(this::getName);
+            .orElseGet(this::name);
         val zipBuilder = ZipUtils.zipEntryBuilder();
         zipBuilder.add(zipEntryName, getBytes());
-        return Blob.of(getName()+".zip", CommonMimeType.ZIP, zipBuilder.toBytes());
+        return Blob.of(name()+".zip", CommonMimeType.ZIP, zipBuilder.toBytes());
     }
 
     public Blob unZip(final @NonNull CommonMimeType resultingMimeType) {
@@ -265,7 +252,7 @@ public final class Blob implements NamedWithMimeType {
                         resultingMimeType,
                         zipEntryDataSource.bytes()))
                 .orElseThrow(()->_Exceptions
-                      .unrecoverable("failed to unzip blob, no entry found %s", getName()));
+                      .unrecoverable("failed to unzip blob, no entry found %s", name()));
     }
 
     // -- HASHING
@@ -309,7 +296,7 @@ public final class Blob implements NamedWithMimeType {
 
     @Override
     public String toString() {
-        return getName() + " [" + getMimeType().getBaseType() + "]: " + getBytes().length + " bytes";
+        return name() + " [" + mimeType().getBaseType() + "]: " + bytes().length + " bytes";
     }
 
     /**
@@ -343,11 +330,11 @@ public final class Blob implements NamedWithMimeType {
             if(blob==null) {
                 return null;
             }
-            String s = blob.getName() +
+            String s = blob.name() +
                     ':' +
-                    blob.getMimeType().getBaseType() +
+                    blob.mimeType().getBaseType() +
                     ':' +
-                    bytesAdapter.marshal(blob.getBytes());
+                    bytesAdapter.marshal(blob.bytes());
             return s;
         }
 
@@ -359,18 +346,18 @@ public final class Blob implements NamedWithMimeType {
      */
     public Optional<BufferedImage> asImage() {
 
-        val bytes = getBytes();
+        val bytes = bytes();
         if(bytes == null) {
             return Optional.empty();
         }
 
-        val mimeType = getMimeType();
+        val mimeType = mimeType();
         if(mimeType == null || !mimeType.getPrimaryType().equals("image")) {
             return Optional.empty();
         }
 
         try {
-            val img = _Images.fromBytes(getBytes());
+            val img = _Images.fromBytes(bytes());
             return Optional.ofNullable(img);
         } catch (Exception e) {
             log.error("failed to read image data", e);
@@ -399,15 +386,25 @@ public final class Blob implements NamedWithMimeType {
         private final byte[] bytes;
 
         private SerializationProxy(final Blob blob) {
-            this.name = blob.getName();
-            this.mimeTypeBase = blob.getMimeType().getBaseType();
-            this.bytes = blob.getBytes();
+            this.name = blob.name();
+            this.mimeTypeBase = blob.mimeType().getBaseType();
+            this.bytes = blob.bytes();
         }
 
         private Object readResolve() {
             return new Blob(name, mimeTypeBase, bytes);
         }
 
+    }
+    
+    // -- DEPRECATIONS
+    
+    /**
+     * @deprecated use {@link #bytes()} instead
+     */
+    @Deprecated(forRemoval = true)
+    public byte[] getBytes() {
+        return bytes();
     }
 
 }

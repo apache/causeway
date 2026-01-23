@@ -50,7 +50,7 @@ extends AssociationColumnAbstract {
     @Override
     protected Component createCellComponent(
             final String componentId, final DataRow dataRow, final IModel<Boolean> dataRowToggle) {
-        val rowElement = dataRow.getRowElement();
+        val rowElement = dataRow.rowElement();
         val rowElementModel = UiObjectWkt.ofAdapter(rowElement);
         val property = rowElement.objSpec().getPropertyElseFail(memberId);
 

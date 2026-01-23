@@ -33,7 +33,7 @@ extends EntityCollectionModelAbstract {
     private static final long serialVersionUID = 1L;
 
     // -- FACTORIES
-
+    
     public static EntityCollectionModelStandalone forActionModel(
             final @NonNull PackedManagedObject collectionAsAdapter,
             final @NonNull ActionModel actionModel,

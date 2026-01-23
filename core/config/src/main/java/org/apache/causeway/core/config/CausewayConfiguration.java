@@ -2925,6 +2925,16 @@ public class CausewayConfiguration {
         @Data
         public static class Wicket {
 
+        	/**
+             * Whether actions, that have explicit <code>hidden = Where</code> semantics
+             * to enable them in tables,
+             * should be gathered into an action column.
+             * That is, collections of domain objects are presented in the UI as tables,
+             * where corresponding domain object actions are gathered into an additional
+             * (typically trailing) column (labeled 'action-column').
+             */
+            private boolean actionColumnEnabled = true;
+        	
             /**
              * Specifies the subclass of
              * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication</code> that is used to
