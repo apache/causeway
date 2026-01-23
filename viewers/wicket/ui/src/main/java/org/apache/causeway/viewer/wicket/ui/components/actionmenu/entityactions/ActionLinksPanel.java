@@ -27,7 +27,6 @@ import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel.ActionPanelStyle;
 import org.apache.causeway.viewer.wicket.ui.components.menuable.MenuablePanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
@@ -36,7 +35,6 @@ import org.apache.causeway.viewer.wicket.ui.util.WktLinks;
 import org.apache.wicket.MarkupContainer;
 
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 public abstract class ActionLinksPanel
 extends MenuablePanelAbstract {

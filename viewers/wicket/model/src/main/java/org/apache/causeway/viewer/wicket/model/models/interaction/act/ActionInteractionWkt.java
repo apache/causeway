@@ -43,7 +43,6 @@ import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.models.ActionModel.ColumnActionModifier;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 

@@ -20,10 +20,7 @@ package org.apache.causeway.core.metamodel.tabular.simple;
 
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.consent.Consent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedCollection;
-import org.apache.causeway.core.metamodel.interactions.managed.ManagedProperty;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 

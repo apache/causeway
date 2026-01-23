@@ -29,12 +29,10 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuItemDto;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuVisitor;
 import org.apache.causeway.viewer.commons.services.userprof.UserProfileUiServiceDefault;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2

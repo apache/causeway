@@ -38,7 +38,6 @@ import org.apache.causeway.core.metamodel.facets.object.autocomplete.AutoComplet
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.persistence.querydsl.applib.services.support.QueryDslSupport;
 
 import org.springframework.lang.Nullable;

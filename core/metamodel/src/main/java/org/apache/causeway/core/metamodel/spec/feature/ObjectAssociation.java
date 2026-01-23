@@ -43,9 +43,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.metamodel.util.WhereContexts;
 
-import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
-import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
-
 import lombok.val;
 
 /**

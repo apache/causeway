@@ -1,7 +1,5 @@
 package org.apache.causeway.applib.mixins.system;
 
-import java.util.UUID;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 import org.junit.jupiter.api.Test;
