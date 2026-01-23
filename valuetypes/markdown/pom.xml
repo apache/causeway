@@ -40,28 +40,11 @@
         <flexmark.version>0.64.8</flexmark.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>module-jdo</id>
-            <activation>
-                <property>
-                    <name>!skip-module-jdo</name>
-                </property>
-            </activation>
-            <modules>
-                <module>applib</module>
-                <module>metamodel</module>
-                <module>ui</module>
-                <module>persistence-jdo</module>
-                <module>persistence-jpa</module>
-            </modules>
-        </profile>
-    </profiles>
-
     <modules>
         <module>applib</module>
         <module>metamodel</module>
         <module>ui</module>
+        <module>persistence-jdo</module>
         <module>persistence-jpa</module>
     </modules>
 
