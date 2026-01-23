@@ -227,7 +227,7 @@ public class MetaModelServiceMenu {
             final String xml = zippedMetamodelBlob
                     .unZip(CommonMimeType.XML)
                     .toClob(UTF_8)
-                    .getChars()
+                    .chars()
                     .toString();
 
             final MetamodelDto rightMetamodelDto =  jaxbService.fromXml(MetamodelDto.class, xml);

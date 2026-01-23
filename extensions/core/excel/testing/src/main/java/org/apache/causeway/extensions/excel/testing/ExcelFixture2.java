@@ -140,7 +140,7 @@ public class ExcelFixture2 extends FixtureScript implements FixtureScriptWithExe
     private byte[] getBytes() {
         if (bytes == null) {
             if (blob != null){
-                bytes = blob.getBytes();
+                bytes = blob.bytes();
             } else {
                 bytes = readBytes();
             }

@@ -71,12 +71,12 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Clob value) {
-        return renderTitle(value, Clob::getName);
+        return renderTitle(value, Clob::name);
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Clob value) {
-        return renderHtml(value, Clob::getName);
+        return renderHtml(value, Clob::name);
     }
 
     // -- ENCODER DECODER

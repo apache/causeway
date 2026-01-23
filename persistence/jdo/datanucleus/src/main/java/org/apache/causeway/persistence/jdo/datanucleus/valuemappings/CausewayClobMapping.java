@@ -71,9 +71,9 @@ public class CausewayClobMapping extends SingleFieldMultiMapping {
     {
         Clob clob = ((Clob)value);
         switch (index) {
-        case 0: return clob.getName();
-        case 1: return clob.getMimeType().getBaseType();
-        case 2: return clob.getChars();
+        case 0: return clob.name();
+        case 1: return clob.mimeType().getBaseType();
+        case 2: return clob.chars();
         }
         throw new IndexOutOfBoundsException();
     }
@@ -87,9 +87,9 @@ public class CausewayClobMapping extends SingleFieldMultiMapping {
             getColumnMapping(1).setObject(preparedStmt, exprIndex[1], null);
             getColumnMapping(2).setObject(preparedStmt, exprIndex[2], null);
         } else {
-            getColumnMapping(0).setString(preparedStmt, exprIndex[0], clob.getName());
-            getColumnMapping(1).setString(preparedStmt, exprIndex[1], clob.getMimeType().getBaseType());
-            getColumnMapping(2).setObject(preparedStmt, exprIndex[2], clob.getChars().toString());
+            getColumnMapping(0).setString(preparedStmt, exprIndex[0], clob.name());
+            getColumnMapping(1).setString(preparedStmt, exprIndex[1], clob.mimeType().getBaseType());
+            getColumnMapping(2).setObject(preparedStmt, exprIndex[2], clob.chars().toString());
         }
     }
 

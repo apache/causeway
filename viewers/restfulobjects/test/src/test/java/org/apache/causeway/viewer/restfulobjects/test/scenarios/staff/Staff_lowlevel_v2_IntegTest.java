@@ -138,7 +138,7 @@ public class Staff_lowlevel_v2_IntegTest extends Abstract_IntegTest {
         Body(String nameValue, String departmentHrefValue, org.apache.causeway.applib.value.Blob blob) {
             name = new Name(nameValue);
             department = new Department(new Department.Value(departmentHrefValue));
-            photo = new Blob(new Blob.Value(blob.getName(), blob.getMimeType().toString(), Base64.getEncoder().encodeToString(blob.getBytes())));
+            photo = new Blob(new Blob.Value(blob.name(), blob.mimeType().toString(), Base64.getEncoder().encodeToString(blob.bytes())));
         }
 
         private Name name;

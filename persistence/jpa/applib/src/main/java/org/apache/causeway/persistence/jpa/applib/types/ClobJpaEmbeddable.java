@@ -89,9 +89,9 @@ public final class ClobJpaEmbeddable {
             return null;
         }
         val clobJpaEmbeddable = new ClobJpaEmbeddable();
-        clobJpaEmbeddable.chars = clob.getChars().toString();
-        clobJpaEmbeddable.mimeType = clob.getMimeType().toString();
-        clobJpaEmbeddable.name = clob.getName();
+        clobJpaEmbeddable.chars = clob.chars().toString();
+        clobJpaEmbeddable.mimeType = clob.mimeType().toString();
+        clobJpaEmbeddable.name = clob.name();
         return clobJpaEmbeddable;
     }
 

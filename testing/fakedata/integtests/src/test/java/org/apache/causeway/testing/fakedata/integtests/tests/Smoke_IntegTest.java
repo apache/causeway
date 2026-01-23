@@ -604,7 +604,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
             Assertions.assertThat(fakeDataDemoObject.getSomeBlob()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeBlob().getMimeType().toString()).isEqualTo("application/pdf");
+            Assertions.assertThat(fakeDataDemoObject.getSomeBlob().mimeType().toString()).isEqualTo("application/pdf");
         }
 
         @Test
@@ -635,7 +635,7 @@ class Smoke_IntegTest extends FakeDataModuleIntegTestAbstract {
             fakeDataDemoObject = wrap(fakeDataDemoObjects).listAllDemoObjectsWithAll().get(0);
 
             Assertions.assertThat(fakeDataDemoObject.getSomeClob()).isNotNull();
-            Assertions.assertThat(fakeDataDemoObject.getSomeClob().getMimeType().toString()).isEqualTo("text/xml");
+            Assertions.assertThat(fakeDataDemoObject.getSomeClob().mimeType().toString()).isEqualTo("text/xml");
         }
 
         @Test

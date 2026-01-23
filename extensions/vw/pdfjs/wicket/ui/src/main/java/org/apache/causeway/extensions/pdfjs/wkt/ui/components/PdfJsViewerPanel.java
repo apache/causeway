@@ -234,7 +234,7 @@ implements IRequestListener {
         }
         val compactFrame = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
         val downloadLink = Wkt.add(compactFrame, Wkt.downloadLinkNoCache(ID_DOWNLOAD_IF_COMPACT, asBlobResource(blob)));
-        Wkt.labelAdd(downloadLink, ID_FILE_NAME_IF_COMPACT, blob.getName());
+        Wkt.labelAdd(downloadLink, ID_FILE_NAME_IF_COMPACT, blob.name());
         return compactFrame;
     }
 
@@ -301,11 +301,11 @@ implements IRequestListener {
     }
 
     private static ByteArrayResource asBlobResource(final @NonNull Blob blob) {
-        return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+        return new ByteArrayResource(blob.mimeType().getBaseType(), blob.bytes(), blob.name());
     }
 
     private static ByteArrayResource asBlobResourceNoCache(final @NonNull Blob blob) {
-        final byte[] bytes = blob.getBytes();
+        final byte[] bytes = blob.bytes();
         return new ByteArrayResource("application/pdf", bytes) {
             private static final long serialVersionUID = 1L;
             @Override protected void configureResponse(

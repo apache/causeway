@@ -175,7 +175,7 @@ public final class Blob implements NamedWithMimeType {
      * for the underlying byte[] to String conversion.
      */
     public Clob toClob(final @NonNull Charset charset) {
-        return new Clob(name(), mimeType(), _Strings.ofBytes(getBytes(), charset));
+        return new Clob(name(), mimeType(), _Strings.ofBytes(bytes(), charset));
     }
 
     /**
@@ -217,7 +217,7 @@ public final class Blob implements NamedWithMimeType {
      * @see DataSource
      */
     public DataSource asDataSource() {
-        return DataSource.ofBytes(_NullSafe.toNonNull(getBytes()));
+        return DataSource.ofBytes(_NullSafe.toNonNull(bytes()));
     }
 
     /**

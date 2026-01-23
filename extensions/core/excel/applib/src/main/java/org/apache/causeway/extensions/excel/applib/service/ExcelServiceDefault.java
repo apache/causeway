@@ -195,7 +195,7 @@ public class ExcelServiceDefault implements ExcelService {
             final WorksheetSpec.Sequencer sequencer) throws ExcelServiceDefault.Exception {
 
         List<WorksheetSpec> worksheetSpecs = _Lists.newArrayList();
-        try (ByteArrayInputStream bais = new ByteArrayInputStream(excelBlob.getBytes())) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(excelBlob.bytes())) {
             try (final Workbook wb = org.apache.poi.ss.usermodel.WorkbookFactory.create(bais)) {
                 final int numberOfSheets = wb.getNumberOfSheets();
                 for (int i = 0; i < numberOfSheets; i++) {

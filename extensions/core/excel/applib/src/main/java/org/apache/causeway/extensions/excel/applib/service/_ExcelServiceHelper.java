@@ -214,7 +214,7 @@ class _ExcelServiceHelper {
             final Blob excelBlob,
             final List<WorksheetSpec> worksheetSpecs) throws ExcelServiceDefault.Exception {
         try {
-            return newExcelConverter().fromBytes(worksheetSpecs, excelBlob.getBytes());
+            return newExcelConverter().fromBytes(worksheetSpecs, excelBlob.bytes());
         } catch (final IOException | InvalidFormatException e) {
             throw new ExcelServiceDefault.Exception(e);
         }

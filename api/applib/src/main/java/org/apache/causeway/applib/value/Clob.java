@@ -192,7 +192,7 @@ public final class Clob implements NamedWithMimeType {
      * for the underlying String to byte[] conversion.
      */
     public Blob toBlob(final @NonNull Charset charset) {
-        return new Blob(name(), mimeType(), _Strings.toBytes(getChars().toString(), charset));
+        return new Blob(name(), mimeType(), _Strings.toBytes(chars().toString(), charset));
     }
 
     /**
@@ -304,7 +304,7 @@ public final class Clob implements NamedWithMimeType {
             .append(':')
             .append(clob.mimeType().getBaseType())
             .append(':')
-            .append(bytesAdapter.marshal(clob.getChars().toString().getBytes(StandardCharsets.UTF_8)))
+            .append(bytesAdapter.marshal(clob.chars().toString().getBytes(StandardCharsets.UTF_8)))
             .toString();
         }
 

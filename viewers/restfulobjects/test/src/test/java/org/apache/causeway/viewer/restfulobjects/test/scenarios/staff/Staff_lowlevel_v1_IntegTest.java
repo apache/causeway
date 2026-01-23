@@ -233,17 +233,17 @@ public class Staff_lowlevel_v1_IntegTest extends Abstract_IntegTest {
 
         @Override
         public String titlePresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-            return renderTitle(value, Blob::getName);
+            return renderTitle(value, Blob::name);
         }
 
         @Override
         public String htmlPresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-            return renderHtml(value, Blob::getName);
+            return renderHtml(value, Blob::name);
         }
 
         private String toEncodedString(final Blob blob) {
-            return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" +
-            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
+            return blob.name() + ":" + blob.mimeType().getBaseType() + ":" +
+            _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.bytes()), StandardCharsets.UTF_8);
         }
 
         private Blob fromEncodedString(final String data) {

@@ -86,13 +86,13 @@ public class ResourceController {
                 .map(Blob.class::cast)
                 .map(blob -> {
                     val bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.asMediaType(MimeType.valueOf(blob.getMimeType().toString())));
+                            .contentType(MediaType.asMediaType(MimeType.valueOf(blob.mimeType().toString())));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
                         bodyBuilder
-                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.getName()).build().toString())
-                                .contentLength(blob.getBytes().length);
+                                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(blob.name()).build().toString())
+                                .contentLength(blob.bytes().length);
                     }
-                    return bodyBuilder.body(blob.getBytes());
+                    return bodyBuilder.body(blob.bytes());
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -115,12 +115,12 @@ public class ResourceController {
                 .map(Clob.class::cast)
                 .map(clob -> {
                     val bodyBuilder = ResponseEntity.ok()
-                            .contentType(MediaType.asMediaType(MimeType.valueOf(clob.getMimeType().toString())));
+                            .contentType(MediaType.asMediaType(MimeType.valueOf(clob.mimeType().toString())));
                     if (responseType == CausewayConfiguration.Viewer.Graphql.ResponseType.ATTACHMENT) {
-                        bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.getName()).build().toString())
-                                .contentLength(clob.getChars().length());
+                        bodyBuilder.header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment().filename(clob.name()).build().toString())
+                                .contentLength(clob.chars().length());
                     }
-                    return bodyBuilder.body(clob.getChars());
+                    return bodyBuilder.body(clob.chars());
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
