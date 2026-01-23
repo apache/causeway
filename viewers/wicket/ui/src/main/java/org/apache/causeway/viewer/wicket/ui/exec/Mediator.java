@@ -19,6 +19,7 @@
 package org.apache.causeway.viewer.wicket.ui.exec;
 
 import org.apache.causeway.applib.value.OpenUrlStrategy;
+import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -85,8 +86,8 @@ final class Mediator {
     static Mediator determineAndInterpretResult(
             final ActionModel actionModel,
             final @Nullable AjaxRequestTarget targetIfAny,
-            final @Nullable ManagedObject resultAdapter) {
-        return MediatorFactory.determineAndInterpretResult(actionModel, targetIfAny, resultAdapter);
+            final @Nullable ManagedObject resultAdapter, Can<ManagedObject> args) {
+        return MediatorFactory.determineAndInterpretResult(actionModel, targetIfAny, resultAdapter, args);
     }
 
     static Mediator withHandler(final IRequestHandler handler) {

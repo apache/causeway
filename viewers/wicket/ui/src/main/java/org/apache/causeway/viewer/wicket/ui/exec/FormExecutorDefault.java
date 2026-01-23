@@ -115,7 +115,7 @@ public final class FormExecutorDefault implements FormExecutor, HasMetaModelCont
 
             // triggers ManagedObject.getBookmarkRefreshed()
             var mediator = actionOrPropertyModel.fold(
-                    act->Mediator.determineAndInterpretResult(act, ajaxTarget, resultAdapter),
+                    act->Mediator.determineAndInterpretResult(act, ajaxTarget, resultAdapter, act.snapshotArgs()),
                     prop->Mediator.toDomainObjectPage(resultAdapter));
 
             // redirect using associated strategy

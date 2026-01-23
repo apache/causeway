@@ -59,10 +59,12 @@ class MediatorFactory {
     Mediator determineAndInterpretResult(
             final @NonNull ActionModel actionModel,
             final @Nullable AjaxRequestTarget ajaxTarget,
-            final @Nullable ManagedObject resultAdapterIfAny) {
+            final @Nullable ManagedObject resultAdapterIfAny,
+            //BACKPORT was removed in v3
+            final @NonNull Can<ManagedObject> args) {
 
         var actionResultModel = ActionResultModel.determineFor(actionModel, resultAdapterIfAny, ajaxTarget);
-        var response = actionResultResponse(actionModel, ajaxTarget, actionResultModel);
+        var response = actionResultResponse(actionModel, ajaxTarget, actionResultModel, args);
 
         //TODO[causeway-viewer-wicket-ui-3815] handling only if we have a page redirect, other cases ignored (eg. download action)
         if(response.pageRedirect()==null)
@@ -107,7 +109,9 @@ class MediatorFactory {
     private Mediator actionResultResponse(
             final @NonNull ActionModel actionModel,
             final @Nullable AjaxRequestTarget ajaxTarget,
-            final @NonNull ActionResultModel actionResultModel) {
+            final @NonNull ActionResultModel actionResultModel,
+            //BACKPORT was removed in v3
+            final @NonNull Can<ManagedObject> args) {
 
         final ActionResultResponseType responseType = actionResultModel.responseType();
         final ManagedObject resultAdapter = actionResultModel.resultAdapter();
@@ -115,7 +119,6 @@ class MediatorFactory {
         switch(responseType) {
         case COLLECTION: {
             _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
-            Can<ManagedObject> args = Can.empty(); //FIXME BACKPORT was removed in v3
             var collectionModel = EntityCollectionModelStandalone
                     .forActionModel((PackedManagedObject)resultAdapter, actionModel, args);
             var pageRedirectRequest = PageRedirectRequest.forPage(
