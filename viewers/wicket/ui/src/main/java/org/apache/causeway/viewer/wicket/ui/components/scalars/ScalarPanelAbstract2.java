@@ -28,16 +28,18 @@ import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.services.placeholder.PlaceholderRenderService.PlaceholderLiteral;
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.viewer.commons.model.components.UiString;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.CompactFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFragment;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FieldFrame;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.PromptFragment;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
@@ -224,14 +226,15 @@ extends ScalarPanelAbstract {
 
         if(clickReceiver==null) return;
 
-        val scalarModel = scalarModel();
+        var attributeModel = scalarModel();
 
-        if (_Util.canPropertyEnterInlineEditDirectly(scalarModel)) {
+        if (_Util.canPropertyEnterInlineEditDirectly(attributeModel)) {
 
-            _Util.lookupMixinForCompositeValueUpdate(scalarModel)
-            .ifPresentOrElse(mixinForCompositeValueEdit->{
+            _Util.lookupMixinForCompositeValueUpdate(attributeModel)
+            .ifPresentOrElse((final ActionModel mixinForCompositeValueEdit)->{
                 // composite value type support
-                Wkt.behaviorAddOnClick(clickReceiver, mixinForCompositeValueEdit.getUiComponent()::onClick);
+                var actionLink = ActionLink.create(mixinForCompositeValueEdit, Where.OBJECT_FORMS);
+                Wkt.behaviorAddOnClick(clickReceiver, actionLink::onClick);
             },()->{
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 Wkt.behaviorAddOnClick(clickReceiver, this::onPropertyInlineEditClick);
@@ -239,9 +242,10 @@ extends ScalarPanelAbstract {
 
         } else {
 
-            _Util.lookupPropertyActionForInlineEdit(scalarModel)
-            .ifPresent(actionLinkInlineAsIfEdit->{
-                Wkt.behaviorAddOnClick(clickReceiver, actionLinkInlineAsIfEdit.getUiComponent()::onClick);
+            _Util.lookupPropertyActionForInlineEdit(attributeModel)
+            .ifPresent((final ActionModel actionLinkInlineAsIfEdit)->{
+                var actionLink = ActionLink.create(actionLinkInlineAsIfEdit, Where.OBJECT_FORMS);
+                Wkt.behaviorAddOnClick(clickReceiver, actionLink::onClick);
             });
         }
     }

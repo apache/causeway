@@ -22,10 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
-
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -39,10 +36,10 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.entity.collection.EntityCollectionPanelFactory.CollectionOwnerAndLayout;
 import org.apache.causeway.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.row.Row;
@@ -51,6 +48,9 @@ import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.model.Model;
 
 import lombok.val;
 
@@ -131,11 +131,11 @@ implements HasDynamicallyVisibleContent {
             getModel().getTypeOfSpecification().getAction(actionLayoutData.getId()).orElse(null)
         )
         .filter(_NullSafe::isPresent)
-        .map(LinkAndLabelFactory.forEntity(getModel()))
+        .map(act->ActionModel.forEntity(act, getModel()))
         .collect(Can.toCan());
 
         if (!visibleActions.isEmpty()) {
-            ActionLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.ActionPanelStyle.INLINE_LIST);
+        	ActionLinksPanel.addActionLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
             visible = true;
         } else {
             WktComponents.permanentlyHide(actionOwner, actionIdToUse);

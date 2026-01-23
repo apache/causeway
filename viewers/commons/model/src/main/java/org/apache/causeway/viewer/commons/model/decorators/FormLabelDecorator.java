@@ -20,11 +20,9 @@ package org.apache.causeway.viewer.commons.model.decorators;
 
 import java.io.Serializable;
 
-import org.springframework.lang.Nullable;
-
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface FormLabelDecorator<T> {
@@ -33,30 +31,17 @@ public interface FormLabelDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter
-    @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-    public static class FormLabelDecorationModel implements Serializable {
-
-        private static final long serialVersionUID = 1L;
+    @AllArgsConstructor
+    @Getter @Accessors(fluent = true)
+    public static final class FormLabelDecorationModel implements Serializable {
+    	private static final long serialVersionUID = 1L;
+    	
+    	final boolean isMandatoryIndicatorShown;
 
         public static FormLabelDecorationModel mandatory(final boolean mandatory) {
-            /* used to be suffixed with ':' till 2.0.0-RC1;
-             * however, the question arises what to do in the label RIGHT position case;
-             * and so we concluded, that perhaps its better to remove the suffix colon
-             * all together */
-            return of(mandatory, "");
+            return new FormLabelDecorationModel(mandatory);
         }
-
-        /* not used
-        public static FormLabelDecorationModel mandatorySuffixed2(
-                final boolean mandatory,
-                final @Nullable String suffix) {
-            return of(mandatory, suffix);
-        } */
-
-        final boolean mandatoryMarker;
-        final @Nullable String suffix;
-
     }
+   
 
 }

@@ -22,7 +22,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
-    exports org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
+    exports org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink;
     exports org.apache.causeway.viewer.wicket.ui.util;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.mmverror;

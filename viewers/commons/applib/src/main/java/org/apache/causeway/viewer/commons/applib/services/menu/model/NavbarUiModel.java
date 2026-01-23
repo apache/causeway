@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import org.springframework.lang.NonNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,11 +26,10 @@ import lombok.experimental.Accessors;
 
 @AllArgsConstructor
 @Getter @Accessors(fluent = true)
-public final class HeaderUiModel {
+public class NavbarUiModel {
 
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
-
+    @NonNull private final NavbarSection primary;
+    @NonNull private final NavbarSection secondary;
+    @NonNull private final NavbarSection tertiary;
+	
 }
-

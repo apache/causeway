@@ -18,14 +18,13 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.model.IModel;
-
 import org.apache.causeway.applib.annotation.DomainServiceLayout;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.causeway.viewer.wicket.ui.ComponentFactoryAbstract;
+import org.apache.wicket.Component;
+import org.apache.wicket.model.IModel;
 
 import lombok.val;
 
@@ -48,7 +47,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         val menuUiModel = ((ServiceActionsModel) model).getObject();
-        val menuBarSelect = menuUiModel.getMenuBarSelect();
+        val menuBarSelect = menuUiModel.menuBarSelect();
         return appliesIf(
                 menuBarSelect == DomainServiceLayout.MenuBar.TERTIARY
                 || menuBarSelect == null);
@@ -56,14 +55,12 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        val menuUiModel = ((ServiceActionsModel) model).getObject();
+        var navBarSection = ((ServiceActionsModel) model).getObject();
 
-        val menuItems = _Lists.<CssMenuItem>newArrayList();
-        ServiceActionUtil.buildMenu(
-                super.getMetaModelContext(), menuUiModel, menuItems::add);
+        var menuItems = _Lists.<CssMenuItem>newArrayList();
+        ServiceActionUtil.buildMenu(navBarSection, menuItems::add);
 
         return new TertiaryActionsPanel(id, menuItems);
     }
-
 
 }

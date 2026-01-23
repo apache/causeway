@@ -43,10 +43,13 @@ import org.apache.causeway.viewer.wicket.model.models.InlinePromptContext;
 import org.apache.causeway.viewer.wicket.model.models.ScalarParameterModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarPropertyModel;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel.ColumnActionModifier;
 import org.apache.causeway.viewer.wicket.model.models.interaction.BookmarkedObjectWkt;
 import org.apache.causeway.viewer.wicket.model.models.interaction.HasBookmarkedOwnerAbstract;
 
+import lombok.Getter;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * The parent (container) model of multiple <i>parameter models</i> which implement
@@ -73,6 +76,7 @@ extends HasBookmarkedOwnerAbstract<ActionInteraction> {
     private static final long serialVersionUID = 1L;
 
     private final String memberId;
+    @Getter @Accessors(fluent = true)
     private final Where where;
 
     /**

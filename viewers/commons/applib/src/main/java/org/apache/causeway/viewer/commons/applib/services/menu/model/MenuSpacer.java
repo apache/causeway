@@ -16,11 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import org.springframework.lang.NonNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,11 +26,17 @@ import lombok.experimental.Accessors;
 
 @AllArgsConstructor
 @Getter @Accessors(fluent = true)
-public final class HeaderUiModel {
+public class MenuSpacer implements MenuEntry {
+	
+	private static final long serialVersionUID = 1L;
+	@NonNull private final String label;
 
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
+    public static MenuSpacer empty() {
+        return new MenuSpacer("");
+    }
+
+    public boolean isEmpty() {
+        return label.length() == 0;
+    }
 
 }
-

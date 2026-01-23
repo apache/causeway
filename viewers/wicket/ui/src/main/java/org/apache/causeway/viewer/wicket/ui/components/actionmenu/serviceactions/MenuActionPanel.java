@@ -70,32 +70,30 @@ public abstract class MenuActionPanel extends PanelBase<Object> {
     }
 
     // -- HELPER
-
+    
     private void addFolderItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        ServiceActionUtil.addFolderItem(super.getMetaModelContext(), menuItem, listItem, parent);
+        ServiceActionUtil.addFolderItem(menuItem, listItem, parent);
     }
 
     private void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        ServiceActionUtil.addLeafItem(
-                super.getMetaModelContext(), menuItem, listItem, parent);
+        ServiceActionUtil.addLeafItem(menuItem, listItem, parent);
     }
 
     private void addSpacer(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        val fragment = new Fragment("content", "separatorItem", parent);
+        var fragment = new Fragment("content", "separatorItem", parent);
         listItem.add(fragment);
         Wkt.cssAppend(listItem, "list-separator");
     }
 
     private void addSectionLabel(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem) {
         final MarkupContainer parent = this;
-        val fragment = new Fragment("content", "sectionItem", parent);
+        var fragment = new Fragment("content", "sectionItem", parent);
         Wkt.labelAdd(fragment, "sectionLabel", menuItem.getName());
         listItem.add(fragment);
         Wkt.cssAppend(listItem, "list-section-label");
     }
-
 
 }

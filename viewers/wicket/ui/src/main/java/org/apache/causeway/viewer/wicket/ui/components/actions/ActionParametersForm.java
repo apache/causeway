@@ -122,8 +122,8 @@ extends PromptFormAbstract<ActionModel> {
         val action = actionModel.getAction();
 
         if (action.getSemantics().isAreYouSure()) {
-            val confirmUiModel = ConfirmDecorationModel.areYouSure(getTranslationService(), UiPlacementDirection.BOTTOM);
-            WktDecorators.getConfirm().decorate(button, confirmUiModel);
+            val confirmUiModel = ConfirmDecorationModel.areYouSure(UiPlacementDirection.BOTTOM);
+            WktDecorators.confirm().decorate(button, confirmUiModel);
         }
     }
 

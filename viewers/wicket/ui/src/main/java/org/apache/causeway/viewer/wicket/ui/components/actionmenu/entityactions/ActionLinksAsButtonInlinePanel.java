@@ -16,23 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.commons.applib.services.header;
+package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
 
-import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
-import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.experimental.Accessors;
+public class ActionLinksAsButtonInlinePanel extends ActionLinksPanel {
 
-@AllArgsConstructor
-@Getter @Accessors(fluent = true)
-public final class HeaderUiModel {
+    private static final long serialVersionUID = 1L;
 
-    private final BrandingUiModel branding;
-    private final UserProfileUiModel userProfile;
-    private final NavbarUiModel navbar;
-
+    public ActionLinksAsButtonInlinePanel(final String id, final Can<ActionLink> links) {
+        super(id, links, ActionPanelStyle.INLINE_LIST);
+    }
 }
-

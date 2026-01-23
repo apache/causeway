@@ -22,10 +22,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import org.apache.wicket.model.ChainingModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.util.convert.IConverter;
-
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Either;
@@ -41,11 +37,15 @@ import org.apache.causeway.viewer.commons.model.hints.HasRenderingHints;
 import org.apache.causeway.viewer.commons.model.hints.RenderingHint;
 import org.apache.causeway.viewer.commons.model.scalar.UiScalar;
 import org.apache.causeway.viewer.wicket.model.value.ConverterBasedOnValueSemantics;
+import org.apache.wicket.model.ChainingModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.convert.IConverter;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * Represents a scalar of an entity, either a PROPERTY or
@@ -236,14 +236,15 @@ implements HasRenderingHints, UiScalar, FormExecutorContext {
     }
 
     public final boolean hasAssociatedActionWithInlineAsIfEdit() {
-        return getAssociatedActions().getFirstAssociatedWithInlineAsIfEdit().isPresent();
+        return getAssociatedActions().firstAssociatedWithInlineAsIfEdit().isPresent();
     }
 
     protected transient AssociatedActions associatedActions;
 
-    public static class AssociatedActions {
-        @Getter private final Optional<ObjectAction> firstAssociatedWithInlineAsIfEdit;
-        @Getter private final List<ObjectAction> remainingAssociated;
+    @Getter @Accessors(fluent = true)
+    public static final class AssociatedActions {
+        private final Optional<ObjectAction> firstAssociatedWithInlineAsIfEdit;
+        private final List<ObjectAction> remainingAssociated;
 
         AssociatedActions(final Can<ObjectAction> allAssociated) {
             firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);

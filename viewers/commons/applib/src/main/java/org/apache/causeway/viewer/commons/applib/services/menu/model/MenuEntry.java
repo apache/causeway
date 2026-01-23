@@ -16,16 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import java.io.Serializable;
+import java.util.Optional;
 
-public class AdditionalLinksAsDropDownPanel extends ActionLinksPanel {
+import org.apache.causeway.commons.internal.base._Casts;
 
-    private static final long serialVersionUID = 1L;
+public interface MenuEntry extends Serializable {
 
-    public AdditionalLinksAsDropDownPanel(final String id, final Can<LinkAndLabel> links) {
-        super(id, links, ActionPanelStyle.DROPDOWN);
+    default Optional<MenuAction> asAction() {
+        return _Casts.castTo(MenuAction.class, this);
     }
+
+    default Optional<MenuSpacer> asSpacer() {
+        return _Casts.castTo(MenuSpacer.class, this);
+    }
+
 }

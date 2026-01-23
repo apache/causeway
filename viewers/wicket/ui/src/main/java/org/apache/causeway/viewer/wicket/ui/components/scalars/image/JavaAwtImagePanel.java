@@ -81,7 +81,7 @@ extends PanelAbstract<ManagedObject, ScalarModel> {
         val scalarModel = scalarModel();
         val scalarNameLabel = Wkt.label(id, scalarModel.getFriendlyName());
 
-        WktDecorators.getFormLabel()
+        WktDecorators.formLabel()
             .decorate(scalarNameLabel, FormLabelDecorationModel
                     .mandatory(scalarModel.isShowMandatoryIndicator()));
 

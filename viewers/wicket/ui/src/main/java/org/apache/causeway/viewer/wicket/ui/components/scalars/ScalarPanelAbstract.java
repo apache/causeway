@@ -25,20 +25,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.IModel;
-
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.collections.ImmutableEnumSet;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -54,7 +43,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.decorators.FormLabelDecorator.FormLabelDecorationModel;
 import org.apache.causeway.viewer.commons.model.scalar.UiParameter;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ScalarModel;
 import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.ActionLinksPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
@@ -69,15 +58,24 @@ import org.apache.causeway.viewer.wicket.ui.util.Wkt.EventTopic;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.model.IModel;
+import org.springframework.lang.Nullable;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 public abstract class ScalarPanelAbstract
 extends PanelAbstract<ManagedObject, ScalarModel>
@@ -303,7 +301,7 @@ implements ScalarModelChangeListener {
             scalarFrameContainer.addOrReplace(compactFrame, regularFrame,
                     formFrame = createFormFrame());
 
-            val associatedLinksAndLabels = _Util.associatedLinksAndLabels(scalarModel);
+            val associatedLinksAndLabels = _Util.associatedActionModels(scalarModel);
             addPositioningCssTo(regularFrame, associatedLinksAndLabels);
             addActionLinksBelowAndRight(regularFrame, associatedLinksAndLabels);
 
@@ -559,7 +557,7 @@ implements ScalarModelChangeListener {
                 return;
             }
 
-            WktDecorators.getFormLabel()
+            WktDecorators.formLabel()
                 .decorate(scalarNameLabel, FormLabelDecorationModel
                         .mandatory(scalarModel.isShowMandatoryIndicator()));
 
@@ -608,19 +606,19 @@ implements ScalarModelChangeListener {
 
     private void addActionLinksBelowAndRight(
             final MarkupContainer labelIfRegular,
-            final Can<LinkAndLabel> linkAndLabels) {
+            final Can<ActionModel> linkAndLabels) {
 
         val linksBelow = linkAndLabels
-                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.BELOW));
-        ActionLinksPanel.addAdditionalLinks(
+                .filter(ActionModel.isPositionedAt(ActionLayout.Position.BELOW));
+        ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_BELOW.getContainerId(),
-                linksBelow, ActionLinksPanel.ActionPanelStyle.INLINE_LIST);
+                linksBelow, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
 
         val linksRight = linkAndLabels
-                .filter(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT));
-        ActionLinksPanel.addAdditionalLinks(
+                .filter(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT));
+        ActionLinksPanel.addActionLinks(
                 labelIfRegular, RegularFrame.ASSOCIATED_ACTION_LINKS_RIGHT.getContainerId(),
-                linksRight, ActionLinksPanel.ActionPanelStyle.DROPDOWN);
+                linksRight, ActionLinksPanel.ActionPanelStyle.DROPDOWN, Where.OBJECT_FORMS);
     }
 
     /**
@@ -633,7 +631,7 @@ implements ScalarModelChangeListener {
      */
     private void addPositioningCssTo(
             final MarkupContainer markupContainer,
-            final Can<LinkAndLabel> actionLinks) {
+            final Can<ActionModel> actionLinks) {
         Wkt.cssAppend(markupContainer, determinePropParamLayoutCss(getModel()));
         Wkt.cssAppend(markupContainer, determineActionLayoutPositioningCss(actionLinks));
     }
@@ -642,9 +640,9 @@ implements ScalarModelChangeListener {
         return Facets.labelAtCss(scalarModel.getMetaModel());
     }
 
-    private static String determineActionLayoutPositioningCss(final Can<LinkAndLabel> entityActionLinks) {
+    private static String determineActionLayoutPositioningCss(final Can<ActionModel> entityActionLinks) {
         return entityActionLinks.stream()
-                .anyMatch(LinkAndLabel.isPositionedAt(ActionLayout.Position.RIGHT))
+                .anyMatch(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT))
                     ? "actions-right"
                     : null;
     }

@@ -25,15 +25,15 @@ import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.fa.FontAwesomeLayers;
+import org.apache.causeway.core.metamodel.facets.members.iconfa.FaLayersProvider;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.LabelIndent;
 import org.apache.causeway.viewer.commons.model.decorators.DisablingDecorator.DisablingDecorationModel;
-
-import lombok.val;
 
 /**
  * UI mixin for {@link ManagedAction}.
@@ -81,7 +81,7 @@ public interface HasManagedAction {
      * of {@link BookmarkPolicy#AS_ROOT root}, and has safe {@link ObjectAction#getSemantics() semantics}.
      */
     default boolean isBookmarkable() {
-        val action = getAction();
+        var action = getAction();
         return action.getSemantics().isSafeInNature()
                 && Facets.bookmarkPolicyOrElseNotSpecified(action).isRoot();
     }
@@ -97,8 +97,9 @@ public interface HasManagedAction {
      *      but not in horizontal action panels,
      *      where e.g. LinkAndLabel correspond to a UI button.
      */
+    @Deprecated
     default Optional<FontAwesomeLayers> lookupFontAwesomeLayers(final boolean forceAlignmentOnIconAbsence) {
-        val managedAction = getManagedAction();
+        var managedAction = getManagedAction();
         return ObjectAction.Util.cssClassFaFactoryFor(
                     managedAction.getAction(),
                     managedAction.getOwner())
@@ -108,6 +109,29 @@ public interface HasManagedAction {
                         : cssClassFaFactory.getLayers()
                     );
     }
+    
+    /**
+     * @param forceAlignmentOnIconAbsence enforced in drop-dows,
+     *      but not in horizontal action panels,
+     *      where e.g. LinkAndLabel correspond to a UI button.
+     */
+    default Optional<FontAwesomeLayers> lookupFontAwesomeLayers(final LabelIndent labelIndent) {
+        var managedAction = getManagedAction();
+        return ObjectAction.Util.cssClassFaFactoryFor(
+                    managedAction.getAction(),
+                    managedAction.getOwner())
+                .map(FaLayersProvider::getLayers)
+                .map(layers->labelIndent == LabelIndent.FORCE_ALIGNMENT_WITH_BLANK_ICON
+	                ? layers.emptyToBlank()
+	        		: layers
+//BACKPORTED	        		
+//                    switch(labelIndent) {
+//                        case FORCE_ALIGNMENT_WITH_BLANK_ICON -> layers.emptyToBlank();
+//                        case NONE -> layers;
+//                    }
+                    );
+    }
+
 
     default Optional<String> getAdditionalCssClass() {
         return Facets.cssClass(getAction(), getActionOwner());
@@ -120,6 +144,16 @@ public interface HasManagedAction {
     public static <T extends HasManagedAction> Predicate<T> isPositionedAt(
             final ActionLayout.Position position) {
         return a -> a.getPosition() == position;
+    }
+    
+    /**
+     * With respect to UI visual hierarchy, actions that appear in the field-set header
+     * are ranked higher than those that appear inside a field-set.
+     */
+    default boolean isPositionedInsideFieldSet() {
+        return isPositionedAt(ActionLayout.Position.BELOW)
+            .or(isPositionedAt(ActionLayout.Position.RIGHT))
+            .test(this);
     }
 
     default Optional<DisablingDecorationModel> getDisableUiModel() {

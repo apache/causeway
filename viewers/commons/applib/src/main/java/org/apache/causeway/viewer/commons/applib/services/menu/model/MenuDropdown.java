@@ -16,16 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions;
+package org.apache.causeway.viewer.commons.applib.services.menu.model;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
+import org.springframework.lang.NonNull;
 
-public class AdditionalLinksAsListInlinePanel extends ActionLinksPanel {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-    private static final long serialVersionUID = 1L;
-
-    public AdditionalLinksAsListInlinePanel(final String id, final Can<LinkAndLabel> links) {
-        super(id, links, ActionPanelStyle.INLINE_LIST);
-    }
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public class MenuDropdown implements MenuEntry {
+        private static final long serialVersionUID = 1L;
+        
+		@NonNull private final String name;
+        @NonNull private final Can<MenuEntry> subEntries; 
 }
