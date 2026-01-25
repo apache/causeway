@@ -90,23 +90,14 @@ record GridCache(
     ..
     at org.apache.causeway.core.metamodel.util.Facets.gridPreload(Facets.java:200)*/
     record ConcurrentMapWrapper<K, V>(ConcurrentHashMap<K, V> map) {
-
         public V computeIfAbsent(final K key, final java.util.function.Function<? super K, ? extends V> mappingFunction) {
-            // Use an atomic flag to track whether a recursive call is currently happening.
-            // It ensures that multiple threads can manage their recursion state independently.
-            final ThreadLocal<Boolean> isRecursing = ThreadLocal.withInitial(() -> false);
+            var value = map.get(key);
+            if(value!=null)
+                return value;
 
-            // Define a recursive compute function
-            return map.compute(key, (k, v) -> {
-                if (isRecursing.get()) return v; // return current value if already in recursion
-
-                isRecursing.set(true); // mark as in recursion
-                try {
-                    return v == null ? mappingFunction.apply(k) : v;
-                } finally {
-                    isRecursing.remove(); // clean up the flag variable
-                }
-            });
+            var newValue = mappingFunction.apply(key);
+            map.put(key, newValue);
+            return newValue;
         }
     }
 
