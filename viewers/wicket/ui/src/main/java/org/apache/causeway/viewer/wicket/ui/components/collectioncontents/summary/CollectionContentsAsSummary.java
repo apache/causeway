@@ -106,7 +106,7 @@ implements CollectionCountProvider {
 
             val visibleAdapters = model.getDataTableModel().getDataRowsFiltered()
                     .getValue()
-                    .map(DataRow::getRowElement)
+                    .map(DataRow::rowElement)
                     .toList();
 
             Summary summary = new Summary(propertyColumnName, visibleAdapters, numberAssociation);

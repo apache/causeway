@@ -91,7 +91,7 @@ public class CommandReplayOnSecondaryService {
         public class ActionDomainEvent extends CommandReplayOnSecondaryService.ActionDomainEvent<uploadCommands> { }
 
         @MemberSupport public void act(final Clob commandsDtoAsXml) {
-            val chars = commandsDtoAsXml.getChars();
+            val chars = commandsDtoAsXml.chars();
             List<CommandDto> commandDtoList;
 
             try {

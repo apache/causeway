@@ -214,6 +214,17 @@ footer > .navbar {
 
 /* from CollectionContentsAsAjaxTablePanel.css */
 
+/* action column fixed width */
+.collectionContentsAsAjaxTablePanel th.action-column  {
+  width: 4rem;
+}
+.collectionContentsAsAjaxTablePanel td.action-column  {
+  padding-left: 2rem;
+}
+.collectionContentsAsAjaxTablePanel td.action-column div.additionalLinkList {
+  float: right;
+}
+
 .collectionContentsAsAjaxTablePanel table.contents {
     font-size: 0.9em;
     width: 100%;

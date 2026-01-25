@@ -22,10 +22,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import org.apache.causeway.applib.annotation.DomainServiceLayout.MenuBar;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiService;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
@@ -33,6 +29,8 @@ import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiService
 import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiService;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiService;
 import org.apache.causeway.viewer.commons.services.CausewayModuleViewerCommonsServices;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,12 +48,10 @@ implements HeaderUiService {
 
     @Override
     public HeaderUiModel getHeader() {
-        return HeaderUiModel.of(
+        return new HeaderUiModel(
                 brandingUiService.getHeaderBranding(),
                 userProfileUiService.userProfile(),
-                menuUiService.getMenu(MenuBar.PRIMARY),
-                menuUiService.getMenu(MenuBar.SECONDARY),
-                menuUiService.getMenu(MenuBar.TERTIARY));
+                menuUiService.getMenu());
     }
 
 }

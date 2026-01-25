@@ -23,11 +23,11 @@ import java.util.Optional;
 
 import org.apache.causeway.core.metamodel.interactions.managed.InteractionVeto;
 import org.apache.causeway.core.metamodel.interactions.managed.MemberInteraction;
+import org.springframework.lang.NonNull;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @FunctionalInterface
 public interface DisablingDecorator<T> {
@@ -36,9 +36,9 @@ public interface DisablingDecorator<T> {
 
     // -- DECORATION MODEL
 
-    @Getter
-    @RequiredArgsConstructor(staticName = "of", access = AccessLevel.PRIVATE)
-    public static class DisablingDecorationModel implements Serializable {
+    @Getter @Accessors(fluent = true)
+    @RequiredArgsConstructor
+    public static final class DisablingDecorationModel implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public interface DisablingDecorator<T> {
 
         public static Optional<DisablingDecorationModel> of(@NonNull final Optional<InteractionVeto> usabilityVeto) {
             return usabilityVeto
-                    .map(veto->of(veto.getReasonAsString().orElse(null)));
+                    .map(veto->new DisablingDecorationModel(veto.getReasonAsString().orElse(null)));
         }
 
         public static Optional<DisablingDecorationModel> of(@NonNull final MemberInteraction<?, ?> memberInteraction) {

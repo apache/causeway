@@ -20,25 +20,23 @@ package org.apache.causeway.viewer.wicket.ui.components.collection;
 
 import java.util.Optional;
 
-import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.tabular.interactive.DataTableInteractive;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.EntityCollectionModelParented;
-import org.apache.causeway.viewer.wicket.ui.components.actionmenu.entityactions.LinkAndLabelFactory;
 import org.apache.causeway.viewer.wicket.ui.components.collection.bulk.MultiselectToggleProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorPanel;
 import org.apache.causeway.viewer.wicket.ui.components.collection.selector.CollectionPresentationSelectorProvider;
 import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ToggleboxColumn;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
-
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
@@ -64,7 +62,7 @@ implements
         val collMetaModel = getModel().getMetaModel();
 
         val associatedActions = collMetaModel.streamAssociatedActions()
-        .map(LinkAndLabelFactory.forCollection(collectionModel))
+        .map(act->ActionModel.forCollection(act, collectionModel))
         .collect(Can.toCan());
 
         collectionModel.setLinkAndLabels(associatedActions);
@@ -96,7 +94,7 @@ implements
             val collModel = getModel();
             val collMetaModel = collModel.getMetaModel();
             toggleboxColumn =  collMetaModel.hasAssociatedActionsWithChoicesFromThisCollection()
-                    ? Optional.of(new ToggleboxColumn(collModel.delegate()))
+                    ? Optional.of(new ToggleboxColumn(collModel.getElementType(), collModel.delegate()))
                     : Optional.empty();
         }
         return toggleboxColumn.orElse(null);

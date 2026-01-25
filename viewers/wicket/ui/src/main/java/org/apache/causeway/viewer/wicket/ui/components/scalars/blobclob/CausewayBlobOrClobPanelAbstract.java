@@ -81,7 +81,7 @@ extends ScalarPanelFormFieldAbstract<T> {
     @Override
     protected UiString obtainOutputFormat() {
         val caption = getBlobOrClobFromModel()
-                .map(NamedWithMimeType::getName)
+                .map(NamedWithMimeType::name)
                 .orElseGet(()->
                     getPlaceholderRenderService()
                     .asText(PlaceholderLiteral.NULL_REPRESENTATION));

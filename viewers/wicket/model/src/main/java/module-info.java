@@ -50,4 +50,5 @@ module org.apache.causeway.viewer.wicket.model {
     requires org.apache.wicket.core;
     requires org.apache.wicket.request;
     requires org.apache.wicket.util;
+	requires org.apache.causeway.security.api;
 }

@@ -41,25 +41,24 @@ extends
     Serializable,
     Comparable<NamedWithMimeType> {
 
-    String getName();
-
-    MimeType getMimeType();
+    String name();
+    MimeType mimeType();
 
     @Override
     default int compareTo(final NamedWithMimeType o) {
         int c = _Strings.compareNullsFirst(
-                this.getName(),
+                this.name(),
                 o!=null
-                    ? o.getName()
+                    ? o.name()
                     : null);
         if(c!=0) {
             return c;
         }
 
         return _Strings.compareNullsFirst(
-                this.getMimeType().getBaseType(),
+                this.mimeType().getBaseType(),
                 o!=null
-                    ? o.getMimeType().getBaseType()
+                    ? o.mimeType().getBaseType()
                     : null);
     }
 
@@ -243,6 +242,23 @@ extends
             return valueOfFileExtension(fileName.substring(beginIndex));
         }
 
+    }
+
+    // -- DEPRECATIONS
+    
+    /**
+     * @deprecated use {@link #name()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default String getName() {
+        return name();
+    }
+    /**
+     * @deprecated use {@link #mimeType()} instead
+     */
+    @Deprecated(forRemoval = true)
+    default MimeType getMimeType() {
+        return mimeType();
     }
 
 }

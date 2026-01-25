@@ -234,9 +234,10 @@ public final class PredicatePrettifier implements Visitor<String, Templates> {
                 return true;
             }
 
-            private static String spaces(int num) {
-                return Stream.generate(() -> " ").limit(num).collect(Collectors.joining());
-            }
+//not used            
+//            private static String spaces(int num) {
+//                return Stream.generate(() -> " ").limit(num).collect(Collectors.joining());
+//            }
 
         }
 

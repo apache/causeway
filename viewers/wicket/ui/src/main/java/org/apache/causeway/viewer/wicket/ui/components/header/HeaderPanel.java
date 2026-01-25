@@ -18,14 +18,9 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.header;
 
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
 import org.apache.causeway.viewer.commons.applib.services.header.HeaderUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.wicket.model.models.ServiceActionsModel;
@@ -37,6 +32,10 @@ import org.apache.causeway.viewer.wicket.ui.pages.error.ErrorPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import lombok.val;
 
@@ -70,8 +69,8 @@ extends PanelAbstract<String, Model<String>> {
 
         val headerUiModel = super.getHeaderModel();
 
-        addApplicationName(headerUiModel.getBranding());
-        addUserName(headerUiModel.getUserProfile());
+        addApplicationName(headerUiModel.branding());
+        addUserName(headerUiModel.userProfile());
         addServiceActionMenuBars(headerUiModel);
     }
 
@@ -108,26 +107,27 @@ extends PanelAbstract<String, Model<String>> {
     }
 
     protected void addServiceActionMenuBars(final HeaderUiModel headerUiModel) {
+        var navbar = headerUiModel.navbar();
         if (getPage() instanceof ErrorPage) {
             WktComponents.permanentlyHide(this, ID_PRIMARY_MENU_BAR);
             WktComponents.permanentlyHide(this, ID_SECONDARY_MENU_BAR);
-            addMenuBar(ID_TERTIARY_MENU_BAR, headerUiModel.getTertiary());
+            addMenuBar(ID_TERTIARY_MENU_BAR, navbar.tertiary());
         } else {
-            addMenuBar(ID_PRIMARY_MENU_BAR, headerUiModel.getPrimary());
-            addMenuBar(ID_SECONDARY_MENU_BAR, headerUiModel.getSecondary());
-            addMenuBar(ID_TERTIARY_MENU_BAR, headerUiModel.getTertiary());
+            addMenuBar(ID_PRIMARY_MENU_BAR, navbar.primary());
+            addMenuBar(ID_SECONDARY_MENU_BAR, navbar.secondary());
+            addMenuBar(ID_TERTIARY_MENU_BAR, navbar.tertiary());
         }
     }
 
     private void addMenuBar(
             final String id,
-            final MenuUiModel menuUiModel) {
+            final NavbarSection menuUiModel) {
 
         final MarkupContainer container = this;
-        val menuModel = new ServiceActionsModel(menuUiModel);
-        val menuBarComponent = getComponentFactoryRegistry()
+        var menuModel = new ServiceActionsModel(menuUiModel);
+        var menuBarComponent = getComponentFactoryRegistry()
                 .createComponent(id, UiComponentType.SERVICE_ACTIONS, menuModel);
-        Wkt.cssAppend(menuBarComponent, menuUiModel.getCssClass());
+        Wkt.cssAppend(menuBarComponent, menuUiModel.cssClass());
         container.add(menuBarComponent);
     }
 

@@ -68,12 +68,12 @@ implements
 
     @Override
     public String titlePresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-        return renderTitle(value, Blob::getName);
+        return renderTitle(value, Blob::name);
     }
 
     @Override
     public String htmlPresentation(final ValueSemanticsProvider.Context context, final Blob value) {
-        return renderHtml(value, Blob::getName);
+        return renderHtml(value, Blob::name);
     }
 
     // -- ENCODER DECODER

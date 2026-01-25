@@ -7,7 +7,9 @@
 
 ⭐ New Features
 
-- bringing in some API changes from v4, deprecating API in v2 https://issues.apache.org/jira/browse/CAUSEWAY-3955[CAUSEWAY-3955] 
+- Wicket Viewer: _Action Column_ for tables https://issues.apache.org/jira/browse/CAUSEWAY-3957[CAUSEWAY-3957]  
+- Wicket Viewer: render _Action_ names with `...` suffix, whenever the actions has non-zero arguments.   
+- bringing in some API changes from v4, deprecating API in v2 (`Blob`, `Clob`, `LocalResourcePath`, ...) https://issues.apache.org/jira/browse/CAUSEWAY-3955[CAUSEWAY-3955] 
 - (re-)enables CI test jobs for v2 commits and pull requests
 - cleaning up POMs, e.g. removes release related profiles  
 

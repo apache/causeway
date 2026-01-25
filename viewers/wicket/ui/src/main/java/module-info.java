@@ -22,7 +22,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.components.widgets.select2;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.datatables;
     exports org.apache.causeway.viewer.wicket.ui.components.scalars.blobclob;
-    exports org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
+    exports org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink;
     exports org.apache.causeway.viewer.wicket.ui.util;
     exports org.apache.causeway.viewer.wicket.ui.pages.common.serversentevents.js;
     exports org.apache.causeway.viewer.wicket.ui.pages.mmverror;
@@ -104,7 +104,7 @@ module org.apache.causeway.viewer.wicket.ui {
     exports org.apache.causeway.viewer.wicket.ui.pages.value;
     exports org.apache.causeway.viewer.wicket.ui;
     exports org.apache.causeway.viewer.wicket.ui.errors;
-    exports org.apache.causeway.viewer.wicket.ui.actionresponse;
+    exports org.apache.causeway.viewer.wicket.ui.exec;
     exports org.apache.causeway.viewer.wicket.ui.components.collection.count;
     exports org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
     exports org.apache.causeway.viewer.wicket.ui.components.layout.bs.clearfix;

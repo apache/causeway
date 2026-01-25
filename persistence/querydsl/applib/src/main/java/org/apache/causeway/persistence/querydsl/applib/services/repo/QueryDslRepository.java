@@ -697,12 +697,13 @@ s     * @see #findFirst(Function[], Function[])
                 .fetch();
     }
 
-    private <F> Expression<F>[] unwrapExpressions(Function<Q, Expression<F>>... expressions) {
-        return Arrays.stream(expressions)
-                .map(x -> x.apply(getEntityPath()))
-                .collect(Collectors.toUnmodifiableList())
-                .toArray(new Expression[0]);
-    }
+//not used
+//    private <F> Expression<F>[] unwrapExpressions(Function<Q, Expression<F>>... expressions) {
+//        return Arrays.stream(expressions)
+//                .map(x -> x.apply(getEntityPath()))
+//                .collect(Collectors.toUnmodifiableList())
+//                .toArray(new Expression[0]);
+//    }
 
     private Expression<?>[] unwrapProjections(Function<Q, Expression<?>>... projections) {
         return Arrays.stream(projections)

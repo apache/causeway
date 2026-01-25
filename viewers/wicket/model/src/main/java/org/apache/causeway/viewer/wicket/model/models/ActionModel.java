@@ -18,31 +18,307 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.wicket.model.IModel;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
+import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.interactions.managed.ActionInteraction;
 import org.apache.causeway.core.metamodel.interactions.managed.ActionInteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.action.UiActionForm;
+import org.apache.causeway.viewer.wicket.model.models.interaction.act.ActionInteractionWkt;
+import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
 
-import lombok.val;
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public class ActionModel
+implements UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
+	private static final long serialVersionUID = 1L;
+	
+	private final UiObjectWkt parentEntityModel;
+    private final ActionInteractionWkt delegate;
+    /**
+     * If underlying action, originates from an action-column, it has special page redirect semantics:
+     * <ul>
+     * <li>if action return is void or matches the originating table/collection's element-type, then just RELOAD page</li>
+     * <li>otherwise open action result page in NEW browser tab</li>
+     * </ul>
+     * @since CAUSEWAY-3815
+     */
+    private final ColumnActionModifier columnActionModifier;
 
-public interface ActionModel
-extends UiActionForm, FormExecutorContext, BookmarkableModel, IModel<ManagedObject> {
+
+    /**
+     * If underlying action, originates from an action-column, it has special page redirect semantics:
+     * <ul>
+     * <li>if action return is void or matches the originating table/collection's element-type, then just RELOAD page</li>
+     * <li>otherwise open action result page in NEW browser tab</li>
+     * </ul>
+     * @since CAUSEWAY-3815
+     */
+    public enum ColumnActionModifier {
+        /**
+         * don't interfere with the default action result route
+         */
+        NONE,
+        /**
+         * reload current page, irrespective of the action result
+         */
+        FORCE_STAY_ON_PAGE,
+        /**
+         * open the action result in a new (blank) browser tab or window
+         */
+        FORCE_NEW_BROWSER_WINDOW;
+        public boolean isNone() { return this == NONE; }
+        public boolean isForceStayOnPage() { return this == FORCE_STAY_ON_PAGE; }
+        public boolean isForceNewBrowserWindow() { return this == FORCE_NEW_BROWSER_WINDOW; }
+    }
+
+    // -- FACTORY METHODS
+
+    public static ActionModel forEntity(
+            final UiObjectWkt parentEntityModel,
+            final Identifier actionIdentifier,
+            final Where where,
+            final ColumnActionModifier columnActionModifier,
+            final ScalarPropertyModel associatedWithPropertyIfAny,
+            final ScalarParameterModel associatedWithParameterIfAny,
+            final EntityCollectionModel associatedWithCollectionIfAny) {
+        var delegate = ActionInteractionWkt.forEntity(
+                parentEntityModel,
+                actionIdentifier,
+                where,
+                associatedWithPropertyIfAny,
+                associatedWithParameterIfAny,
+                associatedWithCollectionIfAny);
+        return new ActionModel(parentEntityModel, delegate, columnActionModifier);
+    }
+
+    public static ActionModel forServiceAction(
+            final ObjectAction action,
+            final UiObjectWkt serviceModel) {
+        return forEntity(
+                        serviceModel,
+                        action.getFeatureIdentifier(),
+                        Where.ANYWHERE,
+                        ColumnActionModifier.NONE,
+                        null, null, null);
+    }
+
+    public static ActionModel forEntity(
+            final ObjectAction action,
+            final UiObjectWkt parentEntityModel) {
+        guardAgainstNotBookmarkable(parentEntityModel.getBookmarkedOwner());
+        return ActionModel.forEntity(
+                        parentEntityModel,
+                        action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
+                        ColumnActionModifier.NONE,
+                        null, null, null);
+    }
+
+    public static ActionModel forEntityFromActionColumn(
+            final ObjectAction action,
+            final UiObjectWkt parentEntityModel,
+            final ColumnActionModifier columnActionModifier) {
+        return ActionModel.forEntity(
+                        parentEntityModel,
+                        action.getFeatureIdentifier(),
+                        Where.ALL_TABLES,
+                        columnActionModifier,
+                        null, null, null);
+    }
+
+    public static ActionModel forCollection(
+            final ObjectAction action,
+            final EntityCollectionModelParented collectionModel) {
+        return forEntity(
+                        collectionModel.getEntityModel(),
+                        action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
+                        ColumnActionModifier.NONE,
+                        null, null, collectionModel);
+    }
+
+    public static ActionModel forPropertyOrParameter(
+            final ObjectAction action,
+            final ScalarModel attributeModel) {
+        return attributeModel instanceof ScalarPropertyModel
+                ? forProperty(action, (ScalarPropertyModel)attributeModel)
+                : forParameter(action, (ScalarParameterModel)attributeModel);
+    }
+
+    public static ActionModel forProperty(
+            final ObjectAction action,
+            final ScalarPropertyModel propertyModel) {
+        return forEntity(
+                        propertyModel.getParentUiModel(),
+                        action.getFeatureIdentifier(),
+                        Where.OBJECT_FORMS,
+                        ColumnActionModifier.NONE,
+                        propertyModel, null, null);
+    }
+
+    public static ActionModel forParameter(
+            final ObjectAction action,
+            final ScalarParameterModel parameterModel) {
+        //XXX[CAUSEWAY-3080] only supported, when parameter type is a singular composite value-type
+        var param = parameterModel.getMetaModel();
+        if(param.isSingular()
+                && param.getElementType().isCompositeValue())
+            return ActionModel.forEntity(
+                            parameterModel.getParentUiModel(),
+                            action.getFeatureIdentifier(),
+                            Where.OBJECT_FORMS,
+                            ColumnActionModifier.NONE,
+                            null, parameterModel, null);
+        return null;
+    }
+
+    // -- CONSTRUCTION
+
+    ActionModel(final UiObjectWkt parentEntityModel, final ActionInteractionWkt delegate) {
+        this(parentEntityModel, delegate, ColumnActionModifier.NONE);
+    }
+
+    // --
+
+    @Override
+    public ObjectAction getAction() {
+        return delegate.getMetaModel();
+    }
+
+    @Override
+    public ActionInteraction getActionInteraction() {
+        return delegate.actionInteraction();
+    }
+
+    // -- BOOKMARKABLE
+
+    @Override
+    public PageParameters getPageParametersWithoutUiHints() {
+        return PageParameterUtils
+                .createPageParametersForAction(getParentObject(), getAction(), snapshotArgs());
+    }
+
+    @Override
+    public PageParameters getPageParameters() {
+        return getPageParametersWithoutUiHints();
+    }
+
+    // --
+
+    @Override
+    public BookmarkPolicy getBookmarkPolicy() {
+        return BookmarkPolicy.AS_ROOT;
+    }
+
+    @Override
+    public UiObjectWkt getParentUiModel() {
+        return parentEntityModel;
+    }
+
+    public Can<ManagedObject> snapshotArgs() {
+        return delegate.parameterNegotiationModel().getParamValues();
+    }
+
+    public ManagedObject executeActionAndReturnResult() {
+        var pendingArgs = delegate.parameterNegotiationModel();
+        var result = delegate.actionInteraction().invokeWithRuleChecking(pendingArgs);
+        return result;
+    }
 
     /** Resets arguments to their fixed point default values
      * @see ActionInteractionHead#defaults(org.apache.causeway.core.metamodel.interactions.managed.ManagedAction)
      */
-    void clearArguments();
-
-    ManagedObject executeActionAndReturnResult();
-    Can<ManagedObject> snapshotArgs();
+    public void clearArguments() {
+        delegate.resetParametersToDefault();
+    }
 
     @Override
-    default PromptStyle getPromptStyle() {
-        val promptStyle = getAction().getPromptStyle();
+    public InlinePromptContext getInlinePromptContext() {
+        return delegate.getInlinePromptContext();
+    }
+
+    @Override
+    public Stream<UiParameterWkt> streamPendingParamUiModels() {
+        return delegate.streamParameterUiModels();
+    }
+
+    @Override
+    public Optional<ScalarParameterModel> getAssociatedParameter() {
+        return delegate.associatedWithParameter();
+    }
+
+    public boolean isVisible() {
+        return getVisibilityConsent(delegate.where()).isAllowed();
+    }
+
+    public boolean isEnabled() {
+        return getUsabilityConsent(delegate.where()).isAllowed();
+    }
+
+    @Override
+    public PromptStyle getPromptStyle() {
+        var promptStyle = getAction().getPromptStyle();
         return promptStyle;
+    }
+
+    public static Predicate<ActionModel> isPositionedAt(final Position panel) {
+        return HasManagedAction.isPositionedAt(panel);
+    }
+
+    // -- MODEL CHAINING
+
+    @Override
+    public void setObject(final ManagedObject object) {
+        throw new UnsupportedOperationException("ActionModel is a chained model - don't mess with the chain");
+    }
+
+    @Override
+    public void detach() {
+        // Detach nested object
+        parentEntityModel.detach();
+    }
+
+    @Override
+    public ManagedObject getObject() {
+        return parentEntityModel.getObject();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Model:classname=[");
+        sb.append(getClass().getName()).append(']');
+        sb.append(":nestedModel=[").append(parentEntityModel).append(']');
+        return sb.toString();
+    }
+
+    // -- HELPER
+
+    private static void guardAgainstNotBookmarkable(final ManagedObject objectAdapter) {
+        var isIdentifiable = ManagedObjects.isIdentifiable(objectAdapter);
+        if (!isIdentifiable)
+            throw new IllegalArgumentException(String.format(
+                    "Object '%s' is not identifiable (has no identifier).",
+                    objectAdapter.getTitle()));
     }
 
 }

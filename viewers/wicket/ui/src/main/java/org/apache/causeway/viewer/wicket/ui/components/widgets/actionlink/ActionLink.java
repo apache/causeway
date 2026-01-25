@@ -16,24 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.viewer.wicket.ui.components.widgets.linkandlabel;
+package org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink;
 
-import org.apache.wicket.Application;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.request.cycle.RequestCycle;
+import static org.apache.causeway.commons.internal.base._Casts.castTo;
 
+import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug._Probe.EntryPoint;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.interactions.managed.ManagedAction;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.viewer.commons.model.action.HasManagedAction;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.causeway.viewer.wicket.model.models.ActionPromptWithExtraContent;
@@ -43,12 +41,17 @@ import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegi
 import org.apache.causeway.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.causeway.viewer.wicket.ui.components.layout.bs.BSGridPanel;
 import org.apache.causeway.viewer.wicket.ui.components.scalars.ScalarFragmentFactory.FrameFragment;
+import org.apache.causeway.viewer.wicket.ui.exec.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.pages.entity.EntityPage;
-import org.apache.causeway.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelUtil;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import static org.apache.causeway.commons.internal.base._Casts.castTo;
+import org.apache.wicket.Application;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.request.cycle.RequestCycle;
 
 import lombok.NonNull;
 import lombok.val;
@@ -76,27 +79,32 @@ import lombok.val;
  */
 public final class ActionLink
 extends IndicatingAjaxLink<ManagedObject>
-implements HasMetaModelContext {
+implements HasMetaModelContext, Menuable, HasManagedAction {
 
     private static final long serialVersionUID = 1L;
+    private static final String ID_ACTION_LINK = "actionLink";
 
     public static ActionLink create(
-            final @NonNull String linkId,
-            final @NonNull ActionModel actionModel) {
+            final @NonNull ActionModel actionModel,
+            final Where where) {
 
-        val actionLink = new ActionLink(linkId, actionModel);
+        val actionLink = new ActionLink(ID_ACTION_LINK, actionModel, where);
         return Wkt.cssAppend(actionLink, "noVeil");
     }
 
     private final AjaxIndicatorAppender indicatorAppenderIfAny;
+    private final Where where; // where to render the action, used to check action's usability and visibility
     protected transient MetaModelContext commonContext;
 
     private ActionLink(
             final String id,
-            final ActionModel model) {
+            final ActionModel model,
+            final Where where) {
         super(id, model);
         this.commonContext = model.getMetaModelContext();
 
+        this.where = where;
+        
         final boolean useIndicatorForNoArgAction = getSettings().isUseIndicatorForNoArgAction();
         this.indicatorAppenderIfAny =
                 useIndicatorForNoArgAction
@@ -107,14 +115,24 @@ implements HasMetaModelContext {
             this.add(this.indicatorAppenderIfAny);
         }
     }
-
-    //XXX temporary public
+    
     public ActionModel getActionModel() {
         return (ActionModel) getModel();
     }
 
-    public ObjectAction getObjectAction() {
+    @Override
+    public ManagedAction getManagedAction() {
+        return getActionModel().getManagedAction();
+    }
+
+    @Override
+    public ObjectAction getAction() {
         return getActionModel().getAction();
+    }
+
+    @Deprecated
+    public ObjectAction getObjectAction() {
+        return getAction();
     }
 
     @Override
@@ -131,18 +149,18 @@ implements HasMetaModelContext {
     public String getReasonDisabledIfAny() {
         // no point evaluating if not visible
         return isVisible()
-                ? getActionModel().getUsabilityConsent().getReasonAsString().orElse(null)
+                ? getActionModel().getUsabilityConsent(where).getReasonAsString().orElse(null)
                 : null;
     }
 
     @Override
     public boolean isVisible() {
-        return getActionModel().getVisibilityConsent().isAllowed();
+        return getActionModel().getVisibilityConsent(where).isAllowed();
     }
 
     @Override
     public boolean isEnabled() {
-        return getActionModel().getUsabilityConsent().isAllowed();
+        return getActionModel().getUsabilityConsent(where).isAllowed();
     }
 
     @SuppressWarnings("deprecation")
@@ -179,6 +197,11 @@ implements HasMetaModelContext {
         } else {
             startDialogInline(target);
         }
+    }
+    
+    @Override
+    public Kind menuableKind() {
+        return Kind.LINK;
     }
 
     private void executeWithoutParams() {
@@ -251,7 +274,7 @@ implements HasMetaModelContext {
 
         target.add(scalarTypeContainer);
     }
-
+    
     // -- DEPENDENCIES
 
     private ComponentFactoryRegistry getComponentFactoryRegistry() {

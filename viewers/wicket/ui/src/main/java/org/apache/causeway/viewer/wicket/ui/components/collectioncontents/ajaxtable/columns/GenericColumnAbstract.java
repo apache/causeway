@@ -18,6 +18,19 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
+import org.apache.causeway.applib.services.i18n.TranslationContext;
+import org.apache.causeway.commons.internal.base._StableValue;
+import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
+import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
+import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
+import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -27,19 +40,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-
-import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.tabular.interactive.DataRow;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.models.interaction.coll.DataRowWkt;
-import org.apache.causeway.viewer.wicket.ui.ComponentFactory;
-import org.apache.causeway.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.app.registry.HasComponentFactoryRegistry;
-import org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanel;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-
-import lombok.val;
 
 /**
  * Represents a {@link AbstractColumn} within a
@@ -53,17 +53,24 @@ extends AbstractColumn<DataRow, String>
 implements GenericColumn, HasMetaModelContext {
     private static final long serialVersionUID = 1L;
 
-    private transient ComponentFactoryRegistry componentRegistry;
+    private final Class<?> elementClass;
+    private final _StableValue<ObjectSpecification> elementTypeRef;
+    private final _StableValue<ComponentFactoryRegistry> componentRegistryRef;
 
     protected GenericColumnAbstract(
+            final ObjectSpecification elementType,
             final String columnName) {
-        this(Model.of(columnName), null);
+        this(elementType, Model.of(columnName), null);
     }
 
     protected GenericColumnAbstract(
+            final ObjectSpecification elementType,
             final IModel<String> columnNameModel,
             final String sortColumn) {
         super(columnNameModel, sortColumn);
+        this.elementTypeRef = new _StableValue<>(elementType);
+        this.elementClass = elementType.getCorrespondingClass();
+        this.componentRegistryRef = new _StableValue<>();
     }
 
     @Override
@@ -72,7 +79,9 @@ implements GenericColumn, HasMetaModelContext {
             final String componentId,
             final IModel<DataRow> rowModel) {
         cellItem.add(createCellComponent(componentId, rowModel.getObject(), ((DataRowWkt)rowModel).getDataRowToggle()));
-        if(this instanceof TitleColumn) {
+        if(this instanceof ActionColumn) {
+            Wkt.cssAppend(cellItem, "action-column");
+        } else if(this instanceof TitleColumn) {
             Wkt.cssAppend(cellItem, "title-column");
             if(((TitleColumn)this).isTitleSuppressed()) {
                 // governed via CSS: render icon slightly larger, when title-suppressed e.g. 1.25em vs 0.9em (default)
@@ -87,17 +96,18 @@ implements GenericColumn, HasMetaModelContext {
 
     protected abstract Component createCellComponent(
             final String componentId, final DataRow dataRow, IModel<Boolean> dataRowToggle);
+    
+    public final ObjectSpecification elementType() {
+        return elementTypeRef.orElseSet(()->MetaModelContext.instanceElseFail().specForTypeElseFail(elementClass));
+    }
 
     protected ComponentFactory findComponentFactory(final UiComponentType uiComponentType, final IModel<?> model) {
         return getComponentRegistry().findComponentFactory(uiComponentType, model);
     }
 
     protected ComponentFactoryRegistry getComponentRegistry() {
-        if(componentRegistry==null) {
-            val componentFactoryRegistryAccessor = (HasComponentFactoryRegistry) Application.get();
-            componentRegistry = componentFactoryRegistryAccessor.getComponentFactoryRegistry();
-        }
-        return componentRegistry;
+        return componentRegistryRef.orElseSet(()->
+            ((HasComponentFactoryRegistry) Application.get()).getComponentFactoryRegistry());
     }
 
     protected String translate(final String raw) {

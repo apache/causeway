@@ -18,29 +18,28 @@
  */
 package org.apache.causeway.viewer.wicket.model.models;
 
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarSection;
+import org.apache.wicket.model.IModel;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
  */
-public class ServiceActionsModel extends ModelAbstract<MenuUiModel> {
-
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public final class ServiceActionsModel implements IModel<NavbarSection> {
+	
     private static final long serialVersionUID = 1L;
-
-    private final MenuUiModel menuUiModel;
-
-    /**
-     * @param menuUiModel - may be null in special case of rendering the tertiary menu on the error page.
-     */
-    public ServiceActionsModel(
-            final MenuUiModel menuUiModel) {
-        super();
-        this.menuUiModel = menuUiModel;
-    }
+    
+	/** may be null in special case of rendering the tertiary menu on the error page */
+    private final NavbarSection navBarSection; 
 
     @Override
-    protected MenuUiModel load() {
-        return menuUiModel;
+    public NavbarSection getObject() {
+        return navBarSection;
     }
 
 }

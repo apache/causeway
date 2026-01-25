@@ -317,9 +317,15 @@ implements FacetHolder {
     public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
-
-        return new _AssociationsAsColumns(getMetaModelContext())
+        return new _MembersAsColumns(getMetaModelContext())
             .streamAssociationsForColumnRendering(this, memberIdentifier, parentObject);
+    }
+    
+    @Override
+    public Stream<ObjectAction> streamActionsForColumnRendering(
+            final Identifier memberIdentifier) {
+        return new _MembersAsColumns(getMetaModelContext())
+                .streamActionsForColumnRendering(this, memberIdentifier);
     }
 
     // -- DETERMINE INJECTABILITY

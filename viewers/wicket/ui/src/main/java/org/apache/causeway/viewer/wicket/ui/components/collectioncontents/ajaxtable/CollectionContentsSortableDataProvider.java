@@ -91,12 +91,12 @@ extends SortableDataProvider<DataRow, String> {
         if(sortProperty != null) {
             val objComparator = ManagedObjects.orderingBy(sortProperty, sort.isAscending());
             return dataRows.sorted((a, b)-> {
-                ManagedObject managedObjectA = a.getRowElement();
+                ManagedObject managedObjectA = a.rowElement();
                 if(managedObjectA.getSpecialization().isViewmodel()) {
                     // make sure any referenced entities are made live if currently hollow
                     ManagedObjects.refreshViewmodel(managedObjectA, /*bookmark supplier*/ null);
                 }
-                ManagedObject managedObjectB = b.getRowElement();
+                ManagedObject managedObjectB = b.rowElement();
                 if(managedObjectA.getSpecialization().isViewmodel()) {
                     // make sure any referenced entities are made live if currently hollow
                     ManagedObjects.refreshViewmodel(managedObjectB, /*bookmark supplier*/ null);

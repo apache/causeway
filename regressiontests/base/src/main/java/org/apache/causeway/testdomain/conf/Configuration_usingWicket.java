@@ -102,7 +102,7 @@ public class Configuration_usingWicket {
         public static final String OPEN_SAMPLE_ACTION = "theme:entityPageContainer:entity:rows:1"
                 + ":rowContents:1"
                 + ":col:entityHeaderPanel:entityActions:additionalLinkList:additionalLinkItem:1"
-                + ":additionalLink";
+                + ":actionLink";
 
         public static final String OPEN_SAMPLE_ACTION_TITLE = OPEN_SAMPLE_ACTION
                 + ":additionalLinkTitle";
@@ -117,7 +117,7 @@ public class Configuration_usingWicket {
                 + ":rows:1:rowContents:1"
                 + ":col:fieldSets:1:memberGroup"
                 + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+                + ":additionalLinkList:additionalLinkItem:0:actionLink";
 
         /** strange asymmetry with JDO, to investigate another day */
         public static final String BOOK_DELETE_ACTION_JPA = "theme:entityPageContainer:entity:rows:2"
@@ -125,7 +125,7 @@ public class Configuration_usingWicket {
                 + ":col:rows:1:rowContents:1:col:tabGroups:1:1:rowContents:1"
                 + ":col:fieldSets:1:memberGroup"
                 + ":panelHeading:associatedActionLinksPanel"
-                + ":additionalLinkList:additionalLinkItem:0:additionalLink";
+                + ":additionalLinkList:additionalLinkItem:0:actionLink";
 
         // -- GENERIC STANDALONE COLLECTION
 

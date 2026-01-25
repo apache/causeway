@@ -74,9 +74,9 @@ public class CausewayBlobMapping extends SingleFieldMultiMapping {
     {
         Blob blob = ((Blob)value);
         switch (index) {
-        case 0: return blob.getName();
-        case 1: return blob.getMimeType().getBaseType();
-        case 2: return blob.getBytes();
+        case 0: return blob.name();
+        case 1: return blob.mimeType().getBaseType();
+        case 2: return blob.bytes();
         }
         throw new IndexOutOfBoundsException();
     }
@@ -99,9 +99,9 @@ public class CausewayBlobMapping extends SingleFieldMultiMapping {
                 // ignore
             }
         } else {
-            getColumnMapping(0).setString(preparedStmt, exprIndex[0], blob.getName());
-            getColumnMapping(1).setString(preparedStmt, exprIndex[1], blob.getMimeType().getBaseType());
-            getColumnMapping(2).setObject(preparedStmt, exprIndex[2], blob.getBytes());
+            getColumnMapping(0).setString(preparedStmt, exprIndex[0], blob.name());
+            getColumnMapping(1).setString(preparedStmt, exprIndex[1], blob.mimeType().getBaseType());
+            getColumnMapping(2).setObject(preparedStmt, exprIndex[2], blob.bytes());
         }
     }
 

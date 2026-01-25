@@ -345,12 +345,13 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         return UtilStr.namedArgStr(paramName, argValue);
     }
 
-    private static boolean isSensitiveName(String name) {
-        return name.equalsIgnoreCase("password") ||
-               name.equalsIgnoreCase("secret") ||
-               name.equalsIgnoreCase("apikey") ||
-               name.equalsIgnoreCase("token");
-    }
+//not used    
+//    private static boolean isSensitiveName(String name) {
+//        return name.equalsIgnoreCase("password") ||
+//               name.equalsIgnoreCase("secret") ||
+//               name.equalsIgnoreCase("apikey") ||
+//               name.equalsIgnoreCase("token");
+//    }
 
     private Can<ManagedObject> argAdaptersFor(final ActionDto actionDto) {
         val actionIdentifier = valueMarshaller.actionIdentifier(actionDto);

@@ -55,7 +55,7 @@ public class CausewayClobPanel extends CausewayBlobOrClobPanelAbstract<Clob> {
     @Override
     protected IResource newResource(final Clob clob) {
     	var blob = clob.toBlobUtf8();
-    	return new ByteArrayResource(blob.getMimeType().getBaseType(), blob.getBytes(), blob.getName());
+    	return new ByteArrayResource(blob.mimeType().getBaseType(), blob.bytes(), blob.name());
     	//[CAUSEWAY-3958] has issues with CSV files
         //return new CharSequenceResource(clob.mimeType().getBaseType(), clob.chars(), clob.name());
     }

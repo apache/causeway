@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -38,53 +41,67 @@ import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.util.WhereContexts;
+import org.springframework.lang.NonNull;
 
 import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
 import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
-class _AssociationsAsColumns implements HasMetaModelContext {
+class _MembersAsColumns implements HasMetaModelContext {
 
     @Getter(onMethod_ = {@Override})
     private final MetaModelContext metaModelContext;
 
+    public final Stream<ObjectAction> streamActionsForColumnRendering(
+            final ObjectSpecification elementType,
+            final Identifier memberIdentifier) {
+        if(elementType.isValue()) return Stream.empty();
+
+        return elementType.streamRuntimeActions(MixedIn.INCLUDED)
+            .filter(ObjectAction.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
+            .sorted((a, b)->a.getCanonicalFriendlyName().compareTo(b.getCanonicalFriendlyName()));
+    }
+
+    /**
+     * @param parentObject not used for standalone tables and allowed to be empty for parented ones
+     */
     public final Stream<ObjectAssociation> streamAssociationsForColumnRendering(
             final ObjectSpecification elementType,
             final Identifier memberIdentifier,
             final ManagedObject parentObject) {
 
         // the type that has the properties and collections that make up this table's columns
-        val elementClass = elementType.getCorrespondingClass();
+        var elementClass = elementType.getCorrespondingClass();
 
-        val parentSpecIfAny = parentObject.objSpec();
+        var parentSpecIfAny = parentObject.objSpec();
 
-        val assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
+        var assocById = _Maps.<String, ObjectAssociation>newLinkedHashMap();
 
         elementType.streamAssociations(MixedIn.INCLUDED)
-        .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(memberIdentifier))
-        .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
-        .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
-        .forEach(assoc->assocById.put(assoc.getId(), assoc));
+            .filter(ObjectAssociation.Predicates.visibleAccordingToHiddenFacet(WhereContexts.collectionVariant(memberIdentifier)))
+            .filter(ObjectAssociation.Predicates.referencesParent(parentSpecIfAny).negate())
+            .filter(assoc->filterColumnsUsingSpi(assoc, elementClass)) // optional SPI to filter columns;
+            .forEach(assoc->assocById.put(assoc.getId(), assoc));
 
-        val assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
+        var assocIdsInOrder = _Lists.<String>newArrayList(assocById.keySet());
 
         // sort by order of occurrence within associated layout, if any
         propertyIdComparator(elementType)
-        .ifPresent(assocIdsInOrder::sort);
+            .ifPresent(assocIdsInOrder::sort);
 
         // optional SPI to reorder columns
         sortColumnsUsingSpi(memberIdentifier, parentObject, assocIdsInOrder, elementClass);
 
         // add all ordered columns to the table
         return assocIdsInOrder.stream()
-                .map(assocById::get)
-                .filter(_NullSafe::isPresent);
+            .map(assocById::get)
+            .filter(_NullSafe::isPresent);
     }
 
     // -- HELPER
@@ -93,33 +110,34 @@ class _AssociationsAsColumns implements HasMetaModelContext {
             final ObjectAssociation assoc,
             final Class<?> elementType) {
         return getServiceRegistry()
-                .select(TableColumnVisibilityService.class)
-                .stream()
-                .noneMatch(x -> x.hides(elementType, assoc.getId()));
+            .select(TableColumnVisibilityService.class)
+            .stream()
+            .noneMatch(x -> x.hides(elementType, assoc.getId()));
     }
 
     // comparator based on grid facet, that is by order of occurrence within associated layout
     private Optional<Comparator<String>> propertyIdComparator(
             final @NonNull ObjectSpecification elementTypeSpec) {
 
-        // same code also appears in EntityPage.
+        // same code also appears in DomainObjectPage.
         // we need to do this here otherwise any tables will render the columns in the wrong order until at least
-        // one object of that type has been rendered via EntityPage.
-        val elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
+        // one object of that type has been rendered via DomainObjectPage.
+        var elementTypeGridFacet = elementTypeSpec.getFacet(GridFacet.class);
 
-        if(elementTypeGridFacet == null) {
-            return Optional.empty();
-        }
+        if(elementTypeGridFacet == null) return Optional.empty();
 
         // the facet should always exist, in fact
         // just enough to ask for the metadata.
 
         // don't pass in any object, just need the meta-data
-        val elementTypeGrid = elementTypeGridFacet.getGrid(null);
+        var elementTypeGrid = elementTypeGridFacet.getGrid(null);
+        if(elementTypeGrid ==null) return Optional.empty();
 
         final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
-        elementTypeGrid.getAllPropertiesById().forEach((propertyId, __)->{
-            propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
+        streamPropertyLayoutData((BSGrid)elementTypeGrid)
+            .map(PropertyLayoutData::getId)
+            .forEach(propertyId->{
+                propertyIdOrderWithinGrid.put(propertyId, propertyIdOrderWithinGrid.size());
         });
 
         // if propertyId is mentioned within grid, put into first 'half' ordered by
@@ -131,19 +149,31 @@ class _AssociationsAsColumns implements HasMetaModelContext {
                 propertyIdOrderWithinGrid.getOrDefault(propertyId, Integer.MAX_VALUE))
                 .thenComparing(Comparator.naturalOrder()));
     }
+    
+    private Stream<PropertyLayoutData> streamPropertyLayoutData(BSGrid bsGrid) {
+    	final var properties = new ArrayList<PropertyLayoutData>();
+    	bsGrid.visit(new BSGrid.VisitorAdapter() {
+    		@Override
+    		public void visit(final PropertyLayoutData propertyLayoutData) {
+    			properties.add(propertyLayoutData);
+    		}
+    	});
+    	return properties.stream();
+    }
 
     private void sortColumnsUsingSpi(
             final Identifier memberIdentifier,
+            // not used for standalone tables, and allowed to be empty in parented ones
             final ManagedObject parentObject,
             final List<String> propertyIdsInOrder,
             final Class<?> elementType) {
 
-        val tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
+        var tableColumnOrderServices = getServiceRegistry().select(TableColumnOrderService.class);
         if(tableColumnOrderServices.isEmpty()) {
             return;
         }
 
-        val whereContext = whereContextFor(memberIdentifier);
+        var whereContext = whereContextFor(memberIdentifier);
 
         tableColumnOrderServices.stream()
         .map(tableColumnOrderService->
@@ -152,10 +182,10 @@ class _AssociationsAsColumns implements HasMetaModelContext {
                     elementType,
                     propertyIdsInOrder)
             : tableColumnOrderService.orderParented(
-                        parentObject.getPojo(),
-                        memberIdentifier.memberLogicalName(),
-                        elementType,
-                        propertyIdsInOrder))
+                    parentObject.getPojo(),
+                    memberIdentifier.memberLogicalName(),
+                    elementType,
+                    propertyIdsInOrder))
         .filter(_NullSafe::isPresent)
         .findFirst()
         .filter(propertyReorderedIds->propertyReorderedIds!=propertyIdsInOrder) // skip if its the same object
@@ -171,7 +201,5 @@ class _AssociationsAsColumns implements HasMetaModelContext {
                 ? STANDALONE_TABLES
                 : PARENTED_TABLES;
     }
-
-
 
 }

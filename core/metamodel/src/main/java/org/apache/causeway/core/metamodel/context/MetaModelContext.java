@@ -21,10 +21,10 @@ package org.apache.causeway.core.metamodel.context;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.springframework.lang.Nullable;
-
+import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.springframework.lang.Nullable;
 
 /**
  * @since 2.0
@@ -52,6 +52,14 @@ public abstract class MetaModelContext implements HasMetaModelContext {
                 .orElseThrow(()->_Exceptions.noSuchElement("MetaModelContext not yet or no longer available."));
     }
 
+    // -- UTILITY
+
+    public static TranslationService translationServiceOrFallback() {
+        return instance()
+            .map(MetaModelContext::getTranslationService)
+            .orElseGet(TranslationService::identity);
+    }
+    
     // -- HELPER
 
     protected static final AtomicReference<MetaModelContext> INSTANCE_HOLDER = new AtomicReference<>();

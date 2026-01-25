@@ -20,8 +20,6 @@ package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
-
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 import org.apache.wicket.Application;

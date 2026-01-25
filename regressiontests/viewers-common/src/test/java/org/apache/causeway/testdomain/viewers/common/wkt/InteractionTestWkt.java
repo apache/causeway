@@ -205,6 +205,6 @@ class InteractionTestWkt extends InteractionTestAbstract {
                 .checkUsability();
 
         val disablingUiModel = DisablingDecorationModel.of(actionInteraction).get();
-        assertEquals("Disabled for demonstration.", disablingUiModel.getReason());
+        assertEquals("Disabled for demonstration.", disablingUiModel.reason());
     }
 }

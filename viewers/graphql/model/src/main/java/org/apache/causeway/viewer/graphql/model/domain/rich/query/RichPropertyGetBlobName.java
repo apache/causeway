@@ -35,7 +35,7 @@ public class RichPropertyGetBlobName extends RichPropertyGetBlobAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        return fetchDataFromBlob(environment, Blob::getName);
+        return fetchDataFromBlob(environment, Blob::name);
     }
 
 }

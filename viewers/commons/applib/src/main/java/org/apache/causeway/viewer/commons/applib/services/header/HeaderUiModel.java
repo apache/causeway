@@ -19,20 +19,20 @@
 package org.apache.causeway.viewer.commons.applib.services.header;
 
 import org.apache.causeway.viewer.commons.applib.services.branding.BrandingUiModel;
-import org.apache.causeway.viewer.commons.applib.services.menu.MenuUiModel;
+import org.apache.causeway.viewer.commons.applib.services.menu.model.NavbarUiModel;
 import org.apache.causeway.viewer.commons.applib.services.userprof.UserProfileUiModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
-@Getter
-@AllArgsConstructor(staticName = "of")
-public class HeaderUiModel {
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public final class HeaderUiModel {
 
     private final BrandingUiModel branding;
     private final UserProfileUiModel userProfile;
-    private final MenuUiModel primary;
-    private final MenuUiModel secondary;
-    private final MenuUiModel tertiary;
+    private final NavbarUiModel navbar;
 
 }
+

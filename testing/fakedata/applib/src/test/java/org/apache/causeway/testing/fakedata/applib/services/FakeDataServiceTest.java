@@ -91,10 +91,10 @@ public class FakeDataServiceTest {
             final Blob blob = causewayBlobs.any();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).isNotNull();
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType()).isNotNull();
+            assertThat(blob.name()).isNotNull();
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType()).isNotNull();
         }
 
         @Test
@@ -103,10 +103,10 @@ public class FakeDataServiceTest {
             final Blob blob = causewayBlobs.anyJpg();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).endsWith(".jpg");
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType().toString()).isEqualTo("image/jpeg");
+            assertThat(blob.name()).endsWith(".jpg");
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType().toString()).isEqualTo("image/jpeg");
         }
 
 
@@ -116,10 +116,10 @@ public class FakeDataServiceTest {
             final Blob blob = causewayBlobs.anyPdf();
 
             assertThat(blob).isNotNull();
-            assertThat(blob.getName()).endsWith(".pdf");
-            assertThat(blob.getBytes()).isNotNull();
-            assertThat(blob.getBytes().length).isGreaterThan(0);
-            assertThat(blob.getMimeType().toString()).isEqualTo("application/pdf");
+            assertThat(blob.name()).endsWith(".pdf");
+            assertThat(blob.bytes()).isNotNull();
+            assertThat(blob.bytes().length).isGreaterThan(0);
+            assertThat(blob.mimeType().toString()).isEqualTo("application/pdf");
         }
 
     }
@@ -140,10 +140,10 @@ public class FakeDataServiceTest {
             final Clob clob = causewayClobs.any();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).isNotNull();
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType()).isNotNull();
+            assertThat(clob.name()).isNotNull();
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType()).isNotNull();
         }
 
         @Test
@@ -152,10 +152,10 @@ public class FakeDataServiceTest {
             final Clob clob = causewayClobs.anyRtf();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).endsWith(".rtf");
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType().toString()).isEqualTo("application/rtf");
+            assertThat(clob.name()).endsWith(".rtf");
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType().toString()).isEqualTo("application/rtf");
         }
 
 
@@ -165,10 +165,10 @@ public class FakeDataServiceTest {
             final Clob clob = causewayClobs.anyXml();
 
             assertThat(clob).isNotNull();
-            assertThat(clob.getName()).endsWith(".xml");
-            assertThat(clob.getChars()).isNotNull();
-            assertThat(clob.getChars().length()).isGreaterThan(0);
-            assertThat(clob.getMimeType().toString()).isEqualTo("text/xml");
+            assertThat(clob.name()).endsWith(".xml");
+            assertThat(clob.chars()).isNotNull();
+            assertThat(clob.chars().length()).isGreaterThan(0);
+            assertThat(clob.mimeType().toString()).isEqualTo("text/xml");
         }
 
     }

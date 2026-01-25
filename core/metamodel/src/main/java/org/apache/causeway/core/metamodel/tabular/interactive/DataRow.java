@@ -32,11 +32,12 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.experimental.Accessors;
 
 public class DataRow {
 
     @Getter private final UUID uuid = UUID.randomUUID(); // in support of client side sorting
-    private final ManagedObject rowElement;
+    @Getter @Accessors(fluent = true) private final ManagedObject rowElement;
     @Getter private final BooleanBindable selectToggle;
     @Getter private final DataTableInteractive parentTable;
 
@@ -60,11 +61,7 @@ public class DataRow {
         });
 
     }
-
-    public ManagedObject getRowElement() {
-        return rowElement;
-    }
-
+    
     public Optional<DataColumn> lookupColumnById(final @NonNull String columnId) {
         return parentTable.getDataColumns().getValue().stream()
                 .filter(dataColumn->dataColumn.getColumnId().equals(columnId))
@@ -79,12 +76,12 @@ public class DataRow {
         return assoc.getSpecialization().fold(
                 property-> Can.of(
                         // similar to ManagedProperty#reassessPropertyValue
-                        property.isVisible(getRowElement(), InteractionInitiatedBy.PASS_THROUGH, Where.ALL_TABLES).isAllowed()
-                                ? property.get(getRowElement(), InteractionInitiatedBy.PASS_THROUGH)
+                        property.isVisible(rowElement(), InteractionInitiatedBy.PASS_THROUGH, Where.ALL_TABLES).isAllowed()
+                                ? property.get(rowElement(), InteractionInitiatedBy.PASS_THROUGH)
                                 : ManagedObject.empty(property.getElementType())),
                 collection-> ManagedObjects.unpack(
-                        collection.isVisible(getRowElement(), InteractionInitiatedBy.PASS_THROUGH, Where.ALL_TABLES).isAllowed()
-                                ? collection.get(getRowElement(), InteractionInitiatedBy.PASS_THROUGH)
+                        collection.isVisible(rowElement(), InteractionInitiatedBy.PASS_THROUGH, Where.ALL_TABLES).isAllowed()
+                                ? collection.get(rowElement(), InteractionInitiatedBy.PASS_THROUGH)
                                 : null
                 ));
     }

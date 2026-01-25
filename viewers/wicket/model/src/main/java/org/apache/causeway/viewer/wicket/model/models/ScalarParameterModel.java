@@ -28,8 +28,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.viewer.commons.model.scalar.HasUiParameter;
 import org.apache.causeway.viewer.wicket.model.models.interaction.act.UiParameterWkt;
 
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-
 import lombok.Getter;
 import lombok.NonNull;
 

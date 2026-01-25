@@ -35,7 +35,7 @@ public class SimplePropertyLobMimeType extends SimplePropertyLobAbstract {
 
     @Override
     protected Object fetchData(DataFetchingEnvironment environment) {
-        return fetchDataFromBlob(environment, blob -> blob.getMimeType().toString());
+        return fetchDataFromBlob(environment, blob -> blob.mimeType().toString());
     }
 
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.menuable;
 
+import java.util.stream.Stream;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.viewer.wicket.model.links.Menuable;
 import org.apache.causeway.viewer.wicket.model.links.MenuablesModel;
@@ -37,6 +39,12 @@ extends PanelAbstract<Can<? extends Menuable>, MenuablesModel> {
 
     public final MenuablesModel menuablesModel() {
         return getModel();
+    }
+    
+    protected final <T extends Menuable> Stream<T> streamMenuables(final Class<T> linkType) {
+        return getModelObject().stream()
+                .filter(linkType::isInstance)
+                .map(linkType::cast);
     }
 
 }

@@ -18,25 +18,23 @@ package org.apache.causeway.viewer.wicket.ui.components.actionmenu.serviceaction
 
 import java.util.List;
 
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionDecorationModel;
+import org.apache.causeway.viewer.commons.model.decorators.ActionDecorators.ActionStyle;
+import org.apache.causeway.viewer.wicket.model.links.Menuable;
+import org.apache.causeway.viewer.wicket.ui.components.widgets.actionlink.ActionLink;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
+import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
+import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.Model;
-
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.causeway.viewer.wicket.model.links.Menuable;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
-import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
-import org.apache.causeway.viewer.wicket.ui.util.WktDecorators;
-import org.apache.causeway.viewer.wicket.ui.util.WktTooltips;
+import org.springframework.lang.Nullable;
 
 import lombok.Getter;
-import lombok.Setter;
-import lombok.val;
 import lombok.experimental.Accessors;
 
 class CssMenuItem
@@ -47,8 +45,8 @@ implements Menuable {
     private static final String ID_MENU_LABEL = "menuLabel";
     private static final String ID_SUB_MENU_ITEMS = "subMenuItems";
 
-    public static CssMenuItem newMenuItemWithLink(final String name) {
-        return new CssMenuItem(name, Menuable.Kind.LINK);
+    public static CssMenuItem newMenuItemWithLink(final String name, final ActionLink actionLink) {
+        return new CssMenuItem(name, Menuable.Kind.LINK, actionLink);
     }
 
     public static CssMenuItem newMenuItemWithSubmenu(final String name) {
@@ -66,27 +64,32 @@ implements Menuable {
     }
 
     @Getter private final String name;
-
-    @Getter @Setter private LinkAndLabel linkAndLabel;
+    /**
+     * only available for kind LINK, otherwise null
+     */
+    private final ActionLink actionLink;
+    public ActionLink actionLinkElseFail() {
+        if(actionLink==null) throw new NullPointerException("this menu item has no action link");
+        return actionLink;
+    }
 
     private CssMenuItem(final String name, final Menuable.Kind menuableKind) {
+        this(name, menuableKind, null);
+    }
+
+    private CssMenuItem(final String name, final Menuable.Kind menuableKind,
+            final @Nullable ActionLink actionLink) {
         this.name = name;
         this.menuableKind = menuableKind;
+        this.actionLink = actionLink;
     }
 
     private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
-    protected void addSubMenuItem(final CssMenuItem cssMenuItem) {
+    protected final void addSubMenuItem(final CssMenuItem cssMenuItem) {
         subMenuItems.add(cssMenuItem);
     }
     public Can<CssMenuItem> getSubMenuItems() {
         return Can.ofCollection(subMenuItems);
-    }
-    /**
-     * @param menuItems we assume these have the correct parent already set
-     */
-    public void replaceSubMenuItems(final List<CssMenuItem> menuItems) {
-        subMenuItems.clear();
-        subMenuItems.addAll(menuItems);
     }
     public boolean hasSubMenuItems() {
         return subMenuItems.size() > 0;
@@ -106,41 +109,16 @@ implements Menuable {
 
     private Component addMenuItemComponentTo(final MarkupContainer markupContainer) {
 
-        val linkAndLabel = getLinkAndLabel();
-        val actionMeta = getLinkAndLabel().getManagedAction().getAction();
-        val actionLink = getLinkAndLabel().getUiComponent();
+        var label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
 
-        val label = Wkt.labelAdd(markupContainer, CssMenuItem.ID_MENU_LABEL, this::getName);
-
-        if (actionLink != null) {
+        if (actionLink!=null) {
 
             // show link...
             markupContainer.add(actionLink);
-            actionLink.add(label);
 
-            linkAndLabel
-            .getDescription()
-            .ifPresent(describedAs->WktTooltips.addTooltip(actionLink, describedAs));
-
-            if (ObjectAction.Util.returnsBlobOrClob(actionMeta)) {
-                Wkt.cssAppend(actionLink, "noVeil");           }
-            if (actionMeta.isPrototype()) {
-                Wkt.cssAppend(actionLink, "prototype");
-            }
-
-            linkAndLabel
-            .getAdditionalCssClass()
-            .ifPresent(cssClass->Wkt.cssAppend(actionLink, cssClass));
-
-            Wkt.cssAppend(actionLink, linkAndLabel.getFeatureIdentifier());
-
-            val faLayers = getLinkAndLabel().lookupFontAwesomeLayers(true);
-            WktDecorators.getIcon().decorate(label, faLayers);
-
-            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                WktDecorators.getDisable().decorate(actionLink, disableUiModel);
-            });
-
+            WktDecorators.decorateMenuAction(
+                    actionLink, actionLink, label,
+                    ActionDecorationModel.of(actionLinkElseFail(), ActionStyle.MENU_ITEM));
 
             // .. and hide label
             WktComponents.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
@@ -148,22 +126,13 @@ implements Menuable {
         } else {
             // hide link...
             WktComponents.permanentlyHide(markupContainer, ID_MENU_LINK);
-            // ... and show label, along with disabled reason
-
-            linkAndLabel.getDisableUiModel().ifPresent(disableUiModel->{
-                WktTooltips.addTooltip(label, disableUiModel.getReason());
-            });
-
             label.add(new AttributeModifier("class", Model.of("disabled")));
-
-            markupContainer.add(label);
-
             return label;
         }
     }
 
     private void addSubMenuItemComponentsIfAnyTo(final MarkupContainer menuItemMarkup) {
-        val subMenuItems = getSubMenuItems();
+        var subMenuItems = getSubMenuItems();
         if (subMenuItems.isEmpty()) {
             WktComponents.permanentlyHide(menuItemMarkup, CssMenuItem.ID_SUB_MENU_ITEMS);
         } else {
