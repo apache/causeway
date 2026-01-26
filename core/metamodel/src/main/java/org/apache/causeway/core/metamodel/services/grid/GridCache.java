@@ -24,6 +24,7 @@ import java.util.function.Function;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.collections._Maps.ConcurrentMapWrapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,56 +50,6 @@ record GridCache(
 
     public Try<BSGrid> computeIfAbsent(final LayoutKey layoutKey, final Function<LayoutKey, Try<BSGrid>> factory) {
         return gridsByKey.computeIfAbsent(layoutKey, factory);
-    }
-
-    /* when using ConcurrentHashMap directly we may see
-    java.lang.IllegalStateException: Recursive update
-    at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1779)
-    at org.apache.causeway.core.metamodel.services.grid.GridCache.computeIfAbsent(GridCache.java:52)
-    at org.apache.causeway.core.metamodel.services.grid.GridServiceDefault.load(GridServiceDefault.java:95)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.load(BSGridFacet.java:117)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.lambda$normalized$0(BSGridFacet.java:86)
-    at java.base/java.util.concurrent.ConcurrentHashMap.compute(ConcurrentHashMap.java:1932)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.normalized(BSGridFacet.java:82)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.getGrid(BSGridFacet.java:68)
-    at org.apache.causeway.core.metamodel.util.Facets.lambda$gridPreload$0(Facets.java:204)
-    at java.base/java.util.Optional.ifPresent(Optional.java:178)
-    at org.apache.causeway.core.metamodel.util.Facets.gridPreload(Facets.java:200)
-    at org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.introspectFully(ObjectSpecificationDefault.java:640)
-    at org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.introspectUpTo(ObjectSpecificationDefault.java:615)
-    at org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationDefault.streamDeclaredAssociations(ObjectSpecificationDefault.java:1000)
-    at org.apache.causeway.core.metamodel.spec.impl.ObjectMemberContainer.streamAssociations(ObjectMemberContainer.java:127)
-    at org.apache.causeway.core.metamodel.spec.impl.ObjectMemberContainer.streamAssociations(ObjectMemberContainer.java:128)
-    at org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer.streamProperties(ObjectAssociationContainer.java:118)
-    at org.apache.causeway.core.metamodel.services.grid.ObjectMemberResolverForGrid.validateAndNormalize(ObjectMemberResolverForGrid.java:148)
-    at org.apache.causeway.core.metamodel.services.grid.ObjectMemberResolverForGrid.resolve(ObjectMemberResolverForGrid.java:115)
-    at org.apache.causeway.core.metamodel.services.grid.GridServiceDefault.lambda$tryLoadNoCache$7(GridServiceDefault.java:110)
-    at java.base/java.util.Optional.orElseGet(Optional.java:364)
-    at org.apache.causeway.core.metamodel.services.grid.GridServiceDefault.lambda$tryLoadNoCache$6(GridServiceDefault.java:110)
-    at org.springframework.util.function.ThrowingFunction.apply(ThrowingFunction.java:63)
-    at org.springframework.util.function.ThrowingFunction.apply(ThrowingFunction.java:51)
-    ..
-    at org.apache.causeway.core.metamodel.services.grid.GridServiceDefault.tryLoadNoCache(GridServiceDefault.java:110)
-    at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1724)
-    at org.apache.causeway.core.metamodel.services.grid.GridCache.computeIfAbsent(GridCache.java:52)
-    at org.apache.causeway.core.metamodel.services.grid.GridServiceDefault.load(GridServiceDefault.java:95)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.load(BSGridFacet.java:117)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.lambda$normalized$0(BSGridFacet.java:86)
-    at java.base/java.util.concurrent.ConcurrentHashMap.compute(ConcurrentHashMap.java:1932)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.normalized(BSGridFacet.java:82)
-    at org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.getGrid(BSGridFacet.java:68)
-    ..
-    at org.apache.causeway.core.metamodel.util.Facets.gridPreload(Facets.java:200)*/
-    record ConcurrentMapWrapper<K, V>(ConcurrentHashMap<K, V> map) {
-        public V computeIfAbsent(final K key, final java.util.function.Function<? super K, ? extends V> mappingFunction) {
-            var value = map.get(key);
-            if(value!=null)
-                return value;
-
-            var newValue = mappingFunction.apply(key);
-            map.put(key, newValue);
-            return newValue;
-        }
     }
 
 }

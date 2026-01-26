@@ -69,7 +69,7 @@ class DataTableSerializationTest implements HasMetaModelContext {
     @ParameterizedTest
     @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
     void roundtripOnEmptyTable(final Class<? extends ViewModel> viewmodelClass) {
-        var original = DataTable.forDomainType(viewmodelClass); //FIXME may throw IllegalState Recursive update
+        var original = DataTable.forDomainType(viewmodelClass);
         var afterRoundtrip = _SerializationTester.roundtrip(original);
 
         assertNotNull(afterRoundtrip);
@@ -84,7 +84,7 @@ class DataTableSerializationTest implements HasMetaModelContext {
     @ParameterizedTest
     @ValueSource(classes = {CustomerClass.class, CustomerRecord.class})
     void roundtripOnPopulatedTable(final Class<? extends ViewModel> viewmodelClass) {
-        var original = DataTable.forDomainType(viewmodelClass) //FIXME may throw IllegalState Recursive update
+        var original = DataTable.forDomainType(viewmodelClass)
             .withDataElementPojos(Can.of("cus-1", "cus-2")
                 .map(name->newInstance(viewmodelClass, name))
                 .map(getObjectManager()::adapt));

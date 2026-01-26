@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -120,9 +121,8 @@ public final class _Maps {
 
     @SafeVarargs
     public static <K, V> Map<K, V> unmodifiableEntries(final Map.@NonNull Entry<? extends K,? extends V>... entries) {
-        if(entries.length==0) {
+        if(entries.length==0)
             return Collections.emptyMap();
-        }
 
         final LinkedHashMap<K, V> mapPreservingOrder = newLinkedHashMap();
 
@@ -133,7 +133,7 @@ public final class _Maps {
     }
 
     public static <K, V> Map.Entry<K, V> entry(final K k, final V v){
-        return new AbstractMap.SimpleEntry<K, V>(k, v);
+        return new AbstractMap.SimpleEntry<>(k, v);
     }
 
     // -- TO STRING
@@ -182,9 +182,8 @@ public final class _Maps {
         var resultMap = mapFactory.get();
 
         if(input==null
-                || input.isEmpty()) {
+                || input.isEmpty())
             return resultMap;
-        }
 
         input.forEach((k, v)->resultMap.put(k, valueMapper.apply(v)));
         return resultMap;
@@ -197,9 +196,8 @@ public final class _Maps {
 
         final Map<K, V> result = factory.get();
 
-        if(input==null) {
+        if(input==null)
             return result;
-        }
 
         input.forEach((k, v)->{
             if(keyFilter.test(k)) {
@@ -212,9 +210,8 @@ public final class _Maps {
 
     public static <K, V> ListMultimap<V, K> invertToListMultimap(final Map<K, V> input) {
         final ListMultimap<V, K> result = _Multimaps.newListMultimap();
-        if(input==null) {
+        if(input==null)
             return result;
-        }
         input.forEach((k, v)->result.putElement(v, k));
         return result;
     }
@@ -224,29 +221,29 @@ public final class _Maps {
     // -- HASH MAP
 
     public static <K, V> HashMap<K, V> newHashMap() {
-        return new HashMap<K, V>();
+        return new HashMap<>();
     }
 
     // -- LINKED HASH MAP
 
     public static <K, V> LinkedHashMap<K, V> newLinkedHashMap() {
-        return new LinkedHashMap<K, V>();
+        return new LinkedHashMap<>();
     }
 
     // -- CONCURRENT HASH MAP
 
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-        return new ConcurrentHashMap<K, V>();
+        return new ConcurrentHashMap<>();
     }
 
     // -- TREE MAP
 
     public static <K, V> TreeMap<K, V> newTreeMap() {
-        return new TreeMap<K, V>();
+        return new TreeMap<>();
     }
 
     public static <K, V> TreeMap<K, V> newTreeMap(final Comparator<? super K> comparator) {
-        return new TreeMap<K, V>(comparator);
+        return new TreeMap<>(comparator);
     }
 
     // -- ALIAS MAP
@@ -259,7 +256,7 @@ public final class _Maps {
     public static <K, V> AliasMap<K, V> newAliasMap(
             final @NonNull Supplier<Map<K, V>> mapFactory){
 
-        return new AliasMap<K, V>() {
+        return new AliasMap<>() {
 
             final Map<K, V> delegate = mapFactory.get();
 
@@ -278,7 +275,7 @@ public final class _Maps {
             @Override
             public void putAll(final Map<? extends K, ? extends V> other) {
                 if(!_NullSafe.isEmpty(other)) {
-                    other.forEach((k, v)->this.put(k, v));
+                    other.forEach(this::put);
                 }
             }
 
@@ -303,9 +300,8 @@ public final class _Maps {
             @Override
             public V get(final Object keyOrAliasKey) {
                 var v = delegate.get(keyOrAliasKey);
-                if(v!=null) {
+                if(v!=null)
                     return v;
-                }
                 return getByAliasKey(keyOrAliasKey);
             }
 
@@ -331,21 +327,18 @@ public final class _Maps {
                     for(var aliasKey : aliasKeys) {
 
                         var existingKeyPair = pairByAliasKey.put(aliasKey, keyPair);
-                        if(existingKeyPair!=null && !remap) {
-
+                        if(existingKeyPair!=null && !remap)
                             throw _Exceptions.illegalArgument(
                                     "alias key collision on alias %s: existing-key=%s, new-key=%s",
                                     aliasKey, existingKeyPair.key, keyPair.key);
-                        }
                     }
                 }
             }
 
             private V getByAliasKey(final Object aliasKey) {
                 var keyPair = pairByAliasKey.get(aliasKey);
-                if(keyPair!=null) {
+                if(keyPair!=null)
                     return delegate.get(keyPair.key());
-                }
                 return null;
             }
 
@@ -370,6 +363,41 @@ public final class _Maps {
         };
     }
 
-    // --
+    // -- UTILITY
+
+    /**
+     * Provides a workaround when {@link ConcurrentHashMap#computeIfAbsent(Object, Function)}, is not applicable due
+     * to recursive update attempts, which are not allowed.
+     *
+     * <p>Applicable when the mapping-function is a {@literal pure} function.
+     */
+    public record ConcurrentMapWrapper<K, V>(ConcurrentHashMap<K, V> map) {
+
+        public ConcurrentMapWrapper() {
+            this(new ConcurrentHashMap<>());
+        }
+
+        /**
+         * Applicable when the mappingFunction is a {@literal pure} function. Particularly useful in caching scenarios,
+         * where the mappingFunction potentially modifies the {@link ConcurrentHashMap} of this wrapper.
+         *
+         * @implNote Implementation is same as the default implementation from the {@link Map} interface. But,
+         *      {@link ConcurrentHashMap} overrides this default, in order to detect when the mappingFunction
+         *      attempts a recursive update, then throws an {@link IllegalStateException}.
+         */
+        public V computeIfAbsent(final K key, final java.util.function.Function<? super K, ? extends V> mappingFunction) {
+            Objects.requireNonNull(mappingFunction);
+
+            var value = map.get(key);
+            if(value!=null)
+                return value;
+
+            var newValue = mappingFunction.apply(key);
+            if(newValue!=null) {
+                map.put(key, newValue);
+            }
+            return newValue;
+        }
+    }
 
 }
