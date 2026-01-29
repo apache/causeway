@@ -26,6 +26,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.inject.Named;
+
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.Editing;
@@ -46,6 +48,19 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 /**
  * @since 2.0 {@index}
  */
+@Named(ApplicationRole.LOGICAL_TYPE_NAME) // required for permission mapping
+/* not allowed on interfaces ...
+@DomainObject(
+        autoCompleteRepository = ApplicationRoleRepository.class,
+        autoCompleteMethod = "findMatching"
+        )
+@DomainObjectLayout(
+        titleUiEvent = ApplicationRole.TitleUiEvent.class,
+        iconUiEvent = ApplicationRole.IconUiEvent.class,
+        cssClassUiEvent = ApplicationRole.CssClassUiEvent.class,
+        layoutUiEvent = ApplicationRole.LayoutUiEvent.class
+)
+*/
 public interface ApplicationRole extends Comparable<ApplicationRole> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
