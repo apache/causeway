@@ -100,11 +100,13 @@ import lombok.experimental.Accessors;
 @Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT,
+        titleUiEvent = ApplicationUser.TitleUiEvent.class,
+        iconUiEvent = ApplicationUser.IconUiEvent.class,
+        cssClassUiEvent = ApplicationUser.CssClassUiEvent.class,
+        layoutUiEvent = ApplicationUser.LayoutUiEvent.class)
 public class ApplicationUser
     implements org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser {
 
