@@ -32,6 +32,7 @@ import org.apache.causeway.applib.services.metamodel.BeanSort;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
+import org.apache.causeway.core.metamodel.spec.IntrospectionTrigger;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -47,7 +48,10 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
      * @return {@code null} if {@code domainType==null}, or if the type should be ignored.
      */
     @Nullable
-    ObjectSpecification loadSpecification(@Nullable Class<?> domainType, @NonNull IntrospectionRequest request);
+    ObjectSpecification loadSpecification(
+    		@Nullable Class<?> domainType, 
+    		@NonNull IntrospectionRequest request,
+    		@NonNull IntrospectionTrigger introspectionTrigger);
 
     // -- SUPPORT FOR LOOKUP BY LOGICAL TYPE NAME
 
@@ -59,14 +63,15 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     @Nullable
     default ObjectSpecification loadSpecification(
             final @Nullable String logicalTypeName,
-            final @NonNull IntrospectionRequest request) {
+            final @NonNull IntrospectionRequest request,
+            final @NonNull IntrospectionTrigger introspectionTrigger) {
 
         if(_Strings.isNullOrEmpty(logicalTypeName)) {
             return null;
         }
         return lookupLogicalType(logicalTypeName)
             .map(logicalType->
-                    loadSpecification(logicalType.correspondingClass(), request))
+                    loadSpecification(logicalType.correspondingClass(), request, introspectionTrigger))
             .orElse(null);
     }
 
@@ -76,7 +81,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     default Optional<ObjectSpecification> specForLogicalTypeName(
             final @Nullable String logicalTypeName) {
         return Optional.ofNullable(
-                loadSpecification(logicalTypeName, IntrospectionRequest.FULL));
+                loadSpecification(logicalTypeName, IntrospectionRequest.FULL, IntrospectionTrigger.dummy()));
     }
 
     @Override
@@ -91,7 +96,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     default Optional<ObjectSpecification> specForType(
             final @Nullable Class<?> domainType) {
         return Optional.ofNullable(
-                loadSpecification(domainType, IntrospectionRequest.FULL));
+                loadSpecification(domainType, IntrospectionRequest.FULL, IntrospectionTrigger.dummy()));
     }
 
     @Override
@@ -145,13 +150,13 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     @Override
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY);
+        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger.dummy());
     }
 
     @Override
     default Optional<BeanSort> lookupBeanSort(final @Nullable LogicalType logicalType) {
         if(logicalType==null) return Optional.empty();
-        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER);
+        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER, IntrospectionTrigger.dummy());
         return spec != null
                 ? Optional.of(spec.getBeanSort())
                 : Optional.empty();

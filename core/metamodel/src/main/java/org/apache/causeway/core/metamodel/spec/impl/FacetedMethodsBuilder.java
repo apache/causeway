@@ -54,6 +54,7 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.causeway.core.metamodel.spec.IntrospectionTrigger;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
@@ -195,7 +196,7 @@ implements
         // Ensure all return types are known
         TypeExtractor.streamMethodReturn(associationCandidateMethods)
             .filter(typeToLoad->typeToLoad!=introspectedClass)
-            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY));
+            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger.dummy()));
 
         // now create FacetedMethods for collections and for properties
         var associationFacetedMethods = new ArrayList<FacetedMethod>();
@@ -376,7 +377,7 @@ implements
 
         // ensure we can load returned element type; otherwise ignore method
         var anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
-        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY))
+        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger.dummy()))
         .anyMatch(Objects::isNull);
         if (anyLoadedAsNull) {
             return false;

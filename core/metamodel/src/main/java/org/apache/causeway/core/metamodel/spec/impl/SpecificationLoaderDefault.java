@@ -78,6 +78,7 @@ import org.apache.causeway.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutor.Substitution;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.causeway.core.metamodel.spec.IntrospectionTrigger;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
@@ -265,25 +266,25 @@ implements
             .concat(
                 valueTypesFromProviders.stream(),
                 causewayBeanTypeRegistry.streamScannedTypes())
-            // prime (up to NOT_INTROSPECTED)
-            .map(this::primeSpecification)
+            // register only (no type-hierarchy nor member introspection)
+            .map(it->this.registerSpecification(it, IntrospectionTrigger.beanCandidate()))
             .forEach(specs::collect);
 
-        introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY);
-        introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL);
-        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL);
-        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL);
+        introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger.dummy());
+        introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
-                specs.entitySpecs(), IntrospectionRequest.FULL);
-        introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionRequest.FULL);
+                specs.entitySpecs(), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+        introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 
         if(isFullIntrospect()) {
             var snapshot = snapshotSpecifications();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionRequest.FULL);
-            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionRequest.FULL);
+            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
         }
 
         log.info(" - running remaining validators");
@@ -355,7 +356,7 @@ implements
     @Override
     public void reloadSpecification(final Class<?> domainType) {
         invalidateCache(domainType);
-        loadSpecification(domainType, IntrospectionRequest.FULL);
+        loadSpecification(domainType, IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
     }
 
     @Override
@@ -381,8 +382,9 @@ implements
     @Override
     public ObjectSpecification loadSpecification(
             final @Nullable Class<?> type,
-            final @NonNull IntrospectionRequest request) {
-        return loadSpecificationNullable(type, this::classify, request);
+            final @NonNull IntrospectionRequest request,
+            final @NonNull IntrospectionTrigger introspectionTrigger) {
+        return loadSpecificationNullable(type, this::classify, request, introspectionTrigger);
     }
 
     @Override
@@ -549,10 +551,11 @@ implements
     }
 
     @Nullable
-    private ObjectSpecificationMutable primeSpecification(
-            final @NonNull CausewayBeanMetaData typeMeta) {
+    private ObjectSpecificationMutable registerSpecification(
+            final @NonNull CausewayBeanMetaData typeMeta,
+            final @NonNull IntrospectionTrigger introspectionTrigger) {
         return loadSpecificationNullable(
-                typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionRequest.REGISTER);
+                typeMeta.getCorrespondingClass(), type->typeMeta, IntrospectionRequest.REGISTER, introspectionTrigger);
 
     }
 
@@ -560,7 +563,8 @@ implements
     private ObjectSpecificationMutable loadSpecificationNullable(
             final @Nullable Class<?> type,
             final @NonNull Function<Class<?>, CausewayBeanMetaData> beanClassifier,
-            final @NonNull IntrospectionRequest request) {
+            final @NonNull IntrospectionRequest request, 
+            final @NonNull IntrospectionTrigger introspectionTrigger) {
 
         if(type==null) return null;
 
@@ -572,9 +576,9 @@ implements
         var spec = cache.computeIfAbsent(substitutedType, _spec->
             logicalTypeResolver
                 .register(
-                        createSpecification(beanClassifier.apply(substitutedType))));
+                        createSpecification(beanClassifier.apply(substitutedType), introspectionTrigger)));
 
-        spec.introspect(request);
+        spec.introspect(request, introspectionTrigger);
 
         if(spec.getAliases().isNotEmpty()
             // this bool. expr. is an optimization, not strictly required ... a bit of hack though
@@ -597,32 +601,35 @@ implements
 
     /**
      * Creates the appropriate type of {@link ObjectSpecification}.
+     * @param introspectionTrigger 
      */
-    private ObjectSpecificationMutable createSpecification(final CausewayBeanMetaData typeMeta) {
+    private ObjectSpecificationMutable createSpecification(
+    		final CausewayBeanMetaData typeMeta, 
+    		final IntrospectionTrigger introspectionTrigger) {
         var objectSpec = new ObjectSpecificationDefault(
-                        typeMeta,
-                        metaModelContext,
-                        facetProcessor,
-                        postProcessor,
-                        classSubstitutorRegistry);
+            typeMeta, metaModelContext,
+            facetProcessor, postProcessor,
+            classSubstitutorRegistry, introspectionTrigger);
         return objectSpec;
     }
 
     private void introspectSequential(
             final Can<ObjectSpecificationMutable> specs,
-            final IntrospectionRequest request) {
+            final IntrospectionRequest request,
+            final IntrospectionTrigger introspectionTrigger) {
         for (var spec : specs) {
-            spec.introspect(request);
+            spec.introspect(request, introspectionTrigger);
         }
     }
 
     private void introspectParallel(
             final Can<ObjectSpecificationMutable> specs,
-            final IntrospectionRequest request) {
+            final IntrospectionRequest request,
+            final IntrospectionTrigger introspectionTrigger) {
         specs.parallelStream()
         .forEach(spec -> {
             try {
-                spec.introspect(request);
+                spec.introspect(request, introspectionTrigger);
             } catch (Throwable ex) {
                 log.error("failure", ex);
                 throw ex;
@@ -633,20 +640,22 @@ implements
     private void introspectAndLog(
             final String info,
             final Iterable<ObjectSpecificationMutable> specs,
-            final IntrospectionRequest request) {
+            final IntrospectionRequest request,
+            final IntrospectionTrigger introspectionTrigger) {
         var stopWatch = _Timing.now();
-        introspect(Can.ofIterable(specs), request);
+        introspect(Can.ofIterable(specs), request, introspectionTrigger);
         stopWatch.stop();
         log.info(" - introspecting {} {} took {}ms", _NullSafe.sizeAutodetect(specs), info, stopWatch.getMillis());
     }
 
     private void introspect(
             final Can<ObjectSpecificationMutable> specs,
-            final IntrospectionRequest request) {
+            final IntrospectionRequest request,
+            final IntrospectionTrigger introspectionTrigger) {
         if(parallel) {
-            introspectParallel(specs, request);
+            introspectParallel(specs, request, introspectionTrigger);
         } else {
-            introspectSequential(specs, request);
+            introspectSequential(specs, request, introspectionTrigger);
         }
     }
 
@@ -655,7 +664,7 @@ implements
         if(substitute.isNeverIntrospect()) return;
 
         var objSpec =
-                loadSpecification(substitute.apply(cls), IntrospectionRequest.FULL);
+                loadSpecification(substitute.apply(cls), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
 
         while(objSpec != null) {
             var type = objSpec.getCorrespondingClass();
