@@ -81,7 +81,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     default Optional<ObjectSpecification> specForLogicalTypeName(
             final @Nullable String logicalTypeName) {
         return Optional.ofNullable(
-                loadSpecification(logicalTypeName, IntrospectionRequest.FULL, IntrospectionTrigger.dummy()));
+                loadSpecification(logicalTypeName, IntrospectionRequest.FULL, IntrospectionTrigger.lookup(logicalTypeName)));
     }
 
     @Override
@@ -96,7 +96,7 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     default Optional<ObjectSpecification> specForType(
             final @Nullable Class<?> domainType) {
         return Optional.ofNullable(
-                loadSpecification(domainType, IntrospectionRequest.FULL, IntrospectionTrigger.dummy()));
+                loadSpecification(domainType, IntrospectionRequest.FULL, IntrospectionTrigger.lookup(domainType)));
     }
 
     @Override
@@ -150,13 +150,15 @@ interface SpecificationLoaderInternal extends SpecificationLoader {
     @Override
     default @Nullable ObjectSpecification loadSpecification(
             final @Nullable Class<?> domainType) {
-        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger.dummy());
+        return loadSpecification(domainType, IntrospectionRequest.TYPE_ONLY, 
+        		IntrospectionTrigger.typeHierarchy(domainType));
     }
 
     @Override
     default Optional<BeanSort> lookupBeanSort(final @Nullable LogicalType logicalType) {
         if(logicalType==null) return Optional.empty();
-        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER, IntrospectionTrigger.dummy());
+        var spec = loadSpecification(logicalType.correspondingClass(), IntrospectionRequest.REGISTER, 
+        		IntrospectionTrigger.lookup(logicalType.correspondingClass()));
         return spec != null
                 ? Optional.of(spec.getBeanSort())
                 : Optional.empty();

@@ -267,24 +267,24 @@ implements
                 valueTypesFromProviders.stream(),
                 causewayBeanTypeRegistry.streamScannedTypes())
             // register only (no type-hierarchy nor member introspection)
-            .map(it->this.registerSpecification(it, IntrospectionTrigger.beanCandidate()))
+            .map(beanMeta->this.registerSpecification(beanMeta, IntrospectionTrigger.beanCandidate()))
             .forEach(specs::collect);
 
-        introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger.dummy());
-        introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
-        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
-        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+        introspectAndLog("type hierarchies", specs.knownSpecs, IntrospectionRequest.TYPE_ONLY, IntrospectionTrigger::typeHierarchy);
+        introspectAndLog("value types", specs.valueSpecs.values(), IntrospectionRequest.FULL, IntrospectionTrigger::valueType);
+        introspectAndLog("mixins", specs.mixinSpecs, IntrospectionRequest.FULL, IntrospectionTrigger::mixin);
+        introspectAndLog("domain services", specs.domainServiceSpecs, IntrospectionRequest.FULL, IntrospectionTrigger::service);
         introspectAndLog("entities (%s)".formatted(causewayBeanTypeRegistry.persistenceStack().name()),
-                specs.entitySpecs(), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
-        introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+                specs.entitySpecs(), IntrospectionRequest.FULL, IntrospectionTrigger::entity);
+        introspectAndLog("view models", specs.viewmodelSpecs(), IntrospectionRequest.FULL, IntrospectionTrigger::viewmodel);
 
         serviceRegistry.lookupServiceElseFail(MenuBarsService.class).menuBars();
 
         if(isFullIntrospect()) {
             var snapshot = snapshotSpecifications();
             log.info(" - introspecting all {} types eagerly (FullIntrospect=true)", snapshot.size());
-            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
-            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+            introspect(snapshot.filter(x->x.getBeanSort().isMixin()), IntrospectionRequest.FULL, IntrospectionTrigger::mixin);
+            introspect(snapshot.filter(x->!x.getBeanSort().isMixin()), IntrospectionRequest.FULL, __->IntrospectionTrigger.beanCandidate());
         }
 
         log.info(" - running remaining validators");
@@ -355,8 +355,18 @@ implements
 
     @Override
     public void reloadSpecification(final Class<?> domainType) {
-        invalidateCache(domainType);
-        loadSpecification(domainType, IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+    	var substitute = classSubstitutorRegistry.getSubstitution(domainType);
+        if(substitute.isNeverIntrospect()) return;
+        
+        var objSpec =
+                loadSpecification(substitute.apply(domainType), IntrospectionRequest.FULL, IntrospectionTrigger.temporary(domainType));
+
+        while(objSpec != null) {
+            cache.remove((Class<?>) objSpec.getCorrespondingClass());
+            objSpec = objSpec.superclass();
+        }
+        
+        loadSpecification(domainType, IntrospectionRequest.FULL, IntrospectionTrigger.reload(domainType));
     }
 
     @Override
@@ -616,20 +626,20 @@ implements
     private void introspectSequential(
             final Can<ObjectSpecificationMutable> specs,
             final IntrospectionRequest request,
-            final IntrospectionTrigger introspectionTrigger) {
+            final Function<Class<?>, IntrospectionTrigger> introspectionTriggerFactory) {
         for (var spec : specs) {
-            spec.introspect(request, introspectionTrigger);
+            spec.introspect(request, introspectionTriggerFactory.apply(spec.getCorrespondingClass()));
         }
     }
 
     private void introspectParallel(
             final Can<ObjectSpecificationMutable> specs,
             final IntrospectionRequest request,
-            final IntrospectionTrigger introspectionTrigger) {
+            final Function<Class<?>, IntrospectionTrigger> introspectionTriggerFactory) {
         specs.parallelStream()
         .forEach(spec -> {
             try {
-                spec.introspect(request, introspectionTrigger);
+                spec.introspect(request, introspectionTriggerFactory.apply(spec.getCorrespondingClass()));
             } catch (Throwable ex) {
                 log.error("failure", ex);
                 throw ex;
@@ -641,9 +651,9 @@ implements
             final String info,
             final Iterable<ObjectSpecificationMutable> specs,
             final IntrospectionRequest request,
-            final IntrospectionTrigger introspectionTrigger) {
+            final Function<Class<?>, IntrospectionTrigger> introspectionTriggerFactory) {
         var stopWatch = _Timing.now();
-        introspect(Can.ofIterable(specs), request, introspectionTrigger);
+        introspect(Can.ofIterable(specs), request, introspectionTriggerFactory);
         stopWatch.stop();
         log.info(" - introspecting {} {} took {}ms", _NullSafe.sizeAutodetect(specs), info, stopWatch.getMillis());
     }
@@ -651,25 +661,11 @@ implements
     private void introspect(
             final Can<ObjectSpecificationMutable> specs,
             final IntrospectionRequest request,
-            final IntrospectionTrigger introspectionTrigger) {
+            final Function<Class<?>, IntrospectionTrigger> introspectionTriggerFactory) {
         if(parallel) {
-            introspectParallel(specs, request, introspectionTrigger);
+            introspectParallel(specs, request, introspectionTriggerFactory);
         } else {
-            introspectSequential(specs, request, introspectionTrigger);
-        }
-    }
-
-    private void invalidateCache(final Class<?> cls) {
-        var substitute = classSubstitutorRegistry.getSubstitution(cls);
-        if(substitute.isNeverIntrospect()) return;
-
-        var objSpec =
-                loadSpecification(substitute.apply(cls), IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
-
-        while(objSpec != null) {
-            var type = objSpec.getCorrespondingClass();
-            cache.remove(type);
-            objSpec = objSpec.superclass();
+            introspectSequential(specs, request, introspectionTriggerFactory);
         }
     }
 

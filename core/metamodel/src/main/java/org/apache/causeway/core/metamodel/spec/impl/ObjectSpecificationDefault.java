@@ -1077,7 +1077,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
-                IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+                IntrospectionRequest.FULL, IntrospectionTrigger.mixin(mixinType));
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
@@ -1111,7 +1111,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
-                IntrospectionRequest.FULL, IntrospectionTrigger.dummy());
+                IntrospectionRequest.FULL, IntrospectionTrigger.mixin(mixinType));
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
