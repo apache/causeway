@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -32,6 +33,14 @@ record TypeNode(
     String logicalName)
 implements MMNode, Serializable {
 
+	TypeNode(ObjectSpecification objSpec) {
+		// for security mapping, abstract spec's may share their logical type name with sub-types
+		// however, for proper mementos, we should used fully qualified class names instead (when abstract)
+		this(objSpec.isAbstract()
+	    		? objSpec.getCorrespondingClass().getName()
+	    		: objSpec.logicalTypeName());
+	}
+	
     @Override
     public String title() {
         var spec = spec().orElse(null);
@@ -53,6 +62,7 @@ implements MMNode, Serializable {
         details.put("Simple Name", spec.logicalType().logicalSimpleName());
         details.put("Namespace", spec.logicalType().namespace());
         details.put("Corresponding Class", spec.getCorrespondingClass().getName());
+        details.put("Super Type", spec.superclass().getCorrespondingClass().toString());
     }
 
     @Override
@@ -62,7 +72,10 @@ implements MMNode, Serializable {
 
         return _Streams.<MMNode>concat(
             Stream.of(
-                    MMNodeFactory.facetGroup(spec.streamFacets(), this)),
+            		MMNodeFactory.superType(spec.superclass(), this),
+            		MMNodeFactory.interfaceGroup(spec.interfaces(), this),
+                    MMNodeFactory.facetGroup(spec.streamFacets(), this))
+            	.filter(Objects::nonNull),
             spec.streamActions(ActionScope.PRODUCTION_ONLY, MixedIn.INCLUDED)
                 .map(action->MMNodeFactory.action(action, this)),
             spec.streamProperties(MixedIn.INCLUDED)
@@ -71,10 +84,19 @@ implements MMNode, Serializable {
                 .map(coll->MMNodeFactory.collection(coll, this)));
     }
     
+    // -- UTIL
+    
+    MetamodelInspectView superType() {
+    	return spec()
+    		.map(ObjectSpecification::superclass)
+    		.map(MetamodelInspectView::root)
+    		.orElse(null);
+    }
+    
     // -- HELPER
     
     private Optional<ObjectSpecification> spec() {
-        return  MetaModelContext.instance()
+        return MetaModelContext.instance()
             .map(MetaModelContext::getSpecificationLoader)
             .flatMap(specLoader->specLoader.specForLogicalTypeName(logicalName));
     }

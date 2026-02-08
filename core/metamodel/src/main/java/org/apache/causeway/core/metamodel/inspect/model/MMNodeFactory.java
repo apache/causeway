@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -35,8 +37,23 @@ import lombok.experimental.UtilityClass;
 class MMNodeFactory {
 
     TypeNode type(final ObjectSpecification objSpec) {
-        return new TypeNode(objSpec.logicalTypeName());
+        return new TypeNode(objSpec);
     }
+
+    TypeNode superType(@Nullable ObjectSpecification superSpec, MMNode parentNodeNotUsed) {
+    	if(superSpec==null
+    			|| superSpec.getCorrespondingClass().equals(Object.class))
+    		return null;
+		return new TypeNode(superSpec);
+	}
+
+	MMNode interfaceGroup(Can<ObjectSpecification> interfaces, TypeNode parentNode) {
+		if(interfaces.isEmpty())
+			return null;
+		var node = new InterfaceGroupNode(interfaces);
+        node.setParentNode(parentNode);
+        return node;
+	}
 
     MMNode facet(final Facet facet, final FacetGroupNode parentNode) {
         var node = new FacetNode(facet);

@@ -27,6 +27,7 @@ import org.apache.causeway.applib.value.Markup;
 
 sealed interface MMNode 
 permits
+    InterfaceGroupNode,
     MemberNode,
     FacetGroupNode,
     FacetNode,

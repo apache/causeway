@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Introspection;
@@ -46,7 +47,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     // -- FACTORY
 
     public static MetamodelInspectView root(final ObjectSpecification spec) {
-        return new MetamodelInspectView(new TypeNode(spec.logicalTypeName()), TreePath.root());
+        return new MetamodelInspectView(new TypeNode(spec), TreePath.root());
     }
 
     // -- CONSTRUCTION
@@ -89,6 +90,13 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
         return activeNode().details();
     }
 
+    @Action 
+    public MetamodelInspectView superType() {
+    	return activeNode() instanceof TypeNode typeNode
+			? typeNode.superType()
+    		: null;
+    }
+    
     // -- IMPLEMENTATION DETAILS
 
     @Override
