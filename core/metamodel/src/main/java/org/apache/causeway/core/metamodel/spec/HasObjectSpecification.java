@@ -49,8 +49,8 @@ public interface HasObjectSpecification {
     /**
      * As used for the element type of collections.
      */
-    default Optional<ObjectSpecification> getElementSpecification() {
-        return objSpec().getElementSpecification();
+    default Optional<ObjectSpecification> explicitElementSpec() {
+        return objSpec().explicitElementSpec();
     }
 
     default Bookmark createBookmark(final @NonNull String urlSafeIdentifier) {

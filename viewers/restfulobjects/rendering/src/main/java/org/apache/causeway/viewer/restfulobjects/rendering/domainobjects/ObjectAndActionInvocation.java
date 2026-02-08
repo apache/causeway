@@ -83,7 +83,7 @@ public class ObjectAndActionInvocation {
 
             // though not strictly required, try to be consistent:  empty list vs populated list
             if(elementAdapters.get().isEmpty()) {
-                var isElementTypeAScalarValue = returnTypeSpec.getElementSpecification()
+                var isElementTypeAScalarValue = returnTypeSpec.explicitElementSpec()
                 .map(elementSpec->isScalarValue(elementSpec))
                 .orElse(false);
                 return isElementTypeAScalarValue

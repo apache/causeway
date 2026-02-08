@@ -72,7 +72,7 @@ final class _InternalTitleUtil {
 
     private String formatAnyCardinalityAsTitle(final @NonNull ObjectSpecification objSpec, final @NonNull ManagedObject managedObject) {
         final int size = objSpec.getFacet(CollectionFacet.class).size(managedObject);
-        var elementSpec = objSpec.getElementSpecification().orElse(null);
+        var elementSpec = objSpec.explicitElementSpec().orElse(null);
         objSpec.getTranslationService().translate(TranslationContext.forClassName(objSpec.getCorrespondingClass()), null);
 
         final String noun = (elementSpec == null

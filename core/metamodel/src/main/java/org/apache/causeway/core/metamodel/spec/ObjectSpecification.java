@@ -273,7 +273,7 @@ extends
      * @return optionally the element type spec based on presence of the TypeOfFacet
      * @since 2.0
      */
-    Optional<ObjectSpecification> getElementSpecification();
+    Optional<ObjectSpecification> explicitElementSpec();
 
     /**
      * @since 2.0
@@ -607,7 +607,7 @@ extends
             return true;
         }
 
-        var elementSpec = getElementSpecification()
+        var elementSpec = explicitElementSpec()
                 .orElse(this);
         return _NullSafe.streamAutodetect(pojo)
                 .filter(element->!Objects.equals(element, pojo)) // to prevent infinite recursion depth

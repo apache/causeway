@@ -378,7 +378,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                     .map(typeOfFacet -> typeOfFacet.elementSpec()));
 
     @Override
-    public Optional<ObjectSpecification> getElementSpecification() {
+    public Optional<ObjectSpecification> explicitElementSpec() {
         return elementSpecification.get();
     }
 

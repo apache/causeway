@@ -148,7 +148,7 @@ extends ReprRendererAbstract<ObjectAndActionInvocation> {
                     new ListReprRenderer(resourceContext, null, representation).withElementRel(Rel.ELEMENT);
             listReprRenderer.with(collectionAdapters)
             .withReturnType(action.getReturnType())
-            .withElementType(returnedAdapter.getElementSpecification().orElse(null));
+            .withElementType(returnedAdapter.explicitElementSpec().orElse(null));
 
             return listReprRenderer;
 

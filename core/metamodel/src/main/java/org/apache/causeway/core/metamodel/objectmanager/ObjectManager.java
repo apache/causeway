@@ -222,7 +222,7 @@ public record ObjectManager(
         return spec.isSingular()
                 ? ManagedObject.adaptSingular(spec, pojo)
                 : ManagedObject.packed(
-                        spec.getElementSpecification().orElseGet(fallbackElementType),
+                        spec.explicitElementSpec().orElseGet(fallbackElementType),
                         _NullSafe.streamAutodetect(pojo)
                         .map(element->adapt(element))
                         .collect(Can.toCan()));
