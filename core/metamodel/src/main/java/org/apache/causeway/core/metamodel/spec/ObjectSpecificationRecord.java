@@ -62,9 +62,6 @@ implements
 
     // -- HIERARCHICAL
 
-    @Override public boolean hasSubclasses() {
-        return hierarchical.hasSubclasses();
-    }
     @Override public Can<ObjectSpecification> interfaces() {
         return hierarchical.interfaces();
     }
@@ -73,9 +70,6 @@ implements
     }
     @Override public boolean isOfTypeResolvePrimitive(final ObjectSpecification other) {
         return hierarchical.isOfTypeResolvePrimitive(other);
-    }
-    @Override public Can<ObjectSpecification> subclasses(final Depth depth) {
-        return hierarchical.subclasses(depth);
     }
     @Override public ObjectSpecification superclass() {
         return hierarchical.superclass();
