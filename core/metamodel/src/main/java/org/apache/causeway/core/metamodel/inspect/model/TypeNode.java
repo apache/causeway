@@ -84,15 +84,6 @@ implements MMNode, Serializable {
                 .map(coll->MMNodeFactory.collection(coll, this)));
     }
     
-    // -- UTIL
-    
-    MetamodelInspectView superType() {
-    	return spec()
-    		.map(ObjectSpecification::superclass)
-    		.map(MetamodelInspectView::root)
-    		.orElse(null);
-    }
-    
     // -- HELPER
     
     private Optional<ObjectSpecification> spec() {

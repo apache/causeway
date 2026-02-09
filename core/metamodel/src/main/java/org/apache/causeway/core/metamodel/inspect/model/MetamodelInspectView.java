@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.inspect.model;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
-import org.apache.causeway.applib.annotation.Action;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Introspection;
@@ -30,8 +29,8 @@ import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.MasterDetailTreeView;
+import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -88,13 +87,6 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "detail", sequence = "1")
     public Markup getDetails() {
         return activeNode().details();
-    }
-
-    @Action 
-    public MetamodelInspectView superType() {
-    	return activeNode() instanceof TypeNode typeNode
-			? typeNode.superType()
-    		: null;
     }
     
     // -- IMPLEMENTATION DETAILS
