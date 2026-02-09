@@ -20,11 +20,14 @@ package org.apache.causeway.core.metamodel.inspect.model;
 
 import jakarta.inject.Named;
 
-import org.apache.causeway.applib.CausewayModuleApplib;
+import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.ActionLayout.Position;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Introspection;
 import org.apache.causeway.applib.annotation.LabelPosition;
+import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.Nature;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Property;
@@ -34,9 +37,10 @@ import org.apache.causeway.applib.graph.tree.TreeAdapter;
 import org.apache.causeway.applib.graph.tree.TreePath;
 import org.apache.causeway.applib.value.Markup;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
-@Named(CausewayModuleApplib.NAMESPACE + ".MetamodelInspectView")
+@Named(CausewayModuleCoreMetamodel.NAMESPACE + ".MetamodelInspectView")
 @DomainObject(
     nature=Nature.VIEW_MODEL,
     editing = Editing.DISABLED,
@@ -87,6 +91,16 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     @PropertyLayout(labelPosition = LabelPosition.NONE, fieldSetId = "detail", sequence = "1")
     public Markup getDetails() {
         return activeNode().details();
+    }
+
+    @Action 
+    @ActionLayout(position = Position.PANEL, fieldSetId = "tree", named = "Inspect other", cssClassFa = "solid shapes")
+    public MetamodelInspectView inspect(String fullyQualifiedClassName) {
+    	return MetamodelInspectMenu.inspect(fullyQualifiedClassName, null);
+    }
+    @MemberSupport 
+    public String validate0Inspect(String fullyQualifiedClassName) {
+    	return MetamodelInspectMenu.validateClassName(fullyQualifiedClassName);
     }
     
     // -- IMPLEMENTATION DETAILS
