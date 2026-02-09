@@ -110,7 +110,7 @@ identified
         <jdom.version>2.0.6.1</jdom.version>
         <jmock.version>2.13.1</jmock.version>
 
-        <jquery-ui.version>1.14.1</jquery-ui.version> <!-- org.webjars:jquery-ui -->
+        <jquery-ui.version>1.14.2</jquery-ui.version> <!-- org.webjars:jquery-ui -->
 
         <jspecify.version>1.0.0</jspecify.version>
         <jsr305.version>3.0.2</jsr305.version>
