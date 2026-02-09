@@ -37,14 +37,14 @@ import lombok.experimental.UtilityClass;
 class MMNodeFactory {
 
     TypeNode type(final ObjectSpecification objSpec) {
-        return new TypeNode(objSpec);
+        return new TypeNode(objSpec, false);
     }
 
     TypeNode superType(@Nullable ObjectSpecification superSpec, MMNode parentNodeNotUsed) {
     	if(superSpec==null
     			|| superSpec.getCorrespondingClass().equals(Object.class))
     		return null;
-		return new TypeNode(superSpec);
+		return new TypeNode(superSpec, true);
 	}
 
 	MMNode interfaceGroup(Can<ObjectSpecification> interfaces, TypeNode parentNode) {

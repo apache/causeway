@@ -30,15 +30,16 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 record TypeNode(
-    String logicalName)
+    String logicalName,
+    boolean isSubnode)
 implements MMNode, Serializable {
-
-	TypeNode(ObjectSpecification objSpec) {
+	
+	TypeNode(ObjectSpecification objSpec, boolean isSubnode) {
 		// for security mapping, abstract spec's may share their logical type name with sub-types
 		// however, for proper mementos, we should used fully qualified class names instead (when abstract)
 		this(objSpec.isAbstract()
 	    		? objSpec.getCorrespondingClass().getName()
-	    		: objSpec.logicalTypeName());
+	    		: objSpec.logicalTypeName(), isSubnode);
 	}
 	
     @Override
@@ -51,7 +52,7 @@ implements MMNode, Serializable {
     
     @Override
     public String iconName() {
-        return "";
+        return isSubnode() ? "sub" : "";
     }
     
     @Override
@@ -62,7 +63,14 @@ implements MMNode, Serializable {
         details.put("Simple Name", spec.logicalType().logicalSimpleName());
         details.put("Namespace", spec.logicalType().namespace());
         details.put("Corresponding Class", spec.getCorrespondingClass().getName());
-        details.put("Super Type", spec.superclass().getCorrespondingClass().toString());
+        Optional.ofNullable(spec.superclass())
+	        .ifPresent(superType->{
+	        	details.put("Super Type", superType.getCorrespondingClass().getName());    	
+	        });
+        spec.interfaces().stream()
+	        .forEach(interfc->details.put(
+	        		"Interface", 
+	        		interfc.getCorrespondingClass().getName()));
     }
 
     @Override

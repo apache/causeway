@@ -50,7 +50,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
     // -- FACTORY
 
     public static MetamodelInspectView root(final ObjectSpecification spec) {
-        return new MetamodelInspectView(new TypeNode(spec), TreePath.root());
+        return new MetamodelInspectView(new TypeNode(spec, false), TreePath.root());
     }
 
     // -- CONSTRUCTION
@@ -134,7 +134,7 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
         }
 
         public MMNode root() {
-            return new TypeNode(logicalName);
+            return new TypeNode(logicalName, false);
         }
 
         static Memento parse(final String stringified) {
