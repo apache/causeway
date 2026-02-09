@@ -141,6 +141,24 @@ public class DomainModelValidator {
     /**
      * JUnit support
      */
+    public void assertValid(
+            final @NonNull Identifier identifier) {
+
+        long failureCount = streamFailuresMatchingOriginatingIdentifier(identifier)
+        		.count();
+
+        if(failureCount>0L) {
+            var msg = String.format("failure messages were not empty:\n%s",
+                    streamFailuresMatchingOriginatingIdentifier(identifier)
+                    .map(ValidationFailure::message)
+                    .collect(Collectors.joining("\n")));
+            throw new AssertionFailedError(msg);
+        }
+    }
+    
+    /**
+     * JUnit support
+     */
     public void assertAnyFailuresContaining(
             final @NonNull Identifier identifier,
             final @NonNull String messageSnippet) {

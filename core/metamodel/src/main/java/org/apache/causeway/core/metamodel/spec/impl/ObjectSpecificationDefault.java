@@ -37,6 +37,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -109,6 +110,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 
@@ -208,7 +210,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
         }
 
         loadSpecOfSuperclass(getCorrespondingClass().getSuperclass());
-        //TODO loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
+        loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
     }
 
     private void introspectMembers() {
@@ -604,25 +606,54 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
     
     protected void loadSpecOfInterfaces(final Class<?>[] interfaces) {
-        final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
-        for (final Class<?> interfaceType : interfaces) {
-            var substitution = classSubstitutorRegistry.getSubstitution(interfaceType);
-            var interfaceToAdd = substitution.isReplace()
-            		? substitution.replacement()
-    				: substitution.isNeverIntrospect()
-	    				? null
-	    				: interfaceType;
-            if(interfaceToAdd==null)
-            	continue;
-            var interfaceSpec = specLoaderInternal().loadSpecification(interfaceToAdd);
-            if(interfaceSpec==null)
-            	continue;
-            interfaceSpecList.add(interfaceSpec);
-        }
-        synchronized(unmodifiableInterfaces) {
-            this.interfaces.clear();
-            this.interfaces.addAll(interfaceSpecList);
-            unmodifiableInterfaces.clear();
+    	if(interfaces==null)
+    		return;
+    		
+    	var classCache = _ClassCache.getInstance();
+    	
+        final List<ObjectSpecification> interfaceSpecList = Stream.of(interfaces)
+    		// pre-filter common interfaces (performance)
+        	.filter(interfaceType->!interfaceType.getName().startsWith("java."))
+        	//--
+        	.map(interfaceType->{
+        		var substitution = classSubstitutorRegistry.getSubstitution(interfaceType);
+                return substitution.isReplace()
+                		? substitution.replacement()
+        				: substitution.isNeverIntrospect()
+    	    				? null
+    	    				: interfaceType;
+        	})
+        	.filter(Objects::nonNull)
+        	.filter(interfaceType->classCache.head(interfaceType).hasAnnotation(DomainObject.class))
+        	.map(specLoaderInternal()::loadSpecification)
+        	.filter(Objects::nonNull)
+        	.toList();
+        
+        if(!interfaceSpecList.isEmpty()) {
+        	if(interfaceSpecList.size()>1) {
+              ValidationFailure.raiseFormatted(facetHolder,
+            		  "Cannot use @DomainObject on more than one interface, as inherited by: %s", 
+            		  getCorrespondingClass().getName());        		
+        	}
+        	if (superclassSpec != null) {
+        		var superType = superclassSpec.getCorrespondingClass();
+        		if(classCache.head(superType).hasAnnotation(DomainObject.class)) {
+        			ValidationFailure.raiseFormatted(facetHolder,
+                  		  "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by: %s", 
+                  		  getCorrespondingClass().getName());
+        		}
+        	}
+        	
+//debug        	
+//        	System.err.println("%s".formatted(getCorrespondingClass().getName()));
+//        	interfaceSpecList.forEach(i->{
+//        		System.err.println("- %s".formatted(i.getCorrespondingClass().getName()));
+//        	});
+        	synchronized(unmodifiableInterfaces) {
+                this.interfaces.clear();
+                this.interfaces.addAll(interfaceSpecList);
+                unmodifiableInterfaces.clear();
+            }	
         }
     }
 
