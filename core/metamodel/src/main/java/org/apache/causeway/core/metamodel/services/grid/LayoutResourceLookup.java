@@ -28,16 +28,14 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.reflection._ClassCache;
-import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,14 +68,12 @@ record LayoutResourceLookup(
         if(isKnownInvalid(layoutKey))
             return Optional.empty();
 
-        var classCache = _ClassCache.getInstance();
-
-        var layoutResourceOpt = _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.INCLUDE)
-            .filter(type->!type.isInterface()
-                    || (!type.getName().startsWith("java.")
-                            && classCache.head(type).hasAnnotation(DomainObject.class)))
-            .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
-            .findFirst();
+        var layoutResourceOpt = MetaModelContext.instance()
+            .flatMap(mmc->mmc.specForType(layoutKey.domainClass()))
+            .flatMap(spec->spec.streamTypeHierarchyAndInterfaces()
+                    .map(ObjectSpecification::getCorrespondingClass)
+                    .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
+                    .findFirst());
 
         if(layoutResourceOpt.isPresent())
             return layoutResourceOpt;

@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -78,7 +79,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -515,14 +515,12 @@ extends
      */
     default Object instantiatePojo() {
         final Class<?> correspondingClass = getCorrespondingClass();
-        if (correspondingClass.isArray()) {
+        if (correspondingClass.isArray())
             return Array.newInstance(correspondingClass.getComponentType(), 0);
-        }
 
         final Class<?> cls = correspondingClass;
-        if (Modifier.isAbstract(cls.getModifiers())) {
+        if (Modifier.isAbstract(cls.getModifiers()))
             throw new UnrecoverableException("Cannot create an instance of an abstract class: " + cls);
-        }
 
         final Object newInstance;
         try {
@@ -590,9 +588,8 @@ extends
     default public boolean isAssignableFrom(final Class<?> actualType) {
         var expectedType = getCorrespondingClass();
         if(expectedType.isAssignableFrom(actualType)
-                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
             return true;
-        }
         return false;
     }
 
@@ -603,9 +600,8 @@ extends
         var actualType = pojo.getClass();
 
         if(expectedType.isAssignableFrom(actualType)
-                || ClassExtensions.equalsWhenBoxing(expectedType, actualType)) {
+                || ClassExtensions.equalsWhenBoxing(expectedType, actualType))
             return true;
-        }
 
         var elementSpec = explicitElementSpec()
                 .orElse(this);
@@ -629,10 +625,23 @@ extends
         return getCorrespondingClass().getName();
     }
 
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with self.
+     * @since 2.0
+     */
     default Stream<ObjectSpecification> streamTypeHierarchy() {
         return superclass()!=null
                 ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
                 : Stream.of(this);
+    }
+
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with self,
+     * then includes all (collected) interfaces at the end.
+     * @since 4.0
+     */
+    default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
+        return Stream.concat(streamTypeHierarchy(), interfaces().stream());
     }
 
     // -- COMMON SUPER TYPE FINDER
@@ -646,12 +655,10 @@ extends
 
         var cls_a = a.getCorrespondingClass();
         var cls_b = b.getCorrespondingClass();
-        if(cls_a.isAssignableFrom(cls_b)) {
+        if(cls_a.isAssignableFrom(cls_b))
             return a;
-        }
-        if(cls_b.isAssignableFrom(cls_a)) {
+        if(cls_b.isAssignableFrom(cls_a))
             return b;
-        }
         // assuming the algorithm is correct: if non of the above is true,
         // we must be able to walk up the tree on both branches
         _Assert.assertNotNull(a.superclass());
