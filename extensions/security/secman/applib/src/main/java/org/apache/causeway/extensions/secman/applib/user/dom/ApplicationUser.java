@@ -29,6 +29,8 @@ import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.MemberSupport;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -65,18 +67,14 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Named(ApplicationUser.LOGICAL_TYPE_NAME) // required for permission mapping
-/* not allowed on interfaces ...
- @DomainObject(
+@DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
         titleUiEvent = ApplicationUser.TitleUiEvent.class,
         iconUiEvent = ApplicationUser.IconUiEvent.class,
         cssClassUiEvent = ApplicationUser.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationUser.LayoutUiEvent.class
-)
- */
+        layoutUiEvent = ApplicationUser.LayoutUiEvent.class)
 public interface ApplicationUser
         extends HasUsername, HasAtPath, Comparable<ApplicationUser> {
 

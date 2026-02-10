@@ -79,11 +79,7 @@ import lombok.Setter;
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT,
-        titleUiEvent = ApplicationTenancy.TitleUiEvent.class,
-        iconUiEvent = ApplicationTenancy.IconUiEvent.class,
-        cssClassUiEvent = ApplicationTenancy.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class)
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationTenancy
     implements org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 

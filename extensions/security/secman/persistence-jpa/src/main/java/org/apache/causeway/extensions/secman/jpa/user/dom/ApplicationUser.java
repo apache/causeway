@@ -102,11 +102,7 @@ import lombok.experimental.Accessors;
         autoCompleteRepository = ApplicationUserRepository.class,
         autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT,
-        titleUiEvent = ApplicationUser.TitleUiEvent.class,
-        iconUiEvent = ApplicationUser.IconUiEvent.class,
-        cssClassUiEvent = ApplicationUser.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationUser.LayoutUiEvent.class)
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationUser
     implements org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser {
 

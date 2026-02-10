@@ -29,6 +29,8 @@ import java.util.function.Function;
 
 import jakarta.inject.Named;
 
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -81,15 +83,12 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)  // required for permission mapping
-/* not allowed on interfaces ...
 @DomainObject
 @DomainObjectLayout(
         titleUiEvent = ApplicationPermission.TitleUiEvent.class,
         iconUiEvent = ApplicationPermission.IconUiEvent.class,
         cssClassUiEvent = ApplicationPermission.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationPermission.LayoutUiEvent.class
-)
-*/
+        layoutUiEvent = ApplicationPermission.LayoutUiEvent.class)
 public interface ApplicationPermission extends Comparable<ApplicationPermission> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";

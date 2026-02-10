@@ -28,6 +28,8 @@ import java.util.Comparator;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.CollectionLayout;
+import org.apache.causeway.applib.annotation.DomainObject;
+import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
@@ -49,7 +51,6 @@ import lombok.experimental.UtilityClass;
  * @since 2.0 {@index}
  */
 @Named(ApplicationTenancy.LOGICAL_TYPE_NAME) // required for permission mapping
-/* not allowed on interfaces ...
 @DomainObject(
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching"
@@ -58,9 +59,7 @@ import lombok.experimental.UtilityClass;
         titleUiEvent = ApplicationTenancy.TitleUiEvent.class,
         iconUiEvent = ApplicationTenancy.IconUiEvent.class,
         cssClassUiEvent = ApplicationTenancy.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class
-)
-*/
+        layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class)
 public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";

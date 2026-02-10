@@ -107,12 +107,7 @@ import lombok.experimental.Accessors;
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_CHILD,
-        titleUiEvent = ApplicationPermission.TitleUiEvent.class,
-        iconUiEvent = ApplicationPermission.IconUiEvent.class,
-        cssClassUiEvent = ApplicationPermission.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationPermission.LayoutUiEvent.class
-)
+        bookmarking = BookmarkPolicy.AS_CHILD)
 public class ApplicationPermission
     implements org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
 
