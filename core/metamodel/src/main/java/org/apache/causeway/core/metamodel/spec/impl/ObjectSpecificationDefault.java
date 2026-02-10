@@ -37,6 +37,7 @@ import org.springframework.util.ClassUtils;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
+import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainService;
 import org.apache.causeway.applib.annotation.Introspection.IntrospectionPolicy;
 import org.apache.causeway.applib.annotation.ObjectSupport;
@@ -109,6 +110,7 @@ import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
 import org.apache.causeway.core.metamodel.spi.EntityTitleSubscriber;
 import org.apache.causeway.core.metamodel.util.Facets;
 
@@ -207,33 +209,8 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
             return;
         }
 
-        // superclass
-        final Class<?> superclass = getCorrespondingClass().getSuperclass();
-        loadSpecOfSuperclass(superclass);
-
-        // walk superinterfaces
-
-        //
-        // REVIEW: the processing here isn't quite the same as with
-        // superclasses, in that with superclasses the superclass adds this type as its
-        // subclass, whereas here this type defines itself as the subtype.
-        //
-        // it'd be nice to push the responsibility for adding subclasses to
-        // the interface type... needs some tests around it, though, before
-        // making that refactoring.
-        //
-        final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
-        final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
-        for (var interfaceType : interfaceTypes) {
-            var interfaceSubstitute = classSubstitutorRegistry.getSubstitution(interfaceType);
-            if (interfaceSubstitute.isReplace()) {
-                var interfaceSpec = specLoaderInternal().loadSpecification(interfaceSubstitute.replacement());
-                interfaceSpecList.add(interfaceSpec);
-            }
-        }
-
-        updateAsSubclassTo(interfaceSpecList);
-        updateInterfaces(interfaceSpecList);
+        loadSpecOfSuperclass(getCorrespondingClass().getSuperclass());
+        loadSpecOfInterfaces(getCorrespondingClass().getInterfaces());
     }
 
     private void introspectMembers() {
@@ -433,33 +410,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     // MERGED FROM FORMER ObjectSpecificationAbstract
     //-----------------------------------------------------------------------------------------------------------------
 
-    /**
-     * @implNote thread-safe
-     */
-    private static class Subclasses {
-
-        // List performs better compared to a Set, when the number of elements is low
-        private Can<ObjectSpecification> classes = Can.empty();
-
-        public void addSubclass(final ObjectSpecification subclass) {
-            synchronized(classes) {
-                classes = classes.addUnique(subclass);
-            }
-        }
-
-        public boolean hasSubclasses() {
-            synchronized(classes) {
-                return classes.isNotEmpty();
-            }
-        }
-
-        public Can<ObjectSpecification> snapshot() {
-            synchronized(classes) {
-                return classes;
-            }
-        }
-    }
-
     // -- FIELDS
 
     private final PostProcessor postProcessor;
@@ -498,9 +448,9 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private final _Lazy<Can<ObjectSpecification>> unmodifiableInterfaces =
             _Lazy.threadSafe(()->Can.ofCollection(interfaces));
 
-    private final Subclasses directSubclasses = new Subclasses();
+    //private final Subclasses directSubclasses = new Subclasses();
     // built lazily
-    private Subclasses transitiveSubclasses;
+    //private Subclasses transitiveSubclasses;
 
     private final Class<?> correspondingClass;
     private final String fullName;
@@ -645,40 +595,66 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     protected void loadSpecOfSuperclass(final Class<?> superclass) {
-        if (superclass == null) {
+        if (superclass == null)
             return;
-        }
-        superclassSpec = specLoaderInternal().loadSpecification(superclass);
-        if (superclassSpec != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("  Superclass {}", superclass.getName());
-            }
-            updateAsSubclassTo(superclassSpec);
+        
+        this.superclassSpec = specLoaderInternal().loadSpecification(superclass);
+        if (superclassSpec != null 
+        		&& log.isDebugEnabled()) {
+            log.debug("  Superclass {}", superclass.getName());
         }
     }
-
-    protected void updateInterfaces(final List<ObjectSpecification> interfaces) {
-        synchronized(unmodifiableInterfaces) {
-            this.interfaces.clear();
-            this.interfaces.addAll(interfaces);
-            unmodifiableInterfaces.clear();
+    
+    protected void loadSpecOfInterfaces(final Class<?>[] interfaces) {
+    	if(interfaces==null)
+    		return;
+    		
+    	var classCache = _ClassCache.getInstance();
+    	
+        final List<ObjectSpecification> interfaceSpecList = Stream.of(interfaces)
+    		// pre-filter common interfaces (performance)
+        	.filter(interfaceType->!interfaceType.getName().startsWith("java."))
+        	//--
+        	.map(interfaceType->{
+        		var substitution = classSubstitutorRegistry.getSubstitution(interfaceType);
+                return substitution.isReplace()
+                		? substitution.replacement()
+        				: substitution.isNeverIntrospect()
+    	    				? null
+    	    				: interfaceType;
+        	})
+        	.filter(Objects::nonNull)
+        	.filter(interfaceType->classCache.head(interfaceType).hasAnnotation(DomainObject.class))
+        	.map(specLoaderInternal()::loadSpecification)
+        	.filter(Objects::nonNull)
+        	.toList();
+        
+        if(!interfaceSpecList.isEmpty()) {
+        	if(interfaceSpecList.size()>1) {
+              ValidationFailure.raiseFormatted(facetHolder,
+            		  "Cannot use @DomainObject on more than one interface, as inherited by: %s", 
+            		  getCorrespondingClass().getName());        		
+        	}
+        	if (superclassSpec != null) {
+        		var superType = superclassSpec.getCorrespondingClass();
+        		if(classCache.head(superType).hasAnnotation(DomainObject.class)) {
+        			ValidationFailure.raiseFormatted(facetHolder,
+                  		  "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by: %s", 
+                  		  getCorrespondingClass().getName());
+        		}
+        	}
+        	
+//debug        	
+//        	System.err.println("%s".formatted(getCorrespondingClass().getName()));
+//        	interfaceSpecList.forEach(i->{
+//        		System.err.println("- %s".formatted(i.getCorrespondingClass().getName()));
+//        	});
+        	synchronized(unmodifiableInterfaces) {
+                this.interfaces.clear();
+                this.interfaces.addAll(interfaceSpecList);
+                unmodifiableInterfaces.clear();
+            }	
         }
-    }
-
-    private void updateAsSubclassTo(final ObjectSpecification supertypeSpec) {
-        // API
-        var introspectableSpec = (ObjectSpecificationDefault) supertypeSpec;
-        introspectableSpec.updateSubclasses(this);
-    }
-
-    protected void updateAsSubclassTo(final List<ObjectSpecification> supertypeSpecs) {
-        for (final ObjectSpecification supertypeSpec : supertypeSpecs) {
-            updateAsSubclassTo(supertypeSpec);
-        }
-    }
-
-    private void updateSubclasses(final ObjectSpecification subclass) {
-        this.directSubclasses.addSubclass(subclass);
     }
 
     protected final void replaceAssociations(final Stream<ObjectAssociation> associations) {
@@ -943,7 +919,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
                 interactionMethod);
     }
 
-    // -- SUPERCLASS, INTERFACES, SUBCLASSES, IS-ABSTRACT
+    // -- INHERITED
 
     @Override
     public ObjectSpecification superclass() {
@@ -953,44 +929,6 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     @Override
     public Can<ObjectSpecification> interfaces() {
         return unmodifiableInterfaces.get();
-    }
-
-    @Override
-    public Can<ObjectSpecification> subclasses(final Depth depth) {
-        if (depth == Depth.DIRECT) {
-            return directSubclasses.snapshot();
-        }
-
-        // depth == Depth.TRANSITIVE)
-        if (transitiveSubclasses == null) {
-            transitiveSubclasses = transitiveSubclasses();
-        }
-
-        return transitiveSubclasses.snapshot();
-    }
-
-    private synchronized Subclasses transitiveSubclasses() {
-        final Subclasses appendTo = new Subclasses();
-        appendSubclasses(this, appendTo);
-        transitiveSubclasses = appendTo;
-        return transitiveSubclasses;
-    }
-
-    private void appendSubclasses(
-            final ObjectSpecification objectSpecification,
-            final Subclasses appendTo) {
-
-        var directSubclasses = objectSpecification.subclasses(Depth.DIRECT);
-        for (ObjectSpecification subclass : directSubclasses) {
-            appendTo.addSubclass(subclass);
-            appendSubclasses(subclass, appendTo);
-        }
-
-    }
-
-    @Override
-    public boolean hasSubclasses() {
-        return directSubclasses.hasSubclasses();
     }
 
     // -- ASSOCIATIONS

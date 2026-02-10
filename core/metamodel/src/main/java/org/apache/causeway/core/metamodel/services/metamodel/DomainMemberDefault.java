@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -47,7 +46,6 @@ import org.apache.causeway.core.metamodel.facets.properties.choices.PropertyChoi
 import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.causeway.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.causeway.core.metamodel.services.devutils.MemberType;
-import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedInMember;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -90,19 +88,15 @@ public class DomainMemberDefault implements DomainMember {
 
     @XmlElement @Override
     public String getClassType() {
-
-        var isService = Stream.concat(
-                    Stream.of(spec),
-                    spec.subclasses(Hierarchical.Depth.DIRECT).stream())
-                .anyMatch(ObjectSpecification::isInjectable);
-
-        return isService
+        return spec.isAbstract()
+        		? "0 Abstract"
+        		: spec.isInjectable()
                     ? "2 Service"
                     : spec.isValue()
-                            ? "3 Value"
-                            : spec.isPlural()
-                                    ? "4 Collection"
-                                    : "1 Object";
+                        ? "3 Value"
+                        : spec.isPlural()
+                            ? "4 Collection"
+                            : "1 Object";
     }
 
     @XmlElement @Override

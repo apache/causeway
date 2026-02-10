@@ -270,10 +270,23 @@ class DomainModelTest_usingBadDomain {
     }
 
     @Test
-    void invalidDomainObjectOnInterface_shouldFail() {
+    void invalidDomainObjectOnInterface1_shouldFail() {
         validator.assertAnyFailuresContaining(
-                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.class)),
-                "Cannot use @DomainObject on interface:");
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.BadlyInterfaced.class)),
+                "Cannot use @DomainObject on more than one interface, as inherited by:");
+    }
+    
+    @Test
+    void invalidDomainObjectOnInterface2_shouldFail() {
+        validator.assertAnyFailuresContaining(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.BadlyMixed.class)),
+                "Cannot use @DomainObject on both, abstract super class and one interface, as inherited by:");
+    }
+    
+    @Test
+    void validDomainObjectOnInterface_shouldNotFail() {
+    	validator.assertValid(
+                Identifier.classIdentifier(LogicalType.fqcn(InvalidDomainObjectOnInterface.Good.class)));
     }
 
     @ParameterizedTest

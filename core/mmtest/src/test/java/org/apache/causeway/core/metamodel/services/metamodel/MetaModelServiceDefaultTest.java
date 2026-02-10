@@ -44,7 +44,6 @@ import org.apache.causeway.applib.services.metamodel.DomainModel;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
-import org.apache.causeway.core.metamodel.spec.Hierarchical;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.impl._JUnitSupport;
@@ -74,7 +73,6 @@ public class MetaModelServiceDefaultTest {
         mockSpec = Mockito.mock(ObjectSpecification.class);
         Mockito.when(mockSpec.getFullIdentifier()).thenReturn("mocked");
         Mockito.when(mockSpec.logicalTypeName()).thenReturn("logicalType");
-        Mockito.when(mockSpec.subclasses(Hierarchical.Depth.DIRECT)).thenReturn(Can.empty());
         Mockito.when(mockSpec.isInjectable()).thenReturn(true);
 
         action = _JUnitSupport.actionForMethod(mockFacetedMethod);

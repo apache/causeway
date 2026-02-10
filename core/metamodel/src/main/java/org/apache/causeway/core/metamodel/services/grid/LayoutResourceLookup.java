@@ -34,8 +34,8 @@ import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.reflection._Reflect;
-import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,13 +65,18 @@ record LayoutResourceLookup(
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
 
-        if(isKnownInvalid(layoutKey)) return Optional.empty();
+        if(isKnownInvalid(layoutKey))
+            return Optional.empty();
 
-        var layoutResourceOpt = _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.EXCLUDE)
-            .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
-            .findFirst();
+        var layoutResourceOpt = MetaModelContext.instance()
+            .flatMap(mmc->mmc.specForType(layoutKey.domainClass()))
+            .flatMap(spec->spec.streamTypeHierarchyAndInterfaces()
+                    .map(ObjectSpecification::getCorrespondingClass)
+                    .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
+                    .findFirst());
 
-        if(layoutResourceOpt.isPresent()) return layoutResourceOpt;
+        if(layoutResourceOpt.isPresent())
+            return layoutResourceOpt;
 
         log.debug(
             "Failed to locate or load layout resource for class {}, "

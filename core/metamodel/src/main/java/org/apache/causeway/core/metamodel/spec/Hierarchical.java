@@ -23,12 +23,6 @@ import org.apache.causeway.commons.collections.Can;
 public interface Hierarchical {
 
     /**
-     * Returns true if the <tt>subclasses()</tt> method will return an array of
-     * one or more elements (ie, not an empty array).
-     */
-    boolean hasSubclasses();
-
-    /**
      * Get the set of specifications for all the interfaces that the class
      * represented by this specification implements.
      */
@@ -49,17 +43,6 @@ public interface Hierarchical {
      * Same as {@link #isOfType(ObjectSpecification)}, except treating wrapper/primitive the same.
      */
     boolean isOfTypeResolvePrimitive(ObjectSpecification other);
-
-    public static enum Depth {
-        DIRECT,
-        TRANSITIVE
-    }
-
-    /**
-     * Get the set of specifications for the subclasses of the class
-     * represented by this specification
-     */
-    Can<ObjectSpecification> subclasses(Depth depth);
 
     /**
      * Get the specification for this specification's class's superclass.
