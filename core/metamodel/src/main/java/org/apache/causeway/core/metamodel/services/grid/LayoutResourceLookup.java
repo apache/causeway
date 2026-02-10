@@ -28,12 +28,14 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._Reflect;
 import org.apache.causeway.commons.internal.reflection._Reflect.InterfacePolicy;
 
@@ -65,13 +67,20 @@ record LayoutResourceLookup(
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
 
-        if(isKnownInvalid(layoutKey)) return Optional.empty();
+        if(isKnownInvalid(layoutKey))
+            return Optional.empty();
 
-        var layoutResourceOpt = _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.EXCLUDE)
+        var classCache = _ClassCache.getInstance();
+
+        var layoutResourceOpt = _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.INCLUDE)
+            .filter(type->!type.isInterface()
+                    || (!type.getName().startsWith("java.")
+                            && classCache.head(type).hasAnnotation(DomainObject.class)))
             .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
             .findFirst();
 
-        if(layoutResourceOpt.isPresent()) return layoutResourceOpt;
+        if(layoutResourceOpt.isPresent())
+            return layoutResourceOpt;
 
         log.debug(
             "Failed to locate or load layout resource for class {}, "
