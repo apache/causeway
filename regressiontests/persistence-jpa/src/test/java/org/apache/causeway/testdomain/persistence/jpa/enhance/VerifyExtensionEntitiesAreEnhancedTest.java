@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.testdomain.persistence.jpa.enhance;
 
-import org.eclipse.persistence.logging.SessionLogEntry;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +33,7 @@ import org.apache.causeway.extensions.secman.jpa.permission.dom.ApplicationPermi
 import org.apache.causeway.extensions.secman.jpa.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
+import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
 
 class VerifyExtensionEntitiesAreEnhancedTest {
 
@@ -41,9 +41,20 @@ class VerifyExtensionEntitiesAreEnhancedTest {
 
     @Test @Disabled("weaving fails, if forced to run")
     void audittrail() {
-//Failed to execute goal [32mcom.ethlo.persistence.tools:eclipselink-maven-plugin:3.0.2:weave[0m [1m(default)[0m on project [36mcauseway-extensions-audittrail-persistence-jpa[0m: [31;1mException [EclipseLink-28018] (Eclipse Persistence Services - 4.0.2.v202306161219): org.eclipse.persistence.exceptions.EntityManagerSetupException[m
-//Exception Description: Predeployment of PersistenceUnit [causeway-extensions-audittrail-persistence-jpa] failed.[m
-//Internal Exception: java.lang.NullPointerException: Cannot invoke "org.eclipse.persistence.internal.jpa.metadata.accessors.objects.MetadataClass.getName()" because the return value of "org.eclipse.persistence.internal.jpa.metadata.accessors.objects.MetadataClass.getSuperclass()" is null[0m[m
+        /*
+Caused by: java.lang.NullPointerException: Cannot invoke "org.eclipse.persistence.internal.jpa.metadata.accessors.objects.MetadataClass.getName()" because the return value of "org.eclipse.persistence.internal.jpa.metadata.accessors.objects.MetadataClass.getSuperclass()" is null
+    at org.eclipse.persistence.internal.jpa.weaving.TransformerFactory.createClassDetails(TransformerFactory.java:312)
+    at org.eclipse.persistence.internal.jpa.weaving.TransformerFactory.addClassDetailsForMappedSuperClasses(TransformerFactory.java:152)
+    at org.eclipse.persistence.internal.jpa.weaving.TransformerFactory.buildClassDetailsAndModifyProject(TransformerFactory.java:223)
+    at org.eclipse.persistence.internal.jpa.weaving.TransformerFactory.createTransformerAndModifyProject(TransformerFactory.java:89)
+    at org.eclipse.persistence.internal.jpa.EntityManagerSetupImpl.predeploy(EntityManagerSetupImpl.java:2072)
+    at org.eclipse.persistence.tools.weaving.jpa.StaticWeaveClassTransformer.buildClassTransformers(StaticWeaveClassTransformer.java:128)
+    at org.eclipse.persistence.tools.weaving.jpa.StaticWeaveClassTransformer.<init>(StaticWeaveClassTransformer.java:78)
+    at org.eclipse.persistence.tools.weaving.jpa.StaticWeaveProcessor.process(StaticWeaveProcessor.java:247)
+    at org.eclipse.persistence.tools.weaving.jpa.StaticWeaveProcessor.performWeaving(StaticWeaveProcessor.java:169)
+    at com.ethlo.persistence.tools.eclipselink.EclipselinkStaticWeaveMojo.processWeaving(EclipselinkStaticWeaveMojo.java:159)
+    at com.ethlo.persistence.tools.eclipselink.EclipselinkStaticWeaveMojo.execute(EclipselinkStaticWeaveMojo.java:111)
+         */
         assertTrue(classCache.isByteCodeEnhanced(AuditTrailEntry.class));
     }
 
@@ -67,7 +78,7 @@ class VerifyExtensionEntitiesAreEnhancedTest {
         assertTrue(classCache.isByteCodeEnhanced(ExecutionOutboxEntry.class));
     }
 
-    @Test @Disabled("weaving for some reason is not picked up to run")
+    @Test
     void secman() {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationRole.class));
         assertTrue(classCache.isByteCodeEnhanced(ApplicationPermission.class));
@@ -75,7 +86,7 @@ class VerifyExtensionEntitiesAreEnhancedTest {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationUser.class));
     }
 
-    @Test @Disabled("weaving for some reason is not picked up to run")
+    @Test
     void sessionlog() {
         assertTrue(classCache.isByteCodeEnhanced(SessionLogEntry.class));
     }

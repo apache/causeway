@@ -142,7 +142,7 @@ import lombok.Setter;
 @DomainObject(
         editing = Editing.DISABLED
 )
-public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry {
+public class SessionLogEntry implements org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry {
 
     public SessionLogEntry(
             final UUID sessionGuid,
@@ -150,7 +150,7 @@ public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.a
             final String username,
             final SessionSubscriber.CausedBy causedBy,
             final Timestamp loginTimestamp) {
-        super(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
+        init(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
     }
 
     public SessionLogEntry() {
@@ -168,7 +168,7 @@ public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.a
     }
     @Transient
     @Override
-    public void setSessionGuid(UUID sessionGuid) {
+    public void setSessionGuid(final UUID sessionGuid) {
         this.pk = new SessionLogEntryPK(sessionGuid);
     }
 
@@ -196,5 +196,11 @@ public class SessionLogEntry extends org.apache.causeway.extensions.sessionlog.a
     @CausedBy
     @Getter @Setter
     private SessionSubscriber.CausedBy causedBy;
+
+    @Override
+    public String toString() {
+        return CONTRACT.toString(SessionLogEntry.this);
+    }
+
 
 }
