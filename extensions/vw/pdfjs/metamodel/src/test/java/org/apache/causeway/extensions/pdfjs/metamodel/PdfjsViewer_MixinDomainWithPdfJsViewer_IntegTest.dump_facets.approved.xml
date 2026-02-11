@@ -854,9 +854,9 @@
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutAnnotation">
             <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act()]"/>
             <mml:attr name="facet" value="MemberDescribedFacetForActionLayoutAnnotation"/>
-            <mml:attr name="originalText" value="Open up a view of the metamodel of this object's domain class"/>
+            <mml:attr name="originalText" value="Opens a meta-model inspection view for this object's domain class"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="translated" value="Open up a view of the metamodel of this object's domain class"/>
+            <mml:attr name="translated" value="Opens a meta-model inspection view for this object's domain class"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet" fqcn="org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetForStaticMemberName">
             <mml:attr name="context" value="TranslationContext[name=org.apache.causeway.core.metamodel.inspect.Object_inspectMetamodel#act()]"/>
@@ -871,7 +871,7 @@
             <mml:attr name="value" value="table"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForActionLayoutAnnotation">
-            <mml:attr name="classes" value="sitemap"/>
+            <mml:attr name="classes" value="shapes solid"/>
             <mml:attr name="facet" value="FaFacetForActionLayoutAnnotation"/>
             <mml:attr name="position" value="LEFT"/>
             <mml:attr name="precedence" value="DEFAULT"/>
