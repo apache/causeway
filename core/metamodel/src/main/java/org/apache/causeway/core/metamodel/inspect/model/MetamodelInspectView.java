@@ -93,16 +93,19 @@ public class MetamodelInspectView extends MasterDetailTreeView<MMNode, Metamodel
         return activeNode().details();
     }
 
-    @Action 
-    @ActionLayout(position = Position.PANEL, fieldSetId = "tree", named = "Inspect other", cssClassFa = "solid shapes")
-    public MetamodelInspectView inspect(String fullyQualifiedClassName) {
+    @Action
+    @ActionLayout(position = Position.PANEL, fieldSetId = "tree",
+        named = "Inspect other",
+        describedAs = "Opens a meta-model inspection view for given fully qualified domain class",
+        cssClassFa = "solid shapes")
+    public MetamodelInspectView inspect(final String fullyQualifiedClassName) {
     	return MetamodelInspectMenu.inspect(fullyQualifiedClassName, null);
     }
-    @MemberSupport 
-    public String validate0Inspect(String fullyQualifiedClassName) {
+    @MemberSupport
+    public String validate0Inspect(final String fullyQualifiedClassName) {
     	return MetamodelInspectMenu.validateClassName(fullyQualifiedClassName);
     }
-    
+
     // -- IMPLEMENTATION DETAILS
 
     @Override

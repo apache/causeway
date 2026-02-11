@@ -43,18 +43,21 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 public class MetamodelInspectMenu {
 
     @Action(restrictTo = RestrictTo.PROTOTYPING)
-    @ActionLayout(named = "Inspect type", cssClassFa = "solid shapes")
-    public MetamodelInspectView inspect(String fullyQualifiedClassName) {
+    @ActionLayout(
+            named = "Inspect type",
+            describedAs = "Opens a meta-model inspection view for given fully qualified domain class",
+            cssClassFa = "solid shapes")
+    public MetamodelInspectView inspect(final String fullyQualifiedClassName) {
     	return inspect(fullyQualifiedClassName, ()->null);
     }
-    @MemberSupport 
-    public String validate0Inspect(String fullyQualifiedClassName) {
+    @MemberSupport
+    public String validate0Inspect(final String fullyQualifiedClassName) {
     	return validateClassName(fullyQualifiedClassName);
     }
-    
+
     // -- UTIL
-    
-    static MetamodelInspectView inspect(String fullyQualifiedClassName, Supplier<MetamodelInspectView> fallback) {
+
+    static MetamodelInspectView inspect(final String fullyQualifiedClassName, final Supplier<MetamodelInspectView> fallback) {
     	try {
     		var classOfInterest = _Context.loadClass(fullyQualifiedClassName);
     		return MetaModelContext.instance()
@@ -67,8 +70,8 @@ public class MetamodelInspectMenu {
 		}
     	return null;
     }
-     
-    static String validateClassName(String fullyQualifiedClassName) {
+
+    static String validateClassName(final String fullyQualifiedClassName) {
     	try {
     		_Context.loadClass(fullyQualifiedClassName);
     	} catch (ClassNotFoundException e) {
@@ -76,5 +79,5 @@ public class MetamodelInspectMenu {
 		}
     	return null;
     }
-     
+
 }
