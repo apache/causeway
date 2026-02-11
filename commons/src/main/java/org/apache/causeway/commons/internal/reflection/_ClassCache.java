@@ -127,9 +127,9 @@ public final class _ClassCache implements AutoCloseable {
     public String getLogicalName(final Class<?> type) {
         var head = head(type);
         return Optional.ofNullable(head.attributeMap().get(Attribute.SPRING_NAMED))
-                .or(()->Optional.ofNullable(head.named()))
-                .or(()->Optional.ofNullable(type.getCanonicalName()))
-                .orElseGet(type::getName);
+            .or(()->Optional.ofNullable(head.named()))
+            .or(()->Optional.ofNullable(type.getCanonicalName()))
+            .orElseGet(type::getName);
     }
 
     public ClassModelHead head(final Class<?> type) {
@@ -201,14 +201,14 @@ public final class _ClassCache implements AutoCloseable {
     @SneakyThrows
     public ResolvedMethod findMethodUniquelyByNameOrFail(final Class<?> type, final String methodName) {
         var matchingMethods = streamResolvedMethods(type)
-                .filter(method->method.name().equals(methodName))
-                .collect(Can.toCan());
+            .filter(method->method.name().equals(methodName))
+            .collect(Can.toCan());
         return matchingMethods.isCardinalityMultiple()
-                ? matchingMethods.reduce(ResolvedMethod::mostSpecific)
-                        .getSingleton()
-                        .orElseThrow(()->_Exceptions.illegalState("unable to determine most specific of methods %s", matchingMethods))
-                : matchingMethods.getSingleton()
-                    .orElseThrow(()->_Exceptions.noSuchMethodException(type, methodName));
+            ? matchingMethods.reduce(ResolvedMethod::mostSpecific)
+                    .getSingleton()
+                    .orElseThrow(()->_Exceptions.illegalState("unable to determine most specific of methods %s", matchingMethods))
+            : matchingMethods.getSingleton()
+                .orElseThrow(()->_Exceptions.noSuchMethodException(type, methodName));
     }
 
     // -- FIELD SEMANTICS
@@ -222,11 +222,11 @@ public final class _ClassCache implements AutoCloseable {
     public Optional<ResolvedMethod> getterForField(final Class<?> type, final Field field) {
         var capitalizedFieldName = _Strings.capitalize(field.getName());
         return Stream.of("get", "is")
-        .map(prefix->prefix + capitalizedFieldName)
-        .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
-        .filter(_NullSafe::isPresent)
-        .filter(AccessorSemantics::isGetter)
-        .findFirst();
+            .map(prefix->prefix + capitalizedFieldName)
+            .map(methodName->lookupResolvedMethod(type, methodName, _Constants.emptyClasses).orElse(null))
+            .filter(_NullSafe::isPresent)
+            .filter(AccessorSemantics::isGetter)
+            .findFirst();
     }
 
     // -- METHOD STREAMS
@@ -248,20 +248,18 @@ public final class _ClassCache implements AutoCloseable {
 
         synchronized(classModel.body().declaredMethodsByAttribute) {
             return classModel.body().declaredMethodsByAttribute
-            .computeIfAbsent(attributeName, key->classModel.body()
-                    .resolvedMethodsByKey.values().stream()
-                    .filter(filter)
-                    .collect(Can.toCan()))
-            .stream();
+                .computeIfAbsent(attributeName, key->classModel.body()
+                        .resolvedMethodsByKey.values().stream()
+                        .filter(filter)
+                        .collect(Can.toCan()))
+                .stream();
         }
     }
 
     // not memoized, as only used for debugging and MetamodelInspectView (UI)
     public boolean isByteCodeEnhanced(final Class<?> type) {
-        var classModel = classModel(type);
-        return classModel.body()
-            .resolvedMethodsByKey.values().stream()
-            .filter(method->isByteCodeEnhanced(method.method()))
+        return Stream.of(type.getDeclaredMethods())
+            .filter(_ClassCache::isByteCodeEnhanced)
             .findAny()
             .isPresent();
     }
@@ -369,28 +367,28 @@ public final class _ClassCache implements AutoCloseable {
 
             // process all methods (public and non-public and inherited)
             _Reflect.streamAllMethods(type, true)
-            .filter(_ClassCache::methodIncludeFilter)
-            .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-            .filter(_NullSafe::isPresent)
-            .forEach(resolved->{
-                var key = new MethodKey(type, resolved.method());
-                var methodToKeep =
-                        putIntoMapHonoringOverridingRelation(body.resolvedMethodsByKey, key, resolved);
-                // collect post-construct methods
-                if(isPostConstruct(methodToKeep.method())) {
-                    body.postConstructMethodsByKey.put(key, methodToKeep);
-                }
-            });
+                .filter(_ClassCache::methodIncludeFilter)
+                .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+                .filter(_NullSafe::isPresent)
+                .forEach(resolved->{
+                    var key = new MethodKey(type, resolved.method());
+                    var methodToKeep =
+                            putIntoMapHonoringOverridingRelation(body.resolvedMethodsByKey, key, resolved);
+                    // collect post-construct methods
+                    if(isPostConstruct(methodToKeep.method())) {
+                        body.postConstructMethodsByKey.put(key, methodToKeep);
+                    }
+                });
 
             // process public methods
             _NullSafe.stream(type.getMethods())
-            .filter(_ClassCache::methodIncludeFilter)
-            .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
-            .filter(_NullSafe::isPresent)
-            .forEach(resolved->{
-                var key = new MethodKey(type, resolved.method());
-                putIntoMapHonoringOverridingRelation(body.publicMethodsByKey, key, resolved);
-            });
+                .filter(_ClassCache::methodIncludeFilter)
+                .map(method->_GenericResolver.resolveMethod(method, type).orElse(null))
+                .filter(_NullSafe::isPresent)
+                .forEach(resolved->{
+                    var key = new MethodKey(type, resolved.method());
+                    putIntoMapHonoringOverridingRelation(body.publicMethodsByKey, key, resolved);
+                });
 
             return body;
         }
