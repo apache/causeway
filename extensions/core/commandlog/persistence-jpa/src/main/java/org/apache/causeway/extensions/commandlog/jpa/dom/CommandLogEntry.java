@@ -222,7 +222,7 @@ import lombok.Setter;
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(CausewayEntityListener.class)
 @NoArgsConstructor
-public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
+public class CommandLogEntry implements org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry {
 
     /**
      * Intended for use on secondary (replay) system.
@@ -235,7 +235,7 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
             final CommandDto commandDto,
             final org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState,
             final int targetIndex) {
-        super(commandDto, replayState, targetIndex);
+        init(commandDto, replayState, targetIndex);
     }
 
     @EmbeddedId
@@ -249,7 +249,7 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     }
     @Transient
     @Override
-    public void setInteractionId(UUID interactionId) {
+    public void setInteractionId(final UUID interactionId) {
         this.pk = new CommandLogEntryPK(interactionId);
     }
 
@@ -325,5 +325,10 @@ public class CommandLogEntry extends org.apache.causeway.extensions.commandlog.a
     @ReplayStateFailureReason
     @Getter @Setter
     private String replayStateFailureReason;
+
+    @Override
+    public String toString() {
+        return STRINGIFIER.toString(this);
+    }
 
 }

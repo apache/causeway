@@ -43,12 +43,14 @@ import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.Nq;
 import org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntryType;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
+import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -153,7 +155,13 @@ import lombok.Setter;
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(CausewayEntityListener.class)
-public class ExecutionLogEntry extends org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry {
+public class ExecutionLogEntry implements org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry {
+
+    public ExecutionLogEntry() {
+    }
+    public ExecutionLogEntry(final Execution<? extends MemberExecutionDto, ?> execution) {
+        init(execution);
+    }
 
     @EmbeddedId
     ExecutionLogEntryPK pk;
@@ -166,7 +174,7 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     }
     @Transient
     @Override
-    public void setInteractionId(UUID interactionId) {
+    public void setInteractionId(final UUID interactionId) {
         pk = new ExecutionLogEntryPK(interactionId, getSequence());
     }
 
@@ -178,7 +186,7 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     }
     @Transient
     @Override
-    public void setSequence(int sequence) {
+    public void setSequence(final int sequence) {
         pk = new ExecutionLogEntryPK(getInteractionId(), sequence);
     }
 
@@ -208,6 +216,7 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     @LogicalMemberIdentifier
     @Getter
     private String logicalMemberIdentifier;
+    @Override
     public void setLogicalMemberIdentifier(final String logicalMemberIdentifier) {
         this.logicalMemberIdentifier = Util.abbreviated(logicalMemberIdentifier, LogicalMemberIdentifier.MAX_LENGTH);
     }
@@ -228,5 +237,10 @@ public class ExecutionLogEntry extends org.apache.causeway.extensions.executionl
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
+
+    @Override
+    public String toString() {
+        return TOSTRING.toString(this);
+    }
 
 }

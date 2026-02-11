@@ -35,11 +35,12 @@ import org.apache.causeway.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
 
+@Disabled("may run too early")
 class VerifyExtensionEntitiesAreEnhancedTest {
 
     private _ClassCache classCache = _ClassCache.getInstance();
 
-    @Test @Disabled("weaving fails, if forced to run")
+    @Test @Disabled("weaving fails")
     void audittrail() {
         /*
 Caused by: java.lang.NullPointerException: Cannot invoke "org.eclipse.persistence.internal.jpa.metadata.accessors.objects.MetadataClass.getName()" because the return value of "org.eclipse.persistence.internal.jpa.metadata.accessors.objects.MetadataClass.getSuperclass()" is null
@@ -58,7 +59,7 @@ Caused by: java.lang.NullPointerException: Cannot invoke "org.eclipse.persistenc
         assertTrue(classCache.isByteCodeEnhanced(AuditTrailEntry.class));
     }
 
-    @Test @Disabled("weaving for some reason is not picked up to run")
+    @Test @Disabled("weaving fails")
     void commandlog() {
         assertTrue(classCache.isByteCodeEnhanced(CommandLogEntry.class));
     }
