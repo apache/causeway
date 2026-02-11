@@ -44,6 +44,7 @@ directive @specifiedBy(
 type Mutation {
   causeway_conf_ConfigurationProperty__key(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, key: String!): rich__causeway_conf_ConfigurationProperty
   causeway_conf_ConfigurationProperty__value(_target: rich__causeway_conf_ConfigurationProperty__gqlv_input, value: String!): rich__causeway_conf_ConfigurationProperty
+  causeway_metamodel_MetamodelInspectView__inspect(_target: rich__causeway_metamodel_MetamodelInspectView__gqlv_input, fullyQualifiedClassName: String!): rich__causeway_metamodel_MetamodelInspectView
   causeway_testing_fixtures_FixtureResult__fixtureScriptClassName(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, fixtureScriptClassName: String): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__key(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, key: String!): rich__causeway_testing_fixtures_FixtureResult
   causeway_testing_fixtures_FixtureResult__object(_target: rich__causeway_testing_fixtures_FixtureResult__gqlv_input, object: String!): rich__causeway_testing_fixtures_FixtureResult
@@ -77,7 +78,6 @@ type Mutation {
 type RICHSchema {
   Scenario(name: String): Scenario
   causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
-  causeway_applib_MetamodelInspectView(object: rich__causeway_applib_MetamodelInspectView__gqlv_input): rich__causeway_applib_MetamodelInspectView
   causeway_applib_RoleMemento(object: rich__causeway_applib_RoleMemento__gqlv_input): rich__causeway_applib_RoleMemento
   causeway_applib_UserMemento(object: rich__causeway_applib_UserMemento__gqlv_input): rich__causeway_applib_UserMemento
   causeway_applib_UserMenu: rich__causeway_applib_UserMenu
@@ -91,6 +91,7 @@ type RICHSchema {
   causeway_feat_ApplicationTypeCollection(object: rich__causeway_feat_ApplicationTypeCollection__gqlv_input): rich__causeway_feat_ApplicationTypeCollection
   causeway_feat_ApplicationTypeMember(object: rich__causeway_feat_ApplicationTypeMember__gqlv_input): rich__causeway_feat_ApplicationTypeMember
   causeway_feat_ApplicationTypeProperty(object: rich__causeway_feat_ApplicationTypeProperty__gqlv_input): rich__causeway_feat_ApplicationTypeProperty
+  causeway_metamodel_MetamodelInspectView(object: rich__causeway_metamodel_MetamodelInspectView__gqlv_input): rich__causeway_metamodel_MetamodelInspectView
   causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
@@ -119,7 +120,6 @@ type RICHSchema {
 
 type SIMPLESchema {
   causeway_applib_DomainObjectList(object: simple__causeway_applib_DomainObjectList__gqlv_input): simple__causeway_applib_DomainObjectList
-  causeway_applib_MetamodelInspectView(object: simple__causeway_applib_MetamodelInspectView__gqlv_input): simple__causeway_applib_MetamodelInspectView
   causeway_applib_RoleMemento(object: simple__causeway_applib_RoleMemento__gqlv_input): simple__causeway_applib_RoleMemento
   causeway_applib_UserMemento(object: simple__causeway_applib_UserMemento__gqlv_input): simple__causeway_applib_UserMemento
   causeway_applib_UserMenu: simple__causeway_applib_UserMenu
@@ -133,6 +133,7 @@ type SIMPLESchema {
   causeway_feat_ApplicationTypeCollection(object: simple__causeway_feat_ApplicationTypeCollection__gqlv_input): simple__causeway_feat_ApplicationTypeCollection
   causeway_feat_ApplicationTypeMember(object: simple__causeway_feat_ApplicationTypeMember__gqlv_input): simple__causeway_feat_ApplicationTypeMember
   causeway_feat_ApplicationTypeProperty(object: simple__causeway_feat_ApplicationTypeProperty__gqlv_input): simple__causeway_feat_ApplicationTypeProperty
+  causeway_metamodel_MetamodelInspectView(object: simple__causeway_metamodel_MetamodelInspectView__gqlv_input): simple__causeway_metamodel_MetamodelInspectView
   causeway_security_LoginRedirect(object: simple__causeway_security_LoginRedirect__gqlv_input): simple__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: simple__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: simple__causeway_testing_fixtures_FixtureResult__gqlv_input): simple__causeway_testing_fixtures_FixtureResult
@@ -171,7 +172,6 @@ type Scenario {
 
 type ScenarioStep {
   causeway_applib_DomainObjectList(object: rich__causeway_applib_DomainObjectList__gqlv_input): rich__causeway_applib_DomainObjectList
-  causeway_applib_MetamodelInspectView(object: rich__causeway_applib_MetamodelInspectView__gqlv_input): rich__causeway_applib_MetamodelInspectView
   causeway_applib_RoleMemento(object: rich__causeway_applib_RoleMemento__gqlv_input): rich__causeway_applib_RoleMemento
   causeway_applib_UserMemento(object: rich__causeway_applib_UserMemento__gqlv_input): rich__causeway_applib_UserMemento
   causeway_applib_UserMenu: rich__causeway_applib_UserMenu
@@ -185,6 +185,7 @@ type ScenarioStep {
   causeway_feat_ApplicationTypeCollection(object: rich__causeway_feat_ApplicationTypeCollection__gqlv_input): rich__causeway_feat_ApplicationTypeCollection
   causeway_feat_ApplicationTypeMember(object: rich__causeway_feat_ApplicationTypeMember__gqlv_input): rich__causeway_feat_ApplicationTypeMember
   causeway_feat_ApplicationTypeProperty(object: rich__causeway_feat_ApplicationTypeProperty__gqlv_input): rich__causeway_feat_ApplicationTypeProperty
+  causeway_metamodel_MetamodelInspectView(object: rich__causeway_metamodel_MetamodelInspectView__gqlv_input): rich__causeway_metamodel_MetamodelInspectView
   causeway_security_LoginRedirect(object: rich__causeway_security_LoginRedirect__gqlv_input): rich__causeway_security_LoginRedirect
   causeway_security_LogoutMenu: rich__causeway_security_LogoutMenu
   causeway_testing_fixtures_FixtureResult(object: rich__causeway_testing_fixtures_FixtureResult__gqlv_input): rich__causeway_testing_fixtures_FixtureResult
@@ -293,44 +294,6 @@ type rich__causeway_applib_DomainObjectList__title__gqlv_property {
   hidden: Boolean
   set(title: String!): rich__causeway_applib_DomainObjectList
   validate(title: String): String
-}
-
-type rich__causeway_applib_MetamodelInspectView {
-  "Object metadata"
-  _meta: rich__causeway_applib_MetamodelInspectView__gqlv_meta
-  "Details"
-  details: rich__causeway_applib_MetamodelInspectView__details__gqlv_property
-  "Tree"
-  tree: rich__causeway_applib_MetamodelInspectView__tree__gqlv_property
-}
-
-type rich__causeway_applib_MetamodelInspectView__details__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(details: String!): rich__causeway_applib_MetamodelInspectView
-  validate(details: String): String
-}
-
-type rich__causeway_applib_MetamodelInspectView__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
-type rich__causeway_applib_MetamodelInspectView__tree__gqlv_property {
-  datatype: String
-  disabled: String
-  get: String!
-  hidden: Boolean
-  set(tree: String!): rich__causeway_applib_MetamodelInspectView
-  validate(tree: String): String
 }
 
 type rich__causeway_applib_RoleMemento {
@@ -1161,6 +1124,79 @@ type rich__causeway_feat_ApplicationType__typeSimpleName__gqlv_property {
   hidden: Boolean
   set(typeSimpleName: String!): rich__causeway_feat_ApplicationType
   validate(typeSimpleName: String): String
+}
+
+type rich__causeway_metamodel_MetamodelInspectView {
+  "Object metadata"
+  _meta: rich__causeway_metamodel_MetamodelInspectView__gqlv_meta
+  "Details"
+  details: rich__causeway_metamodel_MetamodelInspectView__details__gqlv_property
+  "Opens a meta-model inspection view for given fully qualified domain class"
+  inspect: rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action
+  "Tree"
+  tree: rich__causeway_metamodel_MetamodelInspectView__tree__gqlv_property
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__details__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(details: String!): rich__causeway_metamodel_MetamodelInspectView
+  validate(details: String): String
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__inspect__fullyQualifiedClassName__gqlv_action_parameter {
+  datatype: String
+  disabled(fullyQualifiedClassName: String): String
+  hidden: Boolean
+  validity: String
+}
+
+"Opens a meta-model inspection view for given fully qualified domain class"
+type rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action {
+  disabled: String
+  hidden: Boolean
+  invokeNonIdempotent(fullyQualifiedClassName: String!): rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_invoke
+  "Parameters of this action"
+  params: rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_params
+  validate(fullyQualifiedClassName: String): String
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_args {
+  fullyQualifiedClassName: String
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_invoke {
+  "Arguments used to invoke this action"
+  args: rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_args
+  results: rich__causeway_metamodel_MetamodelInspectView
+  target: rich__causeway_metamodel_MetamodelInspectView
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__inspect__gqlv_action_params {
+  "Fully Qualified Class Name"
+  fullyQualifiedClassName: rich__causeway_metamodel_MetamodelInspectView__inspect__fullyQualifiedClassName__gqlv_action_parameter
+}
+
+type rich__causeway_metamodel_MetamodelInspectView__tree__gqlv_property {
+  datatype: String
+  disabled: String
+  get: String!
+  hidden: Boolean
+  set(tree: String!): rich__causeway_metamodel_MetamodelInspectView
+  validate(tree: String): String
 }
 
 type rich__causeway_security_LoginRedirect {
@@ -4620,24 +4656,6 @@ type simple__causeway_applib_DomainObjectList__gqlv_meta {
   title: String!
 }
 
-type simple__causeway_applib_MetamodelInspectView {
-  "Object metadata"
-  _meta: simple__causeway_applib_MetamodelInspectView__gqlv_meta
-  details: String!
-  tree: String!
-}
-
-type simple__causeway_applib_MetamodelInspectView__gqlv_meta {
-  cssClass: String
-  grid: String
-  icon: String
-  id: String!
-  layout: String
-  logicalTypeName: String!
-  saveAs(ref: String): String
-  title: String!
-}
-
 type simple__causeway_applib_RoleMemento {
   "Object metadata"
   _meta: simple__causeway_applib_RoleMemento__gqlv_meta
@@ -4871,6 +4889,26 @@ type simple__causeway_feat_ApplicationTypeProperty__gqlv_meta {
 }
 
 type simple__causeway_feat_ApplicationType__gqlv_meta {
+  cssClass: String
+  grid: String
+  icon: String
+  id: String!
+  layout: String
+  logicalTypeName: String!
+  saveAs(ref: String): String
+  title: String!
+}
+
+type simple__causeway_metamodel_MetamodelInspectView {
+  "Object metadata"
+  _meta: simple__causeway_metamodel_MetamodelInspectView__gqlv_meta
+  details: String!
+  "Opens a meta-model inspection view for given fully qualified domain class"
+  inspect(fullyQualifiedClassName: String!): simple__causeway_metamodel_MetamodelInspectView
+  tree: String!
+}
+
+type simple__causeway_metamodel_MetamodelInspectView__gqlv_meta {
   cssClass: String
   grid: String
   icon: String
@@ -5335,8 +5373,6 @@ type simple__university_dept_StaffMember__photo__gqlv_member {
 enum logicalTypeNames__gqlv_enum {
   "causeway.applib.DomainObjectList"
   causeway_applib_DomainObjectList
-  "causeway.applib.MetamodelInspectView"
-  causeway_applib_MetamodelInspectView
   "causeway.applib.RoleMemento"
   causeway_applib_RoleMemento
   "causeway.applib.UserMemento"
@@ -5359,6 +5395,8 @@ enum logicalTypeNames__gqlv_enum {
   causeway_feat_ApplicationTypeMember
   "causeway.feat.ApplicationTypeProperty"
   causeway_feat_ApplicationTypeProperty
+  "causeway.metamodel.MetamodelInspectView"
+  causeway_metamodel_MetamodelInspectView
   "causeway.security.LoginRedirect"
   causeway_security_LoginRedirect
   "causeway.testing.fixtures.FixtureResult"
@@ -5427,15 +5465,6 @@ scalar Time
 scalar UUID
 
 input rich__causeway_applib_DomainObjectList__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
-input rich__causeway_applib_MetamodelInspectView__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -5535,6 +5564,15 @@ input rich__causeway_feat_ApplicationTypeProperty__gqlv_input {
 }
 
 input rich__causeway_feat_ApplicationType__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input rich__causeway_metamodel_MetamodelInspectView__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
@@ -5687,15 +5725,6 @@ input simple__causeway_applib_DomainObjectList__gqlv_input {
   ref: String
 }
 
-input simple__causeway_applib_MetamodelInspectView__gqlv_input {
-  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
-  id: ID
-  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
-  logicalTypeName: logicalTypeNames__gqlv_enum
-  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
-  ref: String
-}
-
 input simple__causeway_applib_RoleMemento__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
@@ -5787,6 +5816,15 @@ input simple__causeway_feat_ApplicationTypeProperty__gqlv_input {
 }
 
 input simple__causeway_feat_ApplicationType__gqlv_input {
+  "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
+  id: ID
+  "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
+  logicalTypeName: logicalTypeNames__gqlv_enum
+  "Use either 'ref' or 'id'; looks up an object previously saved to the execution context using 'saveAs(ref: ...)'"
+  ref: String
+}
+
+input simple__causeway_metamodel_MetamodelInspectView__gqlv_input {
   "Use either 'id' or 'ref'; looks up an entity from the persistent data store, or if a view model, then recreates using the id as a memento of the object's state"
   id: ID
   "If object identified by 'id', then optionally specifies concrete type.  This is only required if the parameter type defines a super class"
