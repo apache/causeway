@@ -33,7 +33,6 @@
     <properties>
         <jar-plugin.automaticModuleName>org.apache.causeway.extensions.audittrail.persistence.jpa</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/causeway/extensions/audittrail/persistence-jpa</git-plugin.propertiesDir>
-        <jpa-weave>true</jpa-weave>
     </properties>
 
     <dependencies>

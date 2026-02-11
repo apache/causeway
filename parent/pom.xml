@@ -456,7 +456,8 @@
                             <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/META-INF/services/**</exclude>
 
-                            <exclude>**/src/main/resources/supplemental-models.xml</exclude>
+                            <exclude>
+                                **/src/main/resources/supplemental-models.xml</exclude>
 
                             <exclude>**/webpack.config.js</exclude>
                             <exclude>**/webpack.generated.js</exclude>
@@ -480,7 +481,8 @@
                             <exclude>**/*.drawio.svg</exclude>
                             <exclude>**/META-INF/spring.factories</exclude>
 
-                            <exclude>**/incubator/clients/kroviz/package.json.d/project.info</exclude>
+                            <exclude>
+                                **/incubator/clients/kroviz/package.json.d/project.info</exclude>
                             <exclude>**/supplemental-ui/**</exclude>
                             <exclude>**/_nav.adoc</exclude>
                             <exclude>**/module-nav.adoc</exclude>
@@ -1063,10 +1065,12 @@
         <profile>
             <id>jpa-weave</id>
             <activation>
-                <property>
-                    <name>jpa-weave</name>
-                    <value>true</value>
-                </property>
+                <file>
+                    <exists>${basedir}/.jpa-weave</exists>
+                </file>
+                <!-- does not work
+                <property><name>jpa-weave</name></property>
+                -->
             </activation>
             <build>
                 <plugins>
