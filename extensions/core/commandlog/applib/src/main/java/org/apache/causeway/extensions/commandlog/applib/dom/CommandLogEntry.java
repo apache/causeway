@@ -88,14 +88,12 @@ import lombok.experimental.UtilityClass;
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
-        entityChangePublishing = Publishing.DISABLED
-)
+        entityChangePublishing = Publishing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = CommandLogEntry.TitleUiEvent.class,
         iconUiEvent = CommandLogEntry.IconUiEvent.class,
         cssClassUiEvent = CommandLogEntry.CssClassUiEvent.class,
-        layoutUiEvent = CommandLogEntry.LayoutUiEvent.class
-)
+        layoutUiEvent = CommandLogEntry.LayoutUiEvent.class)
 public interface CommandLogEntry
 extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
@@ -636,7 +634,7 @@ extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
 
-    static final ToString<CommandLogEntry> STRINGIFIER = ObjectContracts
+    static final ToString<CommandLogEntry> TOSTRING = ObjectContracts
             .toString("interactionId", CommandLogEntry::getInteractionId)
             .thenToString("username", CommandLogEntry::getUsername)
             .thenToString("timestamp", CommandLogEntry::getTimestamp)

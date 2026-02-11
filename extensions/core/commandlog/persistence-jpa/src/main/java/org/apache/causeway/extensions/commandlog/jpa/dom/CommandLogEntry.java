@@ -328,7 +328,7 @@ public class CommandLogEntry implements org.apache.causeway.extensions.commandlo
 
     @Override
     public String toString() {
-        return STRINGIFIER.toString(this);
+        return TOSTRING.toString(this);
     }
 
 }

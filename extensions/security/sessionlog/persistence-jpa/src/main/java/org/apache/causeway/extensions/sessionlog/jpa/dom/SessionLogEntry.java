@@ -17,7 +17,6 @@
  * under the License.
  *
  */
-
 package org.apache.causeway.extensions.sessionlog.jpa.dom;
 
 import java.sql.Timestamp;

@@ -38,17 +38,21 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Editing;
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.Nq;
 import org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntryType;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
+import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -83,10 +87,16 @@ import lombok.Setter;
 )
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 @EntityListeners(CausewayEntityListener.class)
-public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry {
+public class ExecutionOutboxEntry implements org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry {
 
     @EmbeddedId
     ExecutionOutboxEntryPK pk;
+
+    public ExecutionOutboxEntry() {
+    }
+    public ExecutionOutboxEntry(final @NonNull Execution<? extends MemberExecutionDto,?> execution) {
+        init(execution);
+    }
 
     @Transient
     @InteractionId
@@ -96,7 +106,7 @@ public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executi
     }
     @Transient
     @Override
-    public void setInteractionId(UUID interactionId) {
+    public void setInteractionId(final UUID interactionId) {
         pk = new ExecutionOutboxEntryPK(interactionId, getSequence());
     }
 
@@ -108,7 +118,7 @@ public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executi
     }
     @Transient
     @Override
-    public void setSequence(int sequence) {
+    public void setSequence(final int sequence) {
         pk = new ExecutionOutboxEntryPK(getInteractionId(), sequence);
     }
 
@@ -138,6 +148,7 @@ public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executi
     @LogicalMemberIdentifier
     @Getter
     private String logicalMemberIdentifier;
+    @Override
     public void setLogicalMemberIdentifier(final String logicalMemberIdentifier) {
         this.logicalMemberIdentifier = Util.abbreviated(logicalMemberIdentifier, LogicalMemberIdentifier.MAX_LENGTH);
     }
@@ -158,5 +169,10 @@ public class ExecutionOutboxEntry extends org.apache.causeway.extensions.executi
     @CompletedAt
     @Getter @Setter
     private java.sql.Timestamp completedAt;
+
+    @Override
+    public String toString() {
+        return TOSTRING.toString(this);
+    }
 
 }

@@ -75,14 +75,12 @@ import lombok.experimental.UtilityClass;
 @Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
-        entityChangePublishing = Publishing.DISABLED
-)
+        entityChangePublishing = Publishing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = ExecutionLogEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionLogEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionLogEntry.CssClassUiEvent.class,
-        layoutUiEvent = ExecutionLogEntry.LayoutUiEvent.class
-)
+        layoutUiEvent = ExecutionLogEntry.LayoutUiEvent.class)
 public interface ExecutionLogEntry
 extends Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 

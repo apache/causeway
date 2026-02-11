@@ -64,7 +64,7 @@ Caused by: java.lang.NullPointerException: Cannot invoke "org.eclipse.persistenc
         assertTrue(classCache.isByteCodeEnhanced(CommandLogEntry.class));
     }
 
-    @Test @Disabled("weaving for some reason is not picked up to run")
+    @Test @Disabled("weaving fails")
     void executionlog() {
         assertTrue(classCache.isByteCodeEnhanced(ExecutionLogEntry.class));
     }
