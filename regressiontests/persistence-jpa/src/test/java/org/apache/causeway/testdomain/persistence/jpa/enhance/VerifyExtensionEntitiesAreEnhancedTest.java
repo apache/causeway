@@ -41,7 +41,8 @@ import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
 class VerifyExtensionEntitiesAreEnhancedTest {
 
     static boolean isWeavingEnabled() {
-        return StringUtils.hasLength(System.getProperty("enhanceEclipselink"));
+        return StringUtils.hasLength(System.getProperty("enhanceEclipselink"))
+                || StringUtils.hasLength(System.getenv("enhanceEclipselink"));
     }
 
     private _ClassCache classCache = _ClassCache.getInstance();
