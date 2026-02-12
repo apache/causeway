@@ -83,11 +83,11 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
 
     public static final String FQCN = "org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem";
 
-    @Inject private MessageService messageService;
-    @Inject private RepositoryService repositoryService;
-    @Inject private TitleService titleService;
-    @Inject private ExcelDemoToDoItemMenu toDoItems;
-    @Inject private ClockService clockService;
+    @Inject transient private MessageService messageService;
+    @Inject transient private RepositoryService repositoryService;
+    @Inject transient private TitleService titleService;
+    @Inject transient private ExcelDemoToDoItemMenu toDoItems;
+    @Inject transient private ClockService clockService;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -169,9 +169,8 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     private Double locationLongitude;
 
     public String validateDueBy(final LocalDate dueBy) {
-        if (dueBy == null) {
+        if (dueBy == null)
             return null;
-        }
         return isMoreThanOneWeekInPast(dueBy) ? "Due by date cannot be more than one week old" : null;
     }
 
@@ -222,12 +221,10 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
         return getPreviousCost();
     }
     public String validateUpdateCosts(final BigDecimal proposedCost, final BigDecimal proposedPreviousCost) {
-        if (proposedCost != null && proposedCost.compareTo(BigDecimal.ZERO) < 0) {
+        if (proposedCost != null && proposedCost.compareTo(BigDecimal.ZERO) < 0)
             return "Cost must be positive";
-        }
-        if (proposedPreviousCost != null && proposedPreviousCost.compareTo(BigDecimal.ZERO) < 0) {
+        if (proposedPreviousCost != null && proposedPreviousCost.compareTo(BigDecimal.ZERO) < 0)
             return "Previous cost must be positive";
-        }
         return null;
     }
     //endregion
@@ -247,19 +244,16 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     }
 
     public String disableAdd() {
-        if(isComplete()) {
+        if(isComplete())
             return "Cannot add dependencies for items that are complete";
-        }
         return null;
     }
     // validate the provided argument prior to invoking action
     public String validateAdd(final ExcelDemoToDoItem toDoItem) {
-        if(getDependencies().contains(toDoItem)) {
+        if(getDependencies().contains(toDoItem))
             return "Already a dependency";
-        }
-        if(toDoItem == this) {
+        if(toDoItem == this)
             return "Can't set up a dependency to self";
-        }
         return null;
     }
     //endregion
@@ -273,16 +267,14 @@ public class ExcelDemoToDoItem implements Comparable<ExcelDemoToDoItem> /*, Cale
     }
     // disable action dependent on state of object
     public String disableRemove() {
-        if(isComplete()) {
+        if(isComplete())
             return "Cannot remove dependencies for items that are complete";
-        }
         return getDependencies().isEmpty()? "No dependencies to remove": null;
     }
     // validate the provided argument prior to invoking action
     public String validateRemove(final ExcelDemoToDoItem toDoItem) {
-        if(!getDependencies().contains(toDoItem)) {
+        if(!getDependencies().contains(toDoItem))
             return "Not a dependency";
-        }
         return null;
     }
     // provide a drop-down
