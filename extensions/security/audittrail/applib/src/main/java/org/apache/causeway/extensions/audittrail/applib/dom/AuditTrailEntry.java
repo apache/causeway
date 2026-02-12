@@ -64,7 +64,7 @@ import lombok.experimental.UtilityClass;
         cssClassUiEvent = AuditTrailEntry.CssClassUiEvent.class,
         layoutUiEvent = AuditTrailEntry.LayoutUiEvent.class
 )
-public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<AuditTrailEntry> {
+public interface AuditTrailEntry extends DomainChangeRecord, Comparable<AuditTrailEntry> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtAuditTrailApplib.NAMESPACE + ".AuditTrailEntry";
     public static final String SCHEMA = CausewayModuleExtAuditTrailApplib.SCHEMA;
@@ -108,7 +108,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     public static abstract class ActionDomainEvent extends CausewayModuleExtAuditTrailApplib.ActionDomainEvent<AuditTrailEntry> { }
 
     @Programmatic
-    public void init(final EntityPropertyChange change) {
+    default void init(final EntityPropertyChange change) {
         setTimestamp(change.getTimestamp());
         setUsername(change.getUsername());
         setTarget(change.getTarget());
@@ -120,7 +120,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         setInteractionId(change.getInteractionId());
     }
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         var buf = new TitleBuffer();
         buf.append(_Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                 .format(getTimestamp().toLocalDateTime()));
@@ -130,7 +130,7 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
 
     @DomainChangeRecord.Type
     @Override
-    public ChangeType getType() {
+    default ChangeType getType() {
         return ChangeType.AUDIT_ENTRY;
     }
 
@@ -149,8 +149,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @InteractionId
-    public abstract UUID getInteractionId();
-    public abstract void setInteractionId(UUID interactionId);
+    UUID getInteractionId();
+    void setInteractionId(UUID interactionId);
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -166,8 +166,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @Username
-    public abstract String getUsername();
-    public abstract void setUsername(String userName);
+    String getUsername();
+    void setUsername(String userName);
 
     @Property(
             domainEvent = Timestamp.DomainEvent.class
@@ -182,8 +182,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Timestamp
     @Override
-    public abstract java.sql.Timestamp getTimestamp();
-    public abstract void setTimestamp(java.sql.Timestamp timestamp);
+    java.sql.Timestamp getTimestamp();
+    void setTimestamp(java.sql.Timestamp timestamp);
 
     @Property(
             domainEvent = Target.DomainEvent.class
@@ -199,8 +199,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @Target
-    public abstract Bookmark getTarget();
-    public abstract void setTarget(Bookmark target);
+    Bookmark getTarget();
+    void setTarget(Bookmark target);
 
     /**
      * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
@@ -223,8 +223,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
         String ALLOWS_NULL = HasInteractionIdAndSequence.Sequence.ALLOWS_NULL;
     }
     @Sequence
-    public abstract int getSequence();
-    public abstract void setSequence(int sequence);
+    int getSequence();
+    void setSequence(int sequence);
 
     @Property(
             domainEvent = LogicalMemberIdentifier.DomainEvent.class
@@ -244,8 +244,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @LogicalMemberIdentifier
-    public abstract String getLogicalMemberIdentifier();
-    public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
+    String getLogicalMemberIdentifier();
+    void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
     @Property(
             domainEvent = PropertyId.DomainEvent.class,
@@ -263,8 +263,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @PropertyId
-    public abstract String getPropertyId();
-    public abstract void setPropertyId(String propertyId);
+    String getPropertyId();
+    void setPropertyId(String propertyId);
 
     @Property(
             domainEvent = PreValue.DomainEvent.class,
@@ -285,8 +285,8 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @PreValue
-    public abstract String getPreValue();
-    public abstract void setPreValue(String preValue);
+    String getPreValue();
+    void setPreValue(String preValue);
 
     @Property(
             domainEvent = PostValue.DomainEvent.class,
@@ -307,25 +307,19 @@ public abstract class AuditTrailEntry implements DomainChangeRecord, Comparable<
     }
     @Override
     @PostValue
-    public abstract String getPostValue();
-    public abstract void setPostValue(String postValue);
+    String getPostValue();
+    void setPostValue(String postValue);
 
-    private static final ObjectContracts.ObjectContract<AuditTrailEntry> contract	=
+    static final ObjectContracts.ObjectContract<AuditTrailEntry> CONTRACT =
             ObjectContracts.contract(AuditTrailEntry.class)
                     .thenUse("timestamp", AuditTrailEntry::getTimestamp)
                     .thenUse("username", AuditTrailEntry::getUsername)
                     .thenUse("target", e -> e.getTarget() != null ? e.getTarget().toString(): null)
-                    .thenUse("propertyId", AuditTrailEntry::getPropertyId)
-            ;
+                    .thenUse("propertyId", AuditTrailEntry::getPropertyId);
 
     @Override
-    public String toString() {
-        return contract.toString(AuditTrailEntry.this);
-    }
-
-    @Override
-    public int compareTo(final AuditTrailEntry other) {
-        return contract.compare(this, other);
+    default int compareTo(final AuditTrailEntry other) {
+        return CONTRACT.compare(this, other);
     }
 
 }

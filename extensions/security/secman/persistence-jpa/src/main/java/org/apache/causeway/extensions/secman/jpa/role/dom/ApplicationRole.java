@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.jpa.role.dom;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -40,14 +41,18 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.Bounding;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.Nq;
+import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRoleRepository;
 import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(
@@ -74,13 +79,16 @@ import lombok.Setter;
 @DomainObject(
         bounding = Bounding.BOUNDED,
         autoCompleteRepository = ApplicationRoleRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationRole
-    extends org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole {
+    implements org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole {
+
+    @Inject
+    @Programmatic
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    transient private ApplicationPermissionRepository applicationPermissionRepository;
 
     @Id
     @GeneratedValue
@@ -111,6 +119,21 @@ public class ApplicationRole
     // necessary for integration tests
     public void addToUsers(final ApplicationUser applicationUser) {
         getUsers().add(applicationUser);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return EQUALITY.equals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return HASHING.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return TOSTRING.toString(this);
     }
 
 }

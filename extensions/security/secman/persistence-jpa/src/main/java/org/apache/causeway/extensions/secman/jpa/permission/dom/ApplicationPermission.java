@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.extensions.secman.jpa.permission.dom;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,7 +39,9 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.Nq;
@@ -49,6 +52,7 @@ import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityList
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(
@@ -103,10 +107,12 @@ import lombok.Setter;
 @Named(ApplicationPermission.LOGICAL_TYPE_NAME)
 @DomainObject
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_CHILD
-)
+        bookmarking = BookmarkPolicy.AS_CHILD)
 public class ApplicationPermission
-    extends org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
+    implements org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
+
+    @Inject @Programmatic @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private transient ApplicationFeatureRepository featureRepository;
 
     @Id
     @GeneratedValue
@@ -145,5 +151,20 @@ public class ApplicationPermission
     @FeatureFqn
     @Getter @Setter
     private String featureFqn;
+
+    @Override
+    public boolean equals(final Object other) {
+        return CONTRACT.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return CONTRACT.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return CONTRACT.toString(this);
+    }
 
 }

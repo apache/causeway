@@ -53,6 +53,7 @@ import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.extensions.sessionlog.applib.CausewayModuleExtSessionLogApplib;
 
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -72,7 +73,7 @@ import lombok.experimental.UtilityClass;
         cssClassUiEvent = SessionLogEntry.CssClassUiEvent.class,
         layoutUiEvent = SessionLogEntry.LayoutUiEvent.class
 )
-public abstract class SessionLogEntry implements HasUsername, Comparable<SessionLogEntry> {
+public interface SessionLogEntry extends HasUsername, Comparable<SessionLogEntry> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSessionLogApplib.NAMESPACE + ".SessionLogEntry";
     public static final String SCHEMA = CausewayModuleExtSessionLogApplib.SCHEMA;
@@ -109,7 +110,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
 
     public static abstract class ActionDomainEvent extends CausewayModuleExtSessionLogApplib.ActionDomainEvent<SessionLogEntry> { }
 
-    protected SessionLogEntry(
+    default void init(
             final UUID sessionGuid,
             final String httpSessionId,
             final String username,
@@ -122,7 +123,7 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         setLoginTimestamp(loginTimestamp);
     }
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return String.format("%s: %s logged %s %s",
                 _Temporals.DEFAULT_LOCAL_DATETIME_FORMATTER
                     .format(getLoginTimestamp().toLocalDateTime()),
@@ -131,11 +132,11 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
                 getCausedBy() == SessionSubscriber.CausedBy.SESSION_EXPIRATION ? "(session expired)" : "");
     }
 
-    @ObjectSupport public String cssClass() {
+    @ObjectSupport default String cssClass() {
         return "sessionLogEntry-" + iconName();
     }
 
-    @ObjectSupport public String iconName() {
+    @ObjectSupport default String iconName() {
         return getLogoutTimestamp() == null
                 ? "login"
                 :getCausedBy() != SessionSubscriber.CausedBy.SESSION_EXPIRATION
@@ -161,8 +162,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "false";
     }
     @SessionGuid
-    public abstract UUID getSessionGuid();
-    public abstract void setSessionGuid(UUID sessionGuid);
+    UUID getSessionGuid();
+    void setSessionGuid(UUID sessionGuid);
 
     @Property(
             domainEvent = HttpSessionId.DomainEvent.class
@@ -181,8 +182,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "false";
     }
     @HttpSessionId
-    public abstract String getHttpSessionId();
-    public abstract void setHttpSessionId(String httpSessionId);
+    String getHttpSessionId();
+    void setHttpSessionId(String httpSessionId);
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -203,8 +204,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
     }
     @Override
     @Username
-    public abstract String getUsername();
-    public abstract void setUsername(String username);
+    String getUsername();
+    void setUsername(String username);
 
     @Property(
             domainEvent = LoginTimestamp.DomainEvent.class,
@@ -230,8 +231,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "false";
     }
     @LoginTimestamp
-    public abstract Timestamp getLoginTimestamp();
-    public abstract void setLoginTimestamp(Timestamp loginTimestamp);
+    Timestamp getLoginTimestamp();
+    void setLoginTimestamp(Timestamp loginTimestamp);
 
     @Property(
             domainEvent = LogoutTimestamp.DomainEvent.class,
@@ -257,8 +258,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "true";
     }
     @LogoutTimestamp
-    public abstract Timestamp getLogoutTimestamp();
-    public abstract void setLogoutTimestamp(Timestamp logoutTimestamp);
+    Timestamp getLogoutTimestamp();
+    void setLogoutTimestamp(Timestamp logoutTimestamp);
 
     @Property(
             domainEvent = CausedBy.DomainEvent.class,
@@ -283,8 +284,8 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
         String ALLOWS_NULL = "true";
     }
     @CausedBy
-    public abstract SessionSubscriber.CausedBy getCausedBy();
-    public abstract void setCausedBy(SessionSubscriber.CausedBy causedBy);
+    SessionSubscriber.CausedBy getCausedBy();
+    void setCausedBy(SessionSubscriber.CausedBy causedBy);
 
     @Action(
             commandPublishing = Publishing.DISABLED,
@@ -293,25 +294,26 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
+            named = "next",
             cssClassFa = "fa-step-forward",
             cssClassFaPosition = CssClassFaPosition.RIGHT
     )
-    public class next {
+    @RequiredArgsConstructor
+    public static class next {
 
-        public class DomainEvent extends ActionDomainEvent {
-        }
+        public class DomainEvent extends ActionDomainEvent {}
+        @Inject SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
+        private final SessionLogEntry mixee;
 
         @MemberSupport public SessionLogEntry act() {
-            final List<SessionLogEntry> after = sessionLogEntryRepository.findByUsernameAndStrictlyAfter(getUsername(), getLoginTimestamp());
-            return !after.isEmpty() ? after.get(0) : SessionLogEntry.this;
+            final List<SessionLogEntry> after = sessionLogEntryRepository
+                    .findByUsernameAndStrictlyAfter(mixee.getUsername(), mixee.getLoginTimestamp());
+            return !after.isEmpty() ? after.get(0) : mixee;
         }
 
         @MemberSupport public String disableAct() {
-            return act() == SessionLogEntry.this ? "None after": null;
+            return act() == mixee ? "None after": null;
         }
-
-        @Inject
-        SessionLogEntryRepositoryAbstract sessionLogEntryRepository;
     }
 
     @Action(
@@ -321,45 +323,40 @@ public abstract class SessionLogEntry implements HasUsername, Comparable<Session
             semantics = SemanticsOf.SAFE
     )
     @ActionLayout(
+            named = "previous",
             cssClassFa = "fa-step-backward",
             cssClassFaPosition = CssClassFaPosition.RIGHT
     )
-    public class previous {
+    @RequiredArgsConstructor
+    public static class previous {
 
-        public class DomainEvent extends ActionDomainEvent {
-        }
+        public class DomainEvent extends ActionDomainEvent {}
+        @Inject SessionLogEntryRepositoryAbstract<? extends SessionLogEntry> sessionLogEntryRepository;
+        private final SessionLogEntry mixee;
 
         @MemberSupport public SessionLogEntry act() {
-            final List<SessionLogEntry> before = sessionLogEntryRepository.findByUsernameAndStrictlyBefore(getUsername(), getLoginTimestamp());
-            return !before.isEmpty() ? before.get(0) : SessionLogEntry.this;
+            final List<SessionLogEntry> before = sessionLogEntryRepository
+                    .findByUsernameAndStrictlyBefore(mixee.getUsername(), mixee.getLoginTimestamp());
+            return !before.isEmpty() ? before.get(0) : mixee;
         }
 
         @MemberSupport public String disableAct() {
-            return act() == SessionLogEntry.this ? "None before": null;
+            return act() == mixee ? "None before": null;
         }
-
-        @Inject
-        SessionLogEntryRepositoryAbstract sessionLogEntryRepository;
     }
 
-    private static final ObjectContracts.ObjectContract<SessionLogEntry> contract	=
+    static final ObjectContracts.ObjectContract<SessionLogEntry> CONTRACT =
             ObjectContracts.contract(SessionLogEntry.class)
                     .thenUse("loginTimestamp", SessionLogEntry::getLoginTimestamp)
                     .thenUse("username", SessionLogEntry::getUsername)
                     .thenUse("sessionGuid", SessionLogEntry::getSessionGuid)
                     .thenUse("httpSessionId", SessionLogEntry::getHttpSessionId)
                     .thenUse("logoutTimestamp", SessionLogEntry::getLogoutTimestamp)
-                    .thenUse("causedBy", SessionLogEntry::getCausedBy)
-            ;
+                    .thenUse("causedBy", SessionLogEntry::getCausedBy);
 
     @Override
-    public String toString() {
-        return contract.toString(SessionLogEntry.this);
-    }
-
-    @Override
-    public int compareTo(final SessionLogEntry other) {
-        return contract.compare(this,other);
+    default int compareTo(final SessionLogEntry other) {
+        return CONTRACT.compare(this,other);
     }
 
 }

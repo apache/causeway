@@ -41,8 +41,8 @@ import lombok.RequiredArgsConstructor;
         semantics = SemanticsOf.SAFE
 )
 @ActionLayout(
-        cssClassFa = "fa-sitemap",
-        describedAs = "Open up a view of the metamodel of this object's domain class",
+        cssClassFa = "solid shapes",
+        describedAs = "Opens a meta-model inspection view for this object's domain class",
         fieldSetId = LayoutConstants.FieldSetId.METADATA,
         position = ActionLayout.Position.PANEL_DROPDOWN,
         sequence = "700.2.1"

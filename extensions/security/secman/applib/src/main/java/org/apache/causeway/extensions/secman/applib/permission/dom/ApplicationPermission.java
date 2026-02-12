@@ -27,7 +27,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.DomainObject;
@@ -83,22 +82,20 @@ import lombok.experimental.UtilityClass;
  *
  * @since 2.0 {@index}
  */
-@Named(ApplicationPermission.LOGICAL_TYPE_NAME)
+@Named(ApplicationPermission.LOGICAL_TYPE_NAME)  // required for permission mapping
 @DomainObject
 @DomainObjectLayout(
         titleUiEvent = ApplicationPermission.TitleUiEvent.class,
         iconUiEvent = ApplicationPermission.IconUiEvent.class,
         cssClassUiEvent = ApplicationPermission.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationPermission.LayoutUiEvent.class
-)
-public abstract class ApplicationPermission implements Comparable<ApplicationPermission> {
+        layoutUiEvent = ApplicationPermission.LayoutUiEvent.class)
+public interface ApplicationPermission extends Comparable<ApplicationPermission> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationPermission";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationPermission";
 
-    @UtilityClass
-    public static class Nq {
+    public final static class Nq {
         public static final String FIND_BY_FEATURE = LOGICAL_TYPE_NAME + ".findByFeature";
         public static final String FIND_BY_ROLE = LOGICAL_TYPE_NAME + ".findByRole";
         public static final String FIND_BY_ROLE_RULE_FEATURE = LOGICAL_TYPE_NAME + ".findByRoleAndRuleAndFeature";
@@ -117,11 +114,11 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
 
-    @Inject transient ApplicationFeatureRepository featureRepository;
+    ApplicationFeatureRepository featureRepository();
 
     // -- MODEL
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         var buf = new StringBuilder();
         buf.append(getRole().getName()).append(":")  // admin:
         .append(" ").append(getRule().toString()) // Allow|Veto
@@ -180,8 +177,8 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     }
 
     @Role
-    public abstract ApplicationRole getRole();
-    public abstract void setRole(ApplicationRole applicationRole);
+    ApplicationRole getRole();
+    void setRole(ApplicationRole applicationRole);
 
     // -- RULE
 
@@ -205,8 +202,8 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         String ALLOWS_NULL = "false";
     }
     @Rule
-    public abstract ApplicationPermissionRule getRule();
-    public abstract void setRule(ApplicationPermissionRule rule);
+    ApplicationPermissionRule getRule();
+    void setRule(ApplicationPermissionRule rule);
 
     // -- MODE
 
@@ -230,8 +227,8 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         String ALLOWS_NULL = "false";
     }
     @Mode
-    public abstract ApplicationPermissionMode getMode();
-    public abstract void setMode(ApplicationPermissionMode mode);
+    ApplicationPermissionMode getMode();
+    void setMode(ApplicationPermissionMode mode);
 
     // -- SORT
 
@@ -254,7 +251,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         int TYPICAL_LENGTH = 7;  // ApplicationFeatureType.PACKAGE is longest
     }
     @Sort
-    public String getSort() {
+    default String getSort() {
         final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
                 ? getFeatureSort()
                 : getMemberSort().orElse(null);
@@ -282,8 +279,8 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
      * @see #getFeatureFqn()
      */
     @Programmatic
-    public abstract ApplicationFeatureSort getFeatureSort();
-    public abstract void setFeatureSort(ApplicationFeatureSort featureSort);
+    ApplicationFeatureSort getFeatureSort();
+    void setFeatureSort(ApplicationFeatureSort featureSort);
 
     // -- FQN
 
@@ -314,13 +311,13 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         String ALLOWS_NULL = "false";
     }
     @FeatureFqn
-    public abstract String getFeatureFqn();
-    public abstract void setFeatureFqn(String featureFqn);
+    String getFeatureFqn();
+    void setFeatureFqn(String featureFqn);
 
     // -- FIND FEATURE
 
-    @Programmatic public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
-        return featureRepository.findFeature(featureId);
+    @Programmatic default ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
+        return featureRepository().findFeature(featureId);
     }
 
     @Programmatic private Optional<ApplicationMemberSort> getMemberSort() {
@@ -333,16 +330,16 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
                 .map(this::findFeature);
     }
 
-    // -- HELPER
+    // -- UTIL
 
-    @Programmatic Optional<ApplicationFeatureId> asFeatureId() {
+    @Programmatic default Optional<ApplicationFeatureId> asFeatureId() {
         return Optional.ofNullable(getFeatureSort())
                 .map(featureSort -> ApplicationFeatureId.newFeature(featureSort, getFeatureFqn()));
     }
 
     // -- CONTRACT
 
-    private static final ObjectContracts.ObjectContract<ApplicationPermission> contract	=
+    static final ObjectContracts.ObjectContract<ApplicationPermission> CONTRACT	=
             ObjectContracts.contract(ApplicationPermission.class)
                     .thenUse("role", ApplicationPermission::getRole)
                     .thenUse("featureSort", ApplicationPermission::getFeatureSort)
@@ -350,23 +347,8 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
                     .thenUse("mode", ApplicationPermission::getMode);
 
     @Override
-    public int compareTo(final org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission other) {
-        return contract.compare(this, other);
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        return contract.equals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return contract.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return contract.toString(this);
+    default int compareTo(final org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission other) {
+        return CONTRACT.compare(this, other);
     }
 
     public static class DefaultComparator implements Comparator<ApplicationPermission> {

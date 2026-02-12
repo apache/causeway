@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Digits;
 
@@ -50,7 +49,6 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.HasInteractionDto;
@@ -64,8 +62,6 @@ import org.apache.causeway.extensions.executionoutbox.applib.CausewayModuleExtEx
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
-import lombok.NoArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -80,17 +76,14 @@ import lombok.experimental.UtilityClass;
 @Named(ExecutionOutboxEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
-        entityChangePublishing = Publishing.DISABLED
-)
+        entityChangePublishing = Publishing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = ExecutionOutboxEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionOutboxEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionOutboxEntry.CssClassUiEvent.class,
-        layoutUiEvent = ExecutionOutboxEntry.LayoutUiEvent.class
-)
-@NoArgsConstructor
-public abstract class ExecutionOutboxEntry
-implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
+        layoutUiEvent = ExecutionOutboxEntry.LayoutUiEvent.class)
+public interface ExecutionOutboxEntry
+extends Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionOutboxApplib.NAMESPACE + ".ExecutionOutboxEntry";
     public static final String SCHEMA = CausewayModuleExtExecutionOutboxApplib.SCHEMA;
@@ -112,20 +105,16 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
 
     @UtilityClass
-    protected static class Util {
+    static class Util {
         public static String abbreviated(final String str, final int maxLength) {
             return str != null ? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...") : null;
         }
     }
 
-    @Inject BookmarkService bookmarkService;
-
-    public ExecutionOutboxEntry(final @NonNull Execution<? extends MemberExecutionDto,?> execution) {
-        init(execution);
-    }
+//    @Inject BookmarkService bookmarkService;
 
     @Programmatic
-    public void init(final Execution<? extends MemberExecutionDto, ?> execution) {
+    default void init(final Execution<? extends MemberExecutionDto, ?> execution) {
         var interactionId = execution.getInteraction().getInteractionId();
         setInteractionId(interactionId);
 
@@ -150,18 +139,17 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
             setExecutionType(ExecutionOutboxEntryType.PROPERTY_EDIT);
         } else if(execution instanceof ActionInvocation) {
             setExecutionType(ExecutionOutboxEntryType.ACTION_INVOCATION);
-        } else {
+        } else
             // shouldn't happen, there are no other subtypes
             throw new IllegalArgumentException(String.format("Execution subtype unknown: %s", execution.getClass().getName()));
-        }
     }
 
-    private static final DateTimeFormatter formatter =
+    static final DateTimeFormatter DATATIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return new TitleBuffer()
-                .append(formatter.format(getTimestamp().toLocalDateTime()))
+                .append(DATATIME_FORMATTER.format(getTimestamp().toLocalDateTime()))
                 .append(" ")
                 .append(getLogicalMemberIdentifier())
                 .toString();
@@ -169,7 +157,7 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
 
     @DomainChangeRecord.Type
     @Override
-    public ChangeType getType() {
+    default ChangeType getType() {
         return ChangeType.EXECUTION;
     }
 
@@ -196,8 +184,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @Override
     @InteractionId
-    public abstract UUID getInteractionId();
-    public abstract void setInteractionId(UUID interactionId);
+    UUID getInteractionId();
+    void setInteractionId(UUID interactionId);
 
     /**
      * The 0-based additional identifier of an execution event within the given {@link #getInteractionId() interaction}.
@@ -221,8 +209,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @Sequence
     @Override
-    public abstract int getSequence();
-    public abstract void setSequence(int sequence);
+    int getSequence();
+    void setSequence(int sequence);
 
     @Property(
             domainEvent = ExecutionType.DomainEvent.class
@@ -236,8 +224,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
         int MAX_LENGTH = 30;
     }
     @ExecutionType
-    public abstract ExecutionOutboxEntryType getExecutionType();
-    public abstract void setExecutionType(ExecutionOutboxEntryType executionType);
+    ExecutionOutboxEntryType getExecutionType();
+    void setExecutionType(ExecutionOutboxEntryType executionType);
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -253,8 +241,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @Override
     @Username
-    public abstract String getUsername();
-    public abstract void setUsername(String userName);
+    String getUsername();
+    void setUsername(String userName);
 
     @Property(
             domainEvent = Timestamp.DomainEvent.class
@@ -269,8 +257,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @Timestamp
     @Override
-    public abstract java.sql.Timestamp getTimestamp();
-    public abstract void setTimestamp(java.sql.Timestamp timestamp);
+    java.sql.Timestamp getTimestamp();
+    void setTimestamp(java.sql.Timestamp timestamp);
 
     @Property(
             domainEvent = Target.DomainEvent.class
@@ -286,8 +274,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @Override
     @Target
-    public abstract Bookmark getTarget();
-    public abstract void setTarget(Bookmark target);
+    Bookmark getTarget();
+    void setTarget(Bookmark target);
 
     /**
      * String representation of the invoked action or edited property.
@@ -314,8 +302,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @Override
     @LogicalMemberIdentifier
-    public abstract String getLogicalMemberIdentifier();
-    public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
+    String getLogicalMemberIdentifier();
+    void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
     @Property(
             domainEvent = InteractionDtoAnnot.DomainEvent.class
@@ -330,8 +318,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
     }
     @InteractionDtoAnnot
     @Override
-    public abstract InteractionDto getInteractionDto();
-    public abstract void setInteractionDto(InteractionDto commandDto);
+    InteractionDto getInteractionDto();
+    void setInteractionDto(InteractionDto commandDto);
 
     @Property(
             domainEvent = StartedAt.DomainEvent.class,
@@ -349,8 +337,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
         String ALLOWS_NULL = "true";
     }
     @StartedAt
-    public abstract java.sql.Timestamp getStartedAt();
-    public abstract void setStartedAt(java.sql.Timestamp startedAt);
+    java.sql.Timestamp getStartedAt();
+    void setStartedAt(java.sql.Timestamp startedAt);
 
     @Property(
             domainEvent = CompletedAt.DomainEvent.class,
@@ -368,8 +356,8 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
         String ALLOWS_NULL = "true";
     }
     @CompletedAt
-    public abstract java.sql.Timestamp getCompletedAt();
-    public abstract void setCompletedAt(java.sql.Timestamp completedAt);
+    java.sql.Timestamp getCompletedAt();
+    void setCompletedAt(java.sql.Timestamp completedAt);
 
     @Property(
             domainEvent = Duration.DomainEvent.class,
@@ -388,17 +376,17 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
      * {@link #getStartedAt()} and {@link #getCompletedAt()}.
      */
     @Duration
-    public BigDecimal getDuration() {
+    default BigDecimal getDuration() {
         return _Temporals.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
                 .orElse(null);
     }
 
     @Override
-    public int compareTo(final ExecutionOutboxEntry other) {
+    default int compareTo(final ExecutionOutboxEntry other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
 
-    static final ToString<ExecutionOutboxEntry> stringifier = ObjectContracts
+    static final ToString<ExecutionOutboxEntry> TOSTRING = ObjectContracts
             .toString("interactionId", ExecutionOutboxEntry::getInteractionId)
             .thenToString("sequence", ExecutionOutboxEntry::getSequence)
             .thenToString("username", ExecutionOutboxEntry::getUsername)
@@ -408,11 +396,6 @@ implements Comparable<ExecutionOutboxEntry>, DomainChangeRecord, HasInteractionI
             .thenToString("logicalMemberIdentifier", ExecutionOutboxEntry::getLogicalMemberIdentifier)
             .thenToStringOmitIfAbsent("startedAt", ExecutionOutboxEntry::getStartedAt)
             .thenToStringOmitIfAbsent("completedAt", ExecutionOutboxEntry::getCompletedAt);
-
-    @Override
-    public String toString() {
-        return stringifier.toString(this);
-    }
 
     @Service
     @Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.

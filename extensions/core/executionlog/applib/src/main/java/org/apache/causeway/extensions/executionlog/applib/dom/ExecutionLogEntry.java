@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.UUID;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Digits;
 
@@ -49,7 +48,6 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.mixins.system.HasInteractionId;
 import org.apache.causeway.applib.mixins.system.HasInteractionIdAndSequence;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.HasInteractionDto;
@@ -63,8 +61,6 @@ import org.apache.causeway.extensions.executionlog.applib.CausewayModuleExtExecu
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
 import org.apache.causeway.schema.ixn.v2.MemberExecutionDto;
 
-import lombok.NoArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -79,17 +75,14 @@ import lombok.experimental.UtilityClass;
 @Named(ExecutionLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
-        entityChangePublishing = Publishing.DISABLED
-)
+        entityChangePublishing = Publishing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = ExecutionLogEntry.TitleUiEvent.class,
         iconUiEvent = ExecutionLogEntry.IconUiEvent.class,
         cssClassUiEvent = ExecutionLogEntry.CssClassUiEvent.class,
-        layoutUiEvent = ExecutionLogEntry.LayoutUiEvent.class
-)
-@NoArgsConstructor
-public abstract class ExecutionLogEntry
-implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
+        layoutUiEvent = ExecutionLogEntry.LayoutUiEvent.class)
+public interface ExecutionLogEntry
+extends Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAndSequence, HasInteractionDto {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtExecutionLogApplib.NAMESPACE + ".ExecutionLogEntry";
     public static final String SCHEMA = CausewayModuleExtExecutionLogApplib.SCHEMA;
@@ -122,20 +115,14 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
     }
 
     @UtilityClass
-    protected static class Util {
+    static class Util {
         public static String abbreviated(final String str, final int maxLength) {
             return str != null ? (str.length() < maxLength ? str : str.substring(0, maxLength - 3) + "...") : null;
         }
     }
 
-    @Inject BookmarkService bookmarkService;
-
-    public ExecutionLogEntry(final @NonNull Execution<? extends MemberExecutionDto,?> execution) {
-        init(execution);
-    }
-
     @Programmatic
-    public void init(final Execution<? extends MemberExecutionDto, ?> execution) {
+    default void init(final Execution<? extends MemberExecutionDto, ?> execution) {
         var interactionId = execution.getInteraction().getInteractionId();
         setInteractionId(interactionId);
 
@@ -160,18 +147,17 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
             setExecutionType(ExecutionLogEntryType.PROPERTY_EDIT);
         } else if(execution instanceof ActionInvocation) {
             setExecutionType(ExecutionLogEntryType.ACTION_INVOCATION);
-        } else {
+        } else
             // shouldn't happen, there are no other subtypes
             throw new IllegalArgumentException(String.format("Execution subtype unknown: %s", execution.getClass().getName()));
-        }
     }
 
-    private static final DateTimeFormatter formatter =
+    static final DateTimeFormatter DATETIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return new TitleBuffer()
-                .append(formatter.format(getTimestamp().toLocalDateTime()))
+                .append(DATETIME_FORMATTER.format(getTimestamp().toLocalDateTime()))
                 .append(" ")
                 .append(getLogicalMemberIdentifier())
                 .toString();
@@ -179,7 +165,7 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
 
     @DomainChangeRecord.Type
     @Override
-    public ChangeType getType() {
+    default ChangeType getType() {
         return ChangeType.EXECUTION;
     }
 
@@ -396,17 +382,17 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
      * {@link #getStartedAt()} and {@link #getCompletedAt()}.
      */
     @Duration
-    public BigDecimal getDuration() {
+    default BigDecimal getDuration() {
         return _Temporals.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
                 .orElse(null);
     }
 
     @Override
-    public int compareTo(final ExecutionLogEntry other) {
+    default int compareTo(final ExecutionLogEntry other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
 
-    static final ToString<ExecutionLogEntry> stringifier = ObjectContracts
+    static final ToString<ExecutionLogEntry> TOSTRING = ObjectContracts
             .toString("interactionId", ExecutionLogEntry::getInteractionId)
             .thenToString("sequence", ExecutionLogEntry::getSequence)
             .thenToString("username", ExecutionLogEntry::getUsername)
@@ -416,11 +402,6 @@ implements Comparable<ExecutionLogEntry>, DomainChangeRecord, HasInteractionIdAn
             .thenToString("logicalMemberIdentifier", ExecutionLogEntry::getLogicalMemberIdentifier)
             .thenToStringOmitIfAbsent("startedAt", ExecutionLogEntry::getStartedAt)
             .thenToStringOmitIfAbsent("completedAt", ExecutionLogEntry::getCompletedAt);
-
-    @Override
-    public String toString() {
-        return stringifier.toString(this);
-    }
 
     @Service
     @Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.

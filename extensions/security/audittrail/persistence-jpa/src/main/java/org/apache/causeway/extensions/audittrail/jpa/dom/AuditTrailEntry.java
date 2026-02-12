@@ -214,7 +214,7 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.java.util.
         entityChangePublishing = Publishing.DISABLED
 )
 public class AuditTrailEntry
-extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
+implements org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
 
     private Long id;
 
@@ -225,7 +225,7 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -236,36 +236,41 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         return version;
     }
 
-    public void setVersion(Long version) {
+    public void setVersion(final Long version) {
         this.version = version;
     }
 
     private String username;
 
+    @Override
     @Column(nullable = Username.NULLABLE, length = Username.MAX_LENGTH)
     @Username
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    @Override
+    public void setUsername(final String username) {
         this.username = username;
     }
 
     private java.sql.Timestamp timestamp;
 
+    @Override
     @Column(nullable = Timestamp.NULLABLE)
     @Timestamp
     public java.sql.Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(java.sql.Timestamp timestamp) {
+    @Override
+    public void setTimestamp(final java.sql.Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
     private UUID interactionId;
 
+    @Override
     @Convert(converter = JavaUtilUuidConverter.class)
     @Column(nullable = InteractionId.NULLABLE, length = InteractionId.MAX_LENGTH)
     @InteractionId
@@ -273,24 +278,28 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         return interactionId;
     }
 
-    public void setInteractionId(UUID interactionId) {
+    @Override
+    public void setInteractionId(final UUID interactionId) {
         this.interactionId = interactionId;
     }
 
     private int sequence;
 
+    @Override
     @Column(nullable = Sequence.NULLABLE)
     @Sequence
     public int getSequence() {
         return sequence;
     }
 
-    public void setSequence(int sequence) {
+    @Override
+    public void setSequence(final int sequence) {
         this.sequence = sequence;
     }
 
     private Bookmark target;
 
+    @Override
     @Convert(converter = CausewayBookmarkConverter.class)
     @Column(nullable = Target.NULLABLE, length = Target.MAX_LENGTH)
     @Target
@@ -298,55 +307,70 @@ extends org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry {
         return target;
     }
 
-    public void setTarget(Bookmark target) {
+    @Override
+    public void setTarget(final Bookmark target) {
         this.target = target;
     }
 
     private String logicalMemberIdentifier;
 
+    @Override
     @Column(nullable = LogicalMemberIdentifier.NULLABLE, length = LogicalMemberIdentifier.MAX_LENGTH)
     @LogicalMemberIdentifier
     public String getLogicalMemberIdentifier() {
         return logicalMemberIdentifier;
     }
 
-    public void setLogicalMemberIdentifier(String logicalMemberIdentifier) {
+    @Override
+    public void setLogicalMemberIdentifier(final String logicalMemberIdentifier) {
         this.logicalMemberIdentifier = logicalMemberIdentifier;
     }
 
     private String propertyId;
 
+    @Override
     @Column(nullable = PropertyId.NULLABLE, length = PropertyId.MAX_LENGTH)
     @PropertyId
     public String getPropertyId() {
         return propertyId;
     }
 
-    public void setPropertyId(String propertyId) {
+    @Override
+    public void setPropertyId(final String propertyId) {
         this.propertyId = propertyId;
     }
 
     private String preValue;
 
+    @Override
     @Column(nullable = PreValue.NULLABLE, length = PreValue.MAX_LENGTH)
     @PreValue
     public String getPreValue() {
         return preValue;
     }
 
-    public void setPreValue(String preValue) {
+    @Override
+    public void setPreValue(final String preValue) {
         this.preValue = preValue;
     }
 
     private String postValue;
 
+    @Override
     @Column(nullable = PostValue.NULLABLE, length = PostValue.MAX_LENGTH)
     @PostValue
     public String getPostValue() {
         return postValue;
     }
 
-    public void setPostValue(String postValue) {
+    @Override
+    public void setPostValue(final String postValue) {
         this.postValue = postValue;
     }
+
+    @Override
+    public String toString() {
+        return CONTRACT.toString(AuditTrailEntry.this);
+    }
+
 }

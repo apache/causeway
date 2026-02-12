@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Collection;
@@ -46,38 +45,32 @@ import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.applib.util.ToString;
 import org.apache.causeway.extensions.secman.applib.CausewayModuleExtSecmanApplib;
 import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission;
-import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
-
-import lombok.experimental.UtilityClass;
 
 /**
  * @since 2.0 {@index}
  */
-@Named(ApplicationRole.LOGICAL_TYPE_NAME)
+@Named(ApplicationRole.LOGICAL_TYPE_NAME) // required for permission mapping
 @DomainObject(
         autoCompleteRepository = ApplicationRoleRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
         titleUiEvent = ApplicationRole.TitleUiEvent.class,
         iconUiEvent = ApplicationRole.IconUiEvent.class,
         cssClassUiEvent = ApplicationRole.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationRole.LayoutUiEvent.class
-)
-public abstract class ApplicationRole implements Comparable<ApplicationRole> {
+        layoutUiEvent = ApplicationRole.LayoutUiEvent.class)
+public interface ApplicationRole extends Comparable<ApplicationRole> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationRole";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationRole";
 
-    @UtilityClass
-    public static class Nq {
+    public static final class Nq {
         public static final String FIND_BY_NAME = LOGICAL_TYPE_NAME + ".findByName";
         public static final String FIND_BY_NAME_CONTAINING = LOGICAL_TYPE_NAME + ".findByNameContaining";
     }
 
-    @Inject transient private ApplicationPermissionRepository applicationPermissionRepository;
+    org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository applicationPermissionRepository();
 
     // -- UI & DOMAIN EVENTS
 
@@ -91,7 +84,7 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
 
     // -- MODEL
 
-    @ObjectSupport public String title() {
+    @ObjectSupport public default String title() {
         return getName();
     }
 
@@ -199,42 +192,27 @@ public abstract class ApplicationRole implements Comparable<ApplicationRole> {
     // -- PERMISSIONS
 
     @Permissions
-    public List<org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions() {
-        return applicationPermissionRepository.findByRole(this);
+    public default List<org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission> getPermissions() {
+        return applicationPermissionRepository().findByRole(this);
     }
 
     // -- equals, hashCode, compareTo, toString
 
-    private static final Comparator<ApplicationRole> comparator =
+    static final Comparator<ApplicationRole> COMPARATOR =
             Comparator.comparing(ApplicationRole::getName);
 
-    private static final Equality<ApplicationRole> equality =
+    static final Equality<ApplicationRole> EQUALITY =
             ObjectContracts.checkEquals(ApplicationRole::getName);
 
-    private static final Hashing<ApplicationRole> hashing =
+    static final Hashing<ApplicationRole> HASHING =
             ObjectContracts.hashing(ApplicationRole::getName);
 
-    private static final ToString<ApplicationRole> toString =
+    static final ToString<ApplicationRole> TOSTRING =
             ObjectContracts.toString("name", ApplicationRole::getName);
 
     @Override
-    public int compareTo(final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole other) {
-        return comparator.compare(this, other);
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        return equality.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashing.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
+    public default int compareTo(final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole other) {
+        return COMPARATOR.compare(this, other);
     }
 
 }

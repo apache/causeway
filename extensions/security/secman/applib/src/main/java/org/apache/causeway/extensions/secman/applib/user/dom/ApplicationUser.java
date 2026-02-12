@@ -22,11 +22,9 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.apache.causeway.applib.annotation.Collection;
@@ -50,7 +48,6 @@ import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.ObjectContracts;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration;
@@ -69,26 +66,23 @@ import lombok.experimental.UtilityClass;
 /**
  * @since 2.0 {@index}
  */
-@Named(ApplicationUser.LOGICAL_TYPE_NAME)
+@Named(ApplicationUser.LOGICAL_TYPE_NAME) // required for permission mapping
 @DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
         titleUiEvent = ApplicationUser.TitleUiEvent.class,
         iconUiEvent = ApplicationUser.IconUiEvent.class,
         cssClassUiEvent = ApplicationUser.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationUser.LayoutUiEvent.class
-)
-public abstract class ApplicationUser
-        implements HasUsername, HasAtPath, Comparable<ApplicationUser> {
+        layoutUiEvent = ApplicationUser.LayoutUiEvent.class)
+public interface ApplicationUser
+        extends HasUsername, HasAtPath, Comparable<ApplicationUser> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationUser";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
     public static final String TABLE = "ApplicationUser";
 
-    @UtilityClass
-    public static class Nq {
+    public static final class Nq {
         public static final String FIND_BY_USERNAME = LOGICAL_TYPE_NAME + ".findByUsername";
         public static final String FIND_BY_EMAIL_ADDRESS = LOGICAL_TYPE_NAME + ".findByEmailAddress";
         public static final String FIND = LOGICAL_TYPE_NAME + ".find";
@@ -105,41 +99,25 @@ public abstract class ApplicationUser
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
-    @Inject private transient ApplicationUserRepository applicationUserRepository;
-    @Inject private transient ApplicationPermissionRepository applicationPermissionRepository;
-    @Inject private transient UserService userService;
-    @Inject private transient PermissionsEvaluationService permissionsEvaluationService;
-    @Inject private transient CausewayConfiguration config;
-
-    @Programmatic protected ApplicationUserRepository getApplicationUserRepository() {
-        return applicationUserRepository;
-    }
-
-    @Programmatic protected ApplicationPermissionRepository getApplicationPermissionRepository() {
-        return applicationPermissionRepository;
-    }
-
-    @Programmatic protected UserService getUserService() {
-        return userService;
-    }
-
+    ApplicationUserRepository applicationUserRepository();
+    ApplicationPermissionRepository applicationPermissionRepository();
+    UserService userService();
     /**
      * Optional service, if configured then is used to evaluate permissions within
      * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a default implementation.
      */
-    @Programmatic protected PermissionsEvaluationService getPermissionsEvaluationService() {
-        return permissionsEvaluationService;
+    PermissionsEvaluationService permissionsEvaluationService();
+    CausewayConfiguration config();
+
+    @Programmatic default Secman getSecmanConfig() {
+        return config().extensions().secman();
     }
 
-    @Programmatic protected Secman getSecmanConfig() {
-        return config.extensions().secman();
-    }
-
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return getName();
     }
-    @ObjectSupport public String iconName() {
+    @ObjectSupport default String iconName() {
         return ApplicationUserStatus.isUnlocked(getStatus()) ? "unlocked" : "locked";
     }
 
@@ -161,7 +139,7 @@ public abstract class ApplicationUser
     }
 
     @Name
-    public String getName() {
+    default String getName() {
         final StringBuilder buf = new StringBuilder();
         if(getFamilyName() != null) {
             if(getKnownAs() != null) {
@@ -199,8 +177,8 @@ public abstract class ApplicationUser
     }
     @Override
     @Username
-    public abstract String getUsername();
-    public abstract void setUsername(String username);
+    String getUsername();
+    void setUsername(String username);
 
     // -- FAMILY NAME
 
@@ -231,8 +209,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
     @FamilyName
-    public abstract String getFamilyName();
-    public abstract void setFamilyName(String familyName);
+    String getFamilyName();
+    void setFamilyName(String familyName);
 
     // -- GIVEN NAME
 
@@ -263,8 +241,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
     @GivenName
-    public abstract String getGivenName();
-    public abstract void setGivenName(String givenName);
+    String getGivenName();
+    void setGivenName(String givenName);
 
     // -- KNOWN AS
 
@@ -295,8 +273,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
     @KnownAs
-    public abstract String getKnownAs();
-    public abstract void setKnownAs(String knownAs);
+    String getKnownAs();
+    void setKnownAs(String knownAs);
 
     // -- EMAIL ADDRESS
 
@@ -326,8 +304,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
     @EmailAddress
-    public abstract String getEmailAddress();
-    public abstract void setEmailAddress(String emailAddress);
+    String getEmailAddress();
+    void setEmailAddress(String emailAddress);
 
     // -- PHONE NUMBER
 
@@ -356,8 +334,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
     @PhoneNumber
-    public abstract String getPhoneNumber();
-    public abstract void setPhoneNumber(String phoneNumber);
+    String getPhoneNumber();
+    void setPhoneNumber(String phoneNumber);
 
     // -- FAX NUMBER
 
@@ -388,8 +366,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = "true";
     }
     @FaxNumber
-    public abstract String getFaxNumber();
-    public abstract void setFaxNumber(String faxNumber);
+    String getFaxNumber();
+    void setFaxNumber(String faxNumber);
 
     // -- LOCALEs
 
@@ -424,8 +402,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = Locale.ALLOWS_NULL;
     }
     @Language
-    public abstract java.util.Locale getLanguage();
-    public abstract void setLanguage(java.util.Locale locale);
+    java.util.Locale getLanguage();
+    void setLanguage(java.util.Locale locale);
 
     @Property(
             domainEvent = NumberFormat.DomainEvent.class
@@ -439,8 +417,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = Locale.ALLOWS_NULL;
     }
     @NumberFormat
-    public abstract java.util.Locale getNumberFormat();
-    public abstract void setNumberFormat(java.util.Locale locale);
+    java.util.Locale getNumberFormat();
+    void setNumberFormat(java.util.Locale locale);
 
     @Property(
             domainEvent = TimeFormat.DomainEvent.class
@@ -454,8 +432,8 @@ public abstract class ApplicationUser
         String ALLOWS_NULL = Locale.ALLOWS_NULL;
     }
     @TimeFormat
-    public abstract java.util.Locale getTimeFormat();
-    public abstract void setTimeFormat(java.util.Locale locale);
+    java.util.Locale getTimeFormat();
+    void setTimeFormat(java.util.Locale locale);
 
     @Property(
             domainEvent = AtPath.DomainEvent.class
@@ -475,8 +453,8 @@ public abstract class ApplicationUser
     }
     @Override
     @AtPath
-    public abstract String getAtPath();
-    public abstract void setAtPath(String atPath);
+    String getAtPath();
+    void setAtPath(String atPath);
 
     // -- ACCOUNT TYPE
 
@@ -542,8 +520,8 @@ public abstract class ApplicationUser
     @EncryptedPassword
     public abstract String getEncryptedPassword();
     public abstract void setEncryptedPassword(String encryptedPassword);
-    @MemberSupport public boolean hideEncryptedPassword() {
-        return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
+    @MemberSupport default boolean hideEncryptedPassword() {
+        return !applicationUserRepository().isPasswordFeatureEnabled(this);
     }
 
     // -- HAS PASSWORD
@@ -564,11 +542,11 @@ public abstract class ApplicationUser
     }
 
     @HasPassword
-    public boolean isHasPassword() {
+    default boolean isHasPassword() {
         return _Strings.isNotEmpty(getEncryptedPassword());
     }
-    @MemberSupport public boolean hideHasPassword() {
-        return !getApplicationUserRepository().isPasswordFeatureEnabled(this);
+    @MemberSupport default boolean hideHasPassword() {
+        return !applicationUserRepository().isPasswordFeatureEnabled(this);
     }
 
     // ROLES
@@ -594,39 +572,29 @@ public abstract class ApplicationUser
     }
 
     @Roles
-    public abstract Set<ApplicationRole> getRoles();
+    Set<ApplicationRole> getRoles();
 
     // -- PERMISSION SET
 
-    // short-term caching
-    private transient ApplicationPermissionValueSet cachedPermissionSet;
-
-    @Programmatic public ApplicationPermissionValueSet getPermissionSet() {
-        if(cachedPermissionSet != null) {
-            return cachedPermissionSet;
-        }
-        List<ApplicationPermission> permissions;
-        if(userService.isImpersonating()) {
-            permissions = getApplicationPermissionRepository().findByUserMemento(userService.getUser());
-        } else {
-            permissions = getApplicationPermissionRepository().findByUser(this);
-        }
-        return cachedPermissionSet =
-                new ApplicationPermissionValueSet(
-                        _Lists.map(_Casts.uncheckedCast(permissions), ApplicationPermission.Functions.AS_VALUE),
-                        getPermissionsEvaluationService());
+    @Programmatic default ApplicationPermissionValueSet getPermissionSet() {
+        var permissions = userService().isImpersonating()
+            ? applicationPermissionRepository().findByUserMemento(userService().getUser())
+            : applicationPermissionRepository().findByUser(this);
+        return new ApplicationPermissionValueSet(
+                _Lists.map(permissions, ApplicationPermission.Functions.AS_VALUE),
+                permissionsEvaluationService());
     }
 
     // -- IS FOR SELF OR RUN AS ADMINISTRATOR
 
-    @Programmatic public boolean isForSelf() {
+    @Programmatic default boolean isForSelf() {
         var currentUser = currentUser();
         var currentUserName = currentUser.name();
         var forSelf = Objects.equals(getUsername(), currentUserName);
         return forSelf;
     }
 
-    @Programmatic public boolean isRunAsAdministrator() {
+    @Programmatic default boolean isRunAsAdministrator() {
         var currentUser = currentUser();
         var adminRoleName = getAdminRoleName(); // is guarded to not be empty
         var adminRoleSuffix = ":" + adminRoleName;
@@ -641,14 +609,14 @@ public abstract class ApplicationUser
         return false;
     }
 
-    @Programmatic public boolean isForSelfOrRunAsAdministrator() {
+    @Programmatic default boolean isForSelfOrRunAsAdministrator() {
         return isForSelf()
                 || isRunAsAdministrator();
     }
 
     // -- HELPERS
 
-    @Programmatic public boolean isLocalAccount() {
+    @Programmatic default boolean isLocalAccount() {
         return getAccountType() == org.apache.causeway.extensions.secman.applib.user.dom.AccountType.LOCAL;
     }
 
@@ -660,33 +628,17 @@ public abstract class ApplicationUser
     }
 
     @Programmatic private UserMemento currentUser() {
-        return getUserService().currentUserElseFail();
+        return userService().currentUserElseFail();
     }
 
     // -- equals, hashCode, compareTo, toString
-    private static final String propertyNames = "username";
 
-    private static final ObjectContracts.ObjectContract<ApplicationUser> contract =
-            ObjectContracts.parse(ApplicationUser.class, propertyNames);
-
-    @Override
-    public int compareTo(final org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser other) {
-        return contract.compare(this, other);
-    }
+    static final ObjectContracts.ObjectContract<ApplicationUser> CONTRACT =
+            ObjectContracts.parse(ApplicationUser.class, "username");
 
     @Override
-    public boolean equals(final Object obj) {
-        return contract.equals(this, obj);
-    }
-
-    @Override
-    public int hashCode() {
-        return contract.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return contract.toString(this);
+    public default int compareTo(final org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser other) {
+        return CONTRACT.compare(this, other);
     }
 
 }

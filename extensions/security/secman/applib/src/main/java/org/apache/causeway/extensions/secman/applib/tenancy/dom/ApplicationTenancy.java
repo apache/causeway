@@ -50,7 +50,7 @@ import lombok.experimental.UtilityClass;
 /**
  * @since 2.0 {@index}
  */
-@Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
+@Named(ApplicationTenancy.LOGICAL_TYPE_NAME) // required for permission mapping
 @DomainObject(
         autoCompleteRepository = ApplicationTenancyRepository.class,
         autoCompleteMethod = "findMatching"
@@ -59,9 +59,8 @@ import lombok.experimental.UtilityClass;
         titleUiEvent = ApplicationTenancy.TitleUiEvent.class,
         iconUiEvent = ApplicationTenancy.IconUiEvent.class,
         cssClassUiEvent = ApplicationTenancy.CssClassUiEvent.class,
-        layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class
-)
-public abstract class ApplicationTenancy implements Comparable<ApplicationTenancy> {
+        layoutUiEvent = ApplicationTenancy.LayoutUiEvent.class)
+public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
 
     public static final String LOGICAL_TYPE_NAME = CausewayModuleExtSecmanApplib.NAMESPACE + ".ApplicationTenancy";
     public static final String SCHEMA = CausewayModuleExtSecmanApplib.SCHEMA;
@@ -87,7 +86,7 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
 
     // -- MODEL
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return getName();
     }
 
@@ -120,8 +119,8 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
         String ALLOWS_NULL = "false";
     }
     @Name
-    public abstract String getName();
-    public abstract void setName(String name);
+    String getName();
+    void setName(String name);
 
     // -- PATH
 
@@ -142,8 +141,8 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
         String ALLOWS_NULL = "false";
     }
     @Path
-    public abstract String getPath();
-    public abstract void setPath(String path);
+    String getPath();
+    void setPath(String path);
 
     // -- PARENT
 
@@ -165,11 +164,11 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
         String ALLOWS_NULL = "true";
     }
     @Parent
-    public abstract ApplicationTenancy getParent();
-    public abstract void setParent(ApplicationTenancy parent);
+    ApplicationTenancy getParent();
+    void setParent(ApplicationTenancy parent);
 
     @Programmatic
-    public boolean isRoot() {
+    default boolean isRoot() {
         return getParent()==null;
     }
 
@@ -188,41 +187,26 @@ public abstract class ApplicationTenancy implements Comparable<ApplicationTenanc
         String MAPPED_BY = "parent";
     }
     @Children
-    public abstract Collection<ApplicationTenancy> getChildren();
+    Collection<ApplicationTenancy> getChildren();
 
     // -- CONTRACT
 
-    private static final Equality<ApplicationTenancy> equality =
+    static final Equality<ApplicationTenancy> EQUALITY =
             ObjectContracts.checkEquals(ApplicationTenancy::getPath);
 
-    private static final Hashing<ApplicationTenancy> hashing =
+    static final Hashing<ApplicationTenancy> HASHING =
             ObjectContracts.hashing(ApplicationTenancy::getPath);
 
-    private static final ToString<ApplicationTenancy> toString =
+    static final ToString<ApplicationTenancy> TOSTRING =
             ObjectContracts.toString("path", ApplicationTenancy::getPath)
                     .thenToString("name", ApplicationTenancy::getName);
 
-    private static final Comparator<ApplicationTenancy> comparator =
+    static final Comparator<ApplicationTenancy> COMPARATOR =
             Comparator.comparing(ApplicationTenancy::getPath);
 
     @Override
-    public int compareTo(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy other) {
-        return comparator.compare(this, other);
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        return equality.equals(this, other);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashing.hashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return toString.toString(this);
+    default int compareTo(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy other) {
+        return COMPARATOR.compare(this, other);
     }
 
 }

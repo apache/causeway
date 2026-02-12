@@ -21,6 +21,7 @@ package org.apache.causeway.extensions.secman.jpa.user.dom;
 import java.util.Set;
 import java.util.TreeSet;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,15 +44,23 @@ import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.jaxb.PersistentEntityAdapter;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository;
+import org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionValueSet;
+import org.apache.causeway.extensions.secman.applib.permission.spi.PermissionsEvaluationService;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.Nq;
+import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserRepository;
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUserStatus;
 import org.apache.causeway.extensions.secman.jpa.role.dom.ApplicationRole;
 import org.apache.causeway.persistence.jpa.applib.integration.CausewayEntityListener;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(
@@ -91,13 +100,29 @@ import lombok.Setter;
 @Named(ApplicationUser.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationUserRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationUser
-    extends org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser {
+    implements org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser {
+
+    @Inject @Programmatic @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private transient ApplicationUserRepository applicationUserRepository;
+
+    @Inject @Programmatic @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private transient ApplicationPermissionRepository applicationPermissionRepository;
+
+    @Inject @Programmatic @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private transient UserService userService;
+
+    @Inject @Programmatic @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private transient PermissionsEvaluationService permissionsEvaluationService;
+
+    @Inject @Programmatic @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private transient CausewayConfiguration config;
+
+    // short-term caching
+    private transient ApplicationPermissionValueSet cachedPermissionSet;
 
     @Id
     @GeneratedValue
@@ -192,5 +217,30 @@ public class ApplicationUser
     @Override
     public Set<org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole> getRoles() {
         return _Casts.uncheckedCast(roles);
+    }
+
+    @Programmatic
+    @Override
+    public ApplicationPermissionValueSet getPermissionSet() {
+        if(cachedPermissionSet != null)
+            return cachedPermissionSet;
+        return this.cachedPermissionSet =
+                org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser
+                .super.getPermissionSet();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return CONTRACT.equals(this, obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return CONTRACT.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return CONTRACT.toString(this);
     }
 }

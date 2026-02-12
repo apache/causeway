@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.apache.causeway.commons.internal.collections._Streams;
+import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
@@ -33,15 +34,15 @@ record TypeNode(
     String logicalName,
     boolean isSubnode)
 implements MMNode, Serializable {
-	
-	TypeNode(ObjectSpecification objSpec, boolean isSubnode) {
+
+	TypeNode(final ObjectSpecification objSpec, final boolean isSubnode) {
 		// for security mapping, abstract spec's may share their logical type name with sub-types
 		// however, for proper mementos, we should used fully qualified class names instead (when abstract)
 		this(objSpec.isAbstract()
 	    		? objSpec.getCorrespondingClass().getName()
 	    		: objSpec.logicalTypeName(), isSubnode);
 	}
-	
+
     @Override
     public String title() {
         var spec = spec().orElse(null);
@@ -49,14 +50,14 @@ implements MMNode, Serializable {
             ? spec.logicalType().logicalSimpleName()
             : logicalName;
     }
-    
+
     @Override
     public String iconName() {
         return isSubnode() ? "sub" : "";
     }
-    
+
     @Override
-    public void putDetails(Details details) {
+    public void putDetails(final Details details) {
         var spec = spec().orElse(null);
         if(spec==null) return;
         details.put("Bean Sort", spec.getBeanSort().name());
@@ -65,12 +66,21 @@ implements MMNode, Serializable {
         details.put("Corresponding Class", spec.getCorrespondingClass().getName());
         Optional.ofNullable(spec.superclass())
 	        .ifPresent(superType->{
-	        	details.put("Super Type", superType.getCorrespondingClass().getName());    	
+	        	details.put("Super Type", superType.getCorrespondingClass().getName());
 	        });
         spec.interfaces().stream()
 	        .forEach(interfc->details.put(
-	        		"Interface", 
+	        		"Interface",
 	        		interfc.getCorrespondingClass().getName()));
+        switch (spec.getBeanSort()) {
+            case ENTITY, ABSTRACT -> {
+                if(!spec.getCorrespondingClass().isInterface()) {
+                    var classCache = _ClassCache.getInstance();
+                    details.put("Byte Code Enhanced", ""+classCache.isByteCodeEnhanced(spec.getCorrespondingClass()));
+                }
+            }
+            default -> {}
+        }
     }
 
     @Override
@@ -91,9 +101,9 @@ implements MMNode, Serializable {
             spec.streamCollections(MixedIn.INCLUDED)
                 .map(coll->MMNodeFactory.collection(coll, this)));
     }
-    
+
     // -- HELPER
-    
+
     private Optional<ObjectSpecification> spec() {
         return MetaModelContext.instance()
             .map(MetaModelContext::getSpecificationLoader)

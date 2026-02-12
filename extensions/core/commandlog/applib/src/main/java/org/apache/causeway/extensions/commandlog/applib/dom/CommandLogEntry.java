@@ -30,7 +30,6 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.validation.constraints.Digits;
 
@@ -65,11 +64,11 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Temporals;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.extensions.commandlog.applib.CausewayModuleExtCommandLogApplib;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 import org.apache.causeway.schema.cmd.v2.MapDto;
 
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -89,17 +88,14 @@ import lombok.experimental.UtilityClass;
 @Named(CommandLogEntry.LOGICAL_TYPE_NAME)
 @DomainObject(
         editing = Editing.DISABLED,
-        entityChangePublishing = Publishing.DISABLED
-)
+        entityChangePublishing = Publishing.DISABLED)
 @DomainObjectLayout(
         titleUiEvent = CommandLogEntry.TitleUiEvent.class,
         iconUiEvent = CommandLogEntry.IconUiEvent.class,
         cssClassUiEvent = CommandLogEntry.CssClassUiEvent.class,
-        layoutUiEvent = CommandLogEntry.LayoutUiEvent.class
-)
-@NoArgsConstructor
-public abstract class CommandLogEntry
-implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
+        layoutUiEvent = CommandLogEntry.LayoutUiEvent.class)
+public interface CommandLogEntry
+extends Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
     public final static String LOGICAL_TYPE_NAME = CausewayModuleExtCommandLogApplib.NAMESPACE + ".CommandLogEntry";
     public static final String SCHEMA = CausewayModuleExtCommandLogApplib.SCHEMA;
@@ -153,7 +149,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
 
     @Programmatic
-    public void sync(final Command command) {
+    default void sync(final Command command) {
 
         setInteractionId(command.getInteractionId());
         setUsername(command.getUsername());
@@ -179,7 +175,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * @param replayState - controls whether this is to be replayed
      * @param targetIndex - if the command represents a bulk action, then it is flattened out when replayed; this indicates which target to execute against.
      */
-    public CommandLogEntry(
+    default void init(
             final CommandDto commandDto,
             final org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState,
             final int targetIndex) {
@@ -217,12 +213,12 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
                 .ifPresent(consume);
     }
 
-    private static final DateTimeFormatter formatter =
+    static final DateTimeFormatter DATETIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    @ObjectSupport public String title() {
+    @ObjectSupport default String title() {
         return new TitleBuffer()
-                .append(formatter.format(getTimestamp().toLocalDateTime()))
+                .append(DATETIME_FORMATTER.format(getTimestamp().toLocalDateTime()))
                 .append(" ")
                 .append(getLogicalMemberIdentifier())
                 .toString();
@@ -230,7 +226,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
 
     @DomainChangeRecord.Type
     @Override
-    public ChangeType getType() {
+    default ChangeType getType() {
         return ChangeType.COMMAND;
     }
 
@@ -249,8 +245,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
     @Override
     @InteractionId
-    public abstract UUID getInteractionId();
-    public abstract void setInteractionId(UUID interactionId);
+    UUID getInteractionId();
+    void setInteractionId(UUID interactionId);
 
     @Property(
             domainEvent = Username.DomainEvent.class
@@ -266,8 +262,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
     @Override
     @Username
-    public abstract String getUsername();
-    public abstract void setUsername(String userName);
+    String getUsername();
+    void setUsername(String userName);
 
     @Property(
             domainEvent = Timestamp.DomainEvent.class
@@ -282,8 +278,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
     @Timestamp
     @Override
-    public abstract java.sql.Timestamp getTimestamp();
-    public abstract void setTimestamp(java.sql.Timestamp timestamp);
+    java.sql.Timestamp getTimestamp();
+    void setTimestamp(java.sql.Timestamp timestamp);
 
     @Property(
             domainEvent = Target.DomainEvent.class
@@ -299,8 +295,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
     @Override
     @Target
-    public abstract Bookmark getTarget();
-    public abstract void setTarget(Bookmark target);
+    Bookmark getTarget();
+    void setTarget(Bookmark target);
 
     @Property(
             domainEvent = ExecuteIn.DomainEvent.class
@@ -318,8 +314,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * executed at some time later in a &quot;background&quot; thread of execution.
      */
     @ExecuteIn
-    public abstract org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn getExecuteIn();
-    public abstract void setExecuteIn(org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn replayState);
+    org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn getExecuteIn();
+    void setExecuteIn(org.apache.causeway.extensions.commandlog.applib.dom.ExecuteIn replayState);
 
     /**
      * The interactionId of the parent command, if any.
@@ -335,8 +331,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * @see #getParent()
      */
     @Domain.Exclude
-    public abstract UUID getParentInteractionId();
-    public abstract void setParentInteractionId(UUID parentInteractionId);
+    UUID getParentInteractionId();
+    void setParentInteractionId(UUID parentInteractionId);
 
     @Property(
             domainEvent = Parent.DomainEvent.class,
@@ -357,16 +353,17 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         String ALLOWS_NULL = "true";
     }
     @Parent
-    public <C extends CommandLogEntry> C getParent() {
-        if (getParentInteractionId() == null) {
+    default <C extends CommandLogEntry> C getParent() {
+        if (getParentInteractionId() == null)
             return null;
-        }
+
+        var commandLogEntryRepository = MetaModelContext.instanceElseFail()
+                .lookupServiceElseFail(CommandLogEntryRepository.class);
+
         var parentCommandLogEntryIfAny = commandLogEntryRepository.findByInteractionId(getParentInteractionId());
         var commandLogEntry = parentCommandLogEntryIfAny.orElse(null);
         return _Casts.uncheckedCast(commandLogEntry);
     }
-
-    @Inject CommandLogEntryRepository commandLogEntryRepository;
 
     @Property(
             domainEvent = LogicalMemberIdentifier.DomainEvent.class,
@@ -384,8 +381,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
     @Override
     @LogicalMemberIdentifier
-    public abstract String getLogicalMemberIdentifier();
-    public abstract void setLogicalMemberIdentifier(String logicalMemberIdentifier);
+    String getLogicalMemberIdentifier();
+    void setLogicalMemberIdentifier(String logicalMemberIdentifier);
 
     @Property(
             domainEvent = CommandDtoAnnot.DomainEvent.class
@@ -400,8 +397,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
     @CommandDtoAnnot
     @Override
-    public abstract CommandDto getCommandDto();
-    public abstract void setCommandDto(CommandDto commandDto);
+    CommandDto getCommandDto();
+    void setCommandDto(CommandDto commandDto);
 
     @Property(
             domainEvent = StartedAt.DomainEvent.class,
@@ -419,8 +416,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         String ALLOWS_NULL = "true";
     }
     @StartedAt
-    public abstract java.sql.Timestamp getStartedAt();
-    public abstract void setStartedAt(java.sql.Timestamp startedAt);
+    java.sql.Timestamp getStartedAt();
+    void setStartedAt(java.sql.Timestamp startedAt);
 
     @Property(
             domainEvent = CompletedAt.DomainEvent.class,
@@ -438,8 +435,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         String ALLOWS_NULL = "true";
     }
     @CompletedAt
-    public abstract java.sql.Timestamp getCompletedAt();
-    public abstract void setCompletedAt(java.sql.Timestamp completedAt);
+    java.sql.Timestamp getCompletedAt();
+    void setCompletedAt(java.sql.Timestamp completedAt);
 
     @Property(
             domainEvent = Duration.DomainEvent.class,
@@ -462,7 +459,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      */
     @Digits(integer=5, fraction=3)
     @Duration
-    public BigDecimal getDuration() {
+    default BigDecimal getDuration() {
         return _Temporals.secondsBetweenAsDecimal(getStartedAt(), getCompletedAt())
                 .orElse(null);
     }
@@ -480,7 +477,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         class DomainEvent extends PropertyDomainEvent<Boolean> {}
     }
     @IsComplete
-    public boolean isComplete() {
+    default boolean isComplete() {
         return getCompletedAt() != null;
     }
 
@@ -500,8 +497,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         String ALLOWS_NULL = "true";
     }
     @Result
-    public abstract Bookmark getResult();
-    public abstract void setResult(Bookmark result);
+    Bookmark getResult();
+    void setResult(Bookmark result);
 
     @Property(
             domainEvent = Exception.DomainEvent.class
@@ -526,10 +523,10 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * and so there's no object that can be accessed to be annotated.
      */
     @Exception
-    public abstract String getException();
-    public abstract void setException(final String exception);
+    String getException();
+    void setException(final String exception);
 
-    public void setException(final Throwable exception) {
+    default void setException(final Throwable exception) {
         setException(_Exceptions.asStacktrace(exception));
     }
 
@@ -547,18 +544,15 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         class DomainEvent extends PropertyDomainEvent<String> {}
     }
     @ResultSummary
-    public String getResultSummary() {
-        if(getCompletedAt() == null) {
+    default String getResultSummary() {
+        if(getCompletedAt() == null)
             return "";
-        }
-        if(!_Strings.isNullOrEmpty(getException())) {
+        if(!_Strings.isNullOrEmpty(getException()))
             return "EXCEPTION";
-        }
-        if(getResult() != null) {
+        if(getResult() != null)
             return "OK";
-        } else {
+        else
             return "OK (VOID)";
-        }
     }
 
     @Property(
@@ -574,7 +568,7 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
         class DomainEvent extends PropertyDomainEvent<Boolean> {}
     }
     @IsCaused
-    public boolean isCausedException() {
+    default boolean isCausedException() {
         return getException() != null;
     }
 
@@ -593,8 +587,8 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * For a replayed command, what the outcome was.
      */
     @ReplayState
-    public abstract org.apache.causeway.extensions.commandlog.applib.dom.ReplayState getReplayState();
-    public abstract void setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState);
+    org.apache.causeway.extensions.commandlog.applib.dom.ReplayState getReplayState();
+    void setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState replayState);
 
     @Property(
             domainEvent = ReplayStateFailureReason.DomainEvent.class,
@@ -618,14 +612,14 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
      * For a {@link org.apache.causeway.extensions.commandlog.applib.dom.ReplayState#FAILED failed} replayed command, what the reason was for the failure.
      */
     @ReplayStateFailureReason
-    public abstract String getReplayStateFailureReason();
-    public abstract void setReplayStateFailureReason(String replayStateFailureReason);
-    @MemberSupport public boolean hideReplayStateFailureReason() {
+    String getReplayStateFailureReason();
+    void setReplayStateFailureReason(String replayStateFailureReason);
+    @MemberSupport default boolean hideReplayStateFailureReason() {
         return getReplayState() == null || !getReplayState().isFailed();
     }
 
     @Programmatic
-    public void saveAnalysis(final String analysis) {
+    default void saveAnalysis(final String analysis) {
         if (analysis == null) {
             setReplayState(org.apache.causeway.extensions.commandlog.applib.dom.ReplayState.OK);
         } else {
@@ -636,11 +630,11 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
     }
 
     @Override
-    public int compareTo(final CommandLogEntry other) {
+    default int compareTo(final CommandLogEntry other) {
         return this.getTimestamp().compareTo(other.getTimestamp());
     }
 
-    static final ToString<CommandLogEntry> stringifier = ObjectContracts
+    static final ToString<CommandLogEntry> TOSTRING = ObjectContracts
             .toString("interactionId", CommandLogEntry::getInteractionId)
             .thenToString("username", CommandLogEntry::getUsername)
             .thenToString("timestamp", CommandLogEntry::getTimestamp)
@@ -648,11 +642,6 @@ implements Comparable<CommandLogEntry>, DomainChangeRecord, HasCommandDto {
             .thenToString("logicalMemberIdentifier", CommandLogEntry::getLogicalMemberIdentifier)
             .thenToStringOmitIfAbsent("startedAt", CommandLogEntry::getStartedAt)
             .thenToStringOmitIfAbsent("completedAt", CommandLogEntry::getCompletedAt);
-
-    @Override
-    public String toString() {
-        return stringifier.toString(this);
-    }
 
     @Service
     @Priority(PriorityPrecedence.LATE - 10) // before the framework's own default.

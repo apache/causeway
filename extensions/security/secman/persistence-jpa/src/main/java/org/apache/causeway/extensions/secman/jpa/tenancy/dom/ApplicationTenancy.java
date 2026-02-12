@@ -77,13 +77,11 @@ import lombok.Setter;
 @Named(ApplicationTenancy.LOGICAL_TYPE_NAME)
 @DomainObject(
         autoCompleteRepository = ApplicationTenancyRepository.class,
-        autoCompleteMethod = "findMatching"
-        )
+        autoCompleteMethod = "findMatching")
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT
-        )
+        bookmarking = BookmarkPolicy.AS_ROOT)
 public class ApplicationTenancy
-    extends org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
+    implements org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy {
 
     @Version
     private Long version;
@@ -105,7 +103,7 @@ public class ApplicationTenancy
     @Getter
     private ApplicationTenancy parent;
     @Override
-    public void setParent(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
+    public void setParent(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy parent) {
         this.parent = _Casts.uncheckedCast(parent);
     }
 
@@ -123,6 +121,21 @@ public class ApplicationTenancy
     // necessary for integration tests
     public void removeFromChildren(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy applicationTenancy) {
         getChildren().remove(applicationTenancy);
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        return EQUALITY.equals(this, other);
+    }
+
+    @Override
+    public int hashCode() {
+        return HASHING.hashCode(this);
+    }
+
+    @Override
+    public String toString() {
+        return TOSTRING.toString(this);
     }
 
 }
