@@ -19,8 +19,11 @@
 package org.apache.causeway.testdomain.persistence.jpa.enhance;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.extensions.audittrail.jpa.dom.AuditTrailEntry;
@@ -34,7 +37,12 @@ import org.apache.causeway.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
 
+@EnabledIf(value = "isWeavingEnabled")
 class VerifyExtensionEntitiesAreEnhancedTest {
+
+    static boolean isWeavingEnabled() {
+        return StringUtils.hasLength(System.getProperty("enhanceEclipselink"));
+    }
 
     private _ClassCache classCache = _ClassCache.getInstance();
 

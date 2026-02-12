@@ -1065,12 +1065,9 @@
         <profile>
             <id>jpa-weave</id>
             <activation>
-                <file>
-                    <exists>${basedir}/.jpa-weave</exists>
-                </file>
-                <!-- does not work
-                <property><name>jpa-weave</name></property>
-                -->
+                <!-- all conditions need to be met-->
+                <file><exists>${basedir}/.jpa-weave</exists></file>
+                <property><name>enhanceEclipselink</name></property>
             </activation>
             <build>
                 <plugins>
