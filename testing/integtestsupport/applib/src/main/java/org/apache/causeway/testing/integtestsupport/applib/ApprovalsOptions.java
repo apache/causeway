@@ -24,7 +24,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
-import org.approvaltests.reporters.linux.MeldMergeReporter;
+import org.approvaltests.reporters.linux.ReportWithMeldMergeLinux;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
@@ -41,8 +41,8 @@ public class ApprovalsOptions {
 		var opts = new Options();
 		// on Linux, at time of writing, the default reporter find mechanism throws an exception while evaluating Windows Diff Reporters;
 		// this is a workaround, provided you are on Linux and have Meld installed
-		return MeldMergeReporter.INSTANCE.checkFileExists()
-			? opts.withReporter(MeldMergeReporter.INSTANCE)
+		return ReportWithMeldMergeLinux.INSTANCE.checkFileExists()
+			? opts.withReporter(ReportWithMeldMergeLinux.INSTANCE)
 			: opts;
 	}
 	
