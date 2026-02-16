@@ -54,7 +54,7 @@
 		    <artifactId>pdfjs-dist</artifactId>
 		    <!--  webjar 
             see also o.a.i.extensions.pdfjs.wkt.integration.PdfJsVersion -->
-		    <version>5.4.530</version>
+		    <version>5.4.624</version>
 		</dependency>
 
 	</dependencies>
