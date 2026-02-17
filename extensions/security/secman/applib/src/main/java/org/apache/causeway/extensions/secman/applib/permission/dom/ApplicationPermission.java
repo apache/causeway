@@ -262,12 +262,12 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
     }
     @Sort
     public String getSort() {
-        final Enum<?> e = getFeatureSort() != ApplicationFeatureSort.MEMBER
-                ? getFeatureSort()
-                : getMemberSort().orElse(null);
-        return e != null ? e.name(): null;
+//        var e = getFeatureSort() != ApplicationFeatureSort.MEMBER
+//                ? getFeatureSort()
+//                : getMemberSort().orElse(null);
+        //return e != null ? e.name(): null;
+        return _WeavingWorkaround.sort(this);
     }
-
 
     // -- FEATURE SORT
 
@@ -333,7 +333,7 @@ public abstract class ApplicationPermission implements Comparable<ApplicationPer
         return featureRepository.findFeature(featureId);
     }
 
-    @Programmatic private Optional<ApplicationMemberSort> getMemberSort() {
+    @Programmatic Optional<ApplicationMemberSort> getMemberSort() {
         return getFeature()
                 .flatMap(ApplicationFeature::getMemberSort);
     }
