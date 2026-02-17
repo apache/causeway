@@ -51,15 +51,27 @@ class VerifyExtensionEntitiesAreEnhancedTest {
     void audittrail() {
         assertTrue(classCache.isByteCodeEnhanced(AuditTrailEntry.class));
     }
+    @Test
+    void audittrail_applib() {
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry.class));
+    }
 
     @Test
     void commandlog() {
         assertTrue(classCache.isByteCodeEnhanced(CommandLogEntry.class));
     }
+    @Test
+    void commandlog_applib() {
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry.class));
+    }
 
     @Test
     void executionlog() {
         assertTrue(classCache.isByteCodeEnhanced(ExecutionLogEntry.class));
+    }
+    @Test
+    void executionlog_applib() {
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.class));
     }
 
     @Test
@@ -71,6 +83,10 @@ class VerifyExtensionEntitiesAreEnhancedTest {
     void executionoutbox() {
         assertTrue(classCache.isByteCodeEnhanced(ExecutionOutboxEntry.class));
     }
+    @Test
+    void executionoutbox_applib() {
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.class));
+    }
 
     @Test
     void secman() {
@@ -79,10 +95,21 @@ class VerifyExtensionEntitiesAreEnhancedTest {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationTenancy.class));
         assertTrue(classCache.isByteCodeEnhanced(ApplicationUser.class));
     }
+    @Test
+    void secman_applib() {
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.class));
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.class));
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy.class));
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.class));
+    }
 
     @Test
     void sessionlog() {
         assertTrue(classCache.isByteCodeEnhanced(SessionLogEntry.class));
+    }
+    @Test
+    void sessionlog_applib() {
+        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry.class));
     }
 
 }
