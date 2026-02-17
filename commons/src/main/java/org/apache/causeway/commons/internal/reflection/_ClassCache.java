@@ -33,10 +33,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.Nullable;
-import org.springframework.util.ReflectionUtils;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal._Constants;
@@ -49,6 +45,9 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedConstructor;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.semantics.AccessorSemantics;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
+import org.springframework.util.ReflectionUtils;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -216,6 +215,14 @@ public final class _ClassCache implements AutoCloseable {
                     .collect(Can.toCan()))
             .stream();
         }
+    }
+    
+    // not memoized, as only used for debugging and MetamodelInspectView (UI)
+    public boolean isByteCodeEnhanced(final Class<?> type) {
+        return Stream.of(type.getDeclaredMethods())
+            .filter(_ClassCache::isByteCodeEnhanced)
+            .findAny()
+            .isPresent();
     }
     
     // -- ATTRIBUTES
@@ -512,5 +519,8 @@ public final class _ClassCache implements AutoCloseable {
         return _Strings.decapitalize(fieldName);
     }
 
-
+    private static boolean isByteCodeEnhanced(final Method method) {
+        return method.getName().startsWith("_persistence_"); // EclispeLink static weaving
+    }
+    
 }
