@@ -26,7 +26,7 @@ import lombok.experimental.UtilityClass;
 class _WeavingWorkaround {
 	
 	/**
-	 * This former inlined code snipped was found to break static-weaving, when running the build on JDK 21 or 25.
+	 * This former inlined code snippet was found to break static-weaving, when running the build on JDK 11, 21 or 25.
 	 * Only JDK 17 worked.
 	 */
     String sort(ApplicationPermission perm) {

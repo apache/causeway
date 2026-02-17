@@ -25,6 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
 /**
@@ -32,6 +33,7 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
  * @deprecated not required in 4.x (as abstract classes were refactored into interfaces) 
  */
 @Deprecated
+@Domain.Exclude
 @Entity
 public class AuditTrailEntryDummy extends AuditTrailEntry {
 

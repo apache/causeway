@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 
@@ -30,6 +31,7 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
  * @deprecated not required in 4.x (as abstract classes were refactored into interfaces) 
  */
 @Deprecated
+@Domain.Exclude
 @Entity
 public class ApplicationPermissionDummy extends org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
 

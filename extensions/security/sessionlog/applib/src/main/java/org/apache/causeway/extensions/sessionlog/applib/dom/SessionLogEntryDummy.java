@@ -27,11 +27,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.apache.causeway.applib.annotation.Domain;
+
 /**
  * Just a marker, to have the static-weaving processor pickup inherited abstract classes.
  * @deprecated not required in 4.x (as abstract classes were refactored into interfaces) 
  */
 @Deprecated
+@Domain.Exclude
 @Entity
 public class SessionLogEntryDummy extends SessionLogEntry {
 
