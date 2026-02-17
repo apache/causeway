@@ -1066,7 +1066,7 @@
             <id>jpa-weave</id>
             <activation>
                 <!-- all conditions need to be met-->
-                <file><exists>${basedir}/.jpa-weave</exists></file>
+                <file><exists>${basedir}/.build-jpa-enhance</exists></file>
                 <property><name>enhanceEclipselink</name></property>
             </activation>
             <build>
