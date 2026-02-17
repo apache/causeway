@@ -295,7 +295,8 @@ public final class _ClassCache implements AutoCloseable {
     // -- UTILITY
 
     public static boolean methodExcludeFilter(final Method method) {
-        return method.isBridge()
+        return method.getName().startsWith("_persistence_") // EclispeLink static weaving
+        		|| method.isBridge()
                 || Modifier.isStatic(method.getModifiers())
                 || method.getDeclaringClass().equals(Object.class)
                 || (_Reflect.isNonFinalObjectMethod(method)
