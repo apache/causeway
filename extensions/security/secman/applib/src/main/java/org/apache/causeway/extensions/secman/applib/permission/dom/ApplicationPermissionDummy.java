@@ -31,12 +31,12 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
  */
 @Deprecated
 @Entity
-public class ApplicationPermissionDummy extends ApplicationPermission {
+public class ApplicationPermissionDummy extends org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission {
 
 	@Id
     @GeneratedValue
     private Long id;
-	
+
 	@Override
 	public ApplicationRole getRole() {
 		// TODO Auto-generated method stub
