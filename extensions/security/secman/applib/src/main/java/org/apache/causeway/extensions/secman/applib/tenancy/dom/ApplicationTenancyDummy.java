@@ -21,6 +21,8 @@ package org.apache.causeway.extensions.secman.applib.tenancy.dom;
 import java.util.Collection;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Just a marker, to have the static-weaving processor pickup inherited abstract classes.
@@ -30,6 +32,10 @@ import javax.persistence.Entity;
 @Entity
 public class ApplicationTenancyDummy extends ApplicationTenancy {
 
+	@Id
+    @GeneratedValue
+    private Long id;
+	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub

@@ -22,6 +22,8 @@ package org.apache.causeway.extensions.audittrail.applib.dom;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 
@@ -33,6 +35,10 @@ import org.apache.causeway.applib.services.bookmark.Bookmark;
 @Entity
 public class AuditTrailEntryDummy extends AuditTrailEntry {
 
+	@Id
+    @GeneratedValue
+    private Long id;
+	
 	@Override
 	public UUID getInteractionId() {
 		// TODO Auto-generated method stub

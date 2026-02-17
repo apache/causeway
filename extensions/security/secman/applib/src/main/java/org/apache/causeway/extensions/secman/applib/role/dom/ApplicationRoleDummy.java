@@ -21,6 +21,8 @@ package org.apache.causeway.extensions.secman.applib.role.dom;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 
@@ -32,6 +34,10 @@ import org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser;
 @Entity
 public class ApplicationRoleDummy extends ApplicationRole {
 
+	@Id
+    @GeneratedValue
+    private Long id;
+	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub

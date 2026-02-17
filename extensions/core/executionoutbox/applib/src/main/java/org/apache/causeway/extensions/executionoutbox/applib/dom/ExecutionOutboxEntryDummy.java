@@ -21,6 +21,8 @@ package org.apache.causeway.extensions.executionoutbox.applib.dom;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.schema.ixn.v2.InteractionDto;
@@ -33,6 +35,10 @@ import org.apache.causeway.schema.ixn.v2.InteractionDto;
 @Entity
 public class ExecutionOutboxEntryDummy extends ExecutionOutboxEntry {
 
+	@Id
+    @GeneratedValue
+    private Long id;
+	
 	@Override
 	public UUID getInteractionId() {
 		// TODO Auto-generated method stub

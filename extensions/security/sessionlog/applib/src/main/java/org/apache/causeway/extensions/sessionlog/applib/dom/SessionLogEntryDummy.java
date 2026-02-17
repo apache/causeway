@@ -24,6 +24,8 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * Just a marker, to have the static-weaving processor pickup inherited abstract classes.
@@ -37,6 +39,10 @@ public class SessionLogEntryDummy extends SessionLogEntry {
 			org.apache.causeway.applib.services.session.SessionSubscriber.CausedBy causedBy, Timestamp loginTimestamp) {
 		super(sessionGuid, httpSessionId, username, causedBy, loginTimestamp);
 	}
+	
+	@Id
+    @GeneratedValue
+    private Long id;
 
 	@Override
 	public UUID getSessionGuid() {

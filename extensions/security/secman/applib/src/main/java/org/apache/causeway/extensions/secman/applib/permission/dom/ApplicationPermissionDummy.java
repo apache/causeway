@@ -19,6 +19,8 @@
 package org.apache.causeway.extensions.secman.applib.permission.dom;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import org.apache.causeway.applib.services.appfeat.ApplicationFeatureSort;
 import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
@@ -31,6 +33,10 @@ import org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole;
 @Entity
 public class ApplicationPermissionDummy extends ApplicationPermission {
 
+	@Id
+    @GeneratedValue
+    private Long id;
+	
 	@Override
 	public ApplicationRole getRole() {
 		// TODO Auto-generated method stub
