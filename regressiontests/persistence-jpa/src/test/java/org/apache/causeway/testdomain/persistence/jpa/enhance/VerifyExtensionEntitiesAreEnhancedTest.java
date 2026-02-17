@@ -18,17 +18,11 @@
  */
 package org.apache.causeway.testdomain.persistence.jpa.enhance;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIf;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.extensions.audittrail.jpa.dom.AuditTrailEntry;
 import org.apache.causeway.extensions.commandlog.jpa.dom.CommandLogEntry;
-import org.apache.causeway.extensions.excel.fixtures.demoapp.todomodule.dom.ExcelDemoToDoItem;
 import org.apache.causeway.extensions.executionlog.jpa.dom.ExecutionLogEntry;
 import org.apache.causeway.extensions.executionoutbox.jpa.dom.ExecutionOutboxEntry;
 import org.apache.causeway.extensions.secman.jpa.permission.dom.ApplicationPermission;
@@ -36,6 +30,9 @@ import org.apache.causeway.extensions.secman.jpa.role.dom.ApplicationRole;
 import org.apache.causeway.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
+import org.springframework.util.StringUtils;
 
 @EnabledIf(value = "isWeavingEnabled")
 class VerifyExtensionEntitiesAreEnhancedTest {
@@ -74,10 +71,11 @@ class VerifyExtensionEntitiesAreEnhancedTest {
         assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.class));
     }
 
-    @Test
-    void exceldemo() {
-        assertTrue(classCache.isByteCodeEnhanced(ExcelDemoToDoItem.class));
-    }
+//no JPA variant of ExcelDemoToDoItem in v2 yet (however, could be backported from main)    
+//    @Test
+//    void exceldemo() {
+//        assertTrue(classCache.isByteCodeEnhanced(ExcelDemoToDoItem.class));
+//    }
 
     @Test
     void executionoutbox() {
@@ -88,18 +86,28 @@ class VerifyExtensionEntitiesAreEnhancedTest {
         assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.class));
     }
 
-    @Test
-    void secman() {
+    @Test void secman_role() {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationRole.class));
+    }
+    @Test void secman_permission() {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationPermission.class));
+    }
+    @Test void secman_tenancy() {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationTenancy.class));
+    }
+    @Test void secman_user() {
         assertTrue(classCache.isByteCodeEnhanced(ApplicationUser.class));
     }
-    @Test
-    void secman_applib() {
+    @Test void secman_role_applib() {
         assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.class));
+    }
+    @Test void secman_permission_applib() {
         assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.class));
+    }
+    @Test void secman_tenancy_applib() {
         assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy.class));
+    }
+    @Test void secman_user_applib() {
         assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.class));
     }
 

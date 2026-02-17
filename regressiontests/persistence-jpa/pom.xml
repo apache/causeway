@@ -75,11 +75,12 @@
             <artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.causeway.extensions</groupId>
-            <artifactId>causeway-extensions-excel-fixtures</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        no JPA variant of ExcelDemoToDoItem in v2 yet (however, could be backported from main)-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.causeway.extensions</groupId>-->
+<!--            <artifactId>causeway-extensions-excel-fixtures</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.causeway.extensions</groupId>
             <artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
