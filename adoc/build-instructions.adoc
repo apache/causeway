@@ -7,13 +7,14 @@ Here are the recommended build instructions:
 
 First we set the desired version: 
 ----
-mvn versions:set -Drevision=2.2.0-SNAPSHOT
+mvn versions:set -Drevision=2.2.0-SNAPSHOT <2>
 ----
 
 Now build with _mvn_ command:
 ----
-mvn install \
- -Drevision=2.2.0-SNAPSHOT \
+mvn clean install \ <.>
+ -Drevision=2.2.0-SNAPSHOT \ <.>
+ -DenhanceEclipselink \ <.>
  -Dmaven.compiler.release=11 \
  -Dmaven.compiler.proc=full \
  -Dmaven.source.skip=true \
@@ -22,7 +23,9 @@ mvn install \
  -e
 ----
 
-NOTE: the `revision` parameter can be set as desired
+<.> `clean` required whenever switching weaving on or off
+<.> `revision` parameter can be set as desired
+<.> `enhanceEclipselink` optional parameter, enables static weaving
 
 == Legacy (isis) Build
 

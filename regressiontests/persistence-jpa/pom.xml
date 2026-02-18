@@ -18,48 +18,89 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.causeway.regressiontests</groupId>
-		<artifactId>causeway-regressiontests</artifactId>
-		<version>${revision}</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.causeway.regressiontests</groupId>
+        <artifactId>causeway-regressiontests</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<artifactId>causeway-regressiontests-persistence-jpa</artifactId>
-	<name>Apache Causeway Regression Tests - Persistence (JPA)</name>
+    <artifactId>causeway-regressiontests-persistence-jpa</artifactId>
+    <name>Apache Causeway Regression Tests - Persistence (JPA)</name>
 
-	<properties>
+    <properties>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-		<jar-plugin.automaticModuleName>org.apache.causeway.regressiontests.persistence.jpa</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/causeway/regressiontests/persistence-jpa</git-plugin.propertiesDir>
+        <jar-plugin.automaticModuleName>
+            org.apache.causeway.regressiontests.persistence.jpa</jar-plugin.automaticModuleName>
+        <git-plugin.propertiesDir>
+            org/apache/causeway/regressiontests/persistence-jpa</git-plugin.propertiesDir>
     </properties>
 
-	<dependencies>
+    <dependencies>
 
-		<dependency>
-			<groupId>org.apache.causeway.regressiontests</groupId>
-			<artifactId>causeway-regressiontests-base</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.regressiontests</groupId>
+            <artifactId>causeway-regressiontests-base</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.persistence</groupId>
-			<artifactId>causeway-persistence-jpa-eclipselink</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.persistence</groupId>
+            <artifactId>causeway-persistence-jpa-eclipselink</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.causeway.testing</groupId>
-			<artifactId>causeway-testing-fixtures-applib</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.causeway.testing</groupId>
+            <artifactId>causeway-testing-fixtures-applib</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-	</dependencies>
+
+        <!-- EXTENSIONS (to verify static weaving was done) -->
+
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-audittrail-persistence-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-commandlog-persistence-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+<!--        no JPA variant of ExcelDemoToDoItem in v2 yet (however, could be backported from main)-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.causeway.extensions</groupId>-->
+<!--            <artifactId>causeway-extensions-excel-fixtures</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionlog-persistence-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-executionoutbox-persistence-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-secman-persistence-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.causeway.extensions</groupId>
+            <artifactId>causeway-extensions-sessionlog-persistence-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>
