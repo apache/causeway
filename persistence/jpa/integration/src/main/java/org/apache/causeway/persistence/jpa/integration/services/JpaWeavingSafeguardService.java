@@ -19,7 +19,6 @@
 package org.apache.causeway.persistence.jpa.integration.services;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jakarta.inject.Inject;
@@ -42,9 +41,8 @@ public class JpaWeavingSafeguardService implements MetamodelListener {
 
     @Override public void onMetamodelLoaded() { }
     @Override public void onMetamodelAboutToBeLoaded() {
-        var safeguardMode = Optional.ofNullable(config.persistence().weaving().safeguardMode())
-                .orElse(CausewayConfiguration.Persistence.Weaving.SafeguardMode.REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED);
-        var jpaWeavingSafeguard = new JpaWeavingSafeguard(safeguardMode);
+        log.info("running JPA Weaving Safeguard ...");
+        var jpaWeavingSafeguard = new JpaWeavingSafeguard(config.persistence().weaving().safeguardMode());
         jpaWeavingSafeguard.checkAll(causewayBeanTypeRegistry
                 .streamEntityTypes(PersistenceStack.JPA)
                 .collect(Collectors.toCollection(HashSet::new)));

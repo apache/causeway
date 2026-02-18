@@ -90,8 +90,6 @@ import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._StableValue;
 import org.apache.causeway.commons.internal.context._Context;
-import org.apache.causeway.core.config.CausewayConfiguration.Core;
-import org.apache.causeway.core.config.CausewayConfiguration.Viewer;
 import org.apache.causeway.core.config.metamodel.facets.ActionConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.AssociationLayoutConfigOptions;
 import org.apache.causeway.core.config.metamodel.facets.CollectionLayoutConfigOptions;
@@ -2099,7 +2097,7 @@ public record CausewayConfiguration(
                 LOG_ONLY,
                 /**
                  * (Default) Requires for any entity type hierarchy that when classes are weaved,
-                 * their super classes also need to be weaved.
+                 * their super classes are also weaved.
                  *
                  * <p>Prevents entity type hierarchies from failing later at runtime.
                  */

@@ -49,7 +49,7 @@ public record JpaWeavingSafeguard(
         if(!seen.add(entityType))
             return; // skip when already checked
 
-        log.info("weaved {}{}",
+        log.info("weaved {} {}",
                 classCache.isByteCodeEnhanced(entityType)
                     ? "[#]"
                     : "[-]",
