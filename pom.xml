@@ -80,18 +80,6 @@
 		</profile>
 
 		<profile>
-			<id>module-ext-secman</id>
-			<activation>
-				<property>
-					<name>module-secman</name>
-				</property>
-			</activation>
-			<modules>
-				<module>extensions/security/secman</module>
-			</modules>
-		</profile>
-
-		<profile>
 			<id>module-incubator-commandreplay</id>
 			<activation>
 				<property>
