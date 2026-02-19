@@ -41,8 +41,10 @@ public class JpaWeavingSafeguardService implements MetamodelListener {
 
     @Override public void onMetamodelLoaded() { }
     @Override public void onMetamodelAboutToBeLoaded() {
-        log.info("running JPA Weaving Safeguard");
-        var jpaWeavingSafeguard = new JpaWeavingSafeguard(config.persistence().weaving().safeguardMode());
+        var mode = config.persistence().weaving().safeguardMode();
+        log.info("running JPA Weaving Safeguard ({})", mode.name());
+
+        var jpaWeavingSafeguard = new JpaWeavingSafeguard(mode);
         jpaWeavingSafeguard.checkAll(causewayBeanTypeRegistry
                 .streamEntityTypes(PersistenceStack.JPA)
                 .collect(Collectors.toCollection(HashSet::new)));
