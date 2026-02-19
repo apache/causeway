@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.spec.impl;
 
+import org.apache.causeway.core.metamodel.spec.IntrospectionTrigger;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 
 interface ObjectSpecificationMutable extends ObjectSpecification {
@@ -37,6 +38,6 @@ interface ObjectSpecificationMutable extends ObjectSpecification {
         FULL
     }
 
-    void introspect(IntrospectionRequest request);
+    void introspect(IntrospectionRequest request, IntrospectionTrigger introspectionTrigger);
 
 }

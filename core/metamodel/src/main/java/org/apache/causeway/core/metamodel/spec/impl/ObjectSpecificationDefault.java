@@ -105,6 +105,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.IntrospectionTrigger;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -117,6 +118,7 @@ import org.apache.causeway.core.metamodel.util.Facets;
 import static org.apache.causeway.commons.internal.base._NullSafe.stream;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -135,19 +137,24 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     @Getter(onMethod_={@Override})
     private final IntrospectionPolicy introspectionPolicy;
+    
+    @Getter(onMethod_={@Override}) @Accessors(fluent = true)
+    private final IntrospectionTrigger introspectionTrigger;
 
     public ObjectSpecificationDefault(
             final @NonNull CausewayBeanMetaData typeMeta,
             final @NonNull MetaModelContext mmc,
             final @NonNull FacetProcessor facetProcessor,
             final @NonNull PostProcessor postProcessor,
-            final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry) {
+            final @NonNull ClassSubstitutorRegistry classSubstitutorRegistry,
+            final @NonNull IntrospectionTrigger introspectionTrigger) {
 
         this.correspondingClass = typeMeta.getCorrespondingClass();
         this.logicalType = typeMeta.logicalType();
         this.fullName = correspondingClass.getName();
         this.shortName = typeMeta.logicalType().logicalSimpleName();
         this.beanSort = typeMeta.beanSort();
+        this.introspectionTrigger = introspectionTrigger;
 
         this.facetHolder = FacetHolder.simple(
             facetProcessor.getMetaModelContext(),
@@ -505,7 +512,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     }
 
     @Override
-    public void introspect(IntrospectionRequest request) {
+    public void introspect(IntrospectionRequest request, IntrospectionTrigger introspectionTrigger) {
         switch (request) {
             case REGISTER -> introspectUpTo(IntrospectionState.NOT_INTROSPECTED,
                 ()->"introspect(%s)".formatted(request));
@@ -1008,7 +1015,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
 
     private Stream<ObjectAssociation> createMixedInAssociation(final Class<?> mixinType) {
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
-                IntrospectionRequest.FULL);
+                IntrospectionRequest.FULL, IntrospectionTrigger.mixin(mixinType));
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();
@@ -1042,7 +1049,7 @@ implements ObjectMemberContainer, ObjectSpecificationMutable, HasSpecificationLo
     private Stream<ObjectActionMixedIn> createMixedInAction(final Class<?> mixinType) {
 
         var mixinSpec = specLoaderInternal().loadSpecification(mixinType,
-                IntrospectionRequest.FULL);
+                IntrospectionRequest.FULL, IntrospectionTrigger.mixin(mixinType));
         if (mixinSpec == null
                 || mixinSpec == this) {
             return Stream.empty();

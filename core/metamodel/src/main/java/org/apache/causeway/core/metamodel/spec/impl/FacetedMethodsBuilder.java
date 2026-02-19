@@ -54,6 +54,7 @@ import org.apache.causeway.core.metamodel.facets.HasFacetedMethod;
 import org.apache.causeway.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.causeway.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.causeway.core.metamodel.services.classsubstitutor.ClassSubstitutorRegistry;
+import org.apache.causeway.core.metamodel.spec.IntrospectionTrigger;
 import org.apache.causeway.core.metamodel.spec.impl.ObjectSpecificationMutable.IntrospectionRequest;
 import org.apache.causeway.core.metamodel.specloader.typeextract.TypeExtractor;
 
@@ -140,17 +141,13 @@ implements
         this.methodRemover = new ConcurrentMethodRemover(introspectedClass, methodsRemaining);
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // Class and stuff immediately derived from class
-    // ////////////////////////////////////////////////////////////////////////////
+    // -- SHORTCUT
 
     private String getClassName() {
         return introspectedClass.getName();
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // introspect class
-    // ////////////////////////////////////////////////////////////////////////////
+    // -- INTROSPECT CLASS
 
     public void introspectClass() {
         if (log.isDebugEnabled()) {
@@ -163,9 +160,7 @@ implements
         .process(introspectedClass, introspectionPolicy(), methodRemover, inspectedTypeSpec);
     }
 
-    // ////////////////////////////////////////////////////////////////////////////
-    // introspect associations
-    // ////////////////////////////////////////////////////////////////////////////
+    // -- INTROSPECT ASSOCIATIONS
 
     /**
      * Returns a {@link List} of {@link FacetedMethod}s representing object
@@ -195,7 +190,8 @@ implements
         // Ensure all return types are known
         TypeExtractor.streamMethodReturn(associationCandidateMethods)
             .filter(typeToLoad->typeToLoad!=introspectedClass)
-            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY));
+            .forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY, 
+            		IntrospectionTrigger.getter(typeToLoad)));
 
         // now create FacetedMethods for collections and for properties
         var associationFacetedMethods = new ArrayList<FacetedMethod>();
@@ -376,8 +372,9 @@ implements
 
         // ensure we can load returned element type; otherwise ignore method
         var anyLoadedAsNull = TypeExtractor.streamMethodReturn(actionMethod)
-        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY))
-        .anyMatch(Objects::isNull);
+	        .map(typeToLoad->specLoaderInternal().loadSpecification(typeToLoad, IntrospectionRequest.TYPE_ONLY, 
+	        		IntrospectionTrigger.actionReturn(typeToLoad)))
+	        .anyMatch(Objects::isNull);
         if (anyLoadedAsNull) {
             return false;
         }
