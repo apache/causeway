@@ -6,7 +6,11 @@
 
 📔 Documentation
 
-- `README` (v2) updated build instructions and changelog 
+- `README` (v2) updated build instructions and changelog
+
+🔨 Dependency Upgrades
+
+- Upgrade `eclipselink` 2.7.15 -> 2.7.16 (latest 2.x), see https://github.com/eclipse-ee4j/eclipselink/releases/tag/2.7.16 
 
 = Jan 2016
 
