@@ -18,7 +18,12 @@
  */
 package org.apache.causeway.testdomain.persistence.jpa.enhance;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.extensions.audittrail.jpa.dom.AuditTrailEntry;
@@ -34,6 +39,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.util.StringUtils;
 
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+
 @EnabledIf(value = "isWeavingEnabled")
 class VerifyExtensionEntitiesAreEnhancedTest {
 
@@ -42,33 +50,33 @@ class VerifyExtensionEntitiesAreEnhancedTest {
                 || StringUtils.hasLength(System.getenv("enhanceEclipselink"));
     }
 
-    private _ClassCache classCache = _ClassCache.getInstance();
+    private Verifier verifier = new Verifier(Verifier.getVersion(VerifyExtensionEntitiesAreEnhancedTest.class));
 
     @Test
     void audittrail() {
-        assertTrue(classCache.isByteCodeEnhanced(AuditTrailEntry.class));
+    	verifier.verify(AuditTrailEntry.class);
     }
     @Test
     void audittrail_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry.class));
+    	verifier.verify(org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry.class);
     }
 
     @Test
     void commandlog() {
-        assertTrue(classCache.isByteCodeEnhanced(CommandLogEntry.class));
+    	verifier.verify(CommandLogEntry.class);
     }
     @Test
     void commandlog_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry.class));
+    	verifier.verify(org.apache.causeway.extensions.commandlog.applib.dom.CommandLogEntry.class);
     }
 
     @Test
     void executionlog() {
-        assertTrue(classCache.isByteCodeEnhanced(ExecutionLogEntry.class));
+    	verifier.verify(ExecutionLogEntry.class);
     }
     @Test
     void executionlog_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.class));
+    	verifier.verify(org.apache.causeway.extensions.executionlog.applib.dom.ExecutionLogEntry.class);
     }
 
 //no JPA variant of ExcelDemoToDoItem in v2 yet (however, could be backported from main)    
@@ -79,45 +87,113 @@ class VerifyExtensionEntitiesAreEnhancedTest {
 
     @Test
     void executionoutbox() {
-        assertTrue(classCache.isByteCodeEnhanced(ExecutionOutboxEntry.class));
+    	verifier.verify(ExecutionOutboxEntry.class);
     }
     @Test
     void executionoutbox_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.class));
+    	verifier.verify(org.apache.causeway.extensions.executionoutbox.applib.dom.ExecutionOutboxEntry.class);
     }
 
     @Test void secman_role() {
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationRole.class));
+    	verifier.verify(ApplicationRole.class);
     }
     @Test void secman_permission() {
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationPermission.class));
+    	verifier.verify(ApplicationPermission.class);
     }
     @Test void secman_tenancy() {
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationTenancy.class));
+    	verifier.verify(ApplicationTenancy.class);
     }
     @Test void secman_user() {
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationUser.class));
+    	verifier.verify(ApplicationUser.class);
     }
     @Test void secman_role_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.class));
+    	verifier.verify(org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole.class);
     }
     @Test void secman_permission_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.class));
+    	verifier.verify(org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission.class);
     }
     @Test void secman_tenancy_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy.class));
+    	verifier.verify(org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy.class);
     }
     @Test void secman_user_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.class));
+    	verifier.verify(org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser.class);
     }
 
     @Test
     void sessionlog() {
-        assertTrue(classCache.isByteCodeEnhanced(SessionLogEntry.class));
+    	verifier.verify(SessionLogEntry.class);
     }
     @Test
     void sessionlog_applib() {
-        assertTrue(classCache.isByteCodeEnhanced(org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry.class));
+    	verifier.verify(org.apache.causeway.extensions.sessionlog.applib.dom.SessionLogEntry.class);
+    }
+    
+    // -- HELPER
+
+    @RequiredArgsConstructor
+    final static class Verifier {
+
+    	final Version expectedVersion; 
+    	final _ClassCache classCache;
+    	
+    	@RequiredArgsConstructor
+    	final static class Version {
+    		final int major; final int minor;
+    		@Override
+    		public boolean equals(Object obj) {
+    			return obj instanceof Version
+    					? ((Version)obj).major == major
+    						&& ((Version)obj).minor == minor
+    					: false;
+    		}
+    		@Override
+    		public int hashCode() {
+    			return super.hashCode();
+    		}
+    	}
+
+        Verifier(final Version expectedVersion) {
+            this(expectedVersion, _ClassCache.getInstance());
+        }
+
+        void verify(final Class<?> cls) {
+            assertEquals(expectedVersion, getVersion(cls), ()->"java byte-code version mismatch");
+            assertTrue(classCache.isByteCodeEnhanced(cls), ()->"not enhanced");
+        }
+
+        //EXPERIMENTAL code suggested by Copilot
+        @SneakyThrows
+        static Version getVersion(final Class<?> clazz) {
+            // Build the resource path (handles inner classes too)
+            String resource = clazz.getName().replace('.', '/') + ".class";
+
+            try (InputStream in = clazz.getClassLoader() != null
+                    ? clazz.getClassLoader().getResourceAsStream(resource)
+                    : ClassLoader.getSystemResourceAsStream(resource)) {
+
+                if (in == null) {
+                    // Fallback: try via the class itself (works with bootstrap/jrt classes)
+                    try (InputStream in2 = clazz.getResourceAsStream("/" + resource)) {
+                        if (in2 == null)
+                            throw new IOException("Unable to locate class resource: " + resource);
+                        return readHeader(in2);
+                    }
+                }
+                return readHeader(in);
+            }
+        }
+
+        private static Version readHeader(final InputStream in) throws IOException {
+            try (DataInputStream dis = new DataInputStream(in)) {
+                int magic = dis.readInt();
+                if (magic != 0xCAFEBABE)
+                    throw new IOException("Not a valid class file (bad magic): 0x" + Integer.toHexString(magic));
+                int minor = dis.readUnsignedShort();
+                int major = dis.readUnsignedShort();
+                return new Version(major, minor);
+            }
+        }
+
     }
 
 }

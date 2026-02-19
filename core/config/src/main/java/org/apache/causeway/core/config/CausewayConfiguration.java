@@ -2230,6 +2230,30 @@ public class CausewayConfiguration {
             private String createSchemaSqlTemplate = "CREATE SCHEMA IF NOT EXISTS %S";
 
         }
+
+        private final Weaving weaving = new Weaving();
+        @Data
+        public static class Weaving {
+            public enum SafeguardMode {
+                /**
+                 * Safeguard only logs warnings, but otherwise does not prevent an application from launching.
+                 */
+                LOG_ONLY,
+                /**
+                 * (Default) Requires for any entity type hierarchy that when classes are weaved,
+                 * their super classes are also weaved.
+                 *
+                 * <p>Prevents entity type hierarchies from failing later at runtime.
+                 */
+                REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED,
+                /**
+                 * Enforces weaving on all encountered entity type hierarchies.
+                 */
+                REQUIRE_WEAVED
+            }
+            private SafeguardMode safeguardMode = SafeguardMode.REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED;
+            
+        }
     }
 
     private final Prototyping prototyping = new Prototyping();

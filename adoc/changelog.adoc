@@ -2,7 +2,21 @@
 
 ⭐ New Features
 
-- Static weaving support for CI; enables via `mvn ... -DenhanceEclipselink`  https://issues.apache.org/jira/browse/CAUSEWAY-3968[CAUSEWAY-3968]  
+- Static weaving support for CI; enabled via `mvn ... -DenhanceEclipselink`  https://issues.apache.org/jira/browse/CAUSEWAY-3968[CAUSEWAY-3968]
+- JPA Weaving Safeguard https://issues.apache.org/jira/browse/CAUSEWAY-3969[CAUSEWAY-3969]
+; configure using `causeway.persistence.weaving.safeguardMode=(LOG_ONLY|REQUIRE_WEAVED|..)`
+----
+LOG_ONLY: 
+  Safeguard only logs warnings, but otherwise does not prevent an application from launching.
+
+REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED: 
+  (Default) Requires for any entity type hierarchy that when classes are weaved,
+  their super classes are also weaved.
+  Prevents entity type hierarchies from failing later at runtime.
+
+REQUIRE_WEAVED: 
+  Enforces weaving on all encountered entity type hierarchies.
+----
 
 📔 Documentation
 

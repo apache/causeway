@@ -76,5 +76,7 @@ public interface CausewayBeanTypeRegistry {
             .findFirst()
             .orElse(PersistenceStack.UNSPECIFIED);
     }
+    
+	Stream<Class<?>> streamEntityTypes(PersistenceStack selectedStack);
 
 }
