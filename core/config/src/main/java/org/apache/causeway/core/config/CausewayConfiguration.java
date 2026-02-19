@@ -2252,7 +2252,7 @@ public class CausewayConfiguration {
                 REQUIRE_WEAVED
             }
             private SafeguardMode safeguardMode = SafeguardMode.REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED;
-            
+
         }
     }
 
@@ -2958,7 +2958,7 @@ public class CausewayConfiguration {
              * (typically trailing) column (labeled 'action-column').
              */
             private boolean actionColumnEnabled = true;
-        	
+
             /**
              * Specifies the subclass of
              * <code>org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketApplication</code> that is used to
@@ -3391,17 +3391,17 @@ public class CausewayConfiguration {
             @Data
             public static class FileUpload {
             	/**
-            	 * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'], 
+            	 * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'],
             	 * where 'object' enables fallback behavior. We remove this here.
-            	 *  
+            	 *
             	 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewTypes
             	 */
             	private List<String> disabledPreviewTypes = List.of("object");
             	/**
             	 * Some mime types can trigger unwanted download behavior, dependent on browser and or OS settings.
-            	 * 
+            	 *
             	 * <p>We have seen CSV files causing issues, so we disallow those by default.
-            	 * 
+            	 *
             	 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
             	 */
             	private List<String> disabledPreviewMimeTypes = List.of("text/csv");
@@ -3937,6 +3937,28 @@ public class CausewayConfiguration {
              * </p>
              */
             private PersistPolicy persist = PersistPolicy.ENABLED;
+
+            /**
+             * As per {@link AuditTrail#getFlush()}.
+             *
+             * <p>
+             *     Implementation note: we use an enum here (rather than a simple boolean) to allow for future
+             *     enhancements.
+             * </p>
+             */
+            public enum FlushPolicy {
+                DISABLED,
+                ENABLED;
+            }
+
+            /**
+             * Whether every audit trail entry is flushed as it is persisted (as per
+             * {@link org.apache.causeway.applib.services.repository.RepositoryService#persistAndFlush(Object)}
+             * or is only persisted (as per
+             * {@link org.apache.causeway.applib.services.repository.RepositoryService#persist(Object)} with the flush
+             * performed by the caller.
+             */
+            private FlushPolicy flush = FlushPolicy.ENABLED;
         }
 
         private final CommandLog commandLog = new CommandLog();

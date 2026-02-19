@@ -35,6 +35,7 @@ import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
 import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 
 import lombok.val;
@@ -50,6 +51,7 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     @Inject RepositoryService repositoryService;
     @Inject FactoryService factoryService;
     @Inject CausewaySystemEnvironment causewaySystemEnvironment;
+    @Inject CausewayConfiguration causewayConfiguration;
 
     private final Class<E> auditTrailEntryClass;
 
@@ -65,7 +67,13 @@ public abstract class AuditTrailEntryRepositoryAbstract<E extends AuditTrailEntr
     public AuditTrailEntry createFor(final EntityPropertyChange change) {
         E entry = factoryService.detachedEntity(auditTrailEntryClass);
         entry.init(change);
-        return repositoryService.persistAndFlush(entry);
+        return isFlushEnabled()
+                ? repositoryService.persistAndFlush(entry)
+                : repositoryService.persist(entry);
+    }
+
+    private boolean isFlushEnabled() {
+        return causewayConfiguration.getExtensions().getAuditTrail().getFlush() == CausewayConfiguration.Extensions.AuditTrail.FlushPolicy.ENABLED;
     }
 
     @Override
