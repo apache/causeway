@@ -1030,7 +1030,7 @@ public record CausewayConfiguration(
 
                             "approve.*:btn-success",
                             "reject.*:btn-danger",
-                        })
+                        }) final
                         String[] patterns) {
                         this(patterns, new _StableValue<>());
                     }
@@ -1161,7 +1161,7 @@ public record CausewayConfiguration(
 
                             "wizard.*:fa-solid fa-wand-magic-sparkles"
 
-                        })
+                        }) final
                         String[] patterns) {
                         this(patterns, new _StableValue<>());
                     }
@@ -1993,7 +1993,9 @@ public record CausewayConfiguration(
         @DefaultValue
         Commons commons,
         @DefaultValue
-        Schema schema) {
+        Schema schema,
+        @DefaultValue
+        Weaving weaving) {
 
         public record Commons(
             @DefaultValue
@@ -2083,6 +2085,28 @@ public record CausewayConfiguration(
              */
             @DefaultValue("CREATE SCHEMA IF NOT EXISTS %S")
             String createSchemaSqlTemplate) {
+        }
+
+        public record Weaving(
+                @DefaultValue("REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED")
+                SafeguardMode safeguardMode) {
+            public enum SafeguardMode {
+                /**
+                 * Safeguard only logs warnings, but otherwise does not prevent an application from launching.
+                 */
+                LOG_ONLY,
+                /**
+                 * (Default) Requires for any entity type hierarchy that when classes are weaved,
+                 * their super classes are also weaved.
+                 *
+                 * <p>Prevents entity type hierarchies from failing later at runtime.
+                 */
+                REQUIRE_WEAVED_WHEN_ANY_SUB_IS_WEAVED,
+                /**
+                 * Enforces weaving on all encountered entity type hierarchies.
+                 */
+                REQUIRE_WEAVED
+            }
         }
     }
 
@@ -3167,21 +3191,21 @@ public record CausewayConfiguration(
                 @DefaultValue("false")
                 boolean enable) {
             }
-            
+
             public record FileUpload(
                     /**
-                     * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'], 
+                     * If left empty, the default allows ['image', 'html', 'text', 'video', 'audio', 'flash', 'object'],
                      * where 'object' enables fallback behavior. We remove this here.
-                     *  
+                     *
                      * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewTypes
                      */
                     @DefaultValue({"object"})
                     List<String> disabledPreviewTypes,
             		/**
             		 * Some mime types can trigger unwanted download behavior, dependent on browser and or OS settings.
-            		 * 
+            		 *
             		 * <p>We have seen CSV files causing issues, so we disallow those by default.
-            		 * 
+            		 *
             		 * @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
             		 */
             		@DefaultValue({"text/csv"})
@@ -4331,9 +4355,8 @@ public record CausewayConfiguration(
         public boolean isValid(
             final Class<?> candidateClass,
             final ConstraintValidatorContext constraintContext) {
-            if (superType.get() == null || candidateClass == null) {
+            if (superType.get() == null || candidateClass == null)
                 return true;
-            }
             return superType.get().isAssignableFrom(candidateClass);
         }
     }

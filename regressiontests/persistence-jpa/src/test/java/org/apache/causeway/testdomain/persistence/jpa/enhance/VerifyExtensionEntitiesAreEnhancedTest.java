@@ -18,9 +18,14 @@
  */
 package org.apache.causeway.testdomain.persistence.jpa.enhance;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.springframework.util.StringUtils;
@@ -37,6 +42,8 @@ import org.apache.causeway.extensions.secman.jpa.tenancy.dom.ApplicationTenancy;
 import org.apache.causeway.extensions.secman.jpa.user.dom.ApplicationUser;
 import org.apache.causeway.extensions.sessionlog.jpa.dom.SessionLogEntry;
 
+import lombok.SneakyThrows;
+
 @EnabledIf(value = "isWeavingEnabled")
 class VerifyExtensionEntitiesAreEnhancedTest {
 
@@ -45,44 +52,94 @@ class VerifyExtensionEntitiesAreEnhancedTest {
                 || StringUtils.hasLength(System.getenv("enhanceEclipselink"));
     }
 
-    private _ClassCache classCache = _ClassCache.getInstance();
+    private Verifier verifier = new Verifier(Verifier.getVersion(VerifyExtensionEntitiesAreEnhancedTest.class));
 
     @Test
     void audittrail() {
-        assertTrue(classCache.isByteCodeEnhanced(AuditTrailEntry.class));
+        verifier.verify(AuditTrailEntry.class);
     }
 
     @Test
     void commandlog() {
-        assertTrue(classCache.isByteCodeEnhanced(CommandLogEntry.class));
+        verifier.verify(CommandLogEntry.class);
     }
 
     @Test
     void executionlog() {
-        assertTrue(classCache.isByteCodeEnhanced(ExecutionLogEntry.class));
+        verifier.verify(ExecutionLogEntry.class);
     }
 
     @Test
     void exceldemo() {
-        assertTrue(classCache.isByteCodeEnhanced(ExcelDemoToDoItem.class));
+        verifier.verify(ExcelDemoToDoItem.class);
     }
 
     @Test
     void executionoutbox() {
-        assertTrue(classCache.isByteCodeEnhanced(ExecutionOutboxEntry.class));
+        verifier.verify(ExecutionOutboxEntry.class);
     }
 
     @Test
     void secman() {
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationRole.class));
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationPermission.class));
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationTenancy.class));
-        assertTrue(classCache.isByteCodeEnhanced(ApplicationUser.class));
+        verifier.verify(ApplicationRole.class);
+        verifier.verify(ApplicationPermission.class);
+        verifier.verify(ApplicationTenancy.class);
+        verifier.verify(ApplicationUser.class);
     }
 
     @Test
     void sessionlog() {
-        assertTrue(classCache.isByteCodeEnhanced(SessionLogEntry.class));
+        verifier.verify(SessionLogEntry.class);
+    }
+
+    // -- HELPER
+
+    record Verifier(Version expectedVersion, _ClassCache classCache) {
+
+        public static record Version(int major, int minor) {}
+
+        Verifier(final Version expectedVersion) {
+            this(expectedVersion, _ClassCache.getInstance());
+        }
+
+        void verify(final Class<?> cls) {
+            assertEquals(expectedVersion(), getVersion(cls), ()->"java byte-code version mismatch");
+            assertTrue(classCache.isByteCodeEnhanced(cls), ()->"not enhanced");
+        }
+
+        //EXPERIMENTAL code suggested by Copilot
+        @SneakyThrows
+        static Version getVersion(final Class<?> clazz) {
+            // Build the resource path (handles inner classes too)
+            String resource = clazz.getName().replace('.', '/') + ".class";
+
+            try (InputStream in = clazz.getClassLoader() != null
+                    ? clazz.getClassLoader().getResourceAsStream(resource)
+                    : ClassLoader.getSystemResourceAsStream(resource)) {
+
+                if (in == null) {
+                    // Fallback: try via the class itself (works with bootstrap/jrt classes)
+                    try (InputStream in2 = clazz.getResourceAsStream("/" + resource)) {
+                        if (in2 == null)
+                            throw new IOException("Unable to locate class resource: " + resource);
+                        return readHeader(in2);
+                    }
+                }
+                return readHeader(in);
+            }
+        }
+
+        private static Version readHeader(final InputStream in) throws IOException {
+            try (DataInputStream dis = new DataInputStream(in)) {
+                int magic = dis.readInt();
+                if (magic != 0xCAFEBABE)
+                    throw new IOException("Not a valid class file (bad magic): 0x" + Integer.toHexString(magic));
+                int minor = dis.readUnsignedShort();
+                int major = dis.readUnsignedShort();
+                return new Version(major, minor);
+            }
+        }
+
     }
 
 }

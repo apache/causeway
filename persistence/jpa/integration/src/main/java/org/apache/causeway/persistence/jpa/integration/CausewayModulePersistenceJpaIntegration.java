@@ -34,6 +34,7 @@ import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jpa.integration.entity.JpaEntityIntegration;
 import org.apache.causeway.persistence.jpa.integration.services.JpaSupportServiceUsingSpring;
+import org.apache.causeway.persistence.jpa.integration.services.JpaWeavingSafeguardService;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayBookmarkConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayLocalResourcePathConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.applib.CausewayMarkupConverter;
@@ -63,6 +64,7 @@ import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJp
 
         // @Service's
         JpaSupportServiceUsingSpring.class,
+        JpaWeavingSafeguardService.class,
 
 })
 @EntityScan(basePackageClasses = {
@@ -89,7 +91,7 @@ public class CausewayModulePersistenceJpaIntegration {
 
     //TODO close issue https://issues.apache.org/jira/browse/CAUSEWAY-3895 once this can be removed
     @Bean @Primary
-    public JpaContext defaultJpaContextWorkaround(Set<EntityManager> entityManagers) {
+    public JpaContext defaultJpaContextWorkaround(final Set<EntityManager> entityManagers) {
         var setOfOne = Set.of(entityManagers.iterator().next());
         return new DefaultJpaContext(setOfOne);
     }
