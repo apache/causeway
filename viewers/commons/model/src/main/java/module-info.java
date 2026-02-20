@@ -36,4 +36,5 @@ module org.apache.causeway.viewer.commons.model {
     requires spring.core;
     requires org.apache.causeway.viewer.commons.applib;
     requires org.apache.causeway.core.runtime;
+    requires webjars.locator.core;
 }

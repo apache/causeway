@@ -18,20 +18,16 @@
  */
 package org.apache.causeway.viewer.commons.model.webjar;
 
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+import org.webjars.WebJarAssetLocator;
+import org.webjars.WebJarAssetLocator.WebJarInfo;
+
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.io.TextUtils;
-
-import lombok.SneakyThrows;
 
 /**
  * Utility to scan webjar version strings dynamically from class-path under {@code META-INF/resources/webjars}.
@@ -53,51 +49,26 @@ public record WebjarEnumerator() {
                 .noSuchElement("no webjar found on class-path under META-INF/resources/webjars matching sub-path '%s'", path));
     }
 
+    // datatables/2.3.6
+    // npm/bootstrap-select/1.14.0-beta3
+    // npm/inputmask/5.0.9
+    // jquery-ui/1.14.1
     public record WebjarResource(
         String path,
         String version) {
 
-        static Optional<WebjarResource> parseFromURL(final String url) {
-            if(url==null
-                    || !url.startsWith("jar:file:")
-                    || !url.contains("/org/webjars/")
-                    || !url.contains(".jar!"))
-                return Optional.empty();
-            // datatables/2.3.6
-            // npm/bootstrap-select/1.14.0-beta3
-            // npm/inputmask/5.0.9
-            // jquery-ui/1.14.1
-            var pathAndVersion = TextUtils.cutter(url)
-                .keepAfter("/org/webjars/")
-                .keepBefore(".jar!")
-                .keepBeforeLast("/");
-            return Optional.of(new WebjarResource(
-                pathAndVersion.keepBeforeLast("/").getValue(),
-                pathAndVersion.keepAfterLast("/").getValue()));
+        static WebjarResource from(final WebJarInfo webJarInfo) {
+            return new WebjarResource(webJarInfo.getArtifactId(), webJarInfo.getVersion());
         }
     }
 
     // -- HELPER
 
     private static Map<String, WebjarResource> scanClassPath() {
-        return webjarURLs().stream()
-            .map(WebjarResource::parseFromURL)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+        var locator = new WebJarAssetLocator();
+        return locator.getAllWebJars().values().stream()
+            .map(WebjarResource::from)
             .collect(Collectors.toMap(WebjarResource::path, UnaryOperator.identity()));
-    }
-
-    @SneakyThrows
-    private static Set<String> webjarURLs() {
-        Set<String> webjarURLs = new TreeSet<>();
-        Enumeration<URL> resources = WebjarEnumerator.class.getClassLoader()
-                .getResources("META-INF/resources/webjars");
-
-        while (resources.hasMoreElements()) {
-            URL resource = resources.nextElement();
-            webjarURLs.add(resource.toString());
-        }
-        return webjarURLs;
     }
 
 }
