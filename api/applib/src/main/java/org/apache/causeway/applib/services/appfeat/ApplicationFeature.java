@@ -23,18 +23,11 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.SortedSet;
 
-import jakarta.inject.Named;
-
-import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.SemanticsOf;
-import org.apache.causeway.applib.annotation.Value;
 
 /**
- *
  * @since 1.x revised for 2.0 {@index}
  */
-@Named(CausewayModuleApplib.NAMESPACE_SUDO + ".ApplicationFeature")
-@Value
 public interface ApplicationFeature {
 
     ApplicationFeatureId getFeatureId();
@@ -50,16 +43,12 @@ public interface ApplicationFeature {
     Optional<ApplicationMemberSort> getMemberSort();
 
     default SortedSet<ApplicationFeatureId> getMembersOfSort(final ApplicationMemberSort memberSort) {
-        switch (memberSort) {
-        case PROPERTY:
-            return getProperties();
-        case COLLECTION:
-            return getCollections();
-        case ACTION:
-            return getActions();
-        default:
-            return Collections.emptySortedSet();
-        }
+        return switch (memberSort) {
+        case PROPERTY -> getProperties();
+        case COLLECTION -> getCollections();
+        case ACTION -> getActions();
+        default -> Collections.emptySortedSet();
+        };
     }
 
     /**

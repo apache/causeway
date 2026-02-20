@@ -110,10 +110,9 @@ extends FacetFactoryAbstract {
                 log.warn("could not find a ValueSemanticsProvider for value type {}; "
                         + "the type was found to be annotated with @Value", valueClass);
                 // fall through, so gets a ValueFacet
-            } else {
+            } else
                 // don't install a ValueFacet
                 return Optional.empty();
-            }
         } else {
             log.debug("found {} ValueSemanticsProvider(s) for value type {}", semanticsProviders.size(), valueClass);
         }
@@ -138,7 +137,9 @@ extends FacetFactoryAbstract {
         FacetUtil.addFacetIfPresent(MaxLengthFacetFromValueFacet.create(valueFacet, valueSpec));
         FacetUtil.addFacetIfPresent(DefaultedFacetFromValueFacet.create(valueFacet, valueSpec));
 
-        _Assert.assertTrue(valueSpec.valueFacet().isPresent());
+        _Assert.assertTrue(valueSpec.valueFacet().isPresent(), ()->"value facet not created for %s (provider-count=%d)"
+                    .formatted(valueSpec.getCorrespondingClass().getName(),
+                            valueSemanticsProviders.size()));
         _Assert.assertTrue(valueSpec.lookupNonFallbackFacet(TitleFacet.class).isPresent());
         _Assert.assertNotNull(Facets.valueSerializerElseFail(valueSpec, valueSpec.getCorrespondingClass()));
 
