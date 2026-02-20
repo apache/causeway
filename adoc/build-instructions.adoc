@@ -24,7 +24,7 @@ mvn clean install \ <.>
 ----
 
 <.> `clean` required whenever switching weaving on or off
-<.> `revision` parameter can be set as desired
+<.> `revision` parameter can be set as desired, works in combination with _CI Friendly Version Setting_ (see below)
 <.> `enhanceEclipselink` optional parameter, enables static weaving
 
 == Legacy (isis) Build
@@ -36,3 +36,35 @@ jshell scripts/ci/rename-all-published-sources.jsh
 ----
 
 This will rename artifacts and packages from `causeway` to `isis`.
+
+== CI Friendly Version Setting
+
+[source,xml]
+.parent pom.xml
+----
+<build>
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.20.1</version>
+                <!-- usage: mvn versions:set -Drevision=1.0.0-SNAPSHOT 
+                            to be run before install or deploy -->
+                <configuration>
+                    <newVersion>${revision}</newVersion>
+                    <processAllModules>true</processAllModules>
+                    <generateBackupPoms>false</generateBackupPoms>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>set</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+</build>
+----

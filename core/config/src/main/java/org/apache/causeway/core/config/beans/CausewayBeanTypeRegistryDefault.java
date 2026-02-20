@@ -131,7 +131,8 @@ implements CausewayBeanTypeRegistry {
 
     @Override
     public Stream<Class<?>> streamEntityTypes(final PersistenceStack selectedStack) {
-        if(selectedStack==null || !selectedStack.isJpa()) return Stream.empty();
+        if(selectedStack==null || selectedStack.isUnspecified()) 
+        	return Stream.empty();
         return entityTypes.values().stream()
                 .filter(typeMeta->Objects.equals(typeMeta.getPersistenceStack().orElse(null), selectedStack))
                 .<Class<?>>map(CausewayBeanMetaData::getCorrespondingClass);
