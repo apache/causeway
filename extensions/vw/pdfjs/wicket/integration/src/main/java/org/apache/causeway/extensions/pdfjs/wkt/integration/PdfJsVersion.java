@@ -29,7 +29,7 @@ public record PdfJsVersion(String webjarPath) {
 //    V5_X("v4x5x", "pdfjs-dist/5.4.530", JavaScriptReferenceType.MODULE);
 
     PdfJsVersion() {
-        this("pdfjs-dist/" + WebjarEnumerator.lookupElseFail("npm/pdfjs-dist")
+        this("pdfjs-dist/" + WebjarEnumerator.lookupElseFail("pdfjs-dist")
             .version());
     }
 
