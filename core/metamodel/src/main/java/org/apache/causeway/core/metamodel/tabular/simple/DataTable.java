@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.annotation.Where;
@@ -47,10 +48,9 @@ import org.apache.causeway.core.metamodel.objectmanager.ObjectManager.BulkLoadRe
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.metamodel.util.Facets;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Represents a collection of domain objects (typically entity instances).
@@ -109,6 +109,7 @@ public record DataTable(
                 elementType.getSingularName(),
                 elementType
                     .streamProperties(MixedIn.EXCLUDED)
+                    .sorted(ObjectMember.byMemberOrderSequence(false))
                     .collect(Can.toCan()),
                 Can.empty());
     }
@@ -129,6 +130,7 @@ public record DataTable(
                 elementType
                     .streamAssociations(MixedIn.INCLUDED)
                     .filter(Optional.ofNullable(columnFilter).orElseGet(_Predicates::alwaysTrue))
+                    .sorted(ObjectMember.byMemberOrderSequence(false))
                     .collect(Can.toCan()),
                 Can.empty());
     }
@@ -204,7 +206,7 @@ public record DataTable(
      */
     public DataTable withDataElements(final @Nullable Iterable<ManagedObject> dataElements) {
         var newDataRows = Can.ofIterable(dataElements)
-            .map(domainObject->new DataRow(domainObject));
+            .map(DataRow::new);
         return new DataTable(elementType, dataColumns, newDataRows, tableFriendlyName);
     }
     /**
@@ -327,7 +329,7 @@ public record DataTable(
 
     public final static Predicate<ObjectAssociation> columnFilterIncludingEnabledForSnapshot() {
         return (final ObjectAssociation assoc) -> _Casts.castTo(OneToOneAssociation.class, assoc)
-                .map(prop->prop.isIncludedWithSnapshots())
+                .map(OneToOneAssociation::isIncludedWithSnapshots)
                 .orElse(false);
     }
 
