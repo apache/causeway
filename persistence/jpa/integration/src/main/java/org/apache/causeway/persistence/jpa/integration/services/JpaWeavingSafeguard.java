@@ -42,11 +42,6 @@ public final class JpaWeavingSafeguard {
 
     final CausewayConfiguration.Persistence.Weaving.SafeguardMode mode;
 
-//debug
-//    {
-//        mode = SafeguardMode.REQUIRE_WEAVED;
-//    }
-
     public void checkAll(final Iterable<Class<?>> entityTypes) {
         var cache = new Cache();
 
@@ -93,7 +88,7 @@ public final class JpaWeavingSafeguard {
 
     @RequiredArgsConstructor
     @Getter @Accessors(fluent = true)
-    private final class EnhancementDescriptor{
+    private final static class EnhancementDescriptor{
     	
     	final Class<?> cls;
         final boolean isEnhanced;
@@ -109,7 +104,7 @@ public final class JpaWeavingSafeguard {
 
     @RequiredArgsConstructor
     @Getter @Accessors(fluent = true)
-    private final class Cache {
+    private final static class Cache {
 
     	final Map<Class<?>, EnhancementDescriptor> descriptorsByClass;
     	final _ClassCache classCache;
