@@ -78,7 +78,7 @@ identified
 
         <datasource-proxy-spring-boot-starter.version>2.0.0</datasource-proxy-spring-boot-starter.version>
 
-        <datatables.version>2.3.6</datatables.version> <!-- webjar 
+        <datatables.version>2.3.7</datatables.version> <!-- webjar 
         see also DatatablesDotNet -->
 
         <docx4j.version>11.3.2</docx4j.version>
