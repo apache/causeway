@@ -61,22 +61,20 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
 
-    private final FieldSet fieldSet;
     private final Can<AttributePanel> childScalarPanels;
-    private final List<Component> childComponents;
+    private final int childComponentCount;
 
     public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
         super(id, model);
-        this.fieldSet = fieldSet;
 
         // the UI is only ever built once.
-        childComponents = buildGui();
-        childScalarPanels =
+        var childComponents = buildGui(fieldSet);
+        this.childScalarPanels =
                 _NullSafe.stream(childComponents)
                 .filter(AttributePanel.class::isInstance)
                 .map(AttributePanel.class::cast)
                 .collect(Can.toCan());
-
+        this.childComponentCount = childComponents.size();
     }
 
     @Override
@@ -84,7 +82,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         return (UiObjectWkt) getDefaultModel();
     }
 
-    private List<Component> buildGui() {
+    private List<Component> buildGui(final FieldSet fieldSet) {
 
         final List<Component> childComponents = _Lists.newArrayList();
 
@@ -97,9 +95,9 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
-        var properties = getPropertiesNotStaticallyHidden();
+        var properties = getPropertiesNotStaticallyHidden(fieldSet);
 
-        var memberGroupActions = collectMemberGroupActions(propertyRv, childComponents::add);
+        var memberGroupActions = collectMemberGroupActions(fieldSet, propertyRv, childComponents::add);
 
         final WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
@@ -134,12 +132,13 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
     }
 
     private Can<ActionModel> collectMemberGroupActions(
+            final FieldSet fieldSet,
             final RepeatingView container,
             final Consumer<Component> onNewChildComponent) {
 
         var memberGroupActionList = _Lists.<ActionModel>newArrayList();
 
-        for (var property : getPropertiesNotStaticallyHidden()) {
+        for (var property : getPropertiesNotStaticallyHidden(fieldSet)) {
             var propertyRvContainer = new WebMarkupContainer(container.newChildId());
             container.addOrReplace(propertyRvContainer);
             onNewChildComponent.accept(
@@ -149,10 +148,10 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         return Can.ofCollection(memberGroupActionList);
     }
 
-    private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden() {
+    private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden(final FieldSet fieldSet) {
 
         var entity = getModel().getManagedObject();
-        var propertyLayouts = this.fieldSet.getProperties();
+        var propertyLayouts = fieldSet.getProperties();
         //
         // previously we filtered out any invisible properties.
         // However, the inline prompt/don't redirect logic introduced in 1.15.0 means that we keep the same page,
@@ -221,8 +220,8 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
         // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
         // correct Wicket callback (probably onConfigure).
-        if(childComponents.size() > childScalarPanels.size())
-         return true;
+        if(childComponentCount > childScalarPanels.size())
+            return true;
 
         for (final AttributePanel childComponent : childScalarPanels) {
             if(childComponent.isVisibilityAllowed())

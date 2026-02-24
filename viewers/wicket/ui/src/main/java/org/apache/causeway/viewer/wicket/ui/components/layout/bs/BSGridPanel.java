@@ -33,24 +33,19 @@ class BSGridPanel
 extends PanelAbstract<ManagedObject, UiObjectWkt> {
 
     private static final long serialVersionUID = 1L;
-
     private static final String ID_ROWS = "rows";
-
-    private final BSGrid bsPage;
 
     public BSGridPanel(final String id, final UiObjectWkt objectModel, final BSGrid bsGrid) {
         super(id, objectModel);
-        this.bsPage = bsGrid;
-        buildGui();
+        buildGui(bsGrid);
     }
 
-    private void buildGui() {
-
-        Wkt.cssAppend(this, bsPage.getCssClass());
+    private void buildGui(final BSGrid bsGrid) {
+        Wkt.cssAppend(this, bsGrid.getCssClass());
 
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 
-        for(final BSRow bsRow: this.bsPage.getRows()) {
+        for(final BSRow bsRow: bsGrid.getRows()) {
             final String id = rv.newChildId();
             final WebMarkupContainer row = new Row(id, getModel(), bsRow);
             rv.add(row);

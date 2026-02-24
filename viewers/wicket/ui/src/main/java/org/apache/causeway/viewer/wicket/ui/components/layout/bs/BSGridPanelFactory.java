@@ -42,25 +42,22 @@ public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
-
         var mo = objectModel.getObject();
-        var objectSpec = objectModel.getTypeOfSpecification();
 
         return ApplicationAdvice.appliesIf(
-                Facets.bootstrapGrid(objectSpec, mo)
+                Facets.bootstrapGrid(mo.objSpec(), mo)
                 .isPresent());
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
-
         var mo = objectModel.getObject();
-        var objectSpec = objectModel.getTypeOfSpecification();
 
-        return Facets.bootstrapGrid(objectSpec, mo)
+        return Facets.bootstrapGrid(mo.objSpec(), mo)
             .map(UiGridLayout::new) // creates a deep copy of the underlying grid and applies rules
-            .map(ui->new BSGridPanel(id, objectModel, ui.bsGrid()))
+            .map(UiGridLayout::bsGrid)
+            .map(bsGrid->new BSGridPanel(id, objectModel, bsGrid))
             .orElseThrow(); // empty case guarded against by appliesTo(...) above
     }
 

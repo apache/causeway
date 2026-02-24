@@ -34,29 +34,27 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
+import lombok.Getter;
+
 public class Row
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
-
     private static final String ID_ROW_CONTENTS = "rowContents";
 
-    private final BSRow bsRow;
+    @Getter(onMethod_ = @Override)
+    private boolean visible = false;
 
     public Row(
             final String id,
             final UiObjectWkt objectModel,
             final BSRow bsRow) {
-
         super(id, objectModel);
-
-        this.bsRow = bsRow;
-
-        buildGui();
+        buildGui(bsRow);
     }
 
-    private void buildGui() {
+    private void buildGui(final BSRow bsRow) {
 
         final RepeatingViewWithDynamicallyVisibleContent rv =
                 new RepeatingViewWithDynamicallyVisibleContent(ID_ROW_CONTENTS);
@@ -66,20 +64,17 @@ implements HasDynamicallyVisibleContent {
             final String id = rv.newChildId();
 
             final WebMarkupContainer rowContent;
-            if(bsRowContent instanceof BSCol) {
+            if(bsRowContent instanceof BSCol bsCol) {
 
-                final BSCol bsCol = (BSCol) bsRowContent;
                 final Col col = new Col(id, getModel(), bsCol);
 
-                visible = visible || col.isVisible();
+                this.visible = visible || col.isVisible();
                 rowContent = col;
 
-            } else if (bsRowContent instanceof BSClearFix) {
-                final BSClearFix bsClearFix = (BSClearFix) bsRowContent;
+            } else if (bsRowContent instanceof final BSClearFix bsClearFix) {
                 rowContent = new ClearFix(id, getModel(), bsClearFix);
-            } else {
+            } else
                 throw new IllegalStateException("Unrecognized implementation of BSRowContent");
-            }
 
             rv.add(rowContent);
         }
@@ -93,12 +88,6 @@ implements HasDynamicallyVisibleContent {
             WktComponents.permanentlyHide(panel, rv.getId());
         }
 
-    }
-
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
     }
 
 }

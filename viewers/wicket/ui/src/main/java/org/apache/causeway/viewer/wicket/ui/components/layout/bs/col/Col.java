@@ -54,6 +54,8 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
+import lombok.Getter;
+
 public class Col
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
@@ -67,20 +69,17 @@ implements HasDynamicallyVisibleContent {
     private static final String ID_FIELD_SETS = "fieldSets";
     private static final String ID_COLLECTIONS = "collections";
 
-    private final BSCol bsCol;
+    @Getter(onMethod_ = @Override)
+    private boolean visible = false;
 
     public Col(
             final String id,
             final UiObjectWkt objectModel, final BSCol bsCol) {
-
         super(id, objectModel);
-
-        this.bsCol = bsCol;
-
-        buildGui();
+        buildGui(bsCol);
     }
 
-    private void buildGui() {
+    private void buildGui(final BSCol bsCol) {
 
         setRenderBodyOnly(true);
 
@@ -110,7 +109,7 @@ implements HasDynamicallyVisibleContent {
             actionIdToUse = "objectActions";
             actionIdToHide = "actions";
 
-            visible = true;
+            this.visible = true;
         } else {
             WktComponents.permanentlyHide(div, ID_OBJECT_HEADER_PANEL);
             actionOwner = div;
@@ -134,7 +133,7 @@ implements HasDynamicallyVisibleContent {
 
         if (!visibleActions.isEmpty()) {
             ActionLinksPanel.addActionLinks(actionOwner, actionIdToUse, visibleActions, ActionLinksPanel.ActionPanelStyle.INLINE_LIST, Where.OBJECT_FORMS);
-            visible = true;
+            this.visible = true;
         } else {
             WktComponents.permanentlyHide(actionOwner, actionIdToUse);
         }
@@ -143,11 +142,11 @@ implements HasDynamicallyVisibleContent {
         }
 
         // rows
-        final List<BSRow> rows = _Lists.newArrayList(this.bsCol.getRows());
+        final List<BSRow> rows = _Lists.newArrayList(bsCol.getRows());
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
-            visible = visible || rowsRv.isVisible();
+            this.visible = visible || rowsRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_ROWS);
         }
@@ -196,7 +195,7 @@ implements HasDynamicallyVisibleContent {
 
             }
             div.add(tabGroupRv);
-            visible = visible || tabGroupRv.isVisible();
+            this.visible = visible || tabGroupRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_TAB_GROUPS);
         }
@@ -220,7 +219,7 @@ implements HasDynamicallyVisibleContent {
                 fieldSetRv.add(propertyGroup);
             }
             div.add(fieldSetRv);
-            visible = visible || fieldSetRv.isVisible();
+            this.visible = visible || fieldSetRv.isVisible();
         } else {
             WktComponents.permanentlyHide(div, ID_FIELD_SETS);
         }
@@ -253,7 +252,7 @@ implements HasDynamicallyVisibleContent {
             });
 
             div.add(collectionRv);
-            visible = visible || collectionRv.isVisible();
+            this.visible = visible || collectionRv.isVisible();
 
         } else {
             WktComponents.permanentlyHide(div, ID_COLLECTIONS);
@@ -278,12 +277,6 @@ implements HasDynamicallyVisibleContent {
             rowRv.add(row);
         }
         return rowRv;
-    }
-
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
     }
 
 }

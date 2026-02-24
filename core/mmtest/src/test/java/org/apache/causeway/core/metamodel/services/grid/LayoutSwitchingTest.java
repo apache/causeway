@@ -48,7 +48,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
     }
 
     @Test
-    void switchLayout_lowLevel() {
+    void switchLayout_highLevel() {
 
         var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
@@ -73,7 +73,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
     }
 
     @Test
-    void switchLayout_highLevel() {
+    void switchLayout_lowLevel() {
 
         // triggers grid to be loaded initially
         gridService.load(new LayoutKey(Bar.class, null));
