@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
@@ -47,7 +48,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
     }
 
     @Test
-    void switchLayout() {
+    void switchLayout_lowLevel() {
 
         var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
@@ -65,6 +66,25 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
                 .count());
 
         var bsGridDefault = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridDefault))
+                .stream()
+                .filter(line->line.contains("hidden: null")) // 3 non-hidden members
+                .count());
+    }
+
+    @Test
+    void switchLayout_highLevel() {
+
+        // triggers grid to be loaded initially
+        gridService.load(new LayoutKey(Bar.class, null));
+
+        var bsGridSimple = gridService.load(new LayoutKey(Bar.class, "simple"));
+        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridSimple))
+                .stream()
+                .filter(line->line.contains("hidden: EVERYWHERE")) // 3 hidden members
+                .count());
+
+        var bsGridDefault = gridService.load(new LayoutKey(Bar.class, null));
         assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridDefault))
                 .stream()
                 .filter(line->line.contains("hidden: null")) // 3 non-hidden members
