@@ -20,11 +20,13 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -52,14 +54,21 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
         var gridFacet = barSpec.getFacet(GridFacet.class);
         assertNotNull(gridFacet);
 
-        // triggers grid to be loaded (if initial or reloading supported)
-        var bsGrid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar("simple")));
-        assertNotNull(bsGrid);
+        // triggers grid to be loaded initially
+        gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+
+        var bsGridSimple = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar("simple")));
+        assertNotNull(bsGridSimple);
+        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridSimple))
+                .stream()
+                .filter(line->line.contains("hidden: EVERYWHERE")) // 3 hidden members
+                .count());
 
         var bsGridDefault = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
-        System.err.println(BSUtil.toYaml(bsGrid)); // we don't expect too see any hidden members but there are!
-        //TODO fail on seeing hidden members
+        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridDefault))
+                .stream()
+                .filter(line->line.contains("hidden: null")) // 3 non-hidden members
+                .count());
     }
-
 
 }
