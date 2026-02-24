@@ -1,0 +1,65 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.core.metamodel.services.grid;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
+import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+
+/**
+ * Switching between Layout Variants may result in Members staying hidden.
+ * https://issues.apache.org/jira/browse/CAUSEWAY-3971
+ */
+class LayoutSwitchingTest extends MetaModelTestAbstract {
+
+    private GridServiceDefault gridService;
+
+    @Override
+    protected void afterSetUp() {
+        this.gridService = ((GridServiceDefault) getServiceRegistry()
+                .lookupServiceElseFail(GridService.class));
+        assertFalse(gridService.supportsReloading());
+    }
+
+    @Test
+    void switchLayout() {
+
+        var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
+
+        var gridFacet = barSpec.getFacet(GridFacet.class);
+        assertNotNull(gridFacet);
+
+        // triggers grid to be loaded (if initial or reloading supported)
+        var bsGrid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar("simple")));
+        assertNotNull(bsGrid);
+
+        var bsGridDefault = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        System.err.println(BSUtil.toYaml(bsGrid)); // we don't expect too see any hidden members but there are!
+        //TODO fail on seeing hidden members
+    }
+
+
+}

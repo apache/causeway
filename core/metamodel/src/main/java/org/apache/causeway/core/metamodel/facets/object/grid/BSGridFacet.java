@@ -62,6 +62,9 @@ implements GridFacet {
 
     @Override
     public BSGrid getGrid(final @Nullable ManagedObject mo) {
+        if(mo!=null) {
+            System.err.println("get grid for %s: %s".formatted(layoutPrefixFor(mo), mo));
+        }
         guardAgainstObjectOfDifferentType(mo);
         return normalized(mo);
     }
@@ -87,21 +90,19 @@ implements GridFacet {
 
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return; // cannot introspect
-        if(!objSpec().equals(objectAdapter.objSpec())) {
+        if(!objSpec().equals(objectAdapter.objSpec()))
             throw _Exceptions.unrecoverable(
                     "getGrid(adapter) was called passing an adapter (type: %s), "
                     + "for which this GridFacet (type: %s) is not responsible; "
                     + "indicates that some framework internals are wired up in a wrong way",
                     objectAdapter.objSpec().getCorrespondingClass().getName(),
                     objSpec().getCorrespondingClass().getName());
-        }
     }
 
     private String layoutPrefixFor(final @Nullable ManagedObject objectAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
-            || !hasLayoutPrefixFacet()) {
+            || !hasLayoutPrefixFacet())
             return "";
-        }
         var layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layoutPrefix(objectAdapter));
         return layoutName;
     }
