@@ -98,9 +98,8 @@ public record UiGridLayout(
                 visitCol((BSCol) bsRowContent, uiRow, visitor);
             } else if (bsRowContent instanceof BSClearFix) {
                 visitor.onClearfix(uiRow, (BSClearFix) bsRowContent);
-            } else {
+            } else
                 throw new IllegalStateException("Unrecognized implementation of BSRowContent");
-            }
         }
     }
 
@@ -127,7 +126,9 @@ public record UiGridLayout(
         }
 
         for(var fieldSet : bsCol.getFieldSets()) {
-            if(_NullSafe.isEmpty(fieldSet.getProperties())) continue; // skip empty fieldsets
+            if(_NullSafe.isEmpty(fieldSet.getProperties())) {
+                continue; // skip empty fieldsets
+            }
             visitFieldSet(fieldSet, uiCol, visitor);
         }
 

@@ -62,9 +62,6 @@ implements GridFacet {
 
     @Override
     public BSGrid getGrid(final @Nullable ManagedObject mo) {
-        if(mo!=null) {
-            System.err.println("get grid for %s: %s".formatted(layoutPrefixFor(mo), mo));
-        }
         guardAgainstObjectOfDifferentType(mo);
         return normalized(mo);
     }

@@ -168,7 +168,7 @@ public final class Facets {
 
     public boolean defaultViewIsTable(final ObjectFeature feature) {
         return defaultViewName(feature)
-            .map(viewName->"table".equals(viewName))
+            .map("table"::equals)
             .orElse(false);
     }
 
@@ -221,6 +221,10 @@ public final class Facets {
             .map(matcher::test)
             .orElse(false);
     }
+    public Predicate<ObjectFeature> hiddenWhereNotMatches(final Predicate<Where> matcher) {
+        return hiddenWhereMatches(matcher)
+                .negate();
+    }
 
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(IconFacet.class);
@@ -233,17 +237,11 @@ public final class Facets {
         return feature.lookupFacet(LabelAtFacet.class)
             .map(LabelAtFacet::label)
             .map(labelPos->{
-                switch (labelPos) {
-                case LEFT:
-                case RIGHT:
-                case NONE:
-                case TOP:
-                    return labelPos;
-                case DEFAULT:
-                case NOT_SPECIFIED:
-                default:
-                    return LabelPosition.LEFT;
-                }
+                return switch (labelPos) {
+                case LEFT, RIGHT, NONE, TOP -> labelPos;
+                case DEFAULT, NOT_SPECIFIED -> LabelPosition.LEFT;
+                default -> LabelPosition.LEFT;
+                };
             })
             .orElse(LabelPosition.LEFT);
     }

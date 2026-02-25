@@ -104,12 +104,13 @@ public record GridServiceDefault(
             .flatMapSuccessWhenPresent(layoutResource->loader.tryLoad(layoutKey, layoutResource)
                 .ifFailure(ex->onFailureWhileLoadingResource(layoutKey, layoutResource, ex)))
             // on the success rail we optionally have a raw BSGrid (not yet validated), if present validate
-            .mapSuccessWhenPresent(grid->memberResolver.resolve(grid, layoutKey.domainClass())
+            .mapSuccessWhenPresent(grid->memberResolver.resolve(layoutKey, grid)
                 .<BSGrid>fold(a->a, b->{ onValidationFailure(layoutKey, b); return null; }))
             // on the success rail we optionally have a valid BSGrid, if absent use fallback and validate
             .mapSuccess(gridOpt->gridOpt.orElseGet(()->memberResolver.resolve(
-                fallback.defaultGrid(layoutKey.domainClass()), layoutKey.domainClass())
-                    .<BSGrid>fold(a->a, b->{ onFallbackValidationFailure(b); return null; })));
+                    layoutKey,
+                    fallback.defaultGrid(layoutKey.domainClass()))
+                .<BSGrid>fold(a->a, b->{ onFallbackValidationFailure(b); return null; })));
     }
 
     private void onFailureWhileLoadingResource(

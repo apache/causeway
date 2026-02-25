@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.object.fieldset;
 
+import java.util.ArrayList;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.apache.wicket.Component;
@@ -30,7 +32,6 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.commons.ViewOrEditMode;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -102,8 +103,8 @@ implements HasDynamicallyVisibleContent {
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
-        var properties = getPropertiesNotStaticallyHidden(fieldSet);
-        var memberGroupActions = collectMemberGroupActions(fieldSet, propertyRv);
+        var properties = propertiesNotStaticallyHidden(fieldSet);
+        var memberGroupActions = collectMemberGroupActions(propertyRv, properties);
 
         final WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
@@ -136,12 +137,12 @@ implements HasDynamicallyVisibleContent {
     }
 
     private Can<ActionModel> collectMemberGroupActions(
-            final FieldSet fieldSet,
-            final RepeatingView container) {
+            final RepeatingView container,
+            final Can<OneToOneAssociation> properties) {
 
-        var memberGroupActionList = _Lists.<ActionModel>newArrayList();
+        var memberGroupActionList = new ArrayList<ActionModel>();
 
-        for (var property : getPropertiesNotStaticallyHidden(fieldSet)) {
+        for (var property : properties) {
             var propertyRvContainer = new WebMarkupContainer(container.newChildId());
             container.addOrReplace(propertyRvContainer);
             addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActionList::add);
@@ -150,9 +151,9 @@ implements HasDynamicallyVisibleContent {
         return Can.ofCollection(memberGroupActionList);
     }
 
-    private Can<OneToOneAssociation> getPropertiesNotStaticallyHidden(final FieldSet fieldSet) {
+    private Can<OneToOneAssociation> propertiesNotStaticallyHidden(final FieldSet fieldSet) {
 
-        var entity = getModel().getManagedObject();
+        var mo = getModel().getManagedObject();
         var propertyLayouts = fieldSet.getProperties();
         //
         // previously we filtered out any invisible properties.
@@ -165,18 +166,13 @@ implements HasDynamicallyVisibleContent {
 
         return _NullSafe.stream(propertyLayouts)
             .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
-            .map(propertyLayoutData ->
-                entity.objSpec().getProperty(propertyLayoutData.getId())
-                .orElse(null)
-            )
-            .filter(_NullSafe::isPresent)
-            .filter(
-                Facets.hiddenWhereMatches(where->
-                    // static invisible.
-                    where.isAlways()
-                            || where == Where.OBJECT_FORMS)
-                .negate()
-            )
+            .map(propertyLayoutData -> mo.objSpec()
+                    .getProperty(propertyLayoutData.getId())
+                    .orElse(null))
+            .filter(Objects::nonNull)
+            .filter(Facets.hiddenWhereNotMatches(where ->
+                where.isAlways()
+                    || where == Where.OBJECT_FORMS))
             .collect(Can.toCan());
     }
 

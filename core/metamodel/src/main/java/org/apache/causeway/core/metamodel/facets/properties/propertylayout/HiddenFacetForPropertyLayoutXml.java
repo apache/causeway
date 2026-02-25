@@ -34,14 +34,13 @@ extends HiddenFacetAbstract {
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if (propertyLayout == null) {
+        if (propertyLayout == null)
             return Optional.empty();
-        }
         final Where where = propertyLayout.getHidden();
         return where != null
                 && where != Where.NOT_SPECIFIED
-                        ? Optional.of(new HiddenFacetForPropertyLayoutXml(where, holder, precedence))
-                        : Optional.empty();
+                    ? Optional.of(new HiddenFacetForPropertyLayoutXml(where, holder, precedence))
+                    : Optional.empty();
     }
 
     private HiddenFacetForPropertyLayoutXml(
@@ -56,10 +55,9 @@ extends HiddenFacetAbstract {
 
     @Override
     public String hiddenReason(final ManagedObject targetAdapter, final Where whereContext) {
-        if(!where().includes(whereContext)) {
+        if(!where().includes(whereContext))
             return null;
-        }
-        return "Hidden on " + where().getFriendlyName();
+        return "Hidden where " + where().getFriendlyName();
     }
 
 }
