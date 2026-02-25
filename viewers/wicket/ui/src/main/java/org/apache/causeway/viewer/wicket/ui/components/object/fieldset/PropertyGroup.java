@@ -71,6 +71,26 @@ implements HasDynamicallyVisibleContent {
         return (UiObjectWkt) getDefaultModel();
     }
 
+    @Override
+    public void onConfigure() {
+        super.onConfigure();
+        // have all child attribute panels assess their individual visibility
+        streamChildren()
+            .filter(HasAttributeModel.class::isInstance)
+            .forEach(Component::configure);
+        // assess visibility of this Panel, based on whether any of its child attribute panels is visible
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return streamChildren()
+                .filter(HasAttributeModel.class::isInstance)
+                .anyMatch(Component::isVisibilityAllowed);
+    }
+
+    // -- HELPER
+
     private void buildGui(final FieldSet fieldSet) {
 
         setOutputMarkupPlaceholderTag(true);
@@ -176,26 +196,13 @@ implements HasDynamicallyVisibleContent {
 //            Wkt.cssAppend(scalarNameAndValueComponent, attributeModel.getIdentifier());
 //        }
 
-        var entity = objectModel.getManagedObject();
+        var mo = objectModel.getManagedObject();
 
-        ObjectAction.Util.findForAssociation(entity.objSpec(), property)
+        ObjectAction.Util.findForAssociation(mo.objSpec(), property)
             .map(act->ActionModel.forEntity(act, objectModel))
             .forEach(onAssociatedAction);
 
         return scalarNameAndValueComponent;
-    }
-
-    @Override
-    public void onConfigure() {
-        // have all child attribute panels assess their individual visibility
-        streamChildren()
-            .filter(HasAttributeModel.class::isInstance)
-            .forEach(Component::configure);
-        // assess visibility of this Panel, based on whether any of its child attribute panels is visible
-        setVisibilityAllowed(streamChildren()
-                .filter(HasAttributeModel.class::isInstance)
-                .anyMatch(Component::isVisibilityAllowed));
-        super.onConfigure();
     }
 
 }

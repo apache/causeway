@@ -42,16 +42,28 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
     private static final String ID_ROWS = "rows";
 
     private final BSTab bsTab;
+    private boolean visible = false;
 
     public TabPanel(final String id, final UiObjectWkt model, final BSTab bsTab) {
         this(id, model, bsTab, null);
     }
 
-    public TabPanel(final String id, final UiObjectWkt model, final BSTab bsTab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
+    public TabPanel(final String id, final UiObjectWkt model, final BSTab bsTab,
+            final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
         super(id);
-
         this.bsTab = bsTab;
         buildGui(model, bsTab, repeatingViewWithDynamicallyVisibleContent);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return visible; //FIXME never reassessed, visibility needs assessment during onConfigure
     }
 
     /**
@@ -69,7 +81,7 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
         final RepeatingViewWithDynamicallyVisibleContent rv = rvIfAny != null ? rvIfAny : newRows(model, bsTab);
         div.add(rv);
-        visible = visible || rv.isVisible();
+        this.visible = visible || rv.isVisible();
 
         final WebMarkupContainer panel = this;
         if(visible) {
@@ -92,9 +104,6 @@ implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
         return rv;
     }
 
-    private boolean visible = false;
-    @Override
-    public boolean isVisible() {
-        return visible;
-    }
+
+
 }

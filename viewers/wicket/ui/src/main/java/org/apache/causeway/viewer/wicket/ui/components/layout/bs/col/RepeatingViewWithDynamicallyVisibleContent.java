@@ -30,6 +30,19 @@ implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
+    private boolean visible = false;
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return visible; //FIXME never reassessed, visibility needs assessment during onConfigure
+    }
+
     public RepeatingViewWithDynamicallyVisibleContent(final String id) {
         super(id);
     }
@@ -39,20 +52,12 @@ implements HasDynamicallyVisibleContent {
         final MarkupContainer component = super.add(children);
         for (Component child : children) {
             if(child instanceof HasDynamicallyVisibleContent) {
-                final HasDynamicallyVisibleContent hasDynamicallyVisibleContent = (HasDynamicallyVisibleContent) child;
-                visible = visible || hasDynamicallyVisibleContent.isVisible();
+                this.visible = visible || child.isVisible();
             } else {
-                visible = true;
+                this.visible = true;
             }
         }
         return component;
-    }
-
-    private boolean visible = false;
-
-    @Override
-    public boolean isVisible() {
-        return visible;
     }
 
 }

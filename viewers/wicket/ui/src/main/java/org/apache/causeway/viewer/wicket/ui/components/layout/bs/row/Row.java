@@ -34,8 +34,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-import lombok.Getter;
-
 public class Row
 extends PanelAbstract<ManagedObject, UiObjectWkt>
 implements HasDynamicallyVisibleContent {
@@ -43,7 +41,6 @@ implements HasDynamicallyVisibleContent {
     private static final long serialVersionUID = 1L;
     private static final String ID_ROW_CONTENTS = "rowContents";
 
-    @Getter(onMethod_ = @Override)
     private boolean visible = false;
 
     public Row(
@@ -52,6 +49,17 @@ implements HasDynamicallyVisibleContent {
             final BSRow bsRow) {
         super(id, objectModel);
         buildGui(bsRow);
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return visible; //FIXME never reassessed, visibility need assessment during onConfigure
     }
 
     private void buildGui(final BSRow bsRow) {

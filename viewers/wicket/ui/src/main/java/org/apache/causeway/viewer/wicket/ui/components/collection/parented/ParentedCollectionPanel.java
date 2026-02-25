@@ -68,26 +68,24 @@ implements HasDynamicallyVisibleContent {
 
     private final ComponentHintKey selectedItemHintKey;
 
-    @Getter(onMethod_= {@Override})
     private boolean visible = false;
 
     @Getter(value = AccessLevel.PROTECTED)
     private CollectionPresentationSelectorPanel selectorDropdownPanel;
+    // TableDecorator caching
+    private transient Optional<TableDecorator> tableDecorator;
 
-    private final CollectionLayoutData layoutData;
     private final WebMarkupContainer div;
 
     public ParentedCollectionPanel(final String id, final UiObjectWkt objectModel, final CollectionLayoutData layoutData) {
         super(id, objectModel);
-
-        this.layoutData = layoutData;
         this.div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         selectedItemHintKey = ComponentHintKey.create(super.getMetaModelContext(),
                 this::getSelectorDropdownPanel,
                 CollectionModelParented.HINT_KEY_SELECTED_ITEM);
 
-        buildGui();
+        buildGui(layoutData);
     }
 
     /**
@@ -104,20 +102,30 @@ implements HasDynamicallyVisibleContent {
         } else {
             WktComponents.permanentlyHide(panel, div.getId());
         }
+    }
 
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return visible; //FIXME never reassessed, visibility needs assessment during onConfigure
     }
 
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        tableDecorator().ifPresent(tableDecorator->
+        tableDecorator.ifPresent(tableDecorator->
             renderHeadForTableDecorator(response, tableDecorator));
     }
 
     // -- HELPER
 
-    private void buildGui() {
-        var collectionModel = collectionModelParented();
+    private void buildGui(final CollectionLayoutData layoutData) {
+        var collectionModel = collectionModelParented(layoutData);
         div.setMarkupId("collection-" + collectionModel.getLayoutData().getId());
 
         var collectionMetaModel = collectionModel.getMetaModel();
@@ -129,6 +137,8 @@ implements HasDynamicallyVisibleContent {
         final Consent visibility = collectionMetaModel
                 .isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
+        this.tableDecorator = collectionMetaModel.getTableDecorator();
+
         if(visibility.isAllowed()) {
 
             visible = true;
@@ -136,7 +146,7 @@ implements HasDynamicallyVisibleContent {
             Facets.cssClass(collectionMetaModel, objectAdapter)
                 .ifPresent(cssClass->Wkt.cssAppend(div, cssClass));
 
-            tableDecorator().ifPresent(tableDecorator->
+            tableDecorator.ifPresent(tableDecorator->
                 Wkt.cssAppend(div, tableDecorator.cssClass()));
 
             var collectionPanel = new CollectionPanel(ID_COLLECTION, collectionModel);
@@ -161,22 +171,11 @@ implements HasDynamicallyVisibleContent {
 
     // EntityCollectionModelParented caching
     private transient CollectionModelParented collectionModelParented;
-    private CollectionModelParented collectionModelParented() {
+    private CollectionModelParented collectionModelParented(final CollectionLayoutData layoutData) {
         if(collectionModelParented == null) {
             this.collectionModelParented = CollectionModelParented.forParentObjectModel(getModel(), layoutData);
         }
         return collectionModelParented;
-    }
-
-    // TableDecorator caching
-    private transient Optional<TableDecorator> tableDecorator;
-    private Optional<TableDecorator> tableDecorator() {
-        if(tableDecorator == null) {
-            this.tableDecorator = collectionModelParented()
-                    .getMetaModel()
-                    .getTableDecorator();
-        }
-        return tableDecorator;
     }
 
     private void createSelectorDropdownPanel(final CollectionModel collectionModel) {

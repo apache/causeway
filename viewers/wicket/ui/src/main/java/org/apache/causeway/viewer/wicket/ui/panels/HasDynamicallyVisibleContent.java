@@ -31,6 +31,6 @@ import org.apache.causeway.viewer.wicket.ui.components.layout.bs.col.Col;
  */
 public interface HasDynamicallyVisibleContent {
 
-    boolean isVisible();
+    boolean assessVisibility();
 
 }
