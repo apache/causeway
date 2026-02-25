@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.object.fieldset;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 import org.apache.wicket.Component;
@@ -43,13 +42,14 @@ import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
 import org.apache.causeway.viewer.wicket.ui.components.actionlinks.entityactions.ActionLinksPanel;
-import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributePanel;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeModel;
 import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.causeway.viewer.wicket.ui.util.WktComponents;
 
-public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> implements HasDynamicallyVisibleContent {
+public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt>
+implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
     private static final String ID_MEMBER_GROUP = "memberGroup";
@@ -61,20 +61,9 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
 
-    private final Can<AttributePanel> childScalarPanels;
-    private final int childComponentCount;
-
     public PropertyGroup(final String id, final UiObjectWkt model, final FieldSet fieldSet) {
         super(id, model);
-
-        // the UI is only ever built once.
-        var childComponents = buildGui(fieldSet);
-        this.childScalarPanels =
-                _NullSafe.stream(childComponents)
-                .filter(AttributePanel.class::isInstance)
-                .map(AttributePanel.class::cast)
-                .collect(Can.toCan());
-        this.childComponentCount = childComponents.size();
+        buildGui(fieldSet);
     }
 
     @Override
@@ -82,9 +71,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         return (UiObjectWkt) getDefaultModel();
     }
 
-    private List<Component> buildGui(final FieldSet fieldSet) {
-
-        final List<Component> childComponents = _Lists.newArrayList();
+    private void buildGui(final FieldSet fieldSet) {
 
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
@@ -96,8 +83,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         div.addOrReplace(propertyRv);
 
         var properties = getPropertiesNotStaticallyHidden(fieldSet);
-
-        var memberGroupActions = collectMemberGroupActions(fieldSet, propertyRv, childComponents::add);
+        var memberGroupActions = collectMemberGroupActions(fieldSet, propertyRv);
 
         final WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
@@ -127,22 +113,18 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         } else {
             this.addOrReplace(div);
         }
-
-        return childComponents;
     }
 
     private Can<ActionModel> collectMemberGroupActions(
             final FieldSet fieldSet,
-            final RepeatingView container,
-            final Consumer<Component> onNewChildComponent) {
+            final RepeatingView container) {
 
         var memberGroupActionList = _Lists.<ActionModel>newArrayList();
 
         for (var property : getPropertiesNotStaticallyHidden(fieldSet)) {
             var propertyRvContainer = new WebMarkupContainer(container.newChildId());
             container.addOrReplace(propertyRvContainer);
-            onNewChildComponent.accept(
-                    addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActionList::add));
+            addPropertyToForm(getModel(), property, propertyRvContainer, memberGroupActionList::add);
         }
 
         return Can.ofCollection(memberGroupActionList);
@@ -162,20 +144,20 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
         //
 
         return _NullSafe.stream(propertyLayouts)
-        .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
-        .map(propertyLayoutData ->
-            entity.objSpec().getProperty(propertyLayoutData.getId())
-            .orElse(null)
-        )
-        .filter(_NullSafe::isPresent)
-        .filter(
-            Facets.hiddenWhereMatches(where->
-                // static invisible.
-                where.isAlways()
-                        || where == Where.OBJECT_FORMS)
-            .negate()
-        )
-        .collect(Can.toCan());
+            .filter(propertyLayoutData -> propertyLayoutData.getMetadataError() == null)
+            .map(propertyLayoutData ->
+                entity.objSpec().getProperty(propertyLayoutData.getId())
+                .orElse(null)
+            )
+            .filter(_NullSafe::isPresent)
+            .filter(
+                Facets.hiddenWhereMatches(where->
+                    // static invisible.
+                    where.isAlways()
+                            || where == Where.OBJECT_FORMS)
+                .negate()
+            )
+            .collect(Can.toCan());
     }
 
     private Component addPropertyToForm(
@@ -205,29 +187,15 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 
     @Override
     public void onConfigure() {
-        for (final AttributePanel childComponent : childScalarPanels) {
-            childComponent.configure();
-        }
+        // have all child attribute panels assess their individual visibility
+        streamChildren()
+            .filter(HasAttributeModel.class::isInstance)
+            .forEach(Component::configure);
+        // assess visibility of this Panel, based on whether any of its child attribute panels is visible
+        setVisibilityAllowed(streamChildren()
+                .filter(HasAttributeModel.class::isInstance)
+                .anyMatch(Component::isVisibilityAllowed));
         super.onConfigure();
-    }
-
-    @Override
-    public boolean isVisible() {
-
-        // HACK: there are some components that are not ScalarPanelAbstract2's, eg the pdfjsviewer.
-        // In this case, don't ever hide.
-
-        // TODO: should remove this hack.  We need some sort of SPI for ScalarPanelAbstract2's and any other component,
-        // (eg PdfJsViewer) that can implement.  It's "probably" just a matter of having PdfJsViewer do its work in the
-        // correct Wicket callback (probably onConfigure).
-        if(childComponentCount > childScalarPanels.size())
-            return true;
-
-        for (final AttributePanel childComponent : childScalarPanels) {
-            if(childComponent.isVisibilityAllowed())
-                return true;
-        }
-        return false;
     }
 
 }
