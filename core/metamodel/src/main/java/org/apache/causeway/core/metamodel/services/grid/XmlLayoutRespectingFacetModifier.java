@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -95,8 +94,8 @@ record XmlLayoutRespectingFacetModifier(
                 ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
-        final AtomicInteger propertySequence = new AtomicInteger(0);
         bsGrid.visit(new BSElementVisitor() {
+            private int propertySequence = 1;
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -260,7 +259,7 @@ record XmlLayoutRespectingFacetModifier(
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.owner();
 
-                updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence));
+                updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence++, oneToOneAssociation, precedence));
 
                 updateFacetIfPresent(
                         LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence));
@@ -307,6 +306,7 @@ record XmlLayoutRespectingFacetModifier(
                 updateFacet(LayoutOrderFacetForLayoutXml
                         .create(collectionSequence++, oneToManyAssociation, precedence));
             }
+
         });
     }
 
