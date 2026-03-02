@@ -24,19 +24,20 @@ import org.apache.causeway.applib.annotation.BookmarkPolicy;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
 public class BookmarkPolicyFacetForDomainObjectLayoutXml
-extends BookmarkPolicyFacetAbstract {
+extends BookmarkPolicyFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<BookmarkPolicyFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if (domainObjectLayout == null) {
+        if (domainObjectLayout == null)
             return Optional.empty();
-        }
         final BookmarkPolicy bookmarkPolicy = domainObjectLayout.getBookmarking();
         return bookmarkPolicy != null
                 && bookmarkPolicy != BookmarkPolicy.NEVER

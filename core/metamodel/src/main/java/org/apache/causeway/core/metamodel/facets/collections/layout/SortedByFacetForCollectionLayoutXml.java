@@ -24,29 +24,28 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.core.metamodel.commons.ClassUtil;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.causeway.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 public class SortedByFacetForCollectionLayoutXml
-extends SortedByFacetAbstract {
+extends SortedByFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<SortedByFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(collectionLayout == null) {
+        if(collectionLayout == null)
             return Optional.empty();
-        }
         final String sortedBy = collectionLayout.getSortedBy();
-        if (sortedBy == null) {
+        if (sortedBy == null)
             return Optional.empty();
-        }
         final Class<?> sortedByClass = ClassUtil.forNameElseFail(sortedBy);
-        if(sortedByClass == Comparator.class) {
+        if(sortedByClass == Comparator.class)
             return Optional.empty();
-        }
 
         return sortedByClass != null
                 ? Optional.of(new SortedByFacetForCollectionLayoutXml(uncheckedCast(sortedByClass), holder, precedence))

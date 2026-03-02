@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -35,7 +37,6 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -75,22 +76,21 @@ public final class FacetRanking {
         _Assert.assertEquals(this.facetType, facetType);
 
         // guard against invalidly mocked facets
-        var facetPreference = Objects.requireNonNull(facet.precedence(),
+        var facetPrecedence = Objects.requireNonNull(facet.precedence(),
                 ()->String.format("facet %s declares no precedence", facet.getClass()));
 
         // handle top priority (EVENT) facets separately
-        if(facetPreference.isEvent()) {
+        if(facetPrecedence.isEvent()) {
             eventFacetRef.getAndUpdate(previous->{
-                if(previous!=null) {
+                if(previous!=null)
                     throw _Exceptions
                         .illegalState("cannot override an event facet %s with %s, "
                                 + "must be unique per facet-holder and facet-type",
                                 previous.getClass(),
                                 facet.getClass());
-                }
                 return facet;
             });
-            topPrecedenceRef.set(facetPreference);
+            topPrecedenceRef.set(facetPrecedence);
             return true; // changes apply
         }
 
@@ -98,15 +98,15 @@ public final class FacetRanking {
                 .map(Precedence::ordinal)
                 .orElse(-1);
 
-        if(facetPreference.ordinal() > currentTopOrdinal) {
-            topPrecedenceRef.set(facetPreference);
+        if(facetPrecedence.ordinal() > currentTopOrdinal) {
+            topPrecedenceRef.set(facetPrecedence);
         }
 
         var currentTopRankOrdinal = facetsByPrecedence.isEmpty()
                 ? -1
                 : facetsByPrecedence.asNavigableMapElseFail().lastKey().ordinal();
 
-        var changesTopRank = facetPreference.ordinal() >= currentTopRankOrdinal;
+        var changesTopRank = facetPrecedence.ordinal() >= currentTopRankOrdinal;
 
         // As an optimization (heap), don't store to lower ranks,
         // as these are not considered when picking a winning facet.
@@ -114,7 +114,7 @@ public final class FacetRanking {
         // regardless of facet-precedence (eg. MemberNamedFacets).
         if(changesTopRank
             || facet.isPopulateAllFacetRanks()) {
-            facetsByPrecedence.putElement(facetPreference, facet);
+            facetsByPrecedence.putElement(facetPrecedence, facet);
         }
 
         return changesTopRank;
@@ -132,9 +132,8 @@ public final class FacetRanking {
      */
     public <F extends Facet> Optional<F> getWinner(final @NonNull Class<F> facetType) {
         var eventFacet = getEventFacet(facetType);
-        if(eventFacet.isPresent()) {
+        if(eventFacet.isPresent())
             return eventFacet;
-        }
         return getWinnerNonEvent(facetType);
     }
 

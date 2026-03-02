@@ -24,19 +24,20 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
 public class CssClassFacetForDomainObjectLayoutXml
-extends CssClassFacetSimple {
+extends CssClassFacetSimple
+implements QualifiedFacet {
 
     public static Optional<CssClassFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        if(domainObjectLayout == null) {
+        if(domainObjectLayout == null)
             return Optional.empty();
-        }
         final String cssClass = _Strings.emptyToNull(domainObjectLayout.getCssClass());
         return cssClass != null
                 ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder, precedence))

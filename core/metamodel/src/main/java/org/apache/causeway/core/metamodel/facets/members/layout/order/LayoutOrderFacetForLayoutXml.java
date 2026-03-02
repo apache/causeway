@@ -19,9 +19,11 @@
 package org.apache.causeway.core.metamodel.facets.members.layout.order;
 
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 
 public class LayoutOrderFacetForLayoutXml
-extends LayoutOrderFacetAbstract {
+extends LayoutOrderFacetAbstract
+implements QualifiedFacet {
 
     public static LayoutOrderFacetForLayoutXml create(
             final int sequenceAsInt,

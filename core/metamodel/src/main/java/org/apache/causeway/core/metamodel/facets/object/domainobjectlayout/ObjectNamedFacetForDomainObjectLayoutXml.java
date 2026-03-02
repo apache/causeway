@@ -23,12 +23,14 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetAbstract;
 
 public class ObjectNamedFacetForDomainObjectLayoutXml
-extends ObjectNamedFacetAbstract {
+extends ObjectNamedFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<ObjectNamedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,

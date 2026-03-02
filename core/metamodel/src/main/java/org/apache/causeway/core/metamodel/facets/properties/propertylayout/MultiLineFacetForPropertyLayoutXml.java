@@ -22,19 +22,20 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetForPropertyLayoutXml
-extends MultiLineFacetAbstract {
+extends MultiLineFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<MultiLineFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(propertyLayout == null) {
+        if(propertyLayout == null)
             return Optional.empty();
-        }
         final Integer multiLine = propertyLayout.getMultiLine();
         return multiLine != null && multiLine > 1
                 ? Optional.of(new MultiLineFacetForPropertyLayoutXml(multiLine, holder, precedence))

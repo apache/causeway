@@ -22,18 +22,20 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
 
-public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAbstract {
+public class ActionPositionFacetForActionLayoutXml
+extends ActionPositionFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<ActionPositionFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(actionLayout == null) {
+        if(actionLayout == null)
             return Optional.empty();
-        }
         final org.apache.causeway.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
 
         return Optional.ofNullable(position)

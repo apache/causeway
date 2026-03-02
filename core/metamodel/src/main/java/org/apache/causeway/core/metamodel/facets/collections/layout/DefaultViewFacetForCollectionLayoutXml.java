@@ -23,19 +23,20 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.causeway.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
 
 public class DefaultViewFacetForCollectionLayoutXml
-extends DefaultViewFacetAbstract {
+extends DefaultViewFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<DefaultViewFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if (collectionLayout == null) {
+        if (collectionLayout == null)
             return Optional.empty();
-        }
 
         final String defaultView = _Strings.emptyToNull(collectionLayout.getDefaultView());
         return defaultView != null

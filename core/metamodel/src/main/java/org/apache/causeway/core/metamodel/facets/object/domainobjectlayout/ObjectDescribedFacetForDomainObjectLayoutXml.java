@@ -24,19 +24,20 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.ObjectDescribedFacetAbstract;
 
 public class ObjectDescribedFacetForDomainObjectLayoutXml
-extends ObjectDescribedFacetAbstract {
+extends ObjectDescribedFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<ObjectDescribedFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        if(domainObjectLayout == null) {
+        if(domainObjectLayout == null)
             return Optional.empty();
-        }
         final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
         return describedAs != null
                 ? Optional.of(new ObjectDescribedFacetForDomainObjectLayoutXml(describedAs, holder, precedence))

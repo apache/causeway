@@ -25,19 +25,20 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
 public class FaFacetForDomainObjectLayoutXml
-extends FaStaticFacetAbstract {
+extends FaStaticFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<FaFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
             final Facet.Precedence precedence) {
-        if(domainObjectLayout == null) {
+        if(domainObjectLayout == null)
             return Optional.empty();
-        }
         final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = domainObjectLayout.getCssClassFaPosition();
         return cssClassFa != null

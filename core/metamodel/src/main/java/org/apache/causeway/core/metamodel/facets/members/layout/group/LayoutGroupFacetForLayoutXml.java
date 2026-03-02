@@ -20,15 +20,16 @@ package org.apache.causeway.core.metamodel.facets.members.layout.group;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
-import org.jspecify.annotations.NonNull;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 
 public class LayoutGroupFacetForLayoutXml
-extends LayoutGroupFacetAbstract {
+extends LayoutGroupFacetAbstract
+implements QualifiedFacet {
 
     // -- FACTORIES
 

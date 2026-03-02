@@ -26,6 +26,7 @@ import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 
 /**
  * Provides the prompt style for editing of a property.
@@ -36,7 +37,7 @@ public record PromptStyleFacet(
        @NonNull FacetHolder facetHolder,
        Facet.@NonNull Precedence precedence,
        boolean isObjectTypeSpecific
-   ) implements Facet {
+   ) implements Facet, QualifiedFacet {
 
    public static PromptStyleFacet compositeValueEdit(final FacetHolder facetHolder) {
        return new PromptStyleFacet("CompositeValueEdit", PromptStyle.INLINE_AS_IF_EDIT, facetHolder, Precedence.SYNTHESIZED, false);

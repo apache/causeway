@@ -23,19 +23,20 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
 public class CssClassFacetForPropertyLayoutXml
-extends CssClassFacetSimple {
+extends CssClassFacetSimple
+implements QualifiedFacet {
 
     public static Optional<CssClassFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(propertyLayout == null) {
+        if(propertyLayout == null)
             return Optional.empty();
-        }
         final String cssClass = _Strings.emptyToNull(propertyLayout.getCssClass());
         return cssClass != null
                 ? Optional.of(new CssClassFacetForPropertyLayoutXml(cssClass, holder, precedence))

@@ -22,19 +22,20 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacetAbstract;
 
 public class RenderedAdjustedFacetForPropertyLayoutXml
-extends DateRenderAdjustFacetAbstract {
+extends DateRenderAdjustFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<DateRenderAdjustFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(propertyLayout == null) {
+        if(propertyLayout == null)
             return Optional.empty();
-        }
         final int adjustByDays = propertyLayout.getDateRenderAdjustDays();
         return adjustByDays != 0
                         ? Optional.of(new RenderedAdjustedFacetForPropertyLayoutXml(adjustByDays, holder, precedence))

@@ -23,20 +23,21 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public class HiddenFacetForActionLayoutXml
-extends HiddenFacetAbstract {
+extends HiddenFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<HiddenFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if (actionLayout == null) {
+        if (actionLayout == null)
             return Optional.empty();
-        }
         final Where where = actionLayout.getHidden();
         return where != null
                 && where != Where.NOT_SPECIFIED
@@ -56,9 +57,8 @@ extends HiddenFacetAbstract {
 
     @Override
     public String hiddenReason(final ManagedObject targetAdapter, final Where whereContext) {
-        if(!where().includes(whereContext)) {
+        if(!where().includes(whereContext))
             return null;
-        }
         return "Hidden on " + where().getFriendlyName();
     }
 

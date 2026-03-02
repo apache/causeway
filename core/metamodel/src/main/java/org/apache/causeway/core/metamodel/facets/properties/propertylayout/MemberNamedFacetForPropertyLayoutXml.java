@@ -23,11 +23,13 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 
 public class MemberNamedFacetForPropertyLayoutXml
-extends MemberNamedFacetWithStaticTextAbstract {
+extends MemberNamedFacetWithStaticTextAbstract
+implements QualifiedFacet {
 
     public static Optional<MemberNamedFacet> create(
             final PropertyLayoutData propertyLayoutData,

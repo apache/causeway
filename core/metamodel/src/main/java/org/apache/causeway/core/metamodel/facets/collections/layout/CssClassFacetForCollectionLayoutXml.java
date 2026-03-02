@@ -23,19 +23,20 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
 public class CssClassFacetForCollectionLayoutXml
-extends CssClassFacetSimple {
+extends CssClassFacetSimple
+implements QualifiedFacet {
 
     public static Optional<CssClassFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
             final Precedence precedence) {
-        if(collectionLayout == null) {
+        if(collectionLayout == null)
             return Optional.empty();
-        }
         final String cssClass = _Strings.emptyToNull(collectionLayout.getCssClass());
         return cssClass != null
                 ? Optional.of(new CssClassFacetForCollectionLayoutXml(cssClass, holder, precedence))

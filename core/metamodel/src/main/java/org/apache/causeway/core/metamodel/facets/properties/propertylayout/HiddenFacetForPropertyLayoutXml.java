@@ -23,12 +23,14 @@ import java.util.Optional;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 public class HiddenFacetForPropertyLayoutXml
-extends HiddenFacetAbstract {
+extends HiddenFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<HiddenFacet> create(
             final PropertyLayoutData propertyLayout,
