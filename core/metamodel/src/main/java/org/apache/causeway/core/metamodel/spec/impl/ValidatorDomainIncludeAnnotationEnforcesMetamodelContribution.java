@@ -28,6 +28,8 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Domain;
 import org.apache.causeway.commons.collections.Can;
@@ -37,8 +39,8 @@ import org.apache.causeway.commons.internal.reflection._Annotations;
 import org.apache.causeway.commons.internal.reflection._ClassCache;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
-import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.commons.internal.reflection._Reflect;
+import org.apache.causeway.commons.semantics.AccessorSemantics;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MemberSupportPrefix;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
@@ -53,8 +55,7 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-
-import org.jspecify.annotations.NonNull;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 /**
  * @since 2.0
@@ -79,8 +80,8 @@ extends MetaModelValidatorAbstract {
         final Class<?> type = spec.getCorrespondingClass();
 
         // methods picked up by the framework
-        var memberMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
-        var supportMethods = new TreeSet<ResolvedMethod>(ResolvedMethod::methodCompare);
+        var memberMethods = new TreeSet<>(ResolvedMethod::methodCompare);
+        var supportMethods = new TreeSet<>(ResolvedMethod::methodCompare);
 
         spec
             .streamAnyActions(MixedIn.EXCLUDED)
@@ -98,10 +99,12 @@ extends MetaModelValidatorAbstract {
             .map(MethodFacade::asMethodForIntrospection)
             .forEach(memberMethods::add);
 
+        final String qualifier = Facets.qualifier(spec);
+
         spec
             .streamFacetHolders()
             .flatMap(FacetHolder::streamFacetRankings)
-            .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType()))
+            .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType(), qualifier))
             .flatMap(Optional::stream)
             .filter(ImperativeFacet.class::isInstance)
             .map(ImperativeFacet.class::cast)
@@ -192,9 +195,8 @@ extends MetaModelValidatorAbstract {
                 || spec.isValue()
                 || spec.getIntrospectionPolicy()
                     .getSupportMethodAnnotationPolicy()
-                    .isSupportMethodAnnotationsRequired()) {
+                    .isSupportMethodAnnotationsRequired())
             return; // ignore
-        }
 
         var potentialOrphans = spec instanceof ObjectSpecificationDefault specDefault
             ? specDefault.getPotentialOrphans()

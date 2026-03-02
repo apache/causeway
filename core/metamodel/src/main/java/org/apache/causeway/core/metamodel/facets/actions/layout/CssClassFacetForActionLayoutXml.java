@@ -20,12 +20,17 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class CssClassFacetForActionLayoutXml
 extends CssClassFacetSimple
@@ -34,20 +39,26 @@ implements QualifiedFacet {
     public static Optional<CssClassFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         if(actionLayout == null)
             return Optional.empty();
         final String cssClass = _Strings.emptyToNull(actionLayout.getCssClass());
         return cssClass != null
-                ? Optional.of(new CssClassFacetForActionLayoutXml(cssClass, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new CssClassFacetForActionLayoutXml(cssClass, holder, precedence, qualifier))
+            : Optional.empty();
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private CssClassFacetForActionLayoutXml(
             final String value,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(value, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

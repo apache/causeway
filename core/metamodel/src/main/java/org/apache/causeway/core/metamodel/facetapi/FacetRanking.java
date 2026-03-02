@@ -26,6 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -130,11 +131,13 @@ public final class FacetRanking {
      * based on whether there was any added that has given facetType.
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
-    public <F extends Facet> Optional<F> getWinner(final @NonNull Class<F> facetType) {
+    public <F extends Facet> Optional<F> getWinner(
+            final @NonNull Class<F> facetType,
+            final @Nullable String qualifier) {
         var eventFacet = getEventFacet(facetType);
         if(eventFacet.isPresent())
             return eventFacet;
-        return getWinnerNonEvent(facetType);
+        return getWinnerNonEvent(facetType, qualifier);
     }
 
     /**
@@ -142,11 +145,31 @@ public final class FacetRanking {
      * based on whether there was any added that has given facetType.
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
-    public <F extends Facet> Optional<F> getWinnerNonEvent(final @NonNull Class<F> facetType) {
+    public <F extends Facet> Optional<F> getWinnerNonEvent(
+            final @NonNull Class<F> facetType,
+            final @Nullable String qualifier) {
         var topRank = getTopRank(facetType);
-        // TODO find winner if there are more than one
-        // (also report conflicting semantics) - only historically the last one wins
-        return topRank.getLast();
+        // all matching QualifiedFacet(s) take precedence
+        // all non-matching QualifiedFacet(s) must be ignored
+        // historically (initial design) the last one wins
+
+        F bestSoFar = null;
+
+        for(var facet : topRank) {
+            if(facet instanceof QualifiedFacet qFacet) {
+                if(Objects.equals(qualifier, qFacet.qualifier()))
+                    return Optional.of(facet);
+                else {
+                    continue;
+                }
+            }
+            bestSoFar = facet;
+        }
+
+        //FIXME if bestSoFar == null, then we have to go to the next lower rank;
+        //FIXME the getTopRank(facetType) logic is broken, because it depends now on context
+
+        return Optional.ofNullable(bestSoFar);
     }
 
     /**
@@ -157,11 +180,14 @@ public final class FacetRanking {
      */
     public <F extends Facet> Optional<F> getWinnerNonEventLowerOrEqualTo(
             final @NonNull Class<F> facetType,
-            final @NonNull Precedence precedenceUpper) {
+            final @NonNull Precedence precedenceUpper
+            //,
+            //final @Nullable String qualifier
+            ) {
         var selectedRank = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
         return selectedRank
                 .map(facetsByPrecedence::get)
-                .map(_Lists::lastElementIfAny) // only historically the last one wins
+                .map(_Lists::lastElementIfAny) // historically the last one wins
                 .map(_Casts::uncheckedCast);
     }
 
@@ -272,9 +298,9 @@ public final class FacetRanking {
             var firstOfTopRanking = topRankingFacets.getFirstElseFail();
 
             topRankingFacets
-            .stream()
-            .skip(1)
-            .forEach(next->visitor.accept(firstOfTopRanking, next));
+                .stream()
+                .skip(1)
+                .forEach(next->visitor.accept(firstOfTopRanking, next));
         }
 
     }

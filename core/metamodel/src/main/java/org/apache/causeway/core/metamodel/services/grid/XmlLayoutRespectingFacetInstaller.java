@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.Optional;
-
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -70,7 +68,7 @@ import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
-record XmlLayoutRespectingFacetModifier(
+record XmlLayoutRespectingFacetInstaller(
         SpecificationLoader specLoader) {
 
     /**
@@ -79,7 +77,7 @@ record XmlLayoutRespectingFacetModifier(
      * @implNote This code uses {@link FacetUtil#updateFacet(Facet)}
      * because the layout might be reloaded from XML if reloading is supported.
      */
-    void overwriteFacets(
+    void installFacets(
             final LayoutKey layoutKey,
             final BSGrid bsGrid) {
 
@@ -106,24 +104,26 @@ record XmlLayoutRespectingFacetModifier(
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
+                var qualifier = layoutKey.layoutIfAny();
+
                 updateFacetIfPresent(
                         BookmarkPolicyFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         CssClassFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         FaFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         ObjectDescribedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         ObjectNamedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         TableDecoratorFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
             }
 
             @Override
@@ -132,6 +132,8 @@ record XmlLayoutRespectingFacetModifier(
                 var actionLayoutDataOwner = actionLayoutData.owner();
                 var objectAction = objectActionById.get(actionLayoutData.getId());
                 if(objectAction == null) return;
+
+                var qualifier = layoutKey.layoutIfAny();
 
                 {
                     GroupIdAndName groupIdAndName = null;
@@ -163,7 +165,7 @@ record XmlLayoutRespectingFacetModifier(
                         memberOrderSequence = actionDomainObjectSequence++;
                     }
                     updateFacet(
-                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
+                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence, qualifier));
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
                     var precedenceHotfix = bsGrid.fallback()
@@ -171,7 +173,7 @@ record XmlLayoutRespectingFacetModifier(
                             : Facet.Precedence.HIGH;
 
                     updateFacetIfPresent(
-                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix));
+                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix, qualifier));
                 }
 
                 // fix up the action position if required
@@ -193,28 +195,25 @@ record XmlLayoutRespectingFacetModifier(
                 }
 
                 updateFacetIfPresent(
-                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                    Optional.ofNullable(actionLayoutData)
-                        .map(ActionLayoutData::getPromptStyle)
-                        .map(promptStyle->new PromptStyleFacet("ActionLayoutXml", promptStyle, objectAction, precedence, true)));
-
+                        PromptStyleFacet.createForActionLayoutXml(actionLayoutData, objectAction, precedence, qualifier));
             }
 
             @Override
@@ -222,89 +221,91 @@ record XmlLayoutRespectingFacetModifier(
                 var oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
                 if(oneToOneAssociation == null) return;
 
-                updateFacetIfPresent(
-                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                var qualifier = layoutKey.layoutIfAny();
 
                 updateFacetIfPresent(
-                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        Optional.ofNullable(propertyLayoutData)
-                            .map(PropertyLayoutData::getPromptStyle)
-                            .map(promptStyle->new PromptStyleFacet("PropertyLayoutXml", promptStyle, oneToOneAssociation, precedence, true)));
+                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        PromptStyleFacet.createForPropertyLayoutXml(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
+
+                updateFacetIfPresent(
+                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.owner();
 
-                updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence++, oneToOneAssociation, precedence));
+                updateFacet(
+                        LayoutOrderFacetForLayoutXml.create(propertySequence++, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence));
+                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence, qualifier));
             }
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
                 var oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
-                if(oneToManyAssociation == null)
-                    return;
+                if(oneToManyAssociation == null) return;
+
+                var qualifier = layoutKey.layoutIfAny();
 
                 updateFacetIfPresent(
                         CssClassFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         DefaultViewFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         TableDecoratorFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         MemberDescribedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         HiddenFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         MemberNamedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         PagedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         SortedByFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacet(LayoutOrderFacetForLayoutXml
-                        .create(collectionSequence++, oneToManyAssociation, precedence));
+                        .create(collectionSequence++, oneToManyAssociation, precedence, qualifier));
             }
 
         });

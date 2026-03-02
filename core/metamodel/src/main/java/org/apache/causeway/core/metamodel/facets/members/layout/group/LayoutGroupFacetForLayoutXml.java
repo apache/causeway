@@ -27,6 +27,9 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 public class LayoutGroupFacetForLayoutXml
 extends LayoutGroupFacetAbstract
 implements QualifiedFacet {
@@ -36,29 +39,34 @@ implements QualifiedFacet {
     public static Optional<LayoutGroupFacetForLayoutXml> create(
             final @Nullable GroupIdAndName groupIdAndName,
             final @NonNull  FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(groupIdAndName)
-                .map(gIdAndName->new LayoutGroupFacetForLayoutXml(gIdAndName, holder, precedence));
+                .map(gIdAndName->new LayoutGroupFacetForLayoutXml(gIdAndName, holder, precedence, qualifier));
     }
 
     public static Optional<LayoutGroupFacetForLayoutXml> create(
             final @NonNull FieldSet fieldSet,
             final @NonNull FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return GroupIdAndName
                 .forFieldSet(fieldSet)
-                .flatMap(groupIdAndName->create(groupIdAndName, holder, precedence));
+                .flatMap(groupIdAndName->create(groupIdAndName, holder, precedence, qualifier));
     }
 
-    // -- IMPLEMENTATION
+    // --
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private LayoutGroupFacetForLayoutXml(
             final GroupIdAndName groupIdAndName,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(groupIdAndName, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

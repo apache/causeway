@@ -23,6 +23,7 @@ import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.ClassUtils;
@@ -36,6 +37,7 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.semantics.ValueSemanticsProvider;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Casts;
@@ -236,13 +238,11 @@ public final class Facets {
     public LabelPosition labelAt(final ObjectFeature feature) {
         return feature.lookupFacet(LabelAtFacet.class)
             .map(LabelAtFacet::label)
-            .map(labelPos->{
-                return switch (labelPos) {
-                case LEFT, RIGHT, NONE, TOP -> labelPos;
-                case DEFAULT, NOT_SPECIFIED -> LabelPosition.LEFT;
-                default -> LabelPosition.LEFT;
-                };
-            })
+            .map(labelPos -> (switch (labelPos) {
+            case LEFT, RIGHT, NONE, TOP -> labelPos;
+            case DEFAULT, NOT_SPECIFIED -> LabelPosition.LEFT;
+            default -> LabelPosition.LEFT;
+            }))
             .orElse(LabelPosition.LEFT);
     }
 
@@ -456,6 +456,18 @@ public final class Facets {
             ClassUtils.resolvePrimitiveIfNecessary(requiredType)
             .isAssignableFrom(
                     ClassUtils.resolvePrimitiveIfNecessary(valueFacet.getValueClass()));
+    }
+
+
+    //FIXME this is just an experimental shortcut
+    static final ThreadLocal<LayoutKey> LAYOUT = new ThreadLocal<>();
+    public String qualifier(@NonNull final FacetHolder facetHolder) {
+        return Optional.ofNullable(LAYOUT.get())
+                .map(LayoutKey::layoutIfAny)
+                .orElse(null);
+    }
+    public void setQualifier(final LayoutKey layoutKey) {
+        LAYOUT.set(layoutKey);
     }
 
 }

@@ -22,14 +22,14 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.id.LogicalType;
 import org.apache.causeway.applib.services.i18n.HasTranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that

@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CssClassFaPosition;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -28,6 +30,9 @@ import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaFacet;
 import org.apache.causeway.core.metamodel.facets.members.iconfa.FaStaticFacetAbstract;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 public class FaFacetForActionLayoutXml
 extends FaStaticFacetAbstract
 implements QualifiedFacet {
@@ -35,22 +40,28 @@ implements QualifiedFacet {
     public static Optional<FaFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         if(actionLayout == null)
             return Optional.empty();
         final String cssClassFa = _Strings.emptyToNull(actionLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = actionLayout.getCssClassFaPosition();
         return cssClassFa != null
-                ? Optional.of(new FaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new FaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder, precedence, qualifier))
+            : Optional.empty();
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private FaFacetForActionLayoutXml(
             final String value,
             final CssClassFaPosition position,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(value, position, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

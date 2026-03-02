@@ -20,12 +20,17 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class MemberDescribedFacetForPropertyLayoutXml
 extends MemberDescribedFacetWithStaticTextAbstract
@@ -34,20 +39,25 @@ implements QualifiedFacet {
     public static Optional<MemberDescribedFacet> create(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getDescribedAs)
-        .filter(_Strings::isNotEmpty)
-        .map(describedAs->new MemberDescribedFacetForPropertyLayoutXml(
-                describedAs, holder, precedence));
+            .map(PropertyLayoutData::getDescribedAs)
+            .filter(_Strings::isNotEmpty)
+            .map(describedAs->
+                new MemberDescribedFacetForPropertyLayoutXml(describedAs, holder, precedence, qualifier));
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private MemberDescribedFacetForPropertyLayoutXml(
             final String described,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(described, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

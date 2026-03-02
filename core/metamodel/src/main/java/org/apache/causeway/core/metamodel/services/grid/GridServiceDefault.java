@@ -36,6 +36,7 @@ import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,8 +93,10 @@ public record GridServiceDefault(
 
     @Override
     public BSGrid load(final LayoutKey layoutKey) {
-        return cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
+        var grid = cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
             .valueAsNonNullElseFail(); // at least we should have a fallback, otherwise there is some serious issue
+        Facets.setQualifier(layoutKey);
+        return grid;
     }
 
     // -- HELPER

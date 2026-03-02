@@ -1,6 +1,6 @@
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.util.Optional;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link Facet} can be qualified (similar to Spring beans) in order to allow for alternative
@@ -17,10 +17,9 @@ import java.util.Optional;
  *
  * @since 4.0
  */
-//@FunctionalInterface
+@FunctionalInterface
 public interface QualifiedFacet {
 
-    default Optional<String> qualifier() {
-        return Optional.empty(); //TODO intermediate - remove default impl.
-    }
+    @Nullable String qualifier();
+
 }

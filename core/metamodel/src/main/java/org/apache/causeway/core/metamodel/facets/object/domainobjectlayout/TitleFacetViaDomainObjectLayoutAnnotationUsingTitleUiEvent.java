@@ -37,6 +37,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
@@ -60,13 +61,11 @@ extends TitleFacetAbstract {
                         TitleUiEvent.Noop.class,
                         TitleUiEvent.Default.class,
                         isPostForDefault))
-                .map(titleUiEventClass -> {
-                    return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
-                            titleUiEventClass,
-                            translationContextFor(facetHolder),
-                            metamodelEventService,
-                            facetHolder);
-                });
+                .map(titleUiEventClass -> new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
+                        titleUiEventClass,
+                        translationContextFor(facetHolder),
+                        metamodelEventService,
+                        facetHolder));
     }
 
     private final Class<? extends TitleUiEvent<Object>> titleUiEventClass;
@@ -101,19 +100,18 @@ extends TitleFacetAbstract {
                 && titleUiEvent.getTranslatableTitle() == null) {
             // ie no subscribers out there...
 
+            final String qualifier = Facets.qualifier(facetHolder());
             final TitleFacet underlyingTitleFacet = getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class))
-            .orElse(null);
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class, qualifier))
+                .orElse(null);
 
-            if(underlyingTitleFacet!=null) {
+            if(underlyingTitleFacet!=null)
                 return underlyingTitleFacet.title(titleRenderRequest);
-            }
         }
 
         final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
-        if(translatedTitle != null) {
+        if(translatedTitle != null)
             return translatedTitle.translate(translationService, translationContext);
-        }
         return titleUiEvent.getTitle();
     }
 
@@ -126,9 +124,8 @@ extends TitleFacetAbstract {
     // -- HELPER
 
     private static TranslationContext translationContextFor(final FacetHolder facetHolder) {
-        if(facetHolder instanceof ObjectSpecification) {
+        if(facetHolder instanceof ObjectSpecification)
             return facetHolder.getTranslationContext();
-        }
         return null;
     }
 

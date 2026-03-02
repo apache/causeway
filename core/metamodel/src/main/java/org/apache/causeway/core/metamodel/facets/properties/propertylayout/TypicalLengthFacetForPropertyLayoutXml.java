@@ -20,11 +20,16 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class TypicalLengthFacetForPropertyLayoutXml
 extends TypicalLengthFacetAbstract
@@ -33,19 +38,27 @@ implements QualifiedFacet {
     public static Optional<TypicalLengthFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         if(propertyLayout == null)
             return Optional.empty();
         final Integer typicalLength = propertyLayout.getTypicalLength();
         return typicalLength != null
                 && typicalLength != -1
-                    ? Optional.of(new TypicalLengthFacetForPropertyLayoutXml(typicalLength, holder, precedence))
-                    : Optional.empty();
+            ? Optional.of(new TypicalLengthFacetForPropertyLayoutXml(typicalLength, holder, precedence, qualifier))
+            : Optional.empty();
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private TypicalLengthFacetForPropertyLayoutXml(
-            final int typicalLength, final FacetHolder holder, final Precedence precedence) {
+            final int typicalLength,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(typicalLength, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

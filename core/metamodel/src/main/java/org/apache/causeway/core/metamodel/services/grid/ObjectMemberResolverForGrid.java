@@ -76,8 +76,9 @@ record ObjectMemberResolverForGrid(
     public Either<BSGrid, BSGrid> resolve(final LayoutKey layoutKey, final BSGrid grid) {
         final boolean valid = validateAndNormalize(grid, layoutKey.domainClass());
         if (valid) {
-            new XmlLayoutRespectingFacetModifier(context.specLoaderProvider().get())
-                .overwriteFacets(layoutKey, grid);
+            //TODO perhaps make available via context
+            new XmlLayoutRespectingFacetInstaller(context.specLoaderProvider().get())
+                .installFacets(layoutKey, grid);
             if(log.isDebugEnabled()) {
                 log.debug("Grid:\n\n{}\n\n", toXml(grid));
             }

@@ -18,19 +18,16 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.commons.internal.base._Lazy;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
-
-import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
-
 import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.applib.Identifier;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 /**
  * Provides a (simple) list of {@link Facet}s.
@@ -38,8 +35,9 @@ import org.jspecify.annotations.NonNull;
 record FacetHolderSimple(
     MetaModelContext metaModelContext,
     Identifier featureIdentifier,
-    Map<Class<? extends Facet>, FacetRanking> rankingByType,
-    _Lazy<Map<Class<? extends Facet>, Facet>> snapshot
+    Map<Class<? extends Facet>, FacetRanking> rankingByType
+    //FIXME reinstate caching
+    //_Lazy<Map<Class<? extends Facet>, Facet>> snapshot
     )
 implements FacetHolder {
 
@@ -49,12 +47,12 @@ implements FacetHolder {
         this(metaModelContext, featureIdentifier, new HashMap<>());
     }
 
-    private FacetHolderSimple(
-        final @NonNull MetaModelContext metaModelContext,
-        final Identifier featureIdentifier,
-        final Map<Class<? extends Facet>, FacetRanking> rankingByType) {
-        this(metaModelContext, featureIdentifier, rankingByType, _Lazy.threadSafe(()->makeSnapshot(rankingByType.values())));
-    }
+//    private FacetHolderSimple(
+//        final @NonNull MetaModelContext metaModelContext,
+//        final Identifier featureIdentifier,
+//        final Map<Class<? extends Facet>, FacetRanking> rankingByType) {
+//        this(metaModelContext, featureIdentifier, rankingByType);//, _Lazy.threadSafe(()->makeSnapshot(rankingByType.values())));
+//    }
 
     // -- FIELDS
 
@@ -71,7 +69,8 @@ implements FacetHolder {
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         synchronized(rankingByType) {
-            return snapshot.get().containsKey(facetType);
+            //return snapshot.get().containsKey(facetType);
+            return getFacet(facetType)!=null;
         }
     }
 
@@ -81,30 +80,41 @@ implements FacetHolder {
             var ranking = rankingByType.computeIfAbsent(facet.facetType(), FacetRanking::new);
             var needsInvalidate = ranking.add(facet);
             if(needsInvalidate) {
-                snapshot.clear(); //invalidate
+                //snapshot.clear(); //invalidate
             }
         }
     }
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
+        var qualifier = Facets.qualifier(this);
         synchronized(rankingByType) {
-            return uncheckedCast(snapshot.get().get(facetType));
+
+            return getFacetRanking(facetType)
+                .flatMap(facetRanking->facetRanking.getWinner(facetType, qualifier))
+                .orElse(null);
+
+            //return uncheckedCast(snapshot.get().get(facetType));
         }
     }
 
     @Override
     public Stream<Facet> streamFacets() {
+        var qualifier = Facets.qualifier(this);
         synchronized(rankingByType) {
             // consumers should play nice and don't take too long (as we have a lock)
-            return snapshot.get().values().stream();
+            //return snapshot.get().values().stream();
+            return streamFacetRankings()
+                .flatMap(facetRanking->facetRanking.getWinner(facetRanking.facetType(), qualifier)
+                        .stream());
         }
     }
 
     @Override
     public int getFacetCount() {
         synchronized(rankingByType) {
-            return snapshot.get().size();
+            return Math.toIntExact(streamFacets().count());
+            //return snapshot.get().size();
         }
     }
 
@@ -122,21 +132,22 @@ implements FacetHolder {
 
     // -- HELPER
 
-    // collect all facet information provided with the top-level facets (contributed facets and aliases)
-    private static Map<Class<? extends Facet>, Facet> makeSnapshot(final Collection<FacetRanking> rankings) {
-        var snapshot =  new HashMap<Class<? extends Facet>, Facet>();
-        rankings.stream()
-        .map(facetRanking->facetRanking.getWinner(facetRanking.facetType()))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .forEach(winningFacet->{
 
-            snapshot.put(
-                    winningFacet.facetType(),
-                    winningFacet);
-
-        });
-        return snapshot;
-    }
+//    // collect all facet information provided with the top-level facets (contributed facets and aliases)
+//    private static Map<Class<? extends Facet>, Facet> makeSnapshot(final Collection<FacetRanking> rankings) {
+//        var snapshot =  new HashMap<Class<? extends Facet>, Facet>();
+//        rankings.stream()
+//            .map(facetRanking->facetRanking.getWinner(facetRanking.facetType()))
+//            .filter(Optional::isPresent)
+//            .map(Optional::get)
+//            .forEach(winningFacet->{
+//
+//                snapshot.put(
+//                        winningFacet.facetType(),
+//                        winningFacet);
+//
+//            });
+//        return snapshot;
+//    }
 
 }

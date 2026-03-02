@@ -20,11 +20,16 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class ActionPositionFacetForActionLayoutXml
 extends ActionPositionFacetAbstract
@@ -33,20 +38,26 @@ implements QualifiedFacet {
     public static Optional<ActionPositionFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         if(actionLayout == null)
             return Optional.empty();
-        final org.apache.causeway.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
 
+        final var position = actionLayout.getPosition();
         return Optional.ofNullable(position)
-        .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence));
+                .map(pos->new ActionPositionFacetForActionLayoutXml(pos, holder, precedence, qualifier));
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private ActionPositionFacetForActionLayoutXml(
             final org.apache.causeway.applib.annotation.ActionLayout.Position position,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(position, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override
