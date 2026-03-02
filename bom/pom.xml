@@ -3023,7 +3023,7 @@ identified
                                 <groupId>org.apache.apache.resources</groupId>
                                 <artifactId>
                                     apache-source-release-assembly-descriptor</artifactId>
-                                <version>1.7</version>
+                                <version>1.8</version>
                             </dependency>
                         </dependencies>
                         <executions>
