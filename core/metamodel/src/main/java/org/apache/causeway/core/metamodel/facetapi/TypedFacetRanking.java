@@ -214,14 +214,21 @@ public final class TypedFacetRanking<F extends Facet> {
     // -- DYNAMIC UPDATE SUPPORT
 
     /**
-     * Removes any facet of {@code facetType} from facetHolder if it passes the given {@code filter}.
+     * Within given constraints (qualifier and filter),
+     * removes any {@link Facet} of {@code facetType} from facetHolder.
+     *
+     * <p>Motivated by layout reloading, that is,
+     * reloading of domain-object layouts and menu-bar layouts.
      */
-    public void purgeIf(final @NonNull Predicate<? super F> facetFilter, final Predicate<Facet.Precedence> precedenceFilter) {
+    public void purgeIf(
+            final @NonNull Predicate<? super F> facetFilter,
+            final QualifiedFacet.@NonNull Key qualifierKey,
+            final @NonNull Predicate<Facet.Precedence> precedenceFilter) {
         for(var rank : ranksByPrecedence.descendingMap().values()) {
             if(!precedenceFilter.test(rank.precedence())) {
                 continue; //next
             }
-            rank.purgeIf(facetFilter);
+            rank.purgeIf(qualifierKey, facetFilter);
         }
     }
 

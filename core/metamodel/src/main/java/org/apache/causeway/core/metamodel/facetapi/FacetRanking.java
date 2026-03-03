@@ -111,16 +111,20 @@ public record FacetRanking(
     }
 
     /**
-     * Removes any facet of {@code facetType} from facetHolder if it passes the given {@code filter}.
+     * Within given constraints (qualifier and filter), 
+     * removes any {@link Facet} of {@code facetType} from facetHolder.
+     *
+     * <p>Motivated by layout reloading, that is,
+     * reloading of domain-object layouts and menu-bar layouts.
+     *
      * @param facetType - to ensure the filter is properly generic-type-constraint
-     * @param facetFilter
-     * @param precedenceFilter
      */
     public <F extends Facet> void purgeIf(
             final @NonNull Class<F> facetType,
+            final QualifiedFacet.@NonNull Key qualifierKey,
             final @NonNull Predicate<? super F> facetFilter,
-            final @NonNull Predicate<Precedence> precedenceFilter) {
-        delegate(facetType).purgeIf(facetFilter, precedenceFilter);
+            final @NonNull Predicate<Facet.Precedence> precedenceFilter) {
+        delegate(facetType).purgeIf(facetFilter, qualifierKey, precedenceFilter);
     }
 
     // -- VALIDATION SUPPORT

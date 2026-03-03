@@ -112,8 +112,11 @@ public final class FacetUtil {
     public static void updateFacet(final @Nullable Facet facet) {
         if(facet==null) return;
 
+        var qualifierKey = QualifiedFacet.Key.forFacet(facet);
+
         facet.facetHolder().getFacetRanking(facet.facetType())
             .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
+                    qualifierKey, // discriminate by qualifier
                     facet.getClass()::isInstance, // facet filter
                     prec->prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
                 ));
@@ -139,19 +142,6 @@ public final class FacetUtil {
             final @NonNull Optional<? extends F> facetIfAny) {
         updateFacet(facetIfAny.orElse(null));
     }
-
-//    /**
-//     * Removes any facet of facet-type from facetHolder if it passes the given filter.
-//     */
-//    private static <F extends Facet> void purgeIf(
-//            final Class<F> facetType,
-//            final Predicate<? super F> facetFilter,
-//            final Predicate<Precedence> precedenceFilter,
-//            final FacetHolder facetHolder) {
-//
-//        facetHolder.getFacetRanking(facetType)
-//            .ifPresent(ranking->ranking.purgeIf(facetType, facetFilter, precedenceFilter));
-//    }
 
     // -- FACET ATTRIBUTES
 

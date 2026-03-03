@@ -45,7 +45,6 @@ record FacetRank<F extends Facet>(
             final Class<F> facetType,
             final Facet.Precedence precedence) {
         this(facetType, precedence, _Multimaps.newListMultimap());
-        //this(facetType, precedence, _Multimaps.newListMultimap(ConcurrentSkipListMap::new, CopyOnWriteArrayList::new));
     }
 
     QualifiedFacet.Key key(final @Nullable String qualifier) {
@@ -71,13 +70,14 @@ record FacetRank<F extends Facet>(
         return this;
     }
 
-    void purgeIf(final @NonNull Predicate<? super F> facetFilter) {
-        facetsByQualifier.entrySet()
-            .forEach(e->{
-                var key = e.getKey();
-                var list = e.getValue();
-                list.removeIf(facetFilter);
-            });
+    /**
+     * Removes all matching facets from the underlying collections.
+     */
+    void purgeIf(
+            final QualifiedFacet.@NonNull Key qualifierKey,
+            final @NonNull Predicate<? super F> facetFilter) {
+        lookup(qualifierKey)
+            .ifPresent(list->list.removeIf(facetFilter));
     }
 
     /**
@@ -122,6 +122,9 @@ record FacetRank<F extends Facet>(
 
     // -- HELPER
 
+    private Optional<List<F>> lookup(final QualifiedFacet.Key key) {
+        return Optional.ofNullable(facetsByQualifier.get(key));
+    }
     private Optional<List<F>> lookupQualified(final QualifiedFacet.Key key) {
         return Optional.ofNullable(facetsByQualifier.get(key.toQualified()));
     }
