@@ -20,7 +20,9 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -34,13 +36,13 @@ import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet.Key;
  *
  * @apiNote not thread-safe
  */
-record FacetRank(
-        Class<? extends Facet> facetType,
+record FacetRank<F extends Facet>(
+        Class<F> facetType,
         Facet.Precedence precedence,
-        _Multimaps.ListMultimap<QualifiedFacet.Key, Facet> facetsByQualifier) {
+        _Multimaps.ListMultimap<QualifiedFacet.Key, F> facetsByQualifier) {
 
     FacetRank(
-            final Class<? extends Facet> facetType,
+            final Class<F> facetType,
             final Facet.Precedence precedence) {
         this(facetType, precedence, _Multimaps.newListMultimap());
         //this(facetType, precedence, _Multimaps.newListMultimap(ConcurrentSkipListMap::new, CopyOnWriteArrayList::new));
@@ -50,7 +52,15 @@ record FacetRank(
         return new QualifiedFacet.Key(facetType, qualifier);
     }
 
-    FacetRank add(final @Nullable Facet facet) {
+    /**
+     * If given {@link Facet} is non-null, it is appended the proper lane (one of):
+     * <ul>
+     * <li><code>[qualifier==null]: Facet is <b>not</b> an instance of {@link QualifiedFacet}</code></li>
+     * <li><code>[qualifier==""]: Facet is an instance of {@link QualifiedFacet} with an <b>empty qualifier</b></code></li>
+     * <li><code>[!qualifier.isEmpty()]: Facet is an instance of {@link QualifiedFacet} with a <b>populated qualifier</b></code></li>
+     * </ul>
+     */
+    FacetRank<F> add(final @Nullable F facet) {
         if(facet==null)
             return this; // no-op
 
@@ -61,19 +71,29 @@ record FacetRank(
         return this;
     }
 
-    /**
-     * Whether this rank contains at least one matching {@link QualifiedFacet}.
-     */
-    boolean matches(final String qualifier) {
-        return facetsByQualifier.containsKey(key(qualifier));
+    void purgeIf(final @NonNull Predicate<? super F> facetFilter) {
+        facetsByQualifier.entrySet()
+            .forEach(e->{
+                var key = e.getKey();
+                var list = e.getValue();
+                list.removeIf(facetFilter);
+            });
     }
 
-    Can<Facet> facetsMatching(final Key key) {
+    /**
+     * Returns in sequence:
+     * <ul>
+     * <li>all matching {@link QualifiedFacet}(s)</li>
+     * <li>non-matching {@link QualifiedFacet}(s) are ignored</li>
+     * <li>all Facets which are <b>not</b> an instance of {@link QualifiedFacet}</li>
+     * </ul>
+     */
+    Can<F> facetsMatching(final Key key) {
         return lookupQualified(key)
             .filter(list->!list.isEmpty())
             .or(()->lookupUnqualified(key)
                     .filter(list->!list.isEmpty()))
-            .map(Can::ofCollection)
+            .map(Can::<F>ofCollection)
             .orElseGet(Can::empty);
     }
 
@@ -85,24 +105,27 @@ record FacetRank(
      * <li>later take precedence over earlier</li>
      * </ul>
      */
-    Optional<Facet> findBest(final QualifiedFacet.Key key) {
+    Optional<F> findBest(final QualifiedFacet.Key key) {
         return lookupQualified(key)
             .flatMap(_Lists::lastElement)
             .or(()->lookupUnqualified(key)
                     .flatMap(_Lists::lastElement));
     }
 
-    boolean hasBest(final QualifiedFacet.Key key) {
+    /**
+     * Whether this rank contains at least one matching {@link QualifiedFacet}.
+     */
+    boolean hasAny(final QualifiedFacet.Key key) {
         return isNotEmpty(lookupQualified(key))
             || isNotEmpty(lookupUnqualified(key));
     }
 
     // -- HELPER
 
-    private Optional<List<Facet>> lookupQualified(final QualifiedFacet.Key key) {
+    private Optional<List<F>> lookupQualified(final QualifiedFacet.Key key) {
         return Optional.ofNullable(facetsByQualifier.get(key.toQualified()));
     }
-    private Optional<List<Facet>> lookupUnqualified(final QualifiedFacet.Key key) {
+    private Optional<List<F>> lookupUnqualified(final QualifiedFacet.Key key) {
         return Optional.ofNullable(facetsByQualifier.get(key.toUnqualified()));
     }
     private static <T> boolean isNotEmpty(final Optional<List<T>> listOpt) {

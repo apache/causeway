@@ -112,14 +112,20 @@ public final class FacetUtil {
     public static void updateFacet(final @Nullable Facet facet) {
         if(facet==null) return;
 
-        final boolean skip = facet.facetHolder().lookupFacet(facet.facetType())
-                .map(Facet::precedence)
-                .map(Facet.Precedence::ordinal)
-                .map(ordinal -> ordinal>facet.precedence().ordinal())
-                .orElse(false);
-        if(skip) return;
+        facet.facetHolder().getFacetRanking(facet.facetType())
+            .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
+                    facet.getClass()::isInstance, // facet filter
+                    prec->prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
+                ));
 
-        //FIXME purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.facetHolder());
+//        final boolean skip = facet.facetHolder().lookupFacet(facet.facetType())
+//                .map(Facet::precedence)
+//                .map(Facet.Precedence::ordinal)
+//                .map(ordinal -> ordinal>facet.precedence().ordinal())
+//                .orElse(false);
+//        if(skip) return;
+//
+//        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.facetHolder());
         addFacet(facet);
     }
 
@@ -139,11 +145,12 @@ public final class FacetUtil {
 //     */
 //    private static <F extends Facet> void purgeIf(
 //            final Class<F> facetType,
-//            final Predicate<? super F> filter,
+//            final Predicate<? super F> facetFilter,
+//            final Predicate<Precedence> precedenceFilter,
 //            final FacetHolder facetHolder) {
 //
 //        facetHolder.getFacetRanking(facetType)
-//            .ifPresent(ranking->ranking.purgeIf(facetType, filter));
+//            .ifPresent(ranking->ranking.purgeIf(facetType, facetFilter, precedenceFilter));
 //    }
 
     // -- FACET ATTRIBUTES
