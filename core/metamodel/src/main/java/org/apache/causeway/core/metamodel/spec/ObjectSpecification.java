@@ -116,6 +116,13 @@ extends
     }
 
     IntrospectionPolicy getIntrospectionPolicy();
+    
+    /**
+     * Introduced for debugging.
+     * @see IntrospectionTrigger
+     * @since 4.0
+     */
+    IntrospectionTrigger introspectionTrigger();
 
     /**
      * Natural order, that is, by {@link BeanSort} then by {@link LogicalType}.
