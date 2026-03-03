@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
-import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.mmtestsupport.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.runtimeservices.RuntimeServicesTestAbstract;
 
@@ -159,11 +158,9 @@ extends RuntimeServicesTestAbstract {
         // verify rank did not grow with latest menubars.xml reload
         assertEquals(1, xmlFacetRank.size());
 
-        final String qualifier = Facets.qualifier(objectAction);
-
         // verify winning facet is the same object as the last one added from latest menubars.xml reload,
         // to make sure we are not feed the winner from an outdated cache
-        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class, qualifier).get(), xmlFacetRank.getLastElseFail());
+        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastElseFail());
     }
 
     // -- HELPER

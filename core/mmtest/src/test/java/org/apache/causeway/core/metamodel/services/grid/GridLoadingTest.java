@@ -98,7 +98,7 @@ extends MetaModelTestAbstract {
 
         // verify winning facet is the same object as the last one added from latest layout.xml reload,
         // to make sure we are not feed the winner from an outdated cache
-        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class, null).get(), xmlFacetRank.getLastElseFail());
+        assertSame(facetRanking.getWinnerNonEvent(MemberNamedFacet.class).get(), xmlFacetRank.getLastElseFail());
 
     }
 

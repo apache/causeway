@@ -18,12 +18,14 @@
  */
 package org.apache.causeway.core.metamodel.facetapi;
 
-import java.util.Comparator;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -31,11 +33,9 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.base._Casts;
-import org.apache.causeway.commons.internal.base._Reduction;
-import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Multimaps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -62,11 +62,10 @@ public final class FacetRanking {
 
     @Getter @Accessors(fluent = true) private final @NonNull Class<? extends Facet> facetType;
 
-    private final _Multimaps.@NonNull ListMultimap<Facet.Precedence, Facet> facetsByPrecedence
-            = _Multimaps.newSortedConcurrentListMultimap();
+    private final NavigableMap<Facet.Precedence, FacetRank> ranksByPrecedence = new ConcurrentSkipListMap<>();
 
     private final @NonNull AtomicReference<Facet> eventFacetRef = new AtomicReference<>();
-    private final @NonNull AtomicReference<Precedence> topPrecedenceRef = new AtomicReference<>();
+    private final @NonNull Map<QualifiedFacet.Key, Precedence> topPrecedenceRef = new ConcurrentHashMap<>();
 
     /**
      * @return whether the top rank changed,
@@ -79,6 +78,7 @@ public final class FacetRanking {
         // guard against invalidly mocked facets
         var facetPrecedence = Objects.requireNonNull(facet.precedence(),
                 ()->String.format("facet %s declares no precedence", facet.getClass()));
+        var key = QualifiedFacet.Key.forFacet(facet);
 
         // handle top priority (EVENT) facets separately
         if(facetPrecedence.isEvent()) {
@@ -91,7 +91,8 @@ public final class FacetRanking {
                                 facet.getClass());
                 return facet;
             });
-            topPrecedenceRef.set(facetPrecedence);
+
+            topPrecedenceRef.put(key, facetPrecedence);
             return true; // changes apply
         }
 
@@ -100,12 +101,12 @@ public final class FacetRanking {
                 .orElse(-1);
 
         if(facetPrecedence.ordinal() > currentTopOrdinal) {
-            topPrecedenceRef.set(facetPrecedence);
+            topPrecedenceRef.put(key, facetPrecedence);
         }
 
-        var currentTopRankOrdinal = facetsByPrecedence.isEmpty()
+        var currentTopRankOrdinal = ranksByPrecedence.isEmpty() //FIXME needs context
                 ? -1
-                : facetsByPrecedence.asNavigableMapElseFail().lastKey().ordinal();
+                : ranksByPrecedence.lastKey().ordinal();
 
         var changesTopRank = facetPrecedence.ordinal() >= currentTopRankOrdinal;
 
@@ -114,16 +115,18 @@ public final class FacetRanking {
         // However, there are use-cases, where access to all facets of a given type are required,
         // regardless of facet-precedence (eg. MemberNamedFacets).
         if(changesTopRank
-            || facet.isPopulateAllFacetRanks()) {
-            facetsByPrecedence.putElement(facetPrecedence, facet);
+                || facet.isPopulateAllFacetRanks()) {
+            var rank = ranksByPrecedence
+                    .computeIfAbsent(facetPrecedence, __->new FacetRank(facetType(), facetPrecedence));
+            rank.add(facet);
         }
 
         return changesTopRank;
     }
 
     public void addAll(final @NonNull FacetRanking facetRanking) {
-        facetRanking.facetsByPrecedence.asNavigableMapElseFail()
-            .forEach((k, facets)->facets.forEach(this::add));
+        facetRanking.ranksByPrecedence
+            .forEach((k, rank)->rank.facetsByQualifier().streamElements().forEach(this::add));
     }
 
     /**
@@ -132,12 +135,11 @@ public final class FacetRanking {
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
     public <F extends Facet> Optional<F> getWinner(
-            final @NonNull Class<F> facetType,
-            final @Nullable String qualifier) {
+            final @NonNull Class<F> facetType) {
         var eventFacet = getEventFacet(facetType);
-        if(eventFacet.isPresent())
-            return eventFacet;
-        return getWinnerNonEvent(facetType, qualifier);
+        return eventFacet.isPresent()
+            ? eventFacet
+            : getWinnerNonEvent(facetType);
     }
 
     /**
@@ -146,30 +148,11 @@ public final class FacetRanking {
      * @param facetType - for convenience, so the caller does not need to cast the result
      */
     public <F extends Facet> Optional<F> getWinnerNonEvent(
-            final @NonNull Class<F> facetType,
-            final @Nullable String qualifier) {
-        var topRank = getTopRank(facetType);
-        // all matching QualifiedFacet(s) take precedence
-        // all non-matching QualifiedFacet(s) must be ignored
-        // historically (initial design) the last one wins
-
-        F bestSoFar = null;
-
-        for(var facet : topRank) {
-            if(facet instanceof QualifiedFacet qFacet) {
-                if(Objects.equals(qualifier, qFacet.qualifier()))
-                    return Optional.of(facet);
-                else {
-                    continue;
-                }
-            }
-            bestSoFar = facet;
-        }
-
-        //FIXME if bestSoFar == null, then we have to go to the next lower rank;
-        //FIXME the getTopRank(facetType) logic is broken, because it depends now on context
-
-        return Optional.ofNullable(bestSoFar);
+            final @NonNull Class<F> facetType) {
+        var topRank = topRankInternal();
+        return topRank!=null
+                ? (Optional<F>) topRank.findBest(key())
+                : Optional.empty();
     }
 
     /**
@@ -180,14 +163,12 @@ public final class FacetRanking {
      */
     public <F extends Facet> Optional<F> getWinnerNonEventLowerOrEqualTo(
             final @NonNull Class<F> facetType,
-            final @NonNull Precedence precedenceUpper
-            //,
-            //final @Nullable String qualifier
-            ) {
+            final @NonNull Precedence precedenceUpper) {
+        var key = key();
         var selectedRank = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
         return selectedRank
-                .map(facetsByPrecedence::get)
-                .map(_Lists::lastElementIfAny) // historically the last one wins
+                .map(ranksByPrecedence::get)
+                .flatMap(rank->rank.findBest(key))
                 .map(_Casts::uncheckedCast);
     }
 
@@ -205,10 +186,12 @@ public final class FacetRanking {
      */
     public <F extends Facet> Can<F> getTopRank(final @NonNull Class<F> facetType) {
         _Assert.assertEquals(this.facetType, facetType);
-        var topRankedFacets = facetsByPrecedence.asNavigableMapElseFail().lastEntry();
-        return topRankedFacets!=null
-                ? Can.<F>ofCollection(_Casts.uncheckedCast(topRankedFacets.getValue()))
-                : Can.empty();
+        var key = key();
+        for(var rank : ranksByPrecedence.descendingMap().values()) {
+            if(rank.hasBest(key))
+                return (Can<F>) rank.facetsMatching(key);
+        }
+        return Can.empty();
     }
 
     /**
@@ -221,12 +204,16 @@ public final class FacetRanking {
             final @NonNull Precedence precedenceUpper) {
         _Assert.assertEquals(this.facetType, facetType);
 
+        var key = key();
         var precedenceSelected = getHighestPrecedenceLowerOrEqualTo(precedenceUpper);
 
         return precedenceSelected
-        .map(facetsByPrecedence::get)
-        .map(facetsOfSameRank->Can.<F>ofCollection(_Casts.uncheckedCast(facetsOfSameRank)))
-        .orElseGet(Can::empty);
+            .map(ranksByPrecedence::get)
+            .flatMap(rank->rank.findBest(key))
+
+
+            .map(facetsOfSameRank->Can.<F>ofCollection(_Casts.uncheckedCast(facetsOfSameRank)))
+            .orElseGet(Can::empty);
     }
 
     /**
@@ -234,46 +221,51 @@ public final class FacetRanking {
      * @param precedenceUpper - upper bound
      */
     public Optional<Precedence> getHighestPrecedenceLowerOrEqualTo(final @NonNull Precedence precedenceUpper) {
-        return facetsByPrecedence
-        .keySet()
-        .stream()
-        .filter(precedence->precedence.ordinal()<=precedenceUpper.ordinal())
-        .max(Comparator.comparing(Precedence::ordinal));
+        var key = key();
+        for(var rank : ranksByPrecedence.descendingMap().values()) {
+            if(rank.precedence().ordinal()>precedenceUpper.ordinal()) {
+                continue; //next
+            }
+            if(rank.hasBest(key))
+                return Optional.of(rank.precedence());
+        }
+        return Optional.empty();
     }
 
     public Optional<Facet.Precedence> getTopPrecedence() {
-        return Optional.ofNullable(topPrecedenceRef.get());
+        var key = key();
+        return Optional.ofNullable(topPrecedenceRef.get(key));
     }
 
     // -- DYNAMIC UPDATE SUPPORT
 
-    /**
-     * Removes any facet of {@code facetType} from facetHolder if it passes the given {@code filter}.
-     * @param facetType - to ensure the filter is properly generic-type-constraint
-     * @param filter
-     */
-    public <F extends Facet> void purgeIf(
-            final @NonNull Class<F> facetType,
-            final @NonNull Predicate<? super F> filter) {
-
-        // reassess the top precedence
-        final _Reduction<Facet.Precedence> top = _Reduction.of(null, (a, b)->a==null?b:a.ordinal()>b.ordinal()?a:b);
-        var markedForRemoval = _Lists.newArrayList(facetsByPrecedence.size());
-
-        facetsByPrecedence.forEach((precedence, facets)->{
-            facets.removeIf(_Casts.uncheckedCast(filter));
-            if(!facets.isEmpty()) {
-                top.accept(precedence);
-            } else {
-                markedForRemoval.add(precedence);
-            }
-        });
-
-        topPrecedenceRef.set(top.getResult().orElse(null));
-
-        // remove keys that associate empty lists, so finding highest used precedence by key is simple
-        markedForRemoval.forEach(facetsByPrecedence::remove);
-    }
+//    /**
+//     * Removes any facet of {@code facetType} from facetHolder if it passes the given {@code filter}.
+//     * @param facetType - to ensure the filter is properly generic-type-constraint
+//     * @param filter
+//     */
+//    public <F extends Facet> void purgeIf(
+//            final @NonNull Class<F> facetType,
+//            final @NonNull Predicate<? super F> filter) {
+//
+//        // reassess the top precedence
+//        final _Reduction<Facet.Precedence> top = _Reduction.of(null, (a, b)->a==null?b:a.ordinal()>b.ordinal()?a:b);
+//        var markedForRemoval = _Lists.newArrayList(facetsByPrecedence.size());
+//
+//        facetsByPrecedence.forEach((precedence, facets)->{
+//            facets.removeIf(_Casts.uncheckedCast(filter));
+//            if(!facets.isEmpty()) {
+//                top.accept(precedence);
+//            } else {
+//                markedForRemoval.add(precedence);
+//            }
+//        });
+//
+//        topPrecedenceRef.set(top.getResult().orElse(null));
+//
+//        // remove keys that associate empty lists, so finding highest used precedence by key is simple
+//        markedForRemoval.forEach(facetsByPrecedence::remove);
+//    }
 
     // -- VALIDATION SUPPORT
 
@@ -302,7 +294,53 @@ public final class FacetRanking {
                 .skip(1)
                 .forEach(next->visitor.accept(firstOfTopRanking, next));
         }
+    }
 
+    // -- HELPER
+
+    QualifiedFacet.Key key() {
+        return new QualifiedFacet.Key(facetType, Facets.qualifier(null));
+    }
+
+    @Nullable
+    FacetRank topRankInternal() {
+        var key = key();
+        for(var rank : ranksByPrecedence.descendingMap().values()) {
+            if(rank.hasBest(key))
+                return rank;
+        }
+        return null;
+    }
+
+    /**
+     * Rules in order of strength:
+     * <ul>
+     * <li>all matching {@link QualifiedFacet}(s) take precedence</li>
+     * <li>all non-matching {@link QualifiedFacet}(s) must be ignored</li>
+     * <li>later take precedence over earlier</li>
+     * </ul>
+     */
+    @Deprecated
+    private static <F extends Facet> F findBestWithinRank(
+            final @NonNull Class<F> facetType,
+            final Can<? extends F> rank,
+            final @Nullable String qualifier) {
+
+        F bestNonQualified = null;
+        for(var it = rank.reverseIterator(); it.hasNext(); ) {
+            var facet = it.next();
+            if(facet instanceof QualifiedFacet qFacet) {
+                if(Objects.equals(qualifier, qFacet.qualifier()))
+                    return facet;
+                else {
+                    continue;
+                }
+            }
+            if(bestNonQualified==null) {
+                bestNonQualified = facet;
+            }
+        }
+        return bestNonQualified;
     }
 
 }

@@ -33,7 +33,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 public record IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
     Class<? extends IconUiEvent<Object>> iconUiEventClass,
@@ -96,9 +95,8 @@ implements IconFacet {
     }
 
     private Optional<IconFacet> underlyingIconFacet() {
-        final String qualifier = Facets.qualifier(facetHolder());
         return getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class, qualifier));
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(IconFacet.class));
     }
 
 }

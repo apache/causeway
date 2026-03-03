@@ -27,7 +27,6 @@ import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 /**
  * Provides a (simple) list of {@link Facet}s.
@@ -87,11 +86,10 @@ implements FacetHolder {
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        var qualifier = Facets.qualifier(this);
         synchronized(rankingByType) {
 
             return getFacetRanking(facetType)
-                .flatMap(facetRanking->facetRanking.getWinner(facetType, qualifier))
+                .flatMap(facetRanking->facetRanking.getWinner(facetType))
                 .orElse(null);
 
             //return uncheckedCast(snapshot.get().get(facetType));
@@ -100,12 +98,11 @@ implements FacetHolder {
 
     @Override
     public Stream<Facet> streamFacets() {
-        var qualifier = Facets.qualifier(this);
         synchronized(rankingByType) {
             // consumers should play nice and don't take too long (as we have a lock)
             //return snapshot.get().values().stream();
             return streamFacetRankings()
-                .flatMap(facetRanking->facetRanking.getWinner(facetRanking.facetType(), qualifier)
+                .flatMap(facetRanking->facetRanking.getWinner(facetRanking.facetType())
                         .stream());
         }
     }

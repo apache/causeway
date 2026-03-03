@@ -37,7 +37,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent
 extends TitleFacetAbstract {
@@ -99,10 +98,8 @@ extends TitleFacetAbstract {
         if(titleUiEvent.getTitle() == null
                 && titleUiEvent.getTranslatableTitle() == null) {
             // ie no subscribers out there...
-
-            final String qualifier = Facets.qualifier(facetHolder());
             final TitleFacet underlyingTitleFacet = getSharedFacetRanking()
-                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class, qualifier))
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(TitleFacet.class))
                 .orElse(null);
 
             if(underlyingTitleFacet!=null)

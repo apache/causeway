@@ -2,6 +2,8 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.commons.internal.base._Strings;
+
 /**
  * A {@link Facet} can be qualified (similar to Spring beans) in order to allow for alternative
  * behavior or semantics based on context.
@@ -19,6 +21,39 @@ import org.jspecify.annotations.Nullable;
  */
 @FunctionalInterface
 public interface QualifiedFacet {
+
+    record Key(
+            Class<? extends Facet> facetType,
+            /**
+             * The empty String "" is used for qualified facets, that have an empty qualifier
+             */
+            @Nullable String qualifier) {
+
+        static Key unqualified(final Class<? extends Facet> facetType) {
+            return new Key(facetType, null);
+        }
+        static Key forFacet(final Facet facet) {
+            return facet instanceof QualifiedFacet qFacet
+                    ? new Key(facet.facetType(), _Strings.nullToEmpty(qFacet.qualifier()))
+                    : unqualified(facet.facetType());
+        }
+        public boolean isQualified() {
+            return qualifier!=null;
+        }
+        public boolean isUnqualified() {
+            return qualifier==null;
+        }
+        public Key toUnqualified() {
+            return isUnqualified()
+                ? this
+                : unqualified(facetType);
+        }
+        public Key toQualified() {
+            return isQualified()
+                ? this
+                : new Key(facetType, "");
+        }
+    }
 
     @Nullable String qualifier();
 

@@ -79,7 +79,7 @@ public record LayoutPrefixFacetForUiEvent(
 
         // ie no subscribers out there, then fallback to the underlying ...
         return getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutPrefixFacet.class, null))
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutPrefixFacet.class))
             .map(underlyingLayoutFacet->underlyingLayoutFacet.layoutPrefix(managedObject))
             .orElse(null);
     }

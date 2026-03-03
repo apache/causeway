@@ -32,7 +32,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
 extends CssClassFacetAbstract {
@@ -82,9 +81,8 @@ extends CssClassFacetAbstract {
 
         if(cssClass == null) {
             // ie no subscribers out there...
-            final String qualifier = Facets.qualifier(facetHolder());
             final CssClassFacet underlyingCssClassFacet = getSharedFacetRanking()
-                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class, qualifier))
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
                 .orElse(null);
 
             if(underlyingCssClassFacet!=null)

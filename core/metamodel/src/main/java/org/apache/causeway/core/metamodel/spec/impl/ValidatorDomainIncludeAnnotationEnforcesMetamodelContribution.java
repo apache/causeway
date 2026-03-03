@@ -55,7 +55,6 @@ import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailure;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 /**
  * @since 2.0
@@ -99,12 +98,10 @@ extends MetaModelValidatorAbstract {
             .map(MethodFacade::asMethodForIntrospection)
             .forEach(memberMethods::add);
 
-        final String qualifier = Facets.qualifier(spec);
-
         spec
             .streamFacetHolders()
             .flatMap(FacetHolder::streamFacetRankings)
-            .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType(), qualifier))
+            .map(facetRanking->facetRanking.getWinnerNonEvent(facetRanking.facetType()))
             .flatMap(Optional::stream)
             .filter(ImperativeFacet.class::isInstance)
             .map(ImperativeFacet.class::cast)
