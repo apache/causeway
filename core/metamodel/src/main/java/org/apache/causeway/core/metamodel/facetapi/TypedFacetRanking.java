@@ -23,6 +23,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -65,6 +66,8 @@ public final class TypedFacetRanking<F extends Facet> {
             Collections.synchronizedMap(new EnumMap<Facet.Precedence, FacetRank<F>>(Facet.Precedence.class));
 
     private final @NonNull AtomicReference<F> eventFacetRef = new AtomicReference<>();
+    //TODO if does not help with performance, can be removed (needs performance testing)
+    private final @NonNull Map<QualifiedFacet.Key, Optional<F>> nonEventWinnerCache = new ConcurrentHashMap<>();
 
     /**
      * @return whether the top rank changed,
@@ -96,6 +99,8 @@ public final class TypedFacetRanking<F extends Facet> {
         var rank = ranksByPrecedence
                 .computeIfAbsent(facetPrecedence, __->new FacetRank<>(facetType(), facetPrecedence));
         rank.add(facet);
+
+        nonEventWinnerCache.clear(); // for simplicity invalidate the entire cache
     }
 
     public void addAll(final @NonNull TypedFacetRanking<F> facetRanking) {
@@ -123,8 +128,8 @@ public final class TypedFacetRanking<F extends Facet> {
      */
     public Optional<F> getWinnerNonEvent() {
         var key = key();
-        return topRankInternal(key)
-            .flatMap(topRank->topRank.findBest(key));
+        return nonEventWinnerCache.computeIfAbsent(key, __->topRankInternal(key)
+                .flatMap(topRank->topRank.findBest(key)));
     }
 
     /**
