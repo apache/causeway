@@ -47,6 +47,7 @@ import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
@@ -74,17 +75,24 @@ record ObjectMemberResolverForGrid(
      * Returns either a valid (left) or invalid (right) {@link BSGrid}
      */
     public Either<BSGrid, BSGrid> resolve(final LayoutKey layoutKey, final BSGrid grid) {
-        final boolean valid = validateAndNormalize(grid, layoutKey.domainClass());
-        if (valid) {
-            //TODO perhaps make available via context
-            new XmlLayoutRespectingFacetInstaller(context.specLoaderProvider().get())
-                .installFacets(layoutKey, grid);
-            if(log.isDebugEnabled()) {
-                log.debug("Grid:\n\n{}\n\n", toXml(grid));
+        try {
+            FacetRanking.setQualifier(layoutKey);
+
+            final boolean valid = validateAndNormalize(grid, layoutKey.domainClass());
+            if (valid) {
+                //TODO perhaps make available via context
+                new XmlLayoutRespectingFacetInstaller(context.specLoaderProvider().get())
+                    .installFacets(layoutKey, grid);
+                if(log.isDebugEnabled()) {
+                    log.debug("Grid:\n\n{}\n\n", toXml(grid));
+                }
+                return Either.left(grid);
             }
-            return Either.left(grid);
+            return Either.right(grid);
+
+        } finally {
+            FacetRanking.removeQualifier();
         }
-        return Either.right(grid);
     }
 
     // -- HELPER
@@ -150,7 +158,7 @@ record ObjectMemberResolverForGrid(
 
         // along with any specified by existing metadata
         for (final OneToOneAssociation oneToOneAssociation : oneToOneAssociationById.values()) {
-            var layoutGroupFacet = oneToOneAssociation.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = oneToOneAssociation.lookupFacet(LayoutGroupFacet.class).orElse(null);
             if(layoutGroupFacet == null) {
                 continue;
             }
@@ -259,7 +267,7 @@ record ObjectMemberResolverForGrid(
         for (final String actionId : sortedPossiblyMissingActionIds) {
             var objectAction = objectActionById.get(actionId);
 
-            var layoutGroupFacet = objectAction.getFacet(LayoutGroupFacet.class);
+            var layoutGroupFacet = objectAction.lookupFacet(LayoutGroupFacet.class).orElse(null);
             if(layoutGroupFacet == null) {
                 continue;
             }
@@ -275,10 +283,10 @@ record ObjectMemberResolverForGrid(
                 if(layoutGroupFacet.isExplicitBinding()) {
                     var propertyLayoutDataList = gridModel.propertyLayoutDataById.get(layoutGroupName);
                     if(_NullSafe.isEmpty(propertyLayoutDataList)) {
-                        log.warn(String.format("Could not find propertyLayoutData for layoutGroupName of '%s'", layoutGroupName));
+                        log.warn(String.format("Could not find propertyLayoutData for layoutGroupName '%s'", layoutGroupName));
                         continue;
                     }
-                    var actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                    var actionPositionFacet = objectAction.lookupFacet(ActionPositionFacet.class).orElse(null);
                     final ActionLayout.Position position = actionPositionFacet != null
                         ? actionPositionFacet.position()
                         : ActionLayout.Position.BELOW;
@@ -320,7 +328,7 @@ record ObjectMemberResolverForGrid(
 
                 // since the action is to be associated with a fieldSet, the only available positions are PANEL and PANEL_DROPDOWN.
                 // if the action already has a preference for PANEL, then preserve it, otherwise default to PANEL_DROPDOWN
-                var actionPositionFacet = objectAction.getFacet(ActionPositionFacet.class);
+                var actionPositionFacet = objectAction.lookupFacet(ActionPositionFacet.class).orElse(null);
                 if(actionPositionFacet != null && actionPositionFacet.position() == ActionLayout.Position.PANEL) {
                     actionLayoutData.setPosition(ActionLayout.Position.PANEL);
                 } else {

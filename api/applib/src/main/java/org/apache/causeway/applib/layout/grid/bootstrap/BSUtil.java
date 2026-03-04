@@ -104,6 +104,7 @@ public class BSUtil {
                 w.writeln("bsGrid:");
                 w.inc();
                 w.writeln("class: %s".formatted(bsGrid.domainClass().getName()));
+                w.writeln("layoutKey: %s".formatted(bsGrid.layoutKey()));
             }
             @Override public void exit(final BSGrid bsGrid) {
                 w.dec();

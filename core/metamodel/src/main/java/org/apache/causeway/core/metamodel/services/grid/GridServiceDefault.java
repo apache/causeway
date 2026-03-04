@@ -94,7 +94,6 @@ public record GridServiceDefault(
     public BSGrid load(final LayoutKey layoutKey) {
         var grid = cache.computeIfAbsent(layoutKey, this::tryLoadNoCache)
             .valueAsNonNullElseFail(); // at least we should have a fallback, otherwise there is some serious issue
-        grid.layoutKey(layoutKey);
         return grid;
     }
 
