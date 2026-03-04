@@ -132,6 +132,9 @@ public record FacetRanking(
     public static void setQualifier(final LayoutKey layoutKey) {
         TypedFacetRanking.setQualifier(layoutKey);
     }
+    public static void removeQualifier() {
+        TypedFacetRanking.removeQualifier();
+    }
 
     // -- VALIDATION SUPPORT
 

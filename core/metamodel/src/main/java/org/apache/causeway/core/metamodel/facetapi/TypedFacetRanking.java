@@ -224,6 +224,9 @@ public final class TypedFacetRanking<F extends Facet> {
     static void setQualifier(final LayoutKey layoutKey) {
         LAYOUT.set(layoutKey);
     }
+    static void removeQualifier() {
+        LAYOUT.remove();
+    }
 
     // -- HELPER
 
