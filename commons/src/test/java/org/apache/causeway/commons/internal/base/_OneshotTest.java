@@ -28,12 +28,12 @@ import lombok.SneakyThrows;
 
 class _OneshotTest {
 
-    final _Oneshot a = new _Oneshot();
+    final _Oneshot oneshot = new _Oneshot();
     final LongAdder counter = new LongAdder();
 
     @Test
     void test() {
-        a.trigger(this::sayHelloOnce);
+        oneshot.trigger(this::sayHelloOnce);
     }
 
     @SneakyThrows
@@ -44,13 +44,11 @@ class _OneshotTest {
 
         counter.increment();
 
-        var thread = new Thread(this::doMoreWork);
+        // calling 'sayHelloOnce' from a different thread, while still executing in the main thread,
+        // must not lead to a recursions
+        var thread = new Thread(this::sayHelloOnce);
         thread.start();
         thread.join();
-    }
-
-    void doMoreWork() {
-        a.trigger(this::sayHelloOnce);
     }
 
 }
