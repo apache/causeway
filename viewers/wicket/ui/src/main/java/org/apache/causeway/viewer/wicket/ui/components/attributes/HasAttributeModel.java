@@ -18,11 +18,20 @@
  */
 package org.apache.causeway.viewer.wicket.ui.components.attributes;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.Component;
 
-public interface AttributeModelChangeListener {
+import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
 
-    void onUpdate(AjaxRequestTarget target, AttributePanel attributePanel);
-    void onError(AjaxRequestTarget target, AttributePanel attributePanel);
+/**
+ * Introduced as a marker for PdfjsPanel to share the visibility logic with {@link AttributePanel}.
+ *
+ * <p> By design, Attribute Panels assess their visibility during Wicket's CONFIGURE phase, that is,
+ * they potentially veto visibility by negating {@link Component#isVisibilityAllowed()}.
+ *
+ * <p> Can be removed, once PdfjsPanel inherits from {@link AttributePanel}.
+ */
+public interface HasAttributeModel {
+
+    UiAttributeWkt attributeModel();
 
 }

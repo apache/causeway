@@ -75,24 +75,24 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
 /**
  * We refer to both method parameters and instance fields
  * collectively as "attributes" of a class or method.
- * <p>
- * The field case (aka property) is always singular.
+ *
+ * <p> The field case (aka property) is always singular.
  * {@link UiAttribute#isSingular}
- * <p>
- * The parameter case is either singular or plural.
+ *
+ * <p> The parameter case is either singular or plural.
  * {@link UiAttribute#isSingular} or {@link UiAttribute#isPlural}
- * <p>
- * The various attribute-panels, that are based on this abstract class
+ *
+ * <p> The various attribute-panels, that are based on this abstract class
  * represent all the UI components that are directly associated with attribute types
  * such as domain object references, number types, textual types, temporal types etc.
- * <p>
- * For action parameters attribute-panels are available to support plural (multi-valued) variants.
+ *
+ * <p> For action parameters attribute-panels are available to support plural (multi-valued) variants.
  *
  * @see UiAttribute
  */
 public abstract class AttributePanel
 extends PanelAbstract<ManagedObject, UiAttributeWkt>
-implements AttributeModelChangeListener {
+implements AttributeModelChangeListener, HasAttributeModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -146,8 +146,8 @@ implements AttributeModelChangeListener {
                 || this==CAN_EDIT_INLINE
                 || this==CAN_EDIT_INLINE_VIA_ACTION; }
 
-        static RenderScenario inferFrom(final AttributePanel scalarPanel) {
-            var attributeModel = scalarPanel.attributeModel();
+        static RenderScenario inferFrom(final AttributePanel attributePanel) {
+            var attributeModel = attributePanel.attributeModel();
             if(attributeModel.getRenderingHint().isInTable())
                 return COMPACT;
             if(attributeModel.isParameter())
@@ -198,6 +198,7 @@ implements AttributeModelChangeListener {
     /**
      * Identical to super.getModel()
      */
+    @Override
     public final UiAttributeWkt attributeModel() {
         return super.getModel();
     }
@@ -275,7 +276,7 @@ implements AttributeModelChangeListener {
     }
 
     /**
-     * determines the CSS that is added to the outermost 'scalarTypeContainer' div.
+     * Determines the CSS that is added to the outermost 'scalarTypeContainer' div.
      */
     public final String getCssClassName() {
         return _Strings.decapitalize(getClass().getSimpleName());
@@ -284,8 +285,7 @@ implements AttributeModelChangeListener {
     /**
      * Builds GUI lazily prior to first render.
      *
-     * <p>
-     * This design allows the panel to be configured first.
+     * <p>This design allows the panel to be configured first.
      *
      * @see #onBeforeRender()
      */
@@ -337,6 +337,7 @@ implements AttributeModelChangeListener {
 
     /**
      * Builds the hidden REGULAR component when in COMPACT format.
+     *
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected MarkupContainer createShallowRegularFrame() {
@@ -353,6 +354,7 @@ implements AttributeModelChangeListener {
 
     /**
      * Builds the hidden COMPACT component when in REGULAR format.
+     *
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected Component createShallowCompactFrame() {
@@ -362,6 +364,7 @@ implements AttributeModelChangeListener {
 
     /**
      * Builds the component to render the model when in INLINE EDITING FORM format.
+     *
      * <p>Is added to {@link #getScalarFrameContainer()}.
      */
     protected WebMarkupContainer createFormFrame() {
@@ -457,30 +460,26 @@ implements AttributeModelChangeListener {
         Wkt.cssAppend(this, attributeModel.getCssClass());
 
         Facets.cssClass(attributeModel.getMetaModel(), attributeModel.getParentUiModel().getManagedObject())
-        .ifPresent(cssClass->
-            Wkt.cssAppend(this, cssClass));
+            .ifPresent(cssClass->
+                Wkt.cssAppend(this, cssClass));
     }
 
-    // //////////////////////////////////////
+    // -- CONFIGURE VISIBILITY
 
     /**
      * Each component is now responsible for determining if it should be visible or not.
      *
-     * <p>
-     * Unlike the constructor and <tt>onInitialize</tt>, which are called only once, the <tt>onConfigure</tt> callback
+     * <p> Unlike the constructor and <tt>onInitialize</tt>, which are called only once, the <tt>onConfigure</tt> callback
      * is called multiple times, just prior to <tt>onBeforeRendering</tt>.  It is therefore the correct place for
      * components to set up their visibility/usability.
-     * </p>
-     *
      */
     @Override
     protected void onConfigure() {
-        final boolean hidden = attributeModel().whetherHidden();
-        setVisibilityAllowed(!hidden);
+        setVisibilityAllowed(!attributeModel().whetherHidden());
         super.onConfigure();
     }
 
-    // //////////////////////////////////////
+    // -- CHANGE BEHAVIOR
 
     protected void installModelChangeBehavior() {
         addOrReplaceBehavoir(AttributeModelDefaultChangeBehavior.class, ()->new AttributeModelDefaultChangeBehavior(this));
@@ -528,7 +527,7 @@ implements AttributeModelChangeListener {
 
     @Override
     public void onUpdate(final AjaxRequestTarget target, final AttributePanel scalarPanel) {
-        if(getModel().isParameter()) {
+        if(attributeModel().isParameter()) {
             Wkt.javaScriptAdd(target, EventTopic.FOCUS_FIRST_PARAMETER, getMarkupId());
         }
     }
@@ -542,8 +541,8 @@ implements AttributeModelChangeListener {
     /**
      * When label-position LEFT or TOP populates Wicket template ID_SCALAR_NAME_BEFORE_VALUE,
      * else when label-position RIGHT then populates Wicket template ID_SCALAR_NAME_AFTER_VALUE.
-     * <p>
-     * When label-position NONE, then no label should be rendered.
+     *
+     * <p> When label-position NONE, then no label should be rendered.
      */
     protected final void scalarNameLabelAddTo(final MarkupContainer container, final IModel<String> labelCaption) {
 
@@ -642,9 +641,9 @@ implements AttributeModelChangeListener {
 
     private static String determineActionLayoutPositioningCss(final Can<ActionModel> entityActionLinks) {
         return entityActionLinks.stream()
-                .anyMatch(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT))
-                    ? "actions-right"
-                    : null;
+            .anyMatch(ActionModel.isPositionedAt(ActionLayout.Position.RIGHT))
+                ? "actions-right"
+                : null;
     }
 
     // --

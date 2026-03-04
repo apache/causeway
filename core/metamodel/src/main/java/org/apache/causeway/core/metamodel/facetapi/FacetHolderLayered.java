@@ -22,12 +22,11 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Provides a merged view of the <i>local</i> and the <i>shared</i> list of {@link Facet}s,
@@ -78,36 +77,33 @@ implements FacetHolder {
     @Override
     public int getFacetCount() {
         // optimization, not strictly required
-        if(local.getFacetCount()==0) {
+        if(local.getFacetCount()==0)
             return shared.getFacetCount();
-        }
         // cannot simply add up shared and local
         return (int)streamPopulatedFacetTypes().count();
     }
 
     @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
-        var localFacet = local.getFacet(facetType);
-        var sharedFacet = shared.getFacet(facetType);
+    public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
+        var localFacetOpt = local.lookupFacet(facetType);
+        var sharedFacetOpt = shared.lookupFacet(facetType);
 
-        if(localFacet==null) {
-            return sharedFacet;
-        }
-        if(sharedFacet==null) {
-            return localFacet;
-        }
-        if(localFacet.precedence().ordinal() > sharedFacet.precedence().ordinal()) {
-            return localFacet;
-        }
-        if(sharedFacet.precedence().ordinal() > localFacet.precedence().ordinal()) {
-            return sharedFacet;
-        }
-        if(localFacet.semanticEquals(sharedFacet)) {
-            return localFacet; // arbitrarily picking one
-        }
+        if(localFacetOpt.isEmpty())
+            return sharedFacetOpt;
+        if(sharedFacetOpt.isEmpty())
+            return localFacetOpt;
+
+        var localFacet = localFacetOpt.get();
+        var sharedFacet = sharedFacetOpt.get();
+        if(localFacet.precedence().ordinal() > sharedFacet.precedence().ordinal())
+            return localFacetOpt;
+        if(sharedFacet.precedence().ordinal() > localFacet.precedence().ordinal())
+            return sharedFacetOpt;
+        if(localFacet.semanticEquals(sharedFacet))
+            return localFacetOpt; // arbitrarily picking one
         // semantic conflict
         // have the local win, this is safe for layout.xml stuff, but probably not for future use-cases
-        return localFacet;
+        return localFacetOpt;
 
 //        unfortunately semanticEquals() is not always implemented yet, otherwise we could throw ...
 //        throw _Exceptions.illegalState("conflicting facet semantics between shared %s and local %s",
@@ -124,20 +120,19 @@ implements FacetHolder {
     @Override
     public Stream<Facet> streamFacets() {
         // optimization, not strictly required
-        if(local.getFacetCount()==0) {
+        if(local.getFacetCount()==0)
             return shared.streamFacets();
-        }
         return streamPopulatedFacetTypes()
-                .<Facet>map(facetType->getFacet(facetType))
-                .filter(_NullSafe::isPresent);
+                .map(this::lookupFacet)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
     @Override
     public Stream<FacetRanking> streamFacetRankings() {
         // optimization, not strictly required
-        if(local.getFacetCount()==0) {
+        if(local.getFacetCount()==0)
             return shared.streamFacetRankings();
-        }
         return streamPopulatedFacetTypes()
                 .map(facetType->getFacetRanking(facetType).orElseThrow());
     }
@@ -147,12 +142,10 @@ implements FacetHolder {
         var localFacetRanking = local.getFacetRanking(facetType);
         var sharedFacetRanking = shared.getFacetRanking(facetType);
 
-        if(localFacetRanking.isEmpty()) {
+        if(localFacetRanking.isEmpty())
             return sharedFacetRanking;
-        }
-        if(sharedFacetRanking.isEmpty()) {
+        if(sharedFacetRanking.isEmpty())
             return localFacetRanking;
-        }
 
         var combinedFacetRanking = new FacetRanking(facetType);
         // arbitrarily picking order: shared first and local last, such that if in conflict local wins

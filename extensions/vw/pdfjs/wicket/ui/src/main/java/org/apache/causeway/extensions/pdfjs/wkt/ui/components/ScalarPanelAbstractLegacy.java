@@ -24,11 +24,13 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.wicket.model.models.UiAttributeWkt;
+import org.apache.causeway.viewer.wicket.ui.components.attributes.HasAttributeModel;
 import org.apache.causeway.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 abstract class ScalarPanelAbstractLegacy
-extends PanelAbstract<ManagedObject, UiAttributeWkt> {
+extends PanelAbstract<ManagedObject, UiAttributeWkt>
+implements HasAttributeModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +41,8 @@ extends PanelAbstract<ManagedObject, UiAttributeWkt> {
         super(id, attributeModel);
     }
 
-    protected final UiAttributeWkt attributeModel() {
+    @Override
+    public final UiAttributeWkt attributeModel() {
         return super.getModel();
     }
 

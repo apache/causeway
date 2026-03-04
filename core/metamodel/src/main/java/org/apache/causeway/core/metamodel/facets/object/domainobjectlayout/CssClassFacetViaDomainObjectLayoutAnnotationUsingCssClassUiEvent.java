@@ -49,10 +49,8 @@ extends CssClassFacetAbstract {
                 CssClassUiEvent.Default.class,
                 facetHolder.getConfiguration().applib().annotation()
                     .domainObjectLayout().cssClassUiEvent().postForDefault()))
-        .map(cssClassUiEventClass -> {
-            return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-                    cssClassUiEventClass, metamodelEventService, facetHolder);
-        });
+        .map(cssClassUiEventClass -> new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+                cssClassUiEventClass, metamodelEventService, facetHolder));
 
     }
 
@@ -72,9 +70,8 @@ extends CssClassFacetAbstract {
     @Override
     public String cssClass(final ManagedObject owningAdapter) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(owningAdapter))
             return null;
-        }
 
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
@@ -84,14 +81,12 @@ extends CssClassFacetAbstract {
 
         if(cssClass == null) {
             // ie no subscribers out there...
-
             final CssClassFacet underlyingCssClassFacet = getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
-            .orElse(null);
+                .flatMap(facetRanking->facetRanking.getWinnerNonEvent(CssClassFacet.class))
+                .orElse(null);
 
-            if(underlyingCssClassFacet!=null) {
+            if(underlyingCssClassFacet!=null)
                 return underlyingCssClassFacet.cssClass(owningAdapter);
-            }
         }
 
         return cssClass;

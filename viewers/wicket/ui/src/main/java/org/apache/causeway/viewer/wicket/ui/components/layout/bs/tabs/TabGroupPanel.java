@@ -38,7 +38,6 @@ import org.apache.causeway.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
-// hmmm... not sure how to make this implement HasDynamicallyVisibleContent
 public class TabGroupPanel
 extends AjaxBootstrapTabbedPanel<ITab>
 implements HasDynamicallyVisibleContent {
@@ -51,37 +50,9 @@ implements HasDynamicallyVisibleContent {
     private final ComponentHintKey selectedTabHintKey;
     private final UiObjectWkt objectModel;
 
-    private static List<ITab> tabsFor(final UiObjectWkt objectModel, final BSTabGroup bsTabGroup) {
-        final List<ITab> tabs = new ArrayList<>();
-
-        final List<BSTab> tablist = _NullSafe.stream(bsTabGroup.getTabs())
-                .filter(BSUtil::hasContent)
-                .collect(Collectors.toList());
-
-        for (var bsTab : tablist) {
-            var repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(objectModel, bsTab);
-            String tabName = bsTab.getName();
-            tabs.add(new AbstractTab(Model.of(tabName)) {
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public Panel getPanel(final String panelId) {
-                    return new TabPanel(panelId, objectModel, bsTab, repeatingViewWithDynamicallyVisibleContent);
-                }
-
-                @Override
-                public boolean isVisible() {
-                    return repeatingViewWithDynamicallyVisibleContent.isVisible();
-                }
-            });
-        }
-        return tabs;
-    }
-
     public TabGroupPanel(final String id, final UiObjectWkt objectModel, final BSTabGroup bsTabGroup) {
         super(id, tabsFor(objectModel, bsTabGroup));
         this.objectModel = objectModel;
-
         this.selectedTabHintKey = ComponentHintKey.create(objectModel.getMetaModelContext(), this, SESSION_ATTR_SELECTED_TAB);
     }
 
@@ -89,6 +60,18 @@ implements HasDynamicallyVisibleContent {
     protected void onInitialize() {
         setSelectedTabFromSessionIfAny(this);
         super.onInitialize();
+    }
+
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+        setVisibilityAllowed(assessVisibility());
+    }
+
+    @Override
+    public boolean assessVisibility() {
+        return _NullSafe.stream(getTabs())
+                .anyMatch(ITab::isVisible);
     }
 
     @Override
@@ -118,10 +101,31 @@ implements HasDynamicallyVisibleContent {
         }
     }
 
-    @Override
-    public boolean isVisible() {
-        return _NullSafe.stream(getTabs())
-                .anyMatch(ITab::isVisible);
+    private static List<ITab> tabsFor(final UiObjectWkt objectModel, final BSTabGroup bsTabGroup) {
+        final List<ITab> tabs = new ArrayList<>();
+
+        final List<BSTab> tablist = _NullSafe.stream(bsTabGroup.getTabs())
+                .filter(BSUtil::hasContent)
+                .collect(Collectors.toList());
+
+        for (var bsTab : tablist) {
+            var repeatingViewWithDynamicallyVisibleContent = TabPanel.newRows(objectModel, bsTab);
+            String tabName = bsTab.getName();
+            tabs.add(new AbstractTab(Model.of(tabName)) {
+                private static final long serialVersionUID = 1L;
+
+                @Override
+                public Panel getPanel(final String panelId) {
+                    return new TabPanel(panelId, objectModel, bsTab, repeatingViewWithDynamicallyVisibleContent);
+                }
+
+                @Override
+                public boolean isVisible() {
+                    return repeatingViewWithDynamicallyVisibleContent.isVisible();
+                }
+            });
+        }
+        return tabs;
     }
 
 }

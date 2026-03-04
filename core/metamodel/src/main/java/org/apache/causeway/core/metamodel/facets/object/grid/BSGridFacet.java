@@ -81,27 +81,25 @@ implements GridFacet {
             (layoutPrefix, cachedLayout)->
                 (cachedLayout==null
                         || gridService.supportsReloading())
-                ? this.load(layoutPrefix)
-                : cachedLayout);
+                    ? this.load(layoutPrefix)
+                    : cachedLayout);
     }
 
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)) return; // cannot introspect
-        if(!objSpec().equals(objectAdapter.objSpec())) {
+        if(!objSpec().equals(objectAdapter.objSpec()))
             throw _Exceptions.unrecoverable(
                     "getGrid(adapter) was called passing an adapter (type: %s), "
                     + "for which this GridFacet (type: %s) is not responsible; "
                     + "indicates that some framework internals are wired up in a wrong way",
                     objectAdapter.objSpec().getCorrespondingClass().getName(),
                     objSpec().getCorrespondingClass().getName());
-        }
     }
 
     private String layoutPrefixFor(final @Nullable ManagedObject objectAdapter) {
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(objectAdapter)
-            || !hasLayoutPrefixFacet()) {
+            || !hasLayoutPrefixFacet())
             return "";
-        }
         var layoutName = _Strings.nullToEmpty(layoutFacetLazy.get().layoutPrefix(objectAdapter));
         return layoutName;
     }
@@ -112,7 +110,7 @@ implements GridFacet {
 
     private BSGrid load(final String layoutPrefix) {
         var domainClass = objSpec().getCorrespondingClass();
-        var bsGrid = gridService.load(new LayoutKey(domainClass, _Strings.emptyToNull(layoutPrefix)));
+        var bsGrid = gridService.load(new LayoutKey(domainClass, layoutPrefix));
         return bsGrid;
     }
 

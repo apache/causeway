@@ -168,7 +168,7 @@ public final class Facets {
 
     public boolean defaultViewIsTable(final ObjectFeature feature) {
         return defaultViewName(feature)
-            .map(viewName->"table".equals(viewName))
+            .map("table"::equals)
             .orElse(false);
     }
 
@@ -194,10 +194,10 @@ public final class Facets {
             .map(FileAcceptFacet::value);
     }
 
-    public void gridPreload(
+    public Optional<BSGrid> gridPreload(
             final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
-        objectSpec.lookupFacet(GridFacet.class)
-            .ifPresent(gridFacet->
+        return objectSpec.lookupFacet(GridFacet.class)
+            .map(gridFacet->
                 // the facet should always exist, in fact
                 // just enough to ask for the metadata.
                 // This will cause the current ObjectSpec to be updated as a side effect.
@@ -221,6 +221,10 @@ public final class Facets {
             .map(matcher::test)
             .orElse(false);
     }
+    public Predicate<ObjectFeature> hiddenWhereNotMatches(final Predicate<Where> matcher) {
+        return hiddenWhereMatches(matcher)
+                .negate();
+    }
 
     public boolean iconIsPresent(final ObjectSpecification objectSpec) {
         return objectSpec.containsFacet(IconFacet.class);
@@ -232,19 +236,11 @@ public final class Facets {
     public LabelPosition labelAt(final ObjectFeature feature) {
         return feature.lookupFacet(LabelAtFacet.class)
             .map(LabelAtFacet::label)
-            .map(labelPos->{
-                switch (labelPos) {
-                case LEFT:
-                case RIGHT:
-                case NONE:
-                case TOP:
-                    return labelPos;
-                case DEFAULT:
-                case NOT_SPECIFIED:
-                default:
-                    return LabelPosition.LEFT;
-                }
-            })
+            .map(labelPos -> (switch (labelPos) {
+            case LEFT, RIGHT, NONE, TOP -> labelPos;
+            case DEFAULT, NOT_SPECIFIED -> LabelPosition.LEFT;
+            default -> LabelPosition.LEFT;
+            }))
             .orElse(LabelPosition.LEFT);
     }
 

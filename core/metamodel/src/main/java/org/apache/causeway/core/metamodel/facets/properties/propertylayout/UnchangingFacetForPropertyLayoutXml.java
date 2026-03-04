@@ -20,33 +20,47 @@ package org.apache.causeway.core.metamodel.facets.properties.propertylayout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.annotation.Repainting;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.causeway.core.metamodel.facets.properties.renderunchanged.UnchangingFacetAbstract;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 public class UnchangingFacetForPropertyLayoutXml
-extends UnchangingFacetAbstract {
+extends UnchangingFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<UnchangingFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(propertyLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(propertyLayout == null)
             return Optional.empty();
-        }
         final Repainting repainting = propertyLayout.getRepainting();
         if(repainting == null
-                || repainting == Repainting.NOT_SPECIFIED) {
+                || repainting == Repainting.NOT_SPECIFIED)
             return Optional.empty();
-        }
-        return Optional.of(new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder, precedence));
+        return Optional.of(
+            new UnchangingFacetForPropertyLayoutXml(repainting == Repainting.NO_REPAINT, holder, precedence, qualifier));
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private UnchangingFacetForPropertyLayoutXml(
-            final boolean unchanging, final FacetHolder holder, final Precedence precedence) {
+            final boolean unchanging,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(unchanging, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

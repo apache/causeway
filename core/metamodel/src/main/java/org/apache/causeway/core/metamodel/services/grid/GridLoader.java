@@ -41,7 +41,10 @@ record GridLoader(
     public Try<BSGrid> tryLoad(final LayoutKey layoutKey, final LayoutResource layoutResource) {
         return gridLoadingContext.gridMarshaller(layoutResource.format())
             .orElseThrow()
-            .unmarshal(layoutKey.domainClass(), layoutResource.content(), layoutResource.format());
+            .unmarshal(layoutKey.domainClass(), layoutResource.content(), layoutResource.format())
+            .mapSuccessAsNullable(grid->grid!=null
+                ? grid.layoutKey(layoutKey)
+                : grid);
     }
 
 }

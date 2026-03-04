@@ -28,36 +28,37 @@ import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 
-class GridCache_resourceNameTest {
+class GridCache_resourceNameTest extends MetaModelTestAbstract {
 
     @Test
     void when_default_exists() {
         assertEquals(
                 "Foo.layout.xml",
-                resourceNameFor(new LayoutKey(Foo.class, null)));
+                resourceNameFor(new LayoutKey(Foo.class)));
     }
 
     @Test
     void when_fallback_exists() {
         assertEquals(
                 "Foo2.layout.fallback.xml",
-                resourceNameFor(new LayoutKey(Foo2.class, null)));
+                resourceNameFor(new LayoutKey(Foo2.class)));
     }
 
     @Test
     void when_default_and_fallback_both_exist() {
         assertEquals(
                 "Foo3.layout.xml",
-                resourceNameFor(new LayoutKey(Foo3.class, null)));
+                resourceNameFor(new LayoutKey(Foo3.class)));
     }
 
     @Test
     void when_neither_exist() {
         assertEquals(
                 (String)null,
-                resourceNameFor(new LayoutKey(Foo4.class, null)));
+                resourceNameFor(new LayoutKey(Foo4.class)));
     }
 
     // -- HELPER

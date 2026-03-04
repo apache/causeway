@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.objects;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -63,8 +65,8 @@ extends MetaModelTestAbstract {
     void nameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";
 
-        doReturn(new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {})
-        .when(mockFacetedMethod).getFacet(MemberNamedFacet.class);
+        doReturn(Optional.of(new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {}))
+        .when(mockFacetedMethod).lookupFacet(MemberNamedFacet.class);
 
         assertThat(action.getStaticFriendlyName().get(), is(equalTo(name)));
     }

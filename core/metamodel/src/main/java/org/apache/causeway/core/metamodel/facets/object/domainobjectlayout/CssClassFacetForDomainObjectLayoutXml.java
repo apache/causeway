@@ -20,34 +20,46 @@ package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.causeway.core.metamodel.facets.members.cssclass.CssClassFacetSimple;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 public class CssClassFacetForDomainObjectLayoutXml
-extends CssClassFacetSimple {
+extends CssClassFacetSimple
+implements QualifiedFacet {
 
     public static Optional<CssClassFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Facet.Precedence precedence) {
-        if(domainObjectLayout == null) {
+            final Facet.Precedence precedence,
+            final @Nullable String qualifier) {
+        if(domainObjectLayout == null)
             return Optional.empty();
-        }
         final String cssClass = _Strings.emptyToNull(domainObjectLayout.getCssClass());
         return cssClass != null
-                ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new CssClassFacetForDomainObjectLayoutXml(cssClass, holder, precedence, qualifier))
+            : Optional.empty();
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private CssClassFacetForDomainObjectLayoutXml(
             final String value,
             final FacetHolder holder,
-            final Facet.Precedence precedence) {
+            final Facet.Precedence precedence,
+            final @Nullable String qualifier) {
         super(value, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

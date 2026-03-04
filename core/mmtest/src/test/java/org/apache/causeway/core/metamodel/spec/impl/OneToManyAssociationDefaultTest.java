@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.spec.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -71,7 +72,7 @@ extends MetaModelTestAbstract {
                 .collectionIdentifier(
                         TypeIdentifierTestFactory.newCustomer(),
                         COLLECTION_ID));
-        when(mockPeer.getFacet(MemberNamedFacet.class)).thenReturn(mockNamedFacet);
+        when(mockPeer.lookupFacet(MemberNamedFacet.class)).thenReturn(Optional.ofNullable(mockNamedFacet));
 
         association = OneToManyAssociationDefault.forMethod(mockPeer);
     }

@@ -32,6 +32,7 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -81,6 +82,127 @@ public class BSUtil {
     public BSGrid resolveOwners(final BSGrid grid) {
         new BSElementOwnerResolvingWalker(grid).walk();
         return grid;
+    }
+
+    /**
+     * Useful for debugging or comparing grid instances (e.g. JUnit tests).
+     */
+    public String toYaml(final BSGrid grid) {
+        class TinyWriter {
+            StringBuilder sb = new StringBuilder();
+            int indent = 0;
+            void inc() { indent++; }
+            void dec() { indent--; }
+            void writeln(final String line) {
+                sb.append("  ".repeat(indent)).append(line).append("\n");
+            }
+        }
+        var w = new TinyWriter();
+
+        grid.visit(new BSElementVisitor() {
+            @Override public void enter(final BSGrid bsGrid) {
+                w.writeln("bsGrid:");
+                w.inc();
+                w.writeln("class: %s".formatted(bsGrid.domainClass().getName()));
+                w.writeln("layoutKey: %s".formatted(bsGrid.layoutKey()));
+            }
+            @Override public void exit(final BSGrid bsGrid) {
+                w.dec();
+            }
+            @Override public void enter(final BSRow bsRow) {
+                w.writeln("row:");
+                w.inc();
+            }
+            @Override public void exit(final BSRow bsRow) {
+                w.dec();
+            }
+            @Override public void enter(final BSCol bsCol) {
+                w.writeln("col:");
+                w.inc();
+                w.writeln("span: %s".formatted(bsCol.getSpan()));
+                if(bsCol.isUnreferencedActions()) {
+                    w.writeln("unreferencedActions: true");
+                }
+                if(bsCol.isUnreferencedCollections()) {
+                    w.writeln("unreferencedCollections: true");
+                }
+            }
+            @Override public void exit(final BSCol bsCol) {
+                w.dec();
+            }
+            @Override public void enter(final BSTabGroup bsTabGroup) {
+                w.writeln("tabGroup:");
+                w.inc();
+            }
+            @Override public void exit(final BSTabGroup bsTabGroup) {
+                w.dec();
+            }
+            @Override public void enter(final BSTab bsTab) {
+                w.writeln("tab:");
+                w.inc();
+                w.writeln("name: %s".formatted(bsTab.getName()));
+            }
+            @Override public void exit(final BSTab bsTab) {
+                w.dec();
+            }
+
+            @Override public void visit(final BSClearFix bsClearFix) {}
+            @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                w.inc();
+                w.writeln("domainObject:");
+                w.inc();
+                w.writeln("named: %s".formatted(domainObjectLayoutData.getNamed()));
+                w.writeln("bookmarking: %s".formatted(domainObjectLayoutData.getBookmarking()));
+                w.dec();
+                w.dec();
+            }
+            @Override public void visit(final ActionLayoutData actionLayoutData) {
+                w.inc();
+                w.writeln("action:");
+                w.inc();
+                w.writeln("id: %s".formatted(actionLayoutData.getId()));
+                w.writeln("named: %s".formatted(actionLayoutData.getNamed()));
+                w.writeln("position: %s".formatted(actionLayoutData.getPosition()));
+                w.writeln("promptStyle: %s".formatted(actionLayoutData.getPromptStyle()));
+                w.writeln("hidden: %s".formatted(actionLayoutData.getHidden()));
+                w.dec();
+                w.dec();
+            }
+            @Override public void visit(final PropertyLayoutData propertyLayoutData) {
+                w.inc();
+                w.writeln("property:");
+                w.inc();
+                w.writeln("id: %s".formatted(propertyLayoutData.getId()));
+                w.writeln("named: %s".formatted(propertyLayoutData.getNamed()));
+                w.writeln("hidden: %s".formatted(propertyLayoutData.getHidden()));
+                w.dec();
+                w.dec();
+            }
+            @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+                w.inc();
+                w.writeln("collection:");
+                w.inc();
+                w.writeln("id: %s".formatted(collectionLayoutData.getId()));
+                w.writeln("named: %s".formatted(collectionLayoutData.getNamed()));
+                w.writeln("hidden: %s".formatted(collectionLayoutData.getHidden()));
+                w.dec();
+                w.dec();
+            }
+            @Override public void visit(final FieldSet fieldSet) {
+                w.writeln("fieldSet:");
+                w.inc();
+                w.writeln("id: %s".formatted(fieldSet.getId()));
+                w.writeln("name: %s".formatted(fieldSet.getName()));
+                if(fieldSet.isUnreferencedActions()) {
+                    w.writeln("unreferencedActions: true");
+                }
+                if(fieldSet.isUnreferencedProperties()) {
+                    w.writeln("unreferencedProperties: true");
+                }
+                w.dec();
+            }
+        });
+        return w.sb.toString();
     }
 
     // -- REMOVERS

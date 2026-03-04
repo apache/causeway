@@ -36,14 +36,15 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.jspecify.annotations.NonNull;
 
 /**
  * <h1>- internal use only -</h1>
@@ -279,6 +280,10 @@ public class _Multimaps {
                     .map(Map::values)
                     .flatMap(Collection::stream);
         }
+
+        default V computeIfAbsent(final K1 key, final K2 subkey, final BiFunction<K1, K2, V> factory) {
+            return getOrElseNew(key).computeIfAbsent(subkey, __->factory.apply(key, subkey));
+        }
     }
 
     public static <K, V> ListMultimap<K, V> newListMultimap(
@@ -291,14 +296,14 @@ public class _Multimaps {
         final @NonNull Supplier<? extends Map<K, S>> mapFactory,
         final @NonNull Supplier<S> elementCollectionFactory){
         final Map<K, Set<V>> delegate = _Casts.uncheckedCast(mapFactory.get());
-        return new SetMultimapWrapper<K, V>(delegate, elementCollectionFactory);
+        return new SetMultimapWrapper<>(delegate, elementCollectionFactory);
     }
 
     public static <K1, K2, V> MapMultimap<K1, K2, V> newMapMultimap(
             final @NonNull Supplier<Map<K1, Map<K2, V>>> mapFactory,
             final @NonNull Supplier<Map<K2, V>> elementMapFactory){
 
-        return new MapMultimap<K1, K2, V>() {
+        return new MapMultimap<>() {
 
             final Map<K1, Map<K2, V>> delegate = mapFactory.get();
 
@@ -405,8 +410,8 @@ public class _Multimaps {
             final @Nullable Comparator<K> keyComparator,
             final @Nullable Comparator<V> elementComparator){
 
-        final Supplier<SortedMap<K, SortedSet<V>>> mapFactory = ()->new TreeMap<K, SortedSet<V>>(keyComparator);
-        final Supplier<SortedSet<V>> elementSetFactory = ()->new TreeSet<V>(elementComparator);
+        final Supplier<SortedMap<K, SortedSet<V>>> mapFactory = ()->new TreeMap<>(keyComparator);
+        final Supplier<SortedSet<V>> elementSetFactory = ()->new TreeSet<>(elementComparator);
         return newSetMultimap(mapFactory, elementSetFactory);
     }
 

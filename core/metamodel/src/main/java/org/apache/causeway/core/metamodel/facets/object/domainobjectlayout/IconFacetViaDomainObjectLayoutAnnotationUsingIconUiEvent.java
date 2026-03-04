@@ -53,17 +53,15 @@ implements IconFacet {
                     IconUiEvent.Default.class,
                     facetHolder.getConfiguration().applib().annotation()
                         .domainObjectLayout().iconUiEvent().postForDefault()))
-            .map(iconUiEvent -> {
-                return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-                    _Casts.uncheckedCast(iconUiEvent), metamodelEventService, facetHolder);
-            });
+            .map(iconUiEvent -> new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
+                _Casts.uncheckedCast(iconUiEvent), metamodelEventService, facetHolder));
     }
 
     @Override public Class<? extends Facet> facetType() { return IconFacet.class; }
     @Override public Precedence precedence() { return Precedence.EVENT; }
 
     @Override
-    public Optional<ObjectSupport.IconResource> icon(ManagedObject domainObject, ObjectSupport.IconSize iconSize) {
+    public Optional<ObjectSupport.IconResource> icon(final ManagedObject domainObject, final ObjectSupport.IconSize iconSize) {
 
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) return Optional.empty();
 
@@ -90,7 +88,7 @@ implements IconFacet {
         visitor.accept("iconUiEventClass", iconUiEventClass);
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, ObjectSupport.IconSize iconSize) {
+    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter, final ObjectSupport.IconSize iconSize) {
         var iconUiEvent = EventObjectBase.getInstanceWithSourceSupplier(iconUiEventClass, owningAdapter::getPojo)
             .orElseThrow();
         return iconUiEvent.iconSize(iconSize);

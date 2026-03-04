@@ -110,7 +110,6 @@ extends
         public boolean isEvent() {
             return this == EVENT;
         }
-
     }
 
     /**

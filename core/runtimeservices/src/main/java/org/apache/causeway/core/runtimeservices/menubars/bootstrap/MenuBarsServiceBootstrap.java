@@ -104,9 +104,8 @@ implements MenuBarsService {
     @Override
     public BSMenuBars menuBars(final Type type) {
         var menuBarsFromAnnotationsOnly = this.menuBarsFromAnnotationsOnly.get();
-        if(type == Type.ANNOTATED) {
+        if(type == Type.ANNOTATED)
             return menuBarsFromAnnotationsOnly;
-        }
         return menuBarsDefault();
     }
 
@@ -130,10 +129,9 @@ implements MenuBarsService {
                 .orElse(menuBarsFromAnnotationsOnly);
 
         var unreferencedActionsMenu = validateAndGetUnreferencedActionMenu(menuBars);
-        if (unreferencedActionsMenu == null) {
+        if (unreferencedActionsMenu == null)
             // just use fallback
             return menuBarsFromAnnotationsOnly;
-        }
 
         // add in any missing actions from the fallback
         var referencedActionsByObjectTypeAndId = menuBars.getAllServiceActionsByObjectTypeAndId();
@@ -224,9 +222,8 @@ implements MenuBarsService {
 
     private BSMenu validateAndGetUnreferencedActionMenu(final BSMenuBars menuBars) {
 
-        if (menuBars == null) {
+        if (menuBars == null)
             return null;
-        }
 
         var menusWithUnreferencedActionsFlagSet = _Lists.<BSMenu>newArrayList();
         menuBars.visit(BSMenuBars.VisitorAdapter.visitingMenus(menu->{
@@ -236,9 +233,8 @@ implements MenuBarsService {
         }));
 
         var size = menusWithUnreferencedActionsFlagSet.size();
-        if (size == 1) {
+        if (size == 1)
             return menusWithUnreferencedActionsFlagSet.get(0);
-        }
 
         menuBars.setMetadataError(
                 "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
@@ -273,11 +269,10 @@ implements MenuBarsService {
 
     private boolean isVisibleAdapterForMenu(final ManagedObject objectAdapter) {
         var spec = objectAdapter.objSpec();
-        if (spec.isHidden()) {
+        if (spec.isHidden())
             // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
             // services that have an imperative hidden() method.
             return false;
-        }
         return true;
     }
 
@@ -333,15 +328,15 @@ implements MenuBarsService {
                 var actionLayoutData = new ServiceActionLayoutData(logicalTypeName, objectAction.getId());
 
                 var named = objectAction
-                .getFacetRanking(MemberNamedFacet.class)
-                // assuming layout from annotations never installs higher than Precedence.DEFAULT
-                .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT))
-                .map(MemberNamedFacet::getSpecialization)
-                .flatMap(specialization->specialization.left())
-                .map(HasStaticText::translated)
-                //we have a facet-post-processor to ensure following code path is unreachable,
-                //however, we keep it in avoidance of fatal failure
-                .orElseGet(()->objectAction.getFeatureIdentifier().getMemberNaturalName());
+                    .getFacetRanking(MemberNamedFacet.class)
+                    // assuming layout from annotations never installs higher than Precedence.DEFAULT
+                    .flatMap(facetRanking->facetRanking.getWinnerNonEventLowerOrEqualTo(MemberNamedFacet.class, Precedence.DEFAULT))
+                    .map(MemberNamedFacet::getSpecialization)
+                    .flatMap(specialization->specialization.left())
+                    .map(HasStaticText::translated)
+                    //we have a facet-post-processor to ensure following code path is unreachable,
+                    //however, we keep it in avoidance of fatal failure
+                    .orElseGet(()->objectAction.getFeatureIdentifier().getMemberNaturalName());
 
                 actionLayoutData.setNamed(named); //that's for imperative naming ... objectAction.getFriendlyName(service.asProvider()));
                 menuSection.getServiceActions().add(actionLayoutData);

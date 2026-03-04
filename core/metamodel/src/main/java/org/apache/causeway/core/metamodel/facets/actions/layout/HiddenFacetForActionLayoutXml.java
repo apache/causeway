@@ -20,33 +20,47 @@ package org.apache.causeway.core.metamodel.facets.actions.layout;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.causeway.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
 public class HiddenFacetForActionLayoutXml
-extends HiddenFacetAbstract {
+extends HiddenFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<HiddenFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if (actionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if (actionLayout == null)
             return Optional.empty();
-        }
         final Where where = actionLayout.getHidden();
         return where != null
                 && where != Where.NOT_SPECIFIED
-                        ? Optional.of(new HiddenFacetForActionLayoutXml(where, holder, precedence))
-                        : Optional.empty();
+            ? Optional.of(new HiddenFacetForActionLayoutXml(where, holder, precedence, qualifier))
+            : Optional.empty();
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private HiddenFacetForActionLayoutXml(
-            final Where where, final FacetHolder holder, final Precedence precedence) {
+            final Where where,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(where, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override
@@ -56,9 +70,8 @@ extends HiddenFacetAbstract {
 
     @Override
     public String hiddenReason(final ManagedObject targetAdapter, final Where whereContext) {
-        if(!where().includes(whereContext)) {
+        if(!where().includes(whereContext))
             return null;
-        }
         return "Hidden on " + where().getFriendlyName();
     }
 

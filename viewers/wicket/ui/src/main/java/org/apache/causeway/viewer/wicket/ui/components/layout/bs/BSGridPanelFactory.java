@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.layout.UiGridLayout;
@@ -42,25 +43,20 @@ public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
 
     @Override protected ApplicationAdvice appliesTo(final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
-
         var mo = objectModel.getObject();
-        var objectSpec = objectModel.getTypeOfSpecification();
 
-        return ApplicationAdvice.appliesIf(
-                Facets.bootstrapGrid(objectSpec, mo)
-                .isPresent());
+        return ApplicationAdvice.appliesIf(mo.objSpec().containsFacet(GridFacet.class));
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
-
         var mo = objectModel.getObject();
-        var objectSpec = objectModel.getTypeOfSpecification();
 
-        return Facets.bootstrapGrid(objectSpec, mo)
+        return Facets.bootstrapGrid(mo.objSpec(), mo)
             .map(UiGridLayout::new) // creates a deep copy of the underlying grid and applies rules
-            .map(ui->new BSGridPanel(id, objectModel, ui.bsGrid()))
+            .map(UiGridLayout::bsGrid)
+            .map(bsGrid->new BSGridPanel(id, objectModel, bsGrid))
             .orElseThrow(); // empty case guarded against by appliesTo(...) above
     }
 
