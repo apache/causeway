@@ -111,9 +111,9 @@ extends HasMetaModelContext, HasTranslationContext {
      * <tt>null</tt> and not a fallback.
      */
     default boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
-        var facet = getFacet(facetType);
-        return facet != null
-                && !facet.precedence().isFallback();
+        return lookupFacet(facetType)
+            .map(facet->!facet.precedence().isFallback())
+            .orElse(false);
     }
 
     /**
@@ -121,10 +121,10 @@ extends HasMetaModelContext, HasTranslationContext {
      * facet is <i>explicit</i>, not {@link Facet.Precedence#isInferred() inferred}.
      */
     default boolean containsExplicitNonFallbackFacet(final Class<? extends Facet> facetType) {
-        var facet = getFacet(facetType);
-        return facet != null
-                && !facet.precedence().isFallback()
-                && !facet.precedence().isInferred();
+        return lookupFacet(facetType)
+                .map(facet->!facet.precedence().isFallback()
+                        && !facet.precedence().isInferred())
+                .orElse(false);
     }
 
     Stream<Facet> streamFacets();

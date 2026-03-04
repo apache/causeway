@@ -30,12 +30,12 @@ import java.util.function.Predicate;
 
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
-import org.apache.causeway.core.metamodel.util.Facets;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +59,8 @@ import lombok.experimental.Accessors;
  */
 @RequiredArgsConstructor
 public final class TypedFacetRanking<F extends Facet> {
+
+    private static final ThreadLocal<LayoutKey> LAYOUT = new ThreadLocal<>();
 
     @Getter @Accessors(fluent = true) private final @NonNull Class<F> facetType;
 
@@ -217,10 +219,19 @@ public final class TypedFacetRanking<F extends Facet> {
         });
     }
 
+    // -- LAYOUT SWITCHING
+
+    static void setQualifier(final LayoutKey layoutKey) {
+        LAYOUT.set(layoutKey);
+    }
+
     // -- HELPER
 
     QualifiedFacet.Key key() {
-        return new QualifiedFacet.Key(facetType, Facets.qualifier(null));
+        var qualifier = Optional.ofNullable(LAYOUT.get())
+                .map(LayoutKey::layoutIfAny)
+                .orElse(null);
+        return new QualifiedFacet.Key(facetType, qualifier);
     }
 
     private Optional<FacetRank<F>> topRankInternal(final QualifiedFacet.Key key) {

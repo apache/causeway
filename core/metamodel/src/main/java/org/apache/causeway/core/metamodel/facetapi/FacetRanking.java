@@ -24,6 +24,7 @@ import java.util.function.Predicate;
 
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 
@@ -124,6 +125,12 @@ public record FacetRanking(
             final @NonNull Predicate<? super F> facetFilter,
             final @NonNull Predicate<Facet.Precedence> precedenceFilter) {
         delegate(facetType).purgeIf(facetFilter, qualifierKey, precedenceFilter);
+    }
+
+    // -- LAYOUT SWITCHING
+
+    public static void setQualifier(final LayoutKey layoutKey) {
+        TypedFacetRanking.setQualifier(layoutKey);
     }
 
     // -- VALIDATION SUPPORT
