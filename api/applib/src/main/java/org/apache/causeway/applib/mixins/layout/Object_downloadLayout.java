@@ -64,7 +64,9 @@ public class Object_downloadLayout {
     public static class ActionDomainEvent
     extends org.apache.causeway.applib.CausewayModuleApplib.ActionDomainEvent<Object_downloadLayout> {}
 
-    private final Object holder;
+    @Inject LayoutService layoutService;
+
+    private final Object mixee;
 
     @MemberSupport public Object act(
             @ParameterLayout(
@@ -74,15 +76,19 @@ public class Object_downloadLayout {
             final LayoutExportStyle style,
             final CommonMimeType format) {
 
-        var xmlString = layoutService.objectLayout(holder.getClass(), style, format);
-        return Clob.of(fileName, format, xmlString);
+        var layoutKey = layoutService.layoutKey(mixee).orElseThrow();
+        var xmlString = layoutService.objectLayout(layoutKey, style, format);
+        var infix= layoutKey.isVariant()
+            ? "-" + layoutKey.layoutIfAny()
+            : "";
+        return Clob.of(fileName + infix + ".layout", format, xmlString);
     }
 
     /**
      * Defaults to the (simple) name of the domain object's class, with a <code>.layout</code> suffix
      */
     @MemberSupport public String default0Act() {
-        return holder.getClass().getSimpleName() + ".layout";
+        return mixee.getClass().getSimpleName();
     }
     /**
      * Default style is {@link LayoutExportStyle#MINIMAL}.
@@ -92,10 +98,10 @@ public class Object_downloadLayout {
     }
 
     @MemberSupport public CommonMimeType default2Act() {
-        return layoutService.supportedObjectLayoutFormats().iterator().next(); }
+        return layoutService.supportedObjectLayoutFormats().iterator().next();
+    }
     @MemberSupport public Set<CommonMimeType> choices2Act() {
-        return layoutService.supportedObjectLayoutFormats(); }
-
-    @Inject LayoutService layoutService;
+        return layoutService.supportedObjectLayoutFormats();
+    }
 
 }

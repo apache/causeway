@@ -19,7 +19,11 @@
 package org.apache.causeway.applib.services.layout;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
+
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
@@ -27,11 +31,16 @@ import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
  * Provides the ability to obtain the serialized layout (eg. XML) for a single domain object or
  * for all domain objects, as well as the serialized layout for the application's menu-bars.
  *
- * @since 1.x - revised for 2.0 {@index}
+ * @since 1.x - revised for 2.0 and 4.0 {@index}
  */
 public interface LayoutService {
 
     // -- OBJECT LAYOUT
+
+    /**
+     * @since 4.0
+     */
+    Optional<LayoutKey> layoutKey(@Nullable Object domainObject);
 
     /**
      * Supported format(s) for {@link #objectLayout(Class, LayoutExportStyle, CommonMimeType)}
@@ -43,7 +52,7 @@ public interface LayoutService {
      * Obtains the serialized form of the object layout (grid) for the specified domain class.
      * @throws UnsupportedOperationException when format is not supported
      */
-    String objectLayout(Class<?> domainClass, LayoutExportStyle style, CommonMimeType format);
+    String objectLayout(LayoutKey layoutKey, LayoutExportStyle style, CommonMimeType format);
 
     /**
      * Obtains a zip file of the serialized layouts (grids) of all domain entities and view models.
