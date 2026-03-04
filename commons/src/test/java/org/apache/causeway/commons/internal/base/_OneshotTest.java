@@ -18,10 +18,12 @@
  */
 package org.apache.causeway.commons.internal.base;
 
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import lombok.SneakyThrows;
@@ -30,23 +32,27 @@ class _OneshotTest {
 
     final _Oneshot oneshot = new _Oneshot();
     final LongAdder counter = new LongAdder();
+    final AtomicReference<String> errors = new AtomicReference<>();
 
     @Test
     void test() {
         oneshot.trigger(this::sayHelloOnce);
+        assertEquals(1, counter.intValue());
+        assertEquals(null, errors.get());
     }
 
     @SneakyThrows
     void sayHelloOnce() {
         if(counter.intValue()>0) {
+            errors.set("recursion detected");
             fail("recursion detected");
         }
 
         counter.increment();
 
         // calling 'sayHelloOnce' from a different thread, while still executing in the main thread,
-        // must not lead to a recursions
-        var thread = new Thread(this::sayHelloOnce);
+        // must not lead to a recursion
+        var thread = new Thread(()->oneshot.trigger(this::sayHelloOnce));
         thread.start();
         thread.join();
     }
