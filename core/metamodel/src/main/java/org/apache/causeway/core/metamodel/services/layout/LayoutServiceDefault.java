@@ -129,7 +129,7 @@ implements LayoutService {
         final Class<?> domainClass,
         final LayoutExportStyle style) {
         // making a deep copy so, we don't modify the cached grid
-        var grid = BSUtil.deepCopy(gridService.load(new LayoutKey(domainClass, null)));
+        var grid = BSUtil.deepCopy(gridService.load(new LayoutKey(domainClass)));
 
         if (style == LayoutExportStyle.COMPLETE) return toComplete(grid, domainClass);
         if (style == LayoutExportStyle.MINIMAL) return toMinimal(grid, domainClass);

@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.components.UiComponentType;
 import org.apache.causeway.viewer.commons.model.layout.UiGridLayout;
@@ -44,9 +45,7 @@ public class BSGridPanelFactory extends ObjectComponentFactoryAbstract {
         final UiObjectWkt objectModel = (UiObjectWkt) model;
         var mo = objectModel.getObject();
 
-        return ApplicationAdvice.appliesIf(
-                Facets.bootstrapGrid(mo.objSpec(), mo)
-                .isPresent());
+        return ApplicationAdvice.appliesIf(mo.objSpec().containsFacet(GridFacet.class));
     }
 
     @Override

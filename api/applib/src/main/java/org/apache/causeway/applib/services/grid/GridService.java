@@ -18,17 +18,17 @@
  */
 package org.apache.causeway.applib.services.grid;
 
+import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.springframework.util.StringUtils;
-
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.commons.internal.base._Strings;
 
 /**
  * Loads the layout (grid) for any domain class.
@@ -47,10 +47,17 @@ public interface GridService {
          * domain object's <code>layout()</code> method, whereby - based on the
          * state of the domain object - it requests a different layout be used.
          */
-        @Nullable String layoutIfAny) {
+        @Nullable String layoutIfAny) implements Serializable {
 
-        public boolean isDefault() { return !isVariant(); }
-        public boolean isVariant() { return StringUtils.hasLength(layoutIfAny); }
+        public LayoutKey {
+            layoutIfAny = _Strings.emptyToNull(layoutIfAny);
+        }
+        public LayoutKey(final Class<?> domainClass) {
+            this(domainClass, null);
+        }
+
+        public boolean isDefault() { return layoutIfAny==null; }
+        public boolean isVariant() { return layoutIfAny!=null; }
     }
 
     /**

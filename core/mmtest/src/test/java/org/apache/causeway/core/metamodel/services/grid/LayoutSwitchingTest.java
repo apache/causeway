@@ -52,7 +52,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
 
         var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
-        var gridFacet = barSpec.getFacet(GridFacet.class);
+        var gridFacet = barSpec.lookupFacet(GridFacet.class).orElse(null);
         assertNotNull(gridFacet);
 
         // triggers grid to be loaded initially
@@ -76,7 +76,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
     void switchLayout_lowLevel() {
 
         // triggers grid to be loaded initially
-        gridService.load(new LayoutKey(Bar.class, null));
+        gridService.load(new LayoutKey(Bar.class));
 
         var bsGridSimple = gridService.load(new LayoutKey(Bar.class, "simple"));
         assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridSimple))
@@ -84,7 +84,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
                 .filter(line->line.contains("hidden: EVERYWHERE")) // 3 hidden members
                 .count());
 
-        var bsGridDefault = gridService.load(new LayoutKey(Bar.class, null));
+        var bsGridDefault = gridService.load(new LayoutKey(Bar.class));
         assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridDefault))
                 .stream()
                 .filter(line->line.contains("hidden: null")) // 3 non-hidden members

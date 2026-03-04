@@ -81,8 +81,8 @@ implements GridFacet {
             (layoutPrefix, cachedLayout)->
                 (cachedLayout==null
                         || gridService.supportsReloading())
-                ? this.load(layoutPrefix)
-                : cachedLayout);
+                    ? this.load(layoutPrefix)
+                    : cachedLayout);
     }
 
     private void guardAgainstObjectOfDifferentType(final @Nullable ManagedObject objectAdapter) {
@@ -110,7 +110,7 @@ implements GridFacet {
 
     private BSGrid load(final String layoutPrefix) {
         var domainClass = objSpec().getCorrespondingClass();
-        var bsGrid = gridService.load(new LayoutKey(domainClass, _Strings.emptyToNull(layoutPrefix)));
+        var bsGrid = gridService.load(new LayoutKey(domainClass, layoutPrefix));
         return bsGrid;
     }
 

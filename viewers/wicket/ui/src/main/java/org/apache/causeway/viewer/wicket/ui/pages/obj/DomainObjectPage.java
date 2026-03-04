@@ -33,11 +33,14 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
@@ -85,9 +88,8 @@ public class DomainObjectPage extends PageAbstract {
      */
     public static DomainObjectPage forPageParameters(final PageParameters pageParameters) {
         var bookmark = PageParameterUtils.toBookmark(pageParameters);
-        if(!bookmark.isPresent()) {
+        if(!bookmark.isPresent())
             throw new RestartResponseException(Application.get().getHomePage());
-        }
         return new DomainObjectPage(
                 pageParameters,
                 UiObjectWkt.ofPageParameters(pageParameters));
@@ -143,13 +145,18 @@ public class DomainObjectPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!model.isVisible()) {
+        if(!model.isVisible())
             throw new ObjectMember.AuthorizationException();
-        }
 
         var objectSpec = model.getTypeOfSpecification();
 
-        Facets.gridPreload(objectSpec, objectAdapter);
+        var layoutKey = Facets.gridPreload(objectSpec, objectAdapter)
+            .map(BSGrid::layoutKey)
+            .orElseGet(()->new LayoutKey(objectSpec.getCorrespondingClass()));
+
+        // imposes filters on FacetRanking in the current thread's context
+        // needs to happen in cooperation with installing any layout variant specific facets via Facets.gridPreload(..) above
+        FacetRanking.setQualifier(layoutKey);
 
         var titleStr = objectAdapter.getTitle();
         setTitle(titleStr);
@@ -208,8 +215,9 @@ public class DomainObjectPage extends PageAbstract {
     protected void onDetach() {
     	super.onDetach();
     	model.detach();
+    	FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
     }
-    
+
     // -- REFRESH ENTITIES
 
     @Override
@@ -217,7 +225,7 @@ public class DomainObjectPage extends PageAbstract {
         var mo = model.getObject();
         if(!PageUtils.isAjax()) {
         	//CAUSEWAY-3944: on normal page request, make sure entities are in sync with the db before rendering
-        	ManagedObjects.refreshEntity(mo);	
+        	ManagedObjects.refreshEntity(mo);
         }
         ManagedObjects.refreshViewmodel(mo,
                 ()->PageParameterUtils
@@ -245,9 +253,8 @@ public class DomainObjectPage extends PageAbstract {
             final Can<PageRenderSubscriber> pageRenderSubscribers,
             final BiFunction<PageRenderSubscriber, Bookmark, Void> handler) {
 
-        if(pageRenderSubscribers.isEmpty()) {
+        if(pageRenderSubscribers.isEmpty())
             return;
-        }
 
         // guard against unspecified
         ManagedObjects.asSpecified(model.getObject())
