@@ -44,9 +44,8 @@ public record FacetRanking(
         this(facetType, new TypedFacetRanking<>(facetType));
     }
 
-    public <F extends Facet> boolean add(final F facet) {
+    public <F extends Facet> void add(final F facet) {
         delegate(facet).add(facet);
-        return true; //FIXME
     }
 
     public <F extends Facet> void addAll(final FacetRanking facetRanking) {
@@ -111,7 +110,7 @@ public record FacetRanking(
     }
 
     /**
-     * Within given constraints (qualifier and filter), 
+     * Within given constraints (qualifier and filter),
      * removes any {@link Facet} of {@code facetType} from facetHolder.
      *
      * <p>Motivated by layout reloading, that is,

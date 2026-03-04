@@ -118,17 +118,11 @@ public final class FacetUtil {
             .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
                     qualifierKey, // discriminate by qualifier
                     facet.getClass()::isInstance, // facet filter
-                    prec->prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
+                    prec->qualifierKey.isQualified()
+                        ? true // if qualified, purge all ranks
+                        : prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
                 ));
 
-//        final boolean skip = facet.facetHolder().lookupFacet(facet.facetType())
-//                .map(Facet::precedence)
-//                .map(Facet.Precedence::ordinal)
-//                .map(ordinal -> ordinal>facet.precedence().ordinal())
-//                .orElse(false);
-//        if(skip) return;
-//
-//        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.facetHolder());
         addFacet(facet);
     }
 
