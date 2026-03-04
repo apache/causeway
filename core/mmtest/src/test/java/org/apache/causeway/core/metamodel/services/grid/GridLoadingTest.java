@@ -64,7 +64,7 @@ extends MetaModelTestAbstract {
 
         var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
-        var gridFacet = barSpec.getFacet(GridFacet.class);
+        var gridFacet = barSpec.lookupFacet(GridFacet.class).orElse(null);
         assertNotNull(gridFacet);
 
         // triggers grid to be loaded (if initial or reloading supported)

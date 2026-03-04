@@ -28,9 +28,10 @@ import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 
-class GridCache_resourceNameTest {
+class GridCache_resourceNameTest extends MetaModelTestAbstract {
 
     @Test
     void when_default_exists() {
