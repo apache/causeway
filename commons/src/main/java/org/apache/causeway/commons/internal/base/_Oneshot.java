@@ -19,35 +19,29 @@
 package org.apache.causeway.commons.internal.base;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <h1>- internal use only -</h1>
- * <p>
- * One-shot utility, thread-safe and serializable
- * <p>
- * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
+ *
+ * <p>One-shot utility, thread-safe and serializable
+ *
+ * <p><b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
+ *
  * @since 2.0
  */
 public final class _Oneshot implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Object $lock = new Object[0]; // serializable lock
-
-    private volatile int triggerCount = 0;
+    private final AtomicInteger counter = new AtomicInteger(0); // is serializable
 
     /**
      * Returns whether the trigger was accepted.
      */
     public boolean trigger() {
-        synchronized ($lock) {
-            if(triggerCount==0) {
-                ++ triggerCount;
-                return true;
-            }
-            return false;
-        }
+        return counter.compareAndSet(0, 1);
     }
 
     /**
@@ -56,23 +50,20 @@ public final class _Oneshot implements Serializable {
      * If the {@link Runnable} throws an {@link Exception}, this one-shot will be exhausted regardless.
      */
     public boolean trigger(final Runnable runnable) {
-        synchronized ($lock) {
-            if(triggerCount==0) {
-                ++ triggerCount;
-                runnable.run();
-            }
+        // attempt to change 0 -> 1 atomically; only the thread that succeeds runs the runnable
+        if (counter.compareAndSet(0, 1)) {
+            runnable.run();
+            return true;
+        } else
             return false;
-        }
     }
 
 
     /**
-     * resets to initial condition, that is it allows one more trigger
+     * resets to initial condition, that is, it allows one more trigger
      */
     public void reset() {
-        synchronized ($lock) {
-            triggerCount = 0;
-        }
+        counter.set(0);
     }
 
 }
