@@ -18,19 +18,30 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.commons.io.TextUtils;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.causeway.core.metamodel.facets.all.hide.HiddenFacet.Semantics;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.spec.ActionScope;
+import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
+import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 
 /**
  * Switching between Layout Variants may result in Members staying hidden.
@@ -48,7 +59,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
     }
 
     @Test
-    void switchLayout_highLevel() {
+    void switchLayout_viaFacet() {
 
         var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
@@ -59,35 +70,107 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
         gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
 
         var bsGridSimple = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar("simple")));
-        assertNotNull(bsGridSimple);
-        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridSimple))
-                .stream()
-                .filter(line->line.contains("hidden: EVERYWHERE")) // 3 hidden members
-                .count());
+        assertLineCount(bsGridSimple, 3, line->line.contains("hidden: EVERYWHERE")); // 3 hidden members
+        assertHasLayoutKey(bsGridSimple, new LayoutKey(Bar.class, "simple"));
 
         var bsGridDefault = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
-        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridDefault))
-                .stream()
-                .filter(line->line.contains("hidden: null")) // 3 non-hidden members
-                .count());
+        assertLineCount(bsGridDefault, 3, line->line.contains("hidden: null")); // 3 non-hidden members
+        assertHasLayoutKey(bsGridDefault, new LayoutKey(Bar.class));
+
+        assertCanSwitchQualifierOnAndOff(barSpec, new LayoutKey(Bar.class, "simple"));
+
+        // REPEATED loading should not change the total number of facets stored within rankings
+        assertTotalFacetCountIsInvariant(List.of(
+                barSpec.getActionElseFail("createSimpleObject"),
+                barSpec.getPropertyElseFail("name"),
+                barSpec.getCollectionElseFail("sampleCollection")
+            ),
+            ()->gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar("simple"))));
     }
 
     @Test
-    void switchLayout_lowLevel() {
+    void switchLayout_viaService() {
 
         // triggers grid to be loaded initially
         gridService.load(new LayoutKey(Bar.class));
 
         var bsGridSimple = gridService.load(new LayoutKey(Bar.class, "simple"));
-        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridSimple))
-                .stream()
-                .filter(line->line.contains("hidden: EVERYWHERE")) // 3 hidden members
-                .count());
+        assertLineCount(bsGridSimple, 3, line->line.contains("hidden: EVERYWHERE")); // 3 hidden members
+        assertHasLayoutKey(bsGridSimple, new LayoutKey(Bar.class, "simple"));
 
         var bsGridDefault = gridService.load(new LayoutKey(Bar.class));
-        assertEquals(3L, TextUtils.readLines(BSUtil.toYaml(bsGridDefault))
+        assertLineCount(bsGridDefault, 3, line->line.contains("hidden: null")); // 3 non-hidden members
+        assertHasLayoutKey(bsGridDefault, new LayoutKey(Bar.class));
+
+        var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
+        assertCanSwitchQualifierOnAndOff(barSpec, new LayoutKey(Bar.class, "simple"));
+    }
+
+    // -- HELPER
+
+    private void assertTotalFacetCountIsInvariant(final List<FacetHolder> facetHolders, final Runnable runnable) {
+        final var totalFacetCountsBefore = facetHolders.stream()
+                .map(facetHolder->facetHolder.getFacetRanking(HiddenFacet.class).orElseThrow())
+                .map(FacetRanking::totalFacetCount)
+                .toList();
+        runnable.run();
+        final var totalFacetCountsAfter = facetHolders.stream()
+                .map(facetHolder->facetHolder.getFacetRanking(HiddenFacet.class).orElseThrow())
+                .map(FacetRanking::totalFacetCount)
+                .toList();
+        assertEquals(totalFacetCountsBefore, totalFacetCountsAfter);
+    }
+
+    private void assertCanSwitchQualifierOnAndOff(final ObjectSpecification spec, final LayoutKey layoutKey) {
+        assertHiddenActionCount(spec, 0);
+        assertHiddenPropertyCount(spec, 0);
+        assertHiddenCollectionCount(spec, 0);
+
+        FacetRanking.setQualifier(layoutKey);
+        assertHiddenActionCount(spec, 1);
+        assertHiddenPropertyCount(spec, 1);
+        assertHiddenCollectionCount(spec, 1);
+
+        FacetRanking.removeQualifier();
+        assertHiddenActionCount(spec, 0);
+        assertHiddenPropertyCount(spec, 0);
+        assertHiddenCollectionCount(spec, 0);
+    }
+
+    private void assertHiddenActionCount(final ObjectSpecification spec, final long n) {
+        assertEquals(n,
+            spec.streamActions(ActionScope.ANY, MixedIn.EXCLUDED)
+                .flatMap(act->act.lookupFacet(HiddenFacet.class).stream())
+                .map(HiddenFacet::getSemantics)
+                .filter(Semantics::isHidden)
+                .count());
+    }
+    private void assertHiddenPropertyCount(final ObjectSpecification spec, final long n) {
+        assertEquals(n,
+            spec.streamProperties(MixedIn.EXCLUDED)
+                .flatMap(prop->prop.lookupFacet(HiddenFacet.class).stream())
+                .map(HiddenFacet::getSemantics)
+                .filter(Semantics::isHidden)
+                .count());
+    }
+    private void assertHiddenCollectionCount(final ObjectSpecification spec, final long n) {
+        assertEquals(n,
+            spec.streamCollections(MixedIn.EXCLUDED)
+                .flatMap(coll->coll.lookupFacet(HiddenFacet.class).stream())
+                .map(HiddenFacet::getSemantics)
+                .filter(Semantics::isHidden)
+                .count());
+    }
+
+    private void assertHasLayoutKey(final BSGrid bsGrid, final LayoutKey layoutKey) {
+        assertEquals(layoutKey.domainClass(), bsGrid.domainClass());
+        assertEquals(layoutKey, bsGrid.layoutKey());
+    }
+
+    private void assertLineCount(final BSGrid bsGrid, final long n, final Predicate<String> matcher) {
+        assertEquals(n, TextUtils.readLines(BSUtil.toYaml(bsGrid))
                 .stream()
-                .filter(line->line.contains("hidden: null")) // 3 non-hidden members
+                .filter(matcher)
                 .count());
     }
 

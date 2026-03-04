@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facetapi;
 
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -217,6 +218,20 @@ public final class TypedFacetRanking<F extends Facet> {
                 rank.purgeIf(qualifierKey, facetFilter);
             }
         });
+    }
+
+    /**
+     * Introduced for JUnit testing.
+     */
+    public int totalFacetCount() {
+        return ranksByPrecedence.values()
+            .stream()
+            .mapToInt(rank-> rank.facetsByQualifier()
+                .values()
+                .stream()
+                .mapToInt(List::size)
+                .sum())
+            .sum();
     }
 
     // -- LAYOUT SWITCHING

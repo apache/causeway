@@ -162,6 +162,10 @@ public record FacetRanking(
         }
     }
 
+    public int totalFacetCount() {
+        return typedFacetRanking.totalFacetCount();
+    }
+
     // -- CASTING
 
     @SuppressWarnings("unchecked")
