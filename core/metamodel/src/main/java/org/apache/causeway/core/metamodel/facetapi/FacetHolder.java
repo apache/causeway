@@ -70,18 +70,10 @@ extends HasMetaModelContext, HasTranslationContext {
 
     int getFacetCount();
 
-    /**
-     * Get the facet of the specified type (as per the type it reports from
-     * {@link Facet#facetType()}).
-     */
-    <T extends Facet> T getFacet(Class<T> facetType);
 
     // -- FACET LOOKUP
 
-    default <T extends Facet> Optional<T> lookupFacet(
-            final @NonNull Class<T> facetType) {
-        return Optional.ofNullable(getFacet(facetType));
-    }
+    <T extends Facet> Optional<T> lookupFacet(final @NonNull Class<T> facetType);
 
     default <T extends Facet> Optional<T> lookupFacet(
             final @NonNull Class<T> facetType,
@@ -92,6 +84,16 @@ extends HasMetaModelContext, HasTranslationContext {
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             final @NonNull Class<T> facetType) {
         return lookupFacet(facetType, facet->!facet.precedence().isFallback());
+    }
+
+    /**
+     * Get the facet of the specified type (as per the type it reports from
+     * {@link Facet#facetType()}).
+     * @deprecated
+     */
+    @Deprecated
+    default <T extends Facet> T getFacet(final Class<T> facetType) {
+        return lookupFacet(facetType).orElse(null);
     }
 
     // -- CONTAINS

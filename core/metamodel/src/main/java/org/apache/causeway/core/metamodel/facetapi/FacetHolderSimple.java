@@ -57,7 +57,7 @@ implements FacetHolder {
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
-        return getFacet(facetType)!=null;
+        return lookupFacet(facetType).isPresent();
     }
 
     @Override
@@ -67,10 +67,9 @@ implements FacetHolder {
     }
 
     @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
+    public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
         return getFacetRanking(facetType)
-            .flatMap(facetRanking->facetRanking.getWinner(facetType))
-            .orElse(null);
+            .flatMap(facetRanking->facetRanking.getWinner(facetType));
     }
 
     @Override

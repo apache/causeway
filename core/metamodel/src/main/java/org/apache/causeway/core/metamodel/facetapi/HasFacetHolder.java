@@ -42,8 +42,8 @@ public interface HasFacetHolder extends FacetHolder {
     }
 
     @Override
-    default <T extends Facet> T getFacet(final Class<T> cls) {
-        return getFacetHolder().getFacet(cls);
+    default <T extends Facet> Optional<T> lookupFacet(final Class<T> cls) {
+        return getFacetHolder().lookupFacet(cls);
     }
 
     @Override
