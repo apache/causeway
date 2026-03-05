@@ -116,8 +116,8 @@ record FacetRank<F extends Facet>(
      * Whether this rank contains at least one matching {@link QualifiedFacet}.
      */
     boolean hasAny(final QualifiedFacet.Key key) {
-        return isNotEmpty(lookupQualified(key))
-            || isNotEmpty(lookupUnqualified(key));
+        return hasElements(lookupQualified(key))
+            || hasElements(lookupUnqualified(key));
     }
 
     // -- HELPER
@@ -131,7 +131,7 @@ record FacetRank<F extends Facet>(
     private Optional<List<F>> lookupUnqualified(final QualifiedFacet.Key key) {
         return Optional.ofNullable(facetsByQualifier.get(key.toUnqualified()));
     }
-    private static <T> boolean isNotEmpty(final Optional<List<T>> listOpt) {
+    private static <T> boolean hasElements(final Optional<List<T>> listOpt) {
         return listOpt
             .map(list->!list.isEmpty())
             .orElse(false);
