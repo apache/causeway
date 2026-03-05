@@ -35,12 +35,13 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @RequiredArgsConstructor
 class _EntityFacetForTesting implements EntityFacet {
 
     @Getter private final PersistenceStack persistenceStack;
-    @Getter private final FacetHolder facetHolder;
+    @Getter @Accessors(fluent = true) private final FacetHolder facetHolder;
 
     @Override
     public Class<? extends Facet> facetType() {
@@ -48,7 +49,7 @@ class _EntityFacetForTesting implements EntityFacet {
     }
 
     @Override
-    public Precedence getPrecedence() {
+    public Precedence precedence() {
         return Precedence.DEFAULT;
     }
 

@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.objects;
 
-import org.junit.jupiter.api.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
@@ -27,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
@@ -36,6 +36,7 @@ import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
 import org.apache.causeway.core.metamodel.id.TypeIdentifierTestFactory;
 import org.apache.causeway.core.metamodel.specloader.specimpl.ObjectActionDefault;
+import org.junit.jupiter.api.Test;
 
 class ObjectActionLayoutXmlDefaultTest
 extends MetaModelTestAbstract {
@@ -63,8 +64,8 @@ extends MetaModelTestAbstract {
     void nameDefaultsToActionsMethodName() {
         final String name = "Reduceheadcount";
 
-        doReturn(new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {})
-        .when(mockFacetedMethod).getFacet(MemberNamedFacet.class);
+        doReturn(Optional.of(new MemberNamedFacetWithStaticTextAbstract(name, mockFacetedMethod) {}))
+        	.when(mockFacetedMethod).lookupFacet(MemberNamedFacet.class);
 
         assertThat(action.getStaticFriendlyName().get(), is(equalTo(name)));
     }

@@ -180,7 +180,7 @@ class ObjectAssociationAbstractTest {
     private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock, final Precedence precedence) {
         final T facet = Mockito.mock(typeToMock);
         Mockito.when(facet.facetType()).thenReturn(_Casts.uncheckedCast(typeToMock));
-        Mockito.when(facet.getPrecedence()).thenReturn(precedence);
+        Mockito.when(facet.precedence()).thenReturn(precedence);
         return facet;
     }
 }

@@ -24,12 +24,12 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.core.metamodel.facets.FacetedMethod;
+import org.springframework.lang.NonNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * Provides a merged view of the <i>local</i> and the <i>shared</i> list of {@link Facet}s,
@@ -45,20 +45,22 @@ import lombok.val;
  *
  * @see Facet#isAllowedToBeSharedWhenMixedIn()
  */
-final class FacetHolderLayered
-implements FacetHolder {
-
-    @Getter(onMethod_ = {@Override})
-    private final @NonNull Identifier featureIdentifier;
-    private final @NonNull FacetHolder shared;
-    private final @NonNull FacetHolder local;
-
+@AllArgsConstructor @Getter @Accessors(fluent = true)
+final class FacetHolderLayered implements FacetHolder {
+    
+	private final @NonNull Identifier featureIdentifier;
+	private final @NonNull FacetHolder shared;
+	private final @NonNull FacetHolder local;
+ 
+    @Override
+    public Identifier getFeatureIdentifier() { return featureIdentifier; }
+    public FacetHolder getShared() { return shared; }
+    public FacetHolder getLocal() { return local; }
+    
     public FacetHolderLayered(
             final @NonNull Identifier featureIdentifier,
             final @NonNull FacetHolder shared) {
-        this.featureIdentifier = featureIdentifier;
-        this.shared = shared;
-        this.local = FacetHolder.simple(shared.getMetaModelContext(), featureIdentifier);
+        this(featureIdentifier, shared, FacetHolder.simple(shared.getMetaModelContext(), featureIdentifier));
     }
 
     @Override
@@ -68,9 +70,9 @@ implements FacetHolder {
     }
 
     @Override
-    public void addFacet(@NonNull final Facet facet) {
+    public void addFacet(final @NonNull Facet facet) {
         // eg. if a Facet originates from layout.xml introspection, don't install it on the shared FacetHolder
-        val facetHolder = facet.isObjectTypeSpecific()
+        var facetHolder = facet.isObjectTypeSpecific()
                 ? local
                 : shared;
         facetHolder.addFacet(facet);
@@ -79,36 +81,33 @@ implements FacetHolder {
     @Override
     public int getFacetCount() {
         // optimization, not strictly required
-        if(local.getFacetCount()==0) {
+        if(local.getFacetCount()==0)
             return shared.getFacetCount();
-        }
         // cannot simply add up shared and local
         return (int)streamPopulatedFacetTypes().count();
     }
 
     @Override
-    public <T extends Facet> T getFacet(final Class<T> facetType) {
-        val localFacet = local.getFacet(facetType);
-        val sharedFacet = shared.getFacet(facetType);
+    public <T extends Facet> Optional<T> lookupFacet(final Class<T> facetType) {
+        var localFacetOpt = local.lookupFacet(facetType);
+        var sharedFacetOpt = shared.lookupFacet(facetType);
 
-        if(localFacet==null) {
-            return sharedFacet;
-        }
-        if(sharedFacet==null) {
-            return localFacet;
-        }
-        if(localFacet.getPrecedence().ordinal() > sharedFacet.getPrecedence().ordinal()) {
-            return localFacet;
-        }
-        if(sharedFacet.getPrecedence().ordinal() > localFacet.getPrecedence().ordinal()) {
-            return sharedFacet;
-        }
-        if(localFacet.semanticEquals(sharedFacet)) {
-            return localFacet; // arbitrarily picking one
-        }
+        if(localFacetOpt.isEmpty())
+            return sharedFacetOpt;
+        if(sharedFacetOpt.isEmpty())
+            return localFacetOpt;
+
+        var localFacet = localFacetOpt.get();
+        var sharedFacet = sharedFacetOpt.get();
+        if(localFacet.precedence().ordinal() > sharedFacet.precedence().ordinal())
+            return localFacetOpt;
+        if(sharedFacet.precedence().ordinal() > localFacet.precedence().ordinal())
+            return sharedFacetOpt;
+        if(localFacet.semanticEquals(sharedFacet))
+            return localFacetOpt; // arbitrarily picking one
         // semantic conflict
         // have the local win, this is safe for layout.xml stuff, but probably not for future use-cases
-        return localFacet;
+        return localFacetOpt;
 
 //        unfortunately semanticEquals() is not always implemented yet, otherwise we could throw ...
 //        throw _Exceptions.illegalState("conflicting facet semantics between shared %s and local %s",
@@ -125,37 +124,34 @@ implements FacetHolder {
     @Override
     public Stream<Facet> streamFacets() {
         // optimization, not strictly required
-        if(local.getFacetCount()==0) {
+        if(local.getFacetCount()==0)
             return shared.streamFacets();
-        }
         return streamPopulatedFacetTypes()
-                .<Facet>map(facetType->getFacet(facetType))
-                .filter(_NullSafe::isPresent);
+                .map(this::lookupFacet)
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
     @Override
     public Stream<FacetRanking> streamFacetRankings() {
         // optimization, not strictly required
-        if(local.getFacetCount()==0) {
+        if(local.getFacetCount()==0)
             return shared.streamFacetRankings();
-        }
         return streamPopulatedFacetTypes()
                 .map(facetType->getFacetRanking(facetType).orElseThrow());
     }
 
     @Override
     public Optional<FacetRanking> getFacetRanking(final Class<? extends Facet> facetType) {
-        val localFacetRanking = local.getFacetRanking(facetType);
-        val sharedFacetRanking = shared.getFacetRanking(facetType);
+        var localFacetRanking = local.getFacetRanking(facetType);
+        var sharedFacetRanking = shared.getFacetRanking(facetType);
 
-        if(localFacetRanking.isEmpty()) {
+        if(localFacetRanking.isEmpty())
             return sharedFacetRanking;
-        }
-        if(sharedFacetRanking.isEmpty()) {
+        if(sharedFacetRanking.isEmpty())
             return localFacetRanking;
-        }
 
-        val combinedFacetRanking = new FacetRanking(facetType);
+        var combinedFacetRanking = new FacetRanking(facetType);
         // arbitrarily picking order: shared first and local last, such that if in conflict local wins
         combinedFacetRanking.addAll(sharedFacetRanking.get());
         combinedFacetRanking.addAll(localFacetRanking.get());
@@ -166,7 +162,7 @@ implements FacetHolder {
     // -- HELPER
 
     private Stream<Class<? extends Facet>> streamPopulatedFacetTypes() {
-        val facetTypes = new HashSet<Class<? extends Facet>>();
+        var facetTypes = new HashSet<Class<? extends Facet>>();
         Stream.concat(
                 shared.streamFacets(),
                 local.streamFacets())

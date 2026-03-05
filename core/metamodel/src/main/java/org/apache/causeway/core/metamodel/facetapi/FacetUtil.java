@@ -107,19 +107,19 @@ public final class FacetUtil {
      * then adds given facet to its facetHolder, honoring precedence.
      */
     public static void updateFacet(final @Nullable Facet facet) {
-        if(facet==null) {
-            return;
-        }
-        final boolean skip = facet.getFacetHolder().lookupFacet(facet.facetType())
-                .map(Facet::getPrecedence)
-                .map(Facet.Precedence::ordinal)
-                .map(ordinal -> ordinal>facet.getPrecedence().ordinal())
-                .orElse(false);
-        if(skip) {
-            return;
-        }
+        if(facet==null) return;
 
-        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
+        var qualifierKey = QualifiedFacet.Key.forFacet(facet);
+
+        facet.getFacetHolder().getFacetRanking(facet.facetType())
+            .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
+                    qualifierKey, // discriminate by qualifier
+                    facet.getClass()::isInstance, // facet filter
+                    prec->qualifierKey.isQualified()
+                        ? true // if qualified, purge all ranks
+                        : prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
+                ));
+
         addFacet(facet);
     }
 
@@ -132,18 +132,6 @@ public final class FacetUtil {
     public static <F extends Facet> void updateFacetIfPresent(
             final @NonNull Optional<? extends F> facetIfAny) {
         updateFacet(facetIfAny.orElse(null));
-    }
-
-    /**
-     * Removes any facet of facet-type from facetHolder if it passes the given filter.
-     */
-    private static <F extends Facet> void purgeIf(
-            final Class<F> facetType,
-            final Predicate<? super F> filter,
-            final FacetHolder facetHolder) {
-
-        facetHolder.getFacetRanking(facetType)
-        .ifPresent(ranking->ranking.purgeIf(facetType, filter));
     }
 
     // -- FACET ATTRIBUTES

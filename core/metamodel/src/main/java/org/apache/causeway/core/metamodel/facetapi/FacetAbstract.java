@@ -29,15 +29,17 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 public abstract class FacetAbstract
 implements Facet, HasMetaModelContext {
 
     private final @NonNull Class<? extends Facet> facetType;
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull Facet.Precedence precedence;
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true) 
+    private final @NonNull Facet.Precedence precedence;
 
-    @Getter(onMethod_ = {@Override})
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final @NonNull FacetHolder facetHolder;
 
     public FacetAbstract(
@@ -69,7 +71,7 @@ implements Facet, HasMetaModelContext {
     @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         visitor.accept("facet", ClassUtils.getShortName(getClass()));
-        visitor.accept("precedence", getPrecedence().name());
+        visitor.accept("precedence", precedence().name());
 
         val interactionAdvisors = interactionAdvisors(", ");
 

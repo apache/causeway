@@ -22,24 +22,27 @@ import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -373,10 +376,51 @@ public final class _Maps {
                 pairByAliasKey.clear();
             }
 
-
         };
     }
 
     // --
+    
+    /**
+     * Provides a heap friendly Map traversal in reverse order.
+     *
+     * <p>Useful for {@link EnumMap}(s) which are not navigable ({@link NavigableMap}).
+     *
+     * @param map not forced to be a {@link EnumMap} to allow (synchronized) wrapping
+     */
+    public static <E extends Enum<E>, V> void forEachDescending(
+            final E[] keyUniverse,
+            final Map<E, V> map,
+            final Consumer<V> consumer) {
+        for (int ord = keyUniverse.length - 1; ord >= 0; ord--) {
+            var key = keyUniverse[ord];
+            V value = map.get(key);
+            if(value!=null) {
+                consumer.accept(value);
+            }
+        }
+    }
+
+    /**
+     * Provides a heap friendly Map traversal in reverse order.
+     *
+     * <p>Useful for {@link EnumMap}(s) which are not navigable ({@link NavigableMap}).
+     *
+     * @param map not forced to be a {@link EnumMap} to allow (synchronized) wrapping
+     */
+    public static <E extends Enum<E>, V> Optional<V> findFirstDescending(
+            final E[] keyUniverse,
+            final Map<E, V> map,
+            final Predicate<V> filter) {
+        for (int ord = keyUniverse.length - 1; ord >= 0; ord--) {
+            var key = keyUniverse[ord];
+            V value = map.get(key);
+            if(value!=null) {
+                if(filter.test(value))
+                    return Optional.of(value);
+            }
+        }
+        return Optional.empty();
+    }
 
 }

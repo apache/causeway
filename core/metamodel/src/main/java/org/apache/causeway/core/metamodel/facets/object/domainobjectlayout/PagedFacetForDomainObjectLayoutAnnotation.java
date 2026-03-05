@@ -27,8 +27,6 @@ import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 
-import lombok.val;
-
 public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstract {
 
     public static Optional<PagedFacet> create(
@@ -36,8 +34,9 @@ public class PagedFacetForDomainObjectLayoutAnnotation extends PagedFacetAbstrac
             final FacetHolder holder) {
 
 
-        val tableDecoratorFacet = holder.getFacet(TableDecoratorFacet.class);
-        if (TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value())) {
+        var tableDecoratorFacet = holder.lookupFacet(TableDecoratorFacet.class).orElse(null);
+        if (tableDecoratorFacet!=null
+        		&& TableDecorator.DatatablesNet.class.equals(tableDecoratorFacet.value())) {
             return Optional.of(new PagedFacetOverriddenByDataTablesDecoration(holder));
         }
 

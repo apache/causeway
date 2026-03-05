@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
+import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,6 +35,7 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
@@ -79,9 +83,6 @@ import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.MetamodelToGrid
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-
-import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
-import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -143,6 +144,7 @@ implements GridSystemService<G> {
     private void overwriteFacets(
             final G fcGrid,
             final Class<?> domainClass) {
+    	final LayoutKey layoutKey = new LayoutKey(domainClass);
 
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
@@ -167,6 +169,8 @@ implements GridSystemService<G> {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
+            	var qualifier = layoutKey.layoutIfAny();
+            	
                 updateFacetIfPresent(
                         BookmarkPolicyFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence));
@@ -184,7 +188,7 @@ implements GridSystemService<G> {
                             .create(domainObjectLayoutData, objectSpec, precedence));
                 updateFacetIfPresent(
                         TableDecoratorFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
             }
 
             @Override
@@ -195,13 +199,16 @@ implements GridSystemService<G> {
                 if(objectAction == null) {
                     return;
                 }
-
+                
+                var qualifier = layoutKey.layoutIfAny();
+                
+                
                 {
                     GroupIdAndName groupIdAndName = null;
                     int memberOrderSequence;
                     if(actionLayoutDataOwner instanceof FieldSet) {
-                        val fieldSet = (FieldSet) actionLayoutDataOwner;
-                        for (val propertyLayoutData : fieldSet.getProperties()) {
+                    	var fieldSet = (FieldSet) actionLayoutDataOwner;
+                        for (var propertyLayoutData : fieldSet.getProperties()) {
                             // any will do; choose the first one that we know is valid
                             if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
                                 groupIdAndName = GroupIdAndName
@@ -227,10 +234,10 @@ implements GridSystemService<G> {
                         memberOrderSequence = actionDomainObjectSequence++;
                     }
                     updateFacet(
-                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence));
+                    		LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence, qualifier));
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
-                    val precedenceHotfix = fcGrid.isFallback()
+                    var precedenceHotfix = fcGrid.isFallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
 
@@ -289,6 +296,8 @@ implements GridSystemService<G> {
                     return;
                 }
 
+                var qualifier = layoutKey.layoutIfAny();
+                
                 updateFacetIfPresent(
                         CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
@@ -324,7 +333,8 @@ implements GridSystemService<G> {
                 // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
 
-                updateFacet(LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence));
+                updateFacet(
+                		LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence));
@@ -336,6 +346,8 @@ implements GridSystemService<G> {
                 if(oneToManyAssociation == null) {
                     return;
                 }
+                
+                var qualifier = layoutKey.layoutIfAny();
 
                 updateFacetIfPresent(
                         CssClassFacetForCollectionLayoutXml
@@ -347,7 +359,7 @@ implements GridSystemService<G> {
 
                 updateFacetIfPresent(
                         TableDecoratorFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         MemberDescribedFacetForCollectionLayoutXml
@@ -370,7 +382,7 @@ implements GridSystemService<G> {
                             .create(collectionLayoutData, oneToManyAssociation, precedence));
 
                 updateFacet(LayoutOrderFacetForLayoutXml
-                        .create(collectionSequence++, oneToManyAssociation, precedence));
+                        .create(collectionSequence++, oneToManyAssociation, precedence, qualifier));
             }
         });
     }

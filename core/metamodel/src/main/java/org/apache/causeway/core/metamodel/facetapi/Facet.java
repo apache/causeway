@@ -111,13 +111,13 @@ extends
         public boolean isEvent() {
             return this == EVENT;
         }
-
     }
 
     /**
      * The {@link FacetHolder holder} of this facet.
      */
-    FacetHolder getFacetHolder();
+    FacetHolder facetHolder();
+    @Deprecated default FacetHolder getFacetHolder() { return facetHolder(); }
 
     /**
      * Identifier of the feature this facet is associated with.
@@ -170,7 +170,8 @@ extends
      * Facets with higher precedence override facets with lower precedence.
      * On same precedence, its unspecified, which one wins. (Warnings should be logged.)
      */
-    public Precedence getPrecedence();
+    Precedence precedence();
+    @Deprecated default Precedence getPrecedence() { return precedence(); }
 
     /**
      * Whether this {@link Facet} acts in a domain-object-type specific manner,
@@ -193,7 +194,7 @@ extends
      * for the associated <i>Mixee</i>.
      * @see FacetHolderLayered
      */
-    public default boolean isObjectTypeSpecific() {
+    default boolean isObjectTypeSpecific() {
         return false;
     }
 

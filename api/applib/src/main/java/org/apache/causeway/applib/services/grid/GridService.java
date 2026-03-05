@@ -18,13 +18,22 @@
  */
 package org.apache.causeway.applib.services.grid;
 
+import java.io.Serializable;
+
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Provides the ability to load the XML layout (grid) for a domain class.
@@ -32,6 +41,31 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
  * @since 1.x {@index}
  */
 public interface GridService {
+	
+	@Getter @Accessors(fluent = true)
+	@EqualsAndHashCode
+    public static final class LayoutKey implements Serializable {
+            private static final long serialVersionUID = 6793668843769895126L;
+            
+			private final @NonNull Class<?> domainClass;
+            /**
+             *<p>The optional layout name can for example be returned by the
+             * domain object's <code>layout()</code> method, whereby - based on the
+             * state of the domain object - it requests a different layout be used.
+             */
+			private final @Nullable String layoutIfAny; 
+
+            public LayoutKey(Class<?> domainClass, String layoutIfAny) {
+            	this.domainClass = domainClass;
+                this.layoutIfAny = _Strings.emptyToNull(layoutIfAny);
+            }
+            public LayoutKey(final Class<?> domainClass) {
+                this(domainClass, null);
+            }
+
+            public boolean isDefault() { return layoutIfAny==null; }
+            public boolean isVariant() { return layoutIfAny!=null; }
+        }
 
     /**
      * Whether dynamic reloading of layouts is enabled.

@@ -55,12 +55,12 @@ public interface InteractionAdvisor {
             }
 
             @Override
-            public FacetHolder getFacetHolder() {
+            public FacetHolder facetHolder() {
                 return null;
             }
 
             @Override
-            public Precedence getPrecedence() {
+            public Precedence precedence() {
                 return Facet.Precedence.FALLBACK;
             }
 

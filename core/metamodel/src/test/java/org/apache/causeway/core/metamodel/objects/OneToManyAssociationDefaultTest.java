@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.objects;
 
 import java.util.List;
+import java.util.Optional;
 
 //import com.sun.xml.bind.v2.schemagen.xmlschema.List;
 
@@ -76,7 +77,7 @@ extends MetaModelTestAbstract {
                 .collectionIdentifier(
                         TypeIdentifierTestFactory.newCustomer(),
                         COLLECTION_ID));
-        when(mockPeer.getFacet(MemberNamedFacet.class)).thenReturn(mockNamedFacet);
+        when(mockPeer.lookupFacet(MemberNamedFacet.class)).thenReturn(Optional.of(mockNamedFacet));
 
         association = OneToManyAssociationDefault.forMethod(mockPeer);
     }

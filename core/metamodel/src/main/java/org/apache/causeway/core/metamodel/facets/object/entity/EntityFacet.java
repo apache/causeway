@@ -89,7 +89,7 @@ public interface EntityFacet extends Facet {
      * facet is associated with.
      */
     default ObjectSpecification getEntitySpecification() {
-        return (ObjectSpecification)getFacetHolder();
+        return (ObjectSpecification)facetHolder();
     }
 
     /**
