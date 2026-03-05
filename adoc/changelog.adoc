@@ -3,7 +3,8 @@
 🐞 Bug Fixes
 
 - [Commons] Internal OneShot Util may deadlock https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972] (potentially preventing App from startup)
-
+- Switching between Layout Variants may result in Members staying hidden 
+https://issues.apache.org/jira/browse/CAUSEWAY-3971[CAUSEWAY-3971], https://issues.apache.org/jira/browse/CAUSEWAY-3973[CAUSEWAY-3973]
 
 = Feb 2016
 
