@@ -22,29 +22,42 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.causeway.core.metamodel.facets.object.paged.PagedFacetAbstract;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class PagedFacetForCollectionLayoutXml
-extends PagedFacetAbstract {
+extends PagedFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<PagedFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(collectionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(collectionLayout == null)
             return Optional.empty();
-        }
         final Integer paged = collectionLayout.getPaged();
         return paged != null
                 && paged != -1
-                        ? Optional.of(new PagedFacetForCollectionLayoutXml(paged, holder, precedence))
-                        : Optional.empty();
+            ? Optional.of(new PagedFacetForCollectionLayoutXml(paged, holder, precedence, qualifier))
+            : Optional.empty();
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private PagedFacetForCollectionLayoutXml(
-            final int paged, final FacetHolder holder, final Precedence precedence) {
+            final int paged,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(paged, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

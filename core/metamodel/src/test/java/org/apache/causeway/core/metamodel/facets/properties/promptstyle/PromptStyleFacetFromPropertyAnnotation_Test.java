@@ -18,150 +18,136 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.promptstyle;
 
-import java.util.Optional;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.PromptStyle;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
-import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured;
-import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class PromptStyleFacetFromPropertyAnnotation_Test {
 
-    CausewayConfiguration stubConfiguration = CausewayConfiguration.builder().build();
+	CausewayConfiguration stubConfiguration = CausewayConfiguration.builder().build();
 
-    FacetHolder mockFacetHolder;
-    PropertyLayout mockPropertyLayout;
+	FacetHolder mockFacetHolder;
+	PropertyLayout mockPropertyLayout;
 
-    @BeforeEach
-    public void setUp() throws Exception {
-        mockFacetHolder = Mockito.mock(FacetHolder.class);
-        mockPropertyLayout = Mockito.mock(PropertyLayout.class);
-    }
+	@BeforeEach
+	void setUp() throws Exception {
+		mockFacetHolder = Mockito.mock(FacetHolder.class);
+		mockPropertyLayout = Mockito.mock(PropertyLayout.class);
+	}
 
-    public static class Create_Test extends PromptStyleFacetFromPropertyAnnotation_Test {
+	@Test
+	void when_annotated_with_dialog() throws Exception {
+		var conf = stubConfiguration;
 
-        @Disabled // not sure how this test ever worked ... in that Mockito cannot mock annotations...
-        @Test
-        public void when_annotated_with_dialog() throws Exception {
+		Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.DIALOG);
 
-            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.DIALOG);
+		PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(Optional.of(mockPropertyLayout),
+				conf, mockFacetHolder).orElse(null);
 
-            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
-                    .orElse(null);
+		assertThat(facet.origin(), is("PropertyLayoutAnnotation"));
+		assertThat(facet.value(), is(PromptStyle.DIALOG));
+	}
 
-            assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
-            assertThat(facet.value(), is(PromptStyle.DIALOG));
-        }
+	@Test
+	void when_annotated_with_inline() throws Exception {
+		var conf = stubConfiguration;
 
-        @Disabled // not sure how this test ever worked ... in that Mockito cannot mock annotations...
-        @Test
-        public void when_annotated_with_inline() throws Exception {
+		Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.INLINE);
 
-            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.INLINE);
+		PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(Optional.of(mockPropertyLayout),
+				conf, mockFacetHolder).orElse(null);
 
-            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
-                    .orElse(null);
+		assertThat(facet.origin(), is("PropertyLayoutAnnotation"));
+		assertThat(facet.value(), is(PromptStyle.INLINE));
+	}
 
-            assertThat(facet, is(anInstanceOf(PromptStyleFacetForPropertyLayoutAnnotation.class)));
-            assertThat(facet.value(), is(PromptStyle.INLINE));
-        }
+	@Test
+	void when_annotated_with_as_configured() throws Exception {
+		var conf = stubConfiguration;
+		conf.getViewer().getWicket().setPromptStyle(PromptStyle.INLINE);
 
-        @Disabled // not sure how this test ever worked ... in that Mockito cannot mock annotations...
-        @Test
-        public void when_annotated_with_as_configured() throws Exception {
+		Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
+		Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class)).thenReturn(false);
 
-            stubConfiguration.getViewer().getWicket().setPromptStyle(PromptStyle.INLINE);
+		PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(Optional.of(mockPropertyLayout),
+				conf, mockFacetHolder).orElse(null);
 
-            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
-            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
-            .thenReturn(false);
+		assertThat(facet, is(anInstanceOf(PromptStyleFacet.class)));
+		assertThat(facet.origin(), is("Configuration"));
+		assertThat(facet.value(), is(PromptStyle.INLINE));
+	}
 
-            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
-                    .orElse(null);
+	@Test
+	void when_annotated_with_as_configured_but_already_has_doop_facet() throws Exception {
+		var conf = stubConfiguration;
+		Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
+		Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class)).thenReturn(true);
 
-            assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
-            assertThat(facet.value(), is(PromptStyle.INLINE));
-        }
+		PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(Optional.of(mockPropertyLayout),
+				conf, mockFacetHolder).orElse(null);
 
-        @Disabled // not sure how this test ever worked ... in that Mockito cannot mock annotations...
-        @Test
-        public void when_annotated_with_as_configured_but_already_has_doop_facet() throws Exception {
+		assertThat(facet, is(nullValue()));
+	}
 
-            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.AS_CONFIGURED);
-            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
-            .thenReturn(true);
+	@Test
+	void when_not_annotated() throws Exception {
+		var conf = stubConfiguration;
+		Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.NOT_SPECIFIED);
+		Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class)).thenReturn(false);
 
-            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
-                    .orElse(null);
+		PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(Optional.of(mockPropertyLayout),
+				conf, mockFacetHolder).orElse(null);
 
-            assertThat(facet, is(nullValue()));
-        }
+		assertThat(facet, is(anInstanceOf(PromptStyleFacet.class)));
+		assertThat(facet.origin(), is("Configuration"));
+		assertThat(facet.value(), is(PromptStyle.INLINE));
+	}
 
-        @Disabled // not sure how this test ever worked ... in that Mockito cannot mock annotations...
-        @Test
-        public void when_not_annotated() throws Exception {
+	@Test
+	void when_not_annotated_but_already_has_doop_facet() throws Exception {
+		var conf = stubConfiguration;
 
-            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.NOT_SPECIFIED);
-            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
-            .thenReturn(false);
+		Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.NOT_SPECIFIED);
+		Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class)).thenReturn(true);
 
-            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
-                    .orElse(null);
+		PromptStyleFacet facet = createPromptStyleFacetForPropertyLayoutAnnotation(Optional.of(mockPropertyLayout),
+				conf, mockFacetHolder).orElse(null);
 
-            assertThat(facet.value(), is(PromptStyle.INLINE));
-            assertThat(facet, is(anInstanceOf(PromptStyleFacetAsConfigured.class)));
-        }
+		assertThat(facet, is(nullValue()));
+	}
 
-        @Disabled // not sure how this test ever worked ... in that Mockito cannot mock annotations...
-        @Test
-        public void when_not_annotated_but_already_has_doop_facet() throws Exception {
+	static <T> Matcher<? super T> anInstanceOf(final Class<T> expected) {
+		return new TypeSafeMatcher<T>() {
+			@Override
+			public boolean matchesSafely(final T actual) {
+				return expected.isAssignableFrom(actual.getClass());
+			}
 
-            Mockito.when(mockPropertyLayout.promptStyle()).thenReturn(PromptStyle.NOT_SPECIFIED);
-            Mockito.when(mockFacetHolder.containsNonFallbackFacet(PromptStyleFacet.class))
-            .thenReturn(true);
+			@Override
+			public void describeTo(final Description description) {
+				description.appendText("an instance of ").appendValue(expected);
+			}
+		};
+	}
 
-            PromptStyleFacet facet = PromptStyleFacetForPropertyLayoutAnnotation
-                    .create(Optional.of(mockPropertyLayout), stubConfiguration, mockFacetHolder)
-                    .orElse(null);
-
-            assertThat(facet, is(nullValue()));
-        }
-
-    }
-
-    static <T> Matcher<? super T> anInstanceOf(final Class<T> expected) {
-        return new TypeSafeMatcher<T>() {
-            @Override
-            public boolean matchesSafely(final T actual) {
-                return expected.isAssignableFrom(actual.getClass());
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("an instance of ").appendValue(expected);
-            }
-        };
-    }
-
+	static Optional<PromptStyleFacet> createPromptStyleFacetForPropertyLayoutAnnotation(
+			final Optional<PropertyLayout> p, final CausewayConfiguration c, final FacetHolder f) {
+		return PropertyLayoutFacetFactory.createPromptStyleFacetForPropertyLayoutAnnotation(p, c, f);
+	}
 
 }

@@ -18,19 +18,22 @@
  */
 package org.apache.causeway.core.metamodel.facets.actions.layout;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
+import org.apache.causeway.applib.annotation.PromptStyle;
+import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
-import org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacetFromActionLayoutAnnotation;
 import org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetFromActionLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
-
-import lombok.val;
 
 public class ActionLayoutFacetFactory
 extends FacetFactoryAbstract {
@@ -43,8 +46,8 @@ extends FacetFactoryAbstract {
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
 
-        val facetHolder = processMethodContext.getFacetHolder();
-        val actionLayoutIfAny = processMethodContext
+        var facetHolder = processMethodContext.getFacetHolder();
+        var actionLayoutIfAny = processMethodContext
                 .synthesizeOnMethodOrMixinType(
                         ActionLayout.class,
                         () -> ValidationFailureUtils
@@ -81,28 +84,53 @@ extends FacetFactoryAbstract {
                 .create(actionLayoutIfAny, facetHolder));
 
         // promptStyle
-        addFacetIfPresent(PromptStyleFacetForActionLayoutAnnotation
-                .create(actionLayoutIfAny, getConfiguration(), facetHolder));
+        addFacetIfPresent(
+            createPromptStyleFacetForActionLayoutAnnotation(actionLayoutIfAny, getConfiguration(), facetHolder));
 
         // position
-        val actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
+        var actionPositionFacet = ActionPositionFacetForActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder)
                 .orElseGet(()->new ActionPositionFacetFallback(facetHolder));
 
         addFacet(actionPositionFacet);
 
-        // redirectPolicy
-        val redirectFacet = RedirectFacetFromActionLayoutAnnotation
-                .create(actionLayoutIfAny, facetHolder)
-                .orElseGet(()->new RedirectFacetFallback(facetHolder));
-        addFacet(redirectFacet);
-
         // sequence (layout)
         addFacetIfPresent(
                 LayoutOrderFacetFromActionLayoutAnnotation
                 .create(actionLayoutIfAny, facetHolder));
-
     }
 
+    // -- HELPER
+
+    private static Optional<PromptStyleFacet> createPromptStyleFacetForActionLayoutAnnotation(
+        final Optional<ActionLayout> actionLayoutIfAny,
+        final CausewayConfiguration configuration,
+        final FacetHolder holder) {
+
+        return Optional.ofNullable(
+            actionLayoutIfAny
+                .map(ActionLayout::promptStyle)
+                .filter(promptStyle -> promptStyle != PromptStyle.NOT_SPECIFIED)
+                .<PromptStyleFacet>map(promptStyle -> {switch (promptStyle) {
+                    case DIALOG: 
+                    case DIALOG_MODAL: 
+                    case DIALOG_SIDEBAR:
+                    case INLINE:
+                    case INLINE_AS_IF_EDIT:
+                        return new PromptStyleFacet("ActionLayoutAnnotation", promptStyle, holder);
+                    case AS_CONFIGURED:
+                        return holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                            ? null // do not replace
+                            : PromptStyleFacet.asConfgured(configuration, holder);
+                    case NOT_SPECIFIED: return null; // unexpected code reach
+                    default: return null; // unexpected code reach
+                }})
+                .orElseGet(() ->
+                    // do not replace
+                    holder.containsNonFallbackFacet(PromptStyleFacet.class)
+                        ? null
+                        : PromptStyleFacet.asConfgured(configuration, holder))
+        );
+    }
 
 }

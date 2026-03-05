@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.postprocessors.all.i18n;
 import javax.inject.Inject;
 
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.all.i8n.noun.Noun;
@@ -29,8 +28,7 @@ import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.ObjectNamedFacetSynthesized;
 import org.apache.causeway.core.metamodel.postprocessors.MetaModelPostProcessorAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-
-import lombok.val;
+import org.springframework.util.StringUtils;
 
 public class SynthesizeObjectNamingPostProcessor
 extends MetaModelPostProcessorAbstract {
@@ -47,27 +45,23 @@ extends MetaModelPostProcessorAbstract {
                 || objectSpecification.isInjectable();
         if(!canProcess) return;
 
-        val topRank = objectSpecification
+        var topRank = objectSpecification
                 .getFacetRanking(ObjectNamedFacet.class) // don't use lookupFacet, as that would search up the
                                                          // inheritance hierarchy (which we don't want here)
                 .map(facetRanking->facetRanking.getTopRank(ObjectNamedFacet.class))
                 .orElse(Can.empty())
                 .reverse(); // historically last have higher precedence, so when reverted we can use findFirst logic
 
-        val singular = topRank
+        var singular = topRank
                 .stream()
                 .filter(objectNamedFacet->objectNamedFacet.isNounPresent())
                 .findFirst()
                 .map(ObjectNamedFacet::singular)
-                .filter(_Strings::isNotEmpty)
+                .filter(StringUtils::hasText)
                 .orElseGet(()->getSingularFallbackNoun(objectSpecification));
 
         FacetUtil.addFacet(
-                new ObjectNamedFacetSynthesized(
-                        Noun.singular(singular),
-                        objectSpecification)
-                );
-
+                new ObjectNamedFacetSynthesized(new Noun(singular), objectSpecification));
     }
 
     // -- HELEPR

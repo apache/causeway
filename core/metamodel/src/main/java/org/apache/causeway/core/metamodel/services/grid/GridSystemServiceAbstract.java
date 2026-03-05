@@ -50,8 +50,6 @@ import org.apache.causeway.core.metamodel.facets.actions.layout.FaFacetForAction
 import org.apache.causeway.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberDescribedFacetForActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.actions.layout.MemberNamedFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.PromptStyleFacetForActionLayoutXml;
-import org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.CssClassFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutXml;
 import org.apache.causeway.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutXml;
@@ -69,13 +67,13 @@ import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.FaFac
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectDescribedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.ObjectNamedFacetForDomainObjectLayoutXml;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutXml;
+import org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberDescribedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MemberNamedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyLayoutXml;
-import org.apache.causeway.core.metamodel.facets.properties.propertylayout.PromptStyleFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyLayoutXml;
@@ -173,19 +171,19 @@ implements GridSystemService<G> {
             	
                 updateFacetIfPresent(
                         BookmarkPolicyFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         CssClassFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         FaFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         ObjectDescribedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         ObjectNamedFacetForDomainObjectLayoutXml
-                            .create(domainObjectLayoutData, objectSpec, precedence));
+                            .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
                 updateFacetIfPresent(
                         TableDecoratorFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
@@ -242,7 +240,7 @@ implements GridSystemService<G> {
                             : Facet.Precedence.HIGH;
 
                     updateFacetIfPresent(
-                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix));
+                            LayoutGroupFacetForLayoutXml.create(groupIdAndName, objectAction, precedenceHotfix, qualifier));
                 }
 
                 // fix up the action position if required
@@ -264,29 +262,25 @@ implements GridSystemService<G> {
                 }
 
                 updateFacetIfPresent(
-                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        ActionPositionFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        CssClassFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        FaFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        MemberDescribedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
+                        MemberNamedFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        PromptStyleFacetForActionLayoutXml.create(actionLayoutData, objectAction, precedence));
-
-                updateFacetIfPresent(
-                        RedirectFacetFromActionLayoutXml.create(actionLayoutData, objectAction, precedence));
-
+                        PromptStyleFacet.createForActionLayoutXml(actionLayoutData, objectAction, precedence, qualifier));
             }
 
             @Override
@@ -317,7 +311,7 @@ implements GridSystemService<G> {
                         MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
 
                 updateFacetIfPresent(
-                        PromptStyleFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        PromptStyleFacet.createForPropertyLayoutXml(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
@@ -337,7 +331,7 @@ implements GridSystemService<G> {
                 		LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence));
+                        LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence, qualifier));
             }
 
             @Override
@@ -351,11 +345,11 @@ implements GridSystemService<G> {
 
                 updateFacetIfPresent(
                         CssClassFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         DefaultViewFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         TableDecoratorFacetForCollectionLayoutXml
@@ -363,23 +357,23 @@ implements GridSystemService<G> {
 
                 updateFacetIfPresent(
                         MemberDescribedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         HiddenFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         MemberNamedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         PagedFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         SortedByFacetForCollectionLayoutXml
-                            .create(collectionLayoutData, oneToManyAssociation, precedence));
+                            .create(collectionLayoutData, oneToManyAssociation, precedence, qualifier));
 
                 updateFacet(LayoutOrderFacetForLayoutXml
                         .create(collectionSequence++, oneToManyAssociation, precedence, qualifier));

@@ -36,7 +36,7 @@ extends ObjectNamedFacetAbstract {
             final FacetHolder holder) {
         super(noun, holder, Precedence.SYNTHESIZED);
         // assert that we have a noun
-        _Assert.assertTrue(noun.isLiteralPresent());
+        _Assert.assertFalse(noun.isEmpty());
     }
 
 }
