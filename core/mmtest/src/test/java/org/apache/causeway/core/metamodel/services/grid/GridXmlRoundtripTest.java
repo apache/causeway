@@ -33,6 +33,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -55,7 +56,7 @@ extends MetaModelTestAbstract {
     void happy_case() throws Exception {
 
         final BSGrid bsGrid = new BSGrid();
-        bsGrid.domainClass(Object.class);
+        bsGrid.layoutKey(new LayoutKey(Object.class));
 
         // header
         final BSRow headerRow = new BSRow();
@@ -124,7 +125,7 @@ extends MetaModelTestAbstract {
 
         println(xml);
 
-        BSGrid bsGridRoundtripped = xmlMarshaller.unmarshal(Object.class, xml, CommonMimeType.XML)
+        BSGrid bsGridRoundtripped = xmlMarshaller.unmarshal(new LayoutKey(Object.class), xml, CommonMimeType.XML)
             .valueAsNonNullElseFail();
 
         String xmlRoundtripped = xmlMarshaller.marshal(bsGridRoundtripped, CommonMimeType.XML);

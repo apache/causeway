@@ -24,6 +24,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.services.marshal.Marshaller;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -55,6 +56,6 @@ public interface GridMarshaller {
      * Returns a new de-serialized instance wrapped in a {@link Try}.
      * @throws UnsupportedOperationException when format is not supported (not wrapped)
      */
-    Try<BSGrid> unmarshal(Class<?> domainClass, @Nullable String content, @NonNull CommonMimeType format);
+    Try<BSGrid> unmarshal(LayoutKey layoutKey, @Nullable String content, @NonNull CommonMimeType format);
 
 }

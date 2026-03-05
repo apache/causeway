@@ -54,8 +54,8 @@ import lombok.experimental.Accessors;
 public final class BSGrid implements BSElement, Dto, BSRowOwner {
     private static final long serialVersionUID = 1L;
 
-    @XmlTransient @Getter @Accessors(fluent=true) @Setter private Class<?> domainClass;
     @XmlTransient @Getter @Accessors(fluent=true) @Setter private LayoutKey layoutKey;
+    public Class<?> domainClass() { return layoutKey!=null ? layoutKey.domainClass() : null; }
 
     /**
      * Indicates whether or not this grid is a fallback.

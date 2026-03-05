@@ -110,7 +110,7 @@ public record GridServiceDefault(
             // on the success rail we optionally have a valid BSGrid, if absent use fallback and validate
             .mapSuccess(gridOpt->gridOpt.orElseGet(()->memberResolver.resolve(
                     layoutKey,
-                    fallback.defaultGrid(layoutKey.domainClass()))
+                    fallback.defaultGrid(layoutKey))
                 .<BSGrid>fold(a->a, b->{ onFallbackValidationFailure(b); return null; })));
     }
 

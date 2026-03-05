@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.EnumSet;
 import java.util.Map;
-import java.util.Objects;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -36,6 +35,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridMarshaller;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
@@ -71,37 +71,34 @@ public record GridMarshallerXml(
     @Override
     public String marshal(final @NonNull BSGrid bsGrid, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
-        switch(format) {
-        case XML:{
-            return jaxbService.toXml(bsGrid,
-                    Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
-                        schemaLocationProvider.xsiSchemaLocation()));
-        }
-        default:
-            throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
-        }
+        return switch (format) {
+        case XML -> jaxbService.toXml(bsGrid,
+                            Map.of(jakarta.xml.bind.Marshaller.JAXB_SCHEMA_LOCATION,
+                                schemaLocationProvider.xsiSchemaLocation()));
+        default -> throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
+        };
     }
 
     @Override
-    public Try<BSGrid> unmarshal(final Class<?> domainClass, @Nullable final String content, @NonNull final CommonMimeType format) {
+    public Try<BSGrid> unmarshal(
+            final @NonNull LayoutKey layoutKey,
+            final @Nullable String content,
+            final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
-        switch(format) {
-        case XML:{
-            return Try.call(()->jaxbService.fromXml(BSGrid.class, content))
-                    .mapSuccessWhenPresent(bsGrid->bsGrid.domainClass(Objects.requireNonNull(domainClass)))
-                    .mapSuccessWhenPresent(BSUtil::resolveOwners);
-        }
-        default:
-            throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
-        }
+        return switch (format) {
+        case XML -> Try.call(()->jaxbService.fromXml(BSGrid.class, content))
+                            .mapSuccessWhenPresent(bsGrid->
+                                bsGrid.layoutKey(layoutKey))
+                            .mapSuccessWhenPresent(BSUtil::resolveOwners);
+        default -> throw _Exceptions.unsupportedOperation("supported format %s is not implemented", format.name());
+        };
     }
 
     // -- HELPER
 
     private void throwIfFormatNotSupported(final CommonMimeType format) {
-        if(!supportedFormats().contains(format)) {
+        if(!supportedFormats().contains(format))
             throw _Exceptions.unsupportedOperation("object layout file format %s not supported", format.name());
-        }
     }
 
 }

@@ -21,11 +21,14 @@ package org.apache.causeway.core.metamodel.services.grid;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.resources._Resources;
@@ -36,19 +39,19 @@ import lombok.extern.slf4j.Slf4j;
 record FallbackGridProvider(
     GridLoadingContext context) {
 
-    public BSGrid defaultGrid(final Class<?> domainClass) {
-        final Try<String> content = loadFallbackLayoutAsStringUtf8(domainClass);
+    public BSGrid defaultGrid(final @NonNull LayoutKey layoutKey) {
+        final Try<String> content = loadFallbackLayoutAsStringUtf8(layoutKey.domainClass());
         try {
             return content.getValue()
                     .flatMap(xml -> context.gridMarshaller(CommonMimeType.XML).orElseThrow()
-                        .unmarshal(domainClass, xml, CommonMimeType.XML)
+                        .unmarshal(layoutKey, xml, CommonMimeType.XML)
                         .getValue())
                     .filter(BSGrid.class::isInstance)
                     .map(BSGrid.class::cast)
                     .map(bsGrid->bsGrid.fallback(true))
-                    .orElseGet(() -> fallback(domainClass));
+                    .orElseGet(() -> fallback(layoutKey));
         } catch (final Exception e) {
-            return fallback(domainClass);
+            return fallback(layoutKey);
         }
     }
 
@@ -62,9 +65,9 @@ record FallbackGridProvider(
     // only ever called if fail to load GridFallbackLayout.xml,
     // which *really* shouldn't happen
     //
-    private BSGrid fallback(final Class<?> domainClass) {
+    private BSGrid fallback(final LayoutKey layoutKey) {
         final BSGrid bsGrid = new BSGrid();
-        bsGrid.domainClass(domainClass).fallback(true);
+        bsGrid.layoutKey(layoutKey).fallback(true);
 
         final BSRow headerRow = new BSRow();
         bsGrid.getRows().add(headerRow);
