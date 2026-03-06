@@ -295,34 +295,34 @@ implements GridSystemService<G> {
                 var qualifier = layoutKey.layoutIfAny();
                 
                 updateFacetIfPresent(
-                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        MemberDescribedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        HiddenFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        LabelAtFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        MultiLineFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        MemberNamedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         PromptStyleFacet.createForPropertyLayoutXml(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        UnchangingFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
-                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence));
+                        TypicalLengthFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
                 // Layout group-name based on owning property group, Layout sequence monotonically increasing
                 // nb for any given field set the sequence won't reset to zero; however this is what we want so that
