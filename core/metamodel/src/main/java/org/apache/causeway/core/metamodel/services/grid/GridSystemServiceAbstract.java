@@ -22,6 +22,7 @@ import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -109,14 +110,14 @@ implements GridSystemService<G> {
 
         final boolean valid = validateAndNormalize(grid, domainClass);
         if (valid) {
-            overwriteFacets(grid, domainClass);
+            installFacets(grid);
             if(log.isDebugEnabled()) {
                 log.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
             }
         } else {
 
             if(causewaySystemEnvironment.isPrototyping()) {
-                messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
+                messageService.warnUser("Grid metadata errors for " + grid.layoutKey() + "; check the error log");
             }
             log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
         }
@@ -139,11 +140,12 @@ implements GridSystemService<G> {
      * @implNote This code uses {@link FacetUtil#updateFacet(Facet)}
      * because the layout might be reloaded from XML if reloading is supported.
      */
-    private void overwriteFacets(
-            final G fcGrid,
-            final Class<?> domainClass) {
-    	final LayoutKey layoutKey = new LayoutKey(domainClass);
-
+    private void installFacets(
+            final G fcGrid) {
+    	
+        final LayoutKey layoutKey = Objects.requireNonNull(fcGrid.layoutKey());
+    	
+    	final Class<?> domainClass = layoutKey.domainClass();
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
 
         val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));

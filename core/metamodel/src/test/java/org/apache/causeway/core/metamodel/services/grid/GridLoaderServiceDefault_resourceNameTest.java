@@ -18,18 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.EnumSet;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.EnumSet;
+
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.services.grid.GridLoaderServiceDefault.LayoutKey;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class GridLoaderServiceDefault_resourceNameTest {
 
@@ -46,28 +45,28 @@ class GridLoaderServiceDefault_resourceNameTest {
     void when_default_exists() {
         assertEquals(
                 "Foo.layout.xml",
-                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo.class, null)));
+                resourceNameFor(new LayoutKey(Foo.class, null)));
     }
 
     @Test
     void when_fallback_exists() {
         assertEquals(
                 "Foo2.layout.fallback.xml",
-                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo2.class, null)));
+                resourceNameFor(new LayoutKey(Foo2.class, null)));
     }
 
     @Test
     void when_default_and_fallback_both_exist() {
         assertEquals(
                 "Foo3.layout.xml",
-                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo3.class, null)));
+                resourceNameFor(new LayoutKey(Foo3.class, null)));
     }
 
     @Test
     void when_neither_exist() {
         assertEquals(
                 (String)null,
-                resourceNameFor(new GridLoaderServiceDefault.LayoutKey(Foo4.class, null)));
+                resourceNameFor(new LayoutKey(Foo4.class, null)));
     }
 
     // -- HELPER

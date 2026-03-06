@@ -18,16 +18,15 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import java.util.EnumSet;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+import java.util.EnumSet;
+
 import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
@@ -36,6 +35,7 @@ import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.junit.jupiter.api.Test;
 
 import lombok.val;
 
@@ -54,7 +54,7 @@ extends MetaModelTestAbstract {
 
     // test blueprint, for future work
     void blueprint() {
-        val domainClassAndLayout = new GridLoaderServiceDefault.LayoutKey(Bar.class, null);
+        val domainClassAndLayout = new LayoutKey(Bar.class, null);
         gridLoaderService.loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
 
         val xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);

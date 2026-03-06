@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.layout.grid;
 
 import java.util.LinkedHashMap;
+import java.util.Optional;
 
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
@@ -26,6 +27,7 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutService;
 
 /**
@@ -38,12 +40,16 @@ import org.apache.causeway.applib.services.layout.LayoutService;
  * @since 1.x {@index}
  */
 public interface Grid {
-
+	
+	@Programmatic
+	LayoutKey layoutKey();
+	@Programmatic
+    void layoutKey(LayoutKey layoutKey);
+	
     @Programmatic
-    Class<?> getDomainClass();
-
-    @Programmatic
-    void setDomainClass(final Class<?> domainClass);
+    default Class<?> domainClass() {
+    	return Optional.ofNullable(layoutKey()).map(LayoutKey::domainClass).orElse(null);
+    }
 
     @Programmatic
     String getTnsAndSchemaLocation();

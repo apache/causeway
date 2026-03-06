@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
+import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -29,10 +31,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
@@ -51,6 +49,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.layout.grid.bootstrap.Size;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.i18n.TranslationService;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
 import org.apache.causeway.applib.services.message.MessageService;
@@ -79,8 +78,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import static org.apache.causeway.commons.internal.base._NullSafe.stream;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import lombok.Setter;
 import lombok.val;
@@ -207,7 +207,7 @@ extends GridSystemServiceAbstract<BSGrid> {
     }
 
     private static BSGrid withDomainClass(final BSGrid bsGrid, final Class<?> domainClass) {
-        bsGrid.setDomainClass(domainClass);
+        bsGrid.layoutKey(new LayoutKey(domainClass));
         return bsGrid;
     }
 

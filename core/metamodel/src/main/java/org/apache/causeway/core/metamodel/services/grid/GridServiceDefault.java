@@ -116,7 +116,7 @@ public class GridServiceDefault implements GridService {
             return grid;
         }
 
-        val domainClass = grid.getDomainClass();
+        val domainClass = grid.domainClass();
 
         for (val gridSystemService : gridSystemServices()) {
             gridSystemService.normalize(_Casts.uncheckedCast(grid), domainClass);
@@ -133,7 +133,7 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid complete(final Grid grid) {
 
-        val domainClass = grid.getDomainClass();
+    	val domainClass = grid.domainClass();
         for (val gridSystemService : gridSystemServices()) {
             gridSystemService.complete(_Casts.uncheckedCast(grid), domainClass);
         }
@@ -144,7 +144,7 @@ public class GridServiceDefault implements GridService {
     @Override
     public Grid minimal(final Grid grid) {
 
-        val domainClass = grid.getDomainClass();
+    	val domainClass = grid.domainClass();
         for (val gridSystemService : gridSystemServices()) {
             gridSystemService.minimal(_Casts.uncheckedCast(grid), domainClass);
         }

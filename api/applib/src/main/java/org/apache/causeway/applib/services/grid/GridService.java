@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
@@ -44,6 +45,7 @@ public interface GridService {
 	
 	@Getter @Accessors(fluent = true)
 	@EqualsAndHashCode
+	@ToString
     public static final class LayoutKey implements Serializable {
             private static final long serialVersionUID = 6793668843769895126L;
             

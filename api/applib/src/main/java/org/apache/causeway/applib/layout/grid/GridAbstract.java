@@ -33,6 +33,7 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.FieldSetOwner;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutService;
 
 /**
@@ -47,19 +48,16 @@ import org.apache.causeway.applib.services.layout.LayoutService;
 @XmlTransient // ignore this class
 public abstract class GridAbstract implements Grid {
 
-    private Class<?> domainClass;
+    private LayoutKey layoutKey;
 
     @Override
-    @Programmatic
-    @XmlTransient
-    public Class<?> getDomainClass() {
-        return domainClass;
+    public LayoutKey layoutKey() {
+        return layoutKey;
     }
 
     @Override
-    @Programmatic
-    public void setDomainClass(final Class<?> domainClass) {
-        this.domainClass = domainClass;
+    public void layoutKey(final LayoutKey layoutKey) {
+        this.layoutKey = layoutKey;
     }
 
 

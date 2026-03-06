@@ -30,14 +30,11 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.message.MessageService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
@@ -49,11 +46,13 @@ import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
@@ -87,11 +86,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         this.layoutResourceLoaders = Can.ofCollection(layoutResourceLoaders);
     }
 
-    @Value
-    static class LayoutKey {
-        private final @NonNull Class<?> domainClass;
-        private final @Nullable String layoutIfAny; // layout suffix
-    }
+
 
     // for better logging messages (used only in prototyping mode)
     private final Map<LayoutKey, String> badContentByKey = _Maps.newHashMap();
@@ -158,7 +153,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             final T grid = marshaller
                     .unmarshal(layoutResource.getContent(), layoutResource.getFormat())
                     .getValue().orElseThrow();
-            grid.setDomainClass(domainClass);
+            grid.layoutKey(layoutKey);
             if(supportsReloading()) {
                 gridCache.put(layoutKey, grid);
             }
@@ -188,8 +183,8 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     Optional<LayoutResource> loadLayoutResource(
             final LayoutKey layoutKey,
             final EnumSet<CommonMimeType> supportedFormats) {
-        return _Reflect.streamTypeHierarchy(layoutKey.getDomainClass(), InterfacePolicy.EXCLUDE)
-            .flatMap(type->loadContent(type, layoutKey.getLayoutIfAny(), supportedFormats).stream())
+        return _Reflect.streamTypeHierarchy(layoutKey.domainClass(), InterfacePolicy.EXCLUDE)
+            .flatMap(type->loadContent(type, layoutKey.layoutIfAny(), supportedFormats).stream())
             .findFirst();
     }
 
