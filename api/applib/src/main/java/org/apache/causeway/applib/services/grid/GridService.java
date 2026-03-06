@@ -23,10 +23,8 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -94,54 +92,5 @@ public interface GridService {
 
     EnumSet<CommonMimeType> supportedFormats();
     Optional<GridMarshaller> marshaller(CommonMimeType format);
-    
-    default BSGrid load(final Class<?> domainClass) {
-    	return load(new LayoutKey(domainClass));
-    }
-
-    default BSGrid load(Class<?> domainClass, String layout) {
-    	return load(new LayoutKey(domainClass, layout));
-    }
-
-    // -- DEPRECATIONS
-    
-    @Deprecated default void remove(Class<?> domainClass) {}
-    @Deprecated default boolean existsFor(Class<?> domainClass) {
-		return false;}
-    @Deprecated default BSGrid defaultGridFor(Class<?> domainClass) {
-		return null;}
-    @Deprecated default BSGrid normalize(BSGrid grid) {
-		return grid;};
-    @Deprecated default BSGrid complete(BSGrid grid) {
-		return grid;}
-    @Deprecated default BSGrid minimal(BSGrid grid) {
-		return grid;}
-
-    // -- LAYOUT EXPORT
-
-    @Deprecated default GridMarshallerService marshaller() {
-		return null;}
-
-    @Deprecated default BSGrid toGridForExport(
-            final LayoutKey layoutKey,
-            final LayoutExportStyle style) {
-
-        // don't use the grid from the facet, because it will be modified subsequently.
-    	BSGrid grid = load(layoutKey.domainClass);
-        if(grid == null) {
-            grid = defaultGridFor(layoutKey.domainClass);
-            grid.layoutKey(new LayoutKey(layoutKey.domainClass, null));
-        } else {
-        	grid.layoutKey(layoutKey);
-        }
-        grid = normalize(grid); // required so the grid's tns and schema-locations get populated
-        if (style == LayoutExportStyle.COMPLETE) {
-            return complete(grid);
-        }
-        if (style == LayoutExportStyle.MINIMAL) {
-            return minimal(grid);
-        }
-        throw _Exceptions.unmatchedCase(style);
-    }
 
 }

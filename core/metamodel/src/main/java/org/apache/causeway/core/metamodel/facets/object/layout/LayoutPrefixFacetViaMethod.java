@@ -21,57 +21,69 @@ package org.apache.causeway.core.metamodel.facets.object.layout;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.HasImperativeAspect;
 import org.apache.causeway.core.metamodel.facets.ImperativeAspect;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.experimental.Accessors;
 
-public class LayoutFacetViaLayoutMethod
-extends LayoutFacetAbstract
-implements HasImperativeAspect {
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public final class LayoutPrefixFacetViaMethod 
+implements LayoutPrefixFacet, HasImperativeAspect {
 
-    @Getter(onMethod_ = {@Override}) private final @NonNull ImperativeAspect imperativeAspect;
+    private final @NonNull String origin;
+    private final @NonNull ImperativeAspect imperativeAspect;
+    private final @NonNull FacetHolder facetHolder;
+    private final @NonNull Facet.Precedence precedence;
 
-    public static Optional<LayoutFacet> create(
-            final @Nullable ResolvedMethod methodIfAny,
-            final FacetHolder holder) {
+    // -- FACTORIES
+
+    public static Optional<LayoutPrefixFacetViaMethod> create(
+        final @Nullable ResolvedMethod methodIfAny,
+        final FacetHolder holder) {
+
+    	//debug
+        //System.err.printf("methodIfAny %s%n", methodIfAny);
 
         return Optional.ofNullable(methodIfAny)
-        .map(method->
-            new LayoutFacetViaLayoutMethod(
-                    ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT),
-                    holder));
+            .map(method->ImperativeAspect.singleRegularMethod(method, Intent.UI_HINT))
+            .map(imperativeAspect->
+                new LayoutPrefixFacetViaMethod("LayoutMethod", imperativeAspect, holder, Precedence.DEFAULT));
     }
 
-    private LayoutFacetViaLayoutMethod(
-            final ImperativeAspect imperativeAspect,
-            final FacetHolder holder) {
-        super(holder);
-        this.imperativeAspect = imperativeAspect;
-    }
+    // -- METHODS
+
+    @Override public Class<? extends Facet> facetType() { return LayoutPrefixFacet.class; }
 
     @Override
-    public String layout(final ManagedObject domainObject) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(domainObject)) {
-            return null;
-        }
+    public String layoutPrefix(final ManagedObject managedObject) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) return null;
         try {
-            return (String) imperativeAspect.invokeSingleMethod(domainObject);
+            return (String) imperativeAspect.invokeSingleMethod(managedObject);
         } catch (final RuntimeException ex) {
             return null;
         }
     }
 
     @Override
+    public ImperativeAspect getImperativeAspect() {
+        return imperativeAspect();
+    }
+
+    @Override
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
+    	FacetUtil.visitAttributes(this, visitor);
+        visitor.accept("origin", origin());
         imperativeAspect.visitAttributes(visitor);
     }
 

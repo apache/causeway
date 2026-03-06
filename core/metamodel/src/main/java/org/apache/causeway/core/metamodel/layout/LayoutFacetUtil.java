@@ -342,7 +342,7 @@ public class LayoutFacetUtil {
         }
 
         private LayoutDataFactory(final ObjectSpecification objectSpec) {
-            this.helper = MetamodelToGridOverridingVisitor.of(objectSpec);
+            this.helper = new MetamodelToGridOverridingVisitor(objectSpec);
         }
 
         public ActionLayoutData createActionLayoutData(final String id) {
@@ -371,7 +371,7 @@ public class LayoutFacetUtil {
 
     }
 
-    @RequiredArgsConstructor(staticName = "of")
+    @RequiredArgsConstructor
     public static class MetamodelToGridOverridingVisitor implements BSElementVisitor  {
 
         private final @NonNull ObjectSpecification objectSpec;

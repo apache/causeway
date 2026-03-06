@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.facets.object.domainobjectlayout;
+package org.apache.causeway.core.metamodel.facets.object.layout;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -25,18 +25,32 @@ import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.events.EventObjectBase;
 import org.apache.causeway.applib.events.ui.LayoutUiEvent;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetAbstract;
+import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEventUtils;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
+import org.springframework.lang.NonNull;
 
-public class LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
-extends LayoutFacetAbstract
-implements LayoutFacet {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-    public static Optional<LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent> create(
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public final class LayoutPrefixFacetForUiEvent 
+implements LayoutPrefixFacet {
+    final @NonNull String origin;
+    final @NonNull Class<? extends LayoutUiEvent<Object>> layoutUiEventClass;
+    final @NonNull MetamodelEventService metamodelEventService;
+    final @NonNull FacetHolder facetHolder;
+    final @NonNull Facet.Precedence precedence;
+
+    // -- FACTORIES
+
+    public static Optional<LayoutPrefixFacetForUiEvent> create(
             final Optional<DomainObjectLayout> domainObjectLayoutIfAny,
             final MetamodelEventService metamodelEventService,
             final FacetHolder facetHolder) {
@@ -49,60 +63,44 @@ implements LayoutFacet {
                         LayoutUiEvent.Default.class,
                         facetHolder.getConfiguration().getApplib().getAnnotation()
                             .getDomainObjectLayout().getLayoutUiEvent().isPostForDefault()))
-                .map(layoutUiEvent -> {
-
-                    return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
-                            layoutUiEvent, metamodelEventService, facetHolder);
-                });
+                .map(layoutUiEvent -> new LayoutPrefixFacetForUiEvent("DomainObjectLayoutAnnotationWithLayoutUiEvent",
+                    _Casts.uncheckedCast(layoutUiEvent), metamodelEventService,
+                    facetHolder, Precedence.EVENT));
     }
 
-    private final Class<? extends LayoutUiEvent<Object>> layoutUiEventClass;
-    private final MetamodelEventService metamodelEventService;
+    // -- METHODS
 
-    private LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
-            final Class<? extends LayoutUiEvent<?>> layoutUiEventClass,
-                    final MetamodelEventService metamodelEventService,
-                    final FacetHolder holder) {
-        super(holder, Precedence.EVENT);
-        this.layoutUiEventClass = _Casts.uncheckedCast(layoutUiEventClass);
-        this.metamodelEventService = metamodelEventService;
-    }
+    @Override public Class<? extends Facet> facetType() { return LayoutPrefixFacet.class; }
 
     @Override
-    public String layout(final ManagedObject owningAdapter) {
+    public String layoutPrefix(final ManagedObject managedObject) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(managedObject)) return null;
 
-        if(owningAdapter == null) {
-            return null;
-        }
-
-        final LayoutUiEvent<Object> layoutUiEvent = newLayoutUiEvent(owningAdapter);
+        final LayoutUiEvent<Object> layoutUiEvent = newLayoutUiEvent(managedObject);
 
         metamodelEventService.fireLayoutUiEvent(layoutUiEvent);
 
         final String layout = layoutUiEvent.getLayout();
+        if(layout != null) return layout;
 
-        if(layout == null) {
-            // ie no subscribers out there...
-
-            final LayoutFacet underlyingLayoutFacet = getSharedFacetRanking()
-            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutFacet.class))
+        // ie no subscribers out there, then fallback to the underlying ...
+        return getSharedFacetRanking()
+            .flatMap(facetRanking->facetRanking.getWinnerNonEvent(LayoutPrefixFacet.class))
+            .map(underlyingLayoutFacet->underlyingLayoutFacet.layoutPrefix(managedObject))
             .orElse(null);
-
-            if(underlyingLayoutFacet!=null) {
-                return underlyingLayoutFacet.layout(owningAdapter);
-            }
-        }
-
-        return layout;
     }
+
+    @Override
+    public void visitAttributes(final BiConsumer<String, Object> visitor) {
+    	FacetUtil.visitAttributes(this, visitor);
+        visitor.accept("origin", origin());
+        visitor.accept("layoutUiEventClass", layoutUiEventClass);
+    }
+
+    // -- HELPER
 
     private LayoutUiEvent<Object> newLayoutUiEvent(final ManagedObject owningAdapter) {
         return EventObjectBase.getInstanceWithSourceSupplier(layoutUiEventClass, owningAdapter::getPojo).orElseThrow();
     }
 
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-        visitor.accept("layoutUiEventClass", layoutUiEventClass);
-    }
 }

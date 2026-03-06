@@ -27,7 +27,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
@@ -36,10 +42,13 @@ import org.apache.causeway.applib.services.menu.MenuBarsService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Casts;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.io.ZipUtils;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
+import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
@@ -91,15 +100,15 @@ public class LayoutServiceDefault implements LayoutService {
             .adapt(domainObject);
         if(ManagedObjects.isNullOrUnspecifiedOrEmpty(mo))
             return Optional.empty();
-        var layoutPrefix = mo.objSpec().lookupFacet(LayoutFacet.class)
-                .map(layoutPrefixFacet->layoutPrefixFacet.layout(mo))
+        var layoutPrefix = mo.objSpec().lookupFacet(LayoutPrefixFacet.class)
+                .map(layoutPrefixFacet->layoutPrefixFacet.layoutPrefix(mo))
                 .orElse(null);
         return Optional.of(new LayoutKey(domainObject.getClass(), layoutPrefix));
     }
 
     @Override
     public EnumSet<CommonMimeType> supportedObjectLayoutFormats() {
-        return gridService.marshaller().supportedFormats();
+        return gridService.supportedFormats();
     }
 
     @Override
@@ -137,19 +146,60 @@ public class LayoutServiceDefault implements LayoutService {
 
     // -- HELPER
 
+    private BSGrid toGridForExport(
+        final LayoutKey layoutKey,
+        final LayoutExportStyle style) {
+        // making a deep copy so, we don't modify the cached grid
+        var grid = BSUtil.deepCopy(gridService.load(layoutKey));
+
+        if (style == LayoutExportStyle.COMPLETE) return toComplete(grid, layoutKey);
+        if (style == LayoutExportStyle.MINIMAL) return toMinimal(grid, layoutKey.domainClass());
+
+        throw _Exceptions.unmatchedCase(style);
+    }
+
+    private BSGrid toComplete(final BSGrid grid, final LayoutKey layoutKey) {
+        var objectSpec = specLoader.specForTypeElseFail(layoutKey.domainClass());
+        try {
+            FacetRanking.setQualifier(layoutKey);
+            grid.visit(new MetamodelToGridOverridingVisitor(objectSpec));
+        } finally {
+            FacetRanking.removeQualifier();
+        }
+        return grid;
+    }
+
+    private BSGrid toMinimal(final BSGrid grid, final Class<?> domainClass) {
+        grid.visit(new BSElementVisitor() {
+            @Override public void visit(final ActionLayoutData actionLayoutData) {
+                BSUtil.remove(actionLayoutData);
+            }
+            @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+                BSUtil.remove(collectionLayoutData);
+            }
+            @Override public void visit(final PropertyLayoutData propertyLayoutData) {
+                BSUtil.remove(propertyLayoutData);
+            }
+            @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                BSUtil.replaceWithEmpty(domainObjectLayoutData);
+            }
+        });
+        return grid;
+    }
+
     private Try<String> tryGridToFormatted(
             final LayoutKey layoutKey,
             final LayoutExportStyle style,
             final CommonMimeType format) {
         return Try.call(()->
-            gridToFormatted(gridService.toGridForExport(layoutKey, style), format));
+            gridToFormatted(toGridForExport(layoutKey, style), format));
     }
 
     private String gridToFormatted(final @Nullable BSGrid grid, final CommonMimeType format) {
-        if(grid==null) {
-            return null;
-        }
-        return gridService.marshaller().marshal(_Casts.uncheckedCast(grid), format);
+        if(grid==null) return null;
+        return gridService.marshaller(format)
+            .map(marshaller->marshaller.marshal(grid, format))
+            .orElse(null);
     }
 
     private static String zipEntryNameFor(

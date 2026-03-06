@@ -18,26 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.layout;
 
-import java.util.function.BiConsumer;
-
 import org.apache.causeway.core.metamodel.facetapi.Facet;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facets.object.icon.IconFacet;
+import org.apache.causeway.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
-public class LayoutFacetFallback extends LayoutFacetAbstract {
+/**
+ * Provides the null-able layout prefix for an object.
+ * The prefix - if present - is used to lookup concrete layout variants.
+ * <p>
+ * Typically corresponds to a method named <tt>layout</tt>.
+ *
+ * @see TitleFacet
+ * @see IconFacet
+ */
+public interface LayoutPrefixFacet extends Facet {
 
-    public LayoutFacetFallback(final FacetHolder holder) {
-        super(holder, Facet.Precedence.FALLBACK);
-    }
-
-    @Override
-    public String layout(final ManagedObject objectAdapterIfAny) {
-        return null;
-    }
-
-    @Override
-    public void visitAttributes(final BiConsumer<String, Object> visitor) {
-        super.visitAttributes(visitor);
-    }
-
+    public String layoutPrefix(final ManagedObject managedObject);
 }
