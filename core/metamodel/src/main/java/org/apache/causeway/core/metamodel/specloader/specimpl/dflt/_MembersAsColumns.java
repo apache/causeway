@@ -18,6 +18,9 @@
  */
 package org.apache.causeway.core.metamodel.specloader.specimpl.dflt;
 
+import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
+import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,6 +32,7 @@ import java.util.stream.Stream;
 import org.apache.causeway.applib.Identifier;
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.tablecol.TableColumnOrderService;
 import org.apache.causeway.applib.services.tablecol.TableColumnVisibilityService;
@@ -45,9 +49,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.causeway.core.metamodel.util.WhereContexts;
 import org.springframework.lang.NonNull;
-
-import static org.apache.causeway.applib.annotation.Where.PARENTED_TABLES;
-import static org.apache.causeway.applib.annotation.Where.STANDALONE_TABLES;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -152,7 +153,7 @@ class _MembersAsColumns implements HasMetaModelContext {
     
     private Stream<PropertyLayoutData> streamPropertyLayoutData(BSGrid bsGrid) {
     	final var properties = new ArrayList<PropertyLayoutData>();
-    	bsGrid.visit(new BSGrid.VisitorAdapter() {
+    	bsGrid.visit(new BSElementVisitor() {
     		@Override
     		public void visit(final PropertyLayoutData propertyLayoutData) {
     			properties.add(propertyLayoutData);

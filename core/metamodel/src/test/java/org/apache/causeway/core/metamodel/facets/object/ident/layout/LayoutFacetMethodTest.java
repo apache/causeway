@@ -18,25 +18,24 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.ident.layout;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.commons.internal.reflection._GenericResolver;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacetViaLayoutMethod;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetViaMethod;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import lombok.val;
 
 class LayoutFacetMethodTest {
 
-    private LayoutFacetViaLayoutMethod facet;
+    private LayoutPrefixFacetViaMethod facet;
     private ManagedObject mockOwningAdapter;
 
     private DomainObjectWithProblemInLayoutMethod pojo;
@@ -54,7 +53,7 @@ class LayoutFacetMethodTest {
 
         val iconNameMethod = _GenericResolver.testing
                 .resolveMethod(DomainObjectWithProblemInLayoutMethod.class, "layout");
-        facet = (LayoutFacetViaLayoutMethod) LayoutFacetViaLayoutMethod
+        facet = (LayoutPrefixFacetViaMethod) LayoutPrefixFacetViaMethod
                     .create(iconNameMethod, Mockito.mock(FacetHolder.class))
                     .orElse(null);
 
@@ -70,7 +69,7 @@ class LayoutFacetMethodTest {
     @Test
     public void when_layout_throws_exception() {
         //assertThrows(NullPointerException.class, ()->facet.layout(mockOwningAdapter));
-        final String layout = facet.layout(mockOwningAdapter);
+        final String layout = facet.layoutPrefix(mockOwningAdapter);
         assertThat(layout, is(nullValue()));
     }
 

@@ -24,29 +24,39 @@ import org.apache.causeway.applib.annotation.TableDecorator;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacet;
 import org.apache.causeway.core.metamodel.facets.object.tabledec.TableDecoratorFacetAbstract;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class TableDecoratorFacetForDomainObjectLayoutXml
-extends TableDecoratorFacetAbstract {
+extends TableDecoratorFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<TableDecoratorFacet> create(
             final DomainObjectLayoutData domainObjectLayout,
             final FacetHolder holder,
-            final Facet.Precedence precedence) {
-
+            final Facet.Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(domainObjectLayout)
-        .map(DomainObjectLayoutData::getTableDecorator)
-        .map(tableDecorator->
-            new TableDecoratorFacetForDomainObjectLayoutXml(tableDecorator, holder, precedence));
+            .map(DomainObjectLayoutData::getTableDecorator)
+            .map(tableDecorator->
+                new TableDecoratorFacetForDomainObjectLayoutXml(tableDecorator, holder, precedence, qualifier));
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private TableDecoratorFacetForDomainObjectLayoutXml(
             final Class<? extends TableDecorator> value,
             final FacetHolder holder,
-            final Facet.Precedence precedence) {
+            final Facet.Precedence precedence,
+            final @Nullable String qualifier) {
         super(value, holder, precedence);
+        this.qualifier = qualifier;
     }
-
 
 }

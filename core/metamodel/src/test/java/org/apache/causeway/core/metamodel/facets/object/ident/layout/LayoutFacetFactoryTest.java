@@ -21,7 +21,7 @@ package org.apache.causeway.core.metamodel.facets.object.ident.layout;
 import org.junit.jupiter.api.Test;
 
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.ObjectSupportMethod;
-import org.apache.causeway.core.metamodel.facets.object.layout.LayoutFacet;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacet;
 import org.apache.causeway.core.metamodel.facets.object.support.ObjectSupportFacetFactoryTestAbstract;
 
 class LayoutFacetFactoryTest
@@ -35,7 +35,7 @@ extends ObjectSupportFacetFactoryTestAbstract {
                 return null;
             }
         }
-        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.LAYOUT, LayoutFacet.class);
+        assertPicksUp(1, facetFactory, Customer.class, ObjectSupportMethod.LAYOUT, LayoutPrefixFacet.class);
     }
 
 }

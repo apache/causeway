@@ -644,10 +644,23 @@ extends
         return getCorrespondingClass().getName();
     }
 
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with self.
+     * @since 2.0
+     */
     default Stream<ObjectSpecification> streamTypeHierarchy() {
         return superclass()!=null
                 ? Stream.concat(Stream.of(this), superclass().streamTypeHierarchy())
                 : Stream.of(this);
+    }
+
+    /**
+     * Returns {@link Stream} of the class hierarchy upwards starting with self,
+     * then includes all (collected) interfaces at the end.
+     * @since 4.0
+     */
+    default Stream<ObjectSpecification> streamTypeHierarchyAndInterfaces() {
+        return Stream.concat(streamTypeHierarchy(), interfaces().stream());
     }
 
     // -- COMMON SUPER TYPE FINDER

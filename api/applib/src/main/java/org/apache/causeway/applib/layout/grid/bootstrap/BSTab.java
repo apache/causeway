@@ -108,7 +108,7 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
                 @Override
                 public boolean test(final BSTab thisBsTab) {
                     final BSGrid owningGrid = thisBsTab.getGrid();
-                    owningGrid.visit(new BSGrid.VisitorAdapter() {
+                    owningGrid.visit(new BSElementVisitor() {
 
                         /**
                          * if found the tab, then reset 'foundContent' to false, and then use 'visitingTheNode' as
@@ -117,14 +117,14 @@ public class BSTab extends BSElementAbstract implements BSRowOwner {
                          * 'foundContent' flag.
                          */
                         @Override
-                        public void preVisit(final BSTab bsTab) {
+                        public void enter(final BSTab bsTab) {
                             if(bsTab == thisBsTab) {
                                 foundContent.set(false);
                                 visitingTheNode.set(true);
                             }
                         }
 
-                        @Override public void postVisit(final BSTab bsTab) {
+                        @Override public void exit(final BSTab bsTab) {
                             if(bsTab == thisBsTab) {
                                 visitingTheNode.set(false);
                             }

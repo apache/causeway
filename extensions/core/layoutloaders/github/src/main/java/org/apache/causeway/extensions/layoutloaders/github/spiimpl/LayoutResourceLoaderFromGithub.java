@@ -25,6 +25,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
+import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.causeway.applib.value.NamedWithMimeType;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub;
+import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -32,16 +41,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.causeway.applib.value.NamedWithMimeType;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResource;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
-import org.apache.causeway.extensions.layoutloaders.github.CausewayModuleExtLayoutLoadersGithub;
-import org.apache.causeway.extensions.layoutloaders.github.menu.LayoutLoadersGitHubMenu;
 
 import lombok.NonNull;
 import lombok.val;

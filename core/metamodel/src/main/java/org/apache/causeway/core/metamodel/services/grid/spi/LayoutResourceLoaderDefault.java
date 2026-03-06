@@ -18,20 +18,23 @@
  */
 package org.apache.causeway.core.metamodel.services.grid.spi;
 
-
 import javax.annotation.Priority;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.layout.resource.LayoutResource;
+import org.apache.causeway.applib.layout.resource.LayoutResourceLoader;
 import org.apache.causeway.applib.value.NamedWithMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.io.DataSource;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
  * Default implementation of {@link LayoutResourceLoader}.
@@ -42,8 +45,8 @@ import lombok.RequiredArgsConstructor;
 @Named(CausewayModuleCoreMetamodel.NAMESPACE + ".LayoutResourceLoaderDefault")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-@RequiredArgsConstructor //JUnit Support
-//@Log4j2
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
 public class LayoutResourceLoaderDefault implements LayoutResourceLoader {
 
     @Override

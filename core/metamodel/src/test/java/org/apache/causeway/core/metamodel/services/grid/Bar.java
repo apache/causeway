@@ -18,20 +18,53 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import java.util.List;
+
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.Action;
+import org.apache.causeway.applib.annotation.Collection;
 import org.apache.causeway.applib.annotation.DomainObject;
 import org.apache.causeway.applib.annotation.Nature;
+import org.apache.causeway.applib.annotation.ObjectSupport;
+import org.apache.causeway.applib.annotation.Property;
+
+import lombok.RequiredArgsConstructor;
 
 @Named("simple.Bar")
 @DomainObject(
         nature = Nature.VIEW_MODEL)
+@RequiredArgsConstructor
 public class Bar {
+
+    private final String name;
+
+    public Bar() {
+        this.name = "Bar";
+    }
+
+    @ObjectSupport
+    public String layout() {
+        return name.toLowerCase().contains("simple")
+            ? "simple"
+            : name.toLowerCase().contains("full")
+                ? "full"
+                : null;
+    }
 
     @Action
     public Object createSimpleObject() {
         return new Object();
+    }
+
+    @Property
+    public String getName() {
+        return name;
+    }
+
+    @Collection
+    public List<String> getSampleCollection() {
+        return List.of("Foo", "Bar");
     }
 
 }

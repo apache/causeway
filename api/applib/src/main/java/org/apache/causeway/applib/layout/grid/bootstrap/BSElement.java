@@ -20,6 +20,12 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.io.Serializable;
 
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.FieldSet;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+
 /**
  * @since 1.x {@index}
  */
@@ -31,8 +37,26 @@ public interface BSElement extends WithinGrid, Serializable {
      * custom styling.
      */
     String getCssClass();
-
     void setCssClass(final String cssClass);
 
+    public interface BSElementVisitor {
+        default void enter(final BSGrid bsGrid) {}
+        default void exit(final BSGrid bsGrid) {}
+        default void enter(final BSRow bsRow) {}
+        default void exit(final BSRow bsRow) {}
+        default void enter(final BSCol bsCol) {}
+        default void exit(final BSCol bsCol) {}
+        default void visit(final BSClearFix bsClearFix) {}
+        default void enter(final BSTabGroup bsTabGroup) {}
+        default void exit(final BSTabGroup bsTabGroup) {}
+        default void enter(final BSTab bsTab) {}
+        default void exit(final BSTab bsTab) {}
+
+        default void visit(final DomainObjectLayoutData domainObjectLayoutData) {}
+        default void visit(final ActionLayoutData actionLayoutData) {}
+        default void visit(final PropertyLayoutData propertyLayoutData) {}
+        default void visit(final CollectionLayoutData collectionLayoutData) {}
+        default void visit(final FieldSet fieldSet) {}
+    }
 
 }

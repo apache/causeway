@@ -23,30 +23,42 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class MemberDescribedFacetForActionLayoutXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+extends MemberDescribedFacetWithStaticTextAbstract
+implements QualifiedFacet {
 
     public static Optional<MemberDescribedFacet> create(
             final ActionLayoutData actionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(actionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+
+        if(actionLayout == null)
             return Optional.empty();
-        }
         final String describedAs = _Strings.emptyToNull(actionLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new MemberDescribedFacetForActionLayoutXml(describedAs, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new MemberDescribedFacetForActionLayoutXml(describedAs, holder, precedence, qualifier))
+            : Optional.empty();
     }
+
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
 
     private MemberDescribedFacetForActionLayoutXml(
             final String described,
             final FacetHolder holder,
-            final Precedence precedence) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(described, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

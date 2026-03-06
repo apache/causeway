@@ -27,9 +27,7 @@ import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetAbstract;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-
-import lombok.NonNull;
-import lombok.val;
+import org.springframework.lang.NonNull;
 
 public abstract class HasNounFacetAbstract
 extends FacetAbstract
@@ -63,7 +61,7 @@ implements HasNoun {
 
     @Override
     public boolean isNounPresent() {
-        return noun.isLiteralPresent();
+        return noun.isPresent();
     }
 
     @Override
@@ -80,7 +78,7 @@ implements HasNoun {
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("context", translationContext);
-        if(noun.isLiteralPresent()) {
+        if(noun.isPresent()) {
             visitor.accept("hasNoun", "true");
             visitor.accept("originalText", text());
             visitor.accept("translated", translated()); // memoizes as a side-effect
@@ -98,7 +96,7 @@ implements HasNoun {
             return false;
         }
 
-        val otherFacet =  (HasNounFacetAbstract)other;
+        var otherFacet =  (HasNounFacetAbstract)other;
 
         return Objects.equals(this.noun, otherFacet.noun)
                 && Objects.equals(this.translationContext, otherFacet.translationContext);

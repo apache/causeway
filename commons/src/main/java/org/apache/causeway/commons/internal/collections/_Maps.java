@@ -22,28 +22,36 @@ import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.springframework.lang.Nullable;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 import lombok.val;
+import lombok.experimental.Accessors;
 
 /**
  * <h1>- internal use only -</h1>
@@ -373,10 +381,90 @@ public final class _Maps {
                 pairByAliasKey.clear();
             }
 
-
         };
     }
 
-    // --
+    // -- UTILITY
+
+    /**
+     * Provides a workaround when {@link ConcurrentHashMap#computeIfAbsent(Object, Function)}, is not applicable due
+     * to recursive update attempts, which are not allowed.
+     *
+     * <p>Applicable when the mapping-function is a {@literal pure} function.
+     */
+    @AllArgsConstructor
+    @EqualsAndHashCode
+    @Getter @Accessors(fluent = true)
+    public final static class ConcurrentMapWrapper<K, V> {
+    	private final ConcurrentHashMap<K, V> map;
+
+        public ConcurrentMapWrapper() {
+            this(new ConcurrentHashMap<>());
+        }
+
+        /**
+         * Applicable when the mappingFunction is a {@literal pure} function. Particularly useful in caching scenarios,
+         * where the mappingFunction potentially modifies the {@link ConcurrentHashMap} of this wrapper.
+         *
+         * @implNote Implementation is same as the default implementation from the {@link Map} interface. But,
+         *      {@link ConcurrentHashMap} overrides this default, in order to detect when the mappingFunction
+         *      attempts a recursive update, then throws an {@link IllegalStateException}.
+         */
+        public V computeIfAbsent(final K key, final java.util.function.Function<? super K, ? extends V> mappingFunction) {
+            Objects.requireNonNull(mappingFunction);
+
+            var value = map.get(key);
+            if(value!=null)
+                return value;
+
+            var newValue = mappingFunction.apply(key);
+            if(newValue!=null) {
+                map.put(key, newValue);
+            }
+            return newValue;
+        }
+    }
+    
+    /**
+     * Provides a heap friendly Map traversal in reverse order.
+     *
+     * <p>Useful for {@link EnumMap}(s) which are not navigable ({@link NavigableMap}).
+     *
+     * @param map not forced to be a {@link EnumMap} to allow (synchronized) wrapping
+     */
+    public static <E extends Enum<E>, V> void forEachDescending(
+            final E[] keyUniverse,
+            final Map<E, V> map,
+            final Consumer<V> consumer) {
+        for (int ord = keyUniverse.length - 1; ord >= 0; ord--) {
+            var key = keyUniverse[ord];
+            V value = map.get(key);
+            if(value!=null) {
+                consumer.accept(value);
+            }
+        }
+    }
+
+    /**
+     * Provides a heap friendly Map traversal in reverse order.
+     *
+     * <p>Useful for {@link EnumMap}(s) which are not navigable ({@link NavigableMap}).
+     *
+     * @param map not forced to be a {@link EnumMap} to allow (synchronized) wrapping
+     */
+    public static <E extends Enum<E>, V> Optional<V> findFirstDescending(
+            final E[] keyUniverse,
+            final Map<E, V> map,
+            final Predicate<V> filter) {
+        for (int ord = keyUniverse.length - 1; ord >= 0; ord--) {
+            var key = keyUniverse[ord];
+            V value = map.get(key);
+            if(value!=null) {
+                if(filter.test(value))
+                    return Optional.of(value);
+            }
+        }
+        return Optional.empty();
+    }
 
 }

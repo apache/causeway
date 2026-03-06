@@ -56,8 +56,7 @@
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.GridFacetDefault">
-        <mml:attr name="facet" value="GridFacetDefault"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet">
         <mml:attr name="precedence" value="DEFAULT"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
@@ -136,11 +135,6 @@
             <mml:attr name="position" value="BELOW"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback">
-            <mml:attr name="facet" value="RedirectFacetFallback"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="facet" value="PropertyAnnotationFacetFactory.1"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -190,8 +184,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -260,11 +255,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
             <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -319,8 +309,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -420,11 +411,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
             <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -479,8 +465,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -684,11 +671,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
             <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -743,8 +725,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -851,11 +834,6 @@
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
             <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -910,8 +888,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -964,11 +943,6 @@
             <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
             <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
@@ -1024,8 +998,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -1078,11 +1053,6 @@
             <mml:attr name="facet" value="PrototypeFacetForActionAnnotation"/>
             <mml:attr name="interactionAdvisors" value="HidingOrShowing"/>
             <mml:attr name="precedence" value="DEFAULT"/>
-          </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.layout.RedirectFacetFromActionLayoutAnnotation">
-            <mml:attr name="facet" value="RedirectFacetFromActionLayoutAnnotation"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
           </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
             <mml:attr name="facet" value="ActionSemanticsFacetForActionAnnotation"/>
@@ -1138,8 +1108,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>
@@ -1163,10 +1134,10 @@
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="translated" value="Some View Model_pdf"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.BookmarkPolicyFacetForDomainObjectLayoutXml">
-        <mml:attr name="bookmarkPolicy" value="AS_ROOT"/>
-        <mml:attr name="facet" value="BookmarkPolicyFacetForDomainObjectLayoutXml"/>
-        <mml:attr name="precedence" value="LOW"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+        <mml:attr name="bookmarkPolicy" value="NEVER"/>
+        <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
+        <mml:attr name="precedence" value="FALLBACK"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation">
         <mml:attr name="facet" value="CreatedLifecycleEventFacetForDomainObjectAnnotation"/>
@@ -1203,9 +1174,9 @@
         <mml:attr name="precedence" value="DEFAULT"/>
         <mml:attr name="value" value="org.apache.causeway.applib.events.lifecycle.ObjectUpdatingEvent.Default"/>
       </mml:facet>
-      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.GridFacetDefault">
-        <mml:attr name="facet" value="GridFacetDefault"/>
-        <mml:attr name="precedence" value="DEFAULT"/>
+      <mml:facet id="org.apache.causeway.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.grid.BSGridFacet.NoLayout">
+        <mml:attr name="facet" value="BSGridFacet.NoLayout"/>
+        <mml:attr name="precedence" value="LOW"/>
       </mml:facet>
       <mml:facet id="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.hidden.HiddenTypeFacetFromAuthorization">
         <mml:attr name="facet" value="HiddenTypeFacetFromAuthorization"/>
@@ -1289,11 +1260,6 @@
             <mml:attr name="position" value="BELOW"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacet" fqcn="org.apache.causeway.core.metamodel.facets.actions.redirect.RedirectFacetFallback">
-            <mml:attr name="facet" value="RedirectFacetFallback"/>
-            <mml:attr name="precedence" value="DEFAULT"/>
-            <mml:attr name="redirect" value="AS_CONFIGURED"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet">
             <mml:attr name="facet" value="PropertyAnnotationFacetFactory.1"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1319,11 +1285,6 @@
             <mml:attr name="semantics" value="DISABLED"/>
             <mml:attr name="where" value="ANYWHERE"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.layout.order.LayoutOrderFacetForLayoutXml">
-            <mml:attr name="facet" value="LayoutOrderFacetForLayoutXml"/>
-            <mml:attr name="precedence" value="LOW"/>
-            <mml:attr name="sequence" value="1"/>
-          </mml:facet>
           <mml:facet id="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet" fqcn="org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacetForPropertyFromConfiguration.None">
             <mml:attr name="facet" value="CommandPublishingFacetForPropertyFromConfiguration.None"/>
             <mml:attr name="precedence" value="DEFAULT"/>
@@ -1337,8 +1298,9 @@
             <mml:attr name="facet" value="BookmarkPolicyFacetFallback"/>
             <mml:attr name="precedence" value="FALLBACK"/>
           </mml:facet>
-          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacetAsConfigured">
-            <mml:attr name="facet" value="PromptStyleFacetAsConfigured"/>
+          <mml:facet id="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.causeway.core.metamodel.facets.object.promptStyle.PromptStyleFacet">
+            <mml:attr name="facet" value="PromptStyleFacet"/>
+            <mml:attr name="origin" value="Configuration"/>
             <mml:attr name="precedence" value="DEFAULT"/>
             <mml:attr name="promptStyle" value="INLINE"/>
           </mml:facet>

@@ -23,28 +23,41 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacet;
 import org.apache.causeway.core.metamodel.facets.all.described.MemberDescribedFacetWithStaticTextAbstract;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class MemberDescribedFacetForCollectionLayoutXml
-extends MemberDescribedFacetWithStaticTextAbstract {
+extends MemberDescribedFacetWithStaticTextAbstract
+implements QualifiedFacet {
 
     public static Optional<MemberDescribedFacet> create(
             final CollectionLayoutData collectionLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(collectionLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(collectionLayout == null)
             return Optional.empty();
-        }
         final String describedAs = _Strings.emptyToNull(collectionLayout.getDescribedAs());
         return describedAs != null
-                ? Optional.of(new MemberDescribedFacetForCollectionLayoutXml(describedAs, holder, precedence))
-                : Optional.empty();
+            ? Optional.of(new MemberDescribedFacetForCollectionLayoutXml(describedAs, holder, precedence, qualifier))
+            : Optional.empty();
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private MemberDescribedFacetForCollectionLayoutXml(
-            final String described, final FacetHolder holder, final Precedence precedence) {
+            final String described,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(described, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

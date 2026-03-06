@@ -18,20 +18,17 @@
  */
 package org.apache.causeway.core.metamodel.facets;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.jupiter.api.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.apache.causeway.commons.internal.reflection._Annotations;
-
-import lombok.val;
+import org.junit.jupiter.api.Test;
 
 public class Annotations_synthesizeElseOnClass_Test {
 
@@ -73,8 +70,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("sven"));
@@ -88,8 +85,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("joe"));
@@ -103,8 +100,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("joe"));
@@ -119,8 +116,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("joe"));
@@ -135,8 +132,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("sven"));
@@ -152,8 +149,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("bill"));
@@ -169,8 +166,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("bill"));
@@ -187,8 +184,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("bill"));
@@ -207,8 +204,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("fred"));
@@ -223,8 +220,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("bill"));
@@ -239,8 +236,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             public void action() {}
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("joe"));
@@ -262,8 +259,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             }
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("sven"));
@@ -285,8 +282,8 @@ public class Annotations_synthesizeElseOnClass_Test {
             }
         }
 
-        val method = SomeTestCase.class.getMethod("action");
-        val nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
+        var method = SomeTestCase.class.getMethod("action");
+        var nearest = _Annotations.synthesizeConsideringClass(method, InteracAs.class);
 
         assertThat(nearest.isPresent(), is(true));
         assertThat(nearest.get().usrName(), is("joe"));

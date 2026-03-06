@@ -1,0 +1,141 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.applib.layout.grid.bootstrap;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.causeway.applib.layout.component.ActionLayoutData;
+import org.apache.causeway.applib.layout.component.ActionLayoutDataOwner;
+import org.apache.causeway.applib.layout.component.CollectionLayoutData;
+import org.apache.causeway.applib.layout.component.CollectionLayoutDataOwner;
+import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.FieldSet;
+import org.apache.causeway.applib.layout.component.FieldSetOwner;
+import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+public final class BSWalker {
+	
+	private final BSRowOwner root;
+
+    public void walkDepthFirst(final BSElementVisitor visitor) {
+        if(root instanceof BSGrid) {
+        	var bsGrid = (BSGrid) root; 
+            visitor.enter(bsGrid);
+            traverseRows(root, visitor);
+            visitor.exit(bsGrid);
+        } else {
+            traverseRows(root, visitor);
+        }
+    }
+
+    private void traverseRows(final BSRowOwner rowOwner, final BSElementVisitor visitor) {
+        final List<BSRow> rows = rowOwner.getRows();
+        for (BSRow bsRow : new ArrayList<>(rows)) {
+            visitor.enter(bsRow);
+            traverseCols(bsRow, visitor);
+            visitor.exit(bsRow);
+        }
+    }
+
+    private void traverseCols(final BSRow bsRow, final BSElementVisitor visitor) {
+        final List<BSRowContent> cols = bsRow.getRowContents();
+        for (BSRowContent rowContent : new ArrayList<>(cols)) {
+            if(rowContent instanceof BSCol) {
+            	var bsCol = (BSCol) rowContent;
+                visitor.enter(bsCol);
+                traverseDomainObject(bsCol, visitor);
+                traverseTabGroups(bsCol, visitor);
+                traverseActions(bsCol, visitor);
+                traverseFieldSets(bsCol, visitor);
+                traverseCollections(bsCol, visitor);
+                traverseRows(bsCol, visitor);
+                visitor.exit(bsCol);
+            } else if (rowContent instanceof BSClearFix) {
+                visitor.visit((BSClearFix)rowContent);
+            } else {
+                throw new IllegalStateException(
+                        "Unrecognized implementation of BSRowContent, " + rowContent);
+            }
+        }
+    }
+
+    private void traverseDomainObject(final BSCol bsCol, final BSElementVisitor visitor) {
+        final DomainObjectLayoutData domainObject = bsCol.getDomainObject();
+        if(domainObject == null) return;
+        visitor.visit(domainObject);
+    }
+
+    private void traverseTabGroups(final BSTabGroupOwner bsTabGroupOwner, final BSElementVisitor visitor) {
+        final List<BSTabGroup> tabGroups = bsTabGroupOwner.getTabGroups();
+        for (BSTabGroup bsTabGroup : new ArrayList<>(tabGroups)) {
+            visitor.enter(bsTabGroup);
+            traverseTabs(bsTabGroup, visitor);
+            visitor.exit(bsTabGroup);
+        }
+    }
+
+    private void traverseTabs(final BSTabOwner bsTabOwner, final BSElementVisitor visitor) {
+        final List<BSTab> tabs = bsTabOwner.getTabs();
+        for (BSTab tab : new ArrayList<>(tabs)) {
+            visitor.enter(tab);
+            traverseRows(tab, visitor);
+            visitor.exit(tab);
+        }
+    }
+
+    private void traverseActions(final ActionLayoutDataOwner actionLayoutDataOwner, final BSElementVisitor visitor) {
+        final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
+        if(actionLayoutDatas == null) return;
+
+        for (final ActionLayoutData actionLayoutData : new ArrayList<>(actionLayoutDatas)) {
+            visitor.visit(actionLayoutData);
+        }
+    }
+
+    private void traverseFieldSets(final FieldSetOwner fieldSetOwner, final BSElementVisitor visitor) {
+        final List<FieldSet> fieldSets = fieldSetOwner.getFieldSets();
+        for (FieldSet fieldSet : new ArrayList<>(fieldSets)) {
+            visitor.visit(fieldSet);
+            traverseActions(fieldSet, visitor);
+            final List<PropertyLayoutData> properties = fieldSet.getProperties();
+            for (final PropertyLayoutData property : new ArrayList<>(properties)) {
+                visitor.visit(property);
+                traverseActions(property, visitor);
+            }
+        }
+    }
+
+    private void traverseCollections(
+            final CollectionLayoutDataOwner owner, final BSElementVisitor visitor) {
+        final List<CollectionLayoutData> collections = owner.getCollections();
+        for (CollectionLayoutData collection : new ArrayList<>(collections)) {
+            visitor.visit(collection);
+            traverseActions(collection, visitor);
+        }
+    }
+
+}

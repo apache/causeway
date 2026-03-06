@@ -33,7 +33,8 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
@@ -169,63 +170,63 @@ public class WelcomeHelpPage implements HelpPage {
     private StringBuffer documentationForObjectType(final ObjectSpecification objectSpec) {
         StringBuffer html = new StringBuffer();
 
-        Grid grid = toGrid(objectSpec.getCorrespondingClass());
+        var grid = toGrid(objectSpec.getCorrespondingClass());
         html.append("<ul>");
         {
             html.append("<ul>");
             {
-                for (ActionLayoutData layout : grid.getAllActionsById().values()) {
+                grid.streamActionLayoutData().forEach((final ActionLayoutData layout)->{
                     objectSpec.getAction(layout.getId(), ActionScope.PRODUCTION_ONLY)
-                            .ifPresent(member -> {
-                                if (!"clearHints".equals(member.getId()) && !member.isAlwaysHidden()) {
-                                    String describedAs = member.getCanonicalDescription()
-                                            .map(desc -> String.format("%s", desc))
-                                            .orElse("");
-                                    html.append(String.format("<li><i class='%s'></i><b>%s</b>: %s.</li>\n",
-                                            _Strings.isNotEmpty(layout.getCssClassFa()) ? layout.getCssClassFa() : "fa fa-faw fa-location-arrow",
-                                            member.getCanonicalFriendlyName(),
-                                            describedAs));
-                                }
-                            });
-                }
+                    .ifPresent(member -> {
+                        if (!"clearHints".equals(member.getId()) && !member.isAlwaysHidden()) {
+                            String describedAs = member.getCanonicalDescription()
+                                    .map(desc -> String.format("%s", desc))
+                                    .orElse("");
+                            html.append(String.format("<li><i class='%s'></i><b>%s</b>: %s.</li>\n",
+                                    _Strings.isNotEmpty(layout.getCssClassFa()) ? layout.getCssClassFa() : "fa fa-faw fa-location-arrow",
+                                    member.getCanonicalFriendlyName(),
+                                    describedAs));
+                        }
+                    });
+                });
             }
             html.append("</ul>");
             html.append("<ul>");
             {
-                for (CollectionLayoutData layout : grid.getAllCollectionsById().values()) {
+                grid.streamCollectionLayoutData().forEach((final CollectionLayoutData layout)->{
                     objectSpec.getCollection(layout.getId())
-                            .ifPresent(member -> {
-                                if (!member.isAlwaysHidden()) {
-                                    String description = null;
-                                    if (member.containsFacet(MemberDescribedFacet.class)) {
-                                        description = member.getFacet(MemberDescribedFacet.class).getSpecialization()
-                                                .left().map(HasStaticText::text).orElse(null);
-                                    }
-                                    if (_Strings.isNotEmpty(description)) {
-                                        description = layout.getDescribedAs();
-                                    }
-                                    html.append(String.format("<li><i class='%s'></i><b>%s</b>: %s.</li>\n",
-                                            "fa fa-fw fa-list",
-                                            member.getCanonicalFriendlyName(),
-                                            description != null ? description : ""));
-                                    // FIXME[CAUSEWAY-2883] also visit associated actions
-                                    // ... collection.streamAssociatedActions()
-                                    html.append("<ul>");
-                                    member.streamAssociatedActions().forEach(action -> {
-                                        html.append(String.format("<li><i class='%s'></i> <b>%s</b>: %s.</li>\n",
-                                                "fa fa-faw fa-location-arrow",
-                                                action.getCanonicalFriendlyName(),
-                                                action.getCanonicalDescription().orElse("")));
-                                    });
-                                    html.append("</ul>");
+                        .ifPresent(member -> {
+                            if (!member.isAlwaysHidden()) {
+                                String description = null;
+                                if (member.containsFacet(MemberDescribedFacet.class)) {
+                                    description = member.getFacet(MemberDescribedFacet.class).getSpecialization()
+                                            .left().map(HasStaticText::text).orElse(null);
                                 }
-                            });
-                }
+                                if (_Strings.isNotEmpty(description)) {
+                                    description = layout.getDescribedAs();
+                                }
+                                html.append(String.format("<li><i class='%s'></i><b>%s</b>: %s.</li>\n",
+                                        "fa fa-fw fa-list",
+                                        member.getCanonicalFriendlyName(),
+                                        description != null ? description : ""));
+                                // FIXME[CAUSEWAY-2883] also visit associated actions
+                                // ... collection.streamAssociatedActions()
+                                html.append("<ul>");
+                                member.streamAssociatedActions().forEach(action -> {
+                                    html.append(String.format("<li><i class='%s'></i> <b>%s</b>: %s.</li>\n",
+                                            "fa fa-faw fa-location-arrow",
+                                            action.getCanonicalFriendlyName(),
+                                            action.getCanonicalDescription().orElse("")));
+                                });
+                                html.append("</ul>");
+                            }
+                        });
+                });
             }
             html.append("</ul>");
             html.append("<ul>");
             {
-                grid.visit(new Grid.VisitorAdapter() {
+                grid.visit(new BSElementVisitor() {
                     @Override
                     public void visit(final FieldSet fieldSet) {
                         if (_NullSafe.isEmpty(fieldSet.getProperties())) {
@@ -235,25 +236,25 @@ public class WelcomeHelpPage implements HelpPage {
                             html.append("<ul>");
                             for (PropertyLayoutData layout : fieldSet.getProperties()) {
                                 objectSpec.getProperty(layout.getId())
-                                        .ifPresent(member -> {
-                                            if (!member.isAlwaysHidden()) {
-                                                String describedAs = member.getCanonicalDescription()
-                                                        .map(desc -> String.format("%s", desc))
-                                                        .orElse("");
-                                                html.append(String.format("<li><b>%s</b>: %s.",
-                                                        member.getCanonicalFriendlyName(),
-                                                        describedAs));
-                                                if (member.getElementType().logicalType().correspondingClass()
-                                                        .isAnnotationPresent(DomainObject.class)) {
-                                                    html.append(String.format(" <i> See: <a href='#%s'>%s</a></i>",
-                                                            member.getElementType().logicalTypeName(),
-                                                            member.getElementType().getSingularName()));
-                                                } else {
-                                                    //none
-                                                }
-                                                html.append("</li>\n");
+                                    .ifPresent(member -> {
+                                        if (!member.isAlwaysHidden()) {
+                                            String describedAs = member.getCanonicalDescription()
+                                                    .map(desc -> String.format("%s", desc))
+                                                    .orElse("");
+                                            html.append(String.format("<li><b>%s</b>: %s.",
+                                                    member.getCanonicalFriendlyName(),
+                                                    describedAs));
+                                            if (member.getElementType().logicalType().correspondingClass()
+                                                    .isAnnotationPresent(DomainObject.class)) {
+                                                html.append(String.format(" <i> See: <a href='#%s'>%s</a></i>",
+                                                        member.getElementType().logicalTypeName(),
+                                                        member.getElementType().getSingularName()));
+                                            } else {
+                                                //none
                                             }
-                                        });
+                                            html.append("</li>\n");
+                                        }
+                                    });
                             }
                             html.append("</ul>");
                         }
@@ -272,13 +273,11 @@ public class WelcomeHelpPage implements HelpPage {
                 .map(typeSpec -> typeSpec.getAction(actionLayout.getId(), ActionScope.PRODUCTION_ONLY).orElse(null));
     }
 
-    private Grid toGrid(final Class<?> domainClass) {
+    private BSGrid toGrid(final Class<?> domainClass) {
         return specificationLoader.specForType(domainClass)
                 .flatMap(spec -> spec.lookupFacet(GridFacet.class))
                 .map(gridFacet -> gridFacet.getGrid(null))
                 .orElse(null);
     }
 
-
 }
-

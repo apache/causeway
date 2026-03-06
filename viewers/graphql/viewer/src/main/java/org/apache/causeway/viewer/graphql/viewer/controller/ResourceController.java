@@ -23,6 +23,17 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.bookmark.BookmarkService;
+import org.apache.causeway.applib.value.Blob;
+import org.apache.causeway.applib.value.Clob;
+import org.apache.causeway.commons.io.JaxbUtils;
+import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
+import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,18 +45,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
-import org.apache.causeway.applib.services.bookmark.BookmarkService;
-import org.apache.causeway.applib.value.Blob;
-import org.apache.causeway.applib.value.Clob;
-import org.apache.causeway.commons.io.JaxbUtils;
-import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Value;
 import lombok.val;
@@ -193,7 +192,7 @@ public class ResourceController {
     }
 
     @Nullable
-    private static Grid gridOf(ManagedObject managedObject) {
+    private static BSGrid gridOf(ManagedObject managedObject) {
         val facet = managedObject.objSpec().getFacet(GridFacet.class);
         return facet != null ? facet.getGrid(managedObject) : null;
     }

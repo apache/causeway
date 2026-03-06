@@ -24,6 +24,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FeatureType;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.causeway.core.metamodel.facets.object.domainobjectlayout.tabledec.TableDecoratorFacetForDomainObjectLayoutAnnotation;
+import org.apache.causeway.core.metamodel.facets.object.layout.LayoutPrefixFacetForUiEvent;
 import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 
 import lombok.val;
@@ -55,9 +56,8 @@ extends FacetFactoryAbstract {
                 CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent
                 .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
-        addFacetIfPresent(
-                LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent
-                .create(domainObjectLayoutIfAny, metamodelEventService, facetHolder));
+        addFacetIfPresent(LayoutPrefixFacetForUiEvent.create(
+                    domainObjectLayoutIfAny, metamodelEventService, facetHolder));
 
         addFacetIfPresent(
                 CssClassFacetForDomainObjectLayoutAnnotation

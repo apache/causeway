@@ -23,27 +23,40 @@ import java.util.Optional;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacetWithStaticTextAbstract;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class MemberNamedFacetForPropertyLayoutXml
-extends MemberNamedFacetWithStaticTextAbstract {
+extends MemberNamedFacetWithStaticTextAbstract
+implements QualifiedFacet {
 
     public static Optional<MemberNamedFacet> create(
             final PropertyLayoutData propertyLayoutData,
             final FacetHolder holder,
-            final Precedence precedence) {
-
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         return Optional.ofNullable(propertyLayoutData)
-        .map(PropertyLayoutData::getNamed)
-        .filter(_Strings::isNotEmpty)
-        .map(named->new MemberNamedFacetForPropertyLayoutXml(
-                named, holder, precedence));
+            .map(PropertyLayoutData::getNamed)
+            .filter(_Strings::isNotEmpty)
+            .map(named->
+                new MemberNamedFacetForPropertyLayoutXml(named, holder, precedence, qualifier));
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private MemberNamedFacetForPropertyLayoutXml(
-            final String named, final FacetHolder holder, final Precedence precedence) {
+            final String named,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(named, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

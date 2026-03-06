@@ -24,14 +24,16 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
-
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.DisablingOrEnabling;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.HidingOrShowing;
+import org.apache.causeway.core.metamodel.facetapi.FacetAbstract.Validating;
 import org.apache.causeway.core.metamodel.util.snapshot.XmlSchema;
+import org.springframework.lang.Nullable;
+import org.springframework.util.ClassUtils;
 
 import lombok.NonNull;
 import lombok.val;
@@ -107,19 +109,19 @@ public final class FacetUtil {
      * then adds given facet to its facetHolder, honoring precedence.
      */
     public static void updateFacet(final @Nullable Facet facet) {
-        if(facet==null) {
-            return;
-        }
-        final boolean skip = facet.getFacetHolder().lookupFacet(facet.facetType())
-                .map(Facet::getPrecedence)
-                .map(Facet.Precedence::ordinal)
-                .map(ordinal -> ordinal>facet.getPrecedence().ordinal())
-                .orElse(false);
-        if(skip) {
-            return;
-        }
+        if(facet==null) return;
 
-        purgeIf(facet.facetType(), facet.getClass()::isInstance, facet.getFacetHolder());
+        var qualifierKey = QualifiedFacet.Key.forFacet(facet);
+
+        facet.getFacetHolder().getFacetRanking(facet.facetType())
+            .ifPresent(ranking->ranking.purgeIf(facet.facetType(),
+                    qualifierKey, // discriminate by qualifier
+                    facet.getClass()::isInstance, // facet filter
+                    prec->qualifierKey.isQualified()
+                        ? true // if qualified, purge all ranks
+                        : prec.ordinal()<=facet.precedence().ordinal() // don't change ranks of higher precedence
+                ));
+
         addFacet(facet);
     }
 
@@ -132,18 +134,6 @@ public final class FacetUtil {
     public static <F extends Facet> void updateFacetIfPresent(
             final @NonNull Optional<? extends F> facetIfAny) {
         updateFacet(facetIfAny.orElse(null));
-    }
-
-    /**
-     * Removes any facet of facet-type from facetHolder if it passes the given filter.
-     */
-    private static <F extends Facet> void purgeIf(
-            final Class<F> facetType,
-            final Predicate<? super F> filter,
-            final FacetHolder facetHolder) {
-
-        facetHolder.getFacetRanking(facetType)
-        .ifPresent(ranking->ranking.purgeIf(facetType, filter));
     }
 
     // -- FACET ATTRIBUTES
@@ -205,6 +195,25 @@ public final class FacetUtil {
         .reduce((a, b)->b.getPrecedence().ordinal()>a.getPrecedence().ordinal()
                 ? b
                 : a);
+    }
+    
+	public static void visitAttributes(final Facet facet, final BiConsumer<String, Object> visitor) {
+        visitor.accept("facet", ClassUtils.getShortName(facet.getClass()));
+        visitor.accept("precedence", facet.precedence().name());
+
+        var interactionAdvisors = interactionAdvisors(facet, ", ");
+
+        // suppress 'advisors' if none
+        if(!interactionAdvisors.isEmpty()) {
+            visitor.accept("interactionAdvisors", interactionAdvisors);
+        }
+	}
+
+    private String interactionAdvisors(final Facet facet, final String delimiter) {
+        return Stream.of(Validating.class, HidingOrShowing.class, DisablingOrEnabling.class)
+	        .filter(marker->marker.isAssignableFrom(facet.getClass()))
+	        .map(Class::getSimpleName)
+	        .collect(Collectors.joining(delimiter));
     }
 
 }

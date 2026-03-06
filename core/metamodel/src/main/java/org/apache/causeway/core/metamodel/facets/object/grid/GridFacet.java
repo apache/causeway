@@ -18,26 +18,21 @@
  */
 package org.apache.causeway.core.metamodel.facets.object.grid;
 
-import org.springframework.lang.Nullable;
-
-import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.services.grid.GridSystemService;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.springframework.lang.Nullable;
+
 
 /**
  * Obtain the current grid, derived either from a <code>.layout.xml</code> file, and normalized, or synthesized from
  * existing layout metadata (annotations or <code>layout.json</code>).
- *
  * <p>
- *     Most of the heavy lifting is done by delegating to the {@link LayoutService} and {@link GridSystemService}
- *     services.
- * </p>
+ * Most of the heavy lifting is done by delegating to the {@link LayoutService} services.
  */
 public interface GridFacet extends Facet {
 
-    Grid getGrid(@Nullable ManagedObject objectAdapter);
-
+    BSGrid getGrid(@Nullable ManagedObject mo);
 
 }

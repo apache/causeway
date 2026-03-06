@@ -153,7 +153,5 @@ implements MenuBarsLoaderService {
                 cause);
     }
 
-
-
 }
 

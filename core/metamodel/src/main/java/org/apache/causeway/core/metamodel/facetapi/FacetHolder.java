@@ -28,9 +28,7 @@ import org.apache.causeway.applib.services.i18n.HasTranslationContext;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
-
-import lombok.NonNull;
-import lombok.val;
+import org.springframework.lang.NonNull;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -41,7 +39,7 @@ extends HasMetaModelContext, HasTranslationContext {
 
     // -- FACTORIES
 
-    public static FacetHolderAbstract simple(
+    public static FacetHolder simple(
             final MetaModelContext mmc,
             final Identifier featureIdentifier) {
         return new FacetHolderSimple(mmc, featureIdentifier);
@@ -58,7 +56,7 @@ extends HasMetaModelContext, HasTranslationContext {
     /**
      *  Meant for simple JUnit tests, that don't use the FacetHolder's identifier.
      */
-    public static FacetHolderAbstract forTesting(final MetaModelContext mmc) {
+    public static FacetHolder forTesting(final MetaModelContext mmc) {
         return simple(mmc, Identifier.classIdentifier(LogicalType.fqcn(Object.class)));
     }
 
@@ -71,18 +69,10 @@ extends HasMetaModelContext, HasTranslationContext {
 
     int getFacetCount();
 
-    /**
-     * Get the facet of the specified type (as per the type it reports from
-     * {@link Facet#facetType()}).
-     */
-    <T extends Facet> T getFacet(Class<T> facetType);
 
     // -- FACET LOOKUP
 
-    default <T extends Facet> Optional<T> lookupFacet(
-            final @NonNull Class<T> facetType) {
-        return Optional.ofNullable(getFacet(facetType));
-    }
+    <T extends Facet> Optional<T> lookupFacet(final @NonNull Class<T> facetType);
 
     default <T extends Facet> Optional<T> lookupFacet(
             final @NonNull Class<T> facetType,
@@ -92,7 +82,15 @@ extends HasMetaModelContext, HasTranslationContext {
 
     default <T extends Facet> Optional<T> lookupNonFallbackFacet(
             final @NonNull Class<T> facetType) {
-        return lookupFacet(facetType, facet->!facet.getPrecedence().isFallback());
+        return lookupFacet(facetType, facet->!facet.precedence().isFallback());
+    }
+
+    /**
+     * Get the facet of the specified type (as per the type it reports from
+     * {@link Facet#facetType()}).
+     */
+    default <T extends Facet> T getFacet(final Class<T> facetType) {
+        return lookupFacet(facetType).orElse(null);
     }
 
     // -- CONTAINS
@@ -110,9 +108,9 @@ extends HasMetaModelContext, HasTranslationContext {
      * <tt>null</tt> and not a fallback.
      */
     default boolean containsNonFallbackFacet(final Class<? extends Facet> facetType) {
-        val facet = getFacet(facetType);
-        return facet != null
-                && !facet.getPrecedence().isFallback();
+        return lookupFacet(facetType)
+            .map(facet->!facet.precedence().isFallback())
+            .orElse(false);
     }
 
     /**
@@ -120,10 +118,10 @@ extends HasMetaModelContext, HasTranslationContext {
      * facet is <i>explicit</i>, not {@link Facet.Precedence#isInferred() inferred}.
      */
     default boolean containsExplicitNonFallbackFacet(final Class<? extends Facet> facetType) {
-        val facet = getFacet(facetType);
-        return facet != null
-                && !facet.getPrecedence().isFallback()
-                && !facet.getPrecedence().isInferred();
+        return lookupFacet(facetType)
+                .map(facet->!facet.precedence().isFallback()
+                        && !facet.precedence().isInferred())
+                .orElse(false);
     }
 
     Stream<Facet> streamFacets();

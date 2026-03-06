@@ -22,28 +22,41 @@ import java.util.Optional;
 
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
+import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacet;
 import org.apache.causeway.core.metamodel.facets.objectvalue.daterenderedadjust.DateRenderAdjustFacetAbstract;
+import org.springframework.lang.Nullable;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 public class RenderedAdjustedFacetForPropertyLayoutXml
-extends DateRenderAdjustFacetAbstract {
+extends DateRenderAdjustFacetAbstract
+implements QualifiedFacet {
 
     public static Optional<DateRenderAdjustFacet> create(
             final PropertyLayoutData propertyLayout,
             final FacetHolder holder,
-            final Precedence precedence) {
-        if(propertyLayout == null) {
+            final Precedence precedence,
+            final @Nullable String qualifier) {
+        if(propertyLayout == null)
             return Optional.empty();
-        }
         final int adjustByDays = propertyLayout.getDateRenderAdjustDays();
         return adjustByDays != 0
-                        ? Optional.of(new RenderedAdjustedFacetForPropertyLayoutXml(adjustByDays, holder, precedence))
-                        : Optional.empty();
+            ? Optional.of(new RenderedAdjustedFacetForPropertyLayoutXml(adjustByDays, holder, precedence, qualifier))
+            : Optional.empty();
     }
 
+    @Getter(onMethod_ = @Override) @Accessors(fluent = true, makeFinal = true)
+    private final @Nullable String qualifier;
+
     private RenderedAdjustedFacetForPropertyLayoutXml(
-            final int adjustByDays, final FacetHolder holder, final Precedence precedence) {
+            final int adjustByDays,
+            final FacetHolder holder,
+            final Precedence precedence,
+            final @Nullable String qualifier) {
         super(adjustByDays, holder, precedence);
+        this.qualifier = qualifier;
     }
 
     @Override

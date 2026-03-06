@@ -25,16 +25,13 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.menu.MenuBarsService;
@@ -46,6 +43,8 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -123,7 +122,7 @@ public class SitemapServiceDefault implements SitemapService {
                     val grid = specificationLoader.specForType(actionElementType.getCorrespondingClass())
                                 .flatMap(Facets::bootstrapGrid)
                                 .orElse(null);
-                    grid.visit(new Grid.VisitorAdapter() {
+                    grid.visit(new BSElementVisitor() {
                         @Override public void visit(final ActionLayoutData actionLayoutData) {
                             actionElementType.getAction(actionLayoutData.getId(), ActionScope.PRODUCTION_ONLY)
                             .ifPresent(action->{

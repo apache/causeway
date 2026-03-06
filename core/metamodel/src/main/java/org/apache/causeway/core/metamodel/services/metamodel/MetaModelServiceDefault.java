@@ -113,7 +113,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public void rebuild(final Class<?> domainType) {
 
-        gridService.remove(domainType);
+        gridService.invalidate(domainType);
         specificationLoader.reloadSpecification(domainType);
     }
 

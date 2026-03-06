@@ -85,7 +85,11 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
         this.cols = cols;
     }
 
-
+    @XmlTransient
+    @Programmatic
+	public List<BSRowContent> getRowContents() {
+		return cols;
+	}
 
 
     private String metadataError;
@@ -137,6 +141,5 @@ public class BSRow extends BSElementAbstract implements HasCssId, BSRowContentOw
                 "id='" + id + '\'' +
                 '}';
     }
-
 
 }
