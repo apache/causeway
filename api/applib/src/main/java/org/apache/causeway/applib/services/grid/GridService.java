@@ -115,7 +115,11 @@ public interface GridService {
      *     {@link GridLoaderService}.
      * </p>
      */
-    Grid load(final Class<?> domainClass);
+    Grid load(LayoutKey layoutKey);
+    
+    default Grid load(final Class<?> domainClass) {
+    	return load(new LayoutKey(domainClass));
+    }
 
     /**
      * Returns an alternative layout for the domain class.
@@ -133,7 +137,9 @@ public interface GridService {
      *      named layout file, <code>[domainClass].layout.[layout].xml</code>.
      * </p>
      */
-    Grid load(Class<?> domainClass, String layout);
+    default Grid load(Class<?> domainClass, String layout) {
+    	return load(new LayoutKey(domainClass, layout));
+    }
 
     /**
      * Returns a default grid; eg where none can be loaded using {@link #load(Class)}.

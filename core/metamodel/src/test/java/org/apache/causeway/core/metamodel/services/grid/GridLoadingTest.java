@@ -22,15 +22,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.EnumSet;
 
 import org.apache.causeway.applib.services.grid.GridLoaderService;
+import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.applib.services.layout.LayoutService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
@@ -46,10 +50,22 @@ extends MetaModelTestAbstract {
     private LayoutService layoutService;
 
     @Override
+    protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {
+    	var env = new CausewaySystemEnvironment();
+        env.setUnitTesting(true);
+        env.setPrototyping(true);
+    	mmcBuilder.systemEnvironment(env);
+    }
+    
+    @Override
     protected void afterSetUp() {
         layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
         gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry()
                 .lookupServiceElseFail(GridLoaderService.class);
+        
+        var gridService = ((GridServiceDefault) getServiceRegistry()
+                .lookupServiceElseFail(GridService.class));
+        assertTrue(gridService.supportsReloading(), ()->"unmet test precondition 'supportsReloading'");
     }
 
     // test blueprint, for future work

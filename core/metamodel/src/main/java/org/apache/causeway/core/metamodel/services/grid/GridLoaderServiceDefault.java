@@ -86,8 +86,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         this.layoutResourceLoaders = Can.ofCollection(layoutResourceLoaders);
     }
 
-
-
     // for better logging messages (used only in prototyping mode)
     private final Map<LayoutKey, String> badContentByKey = _Maps.newHashMap();
     // cache (used only in prototyping mode)

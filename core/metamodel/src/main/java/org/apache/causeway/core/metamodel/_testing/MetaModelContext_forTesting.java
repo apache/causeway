@@ -283,6 +283,7 @@ extends MetaModelContext {
     private static CausewaySystemEnvironment newCausewaySystemEnvironment() {
         val env = new CausewaySystemEnvironment();
         env.setUnitTesting(true);
+        env.setPrototyping(false);
         return env;
     }
 
@@ -473,7 +474,8 @@ extends MetaModelContext {
     private final GridLoaderService gridLoaderService = createGridLoaderService();
     //XXX lombok issue: won't compile if inlined
     private final GridLoaderService createGridLoaderService() {
-        return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), /*support reloading*/true);
+        return new GridLoaderServiceDefault(getMessageService(), Can.of(new LayoutResourceLoaderDefault()), 
+        		systemEnvironment.isPrototyping());// /*support reloading*/true);
     }
 
     @Getter(lazy = true)

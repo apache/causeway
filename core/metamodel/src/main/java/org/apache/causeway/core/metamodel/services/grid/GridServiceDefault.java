@@ -28,7 +28,7 @@ import javax.inject.Named;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.StringUtils;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
@@ -85,15 +85,12 @@ public class GridServiceDefault implements GridService {
         return gridLoaderService.existsFor(domainClass, marshaller.supportedFormats());
     }
 
-    @Override
-    public Grid load(final Class<?> domainClass) {
-        return gridLoaderService.load(domainClass, marshaller).orElse(null);
-    }
-
-    @Override
-    public Grid load(final Class<?> domainClass, final String layout) {
-        return gridLoaderService.load(domainClass, layout, marshaller).orElse(null);
-    }
+	@Override
+	public Grid load(LayoutKey layoutKey) {
+		return StringUtils.hasLength(layoutKey.layoutIfAny())
+			? gridLoaderService.load(layoutKey.domainClass(), layoutKey.layoutIfAny(), marshaller).orElse(null)
+			: gridLoaderService.load(layoutKey.domainClass(), marshaller).orElse(null);
+	}
 
     // //////////////////////////////////////
 

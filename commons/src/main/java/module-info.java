@@ -26,6 +26,7 @@ module org.apache.causeway.commons {
     exports org.apache.causeway.commons.handler;
     exports org.apache.causeway.commons.having;
     exports org.apache.causeway.commons.io;
+    exports org.apache.causeway.commons.net;
     // internals exported as well
     exports org.apache.causeway.commons.internal;
     exports org.apache.causeway.commons.internal.assertions;
@@ -80,6 +81,7 @@ module org.apache.causeway.commons {
     requires com.fasterxml.jackson.dataformat.yaml;
     requires com.fasterxml.jackson.datatype.jdk8;
     requires java.management;
+	requires org.jspecify;
 
     opens org.apache.causeway.commons.internal.resources to java.xml.bind, com.sun.xml.bind; // JUnit test
     opens org.apache.causeway.commons.io to java.xml.bind, com.sun.xml.bind;
