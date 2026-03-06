@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.facetapi.QualifiedFacet.Key;
 /**
  * Multiple {@link FacetRank}(s) are collected into a single {@link FacetRanking}.
  *
- * @apiNote not thread-safe
+ * @apiNote thread-safe
  */
 record FacetRank<F extends Facet>(
         Class<F> facetType,
@@ -44,7 +44,7 @@ record FacetRank<F extends Facet>(
     FacetRank(
             final Class<F> facetType,
             final Facet.Precedence precedence) {
-        this(facetType, precedence, _Multimaps.newListMultimap());
+        this(facetType, precedence, _Multimaps.newConcurrentListMultimap());
     }
 
     QualifiedFacet.Key key(final @Nullable String qualifier) {
