@@ -54,10 +54,10 @@ extends MetaModelTestAbstract {
 
     // test blueprint, for future work
     void blueprint() {
-        val domainClassAndLayout = new LayoutKey(Bar.class, null);
-        gridLoaderService.loadLayoutResource(domainClassAndLayout, EnumSet.of(CommonMimeType.XML));
+        val layoutKey = new LayoutKey(Bar.class, null);
+        gridLoaderService.loadLayoutResource(layoutKey, EnumSet.of(CommonMimeType.XML));
 
-        val xml = layoutService.objectLayout(Bar.class, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
+        val xml = layoutService.objectLayout(layoutKey, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
         System.out.println(xml);
     }
 

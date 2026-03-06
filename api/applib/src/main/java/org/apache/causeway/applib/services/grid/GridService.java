@@ -196,13 +196,16 @@ public interface GridService {
     GridMarshallerService<? extends Grid> marshaller();
 
     default Grid toGridForExport(
-            final Class<?> domainClass,
+            final LayoutKey layoutKey,
             final LayoutExportStyle style) {
 
         // don't use the grid from the facet, because it will be modified subsequently.
-        Grid grid = load(domainClass);
+        Grid grid = load(layoutKey.domainClass);
         if(grid == null) {
-            grid = defaultGridFor(domainClass);
+            grid = defaultGridFor(layoutKey.domainClass);
+            grid.layoutKey(new LayoutKey(layoutKey.domainClass, null));
+        } else {
+        	grid.layoutKey(layoutKey);
         }
         grid = normalize(grid); // required so the grid's tns and schema-locations get populated
         if (style == LayoutExportStyle.COMPLETE) {
