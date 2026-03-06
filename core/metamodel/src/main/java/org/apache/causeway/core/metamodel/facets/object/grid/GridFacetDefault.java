@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.lang.Nullable;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
@@ -60,7 +59,7 @@ implements GridFacet {
     private final _Lazy<LayoutFacet> layoutFacetLazy = _Lazy.threadSafe(()->
         facetHolder().getFacet(LayoutFacet.class));
 
-    private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
+    private final Map<String, BSGrid> gridByLayoutName = new ConcurrentHashMap<>();
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
@@ -70,7 +69,7 @@ implements GridFacet {
     }
 
     @Override
-    public Grid getGrid(final @Nullable ManagedObject objectAdapter) {
+    public BSGrid getGrid(final @Nullable ManagedObject objectAdapter) {
 
         guardAgainstObjectOfDifferentType(objectAdapter);
 

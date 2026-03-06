@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.applib.services.grid;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 
 /**
@@ -37,14 +36,14 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 public interface GridSystemService {
 
     /**
-     * The concrete subclass of {@link Grid} supported by this implementation.
+     * The concrete subclass of {@link BSGrid} supported by this implementation.
      *
      * <p>
      *     There can be multiple implementations of this service, this indicates
      *     the base class used by the implementation.
      * </p>
      */
-    default Class<? extends Grid> gridImplementation() {
+    default Class<BSGrid> gridImplementation() {
     	return BSGrid.class;
     }
 

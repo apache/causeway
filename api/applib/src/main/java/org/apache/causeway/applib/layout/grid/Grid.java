@@ -18,16 +18,11 @@
  */
 package org.apache.causeway.applib.layout.grid;
 
-import java.util.LinkedHashMap;
-import java.util.Optional;
-
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutService;
 
 /**
@@ -39,49 +34,8 @@ import org.apache.causeway.applib.services.layout.LayoutService;
  *
  * @since 1.x {@index}
  */
+@Deprecated
 public interface Grid {
-	
-	@Programmatic
-	LayoutKey layoutKey();
-	@Programmatic
-    void layoutKey(LayoutKey layoutKey);
-	
-    @Programmatic
-    default Class<?> domainClass() {
-    	return Optional.ofNullable(layoutKey()).map(LayoutKey::domainClass).orElse(null);
-    }
-
-    @Programmatic
-    String getTnsAndSchemaLocation();
-
-    @Programmatic
-    void setTnsAndSchemaLocation(final String tnsAndSchemaLocation);
-
-    /**
-     * Indicates whether or not this grid is a fallback.
-     * {@code True}, if this Grid originates from
-     * {@link org.apache.causeway.applib.services.grid.GridSystemService#defaultGrid(Class)}.
-     * <p>
-     * Governs meta-model facet precedence, that is,
-     * facets from annotations should overrule those from fallback XML grids.
-     */
-    @Programmatic
-    default boolean isFallback() { return false; }
-
-    @Programmatic
-    boolean isNormalized();
-
-    @Programmatic
-    void setNormalized(final boolean normalized);
-
-    @Programmatic
-    LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
-
-    @Programmatic
-    LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
-
-    @Programmatic
-    LinkedHashMap<String, ActionLayoutData> getAllActionsById();
 
     interface Visitor {
         void visit(final DomainObjectLayoutData domainObjectLayoutData);
@@ -107,8 +61,5 @@ public interface Grid {
         @Override public void visit(final FieldSet fieldSet) {
         }
     }
-
-    @Programmatic
-    void visit(final Grid.Visitor visitor);
 
 }

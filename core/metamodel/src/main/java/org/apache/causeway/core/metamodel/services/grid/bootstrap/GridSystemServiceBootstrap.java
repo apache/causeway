@@ -41,7 +41,6 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
@@ -236,7 +235,7 @@ extends GridSystemServiceAbstract {
 
     @Override
     protected boolean validateAndNormalize(
-            final Grid grid,
+            final BSGrid grid,
             final Class<?> domainClass) {
 
         val bsGrid = (BSGrid) grid;

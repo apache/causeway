@@ -131,7 +131,7 @@ implements GridSystemService {
      * (eg facets from annotations) or just by applying default rules.
      */
     protected abstract boolean validateAndNormalize(
-            final Grid grid,
+            final BSGrid grid,
             final Class<?> domainClass);
 
 

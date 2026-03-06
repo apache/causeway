@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
@@ -145,7 +145,7 @@ public class LayoutServiceDefault implements LayoutService {
             gridToFormatted(gridService.toGridForExport(layoutKey, style), format));
     }
 
-    private String gridToFormatted(final @Nullable Grid grid, final CommonMimeType format) {
+    private String gridToFormatted(final @Nullable BSGrid grid, final CommonMimeType format) {
         if(grid==null) {
             return null;
         }

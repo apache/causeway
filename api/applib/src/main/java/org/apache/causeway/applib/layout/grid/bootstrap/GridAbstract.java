@@ -21,6 +21,7 @@ package org.apache.causeway.applib.layout.grid.bootstrap;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -36,6 +37,10 @@ import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutService;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 /**
  * All top-level page layout classes should implement this interface.
  *
@@ -46,37 +51,29 @@ import org.apache.causeway.applib.services.layout.LayoutService;
  * @since 1.x {@index}
  */
 @XmlTransient // ignore this class
-abstract class GridAbstract implements Grid {
+abstract class GridAbstract {
 
+	@Getter @Setter @Accessors(fluent = true)
     private LayoutKey layoutKey;
-
-    @Override
-    public LayoutKey layoutKey() {
-        return layoutKey;
+    
+    @Programmatic
+    public final Class<?> domainClass() {
+    	return Optional.ofNullable(layoutKey()).map(LayoutKey::domainClass).orElse(null);
     }
-
-    @Override
-    public void layoutKey(final LayoutKey layoutKey) {
-        this.layoutKey = layoutKey;
-    }
-
 
     private String tnsAndSchemaLocation;
-    @Override
     @Programmatic
     @XmlTransient
     public String getTnsAndSchemaLocation() {
         return tnsAndSchemaLocation;
     }
 
-    @Override
     @Programmatic
     public void setTnsAndSchemaLocation(final String tnsAndSchemaLocation) {
         this.tnsAndSchemaLocation = tnsAndSchemaLocation;
     }
 
     private boolean fallback;
-    @Override
     @Programmatic
     @XmlTransient
     public boolean isFallback() {
@@ -88,13 +85,11 @@ abstract class GridAbstract implements Grid {
     }
 
     private boolean normalized;
-    @Override
     @Programmatic
     @XmlTransient
     public boolean isNormalized() {
         return normalized;
     }
-    @Override
     @Programmatic
     public void setNormalized(final boolean normalized) {
         this.normalized = normalized;
@@ -105,7 +100,7 @@ abstract class GridAbstract implements Grid {
      */
     protected void traverseActions(
             final ActionLayoutDataOwner actionLayoutDataOwner,
-            final GridAbstract.Visitor visitor) {
+            final Grid.Visitor visitor) {
 
         final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
         if(actionLayoutDatas == null) {
@@ -121,7 +116,7 @@ abstract class GridAbstract implements Grid {
     /**
      * Convenience for subclasses.
      */
-    protected void traverseFieldSets(final FieldSetOwner fieldSetOwner, final GridAbstract.Visitor visitor) {
+    protected void traverseFieldSets(final FieldSetOwner fieldSetOwner, final Grid.Visitor visitor) {
         final List<FieldSet> fieldSets = fieldSetOwner.getFieldSets();
         for (FieldSet fieldSet : new ArrayList<>(fieldSets)) {
             fieldSet.setOwner(fieldSetOwner);
@@ -141,7 +136,7 @@ abstract class GridAbstract implements Grid {
      * Convenience for subclasses.
      */
     protected void traverseCollections(
-            final CollectionLayoutDataOwner owner, final GridAbstract.Visitor visitor) {
+            final CollectionLayoutDataOwner owner, final Grid.Visitor visitor) {
         final List<CollectionLayoutData> collections = owner.getCollections();
         for (CollectionLayoutData collection : new ArrayList<>(collections)) {
             collection.setOwner(owner);
@@ -150,8 +145,6 @@ abstract class GridAbstract implements Grid {
         }
     }
 
-
-    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
@@ -166,7 +159,6 @@ abstract class GridAbstract implements Grid {
     }
 
 
-    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
@@ -181,8 +173,6 @@ abstract class GridAbstract implements Grid {
         return collectionsById;
     }
 
-
-    @Override
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {
@@ -197,8 +187,6 @@ abstract class GridAbstract implements Grid {
         return actionsById;
     }
 
-
-    @Programmatic
     @XmlTransient
     public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
         final LinkedHashMap<String, FieldSet> fieldSetsByName = new LinkedHashMap<>();
@@ -211,6 +199,8 @@ abstract class GridAbstract implements Grid {
         });
         return fieldSetsByName;
     }
-
+    
+    @Programmatic
+    abstract void visit(final Grid.Visitor visitor);
 
 }

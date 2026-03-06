@@ -18,12 +18,11 @@
  */
 package org.apache.causeway.applib.services.grid;
 
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.marshal.MarshallerService;
 
 /**
- * Supports {@link Grid} marshaling and unmarshaling.
+ * Supports {@link BSGrid} marshaling and unmarshaling.
  *
  * @since 2.0 {@index}
  */

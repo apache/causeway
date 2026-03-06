@@ -34,6 +34,7 @@ import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.component.ServiceActionLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.menubars.MenuBars;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
@@ -169,7 +170,7 @@ public class WelcomeHelpPage implements HelpPage {
     private StringBuffer documentationForObjectType(final ObjectSpecification objectSpec) {
         StringBuffer html = new StringBuffer();
 
-        Grid grid = toGrid(objectSpec.getCorrespondingClass());
+        BSGrid grid = toGrid(objectSpec.getCorrespondingClass());
         html.append("<ul>");
         {
             html.append("<ul>");
@@ -272,7 +273,7 @@ public class WelcomeHelpPage implements HelpPage {
                 .map(typeSpec -> typeSpec.getAction(actionLayout.getId(), ActionScope.PRODUCTION_ONLY).orElse(null));
     }
 
-    private Grid toGrid(final Class<?> domainClass) {
+    private BSGrid toGrid(final Class<?> domainClass) {
         return specificationLoader.specForType(domainClass)
                 .flatMap(spec -> spec.lookupFacet(GridFacet.class))
                 .map(gridFacet -> gridFacet.getGrid(null))

@@ -34,14 +34,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.springframework.stereotype.Component;
-
 import org.apache.causeway.applib.annotation.Where;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.commons.io.UrlUtils;
 import org.apache.causeway.core.metamodel.consent.Consent;
@@ -65,6 +64,7 @@ import org.apache.causeway.viewer.restfulobjects.rendering.RestfulObjectsApplica
 import org.apache.causeway.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.causeway.viewer.restfulobjects.rendering.util.RequestParams;
 import org.apache.causeway.viewer.restfulobjects.viewer.context.ResourceContext;
+import org.springframework.stereotype.Component;
 
 import lombok.NonNull;
 import lombok.val;
@@ -322,7 +322,7 @@ implements DomainObjectResource {
                 .build());
     }
 
-    private Optional<Grid> layoutAsGrid(
+    private Optional<BSGrid> layoutAsGrid(
             final String domainType,
             final String instanceId) {
 
@@ -339,7 +339,7 @@ implements DomainObjectResource {
             final ResourceContext resourceContext,
             final String domainType,
             final String instanceId,
-            final Grid grid) {
+            final BSGrid grid) {
 
         grid.visit(new Grid.VisitorAdapter() {
             @Override

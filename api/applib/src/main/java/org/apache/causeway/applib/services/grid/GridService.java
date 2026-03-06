@@ -24,7 +24,6 @@ import org.apache.causeway.applib.annotation.ActionLayout;
 import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
-import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -102,7 +101,7 @@ public interface GridService {
     boolean existsFor(Class<?> domainClass);
 
     /**
-     * Returns a new instance of a {@link Grid} for the specified domain class,
+     * Returns a new instance of a {@link BSGrid} for the specified domain class,
      * for example as loaded from a <code>layout.xml</code> file.
      *
      * <p>
@@ -167,14 +166,14 @@ public interface GridService {
      *     annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and
      *     {@link CollectionLayout}) (if present) will continue to be used to provide additional layout metadata.  Of
      *     course, there is nothing to prevent the developer from extending the layout XML to also include the
-     *     layout XML (in other words moving towards a {@link #complete(Grid) complete} grid.  Metadata within the
+     *     layout XML (in other words moving towards a {@link #complete(BSGrid) complete} grid.  Metadata within the
      *     <code>layout.xml</code> file takes precedence over any annotations.
      * </p>
      */
     BSGrid normalize(BSGrid grid);
 
     /**
-     * Modifies the provided {@link Grid} with additional metadata, broadly speaking corresponding to the
+     * Modifies the provided {@link BSGrid} with additional metadata, broadly speaking corresponding to the
      * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
      *
      * <p>
@@ -186,7 +185,7 @@ public interface GridService {
     BSGrid complete(BSGrid grid);
 
     /**
-     * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure.
+     * Modifies the provided {@link BSGrid}, removing all metadata except the basic grid structure.
      *
      * <p>
      *     If a 'minimal' grid is persisted as the <code>layout.xml</code>, then the expectation is that
