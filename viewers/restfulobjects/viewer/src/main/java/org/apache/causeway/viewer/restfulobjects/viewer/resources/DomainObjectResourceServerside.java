@@ -39,7 +39,7 @@ import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.layout.links.Link;
 import org.apache.causeway.commons.io.UrlUtils;
@@ -341,7 +341,7 @@ implements DomainObjectResource {
             final String instanceId,
             final BSGrid grid) {
 
-        grid.visit(new Grid.VisitorAdapter() {
+        grid.visit(new BSElementVisitor() {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
                 Link link = new Link(

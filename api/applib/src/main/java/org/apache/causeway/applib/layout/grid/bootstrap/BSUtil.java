@@ -28,6 +28,7 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.commons.internal._Java17Ex;
 import org.springframework.util.Assert;
 import org.springframework.util.SerializationUtils;
@@ -48,6 +49,11 @@ public class BSUtil {
         return (BSGrid)orig;
     }
 
+    public BSGrid resolveOwners(final BSGrid grid) {
+        new BSElementOwnerResolvingWalker(grid).walk();
+        return grid;
+    }
+    
     /**
      * Useful for debugging or comparing grid instances (e.g. JUnit tests).
      */
@@ -63,24 +69,24 @@ public class BSUtil {
         }
         var w = new TinyWriter();
 
-        grid.visit(new BSGrid.VisitorAdapter() {
-            @Override public void preVisit(final BSGrid bsGrid) {
+        grid.visit(new BSElementVisitor() {
+            @Override public void enter(final BSGrid bsGrid) {
                 w.writeln("bsGrid:");
                 w.inc();
                 w.writeln("class: %s".formatted(bsGrid.domainClass().getName()));
                 w.writeln("layoutKey: %s".formatted(bsGrid.layoutKey()));
             }
-            @Override public void postVisit(final BSGrid bsGrid) {
+            @Override public void exit(final BSGrid bsGrid) {
                 w.dec();
             }
-            @Override public void preVisit(final BSRow bsRow) {
+            @Override public void enter(final BSRow bsRow) {
                 w.writeln("row:");
                 w.inc();
             }
-            @Override public void postVisit(final BSRow bsRow) {
+            @Override public void exit(final BSRow bsRow) {
                 w.dec();
             }
-            @Override public void preVisit(final BSCol bsCol) {
+            @Override public void enter(final BSCol bsCol) {
                 w.writeln("col:");
                 w.inc();
                 w.writeln("span: %s".formatted(bsCol.getSpan()));
@@ -91,22 +97,22 @@ public class BSUtil {
                     w.writeln("unreferencedCollections: true");
                 }
             }
-            @Override public void postVisit(final BSCol bsCol) {
+            @Override public void exit(final BSCol bsCol) {
                 w.dec();
             }
-            @Override public void preVisit(final BSTabGroup bsTabGroup) {
+            @Override public void enter(final BSTabGroup bsTabGroup) {
                 w.writeln("tabGroup:");
                 w.inc();
             }
-            @Override public void postVisit(final BSTabGroup bsTabGroup) {
+            @Override public void exit(final BSTabGroup bsTabGroup) {
                 w.dec();
             }
-            @Override public void preVisit(final BSTab bsTab) {
+            @Override public void enter(final BSTab bsTab) {
                 w.writeln("tab:");
                 w.inc();
                 w.writeln("name: %s".formatted(bsTab.getName()));
             }
-            @Override public void postVisit(final BSTab bsTab) {
+            @Override public void exit(final BSTab bsTab) {
                 w.dec();
             }
 
@@ -178,13 +184,17 @@ public class BSUtil {
         tab.setOwner(null);
         return ownerOpt;
     }
-//    /** removes the col from its owner and returns the owner */
-//    public Optional<BSRowContentOwner> remove(final BSCol col) {
-//        var ownerOpt = Optional.ofNullable(col.getOwner());
-//        ownerOpt.ifPresent(owner->owner.getRowContents().remove(col));
-//        col.setOwner(null);
-//        return ownerOpt;
-//    }
+    /** removes the col from its owner and returns the owner */
+    public Optional<BSRowContentOwner> remove(final BSCol col) {
+        var ownerOpt = Optional.ofNullable(col.getOwner());
+        ownerOpt.ifPresent(owner->{ 
+        	if(owner instanceof BSRow) {
+        		((BSRow)owner).getRowContents().remove(col);
+        	}
+        });
+        col.setOwner(null);
+        return ownerOpt;
+    }
     /** removes the tabGroup from its owner and returns the owner */
     public Optional<BSTabGroupOwner> remove(final BSTabGroup tabGroup) {
         var ownerOpt = Optional.ofNullable(tabGroup.getOwner());

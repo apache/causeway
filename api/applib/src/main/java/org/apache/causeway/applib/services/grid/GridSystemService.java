@@ -33,6 +33,7 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
  *
  * @since 1.x {@index}
  */
+@Deprecated
 public interface GridSystemService {
 
     /**

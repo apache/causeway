@@ -393,10 +393,8 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static Stream<ObjectAction> findForAssociation(
-                final ManagedObject adapter,
+                final ObjectSpecification spec,
                 final ObjectAssociation association) {
-
-            val spec = adapter.objSpec();
 
             return spec.streamRuntimeActions(MixedIn.INCLUDED)
             .filter(Predicates.isSameLayoutGroupAs(association))

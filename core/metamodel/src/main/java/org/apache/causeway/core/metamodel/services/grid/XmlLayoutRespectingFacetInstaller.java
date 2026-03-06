@@ -16,34 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid.bootstrap;
+package org.apache.causeway.core.metamodel.services.grid;
 
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
 
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.inject.Inject;
-
-import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
-import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
-import org.apache.causeway.applib.services.grid.GridSystemService;
-import org.apache.causeway.applib.services.i18n.TranslationService;
-import org.apache.causeway.applib.services.jaxb.JaxbService;
-import org.apache.causeway.applib.services.message.MessageService;
-import org.apache.causeway.commons.internal.collections._Sets;
-import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetUtil;
 import org.apache.causeway.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
@@ -79,61 +64,18 @@ import org.apache.causeway.core.metamodel.facets.properties.propertylayout.Multi
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyLayoutXml;
 import org.apache.causeway.core.metamodel.facets.properties.propertylayout.UnchangingFacetForPropertyLayoutXml;
-import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.MetamodelToGridOverridingVisitor;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import lombok.val;
-import lombok.extern.log4j.Log4j2;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
-@RequiredArgsConstructor(onConstructor_ = {@Inject}, access = AccessLevel.PROTECTED)
-@Log4j2
-abstract class GridSystemServiceAbstract
-implements GridSystemService {
-
-    protected final SpecificationLoader specificationLoader;
-    protected final TranslationService translationService;
-    protected final JaxbService jaxbService;
-    protected final MessageService messageService;
-    protected final CausewaySystemEnvironment causewaySystemEnvironment;
-
-    @Override
-    public void normalize(final BSGrid grid, final Class<?> domainClass) {
-
-        if(!gridImplementation().isAssignableFrom(grid.getClass())) {
-            // ignore any other grid implementations
-            return;
-        }
-
-        final boolean valid = validateAndNormalize(grid, domainClass);
-        if (valid) {
-            installFacets(grid);
-            if(log.isDebugEnabled()) {
-                log.debug("Grid:\n\n{}\n\n", jaxbService.toXml(grid));
-            }
-        } else {
-
-            if(causewaySystemEnvironment.isPrototyping()) {
-                messageService.warnUser("Grid metadata errors for " + grid.layoutKey() + "; check the error log");
-            }
-            log.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
-        }
-    }
-
-
-    /**
-     * Mandatory hook method for subclasses, where they must ensure that all object members (properties, collections
-     * and actions) are in the grid metadata, typically by deriving this information from other existing metadata
-     * (eg facets from annotations) or just by applying default rules.
-     */
-    protected abstract boolean validateAndNormalize(
-            final BSGrid grid,
-            final Class<?> domainClass);
-
+@AllArgsConstructor
+@Getter @Accessors(fluent = true)
+final class XmlLayoutRespectingFacetInstaller {
+    private final SpecificationLoader specLoader;
 
     /**
      * Overwrites (replaces) any existing facets in the metamodel with info taken from the grid.
@@ -141,25 +83,23 @@ implements GridSystemService {
      * @implNote This code uses {@link FacetUtil#updateFacet(Facet)}
      * because the layout might be reloaded from XML if reloading is supported.
      */
-    private void installFacets(
-            final BSGrid fcGrid) {
-    	
-        final LayoutKey layoutKey = Objects.requireNonNull(fcGrid.layoutKey());
-    	
-    	final Class<?> domainClass = layoutKey.domainClass();
-        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
+    void installFacets(
+            final LayoutKey layoutKey,
+            final BSGrid bsGrid) {
 
-        val oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
-        val oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
-        val objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
+        var objectSpec = specLoader.specForTypeElseFail(layoutKey.domainClass());
+
+        var oneToOneAssociationById = ObjectMember.mapById(objectSpec.streamProperties(MixedIn.INCLUDED));
+        var oneToManyAssociationById = ObjectMember.mapById(objectSpec.streamCollections(MixedIn.INCLUDED));
+        var objectActionById = ObjectMember.mapById(objectSpec.streamRuntimeActions(MixedIn.INCLUDED));
 
         // governs, whether annotations win over XML grid, based on whether XML grid is fallback or 'explicit'
-        val precedence = fcGrid.isFallback()
+        var precedence = bsGrid.fallback()
                 ? Facet.Precedence.LOW // fallback case: XML layout is overruled by layout from annotations
                 : Facet.Precedence.HIGH; // non-fallback case: XML layout overrules layout from annotations
 
-        final AtomicInteger propertySequence = new AtomicInteger(0);
-        fcGrid.visit(new Grid.VisitorAdapter() {
+        bsGrid.visit(new BSElementVisitor() {
+            private int propertySequence = 1;
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -170,8 +110,8 @@ implements GridSystemService {
             @Override
             public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
 
-            	var qualifier = layoutKey.layoutIfAny();
-            	
+                var qualifier = layoutKey.layoutIfAny();
+
                 updateFacetIfPresent(
                         BookmarkPolicyFacetForDomainObjectLayoutXml
                             .create(domainObjectLayoutData, objectSpec, precedence, qualifier));
@@ -195,21 +135,17 @@ implements GridSystemService {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
 
-                val actionLayoutDataOwner = actionLayoutData.getOwner();
-                val objectAction = objectActionById.get(actionLayoutData.getId());
-                if(objectAction == null) {
-                    return;
-                }
-                
+                var actionLayoutDataOwner = actionLayoutData.getOwner();
+                var objectAction = objectActionById.get(actionLayoutData.getId());
+                if(objectAction == null) return;
+
                 var qualifier = layoutKey.layoutIfAny();
-                
-                
+
                 {
                     GroupIdAndName groupIdAndName = null;
                     int memberOrderSequence;
                     if(actionLayoutDataOwner instanceof FieldSet) {
-                    	var fieldSet = (FieldSet) actionLayoutDataOwner;
-                        for (var propertyLayoutData : fieldSet.getProperties()) {
+                        for (var propertyLayoutData : ((FieldSet)actionLayoutDataOwner).getProperties()) {
                             // any will do; choose the first one that we know is valid
                             if(oneToOneAssociationById.containsKey(propertyLayoutData.getId())) {
                                 groupIdAndName = GroupIdAndName
@@ -235,10 +171,10 @@ implements GridSystemService {
                         memberOrderSequence = actionDomainObjectSequence++;
                     }
                     updateFacet(
-                    		LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence, qualifier));
+                            LayoutOrderFacetForLayoutXml.create(memberOrderSequence, objectAction, precedence, qualifier));
 
                     //XXX hotfix: always override LayoutGroupFacetFromActionLayoutAnnotation, otherwise actions are not shown - don't know why
-                    var precedenceHotfix = fcGrid.isFallback()
+                    var precedenceHotfix = bsGrid.fallback()
                             ? Facet.Precedence.DEFAULT
                             : Facet.Precedence.HIGH;
 
@@ -288,13 +224,11 @@ implements GridSystemService {
 
             @Override
             public void visit(final PropertyLayoutData propertyLayoutData) {
-                val oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
-                if(oneToOneAssociation == null) {
-                    return;
-                }
+                var oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
+                if(oneToOneAssociation == null) return;
 
                 var qualifier = layoutKey.layoutIfAny();
-                
+
                 updateFacetIfPresent(
                         CssClassFacetForPropertyLayoutXml.create(propertyLayoutData, oneToOneAssociation, precedence, qualifier));
 
@@ -331,7 +265,7 @@ implements GridSystemService {
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
 
                 updateFacet(
-                		LayoutOrderFacetForLayoutXml.create(propertySequence.incrementAndGet(), oneToOneAssociation, precedence, qualifier));
+                        LayoutOrderFacetForLayoutXml.create(propertySequence++, oneToOneAssociation, precedence, qualifier));
 
                 updateFacetIfPresent(
                         LayoutGroupFacetForLayoutXml.create(fieldSet, oneToOneAssociation, precedence, qualifier));
@@ -339,11 +273,9 @@ implements GridSystemService {
 
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
-                val oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
-                if(oneToManyAssociation == null) {
-                    return;
-                }
-                
+                var oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
+                if(oneToManyAssociation == null) return;
+
                 var qualifier = layoutKey.layoutIfAny();
 
                 updateFacetIfPresent(
@@ -381,60 +313,8 @@ implements GridSystemService {
                 updateFacet(LayoutOrderFacetForLayoutXml
                         .create(collectionSequence++, oneToManyAssociation, precedence, qualifier));
             }
+
         });
     }
-
-    @Value(staticConstructor = "of")
-    protected static class SurplusAndMissing {
-        public final Set<String> surplus;
-        public final Set<String> missing;
-    }
-
-    protected static SurplusAndMissing surplusAndMissing(final Set<String> first, final Set<String> second){
-        val firstNotSecond = _Sets.minus(first, second, LinkedHashSet::new); // preserve order
-        val secondNotFirst = _Sets.minus(second, first, LinkedHashSet::new); // preserve order
-        return SurplusAndMissing.of(firstNotSecond, secondNotFirst);
-    }
-
-    // //////////////////////////////////////
-
-    @Programmatic
-    @Override
-    public void complete(final BSGrid grid, final Class<?> domainClass) {
-        normalize(grid, domainClass);
-        val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
-        grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
-    }
-
-
-    @Programmatic
-    @Override
-    public void minimal(final BSGrid grid, final Class<?> domainClass) {
-        normalize(grid, domainClass);
-        grid.visit(new Grid.VisitorAdapter() {
-            @Override
-            public void visit(final ActionLayoutData actionLayoutData) {
-                actionLayoutData.getOwner().getActions().remove(actionLayoutData);
-            }
-
-            @Override
-            public void visit(final CollectionLayoutData collectionLayoutData) {
-                collectionLayoutData.getOwner().getCollections().remove(collectionLayoutData);
-            }
-
-            @Override
-            public void visit(final PropertyLayoutData propertyLayoutData) {
-                propertyLayoutData.getOwner().getProperties().remove(propertyLayoutData);
-            }
-
-            @Override
-            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                final DomainObjectLayoutDataOwner owner = domainObjectLayoutData.getOwner();
-                owner.setDomainObject(new DomainObjectLayoutData());
-            }
-        });
-    }
-
-
 
 }

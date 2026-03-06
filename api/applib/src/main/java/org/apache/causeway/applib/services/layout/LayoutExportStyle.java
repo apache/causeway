@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.services.layout;
 
 import org.apache.causeway.applib.annotation.Value;
-import org.apache.causeway.applib.layout.grid.Grid;
 
 /**
  * Format option when generating a layout file (while prototyping).

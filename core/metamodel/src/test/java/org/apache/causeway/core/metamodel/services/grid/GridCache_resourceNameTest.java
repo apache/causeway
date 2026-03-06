@@ -18,64 +18,56 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.EnumSet;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.apache.causeway.applib.layout.resource.LayoutResource;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoader;
+import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-class GridLoaderServiceDefault_resourceNameTest {
-
-    private GridLoaderServiceDefault gridLoaderServiceDefault;
-    private LayoutResourceLoader layoutResourceLoader;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        layoutResourceLoader = new LayoutResourceLoaderDefault();
-        gridLoaderServiceDefault = new GridLoaderServiceDefault(null, Can.of(layoutResourceLoader), false);
-    }
+class GridCache_resourceNameTest extends MetaModelTestAbstract {
 
     @Test
     void when_default_exists() {
         assertEquals(
                 "Foo.layout.xml",
-                resourceNameFor(new LayoutKey(Foo.class, null)));
+                resourceNameFor(new LayoutKey(Foo.class)));
     }
 
     @Test
     void when_fallback_exists() {
         assertEquals(
                 "Foo2.layout.fallback.xml",
-                resourceNameFor(new LayoutKey(Foo2.class, null)));
+                resourceNameFor(new LayoutKey(Foo2.class)));
     }
 
     @Test
     void when_default_and_fallback_both_exist() {
         assertEquals(
                 "Foo3.layout.xml",
-                resourceNameFor(new LayoutKey(Foo3.class, null)));
+                resourceNameFor(new LayoutKey(Foo3.class)));
     }
 
     @Test
     void when_neither_exist() {
         assertEquals(
                 (String)null,
-                resourceNameFor(new LayoutKey(Foo4.class, null)));
+                resourceNameFor(new LayoutKey(Foo4.class)));
     }
 
     // -- HELPER
 
-    private String resourceNameFor(final LayoutKey dcal) {
-        return gridLoaderServiceDefault.loadLayoutResource(dcal, EnumSet.of(CommonMimeType.XML))
-        .map(xml->xml.getResourceName())
-        .orElse(null);
+    private String resourceNameFor(final LayoutKey key) {
+        var resourceLookup = new LayoutResourceLookup(Can.of(new LayoutResourceLoaderDefault()));
+        return resourceLookup.lookupLayoutResource(key, EnumSet.of(CommonMimeType.XML))
+            .map(LayoutResource::resourceName)
+            .orElse(null);
     }
-
 
 }

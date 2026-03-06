@@ -18,81 +18,60 @@
  */
 package org.apache.causeway.core.metamodel.services.grid;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.EnumSet;
-
-import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridService;
-import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
-import org.apache.causeway.applib.services.layout.LayoutExportStyle;
-import org.apache.causeway.applib.services.layout.LayoutService;
-import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
-import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 import org.apache.causeway.core.metamodel.facetapi.Facet.Precedence;
 import org.apache.causeway.core.metamodel.facets.all.named.MemberNamedFacet;
 import org.apache.causeway.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.junit.jupiter.api.Test;
-
-import lombok.val;
+import org.apache.causeway.core.metamodel._testing.MetaModelContext_forTesting.MetaModelContext_forTestingBuilder;
 
 class GridLoadingTest
 extends MetaModelTestAbstract {
 
-    private GridLoaderServiceDefault gridLoaderService;
-    private LayoutService layoutService;
+    private GridServiceDefault gridService;
 
     @Override
-    protected void onSetUp(MetaModelContext_forTestingBuilder mmcBuilder) {
-    	var env = new CausewaySystemEnvironment();
-        env.setUnitTesting(true);
+    protected void onSetUp(final MetaModelContext_forTestingBuilder mmcBuilder) {
+        var env = new CausewaySystemEnvironment();
         env.setPrototyping(true);
-    	mmcBuilder.systemEnvironment(env);
+        assertTrue(env.isPrototyping());
+        mmcBuilder.systemEnvironment(env);
+        super.onSetUp(mmcBuilder);
     }
-    
+
     @Override
     protected void afterSetUp() {
-        layoutService = getServiceRegistry().lookupServiceElseFail(LayoutService.class);
-        gridLoaderService = (GridLoaderServiceDefault)getServiceRegistry()
-                .lookupServiceElseFail(GridLoaderService.class);
-        
-        var gridService = ((GridServiceDefault) getServiceRegistry()
+        this.gridService = ((GridServiceDefault) getServiceRegistry()
                 .lookupServiceElseFail(GridService.class));
-        assertTrue(gridService.supportsReloading(), ()->"unmet test precondition 'supportsReloading'");
-    }
-
-    // test blueprint, for future work
-    void blueprint() {
-        val layoutKey = new LayoutKey(Bar.class, null);
-        gridLoaderService.loadLayoutResource(layoutKey, EnumSet.of(CommonMimeType.XML));
-
-        val xml = layoutService.objectLayout(layoutKey, LayoutExportStyle.MINIMAL, CommonMimeType.XML);
-        System.out.println(xml);
+        assertTrue(gridService.supportsReloading());
     }
 
     @Test
     void customNamed() {
 
-        val customNamed = "Hello";
+        var customNamed = "Hello";
 
-        val barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
+        var barSpec = getSpecificationLoader().specForTypeElseFail(Bar.class);
 
-        val gridFacet = barSpec.getFacet(GridFacet.class);
+        var gridFacet = barSpec.lookupFacet(GridFacet.class).orElse(null);
         assertNotNull(gridFacet);
 
         // triggers grid to be loaded (if initial or reloading supported)
-        val grid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        var grid = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
         assertNotNull(grid);
 
         // verify object-action's member named facet was installed when loading Grid from XML
-        val objectAction = barSpec.getAction("createSimpleObject").orElse(null);
+        var objectAction = barSpec.getAction("createSimpleObject").orElse(null);
         assertNotNull(objectAction);
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
 
@@ -100,16 +79,18 @@ extends MetaModelTestAbstract {
         // verify however, that the number of facets stays constant
 
         // triggers grid to be re-loaded
-        val grid2 = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
+        gridService.invalidate(Bar.class);
+
+        var grid2 = gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar()));
         assertNotSame(grid, grid2); // verify that we actually got a new grid, indicative of a reload having taken place
 
         assertEquals(customNamed, objectAction.getStaticFriendlyName().orElse(null));
 
-        val facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
+        var facetRanking = objectAction.getFacetRanking(MemberNamedFacet.class).orElse(null);
         assertNotNull(facetRanking);
 
         // XML layout facets are installed at precedence HIGH
-        val xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
+        var xmlFacetRank = facetRanking.getRankLowerOrEqualTo(MemberNamedFacet.class, Precedence.HIGH);
 
         // verify rank did not grow with latest layout.xml reload
         assertEquals(1, xmlFacetRank.size());

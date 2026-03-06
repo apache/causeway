@@ -16,17 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.grid;
+package org.apache.causeway.applib.layout.resource;
 
-import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
-import org.apache.causeway.applib.services.marshal.MarshallerService;
+import java.util.Objects;
+
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 /**
- * Supports {@link BSGrid} marshaling and unmarshaling.
+ * Layout data record with name, format and contents (XML, JSON, etc.) based on format.
  *
- * @since 2.0 {@index}
+ * @since 4.0 {@index}
  */
-@Deprecated
-public interface GridMarshallerService
-extends MarshallerService<BSGrid> {
+@Getter @Accessors(fluent = true)
+public final class LayoutResource {
+	
+    private final String resourceName;
+    private final CommonMimeType format;
+    private final String content;
+
+    public LayoutResource(
+    		final String resourceName,
+    	    final CommonMimeType format,
+    	    final String content) {
+    	this.resourceName = Objects.requireNonNull(resourceName);
+        this.format = Objects.requireNonNull(format);
+        this.content = Objects.requireNonNull(content);
+    }
+
 }

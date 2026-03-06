@@ -19,13 +19,12 @@
 package org.apache.causeway.applib.services.grid;
 
 import java.io.Serializable;
+import java.util.EnumSet;
+import java.util.Optional;
 
-import org.apache.causeway.applib.annotation.ActionLayout;
-import org.apache.causeway.applib.annotation.CollectionLayout;
-import org.apache.causeway.applib.annotation.DomainObjectLayout;
-import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.springframework.lang.NonNull;
@@ -67,141 +66,63 @@ public interface GridService {
 
             public boolean isDefault() { return layoutIfAny==null; }
             public boolean isVariant() { return layoutIfAny!=null; }
-        }
+	}
 
     /**
      * Whether dynamic reloading of layouts is enabled.
      *
-     * <p>
-     *     The default implementation just delegates to the configured
-     *     {@link GridLoaderService}; the default implementation of <i>that</i>
-     *     service enables reloading wihle prototyping, disables in production.
-     * </p>
+     * <p> The default implementation enables reloading while prototyping, disables in production.
      */
     boolean supportsReloading();
 
     /**
      * To support metamodel invalidation/rebuilding of spec.
      *
-     * <p>
-     *     The default implementation just delegates to the configured
-     *     {@link GridLoaderService}.
-     * </p>
+     * <p> Acts as a no-op if not {@link #supportsReloading()}.
      */
-    void remove(Class<?> domainClass);
+    void invalidate(Class<?> domainClass);
 
     /**
-     * Whether any persisted layout metadata (eg a <code>.layout.xml</code> file) exists for this domain class.
+     * Returns a {@link BSGrid} for given {@link LayoutKey}.
      *
-     * <p>
-     *     The default implementation just delegates to the configured
-     *     {@link GridLoaderService}.
-     * </p>
-     */
-    boolean existsFor(Class<?> domainClass);
-
-    /**
-     * Returns a new instance of a {@link BSGrid} for the specified domain class,
-     * for example as loaded from a <code>layout.xml</code> file.
+     * <p>The default implementation uses the layout name to search for a differently
+     * named layout file, <code>[domainClass].layout.[layout].xml</code>.
      *
-     * <p>
-     *     If non exists, returns <code>null</code>.  (The caller can then
-     *     use {@link GridService#defaultGridFor(Class)} to obtain a
-     *     default grid if necessary).
-     * </p>
-     *
-     * <p>
-     *     The default implementation just delegates to the configured
-     *     {@link GridLoaderService}.
-     * </p>
+     * <p>When no specific grid layout is found returns a generic fallback.
      */
     BSGrid load(LayoutKey layoutKey);
+
+    EnumSet<CommonMimeType> supportedFormats();
+    Optional<GridMarshaller> marshaller(CommonMimeType format);
     
     default BSGrid load(final Class<?> domainClass) {
     	return load(new LayoutKey(domainClass));
     }
 
-    /**
-     * Returns an alternative layout for the domain class.
-     *
-     * <p>
-     *     The alternative layout name can for example be returned by the
-     *     domain object's <code>layout()</code> method, whereby - based on the
-     *     state of the domain object - it requests a different layout be used.
-     * </p>
-     *
-     * <p>
-     *     The default implementation just delegates to the configured
-     *     {@link GridLoaderService}; the default implementation of <i>that</i>
-     *     service uses the layout name to search for a differently
-     *      named layout file, <code>[domainClass].layout.[layout].xml</code>.
-     * </p>
-     */
     default BSGrid load(Class<?> domainClass, String layout) {
     	return load(new LayoutKey(domainClass, layout));
     }
 
-    /**
-     * Returns a default grid; eg where none can be loaded using {@link #load(Class)}.
-     *
-     * <p>
-     * Used when no existing grid layout exists for a domain class.
-     * </p>
-     *
-     * <p>
-     *     The default implementation searches through all available
-     *     {@link GridSystemService}s and asks each in turn for a
-     *     {@link GridSystemService#defaultGrid(Class) default grid}.
-     * </p>
-     */
-    BSGrid defaultGridFor(Class<?> domainClass);
-
-    /**
-     * Returns a normalized grid for the domain class obtained previously using {@link #load(Class)}.
-     *
-     * <p>
-     *     If a 'normalized' grid is persisted as the <code>layout.xml</code>, then the expectation is that
-     *     any ordering metadata from layout annotations can be removed from the domain class
-     *     because the binding of properties/collections/actions will be within the XML.  However, the layout
-     *     annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and
-     *     {@link CollectionLayout}) (if present) will continue to be used to provide additional layout metadata.  Of
-     *     course, there is nothing to prevent the developer from extending the layout XML to also include the
-     *     layout XML (in other words moving towards a {@link #complete(BSGrid) complete} grid.  Metadata within the
-     *     <code>layout.xml</code> file takes precedence over any annotations.
-     * </p>
-     */
-    BSGrid normalize(BSGrid grid);
-
-    /**
-     * Modifies the provided {@link BSGrid} with additional metadata, broadly speaking corresponding to the
-     * {@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout} and {@link CollectionLayout}.
-     *
-     * <p>
-     *     If a 'complete' grid is persisted as the <code>layout.xml</code>, then there should be no need
-     *     for any of the layout annotations,
-     *     to be required in the domain class itself.
-     * </p>
-     */
-    BSGrid complete(BSGrid grid);
-
-    /**
-     * Modifies the provided {@link BSGrid}, removing all metadata except the basic grid structure.
-     *
-     * <p>
-     *     If a 'minimal' grid is persisted as the <code>layout.xml</code>, then the expectation is that
-     *     most of the layout annotations ({@link DomainObjectLayout}, {@link ActionLayout}, {@link PropertyLayout},
-     *     {@link CollectionLayout} will still be retained in the domain class code.
-     * </p>
-     *
-     * @param grid
-     */
-    BSGrid minimal(BSGrid grid);
+    // -- DEPRECATIONS
+    
+    @Deprecated default void remove(Class<?> domainClass) {}
+    @Deprecated default boolean existsFor(Class<?> domainClass) {
+		return false;}
+    @Deprecated default BSGrid defaultGridFor(Class<?> domainClass) {
+		return null;}
+    @Deprecated default BSGrid normalize(BSGrid grid) {
+		return grid;};
+    @Deprecated default BSGrid complete(BSGrid grid) {
+		return grid;}
+    @Deprecated default BSGrid minimal(BSGrid grid) {
+		return grid;}
 
     // -- LAYOUT EXPORT
 
-    GridMarshallerService marshaller();
+    @Deprecated default GridMarshallerService marshaller() {
+		return null;}
 
-    default BSGrid toGridForExport(
+    @Deprecated default BSGrid toGridForExport(
             final LayoutKey layoutKey,
             final LayoutExportStyle style) {
 

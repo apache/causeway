@@ -20,10 +20,6 @@ package org.apache.causeway.core.metamodel.services.grid;
 
 import java.util.Map;
 
-import javax.xml.bind.Marshaller;
-
-import org.junit.jupiter.api.Test;
-
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
@@ -35,12 +31,14 @@ import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
 import org.apache.causeway.applib.services.grid.GridService;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.jaxb.CausewaySchemas;
 import org.apache.causeway.applib.services.jaxb.JaxbService;
+import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.testing._DocumentTester;
 import org.apache.causeway.core.metamodel.MetaModelTestAbstract;
+import org.junit.jupiter.api.Test;
 
 class GridXmlRoundtripTest
 extends MetaModelTestAbstract {
@@ -124,14 +122,17 @@ extends MetaModelTestAbstract {
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bsGrid);
-        String xml = jaxbService.toXml(bsGrid,
-                _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
+        var xmlMarshaller = gridServiceDefault.marshaller(CommonMimeType.XML).orElseThrow();
+
+        String xml = xmlMarshaller.marshal(bsGrid, CommonMimeType.XML);
+
         println(xml);
 
-        BSGrid bsPageroundtripped = jaxbService.fromXml(BSGrid.class, xml);
-        String xmlRoundtripped = jaxbService.toXml(bsPageroundtripped,
-                _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
+        BSGrid bsGridRoundtripped = xmlMarshaller.unmarshal(new LayoutKey(Object.class), xml, CommonMimeType.XML)
+            .valueAsNonNullElseFail();
+
+        String xmlRoundtripped = xmlMarshaller.marshal(bsGridRoundtripped, CommonMimeType.XML);
+
         _DocumentTester.assertXmlEqualsIgnoreOrder(xml, xmlRoundtripped);
 
         println("==========");

@@ -18,8 +18,8 @@
  */
 package org.apache.causeway.viewer.commons.model.layout;
 
+import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
@@ -29,23 +29,20 @@ import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSClearFix;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSCol;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGridTransformer;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSRow;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTab;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSTabGroup;
-import org.apache.causeway.commons.internal.base._Lazy;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSUtil;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.util.Facets;
 import org.apache.causeway.viewer.commons.model.UiModel;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
-@RequiredArgsConstructor(staticName = "bind")
 public class UiGridLayout implements UiModel {
 
     @RequiredArgsConstructor
@@ -62,54 +59,35 @@ public class UiGridLayout implements UiModel {
         protected abstract void onAction(C container, ActionLayoutData actionData);
         protected abstract void onProperty(C container, PropertyLayoutData propertyData);
         protected abstract void onCollection(C container, CollectionLayoutData collectionData);
-
+    }
+    
+    public final BSGrid bsGrid;
+        
+    public UiGridLayout(BSGrid bsGrid) {
+    	//since BSGrid is mutable, always create a defensive copy for wrapping
+    	this.bsGrid = BSUtil.deepCopy(Objects.requireNonNull(bsGrid));
+    	new BSGridTransformer.EmptyTabRemover().apply(bsGrid);
+    	new BSGridTransformer.CollapseIfOneTab().apply(bsGrid);
+    	new BSGridTransformer.EmptyRowRemover().apply(bsGrid);
     }
 
-    @NonNull private final ManagedObject managedObject;
-    private _Lazy<Optional<BSGrid>> gridData = _Lazy.threadSafe(this::initGridData);
+    public static Optional<UiGridLayout> forObject(final ManagedObject mo) {
+        return ManagedObjects.isNullOrUnspecifiedOrEmpty(mo)
+            ? Optional.empty()
+            : Facets.bootstrapGrid(mo.objSpec(), mo)
+                .map(UiGridLayout::new);
+    }
 
+    /**
+     * recursively visits the grid
+     */
     public <C, T> void visit(final Visitor<C, T> visitor) {
-
-        // recursively visit the grid
-        gridData.get()
-        .ifPresent(bsGrid->{
-            for(val bsRow: bsGrid.getRows()) {
-                visitRow(bsRow, visitor.rootContainer, visitor);
-            }
-        });
-
+        for(var bsRow: bsGrid.getRows()) {
+            visitRow(bsRow, visitor.rootContainer, visitor);
+        }
     }
 
-    private Optional<BSGrid> initGridData() {
-        return Facets.bootstrapGrid(managedObject.objSpec(), managedObject)
-        .map(this::attachAssociatedActions);
-    }
-
-    //TODO[refactor] this should not be necessary here, the GridFacet should already have done that for us
-    private BSGrid attachAssociatedActions(final BSGrid bSGrid) {
-
-        val primedActions = bSGrid.getAllActionsById();
-        final Set<String> actionIdsAlreadyAdded = _Sets.newHashSet(primedActions.keySet());
-
-        managedObject.objSpec().streamProperties(MixedIn.INCLUDED)
-        .forEach(property->{
-            Optional.ofNullable(
-                    bSGrid.getAllPropertiesById().get(property.getId()))
-            .ifPresent(pl->{
-
-                ObjectAction.Util.findForAssociation(managedObject, property)
-                .map(action->action.getId())
-                .filter(id->!actionIdsAlreadyAdded.contains(id))
-                .peek(actionIdsAlreadyAdded::add)
-                .map(ActionLayoutData::new)
-                .forEach(pl.getActions()::add);
-
-            });
-
-
-        });
-        return bSGrid;
-    }
+    // -- HELPER
 
     private <C, T> void visitRow(final BSRow bsRow, final C container, final Visitor<C, T> visitor) {
 

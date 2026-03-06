@@ -19,15 +19,12 @@
 package org.apache.causeway.core.runtimeservices.menubars.bootstrap;
 
 import java.util.EnumSet;
+import java.util.Map;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.bind.Marshaller;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.layout.menubars.bootstrap.BSMenuBars;
@@ -36,12 +33,14 @@ import org.apache.causeway.applib.services.menu.MenuBarsMarshallerService;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 /**
@@ -54,7 +53,7 @@ import lombok.experimental.Accessors;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MenuBarsMarshallerBootstrap")
 @Priority(PriorityPrecedence.MIDPOINT)
 @Qualifier("Default")
-//@Log4j2
+//@Slf4j
 public class MenuBarsMarshallerServiceBootstrap
 implements MenuBarsMarshallerService<BSMenuBars> {
 
@@ -78,7 +77,7 @@ implements MenuBarsMarshallerService<BSMenuBars> {
     @Override
     public String marshal(final @NonNull BSMenuBars menuBars, final @NonNull CommonMimeType format) {
         throwIfFormatNotSupported(format);
-        return jaxbService.toXml(menuBars, _Maps.unmodifiable(
+        return jaxbService.toXml(menuBars, Map.of(
                 Marshaller.JAXB_SCHEMA_LOCATION, menuBars.getTnsAndSchemaLocation()));
     }
 

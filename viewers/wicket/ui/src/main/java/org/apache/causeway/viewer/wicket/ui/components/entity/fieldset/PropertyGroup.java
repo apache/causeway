@@ -196,7 +196,7 @@ public class PropertyGroup extends PanelAbstract<ManagedObject, UiObjectWkt> imp
 
         val entity = entityModel.getManagedObject();
 
-        ObjectAction.Util.findForAssociation(entity, property)
+        ObjectAction.Util.findForAssociation(entity.objSpec(), property)
 	        .map(act->ActionModel.forEntity(act, entityModel))
 	        .forEach(onAssociatedAction);
 

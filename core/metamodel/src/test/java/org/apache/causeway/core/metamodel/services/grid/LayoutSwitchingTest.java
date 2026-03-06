@@ -41,7 +41,6 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.ActionScope;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import lombok.experimental.ExtensionMethod;
@@ -92,7 +91,7 @@ class LayoutSwitchingTest extends MetaModelTestAbstract {
             ()->gridFacet.getGrid(ManagedObject.adaptSingular(barSpec, new Bar("simple"))));
     }
 
-    @Test @Disabled
+    @Test
     void switchLayout_viaService() {
 
         // triggers grid to be loaded initially

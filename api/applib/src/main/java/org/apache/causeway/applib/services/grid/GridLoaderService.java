@@ -33,6 +33,7 @@ import lombok.NonNull;
  *
  * @since 1.x - revised for 2.0 {@index}
  */
+@Deprecated
 public interface GridLoaderService {
 
     /**

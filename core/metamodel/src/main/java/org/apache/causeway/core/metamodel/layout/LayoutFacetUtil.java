@@ -35,7 +35,7 @@ import org.apache.causeway.applib.layout.component.HasDescribedAs;
 import org.apache.causeway.applib.layout.component.HasHidden;
 import org.apache.causeway.applib.layout.component.HasNamed;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.functions._Functions;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
@@ -372,7 +372,7 @@ public class LayoutFacetUtil {
     }
 
     @RequiredArgsConstructor(staticName = "of")
-    public static class MetamodelToGridOverridingVisitor extends Grid.VisitorAdapter  {
+    public static class MetamodelToGridOverridingVisitor implements BSElementVisitor  {
 
         private final @NonNull ObjectSpecification objectSpec;
 
