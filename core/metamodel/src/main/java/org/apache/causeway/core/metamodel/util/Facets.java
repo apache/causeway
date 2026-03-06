@@ -191,10 +191,10 @@ public final class Facets {
             .map(FileAcceptFacet::value);
     }
 
-    public void gridPreload(
+    public Optional<BSGrid> gridPreload(
             final ObjectSpecification objectSpec, final ManagedObject objectAdapter) {
-        objectSpec.lookupFacet(GridFacet.class)
-            .ifPresent(gridFacet->
+        return objectSpec.lookupFacet(GridFacet.class)
+            .map(gridFacet->
                 // the facet should always exist, in fact
                 // just enough to ask for the metadata.
                 // This will cause the current ObjectSpec to be updated as a side effect.

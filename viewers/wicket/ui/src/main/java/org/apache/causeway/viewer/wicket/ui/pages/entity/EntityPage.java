@@ -20,8 +20,29 @@ package org.apache.causeway.viewer.wicket.ui.pages.entity;
 
 import java.util.Optional;
 import java.util.function.BiFunction;
-import org.apache.causeway.applib.services.bookmark.Bookmark;
 
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.services.bookmark.Bookmark;
+import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
+import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
+import org.apache.causeway.applib.services.user.UserMemento;
+import org.apache.causeway.commons.collections.Can;
+import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.debug._Debug;
+import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.core.metamodel.facetapi.FacetRanking;
+import org.apache.causeway.core.metamodel.object.ManagedObject;
+import org.apache.causeway.core.metamodel.object.ManagedObjects;
+import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.util.Facets;
+import org.apache.causeway.viewer.commons.model.components.UiComponentType;
+import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
+import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
+import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
+import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -33,26 +54,6 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.CssResourceReference;
-
-import org.apache.causeway.applib.services.publishing.spi.PageRenderSubscriber;
-import org.apache.causeway.applib.services.user.UserMemento;
-import org.apache.causeway.commons.collections.Can;
-import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.debug._Debug;
-import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.object.ManagedObjects;
-import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
-import org.apache.causeway.core.metamodel.util.Facets;
-import org.apache.causeway.viewer.commons.model.components.UiComponentType;
-import org.apache.causeway.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.causeway.viewer.wicket.model.modelhelpers.WhereAmIHelper;
-import org.apache.causeway.viewer.wicket.model.models.UiObjectWkt;
-import org.apache.causeway.viewer.wicket.model.util.PageParameterUtils;
-import org.apache.causeway.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
-import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.causeway.viewer.wicket.ui.util.Wkt;
 
 import lombok.val;
 
@@ -156,9 +157,15 @@ public class EntityPage extends PageAbstract {
             throw new ObjectMember.AuthorizationException();
         }
 
-        final ObjectSpecification objectSpec = model.getTypeOfSpecification();
+        var objectSpec = model.getTypeOfSpecification();
 
-        Facets.gridPreload(objectSpec, objectAdapter);
+        var layoutKey = Facets.gridPreload(objectSpec, objectAdapter)
+            .map(BSGrid::layoutKey)
+            .orElseGet(()->new LayoutKey(objectSpec.getCorrespondingClass()));
+
+        // imposes filters on FacetRanking in the current thread's context
+        // needs to happen in cooperation with installing any layout variant specific facets via Facets.gridPreload(..) above
+        FacetRanking.setQualifier(layoutKey);
 
         final String titleStr = objectAdapter.getTitle();
         setTitle(titleStr);
@@ -212,6 +219,13 @@ public class EntityPage extends PageAbstract {
 
         whereAmIContainer.addOrReplace(listItems);
 
+    }
+    
+    @Override
+    protected void onDetach() {
+    	super.onDetach();
+    	//model.detach(); //v4
+    	FacetRanking.removeQualifier(); // cleans up after FacetRanking.setQualifier(..) in buildPage() above
     }
 
     // -- REFRESH ENTITIES
