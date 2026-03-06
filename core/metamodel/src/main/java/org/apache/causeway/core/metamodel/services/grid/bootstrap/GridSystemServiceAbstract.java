@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.services.grid;
+package org.apache.causeway.core.metamodel.services.grid.bootstrap;
 
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacet;
 import static org.apache.causeway.core.metamodel.facetapi.FacetUtil.updateFacetIfPresent;
@@ -36,6 +36,7 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.grid.GridSystemService;
 import org.apache.causeway.applib.services.i18n.TranslationService;
@@ -91,8 +92,8 @@ import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor(onConstructor_ = {@Inject}, access = AccessLevel.PROTECTED)
 @Log4j2
-public abstract class GridSystemServiceAbstract<G extends org.apache.causeway.applib.layout.grid.Grid>
-implements GridSystemService<G> {
+abstract class GridSystemServiceAbstract
+implements GridSystemService {
 
     protected final SpecificationLoader specificationLoader;
     protected final TranslationService translationService;
@@ -101,7 +102,7 @@ implements GridSystemService<G> {
     protected final CausewaySystemEnvironment causewaySystemEnvironment;
 
     @Override
-    public void normalize(final G grid, final Class<?> domainClass) {
+    public void normalize(final BSGrid grid, final Class<?> domainClass) {
 
         if(!gridImplementation().isAssignableFrom(grid.getClass())) {
             // ignore any other grid implementations
@@ -141,7 +142,7 @@ implements GridSystemService<G> {
      * because the layout might be reloaded from XML if reloading is supported.
      */
     private void installFacets(
-            final G fcGrid) {
+            final BSGrid fcGrid) {
     	
         final LayoutKey layoutKey = Objects.requireNonNull(fcGrid.layoutKey());
     	
@@ -399,7 +400,7 @@ implements GridSystemService<G> {
 
     @Programmatic
     @Override
-    public void complete(final G grid, final Class<?> domainClass) {
+    public void complete(final BSGrid grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
         val objectSpec = specificationLoader.specForTypeElseFail(domainClass);
         grid.visit(MetamodelToGridOverridingVisitor.of(objectSpec));
@@ -408,7 +409,7 @@ implements GridSystemService<G> {
 
     @Programmatic
     @Override
-    public void minimal(final G grid, final Class<?> domainClass) {
+    public void minimal(final BSGrid grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
         grid.visit(new Grid.VisitorAdapter() {
             @Override

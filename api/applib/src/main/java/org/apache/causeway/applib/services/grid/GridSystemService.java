@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.services.grid;
 
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 
 /**
  * Encapsulates a single layout grid system which can be used to customize the layout
@@ -33,7 +34,7 @@ import org.apache.causeway.applib.layout.grid.Grid;
  *
  * @since 1.x {@index}
  */
-public interface GridSystemService<G extends Grid> {
+public interface GridSystemService {
 
     /**
      * The concrete subclass of {@link Grid} supported by this implementation.
@@ -43,7 +44,9 @@ public interface GridSystemService<G extends Grid> {
      *     the base class used by the implementation.
      * </p>
      */
-    Class<G> gridImplementation();
+    default Class<? extends Grid> gridImplementation() {
+    	return BSGrid.class;
+    }
 
     /**
      * The target namespace for this grid system.
@@ -78,7 +81,7 @@ public interface GridSystemService<G extends Grid> {
      *
      * @param domainClass
      */
-    G defaultGrid(Class<?> domainClass);
+    BSGrid defaultGrid(Class<?> domainClass);
 
     /**
      * Validates and normalizes a grid, modifying the grid so that all of the
@@ -94,7 +97,7 @@ public interface GridSystemService<G extends Grid> {
      * (but other annotations must be retained).
      * </p>
      */
-    void normalize(G grid, Class<?> domainClass);
+    void normalize(BSGrid grid, Class<?> domainClass);
 
     /**
      * Takes a normalized grid and enriches it with all the available metadata
@@ -113,7 +116,7 @@ public interface GridSystemService<G extends Grid> {
      * @param grid
      * @param domainClass
      */
-    void complete(G grid, Class<?> domainClass);
+    void complete(BSGrid grid, Class<?> domainClass);
 
     /**
      * Takes a normalized grid and strips out removes all members, leaving only
@@ -130,6 +133,6 @@ public interface GridSystemService<G extends Grid> {
      * @param grid
      * @param domainClass
      */
-    void minimal(G grid, Class<?> domainClass);
+    void minimal(BSGrid grid, Class<?> domainClass);
 
 }

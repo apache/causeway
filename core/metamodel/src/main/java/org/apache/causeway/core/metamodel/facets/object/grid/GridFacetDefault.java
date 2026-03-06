@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.lang.Nullable;
 
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridService;
 import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.commons.internal.base._Strings;
@@ -57,7 +58,7 @@ implements GridFacet {
     private final GridService gridService;
 
     private final _Lazy<LayoutFacet> layoutFacetLazy = _Lazy.threadSafe(()->
-        getFacetHolder().getFacet(LayoutFacet.class));
+        facetHolder().getFacet(LayoutFacet.class));
 
     private final Map<String, Grid> gridByLayoutName = new ConcurrentHashMap<>();
 
@@ -115,11 +116,11 @@ implements GridFacet {
         return layoutFacetLazy.get()!=null;
     }
 
-    private Grid load(final @NonNull String layoutName) {
+    private BSGrid load(final @NonNull String layoutName) {
 
         val domainClass = getSpecification().getCorrespondingClass();
 
-        val grid = Optional.ofNullable(
+        BSGrid grid = Optional.ofNullable(
                 // loads from object's XML if available
                 gridService.load(domainClass, _Strings.emptyToNull(layoutName)))
                 // loads from default-XML if available
@@ -128,7 +129,7 @@ implements GridFacet {
     }
 
     private ObjectSpecification getSpecification() {
-        return (ObjectSpecification) getFacetHolder();
+        return (ObjectSpecification) facetHolder();
     }
 
 }

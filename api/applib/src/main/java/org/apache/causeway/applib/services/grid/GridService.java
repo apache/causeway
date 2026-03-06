@@ -25,6 +25,7 @@ import org.apache.causeway.applib.annotation.CollectionLayout;
 import org.apache.causeway.applib.annotation.DomainObjectLayout;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.layout.LayoutExportStyle;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -115,9 +116,9 @@ public interface GridService {
      *     {@link GridLoaderService}.
      * </p>
      */
-    Grid load(LayoutKey layoutKey);
+    BSGrid load(LayoutKey layoutKey);
     
-    default Grid load(final Class<?> domainClass) {
+    default BSGrid load(final Class<?> domainClass) {
     	return load(new LayoutKey(domainClass));
     }
 
@@ -137,7 +138,7 @@ public interface GridService {
      *      named layout file, <code>[domainClass].layout.[layout].xml</code>.
      * </p>
      */
-    default Grid load(Class<?> domainClass, String layout) {
+    default BSGrid load(Class<?> domainClass, String layout) {
     	return load(new LayoutKey(domainClass, layout));
     }
 
@@ -154,7 +155,7 @@ public interface GridService {
      *     {@link GridSystemService#defaultGrid(Class) default grid}.
      * </p>
      */
-    Grid defaultGridFor(Class<?> domainClass);
+    BSGrid defaultGridFor(Class<?> domainClass);
 
     /**
      * Returns a normalized grid for the domain class obtained previously using {@link #load(Class)}.
@@ -170,7 +171,7 @@ public interface GridService {
      *     <code>layout.xml</code> file takes precedence over any annotations.
      * </p>
      */
-    Grid normalize(final Grid grid);
+    BSGrid normalize(BSGrid grid);
 
     /**
      * Modifies the provided {@link Grid} with additional metadata, broadly speaking corresponding to the
@@ -182,7 +183,7 @@ public interface GridService {
      *     to be required in the domain class itself.
      * </p>
      */
-    Grid complete(Grid grid);
+    BSGrid complete(BSGrid grid);
 
     /**
      * Modifies the provided {@link Grid}, removing all metadata except the basic grid structure.
@@ -195,18 +196,18 @@ public interface GridService {
      *
      * @param grid
      */
-    Grid minimal(Grid grid);
+    BSGrid minimal(BSGrid grid);
 
     // -- LAYOUT EXPORT
 
-    GridMarshallerService<? extends Grid> marshaller();
+    GridMarshallerService marshaller();
 
-    default Grid toGridForExport(
+    default BSGrid toGridForExport(
             final LayoutKey layoutKey,
             final LayoutExportStyle style) {
 
         // don't use the grid from the facet, because it will be modified subsequently.
-        Grid grid = load(layoutKey.domainClass);
+    	BSGrid grid = load(layoutKey.domainClass);
         if(grid == null) {
             grid = defaultGridFor(layoutKey.domainClass);
             grid.layoutKey(new LayoutKey(layoutKey.domainClass, null));

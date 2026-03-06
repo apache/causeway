@@ -56,7 +56,7 @@ import lombok.experimental.Accessors;
 @Qualifier("Default")
 //@Log4j2
 public class GridMarshallerServiceBootstrap
-implements GridMarshallerService<BSGrid> {
+implements GridMarshallerService {
 
     private final JaxbService jaxbService;
 

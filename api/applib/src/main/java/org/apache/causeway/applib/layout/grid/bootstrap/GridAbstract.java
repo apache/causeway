@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.layout.grid;
+package org.apache.causeway.applib.layout.grid.bootstrap;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,7 +32,7 @@ import org.apache.causeway.applib.layout.component.CollectionLayoutDataOwner;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.FieldSetOwner;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
-import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
+import org.apache.causeway.applib.layout.grid.Grid;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
 import org.apache.causeway.applib.services.layout.LayoutService;
 
@@ -46,7 +46,7 @@ import org.apache.causeway.applib.services.layout.LayoutService;
  * @since 1.x {@index}
  */
 @XmlTransient // ignore this class
-public abstract class GridAbstract implements Grid {
+abstract class GridAbstract implements Grid {
 
     private LayoutKey layoutKey;
 

@@ -71,7 +71,6 @@ import org.apache.causeway.core.metamodel.facets.actions.position.ActionPosition
 import org.apache.causeway.core.metamodel.facets.members.layout.group.GroupIdAndName;
 import org.apache.causeway.core.metamodel.facets.members.layout.group.LayoutGroupFacet;
 import org.apache.causeway.core.metamodel.layout.LayoutFacetUtil.LayoutDataFactory;
-import org.apache.causeway.core.metamodel.services.grid.GridSystemServiceAbstract;
 import org.apache.causeway.core.metamodel.spec.ObjectSpecification;
 import org.apache.causeway.core.metamodel.spec.feature.MixedIn;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -99,7 +98,7 @@ import lombok.extern.log4j.Log4j2;
 @Qualifier("Bootstrap")
 @Log4j2
 public class GridSystemServiceBootstrap
-extends GridSystemServiceAbstract<BSGrid> {
+extends GridSystemServiceAbstract {
 
     public static final String TNS = "https://causeway.apache.org/applib/layout/grid/bootstrap3";
     public static final String SCHEMA_LOCATION = "https://causeway.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
@@ -117,7 +116,7 @@ extends GridSystemServiceAbstract<BSGrid> {
 
     @Inject @Lazy // circular dependency (late binding)
     @Setter @Accessors(chain = true) // JUnit support
-    private GridMarshallerService<BSGrid> marshaller;
+    private GridMarshallerService marshaller;
 
     private final CausewayConfiguration config;
     private final Can<FallbackLayoutDataSource> fallbackLayoutDataSources;

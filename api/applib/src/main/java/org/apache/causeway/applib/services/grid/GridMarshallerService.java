@@ -19,6 +19,7 @@
 package org.apache.causeway.applib.services.grid;
 
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.marshal.MarshallerService;
 
 /**
@@ -26,6 +27,6 @@ import org.apache.causeway.applib.services.marshal.MarshallerService;
  *
  * @since 2.0 {@index}
  */
-public interface GridMarshallerService<T extends Grid>
-extends MarshallerService<T> {
+public interface GridMarshallerService
+extends MarshallerService<BSGrid> {
 }

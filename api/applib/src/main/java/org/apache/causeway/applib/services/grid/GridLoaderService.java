@@ -21,11 +21,11 @@ package org.apache.causeway.applib.services.grid;
 import java.util.EnumSet;
 import java.util.Optional;
 
-import org.springframework.lang.Nullable;
-
 import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.mixins.metamodel.Object_rebuildMetamodel;
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
+import org.springframework.lang.Nullable;
 
 import lombok.NonNull;
 
@@ -76,19 +76,19 @@ public interface GridLoaderService {
      * </p>
      * @throws UnsupportedOperationException - when format is not supported
      */
-    <T extends Grid> Optional<T> load(
+    Optional<BSGrid> load(
             Class<?> domainClass,
             @Nullable String layoutIfAny,
-            @NonNull GridMarshallerService<T> marshaller);
+            @NonNull GridMarshallerService marshaller);
 
     /**
      * Optionally returns a new instance of a {@link Grid},
      * based on whether the underlying resource could be found, loaded and parsed.
      * @throws UnsupportedOperationException - when format is not supported
      */
-    default <T extends Grid> Optional<T> load(
+    default Optional<BSGrid> load(
             final Class<?> domainClass,
-            final @NonNull GridMarshallerService<T> marshaller) {
+            final @NonNull GridMarshallerService marshaller) {
         return load(domainClass, null, marshaller);
     }
 

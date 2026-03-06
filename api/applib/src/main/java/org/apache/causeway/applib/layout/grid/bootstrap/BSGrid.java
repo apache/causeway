@@ -35,7 +35,6 @@ import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
 import org.apache.causeway.applib.layout.component.FieldSet;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.Grid;
-import org.apache.causeway.applib.layout.grid.GridAbstract;
 import org.apache.causeway.applib.mixins.dto.Dto;
 
 /**

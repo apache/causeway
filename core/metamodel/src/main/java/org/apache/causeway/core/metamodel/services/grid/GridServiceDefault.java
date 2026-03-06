@@ -26,11 +26,8 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.grid.GridService;
@@ -39,6 +36,9 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -65,8 +65,8 @@ public class GridServiceDefault implements GridService {
 
     private final GridLoaderService gridLoaderService;
     @Getter(onMethod_={@Override}) @Accessors(fluent = true)
-    private final GridMarshallerService<? extends Grid> marshaller;
-    private final List<GridSystemService<? extends Grid>> gridSystemServices;
+    private final GridMarshallerService marshaller;
+    private final List<GridSystemService> gridSystemServices;
 
     // //////////////////////////////////////
 
@@ -86,7 +86,7 @@ public class GridServiceDefault implements GridService {
     }
 
 	@Override
-	public Grid load(LayoutKey layoutKey) {
+	public BSGrid load(LayoutKey layoutKey) {
 		return StringUtils.hasLength(layoutKey.layoutIfAny())
 			? gridLoaderService.load(layoutKey.domainClass(), layoutKey.layoutIfAny(), marshaller).orElse(null)
 			: gridLoaderService.load(layoutKey.domainClass(), marshaller).orElse(null);
@@ -95,9 +95,9 @@ public class GridServiceDefault implements GridService {
     // //////////////////////////////////////
 
     @Override
-    public Grid defaultGridFor(final Class<?> domainClass) {
+    public BSGrid defaultGridFor(final Class<?> domainClass) {
         for (val gridSystemService : gridSystemServices()) {
-            val grid = gridSystemService.defaultGrid(domainClass);
+        	BSGrid grid = gridSystemService.defaultGrid(domainClass);
             if(grid != null) {
                 return grid;
             }
@@ -107,7 +107,7 @@ public class GridServiceDefault implements GridService {
     }
 
     @Override
-    public Grid normalize(final Grid grid) {
+    public BSGrid normalize(final BSGrid grid) {
 
         if(grid.isNormalized()) {
             return grid;
@@ -128,7 +128,7 @@ public class GridServiceDefault implements GridService {
     }
 
     @Override
-    public Grid complete(final Grid grid) {
+    public BSGrid complete(final BSGrid grid) {
 
     	val domainClass = grid.domainClass();
         for (val gridSystemService : gridSystemServices()) {
@@ -139,7 +139,7 @@ public class GridServiceDefault implements GridService {
     }
 
     @Override
-    public Grid minimal(final Grid grid) {
+    public BSGrid minimal(final BSGrid grid) {
 
     	val domainClass = grid.domainClass();
         for (val gridSystemService : gridSystemServices()) {
@@ -152,7 +152,7 @@ public class GridServiceDefault implements GridService {
     /**
      * Not public API, exposed only for testing.
      */
-    public String tnsAndSchemaLocation(final Grid grid) {
+    public String tnsAndSchemaLocation(final BSGrid grid) {
         val parts = _Lists.<String>newArrayList();
 
         parts.add(COMPONENT_TNS);
@@ -174,7 +174,7 @@ public class GridServiceDefault implements GridService {
 
     ////////////////////////////////////////////////////////
 
-    private List<GridSystemService<? extends Grid>> filteredGridSystemServices;
+    private List<GridSystemService> filteredGridSystemServices;
 
     /**
      * For all of the {@link GridSystemService}s available, return only the first one for any that
@@ -185,7 +185,7 @@ public class GridServiceDefault implements GridService {
      *   general idea of multiple implementations.
      * </p>
      */
-    protected List<GridSystemService<? extends Grid>> gridSystemServices() {
+    protected List<GridSystemService> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
 
@@ -203,8 +203,8 @@ public class GridServiceDefault implements GridService {
 
     // -- poor man's testing support
 
-    List<GridSystemService<? extends Grid>> gridSystemServicesForTest;
-    Collection<GridSystemService<? extends Grid>> getGridSystemServices() {
+    List<GridSystemService> gridSystemServicesForTest;
+    Collection<GridSystemService> getGridSystemServices() {
         return gridSystemServices!=null
                 ? gridSystemServices
                 : gridSystemServicesForTest;

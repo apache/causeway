@@ -31,7 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.layout.grid.Grid;
+import org.apache.causeway.applib.layout.grid.bootstrap.BSGrid;
 import org.apache.causeway.applib.services.grid.GridLoaderService;
 import org.apache.causeway.applib.services.grid.GridMarshallerService;
 import org.apache.causeway.applib.services.grid.GridService.LayoutKey;
@@ -89,7 +89,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     // for better logging messages (used only in prototyping mode)
     private final Map<LayoutKey, String> badContentByKey = _Maps.newHashMap();
     // cache (used only in prototyping mode)
-    private final Map<LayoutKey, Grid> gridCache = _Maps.newHashMap();
+    private final Map<LayoutKey, BSGrid> gridCache = _Maps.newHashMap();
 
     @Override
     public void remove(final Class<?> domainClass) {
@@ -108,10 +108,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
     }
 
     @Override
-    public <T extends Grid> Optional<T> load(
+    public Optional<BSGrid> load(
             final Class<?> domainClass,
             final String layoutIfAny,
-            final @NonNull GridMarshallerService<T> marshaller) {
+            final @NonNull GridMarshallerService marshaller) {
 
         val supportedFormats = marshaller.supportedFormats();
 
@@ -140,15 +140,14 @@ public class GridLoaderServiceDefault implements GridLoaderService {
             }
         } else {
             // if cached, serve from cache - otherwise fall through
-            @SuppressWarnings("unchecked")
-            final T grid = (T)gridCache.get(layoutKey);
+            final BSGrid grid = gridCache.get(layoutKey);
             if(grid != null) {
                 return Optional.of(grid);
             }
         }
 
         try {
-            final T grid = marshaller
+            final BSGrid grid = marshaller
                     .unmarshal(layoutResource.getContent(), layoutResource.getFormat())
                     .getValue().orElseThrow();
             grid.layoutKey(layoutKey);
