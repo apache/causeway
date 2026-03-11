@@ -49,11 +49,11 @@
         -Drevision=2.7.8 -->
 
 		<maven.compiler.release>11</maven.compiler.release>
-		<maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
-        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
-        <maven-surefire-report-plugin.version>3.5.4</maven-surefire-report-plugin.version>
+        <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>3.5.5</maven-surefire-report-plugin.version>
         <!--  for surefire, failsafe and surefire-report  -->
         <maven.plugin.tools.version>3.15.2</maven.plugin.tools.version>
 
@@ -63,7 +63,7 @@
 		<!-- IMPORTANT: keep in sync with property defined in resteasy-spring-boot-starter -->
 		<resteasy.version>5.0.0.Final</resteasy.version>
 
-        <maven.deploy.skip>true</maven.deploy.skip> <!-- temporarily troubleshooting deploy issue -->
+<!--        <maven.deploy.skip>true</maven.deploy.skip>-->
 	</properties>
 
 	<build>
@@ -103,7 +103,7 @@
 			<dependency>
 				<groupId>org.apache.causeway</groupId>
 				<artifactId>causeway-bom</artifactId>
-				<version>${revision}</version>
+				<version>${project.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -325,7 +325,7 @@
 				</property>
 			</activation>
 			<properties>
-				<jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
+				<jib-maven-plugin.version>3.5.1</jib-maven-plugin.version>
 			</properties>
 			<build>
 				<pluginManagement>

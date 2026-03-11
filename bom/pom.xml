@@ -175,7 +175,7 @@ identified
         <junit-platform.version>1.10.2</junit-platform.version>
 
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <lombok.version>1.18.42</lombok.version> <!-- overriding Spring -->
+        <lombok.version>1.18.44</lombok.version> <!-- overriding Spring -->
 
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <momentjs.version>2.29.4</momentjs.version> <!-- keep in sync:
@@ -187,6 +187,7 @@ identified
         <npm.version>8.19.2</npm.version>
 
         <ognl.version>3.4.3</ognl.version>
+        <osgi.version>8.0.0</osgi.version>
 
         <picocontainer.version>2.15</picocontainer.version>
         <poi.version>5.2.5</poi.version>
@@ -219,6 +220,7 @@ identified
         as served by wicket via webjars -->
         <wicketstuff.version>9.16.0</wicketstuff.version> <!--
         org.wicketstuff:wicketstuff-select2 -->
+        <wicketstuff-gmap3.version>9.22.0</wicketstuff-gmap3.version>
 
         <!-- OTHER -->
 
