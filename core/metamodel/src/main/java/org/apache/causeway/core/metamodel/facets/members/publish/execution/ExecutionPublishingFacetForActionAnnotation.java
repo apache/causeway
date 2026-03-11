@@ -83,6 +83,7 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
                         case DISABLED:
                             return new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
                         case ENABLED:
+                        case ENABLED_FOR_UPDATES_ONLY:
                             return new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
                         default:
                             throw new IllegalStateException(String.format("@Action#executionPublishing '%s' not recognised", publishing));

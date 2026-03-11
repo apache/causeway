@@ -57,17 +57,19 @@ extends EntityChangePublishingFacetAbstract {
                         : new EntityChangePublishingFacetFromConfiguration(holder, true));
             }
         case DISABLED:
-            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, false));
+            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, false, false, false, false));
         case ENABLED:
-            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true));
+            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true, true, true, true));
+        case ENABLED_FOR_UPDATES_ONLY:
+            return Optional.of(new EntityChangePublishingFacetForDomainObjectAnnotation(holder, true, false, true, false));
 
         default:
             throw _Exceptions.unmatchedCase(publish);
         }
     }
 
-    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder, boolean enabled) {
-        super(holder, enabled);
+    protected EntityChangePublishingFacetForDomainObjectAnnotation(final FacetHolder holder, boolean enabled, boolean enabledForCreate, boolean enabledForUpdate, boolean enabledForDelete) {
+        super(holder, enabled, enabledForCreate, enabledForUpdate, enabledForDelete);
     }
 }
 

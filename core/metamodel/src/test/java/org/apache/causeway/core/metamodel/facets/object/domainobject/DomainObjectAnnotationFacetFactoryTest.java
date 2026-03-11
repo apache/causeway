@@ -22,8 +22,11 @@ import java.util.UUID;
 
 import javax.inject.Named;
 
+import org.apache.causeway.applib.annotation.Publishing;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -78,7 +81,7 @@ extends FacetFactoryTestAbstract {
         facetFactory = null;
     }
 
-    class Customer {
+    static class Customer {
     }
 
     class SomeHasInteractionId implements HasInteractionId {
@@ -108,7 +111,8 @@ extends FacetFactoryTestAbstract {
 
     }
 
-    public static class EntityChangePublishing extends DomainObjectAnnotationFacetFactoryTest {
+    @Nested
+    public class EntityChangePublishing  {
 
         @DomainObject(entityChangePublishing = org.apache.causeway.applib.annotation.Publishing.AS_CONFIGURED)
         class CustomerWithDomainObjectAndAuditingSetToAsConfigured {
@@ -122,8 +126,13 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectAndAuditingSetToEnabled {
         }
 
+        @DomainObject(entityChangePublishing = Publishing.ENABLED_FOR_UPDATES_ONLY)
+        class CustomerWithDomainObjectAndEntityChangePublishingSetToEnabledForUpdatesOnly {
+        }
 
-        public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends EntityChangePublishing {
+
+        @Nested
+        public class WhenNotAnnotatedAndDefaultsFromConfiguration {
 
             @Test
             void configured_value_set_to_all() {
@@ -157,7 +166,8 @@ extends FacetFactoryTestAbstract {
 
         }
 
-        public static class WithDomainObjectAnnotationWithAuditingSetToAsConfigured extends EntityChangePublishing {
+        @Nested
+        public class WithDomainObjectAnnotationWithAuditingSetToAsConfigured {
 
             @Test
             public void configured_value_set_to_all() {
@@ -190,7 +200,8 @@ extends FacetFactoryTestAbstract {
 
         }
 
-        public static class WithDomainObjectAnnotationWithAuditingSetToEnabled extends EntityChangePublishing {
+        @Nested
+        public class WithDomainObjectAnnotationWithAuditingSetToEnabled {
 
             @Test
             public void irrespective_of_configured_value() {
@@ -208,7 +219,31 @@ extends FacetFactoryTestAbstract {
 
         }
 
-        public static class WithDomainObjectAnnotationWithAuditingSetToDisabled extends EntityChangePublishing {
+        @Nested
+        public class WithDomainObjectAnnotationWithEntityChangePublishingSetToEnabledForUpdatesOnly {
+
+            @Test
+            public void irrespective_of_configured_value() {
+                allowingEntityChangePublishingToReturn(null);
+                objectScenario(CustomerWithDomainObjectAndEntityChangePublishingSetToEnabledForUpdatesOnly.class, (processClassContext, facetHolder)->{
+                    facetFactory.process(processClassContext);
+
+                    final Facet facet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+                    assertNotNull(facet);
+                    assertTrue(facet instanceof EntityChangePublishingFacetForDomainObjectAnnotation);
+
+                    assertFalse(EntityChangePublishingFacet.isPublishingEnabledForCreate(facetHolder));
+                    assertTrue(EntityChangePublishingFacet.isPublishingEnabledForUpdate(facetHolder));
+                    assertFalse(EntityChangePublishingFacet.isPublishingEnabledForDelete(facetHolder));
+
+                    assertNoMethodsRemoved();
+                });
+            }
+
+        }
+
+        @Nested
+        public class WithDomainObjectAnnotationWithAuditingSetToDisabled {
 
             @Test
             public void irrespective_of_configured_value() {
@@ -226,7 +261,8 @@ extends FacetFactoryTestAbstract {
 
     }
 
-    public static class AutoComplete extends DomainObjectAnnotationFacetFactoryTest {
+    @Nested
+    public class AutoComplete  {
 
         class CustomerRepository {
             public String lookup(final String x) { return null; }
@@ -317,7 +353,8 @@ extends FacetFactoryTestAbstract {
 
     }
 
-    public static class Bounded extends DomainObjectAnnotationFacetFactoryTest {
+    @Nested
+    public class Bounded  {
 
         @DomainObject(bounding = Bounding.BOUNDED)
         class CustomerWithDomainObjectAndBoundedSetToTrue {
@@ -331,10 +368,8 @@ extends FacetFactoryTestAbstract {
         class CustomerWithDomainObjectButNoBounded {
         }
 
-        @Override
         @BeforeEach
         public void setUp() throws Exception {
-            super.setUp();
             ignoringConfiguration();
         }
 
@@ -382,25 +417,23 @@ extends FacetFactoryTestAbstract {
 
     }
 
-    public static class Editing extends DomainObjectAnnotationFacetFactoryTest {
+    @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.AS_CONFIGURED)
+    static class CustomerWithDomainObjectAndEditingSetToAsConfigured {
+    }
 
-        class CustomerWithImmutableAnnotation {
-        }
+    @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.DISABLED)
+    static class CustomerWithDomainObjectAndEditingSetToDisabled {
+    }
 
-        @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.AS_CONFIGURED)
-        class CustomerWithDomainObjectAndEditingSetToAsConfigured {
-        }
+    @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.ENABLED)
+    static class CustomerWithDomainObjectAndEditingSetToEnabled {
+    }
 
-        @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.DISABLED)
-        class CustomerWithDomainObjectAndEditingSetToDisabled {
-        }
+    @Nested
+    public class Editing {
 
-        @DomainObject(editing = org.apache.causeway.applib.annotation.Editing.ENABLED)
-        class CustomerWithDomainObjectAndEditingSetToEnabled {
-        }
-
-
-        public static class WhenNotAnnotatedAndDefaultsFromConfiguration extends Editing {
+        @Nested
+        public class WhenNotAnnotatedAndDefaultsFromConfiguration {
 
             @Test
             public void configured_value_set_to_true() {
@@ -448,8 +481,8 @@ extends FacetFactoryTestAbstract {
             }
         }
 
-
-        public static class WithDomainObjectAnnotationWithEditingSetToAsConfigured extends Editing {
+        @Nested
+        public class WithDomainObjectAnnotationWithEditingSetToAsConfigured  {
 
             @Test
             public void configured_value_set_to_true() {
@@ -493,7 +526,8 @@ extends FacetFactoryTestAbstract {
             }
         }
 
-        public static class WithDomainObjectAnnotationWithEditingSetToEnabled extends Editing {
+        @Nested
+        public class WithDomainObjectAnnotationWithEditingSetToEnabled  {
 
             @Test
             public void irrespective_of_configured_value() {
@@ -509,7 +543,8 @@ extends FacetFactoryTestAbstract {
             }
         }
 
-        public static class WithDomainObjectAnnotationWithEditingSetToDisabled extends Editing {
+        @Nested
+        public class WithDomainObjectAnnotationWithEditingSetToDisabled  {
 
             @Test
             public void irrespective_of_configured_value() {
@@ -527,27 +562,27 @@ extends FacetFactoryTestAbstract {
         }
     }
 
-    public static class LogicalTypeName extends DomainObjectAnnotationFacetFactoryTest {
+    @Named("CUS")
+    @DomainObject
+    static class LogicalTypeNameCustomerWithDomainObjectAndObjectTypeSet {
+    }
 
-        @Named("CUS")
-        @DomainObject
-        class CustomerWithDomainObjectAndObjectTypeSet {
-        }
+    @DomainObject
+    static class LogicalTypeNameCustomerWithDomainObjectButNoObjectType {
+    }
 
-        @DomainObject
-        class CustomerWithDomainObjectButNoObjectType {
-        }
 
-        @Override
+    @Nested
+    public class LogicalTypeName {
+
         @BeforeEach
         public void setUp() throws Exception {
-            super.setUp();
             ignoringConfiguration();
         }
 
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
-            assertThat(LogicalType.infer(CustomerWithDomainObjectAndObjectTypeSet.class).logicalName(),
+            assertThat(LogicalType.infer(LogicalTypeNameCustomerWithDomainObjectAndObjectTypeSet.class).logicalName(),
                     is("CUS"));
             assertNoMethodsRemoved();
         }
@@ -555,7 +590,7 @@ extends FacetFactoryTestAbstract {
         @Test
         public void whenDomainObjectAndObjectTypeNotSet() {
 
-            objectScenario(CustomerWithDomainObjectButNoObjectType.class, (processClassContext, facetHolder)->{
+            objectScenario(LogicalTypeNameCustomerWithDomainObjectButNoObjectType.class, (processClassContext, facetHolder)->{
                 facetFactory.process(processClassContext);
 
                 final Facet facet = facetHolder.getFacet(AliasedFacet.class);
@@ -580,28 +615,28 @@ extends FacetFactoryTestAbstract {
 
     }
 
-    public static class Nature extends DomainObjectAnnotationFacetFactoryTest {
 
-        @DomainObject(nature = org.apache.causeway.applib.annotation.Nature.ENTITY)
-        class CustomerWithDomainObjectAndNatureSetToJdoEntity {
-        }
+    @DomainObject(nature = org.apache.causeway.applib.annotation.Nature.ENTITY)
+    static class CustomerWithDomainObjectAndNatureSetToJdoEntity {
+    }
 
-        @DomainObject(nature = org.apache.causeway.applib.annotation.Nature.NOT_SPECIFIED)
-        class CustomerWithDomainObjectAndNatureSetToNotSpecified {
-        }
+    @DomainObject(nature = org.apache.causeway.applib.annotation.Nature.NOT_SPECIFIED)
+    static class CustomerWithDomainObjectAndNatureSetToNotSpecified {
+    }
 
-        @DomainObject(nature = org.apache.causeway.applib.annotation.Nature.VIEW_MODEL)
-        class CustomerWithDomainObjectAndNatureSetToViewModel {
-        }
+    @DomainObject(nature = org.apache.causeway.applib.annotation.Nature.VIEW_MODEL)
+    static class CustomerWithDomainObjectAndNatureSetToViewModel {
+    }
 
-        @DomainObject
-        class CustomerWithDomainObjectButNoNature {
-        }
+    @DomainObject
+    static class CustomerWithDomainObjectButNoNature {
+    }
 
-        @Override
+    @Nested
+    public class Nature  {
+
         @BeforeEach
         public void setUp() throws Exception {
-            super.setUp();
             ignoringConfiguration();
         }
 
@@ -663,18 +698,20 @@ extends FacetFactoryTestAbstract {
 
     }
 
-    public static class Alias extends AbstractTestWithMetaModelContext {
+    @Named("object.name")
+    @DomainObject(aliased = {"object.name", "object.alias"})
+    static class AliasDomainObjectWithAliases {
+    }
+
+    @Named("service.name")
+    @DomainService(aliased = {"service.name", "service.alias"})
+    static class AliasDomainServiceWithAliases {
+    }
+
+
+    @Nested
+    public class Alias  {
         DomainObjectAnnotationFacetFactory facetFactory;
-
-        @Named("object.name")
-        @DomainObject(aliased = {"object.name", "object.alias"})
-        class DomainObjectWithAliases {
-        }
-
-        @Named("service.name")
-        @DomainService(aliased = {"service.name", "service.alias"})
-        class DomainServiceWithAliases {
-        }
 
         @Test
         public void testValidationDomainObjectWithAliasesConfigured() {
@@ -685,7 +722,7 @@ extends FacetFactoryTestAbstract {
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
 
-            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainObjectWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            getMetaModelContext().getSpecificationLoader().loadSpecification(AliasDomainObjectWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
             ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
             assertFalse(validationFailures.hasFailures());
         }
@@ -699,7 +736,7 @@ extends FacetFactoryTestAbstract {
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
 
-            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainServiceWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            getMetaModelContext().getSpecificationLoader().loadSpecification(AliasDomainServiceWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
             ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
             assertFalse(validationFailures.hasFailures());
         }
@@ -711,7 +748,7 @@ extends FacetFactoryTestAbstract {
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
 
-            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainObjectWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            getMetaModelContext().getSpecificationLoader().loadSpecification(AliasDomainObjectWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
             ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
             assertTrue(validationFailures.hasFailures());
         }
@@ -724,7 +761,7 @@ extends FacetFactoryTestAbstract {
             facetFactory = new DomainObjectAnnotationFacetFactory(getMetaModelContext());
             ((MetaModelContext_forTesting) getMetaModelContext()).getProgrammingModel();//kicks off the programming model factory
 
-            getMetaModelContext().getSpecificationLoader().loadSpecification(DomainServiceWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
+            getMetaModelContext().getSpecificationLoader().loadSpecification(AliasDomainServiceWithAliases.class, IntrospectionState.FULLY_INTROSPECTED);
             ValidationFailures validationFailures = getMetaModelContext().getSpecificationLoader().getOrAssessValidationResult();
             assertTrue(validationFailures.hasFailures());
         }

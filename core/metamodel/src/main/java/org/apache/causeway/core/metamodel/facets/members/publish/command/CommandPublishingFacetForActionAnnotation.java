@@ -93,6 +93,7 @@ public abstract class CommandPublishingFacetForActionAnnotation extends CommandP
                         case DISABLED:
                             return new CommandPublishingFacetForActionAnnotation.Disabled(processor, holder, servicesInjector);
                         case ENABLED:
+                        case ENABLED_FOR_UPDATES_ONLY:
                             return new CommandPublishingFacetForActionAnnotation.Enabled(processor, holder, servicesInjector);
                         default:
                             throw new IllegalStateException(String.format("@Action#commandPublishing '%s' not recognised", publishing));

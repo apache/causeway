@@ -83,6 +83,7 @@ extends ExecutionPublishingFacetAbstract {
                     case DISABLED:
                         return new ExecutionPublishingFacetForPropertyAnnotation.Disabled(holder);
                     case ENABLED:
+                    case ENABLED_FOR_UPDATES_ONLY:
                         return new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
                     default:
                         throw new IllegalStateException(String.format("@Property#executionPublishing '%s' not recognised", publishing));

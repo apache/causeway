@@ -35,9 +35,21 @@ implements EntityChangePublishingFacet {
     @Getter
     private final boolean enabled;
 
-    public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder, boolean enabled) {
+    @Getter
+    private final boolean enabledForCreate;
+
+    @Getter
+    private final boolean enabledForUpdate;
+
+    @Getter
+    private final boolean enabledForDelete;
+
+    public EntityChangePublishingFacetAbstract(final FacetHolder facetHolder, boolean enabled, boolean enabledForCreate, boolean enabledForUpdate, boolean enabledForDelete) {
         super(EntityChangePublishingFacetAbstract.type(), facetHolder);
         this.enabled = enabled;
+        this.enabledForCreate = enabledForCreate;
+        this.enabledForUpdate = enabledForUpdate;
+        this.enabledForDelete = enabledForDelete;
     }
 
 }

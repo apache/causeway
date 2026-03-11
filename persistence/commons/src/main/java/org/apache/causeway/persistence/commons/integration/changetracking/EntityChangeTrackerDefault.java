@@ -536,7 +536,8 @@ implements
 
         _Xray.enlistCreated(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) {
+        if ( isEntityExcludedForChangePublishing(entity) ||
+            !EntityChangePublishingFacet.isPublishingEnabledForCreate(entity.objSpec())) {
             return;
         }
 
@@ -558,7 +559,8 @@ implements
 
         _Xray.enlistUpdating(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) {
+        if ( isEntityExcludedForChangePublishing(entity) ||
+            !EntityChangePublishingFacet.isPublishingEnabledForUpdate(entity.objSpec())) {
             return;
         }
 
@@ -596,7 +598,10 @@ implements
 
         _Xray.enlistDeleting(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) return;
+        if ( isEntityExcludedForChangePublishing(entity) ||
+            !EntityChangePublishingFacet.isPublishingEnabledForDelete(entity.objSpec())) {
+            return;
+        }
 
         suppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
