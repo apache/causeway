@@ -48,6 +48,8 @@
         <revision>2.2.0-SNAPSHOT</revision> <!-- can be overidden like mvn
         -Drevision=2.7.8 -->
 
+        <lombok.version>1.18.44</lombok.version> <!-- overrides spring -->
+
 		<maven.compiler.release>11</maven.compiler.release>
 		<maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
@@ -71,17 +73,26 @@
 			<plugins>
 				<!-- Compile -->
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${maven-compiler-plugin.version}</version>
-					<configuration>
-						<showDeprecation>false</showDeprecation>
-						<showWarnings>false</showWarnings>
-						<!-- Java compliance level, to be overridden with option maven.compiler.release -->
-					</configuration>
-					<!-- goal:compile binds to phase:compile -->
-					<!-- goal:testCompile binds to phase:test-compile -->
-				</plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.15.0</version>
+                    <configuration>
+                        <showDeprecation>false</showDeprecation>
+                        <showWarnings>false</showWarnings>
+                        <parameters>true</parameters>
+                        <!-- Java compliance level, to be overridden with option
+                        maven.compiler.release -->
+                    </configuration>
+                    <!-- goal:compile binds to phase:compile -->
+                    <!-- goal:testCompile binds to phase:test-compile -->
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.ow2.asm</groupId>
+                            <artifactId>asm</artifactId>
+                            <version>9.9.1</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
 
 				<!-- SITE REPORT -->
 				<plugin>
