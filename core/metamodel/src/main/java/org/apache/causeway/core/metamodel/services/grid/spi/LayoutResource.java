@@ -16,34 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.layout.resource;
-
-import java.util.Objects;
+package org.apache.causeway.core.metamodel.services.grid.spi;
 
 import org.apache.causeway.applib.value.NamedWithMimeType.CommonMimeType;
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
 /**
- * Layout data record with name, format and contents (XML, JSON, etc.) based on format.
- *
- * @since 4.0 {@index}
+ * @deprecated was promoted to applib
  */
-@Getter @Accessors(fluent = true)
-public class LayoutResource {
-	
-    private final String resourceName;
-    private final CommonMimeType format;
-    private final String content;
+@Deprecated(forRemoval = true)
+public final class LayoutResource extends org.apache.causeway.applib.layout.resource.LayoutResource{
 
-    public LayoutResource(
-    		final String resourceName,
-    	    final CommonMimeType format,
-    	    final String content) {
-    	this.resourceName = Objects.requireNonNull(resourceName);
-        this.format = Objects.requireNonNull(format);
-        this.content = Objects.requireNonNull(content);
-    }
+	public LayoutResource(String resourceName, CommonMimeType format, String content) {
+		super(resourceName, format, content);
+	}
 
 }
