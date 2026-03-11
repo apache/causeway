@@ -63,7 +63,7 @@
 
         <!-- PLUGINS -->
 
-        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
         <ethlo-eclipselink-maven-plugin.version>3.0.2</ethlo-eclipselink-maven-plugin.version>
         <maven-release-plugin.version>3.3.1</maven-release-plugin.version>
         <maven-source-plugin.version>3.4.0</maven-source-plugin.version>
@@ -330,7 +330,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.5.0</version>    <!--bumped-->
+                    <version>3.4.0</version>    <!--bumped-->
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -414,7 +414,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
-                    <version>3.6.2</version>
+                    <version>3.6.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.rat</groupId>
