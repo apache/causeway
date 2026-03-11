@@ -163,6 +163,7 @@ final class LayoutResourceLookup {
 
         return layoutResourceLoaders.stream()
             .flatMap(loader->loader.lookupLayoutResource(type, candidateResourceName).stream())
+            .map(LayoutResource.class::cast)
             .findFirst();
     }
 

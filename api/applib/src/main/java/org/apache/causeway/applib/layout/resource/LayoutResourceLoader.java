@@ -35,7 +35,7 @@ public interface LayoutResourceLoader {
      *
      * <p>Implementing beans may chose to be indifferent by returning an empty {@link Try}
      */
-    Try<LayoutResource> tryLoadLayoutResource(
+    Try<? extends LayoutResource> tryLoadLayoutResource(
             final @NonNull Class<?> domainClass,
             final @NonNull String candidateResourceName);
 
@@ -46,7 +46,7 @@ public interface LayoutResourceLoader {
      *
      * <p>Silently ignores exceptions underneath, if any.
      */
-    default Optional<LayoutResource> lookupLayoutResource(
+    default Optional<? extends LayoutResource> lookupLayoutResource(
             final @NonNull Class<?> domainClass,
             final @NonNull String candidateResourceName) {
         return tryLoadLayoutResource(domainClass, candidateResourceName)
