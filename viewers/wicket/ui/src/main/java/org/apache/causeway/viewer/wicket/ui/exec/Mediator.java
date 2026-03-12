@@ -150,11 +150,10 @@ record Mediator(
                         : javascriptFor_sameWindow(fullUrl);
 
                     scheduleJs(ajaxTarget, js, 100);
-                } else {
+                } else
                     throw _Exceptions.unrecoverable(
                             "no logic implemented to handle IRequestHandler of type %s",
                             requestHandler.getClass().getName());
-                }
             }
         }
     }
@@ -181,11 +180,33 @@ record Mediator(
     }
 
     private static String javascriptFor_newWindow(final CharSequence url) {
-        return "function(){Wicket.Event.publish(Causeway.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
+        return String.format("""
+            function(){
+                const url = '%s';
+                const requiredOrigin = window.location.origin;
+                const replacedUrl = url.startsWith(requiredOrigin)
+                  ? url
+                  : (() => {
+                      const urlObj = new URL(url);
+                      return requiredOrigin + urlObj.pathname + urlObj.search + urlObj.hash;
+                    })();
+                Wicket.Event.publish(Causeway.Topic.OPEN_IN_NEW_TAB, replacedUrl);
+            }""", url);
     }
 
     private static String javascriptFor_sameWindow(final CharSequence url) {
-        return "\"window.location.href='" + url + "'\"";
+        return String.format("""
+            function(){
+                const url = '%s';
+                const requiredOrigin = window.location.origin;
+                const replacedUrl = url.startsWith(requiredOrigin)
+                  ? url
+                  : (() => {
+                      const urlObj = new URL(url);
+                      return requiredOrigin + urlObj.pathname + urlObj.search + urlObj.hash;
+                    })();
+                window.location.href=replacedUrl;
+            }""", url);
     }
 
     private static void scheduleJs(final AjaxRequestTarget target, final String js, final int millis) {
