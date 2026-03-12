@@ -39,6 +39,7 @@ import lombok.RequiredArgsConstructor;
  * @since 2.0 {@index}
  *
  * @see HomePageResolverService
+ * @deprecated no longer in effect since v2
  */
 @Service
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".RoutingServiceDefault")
@@ -46,6 +47,7 @@ import lombok.RequiredArgsConstructor;
 @Qualifier("Default")
 @RequiredArgsConstructor(onConstructor_ = {@Inject})
 //@Log4j2
+@Deprecated
 public class RoutingServiceDefault implements RoutingService {
 
     private final HomePageResolverService homePageResolverService;
