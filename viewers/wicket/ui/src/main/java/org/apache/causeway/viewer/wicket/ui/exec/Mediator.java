@@ -193,11 +193,31 @@ final class Mediator {
     }
 
     private static String javascriptFor_newWindow(final CharSequence url) {
-        return "function(){Wicket.Event.publish(Causeway.Topic.OPEN_IN_NEW_TAB, '" + url + "');}";
+        return String.format("function(){\n"
+        		+ "    const url = '%s';\n"
+        		+ "    const requiredOrigin = window.location.origin;\n"
+        		+ "    const replacedUrl = url.startsWith(requiredOrigin)\n"
+        		+ "      ? url\n"
+        		+ "      : (() => {\n"
+        		+ "          const urlObj = new URL(url);\n"
+        		+ "          return requiredOrigin + urlObj.pathname + urlObj.search + urlObj.hash;\n"
+        		+ "        })();\n"
+        		+ "    Wicket.Event.publish(Causeway.Topic.OPEN_IN_NEW_TAB, replacedUrl);\n"
+        		+ "}", url);
     }
 
     private static String javascriptFor_sameWindow(final CharSequence url) {
-        return "\"window.location.href='" + url + "'\"";
+        return String.format("function(){\n"
+        		+ "    const url = '%s';\n"
+        		+ "    const requiredOrigin = window.location.origin;\n"
+        		+ "    const replacedUrl = url.startsWith(requiredOrigin)\n"
+        		+ "      ? url\n"
+        		+ "      : (() => {\n"
+        		+ "          const urlObj = new URL(url);\n"
+        		+ "          return requiredOrigin + urlObj.pathname + urlObj.search + urlObj.hash;\n"
+        		+ "        })();\n"
+        		+ "    window.location.href=replacedUrl;\n"
+        		+ "}", url);
     }
 
     private static void scheduleJs(final AjaxRequestTarget target, final String js, final int millis) {
