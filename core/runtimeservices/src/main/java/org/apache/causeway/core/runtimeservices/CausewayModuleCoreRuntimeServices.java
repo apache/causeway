@@ -59,7 +59,6 @@ import org.apache.causeway.core.runtimeservices.publish.ObjectLifecyclePublisher
 import org.apache.causeway.core.runtimeservices.recognizer.ExceptionRecognizerServiceDefault;
 import org.apache.causeway.core.runtimeservices.recognizer.dae.ExceptionRecognizerForDataAccessException;
 import org.apache.causeway.core.runtimeservices.render.PlaceholderRenderServiceDefault;
-import org.apache.causeway.core.runtimeservices.routing.RoutingServiceDefault;
 import org.apache.causeway.core.runtimeservices.scratchpad.ScratchpadDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionIdGeneratorDefault;
 import org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault;
@@ -121,9 +120,6 @@ import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDe
         WrapperFactoryDefault.class,
         XmlServiceDefault.class,
         XmlSnapshotServiceDefault.class,
-
-        // @Controller
-        RoutingServiceDefault.class,
 
         // @DomainService's
         TranslationServicePoMenu.class,
