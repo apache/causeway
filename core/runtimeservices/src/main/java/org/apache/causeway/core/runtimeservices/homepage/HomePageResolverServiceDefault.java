@@ -20,7 +20,6 @@ package org.apache.causeway.core.runtimeservices.homepage;
 
 import java.util.Optional;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.annotation.HomePage;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.factory.FactoryService;
 import org.apache.causeway.applib.services.homepage.HomePageResolverService;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.metamodel.commons.ClassExtensions;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
@@ -38,10 +38,8 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
  * Default implementation of {@link HomePageResolverService}, which uses the view model annotated with
  * {@link HomePage} as the home page.
  *
- * <p>
- *     If there is more than one such view model so annotated, then the one chosen is not defined
- *     (in effect, can be considered is randomly chosen).
- * </p>
+ * <p>If there is more than one such view model so annotated, then the one chosen is not defined
+ * (in effect, can be considered is randomly chosen).
  *
  * @since 2.0 {@index}
  */
@@ -51,9 +49,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 public class HomePageResolverServiceDefault implements HomePageResolverService {
 
     private final FactoryService factoryService;
-    private final CausewayBeanTypeRegistry causewayBeanTypeRegistry;
-
-    private Optional<Class<?>> viewModelTypeForHomepage;
+    private final _Lazy<Optional<Class<?>>> viewModelTypeForHomepage;
 
     @Inject
     public HomePageResolverServiceDefault(
@@ -61,17 +57,12 @@ public class HomePageResolverServiceDefault implements HomePageResolverService {
             final CausewayBeanTypeRegistry causewayBeanTypeRegistry) {
 
         this.factoryService = factoryService;
-        this.causewayBeanTypeRegistry = causewayBeanTypeRegistry;
-    }
-
-    @PostConstruct
-    public void init() {
-        viewModelTypeForHomepage = causewayBeanTypeRegistry.findHomepageViewmodel();
+        this.viewModelTypeForHomepage = _Lazy.threadSafe(causewayBeanTypeRegistry::findHomepageViewmodel);
     }
 
     @Override
     public Object getHomePage() {
-        return viewModelTypeForHomepage
+        return viewModelTypeForHomepage.get()
                 .map(ClassExtensions::newInstance)
                 .map(factoryService::viewModel)
                 .orElse(null);
