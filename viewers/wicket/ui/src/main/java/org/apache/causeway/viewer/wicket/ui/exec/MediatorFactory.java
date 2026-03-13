@@ -76,11 +76,11 @@ class MediatorFactory {
             // force full page reload
             case FORCE_STAY_ON_PAGE: return new Mediator(
                 ExecutionResultHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
-                null, null, ajaxTarget, response.pageRedirect().toUrl()); // page redirect should point to current page
+                null, null, ajaxTarget, UrlBasedRedirectContext.of(response.pageRedirect().toUrl())); // page redirect should point to current page
             // open result page in new browser tab/win
             case FORCE_NEW_BROWSER_WINDOW: return new Mediator(
                 ExecutionResultHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW,
-                null, null, ajaxTarget, response.pageRedirect().toUrl()); // page redirect should point to action result
+                null, null, ajaxTarget, UrlBasedRedirectContext.of(response.pageRedirect().toUrl())); // page redirect should point to action result
         }
         
         throw _Exceptions.unmatchedCase(actionModel.columnActionModifier());
