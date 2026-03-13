@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.ui.exec;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -33,6 +32,7 @@ import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.viewer.wicket.model.models.ActionModel;
 import org.apache.causeway.viewer.wicket.model.models.RedirectRequestHandlerWithOpenUrlStrategy;
+import org.apache.causeway.viewer.wicket.ui.exec.JavaScriptRedirect.OriginRewrite;
 import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 
 /**
@@ -61,7 +61,7 @@ record Mediator(
      * either {@link ExecutionResultHandlingStrategy#OPEN_URL_IN_NEW_BROWSER_WINDOW}
      * or {@link ExecutionResultHandlingStrategy#OPEN_URL_IN_SAME_BROWSER_WINDOW}
      */
-    String url) {
+    UrlBasedRedirectContext urlBasedRedirectContext) {
 
     enum ExecutionResultHandlingStrategy {
         REDIRECT_TO_PAGE,
@@ -101,7 +101,7 @@ record Mediator(
                 openUrlStrategy.isNewWindow()
                     ? ExecutionResultHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW
                     : ExecutionResultHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
-                null, null, ajaxTarget, url);
+                null, null, ajaxTarget, UrlBasedRedirectContext.of(url));
     }
 
     void handle() {
@@ -115,16 +115,18 @@ record Mediator(
                 this.pageRedirect().apply();
             }
             case OPEN_URL_IN_NEW_BROWSER_WINDOW -> {
-                final String fullUrl = expanded(RequestCycle.get(), url());
-                scheduleJs(ajaxTarget(), javascriptFor_newWindow(fullUrl), 100);
+                var js = urlBasedRedirectContext.createJavaScriptRedirect()
+                    .javascriptFor_newWindow();
+                scheduleJs(ajaxTarget, js, 100);
             }
             case OPEN_URL_IN_SAME_BROWSER_WINDOW -> {
-                final String fullUrl = expanded(RequestCycle.get(), url());
-                scheduleJs(ajaxTarget(), javascriptFor_sameWindow(fullUrl), 100);
+                var js = urlBasedRedirectContext.createJavaScriptRedirect()
+                    .javascriptFor_sameWindow();
+                scheduleJs(ajaxTarget, js, 100);
             }
             case SCHEDULE_HANDLER -> {
-                var requestCycle = RequestCycle.get();
-                var ajaxTarget = requestCycle.find(AjaxRequestTarget.class).orElse(null);
+                final var requestCycle = RequestCycle.get();
+                final var ajaxTarget = requestCycle.find(AjaxRequestTarget.class).orElse(null);
                 final IRequestHandler requestHandler = handler();
 
                 if (ajaxTarget == null) {
@@ -142,13 +144,16 @@ record Mediator(
                     var relativeDownloadPageUri = TextUtils.cutter(streamingBehavior.getCallbackUrl().toString())
                         .keepAfterLast("/")
                         .getValue();
-                    scheduleJs(ajaxTarget, javascriptFor_sameWindow(relativeDownloadPageUri), 10);
+                    // never rewrite relative URLs
+                    var js = new JavaScriptRedirect(OriginRewrite.DISABLED, relativeDownloadPageUri)
+                            .javascriptFor_sameWindow();
+                    scheduleJs(ajaxTarget, js, 10);
                 } else if(requestHandler instanceof RedirectRequestHandlerWithOpenUrlStrategy redirectHandler) {
-                    var fullUrl = expanded(requestCycle, redirectHandler.getRedirectUrl());
+                    var jsFactory = UrlBasedRedirectContext.of(redirectHandler.getRedirectUrl())
+                            .createJavaScriptRedirect();
                     var js = redirectHandler.getOpenUrlStrategy().isNewWindow()
-                        ? javascriptFor_newWindow(fullUrl)
-                        : javascriptFor_sameWindow(fullUrl);
-
+                        ? jsFactory.javascriptFor_newWindow()
+                        : jsFactory.javascriptFor_sameWindow();
                     scheduleJs(ajaxTarget, js, 100);
                 } else
                     throw _Exceptions.unrecoverable(
@@ -159,55 +164,6 @@ record Mediator(
     }
 
     // -- HELPER
-
-    /**
-     * @see #expanded(String)
-     */
-    private static String expanded(final RequestCycle requestCycle, final String url) {
-        String urlStr = expanded(url);
-        return requestCycle.getUrlRenderer().renderFullUrl(Url.parse(urlStr));
-    }
-
-    /**
-     * very simple template support, the idea being that "antiCache=${currentTimeMillis}"
-     * will be replaced automatically.
-     */
-    private static String expanded(String urlStr) {
-        if(urlStr.contains("antiCache=${currentTimeMillis}")) {
-            urlStr = urlStr.replace("antiCache=${currentTimeMillis}", "antiCache="+System.currentTimeMillis());
-        }
-        return urlStr;
-    }
-
-    private static String javascriptFor_newWindow(final CharSequence url) {
-        return String.format("""
-            function(){
-                const url = '%s';
-                const requiredOrigin = window.location.origin;
-                const replacedUrl = url.startsWith(requiredOrigin)
-                  ? url
-                  : (() => {
-                      const urlObj = new URL(url);
-                      return requiredOrigin + urlObj.pathname + urlObj.search + urlObj.hash;
-                    })();
-                Wicket.Event.publish(Causeway.Topic.OPEN_IN_NEW_TAB, replacedUrl);
-            }""", url);
-    }
-
-    private static String javascriptFor_sameWindow(final CharSequence url) {
-        return String.format("""
-            function(){
-                const url = '%s';
-                const requiredOrigin = window.location.origin;
-                const replacedUrl = url.startsWith(requiredOrigin)
-                  ? url
-                  : (() => {
-                      const urlObj = new URL(url);
-                      return requiredOrigin + urlObj.pathname + urlObj.search + urlObj.hash;
-                    })();
-                window.location.href=replacedUrl;
-            }""", url);
-    }
 
     private static void scheduleJs(final AjaxRequestTarget target, final String js, final int millis) {
         // the timeout is needed to let Wicket release the channel

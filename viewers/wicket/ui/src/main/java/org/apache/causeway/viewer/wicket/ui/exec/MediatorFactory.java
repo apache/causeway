@@ -72,11 +72,11 @@ class MediatorFactory {
                 // force full page reload
                 case FORCE_STAY_ON_PAGE -> new Mediator(
                     ExecutionResultHandlingStrategy.OPEN_URL_IN_SAME_BROWSER_WINDOW,
-                    null, null, ajaxTarget, response.pageRedirect().toUrl()); // page redirect should point to current page
+                    null, null, ajaxTarget, UrlBasedRedirectContext.of(response.pageRedirect().toUrl())); // page redirect should point to current page
                 // open result page in new browser tab/win
                 case FORCE_NEW_BROWSER_WINDOW -> new Mediator(
                     ExecutionResultHandlingStrategy.OPEN_URL_IN_NEW_BROWSER_WINDOW,
-                    null, null, ajaxTarget, response.pageRedirect().toUrl()); // page redirect should point to action result
+                    null, null, ajaxTarget, UrlBasedRedirectContext.of(response.pageRedirect().toUrl())); // page redirect should point to action result
                 }
             : response;
     }
@@ -88,16 +88,12 @@ class MediatorFactory {
             final @NonNull OpenUrlStrategy openUrlStrategy,
             final @NonNull WebAppContextPath webAppContextPath) {
 
-        if(value instanceof java.net.URL) {
-            var url = (java.net.URL) value;
+        if(value instanceof java.net.URL url)
             return new RedirectRequestHandlerWithOpenUrlStrategy(url.toString());
-        }
-        if(value instanceof LocalResourcePath) {
-            var localResourcePath = (LocalResourcePath) value;
+        if(value instanceof LocalResourcePath localResourcePath)
             return new RedirectRequestHandlerWithOpenUrlStrategy(
                     localResourcePath.getEffectivePath(webAppContextPath::prependContextPath),
                     localResourcePath.openUrlStrategy());
-        }
         return null;
     }
 
@@ -109,77 +105,75 @@ class MediatorFactory {
         final ActionResultResponseType responseType = actionResultModel.responseType();
         final ManagedObject resultAdapter = actionResultModel.resultAdapter();
 
-        switch(responseType) {
-        case COLLECTION: {
+        return switch (responseType) {
+        case COLLECTION -> {
             _Assert.assertTrue(resultAdapter instanceof PackedManagedObject);
             var collectionModel = CollectionModelStandalone
                     .forActionModel((PackedManagedObject)resultAdapter, actionModel);
             var pageRedirectRequest = PageRedirectRequest.forPage(
                     StandaloneCollectionPage.class, new StandaloneCollectionPage(collectionModel));
-            return Mediator.toPage(pageRedirectRequest);
+            yield Mediator.toPage(pageRedirectRequest);
         }
-        case OBJECT: {
+        case OBJECT -> {
             determineScalarAdapter(actionModel.getMetaModelContext(), resultAdapter); // intercepts collections
-            return Mediator.toDomainObjectPage(resultAdapter);
+            yield Mediator.toDomainObjectPage(resultAdapter);
         }
-        case SIGN_IN: {
+        case SIGN_IN -> {
             var signInPage = actionModel.getMetaModelContext()
                     .lookupServiceElseFail(PageClassRegistry.class)
                     .getPageClass(PageType.SIGN_IN);
             var pageRedirectRequest = PageRedirectRequest.forPageClass(signInPage);
-            return Mediator.toPage(pageRedirectRequest);
+            yield Mediator.toPage(pageRedirectRequest);
         }
-        case VALUE: {
+        case VALUE -> {
             var valueModel = new ValueModel(actionModel, resultAdapter);
             var valuePage = new ValuePage(valueModel, actionModel.getFriendlyName());
             var pageRedirectRequest = PageRedirectRequest.forPage(ValuePage.class, valuePage);
-            return Mediator.toPage(pageRedirectRequest);
+            yield Mediator.toPage(pageRedirectRequest);
         }
-        case VALUE_BLOB:
-        case VALUE_CLOB: {
+        case VALUE_BLOB, VALUE_CLOB -> {
             final Object value = resultAdapter.getPojo();
             IRequestHandler handler = LobRequestHandler.downloadHandler(actionModel.getAction(), value);
-            return Mediator.withHandler(handler);
+            yield Mediator.withHandler(handler);
         }
-        case VALUE_LOCALRESPATH_AJAX: {
+        case VALUE_LOCALRESPATH_AJAX -> {
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
             var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
-            return Mediator
-                    .openUrlInBrowser(ajaxTarget, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.openUrlStrategy());
+            yield Mediator
+                                .openUrlInBrowser(ajaxTarget, localResPath.getEffectivePath(webAppContextPath::prependContextPath), localResPath.openUrlStrategy());
         }
-        case VALUE_LOCALRESPATH_NOAJAX: {
+        case VALUE_LOCALRESPATH_NOAJAX -> {
             // open URL server-side redirect
             final LocalResourcePath localResPath = (LocalResourcePath)resultAdapter.getPojo();
             var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             IRequestHandler handler = redirectHandler(localResPath, localResPath.openUrlStrategy(), webAppContextPath);
-            return Mediator.withHandler(handler);
+            yield Mediator.withHandler(handler);
         }
-        case VALUE_URL_AJAX: {
+        case VALUE_URL_AJAX -> {
             final URL url = (URL)resultAdapter.getPojo();
-            return Mediator
-                    .openUrlInBrowser(ajaxTarget, url.toString(), OpenUrlStrategy.NEW_WINDOW); // default behavior
+            yield Mediator
+                                .openUrlInBrowser(ajaxTarget, url.toString(), OpenUrlStrategy.NEW_WINDOW); // default behavior
         }
-        case VALUE_URL_NOAJAX: {
+        case VALUE_URL_NOAJAX -> {
             // open URL server-side redirect
             final Object value = resultAdapter.getPojo();
             var webAppContextPath = actionModel.getMetaModelContext().getWebAppContextPath();
             IRequestHandler handler = redirectHandler(value, OpenUrlStrategy.NEW_WINDOW, webAppContextPath); // default behavior
-            return Mediator.withHandler(handler);
+            yield Mediator.withHandler(handler);
         }
-        case VOID_AS_EMPTY: {
+        case VOID_AS_EMPTY -> {
             var pageRedirectRequest = PageRedirectRequest
                 .forPage(VoidReturnPage.class, new VoidReturnPage(new VoidModel(), actionModel.getFriendlyName()));
-            return Mediator.toPage(pageRedirectRequest);
+            yield Mediator.toPage(pageRedirectRequest);
         }
-        case RELOAD: {
+        case RELOAD -> {
             var currentPage = PageRequestHandlerTracker.getLastHandler(RequestCycle.get()).getPage();
             var pageClass = currentPage.getClass();
             var pageRedirectRequest = PageRedirectRequest.forPage(pageClass, _Casts.uncheckedCast(currentPage));
-            return Mediator.toPage(pageRedirectRequest);
+            yield Mediator.toPage(pageRedirectRequest);
         }
-        default:
-            throw _Exceptions.unmatchedCase(responseType);
-        }
+        default -> throw _Exceptions.unmatchedCase(responseType);
+        };
     }
 
     private ManagedObject determineScalarAdapter(
