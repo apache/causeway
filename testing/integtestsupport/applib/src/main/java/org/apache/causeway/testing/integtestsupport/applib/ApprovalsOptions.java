@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.approvaltests.core.Options;
 import org.approvaltests.core.Scrubber;
-
+import org.approvaltests.reporters.linux.ReportWithMeldMergeLinux;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.collections._Maps;
@@ -36,18 +36,27 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class ApprovalsOptions {
 
+	public static Options defaultOptions() {
+		var opts = new Options();
+		// on Linux, at time of writing, the default reporter find mechanism throws an exception while evaluating Windows Diff Reporters;
+		// this is a workaround, provided you are on Linux and have Meld installed
+		return ReportWithMeldMergeLinux.INSTANCE.checkFileExists()
+			? opts.withReporter(ReportWithMeldMergeLinux.INSTANCE)
+			: opts;
+	}
+	
     public static Options xmlOptions() {
-        return new Options()
-                .withScrubber(ApprovalsOptions::scrub)
-                .forFile()
-                .withExtension(".xml");
+        return defaultOptions()
+            .withScrubber(ApprovalsOptions::scrub)
+            .forFile()
+            .withExtension(".xml");
     }
 
     private String scrub(final String input) {
         return TextUtils.streamLines(input)
-                .map(ApprovalsOptions::scrubLine)
-                .filter(line->!_Strings.nullToEmpty(line).isBlank()) // ignore blank lines, just in case
-                .collect(Collectors.joining("\n")); // UNIX line ending convention
+            .map(ApprovalsOptions::scrubLine)
+            .filter(line->!_Strings.nullToEmpty(line).isBlank()) // ignore blank lines, just in case
+            .collect(Collectors.joining("\n")); // UNIX line ending convention
     }
 
     /**
@@ -98,7 +107,7 @@ public class ApprovalsOptions {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public Options gqlOptions() {
-        return new Options().withScrubber(new Scrubber() {
+        return defaultOptions().withScrubber(new Scrubber() {
             @SneakyThrows
             @Override
             public String scrub(final String s) {
