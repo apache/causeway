@@ -62,7 +62,8 @@ identified
 
         <!-- LIBRARY DEPENDENCIES -->
 
-        <archunit.version>1.4.1</archunit.version>
+        <archunit.version>1.4.1</archunit.version> <!-- no java 26 support yet, once its there, 
+            remove all related @ArchIgnore annots. from tests -->
         <asciidoctorj.version>3.0.1</asciidoctorj.version>
         <asm.version>9.9.1</asm.version> <!-- keep in sync with
         org.eclipse.persistence:org.eclipse.persistence.asm -->

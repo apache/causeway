@@ -20,6 +20,7 @@ package org.apache.causeway.testing.archtestsupport.applib.entity.jpa;
 
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchIgnore;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
@@ -41,6 +42,7 @@ import static org.apache.causeway.testing.archtestsupport.applib.classrules.Arch
       JpaDomModule.class
     },
     importOptions = {ImportOption.OnlyIncludeTests.class})
+@ArchIgnore(reason = "no Java 26 support yet")
 public class JpaEntityArchTests {
 
   @ArchTest

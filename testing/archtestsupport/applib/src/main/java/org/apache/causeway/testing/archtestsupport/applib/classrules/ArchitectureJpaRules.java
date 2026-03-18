@@ -105,11 +105,10 @@ public class ArchitectureJpaRules {
     }
 
     static DescribedPredicate<JavaAnnotation<?>> EntityListeners_with_CausewayEntityListener() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@EntityListener({CausewayEntityListener.class})") {
+        return new DescribedPredicate<>("@EntityListener({CausewayEntityListener.class})") {
             @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
-                if (!javaAnnotation.getRawType().isAssignableTo(EntityListeners.class)) {
+                if (!javaAnnotation.getRawType().isAssignableTo(EntityListeners.class))
                     return false;
-                }
                 var properties = javaAnnotation.getProperties();
                 var listeners = properties.get("value");
                 return listeners instanceof JavaClass[] && containsCausewayEntityListener((JavaClass[]) listeners);
@@ -258,11 +257,10 @@ public class ArchitectureJpaRules {
     }
 
     static DescribedPredicate<JavaAnnotation<?>> Table_schema() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@Table(schema=...)") {
+        return new DescribedPredicate<>("@Table(schema=...)") {
             @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
-                if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
+                if (!javaAnnotation.getRawType().isAssignableTo(Table.class))
                     return false;
-                }
                 var properties = javaAnnotation.getProperties();
                 var schema = properties.get("schema");
                 return schema instanceof String &&
@@ -272,7 +270,7 @@ public class ArchitectureJpaRules {
     }
 
     static DescribedPredicate<JavaClass> areEntities() {
-        return new DescribedPredicate<JavaClass>("are entities") {
+        return new DescribedPredicate<>("are entities") {
             @Override
             public boolean test(final JavaClass input) {
                 return input.isAnnotatedWith(Entity.class);
@@ -281,11 +279,10 @@ public class ArchitectureJpaRules {
     }
 
     static DescribedPredicate<JavaAnnotation<?>> Table_uniqueConstraints() {
-        return new DescribedPredicate<JavaAnnotation<?>>("@Table(uniqueConstraints=...)") {
+        return new DescribedPredicate<>("@Table(uniqueConstraints=...)") {
             @Override public boolean test(final JavaAnnotation<?> javaAnnotation) {
-                if (!javaAnnotation.getRawType().isAssignableTo(Table.class)) {
+                if (!javaAnnotation.getRawType().isAssignableTo(Table.class))
                     return false;
-                }
                 var properties = javaAnnotation.getProperties();
                 var uniqueConstraints = properties.get("uniqueConstraints");
                 return uniqueConstraints instanceof JavaAnnotation[] &&
@@ -310,12 +307,11 @@ public class ArchitectureJpaRules {
     }
 
     static DescribedPredicate<? super JavaClass> areSubtypeEntities() {
-        return new DescribedPredicate<JavaClass>("are subtype entities ") {
+        return new DescribedPredicate<>("are subtype entities ") {
             @Override public boolean test(final JavaClass input) {
                 var superclassIfAny = input.getSuperclass();
-                if(!superclassIfAny.isPresent()) {
+                if(!superclassIfAny.isPresent())
                     return false;
-                }
                 var superType = superclassIfAny.get();
                 var superClass = superType.toErasure();
                 var entityIfAny = superClass
