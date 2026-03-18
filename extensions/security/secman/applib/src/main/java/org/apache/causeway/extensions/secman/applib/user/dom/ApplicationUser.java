@@ -99,16 +99,16 @@ public interface ApplicationUser
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationUser, T> {}
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationUser, T> {}
 
-    ApplicationUserRepository applicationUserRepository();
-    ApplicationPermissionRepository applicationPermissionRepository();
-    UserService userService();
+    @Programmatic ApplicationUserRepository applicationUserRepository();
+    @Programmatic ApplicationPermissionRepository applicationPermissionRepository();
+    @Programmatic UserService userService();
     /**
      * Optional service, if configured then is used to evaluate permissions within
      * {@link ApplicationPermissionValueSet#evaluate(ApplicationFeatureId, ApplicationPermissionMode)}
      * else will fallback to a default implementation.
      */
-    PermissionsEvaluationService permissionsEvaluationService();
-    CausewayConfiguration config();
+    @Programmatic PermissionsEvaluationService permissionsEvaluationService();
+    @Programmatic CausewayConfiguration config();
 
     @Programmatic default Secman getSecmanConfig() {
         return config().extensions().secman();
@@ -636,6 +636,7 @@ public interface ApplicationUser
     static final ObjectContracts.ObjectContract<ApplicationUser> CONTRACT =
             ObjectContracts.parse(ApplicationUser.class, "username");
 
+    @Programmatic
     @Override
     public default int compareTo(final org.apache.causeway.extensions.secman.applib.user.dom.ApplicationUser other) {
         return CONTRACT.compare(this, other);

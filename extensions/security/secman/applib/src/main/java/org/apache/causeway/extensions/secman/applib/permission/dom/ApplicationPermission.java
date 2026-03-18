@@ -114,6 +114,7 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
     public static abstract class PropertyDomainEvent<T> extends CausewayModuleExtSecmanApplib.PropertyDomainEvent<ApplicationPermission, T> {}
     public static abstract class CollectionDomainEvent<T> extends CausewayModuleExtSecmanApplib.CollectionDomainEvent<ApplicationPermission, T> {}
 
+    @Programmatic
     ApplicationFeatureRepository featureRepository();
 
     // -- MODEL
@@ -346,6 +347,7 @@ public interface ApplicationPermission extends Comparable<ApplicationPermission>
                     .thenUse("featureFqn", ApplicationPermission::getFeatureFqn)
                     .thenUse("mode", ApplicationPermission::getMode);
 
+    @Programmatic
     @Override
     default int compareTo(final org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermission other) {
         return CONTRACT.compare(this, other);

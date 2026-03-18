@@ -204,6 +204,7 @@ public interface ApplicationTenancy extends Comparable<ApplicationTenancy> {
     static final Comparator<ApplicationTenancy> COMPARATOR =
             Comparator.comparing(ApplicationTenancy::getPath);
 
+    @Programmatic
     @Override
     default int compareTo(final org.apache.causeway.extensions.secman.applib.tenancy.dom.ApplicationTenancy other) {
         return COMPARATOR.compare(this, other);

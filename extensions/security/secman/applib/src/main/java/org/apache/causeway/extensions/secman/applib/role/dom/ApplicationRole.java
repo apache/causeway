@@ -37,6 +37,7 @@ import org.apache.causeway.applib.annotation.ObjectSupport;
 import org.apache.causeway.applib.annotation.Optionality;
 import org.apache.causeway.applib.annotation.Parameter;
 import org.apache.causeway.applib.annotation.ParameterLayout;
+import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.Property;
 import org.apache.causeway.applib.annotation.PropertyLayout;
 import org.apache.causeway.applib.util.Equality;
@@ -70,6 +71,7 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
         public static final String FIND_BY_NAME_CONTAINING = LOGICAL_TYPE_NAME + ".findByNameContaining";
     }
 
+    @Programmatic
     org.apache.causeway.extensions.secman.applib.permission.dom.ApplicationPermissionRepository applicationPermissionRepository();
 
     // -- UI & DOMAIN EVENTS
@@ -210,6 +212,7 @@ public interface ApplicationRole extends Comparable<ApplicationRole> {
     static final ToString<ApplicationRole> TOSTRING =
             ObjectContracts.toString("name", ApplicationRole::getName);
 
+    @Programmatic
     @Override
     public default int compareTo(final org.apache.causeway.extensions.secman.applib.role.dom.ApplicationRole other) {
         return COMPARATOR.compare(this, other);
