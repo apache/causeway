@@ -79,9 +79,8 @@ module org.apache.causeway.commons {
     requires jakarta.annotation;
     requires com.sun.xml.bind;
     requires tools.jackson.dataformat.yaml;
-    //requires tools.jackson.datatype.javatime;
     requires org.slf4j;
-	requires org.snakeyaml.engine.v2;
+    requires org.snakeyaml.engine;
 
     // JAXB JUnit test
     opens org.apache.causeway.commons.internal.resources to jakarta.xml.bind;
