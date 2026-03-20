@@ -78,7 +78,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
     CausewayModuleViewerWicketViewer.class,
 })
 public class Configuration_usingWicket {
-	
+
     @Bean
     public WicketTesterFactory wicketTesterFactory(final MetaModelContext mmc) {
         return new WicketTesterFactory(mmc);
@@ -282,25 +282,22 @@ public class Configuration_usingWicket {
 
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass, final PageParameters parameters) {
-            if(DomainObjectPage.class.equals(pageClass)) {
+            if(DomainObjectPage.class.equals(pageClass))
                 return _Casts.uncheckedCast(DomainObjectPage.forPageParameters(parameters));
-            }
             return delegate.newPage(pageClass, parameters);
         }
 
         @Override
         public <C extends IRequestablePage> C newPage(final Class<C> pageClass) {
-            if(DomainObjectPage.class.equals(pageClass)) {
+            if(DomainObjectPage.class.equals(pageClass))
                 throw _Exceptions.illegalArgument("cannot instantiate DomainObjectPage without PageParameters");
-            }
             return delegate.newPage(pageClass);
         }
 
         @Override
         public <C extends IRequestablePage> boolean isBookmarkable(final Class<C> pageClass) {
-            if(DomainObjectPage.class.equals(pageClass)) {
+            if(DomainObjectPage.class.equals(pageClass))
                 return true;
-            }
             return delegate.isBookmarkable(pageClass);
         }
     }
@@ -353,7 +350,7 @@ public class Configuration_usingWicket {
         protected void internalInit() {
             super.internalInit();
             // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-            CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
+            CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this);
         }
 
     }

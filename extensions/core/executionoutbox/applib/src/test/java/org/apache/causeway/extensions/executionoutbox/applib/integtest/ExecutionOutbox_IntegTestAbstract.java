@@ -36,6 +36,7 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -60,9 +61,11 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
 
     Counter counter1;
     Counter counter2;
+    private TestSupport<?> testSupport;
 
     @BeforeEach
     void beforeEach() {
+        this.testSupport = interactionService.testSupport();
         counterRepository.removeAll();
         executionOutboxEntryRepository.removeAll();
 
@@ -86,7 +89,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -117,7 +120,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -148,7 +151,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithExecutionPublishingDisabled.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -162,7 +165,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithExecutionPublishingDisabled();
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -176,7 +179,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).setNum(99L);
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -206,7 +209,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).setNum2(99L);
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -220,7 +223,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
-        interactionService.openInteraction();
+        testSupport.openInteraction();
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
 
         ExecutionOutboxEntry executionLogEntry = all.get(0);
@@ -238,7 +241,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
 
         // when we start a new session and lookup from the bookmark
         interactionService.closeInteractionLayers();
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         Optional<Object> cle2IfAny = bookmarkService.lookup(eleBookmarkIfAny.get());
         assertThat(cle2IfAny).isPresent();
@@ -257,7 +260,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
         interactionService.closeInteractionLayers();    // to flush
-        interactionService.openInteraction();
+        testSupport.openInteraction();
 
         // when
         List<? extends ExecutionOutboxEntry> executionTarget1User1IfAny = executionOutboxEntryRepository.findOldest();

@@ -54,9 +54,7 @@ import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.metrics.MetricsService;
-import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Timing;
@@ -119,7 +117,7 @@ implements
     }
 
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
-            new MetaDataKey<SessionLifecyclePhase>() { private static final long serialVersionUID = 1L; };
+            new MetaDataKey<>() { private static final long serialVersionUID = 1L; };
 
     @Setter
     private PageClassRegistry pageClassRegistry;
@@ -142,50 +140,11 @@ implements
                     log.trace("flagging the RequestCycle as expired (rememberMe feature is active for the current user)");
                 }
             }
-            if(log.isTraceEnabled()) {
-                log.trace("onBeginRequest out - session was not opened (because no Session)");
-            }
             return;
         }
-
-        // participate if an InteractionContext was already provided through some other mechanism,
-        // but fail early if the current user is impersonating
-        // (seeing this if going back the browser history into a page, that was previously impersonated)
-        var interactionService = getInteractionService();
-        var authenticatedWebSession = AuthenticatedWebSessionForCauseway.get();
-
-        /*XXX for debugging delegated user ...
-        interactionService.openInteraction(InteractionContext
-                .ofUserWithSystemDefaults(
-                        UserMemento.ofName("delegated")
-                        .withRoleAdded(UserMemento.AUTHORIZED_USER_ROLE)
-                        .withAuthenticationSource(AuthenticationSource.EXTERNAL)));*/
-
-        var currentInteractionContext = interactionService.currentInteractionContext();
-        if(currentInteractionContext.isPresent()) {
-            if(currentInteractionContext.get().getUser().isImpersonating()) {
-                throw _Exceptions.illegalState("cannot enter a new request cycle with a left over impersonating user");
-            }
-            authenticatedWebSession.setPrimedInteractionContext(currentInteractionContext.get());
-        }
-
-        var interactionContext0 = authenticatedWebSession.getInteractionContext();
-        if (interactionContext0 == null) {
-            log.warn("onBeginRequest out - session was not opened (because no authentication)");
-            return;
-        }
-
-        // impersonation support
-        var interactionContext1 = lookupServiceElseFail(UserService.class)
-                .lookupImpersonatedUser()
-                .map(sudoUser -> interactionContext0.withUser(sudoUser))
-                .orElse(interactionContext0);
-
-        // Note: this is a no-op if an interactionContext layer was already opened and is unchanged.
-        interactionService.openInteraction(interactionContext1);
-
+        
         if(log.isTraceEnabled()) {
-            log.trace("onBeginRequest out - session was opened");
+            log.trace("onBeginRequest out - session about to open");
         }
 
         if(log.isDebugEnabled()) {
@@ -212,19 +171,17 @@ implements
             }
             SessionLifecyclePhase.transferExpiredFlagToSession();
 
-        } else if(handler instanceof RenderPageRequestHandler) {
+        } else if(handler instanceof RenderPageRequestHandler requestHandler) {
 
             // using side-effect free access to MM validation result
             var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
             .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
 
             if(validationResult.hasFailures()) {
-                RenderPageRequestHandler requestHandler = (RenderPageRequestHandler) handler;
                 final IRequestablePage nextPage = requestHandler.getPage();
-                if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage) {
+                if(nextPage instanceof ErrorPage || nextPage instanceof MmvErrorPage)
                     // do nothing
                     return;
-                }
                 throw new MetaModelInvalidException(validationResult.getAsLineNumberedString());
             }
 
@@ -291,9 +248,6 @@ implements
             }
         }
 
-        getMetaModelContext().lookupService(InteractionService.class).ifPresent(
-            InteractionService::closeInteractionLayers
-        );
     }
 
     @Override
@@ -321,8 +275,7 @@ implements
         try {
 
             // adapted from http://markmail.org/message/un7phzjbtmrrperc
-            if(ex instanceof ListenerInvocationNotAllowedException) {
-                final ListenerInvocationNotAllowedException linaex = (ListenerInvocationNotAllowedException) ex;
+            if(ex instanceof final ListenerInvocationNotAllowedException linaex) {
                 if(linaex.getComponent() != null && PromptFormAbstract.ID_CANCEL_BUTTON.equals(linaex.getComponent().getId())) {
                     // no message.
                     // this seems to occur when press ESC twice in rapid succession on a modal dialog.
@@ -439,9 +392,8 @@ implements
         var validationResult = mmc.getSpecificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
-                && validationResult.hasFailures()) {
+                && validationResult.hasFailures())
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
-        }
 
         var exceptionRecognizerService = mmc.getServiceRegistry()
             .lookupServiceElseFail(ExceptionRecognizerService.class);
@@ -499,9 +451,8 @@ implements
      * Matters should improve once CAUSEWAY-299 gets implemented...
      */
     protected boolean isSignedIn() {
-        if(!isInInteraction()) {
+        if(!isInInteraction())
             return false;
-        }
         return getWicketAuthenticatedWebSession().isSignedIn();
     }
 
@@ -514,9 +465,8 @@ implements
                     getConfiguration().viewer().wicket().rememberMe().cookieKey());
 
             for (var cookie : cookies) {
-                if (cookieKey.equals(cookie.getName())) {
+                if (cookieKey.equals(cookie.getName()))
                     return true;
-                }
             }
         }
         return false;

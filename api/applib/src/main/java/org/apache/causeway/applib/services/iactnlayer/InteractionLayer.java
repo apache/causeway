@@ -18,36 +18,54 @@
  */
 package org.apache.causeway.applib.services.iactnlayer;
 
+import org.jspecify.annotations.Nullable;
+
 import org.apache.causeway.applib.services.iactn.Interaction;
 
 /**
  * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
  * an {@link InteractionContext} (&quot;who&quot; is executing, &quot;when&quot; and &quot;where&quot;).
  *
- * <p>
- * {@link InteractionLayer}s are so called because they may be nested (held in a stack).  For example the
+ * <p> {@link InteractionLayer}s are so called because they may be nested (held in a stack).  For example the
  * {@link org.apache.causeway.applib.services.sudo.SudoService} creates a new temporary layer with a different
  * {@link InteractionContext#getUser() user}, while fixtures that mock the clock switch out the
  * {@link InteractionContext#getClock() clock}.
- * </p>
  *
- * <p>
- * The stack of layers is per-thread, managed by {@link InteractionService} as a thread-local).
- * </p>
+ * <p> The stack of layers is per-thread, managed by {@link InteractionService} as a thread-local).
  *
  * @since 2.0 {@index}
  */
 public record InteractionLayer(
+        @Nullable InteractionLayer parent,
         /**
-         * Current thread's {@link Interaction} : &quot;what&quot; is being executed
+         * Current thread's {@link Interaction} : WHAT is being executed
          */
         Interaction interaction,
 
         /**
-         * &quot;who&quot; is performing this {@link #getInteraction()}, also
-         * &quot;when&quot; and &quot;where&quot;.
+         * WHO is performing this {@link #getInteraction()}, also
+         * WHEN and WHERE.
          */
-        InteractionContext interactionContext
-        ) {
+        InteractionContext interactionContext) {
+
+    public boolean isRoot() {
+        return parent==null;
+    }
+
+    public int parentCount() {
+        return parent!=null
+            ? 1 + parent.parentCount()
+            : 0;
+    }
+
+    public int totalLayerCount() {
+        return 1 + parentCount();
+    }
+
+    public InteractionLayer rootLayer() {
+        return parent!=null
+            ? parent.rootLayer()
+            : this;
+    }
 
 }

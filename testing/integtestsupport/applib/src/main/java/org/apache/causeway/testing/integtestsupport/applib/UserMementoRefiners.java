@@ -17,7 +17,6 @@
  * under the License.
  *
  */
-
 package org.apache.causeway.testing.integtestsupport.applib;
 
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -54,7 +53,7 @@ public class UserMementoRefiners implements BeforeEachCallback {
                             for (UserMementoRefiner userMementoRefiner : serviceRegistry.select(UserMementoRefiner.class)) {
                                 user = userMementoRefiner.refine(user);
                             }
-                            interactionService.openInteraction(currentInteractionContext.withUser(user));
+                            interactionService.testSupport().openInteraction(currentInteractionContext.withUser(user));
                         }
                     )
                 )

@@ -33,6 +33,7 @@ import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -59,32 +60,35 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
     }
 
     Bookmark target1;
+    private TestSupport<?> testSupport;
 
     @BeforeEach
     void beforeEach() {
-        interactionService.nextInteraction();
+        this.testSupport = interactionService.testSupport();
+        testSupport.nextInteraction(ia->{
+            counterRepository.removeAll();
 
-        counterRepository.removeAll();
+            assertThat(counterRepository.find()).isEmpty();
 
-        assertThat(counterRepository.find()).isEmpty();
+            var counter1 = counterRepository.persist(newCounter("counter-1"));
+            target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
 
-        var counter1 = counterRepository.persist(newCounter("counter-1"));
-        target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
+            assertThat(counterRepository.find()).hasSize(1);
+        });
 
-        assertThat(counterRepository.find()).hasSize(1);
+        testSupport.nextInteraction(ia->{
+            commandLogEntryRepository.removeAll();
+            executionLogEntryRepository.removeAll();
+            executionOutboxEntryRepository.removeAll();
+            auditTrailEntryRepository.removeAll();
+        });
 
-        interactionService.nextInteraction();
-        commandLogEntryRepository.removeAll();
-        executionLogEntryRepository.removeAll();
-        executionOutboxEntryRepository.removeAll();
-        auditTrailEntryRepository.removeAll();
-
-        interactionService.nextInteraction();
-
-        assertThat(commandLogEntryRepository.findAll()).isEmpty();
-        assertThat(executionLogEntryRepository.findAll()).isEmpty();
-        assertThat(executionOutboxEntryRepository.findAll()).isEmpty();
-        assertThat(auditTrailEntryRepository.findAll()).isEmpty();
+        testSupport.nextInteraction(ia->{
+            assertThat(commandLogEntryRepository.findAll()).isEmpty();
+            assertThat(executionLogEntryRepository.findAll()).isEmpty();
+            assertThat(executionOutboxEntryRepository.findAll()).isEmpty();
+            assertThat(auditTrailEntryRepository.findAll()).isEmpty();
+        });
     }
 
     protected abstract Counter newCounter(String name);
@@ -93,7 +97,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
     protected void assertEntityPublishingDisabledFor(final Class<?> entityClass) {
         var objectSpecification = specificationLoader.loadSpecification(entityClass);
-        EntityChangePublishingFacet facet = objectSpecification.getFacet(EntityChangePublishingFacet.class);
+        EntityChangePublishingFacet facet = objectSpecification.lookupFacet(EntityChangePublishingFacet.class).orElse(null);
         Assertions.assertThat(facet)
                         .satisfies(f -> assertThat(f).isNotNull())
                         .satisfies(f -> assertThat(f.isEnabled()).isFalse())
@@ -106,6 +110,8 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // given
         var counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
         var interaction = interactionService.currentInteraction().orElseThrow();
+
+        {
 
         // when
         wrapperFactory.wrapMixinT(Counter_bumpUsingMixin.class, counter1).act();
@@ -190,42 +196,46 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... and audit entries not yet generated
         var auditTrailEntries = auditTrailEntryRepository.findAll();
         assertThat(auditTrailEntries).isEmpty();
+        }
 
         // when
-        interactionService.nextInteraction();   // flushes the command and audit trail entries
+        testSupport.nextInteraction(ia->{ // flushes the command and audit trail entries
 
-        // then
-        // ... command entry now marked as complete
-        commandLogEntries = commandLogEntryRepository.findAll();
-        assertThat(commandLogEntries).hasSize(1);
-        var commandLogEntryAfter = commandLogEntries.get(0);
-        assertThat(commandLogEntryAfter)
-                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
-                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
-                .satisfies(e -> assertThat(e.getResult()).isNotNull())
-                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
+            // then
+            // ... command entry now marked as complete
+            var commandLogEntries = commandLogEntryRepository.findAll();
+            assertThat(commandLogEntries).hasSize(1);
+            var commandLogEntryAfter = commandLogEntries.get(0);
+            assertThat(commandLogEntryAfter)
+                    .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
+                    .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                    .satisfies(e -> assertThat(e.getResult()).isNotNull())
+                    .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
 
-        if(!isJpa()) {
-            // and then
-            // ... audit trail entry created
-            auditTrailEntries = auditTrailEntryRepository.findAll();
-            assertThat(auditTrailEntries).hasSize(1);
+            if(!isJpa()) {
+                // and then
+                // ... audit trail entry created
+                var auditTrailEntries = auditTrailEntryRepository.findAll();
+                assertThat(auditTrailEntries).hasSize(1);
 
-            var propertyIds = auditTrailEntries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-            assertThat(propertyIds).containsExactly("num");
+                var propertyIds = auditTrailEntries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+                assertThat(propertyIds).containsExactly("num");
 
-            var entriesById = auditTrailEntries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
-            assertThat(entriesById.get("num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("cmdexecauditsess.test.Counter#num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("1"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isEqualTo(interaction.getInteractionId()))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
-        }
+                var entriesById = auditTrailEntries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+                assertThat(entriesById.get("num"))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("cmdexecauditsess.test.Counter#num"))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isNull())
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("1"))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isEqualTo(interaction.getInteractionId()))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
+                        .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
+            }
+
+        });
+
     }
 
     @Test
@@ -233,6 +243,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
         // given
         var counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        {
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
@@ -259,27 +270,29 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... but audit entries not yet generated
         var auditTrailEntries = auditTrailEntryRepository.findAll();
         assertThat(auditTrailEntries).isEmpty();
+        }
 
         // when
-        interactionService.nextInteraction();   // flushes the command and audit trail entries
+        testSupport.nextInteraction(ia->{   // flushes the command and audit trail entries
 
-        // then
-        // ... command entry now marked as complete
-        commandLogEntries = commandLogEntryRepository.findAll();
-        assertThat(commandLogEntries).hasSize(1);
-        var commandLogEntryAfter = commandLogEntries.get(0);
-        assertThat(commandLogEntryAfter)
-                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
-                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
-                .satisfies(e -> assertThat(e.getResult()).isNotNull())
-                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
+            // then
+            // ... command entry now marked as complete
+            var commandLogEntries = commandLogEntryRepository.findAll();
+            assertThat(commandLogEntries).hasSize(1);
+            var commandLogEntryAfter = commandLogEntries.get(0);
+            assertThat(commandLogEntryAfter)
+                    .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
+                    .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                    .satisfies(e -> assertThat(e.getResult()).isNotNull())
+                    .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK"));
 
-        if(!isJpa()) {
-            // and then
-            // ... audit trail entry created
-            auditTrailEntries = auditTrailEntryRepository.findAll();
-            assertThat(auditTrailEntries).hasSize(1);
-        }
+            if(!isJpa()) {
+                // and then
+                // ... audit trail entry created
+                var auditTrailEntries = auditTrailEntryRepository.findAll();
+                assertThat(auditTrailEntries).hasSize(1);
+            }
+        });
 
     }
 
@@ -288,7 +301,7 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
 
         // given
         var counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
-
+        {
         // when
         wrapperFactory.wrap(counter1).setNum(99L);
 
@@ -311,27 +324,28 @@ public abstract class CmdExecAuditSessLog_IntegTestAbstract extends CausewayInte
         // ... and audit entries not yet generated
         var auditTrailEntries = auditTrailEntryRepository.findAll();
         assertThat(auditTrailEntries).isEmpty();
-
-        // when
-        interactionService.nextInteraction();   // flushes the command and audit trail entries
-
-        // then
-        // ... command entry now marked as complete
-        commandLogEntries = commandLogEntryRepository.findAll();
-        assertThat(commandLogEntries).hasSize(1);
-        var commandLogEntryAfter = commandLogEntries.get(0);
-        assertThat(commandLogEntryAfter)
-                .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
-                .satisfies(e -> assertThat(e.getDuration()).isNotNull())
-                .satisfies(e -> assertThat(e.getResult()).isNull()) // property edits are effectively void actions
-                .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK (VOID)"));
-
-        if(!isJpa()) {
-            // and then
-            // ... audit trail entry created
-            auditTrailEntries = auditTrailEntryRepository.findAll();
-            assertThat(auditTrailEntries).hasSize(1);
         }
+        // when
+        testSupport.nextInteraction(ia->{   // flushes the command and audit trail entries
+
+            // then
+            // ... command entry now marked as complete
+            var commandLogEntries = commandLogEntryRepository.findAll();
+            assertThat(commandLogEntries).hasSize(1);
+            var commandLogEntryAfter = commandLogEntries.get(0);
+            assertThat(commandLogEntryAfter)
+                    .satisfies(e -> assertThat(e.getCompletedAt()).isNotNull())
+                    .satisfies(e -> assertThat(e.getDuration()).isNotNull())
+                    .satisfies(e -> assertThat(e.getResult()).isNull()) // property edits are effectively void actions
+                    .satisfies(e -> assertThat(e.getResultSummary()).isEqualTo("OK (VOID)"));
+
+            if(!isJpa()) {
+                // and then
+                // ... audit trail entry created
+                var auditTrailEntries = auditTrailEntryRepository.findAll();
+                assertThat(auditTrailEntries).hasSize(1);
+            }
+        });
 
     }
 

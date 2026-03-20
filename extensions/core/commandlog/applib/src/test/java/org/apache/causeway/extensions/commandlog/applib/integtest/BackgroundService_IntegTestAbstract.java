@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory.AsyncProxy;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -69,6 +70,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
     JobExecutionContext mockQuartzJobExecutionContext = Mockito.mock(JobExecutionContext.class);
 
     Bookmark bookmark;
+    private TestSupport<?> testSupport;
 
     protected abstract <T extends Counter> T newCounter(String name);
 
@@ -87,6 +89,7 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
     @BeforeEach
     void setup_counter() {
+        this.testSupport = interactionService.testSupport();
         transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
             counterRepository.removeAll();
 
@@ -211,27 +214,29 @@ public abstract class BackgroundService_IntegTestAbstract extends CausewayIntegr
 
         // when (simulate quartz running in the background)
         runBackgroundCommandsJob.execute(mockQuartzJobExecutionContext);
-        interactionService.nextInteraction();
+        testSupport.nextInteraction(ia->{
 
-        // then bumped
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
-            assertThat(counter.getNum()).isEqualTo(1L);
-        }).ifFailureFail();
+            // then bumped
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                var counter = bookmarkService.lookup(bookmark, Counter.class).orElseThrow();
+                assertThat(counter.getNum()).isEqualTo(1L);
+            }).ifFailureFail();
 
-        // and marked as started and completed
-        transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
-            var after = commandLogEntryRepository.findAll();
-            assertThat(after).hasSize(1);
-            CommandLogEntry commandLogEntryAfter = after.get(0);
+            // and marked as started and completed
+            transactionService.runTransactional(Propagation.REQUIRES_NEW, () -> {
+                var after = commandLogEntryRepository.findAll();
+                assertThat(after).hasSize(1);
+                CommandLogEntry commandLogEntryAfter = after.get(0);
 
-            assertThat(commandLogEntryAfter)
-                    .satisfies(x -> assertThat(x.getStartedAt()).isNotNull()) // changed
-                    .satisfies(x -> assertThat(x.getCompletedAt()).isNotNull()) // changed
-                    .satisfies(x -> assertThat(x.getResult()).isNotNull()) // changed
-                    .satisfies(x -> assertThat(x.getResultSummary()).isNotNull()) // changed
-                    ;
-        }).ifFailureFail();
+                assertThat(commandLogEntryAfter)
+                        .satisfies(x -> assertThat(x.getStartedAt()).isNotNull()) // changed
+                        .satisfies(x -> assertThat(x.getCompletedAt()).isNotNull()) // changed
+                        .satisfies(x -> assertThat(x.getResult()).isNotNull()) // changed
+                        .satisfies(x -> assertThat(x.getResultSummary()).isNotNull()) // changed
+                        ;
+            }).ifFailureFail();
+
+        });
 
     }
 

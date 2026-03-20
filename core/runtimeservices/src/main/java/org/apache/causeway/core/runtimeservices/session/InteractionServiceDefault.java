@@ -21,9 +21,9 @@ package org.apache.causeway.core.runtimeservices.session;
 import java.io.File;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -47,6 +47,7 @@ import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
+import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
@@ -55,7 +56,6 @@ import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.commons.internal.debug._Probe;
@@ -72,7 +72,10 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.Value;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -92,10 +95,7 @@ implements
     InteractionService,
     InteractionLayerTracker {
 
-    // TODO: reading the javadoc for TransactionSynchronizationManager and looking at the implementations
-    //  of TransactionSynchronization (in particular SpringSessionSynchronization), I suspect that this
-    //  ThreadLocal would be considered bad practice and instead should be managed using the TransactionSynchronization mechanism.
-    final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
+    final InteractionLayerStack layerStack = new InteractionLayerStack();
 
     final EventBusService eventBusService;
     final ObservationProvider observationProvider;
@@ -159,6 +159,7 @@ implements
         });
     }
 
+    //TODO this is a metamodel concern, why is it in runtime services?
     private void initMetamodel(final SpecificationLoader specificationLoader) {
 
         var taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
@@ -188,69 +189,63 @@ implements
 
     @Override
     public int getInteractionLayerCount() {
-        return interactionLayerStack.get().size();
+        return layerStack.size();
     }
 
-    @Override
-    public InteractionLayer openInteraction() {
+    private InteractionLayer openInteraction() {
         return currentInteractionLayer()
                 // or else create an anonymous authentication layer
                 .orElseGet(()->openInteraction(InteractionContextFactory.anonymous()));
     }
 
-    @Override
-    public InteractionLayer openInteraction(
-            final @NonNull InteractionContext interactionContextToUse) {
-
-        var causewayInteraction = getOrCreateCausewayInteraction();
+    private InteractionLayer openInteraction(final @NonNull InteractionContext interactionContextToUse) {
 
         // check whether we should reuse any current interactionLayer,
         // that is, if current authentication and authToUse are equal
-
         var reuseCurrentLayer = currentInteractionContext()
                 .map(currentInteractionContext -> Objects.equals(currentInteractionContext, interactionContextToUse))
                 .orElse(false);
-
         if(reuseCurrentLayer)
             // we are done, just return the stack's top
-            return interactionLayerStack.get().peek();
+            return currentInteractionLayerElseFail();
 
-        var interactionLayer = new InteractionLayer(causewayInteraction, interactionContextToUse);
+        var newInteractionLayer = observationProvider.get("New Interaction Layer")
+        .highCardinalityKeyValue("stackSize", ""+getInteractionLayerCount())
+        .observe(()->{
 
-        interactionLayerStack.get().push(interactionLayer);
+            var causewayInteraction = currentInteractionLayer()
+                .map(InteractionLayer::interaction)
+                .map(it->(CausewayInteraction)it)
+                .orElseGet(()->new CausewayInteraction(interactionIdGenerator.interactionId()));
+            var interactionLayer = layerStack.push(causewayInteraction, interactionContextToUse);
 
-        if(isAtTopLevel()) {
-            transactionServiceSpring.onOpen(causewayInteraction);
-            interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
-        }
+            if(isAtTopLevel()) {
+                transactionServiceSpring.onOpen(causewayInteraction);
+                interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
+            }
+
+            return interactionLayer;
+        });
 
         if(log.isDebugEnabled()) {
             log.debug("new interaction layer created (interactionId={}, total-layers-on-stack={}, {})",
                     currentInteraction().map(Interaction::getInteractionId).orElse(null),
-                    interactionLayerStack.get().size(),
+                    getInteractionLayerCount(),
                     _Probe.currentThreadId());
         }
 
         if(XrayUi.isXrayEnabled()) {
-            _Xray.newInteractionLayer(interactionLayerStack.get());
+            _Xray.newInteractionLayer(newInteractionLayer);
         }
 
-        return interactionLayer;
-    }
-
-    private CausewayInteraction getOrCreateCausewayInteraction() {
-
-        final Stack<InteractionLayer> interactionLayers = interactionLayerStack.get();
-        return interactionLayers.isEmpty()
-    			? new CausewayInteraction(interactionIdGenerator.interactionId())
-				: _Casts.uncheckedCast(interactionLayers.firstElement().interaction());
+        return newInteractionLayer;
     }
 
     @Override
     public void closeInteractionLayers() {
         log.debug("about to close the interaction stack (interactionId={}, total-layers-on-stack={}, {})",
                 currentInteraction().map(Interaction::getInteractionId).orElse(null),
-                interactionLayerStack.get().size(),
+                layerStack.size(),
                 _Probe.currentThreadId());
 
         //
@@ -262,15 +257,12 @@ implements
 
 	@Override
     public Optional<InteractionLayer> currentInteractionLayer() {
-    	var stack = interactionLayerStack.get();
-    	return stack.isEmpty()
-    	        ? Optional.empty()
-                : Optional.of(stack.lastElement());
+	    return layerStack.currentLayer();
     }
 
     @Override
     public boolean isInInteraction() {
-        return !interactionLayerStack.get().isEmpty();
+        return !layerStack.isEmpty();
     }
 
     // -- AUTHENTICATED EXECUTION
@@ -281,7 +273,7 @@ implements
             final @NonNull InteractionContext interactionContext,
             final @NonNull Callable<R> callable) {
 
-        final int stackSizeWhenEntering = interactionLayerStack.get().size();
+        final int stackSizeWhenEntering = layerStack.size();
         openInteraction(interactionContext);
         try {
             return callInternal(callable);
@@ -302,7 +294,7 @@ implements
             final @NonNull InteractionContext interactionContext,
             final @NonNull ThrowingRunnable runnable) {
 
-        final int stackSizeWhenEntering = interactionLayerStack.get().size();
+        final int stackSizeWhenEntering = layerStack.size();
         openInteraction(interactionContext);
         try {
             runInternal(runnable);
@@ -374,8 +366,7 @@ implements
     }
 
     private void requestRollback(final Throwable cause) {
-        var stack = interactionLayerStack.get();
-        if(stack.isEmpty()) {
+        if(layerStack.isEmpty()) {
             // seeing this code-path, when the corresponding runnable/callable
             // by itself causes the interaction stack to be closed
             log.warn("unexpected state: missing interaction (layer) on interaction rollback; "
@@ -384,12 +375,12 @@ implements
                     cause.getMessage());
             return;
         }
-        var interaction = _Casts.<CausewayInteraction>uncheckedCast(stack.get(0).interaction());
+        var interaction = (CausewayInteraction) layerStack.peek().rootLayer().interaction();
         transactionServiceSpring.requestRollback(interaction);
     }
 
     private boolean isAtTopLevel() {
-    	return interactionLayerStack.get().size()==1;
+    	return layerStack.size()==1;
     }
 
     @SneakyThrows
@@ -454,30 +445,31 @@ implements
     }
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
+        if(layerStack.isEmpty()) return;
+        if(downToStackSize<0) throw new IllegalArgumentException("required non-negative");
 
         log.debug("about to close interaction stack down to size {} (interactionId={}, total-layers-on-stack={}, {})",
                 downToStackSize,
                 currentInteraction().map(Interaction::getInteractionId).orElse(null),
-                interactionLayerStack.get().size(),
+                layerStack.size(),
                 _Probe.currentThreadId());
 
-        var stack = interactionLayerStack.get();
         try {
-            while(stack.size()>downToStackSize) {
+            layerStack.popWhile(currentLayer->{
+                if(!(layerStack.size()>downToStackSize)) return false;
                 if(isAtTopLevel()) {
                     // keep the stack unmodified yet, to allow for callbacks to properly operate
-
-                    preInteractionClosed(_Casts.uncheckedCast(stack.peek().interaction()));
+                    preInteractionClosed((CausewayInteraction)currentLayer.interaction());
                 }
-                _Xray.closeInteractionLayer(stack);
-                stack.pop();
-            }
+                _Xray.closeInteractionLayer(currentLayer);
+                return true;
+            });
         } finally {
             // preInteractionClosed above could conceivably throw an exception, so we'll tidy up our threadlocal
             // here to ensure everything is cleaned up
             if(downToStackSize == 0) {
                 // cleanup thread-local
-                interactionLayerStack.remove();
+                layerStack.clear();
             }
         }
     }
@@ -522,6 +514,38 @@ implements
         commandPublisherProvider.get().complete(command);
 
         interaction.clear();
+    }
+
+    @Value
+    static final class TestSupportImpl<T> implements TestSupport<T> {
+        @Getter @Accessors(fluent = true) final T model;
+        final InteractionServiceDefault interactionService;
+
+        @Override
+        public void nextInteraction(final Consumer<T> callback) {
+            interactionService.closeInteractionLayers();
+            interactionService.openInteraction();
+            callback.accept(model);
+        }
+        @Override
+        public void nextInteraction(final InteractionContext interactionContext, final Consumer<T> callback) {
+            interactionService.closeInteractionLayers();
+            interactionService.openInteraction(interactionContext);
+            callback.accept(model);
+        }
+        @Override
+        public InteractionLayer openInteraction() {
+            return interactionService.openInteraction();
+        }
+        @Override
+        public InteractionLayer openInteraction(@NonNull final InteractionContext interactionContext) {
+            return interactionService.openInteraction(interactionContext);
+        }
+    }
+
+    @Override
+    public <T> TestSupport<T> testSupport(final T model) {
+        return new TestSupportImpl<>(model, this);
     }
 
 }

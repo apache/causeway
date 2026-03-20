@@ -1,0 +1,84 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+package org.apache.causeway.viewer.wicket.viewer.integration;
+
+import org.apache.wicket.request.IRequestCycle;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.cycle.RequestCycleContext;
+
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.user.UserService;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
+
+import lombok.extern.slf4j.Slf4j;
+
+public class RequestCycle2 extends RequestCycle {
+
+    public RequestCycle2(final RequestCycleContext context) {
+        super(context);
+    }
+
+    record Wrapper(IRequestHandler delegate) implements IRequestHandler {
+        @Override
+        public void respond(final IRequestCycle requestCycle) {
+            delegate.respond(requestCycle);
+        }
+        @Override
+        public void detach(final IRequestCycle requestCycle) {
+            delegate.detach(requestCycle);
+        }
+    }
+
+    @Slf4j
+    record RequestHandlerWrapper(
+            InteractionService interactionService,
+            InteractionContext interactionContext,
+            IRequestHandler delegate) implements IRequestHandler {
+
+        @Override
+        public void respond(final IRequestCycle requestCycle) {
+            if(interactionContext==null) {
+                delegate.respond(requestCycle);
+                return;
+            }
+            interactionService.run(interactionContext, ()->delegate.respond(requestCycle));
+        }
+        @Override
+        public void detach(final IRequestCycle requestCycle) {
+            delegate.detach(requestCycle);
+        }
+    }
+
+    @Override
+    protected IRequestHandler resolveRequestHandler() {
+        var mmc = MetaModelContext.instanceElseFail();
+
+        var ic = new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class))
+            .determineInteractionContext()
+            .orElse(null);
+
+        return new RequestHandlerWrapper(
+                        mmc.getInteractionService(),
+                        ic,
+                        super.resolveRequestHandler());
+    }
+
+}

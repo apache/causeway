@@ -19,11 +19,12 @@
 package org.apache.causeway.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * A low-level service to programmatically create a short-lived interaction or session.
@@ -54,42 +55,6 @@ import org.jspecify.annotations.NonNull;
  * @since 2.x {@index}
  */
 public interface InteractionService extends InteractionLayerTracker {
-
-    /**
-     * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
-     * anonymous one.
-     *
-     * @see #openInteraction(InteractionContext)
-     */
-    InteractionLayer openInteraction();
-
-    /**
-     * Returns a new or reused {@link InteractionLayer} that is a holder of the {@link InteractionContext}
-     * on top of the current thread's interaction layer stack.
-     *
-     * <p>
-     * If available reuses an existing {@link InteractionContext}, otherwise creates a new one.
-     * </p>
-     *
-     * <p>
-     * The {@link InteractionLayer} represents a user's span of activities interacting with
-     * the application.  These can be stacked (usually temporarily), for example for a sudo
-     * session or to mock the clock.  The stack is later closed using {@link #closeInteractionLayers()}.
-     * </p>
-     *
-     * @param interactionContext
-     *
-     * @apiNote if the current {@link InteractionLayer} (if any) has an {@link InteractionContext} that
-     * equals that of the given one, as an optimization, no new layer is pushed onto the stack;
-     * instead the current one is returned
-     */
-    InteractionLayer openInteraction(
-            @NonNull InteractionContext interactionContext);
-
-    /**
-     * closes all open {@link InteractionLayer}(s) as stacked on the current thread
-     */
-    void closeInteractionLayers();
 
     /**
      * @return whether the calling thread is within the context of an open {@link InteractionLayer}
@@ -205,33 +170,69 @@ public interface InteractionService extends InteractionLayerTracker {
     }
 
     /**
-     * Primarily for testing, closes the current interaction and opens a new one.
-     *
-     * <p>
-     *     In tests, this is a good way to simulate multiple interactions within a scenario.  If you use the popular
-     *     given/when/then structure, consider using at the end of each "given" or "when" block.
-     * </p>
-     *
-     * @see #closeInteractionLayers()
-     * @see #openInteraction()
-     * @see #nextInteraction(InteractionContext)
+     * closes all open {@link InteractionLayer}(s) as stacked on the current thread
      */
-    default InteractionLayer nextInteraction() {
-        closeInteractionLayers();
-        return openInteraction();
+    void closeInteractionLayers();
+
+    public interface TestSupport<T> {
+        T model();
+        /**
+         * Primarily for testing, closes the current interaction and opens a new one.
+         *
+         * <p>
+         *     In tests, this is a good way to simulate multiple interactions within a scenario.  If you use the popular
+         *     given/when/then structure, consider using at the end of each "given" or "when" block.
+         * </p>
+         *
+         * @see #closeInteractionLayers()
+         * @see #openInteraction()
+         * @see #nextInteraction(InteractionContext)
+         */
+        void nextInteraction(final Consumer<T> callback);
+        /**
+         * Primarily for testing, closes the current interaction and opens a new one with the specified
+         * {@link InteractionContext}.
+         *
+         * @see #closeInteractionLayers()
+         * @see #openInteraction(InteractionContext)
+         * @see #nextInteraction()
+         */
+        void nextInteraction(final InteractionContext interactionContext, final Consumer<T> callback);
+        /**
+         * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new
+         * anonymous one.
+         *
+         * @see #openInteraction(InteractionContext)
+         */
+        InteractionLayer openInteraction();
+        /**
+         * Returns a new or reused {@link InteractionLayer} that is a holder of the {@link InteractionContext}
+         * on top of the current thread's interaction layer stack.
+         *
+         * <p>
+         * If available reuses an existing {@link InteractionContext}, otherwise creates a new one.
+         * </p>
+         *
+         * <p>
+         * The {@link InteractionLayer} represents a user's span of activities interacting with
+         * the application.  These can be stacked (usually temporarily), for example for a sudo
+         * session or to mock the clock.  The stack is later closed using {@link #closeInteractionLayers()}.
+         * </p>
+         *
+         * @param interactionContext
+         *
+         * @apiNote if the current {@link InteractionLayer} (if any) has an {@link InteractionContext} that
+         * equals that of the given one, as an optimization, no new layer is pushed onto the stack;
+         * instead the current one is returned
+         */
+        InteractionLayer openInteraction(
+                @NonNull InteractionContext interactionContext);
     }
 
-    /**
-     * Primarily for testing, closes the current interaction and opens a new one with the specified
-     * {@link InteractionContext}.
-     *
-     * @see #closeInteractionLayers()
-     * @see #openInteraction(InteractionContext)
-     * @see #nextInteraction()
-     */
-    default InteractionLayer nextInteraction(final InteractionContext interactionContext) {
-        closeInteractionLayers();
-        return openInteraction(interactionContext);
+    <T> TestSupport<T> testSupport(T model);
+
+    default <T> TestSupport<T> testSupport() {
+        return testSupport(null);
     }
 
 }

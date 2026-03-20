@@ -19,21 +19,22 @@
 package org.apache.causeway.core.security._testing;
 
 import java.util.Optional;
-import java.util.Stack;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
+
+import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
+import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -44,29 +45,28 @@ import lombok.SneakyThrows;
 public class InteractionService_forTesting
 implements InteractionService {
 
-    private Stack<InteractionLayer> interactionLayers = new Stack<>();
+    final InteractionLayerStack layerStack = new InteractionLayerStack();
 
-    @Override
-    public InteractionLayer openInteraction() {
+//    @Override
+    private InteractionLayer openInteraction() {
         final UserMemento userMemento = UserMemento.system();
         return openInteraction(InteractionContext.ofUserWithSystemDefaults(userMemento));
     }
 
-    @Override
-    public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
+//    @Override
+    private InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
-        return interactionLayers.push(
-                new InteractionLayer(interaction, interactionContext));
+        return layerStack.push(interaction, interactionContext);
     }
 
     @Override
     public void closeInteractionLayers() {
-        interactionLayers.clear();
+        layerStack.clear();
     }
 
     @Override
     public boolean isInInteraction() {
-        return interactionLayers.size()>0;
+        return !layerStack.isEmpty();
     }
 
     @Override public Optional<UUID> getInteractionId() {
@@ -76,13 +76,13 @@ implements InteractionService {
     }
 
     @Override public Optional<InteractionLayer> currentInteractionLayer() {
-        return interactionLayers.isEmpty()
+        return layerStack.isEmpty()
                 ? Optional.empty()
-                : Optional.of(interactionLayers.peek());
+                : Optional.of(layerStack.peek());
     }
 
     @Override public int getInteractionLayerCount() {
-        return interactionLayers.size();
+        return layerStack.size();
     }
 
     @Override @SneakyThrows
@@ -91,7 +91,7 @@ implements InteractionService {
             openInteraction(interactionContext);
             return callable.call();
         } finally {
-            interactionLayers.pop();
+            layerStack.pop();
         }
     }
 
@@ -101,7 +101,7 @@ implements InteractionService {
             openInteraction(interactionContext);
             runnable.run();
         } finally {
-            interactionLayers.pop();
+            layerStack.pop();
         }
     }
 
@@ -111,7 +111,7 @@ implements InteractionService {
             openInteraction();
             runnable.run();
         } finally {
-            interactionLayers.pop();
+            layerStack.pop();
         }
     }
 
@@ -121,7 +121,7 @@ implements InteractionService {
             openInteraction();
             return callable.call();
         } finally {
-            interactionLayers.pop();
+            layerStack.pop();
         }
     }
 
@@ -136,6 +136,11 @@ implements InteractionService {
         @Override public Command getCommand() { return null; }
         @Override public Execution<?, ?> getCurrentExecution() { return null; }
         @Override public Execution<?, ?> getPriorExecution() { return null; }
-    };
+    }
+
+    @Override
+    public <T> TestSupport<T> testSupport(final T model) {
+        throw new UnsupportedOperationException();
+    }
 
 }

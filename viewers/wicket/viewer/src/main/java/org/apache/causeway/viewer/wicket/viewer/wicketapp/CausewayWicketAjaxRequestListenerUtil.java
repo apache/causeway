@@ -27,7 +27,6 @@ import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.component.IRequestablePage;
 
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.experimental.UtilityClass;
@@ -36,8 +35,7 @@ import lombok.experimental.UtilityClass;
 public final class CausewayWicketAjaxRequestListenerUtil {
 
     public void setRootRequestMapper(
-            final WebApplication app,
-            final MetaModelContext commonContext) {
+            final WebApplication app) {
 
         app.setRootRequestMapper(new SystemMapper(app) {
             @Override
@@ -55,8 +53,7 @@ public final class CausewayWicketAjaxRequestListenerUtil {
                             final IRequestablePage iRequestablePage =
                                     ((ListenerRequestHandler)handler).getPage();
 
-                            if(iRequestablePage instanceof PageAbstract) {
-                                var pageAbstract = (PageAbstract) iRequestablePage;
+                            if(iRequestablePage instanceof PageAbstract pageAbstract) {
                                 pageAbstract.onNewRequestCycle();
                             }
 

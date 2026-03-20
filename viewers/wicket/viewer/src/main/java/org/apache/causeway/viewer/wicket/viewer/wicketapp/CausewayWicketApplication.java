@@ -68,6 +68,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
+import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
@@ -136,11 +137,11 @@ implements
         // in which search for i18n properties, to search for the application-specific
         // settings before any other.
         setResourceSettings(new CausewayResourceSettings(this));
-
         super.internalInit();
+        setRequestCycleProvider(RequestCycle2::new);
 
         // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this, metaModelContext);
+        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this);
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
@@ -328,9 +329,8 @@ implements
     @Override
     public final RuntimeConfigurationType getConfigurationType() {
 
-        if(systemEnvironment==null) {
+        if(systemEnvironment==null)
             return RuntimeConfigurationType.DEPLOYMENT;
-        }
 
         return systemEnvironment.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT

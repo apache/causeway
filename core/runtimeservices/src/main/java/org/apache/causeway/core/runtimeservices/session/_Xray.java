@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.session;
 
-import java.util.Stack;
-
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
@@ -30,16 +28,15 @@ import org.apache.causeway.core.security.util.XrayUtil;
 //@Slf4j
 final class _Xray {
 
-    static void newInteractionLayer(final Stack<InteractionLayer> afterEnter) {
+    static void newInteractionLayer(final InteractionLayer afterEnter) {
 
-        if(!XrayUi.isXrayEnabled()) {
+        if(!XrayUi.isXrayEnabled())
             return;
-        }
 
         // make defensive copies, so can use in another thread
-        final int authStackSize = afterEnter.size();
-        var interactionId = afterEnter.peek().interaction().getInteractionId();
-        var executionContext = afterEnter.peek().interactionContext();
+        final int authStackSize = afterEnter.totalLayerCount();
+        var interactionId = afterEnter.interaction().getInteractionId();
+        var executionContext = afterEnter.interactionContext();
 
         _XrayEvent.interactionOpen("open interaction %s", interactionId);
 
@@ -86,14 +83,13 @@ final class _Xray {
 
     }
 
-    public static void closeInteractionLayer(final Stack<InteractionLayer> beforeClose) {
+    public static void closeInteractionLayer(final InteractionLayer beforeClose) {
 
-        if(!XrayUi.isXrayEnabled()) {
+        if(!XrayUi.isXrayEnabled())
             return;
-        }
 
-        final int authStackSize = beforeClose.size();
-        var interactionId = beforeClose.peek().interaction().getInteractionId();
+        final int authStackSize = beforeClose.totalLayerCount();
+        var interactionId = beforeClose.interaction().getInteractionId();
         var sequenceId = XrayUtil.sequenceId(interactionId);
 
         _XrayEvent.interactionClose("close interaction %s", interactionId);
