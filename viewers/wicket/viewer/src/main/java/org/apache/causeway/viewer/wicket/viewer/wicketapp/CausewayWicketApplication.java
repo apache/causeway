@@ -68,7 +68,7 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
-import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
+import org.apache.causeway.viewer.wicket.viewer.integration.RootRequestMapper;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
 
 import lombok.Getter;
@@ -138,10 +138,9 @@ implements
         // settings before any other.
         setResourceSettings(new CausewayResourceSettings(this));
         super.internalInit();
-        setRequestCycleProvider(RequestCycle2::new);
+        //setRequestCycleProvider(RequestCycle2::new);
 
-        // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-        CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this);
+        setRootRequestMapper(new RootRequestMapper(this));
     }
 
     private AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {

@@ -18,34 +18,26 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.integration;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.SystemMapper;
+import org.apache.wicket.core.request.handler.ListenerRequestHandler;
+import org.apache.wicket.core.request.mapper.PageInstanceMapper;
 import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.apache.wicket.request.IRequestMapper;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.component.IRequestablePage;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
+import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
 import lombok.extern.slf4j.Slf4j;
 
-public class RequestCycle2 extends RequestCycle {
+public final class RootRequestMapper extends SystemMapper implements IRequestMapper {
 
-    public RequestCycle2(final RequestCycleContext context) {
-        super(context);
-    }
-
-    record Wrapper(IRequestHandler delegate) implements IRequestHandler {
-        @Override
-        public void respond(final IRequestCycle requestCycle) {
-            delegate.respond(requestCycle);
-        }
-        @Override
-        public void detach(final IRequestCycle requestCycle) {
-            delegate.detach(requestCycle);
-        }
-    }
+    public static ThreadLocal<InteractionContext> X = new ThreadLocal<>();
 
     @Slf4j
     record RequestHandlerWrapper(
@@ -67,18 +59,43 @@ public class RequestCycle2 extends RequestCycle {
         }
     }
 
-    @Override
-    protected IRequestHandler resolveRequestHandler() {
-        var mmc = MetaModelContext.instanceElseFail();
+    public RootRequestMapper(final Application application) {
+        super(application);
+    }
 
-        var ic = new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class))
-            .determineInteractionContext()
-            .orElse(null);
+    @Override
+    public IRequestHandler mapRequest(final Request request) {
+        var mmc = MetaModelContext.instanceElseFail();
+//        var ic = new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class))
+//            .determineInteractionContext()
+//            .orElse(null);
 
         return new RequestHandlerWrapper(
                         mmc.getInteractionService(),
-                        ic,
-                        super.resolveRequestHandler());
+                        X.get(),
+                        super.mapRequest(request));
+    }
+
+    // intercept AJAX requests and reload view-models so any detached entities are re-fetched
+    @Override
+    protected IRequestMapper newPageInstanceMapper() {
+        return new PageInstanceMapper() {
+            @Override
+            public IRequestHandler mapRequest(final Request request) {
+                var handler = super.mapRequest(request);
+
+                if (handler instanceof ListenerRequestHandler) {
+
+                    final IRequestablePage iRequestablePage = ((ListenerRequestHandler) handler).getPage();
+
+                    if (iRequestablePage instanceof PageAbstract pageAbstract) {
+                        pageAbstract.onNewRequestCycle();
+                    }
+                }
+
+                return handler;
+            }
+        };
     }
 
 }

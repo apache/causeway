@@ -61,7 +61,7 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragm
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
-import org.apache.causeway.viewer.wicket.viewer.wicketapp.CausewayWicketAjaxRequestListenerUtil;
+import org.apache.causeway.viewer.wicket.viewer.integration.RootRequestMapper;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -349,8 +349,7 @@ public class Configuration_usingWicket {
         @Override
         protected void internalInit() {
             super.internalInit();
-            // intercept AJAX requests and reload view-models so any detached entities are re-fetched
-            CausewayWicketAjaxRequestListenerUtil.setRootRequestMapper(this);
+            setRootRequestMapper(new RootRequestMapper(this));
         }
 
     }

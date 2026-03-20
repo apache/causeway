@@ -55,12 +55,14 @@ import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.base._Timing;
 import org.apache.causeway.commons.internal.base._Timing.StopWatch;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
@@ -142,7 +144,13 @@ implements
             }
             return;
         }
-        
+
+        var mmc = MetaModelContext.instanceElseFail();
+        var ic = new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class))
+              .determineInteractionContext()
+              .orElse(null);
+        RootRequestMapper.X.set(ic);
+
         if(log.isTraceEnabled()) {
             log.trace("onBeginRequest out - session about to open");
         }
