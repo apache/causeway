@@ -30,6 +30,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -38,8 +40,10 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
+import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
@@ -57,17 +61,17 @@ import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationProvider;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
-import org.apache.causeway.core.runtime.events.MetamodelEventService;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
-import org.jspecify.annotations.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,7 +97,8 @@ implements
     //  ThreadLocal would be considered bad practice and instead should be managed using the TransactionSynchronization mechanism.
     final ThreadLocal<Stack<InteractionLayer>> interactionLayerStack = ThreadLocal.withInitial(Stack::new);
 
-    final MetamodelEventService runtimeEventService;
+    final EventBusService eventBusService;
+    final ObservationProvider observationProvider;
     final Provider<SpecificationLoader> specificationLoaderProvider;
     final ServiceInjector serviceInjector;
 
@@ -108,7 +113,9 @@ implements
 
     @Inject
     public InteractionServiceDefault(
-            final MetamodelEventService runtimeEventService,
+            final EventBusService eventBusService,
+            @Qualifier("causeway-runtimeservices")
+            final CausewayObservationInternal observation,
             final Provider<SpecificationLoader> specificationLoaderProvider,
             final ServiceInjector serviceInjector,
             final TransactionServiceSpring transactionServiceSpring,
@@ -116,7 +123,8 @@ implements
             final Provider<CommandPublisher> commandPublisherProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
-        this.runtimeEventService = runtimeEventService;
+        this.eventBusService = eventBusService;
+        this.observationProvider = observation.provider(getClass());
         this.specificationLoaderProvider = specificationLoaderProvider;
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
@@ -124,19 +132,34 @@ implements
         this.commandPublisherProvider = commandPublisherProvider;
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
-
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
     }
 
     @EventListener
     public void init(final ContextRefreshedEvent event) {
-
         log.info("Initialising Causeway System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
-        runtimeEventService.fireBeforeMetamodelLoading();
+        observationProvider.get("Initialising Causeway System")
+        .observe(()->{
+            observationProvider.get("Notify BEFORE_METAMODEL_LOADING Listeners")
+            .observe(()->{
+                eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
+            });
 
-        var specificationLoader = specificationLoaderProvider.get();
+            observationProvider.get("Initialising Causeway Metamodel")
+            .observe(()->{
+                initMetamodel(specificationLoaderProvider.get());
+            });
+
+            observationProvider.get("Notify AFTER_METAMODEL_LOADED Listeners")
+            .observe(()->{
+                eventBusService.post(MetamodelEvent.AFTER_METAMODEL_LOADED);
+            });
+        });
+    }
+
+    private void initMetamodel(final SpecificationLoader specificationLoader) {
 
         var taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
                 .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
@@ -161,9 +184,6 @@ implements
                 //throw _Exceptions.unrecoverable("Validation FAILED");
             }
         }
-
-        runtimeEventService.fireAfterMetamodelLoaded();
-
     }
 
     @Override
@@ -191,10 +211,9 @@ implements
                 .map(currentInteractionContext -> Objects.equals(currentInteractionContext, interactionContextToUse))
                 .orElse(false);
 
-        if(reuseCurrentLayer) {
+        if(reuseCurrentLayer)
             // we are done, just return the stack's top
             return interactionLayerStack.get().peek();
-        }
 
         var interactionLayer = new InteractionLayer(causewayInteraction, interactionContextToUse);
 
@@ -465,9 +484,8 @@ implements
 
     private CausewayInteraction getInternalInteractionElseFail() {
         var interaction = currentInteractionElseFail();
-        if(interaction instanceof CausewayInteraction) {
+        if(interaction instanceof CausewayInteraction)
             return (CausewayInteraction) interaction;
-        }
         throw _Exceptions.unrecoverable("the framework does not recognize "
                 + "this implementation of an Interaction: %s", interaction.getClass().getName());
     }

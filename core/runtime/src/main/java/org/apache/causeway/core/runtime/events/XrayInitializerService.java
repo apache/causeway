@@ -18,49 +18,31 @@
  */
 package org.apache.causeway.core.runtime.events;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
+import org.apache.causeway.applib.events.metamodel.MetamodelListener;
 import org.apache.causeway.applib.services.confview.ConfigurationViewService;
-import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 
-/**
- *
- * @since 2.0
- * @implNote Listeners to runtime events can only reliably receive these after the
- * post-construct phase has finished and before the pre-destroy phase has begun.
- */
 @Service
-@Named(CausewayModuleCoreRuntime.NAMESPACE + ".MetamodelEventService")
-@Priority(PriorityPrecedence.MIDPOINT)
-@Qualifier("Default")
-public class MetamodelEventService {
-
-    @Inject
-    private EventBusService eventBusService;
+@Named(CausewayModuleCoreRuntime.NAMESPACE + ".XrayInitializerService")
+public class XrayInitializerService implements MetamodelListener {
 
     @Autowired(required = false)
     private ConfigurationViewService configurationService;
 
-    public void fireBeforeMetamodelLoading() {
-
+    @Override
+    public void onMetamodelAboutToBeLoaded() {
         if(configurationService!=null) {
             _Xray.addConfiguration(configurationService);
         }
-
-        eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
     }
 
-    public void fireAfterMetamodelLoaded() {
-        eventBusService.post(MetamodelEvent.AFTER_METAMODEL_LOADED);
+    @Override
+    public void onMetamodelLoaded() {
+        // no-op
     }
-
 }

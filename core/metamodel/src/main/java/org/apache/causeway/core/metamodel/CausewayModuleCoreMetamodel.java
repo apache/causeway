@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import jakarta.inject.Provider;
@@ -42,6 +43,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
@@ -116,7 +118,9 @@ import org.apache.causeway.core.metamodel.valuesemantics.temporal.legacy.JavaUti
 import org.apache.causeway.core.metamodel.valuetypes.ValueSemanticsResolverDefault;
 import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
-@Configuration
+import io.micrometer.observation.ObservationRegistry;
+
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleApplib.class,
@@ -200,7 +204,7 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
 
         // standalone validators
         LogicalTypeMalformedValidator.class,
-        
+
         // menubar contributions
         MetamodelInspectMenu.class
 })
@@ -259,6 +263,12 @@ public class CausewayModuleCoreMetamodel {
         Objects.requireNonNull(bookmarkService);
         Objects.requireNonNull(valueSemanticsResolverProvider);
         return new ValueCodec(bookmarkService, valueSemanticsResolverProvider);
+    }
+
+    @Bean("causeway-metamodel")
+    public CausewayObservationInternal causewayObservationInternal(
+            final Optional<ObservationRegistry> observationRegistryOpt) {
+        return new CausewayObservationInternal(observationRegistryOpt, "causeway-metamodel");
     }
 
 }

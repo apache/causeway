@@ -18,6 +18,8 @@
  */
 package org.apache.causeway.core.runtimeservices;
 
+import java.util.Optional;
+
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +31,7 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
 import org.apache.causeway.core.codegen.bytebuddy.CausewayModuleCoreCodegenByteBuddy;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -72,6 +75,8 @@ import org.apache.causeway.core.runtimeservices.userreg.EmailNotificationService
 import org.apache.causeway.core.runtimeservices.wrapper.WrapperFactoryDefault;
 import org.apache.causeway.core.runtimeservices.xml.XmlServiceDefault;
 import org.apache.causeway.core.runtimeservices.xmlsnapshot.XmlSnapshotServiceDefault;
+
+import io.micrometer.observation.ObservationRegistry;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
@@ -149,6 +154,12 @@ public class CausewayModuleCoreRuntimeServices {
         public HmacAuthority fallbackHmacAuthority() {
             return HmacAuthority.HmacSHA256.randomInstance();
         }
+    }
+
+    @Bean("causeway-runtimeservices")
+    public CausewayObservationInternal causewayObservationInternal(
+            final Optional<ObservationRegistry> observationRegistryOpt) {
+        return new CausewayObservationInternal(observationRegistryOpt, "causeway-runtimeservices");
     }
 
 }

@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.runtime.events.MetamodelEventService;
+import org.apache.causeway.core.runtime.events.XrayInitializerService;
 import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
 
 @Configuration
@@ -34,7 +34,7 @@ import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
         CausewayModuleCoreTransaction.class,
 
         // @Service's
-        MetamodelEventService.class,
+        XrayInitializerService.class,
 })
 public class CausewayModuleCoreRuntime {
 
