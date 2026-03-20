@@ -30,6 +30,7 @@ import org.apache.wicket.request.component.IRequestablePage;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.commons.internal.base._Lazy;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
@@ -43,19 +44,30 @@ public final class RootRequestMapper extends SystemMapper implements IRequestMap
     record RequestHandlerWrapper(
             InteractionService interactionService,
             InteractionContext interactionContext,
-            IRequestHandler delegate) implements IRequestHandler {
+            _Lazy<IRequestHandler> delegate) implements IRequestHandler {
 
         @Override
         public void respond(final IRequestCycle requestCycle) {
             if(interactionContext==null) {
-                delegate.respond(requestCycle);
+                delegate.get().respond(requestCycle);
                 return;
             }
-            interactionService.run(interactionContext, ()->delegate.respond(requestCycle));
+            interactionService.testSupport().openInteraction(interactionContext);
+            X.remove();
+            delegate.get().respond(requestCycle);
+
+
+//            interactionService.run(interactionContext, ()->{
+//                delegate.get().respond(requestCycle);
+//                X.remove();
+//            });
         }
         @Override
         public void detach(final IRequestCycle requestCycle) {
-            delegate.detach(requestCycle);
+            if(delegate.isMemoized()) {
+                delegate.get().detach(requestCycle);
+            }
+            interactionService.closeInteractionLayers();
         }
     }
 
@@ -73,7 +85,7 @@ public final class RootRequestMapper extends SystemMapper implements IRequestMap
         return new RequestHandlerWrapper(
                         mmc.getInteractionService(),
                         X.get(),
-                        super.mapRequest(request));
+                        _Lazy.threadSafe(()->super.mapRequest(request)));
     }
 
     // intercept AJAX requests and reload view-models so any detached entities are re-fetched

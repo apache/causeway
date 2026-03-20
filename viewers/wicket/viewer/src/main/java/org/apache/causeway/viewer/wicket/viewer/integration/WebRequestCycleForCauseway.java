@@ -437,6 +437,8 @@ implements
             signInPageClass = WicketSignInPage.class;
         }
         final PageParameters parameters = new PageParameters();
+        if(signInPageClass == WicketSignInPage.class)
+            return new WicketSignInPage(parameters, exceptionModel);
         Page signInPage;
         try {
             Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
