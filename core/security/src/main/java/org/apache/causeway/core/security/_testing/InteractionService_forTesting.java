@@ -38,6 +38,8 @@ import org.apache.causeway.commons.functional.ThrowingRunnable;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
+import io.micrometer.observation.Observation;
+
 /**
  * A pass-through implementation, free of side-effects,
  * in support of simple JUnit tests.
@@ -56,7 +58,7 @@ implements InteractionService {
 //    @Override
     private InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
-        return layerStack.push(interaction, interactionContext);
+        return layerStack.push(interaction, interactionContext, Observation.NOOP);
     }
 
     @Override

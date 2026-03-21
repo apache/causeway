@@ -209,23 +209,20 @@ implements
             // we are done, just return the stack's top
             return currentInteractionLayerElseFail();
 
-        var newInteractionLayer = observationProvider.get("New Interaction Layer")
-        .highCardinalityKeyValue("stackSize", ""+getInteractionLayerCount())
-        .observe(()->{
+        var causewayInteraction = currentInteractionLayer()
+            .map(InteractionLayer::interaction)
+            .map(it->(CausewayInteraction)it)
+            .orElseGet(()->new CausewayInteraction(interactionIdGenerator.interactionId()));
 
-            var causewayInteraction = currentInteractionLayer()
-                .map(InteractionLayer::interaction)
-                .map(it->(CausewayInteraction)it)
-                .orElseGet(()->new CausewayInteraction(interactionIdGenerator.interactionId()));
-            var interactionLayer = layerStack.push(causewayInteraction, interactionContextToUse);
+        var obs = observationProvider.get("Causeway Layered Interaction")
+                .highCardinalityKeyValue("stackSize", ""+getInteractionLayerCount());
 
-            if(isAtTopLevel()) {
-                transactionServiceSpring.onOpen(causewayInteraction);
-                interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
-            }
+        var newInteractionLayer = layerStack.push(causewayInteraction, interactionContextToUse, obs);
 
-            return interactionLayer;
-        });
+        if(isAtTopLevel()) {
+            transactionServiceSpring.onOpen(causewayInteraction);
+            interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
+        }
 
         if(log.isDebugEnabled()) {
             log.debug("new interaction layer created (interactionId={}, total-layers-on-stack={}, {})",

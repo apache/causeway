@@ -19,10 +19,17 @@
 package org.apache.causeway.commons.internal.observation;
 
 import java.util.Optional;
+import java.util.function.Supplier;
+
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.StringUtils;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
 import io.micrometer.observation.Observation;
+import io.micrometer.observation.Observation.Scope;
 import io.micrometer.observation.ObservationRegistry;
 
 /**
@@ -71,6 +78,49 @@ public record CausewayObservationInternal(
 
     public ObservationProvider provider(final Class<?> bean) {
         return name->createNotStarted(bean, name);
+    }
+
+    /**
+     * Helps if start and stop of an {@link Observation} happen in different code locations.
+     */
+    @Data @Accessors(fluent = true)
+    public static class ObservationClosure implements AutoCloseable {
+
+        private Observation observation;
+        private Scope scope;
+
+        public ObservationClosure startAndOpenScope(final Observation observation) {
+            if(observation==null) return this;
+            this.observation = observation.start();
+            this.scope = observation.openScope();
+            return this;
+        }
+
+        @Override
+        public void close() {
+            if(observation==null) return;
+            if(scope!=null) {
+                this.scope.close();
+                this.scope = null;
+            }
+            observation.stop();
+        }
+
+        public void onError(final Exception ex) {
+            if(observation==null) return;
+            observation.error(ex);
+        }
+
+        public ObservationClosure tag(final String key, @Nullable final Supplier<Object> valueSupplier) {
+            if(observation==null || valueSupplier == null) return this;
+            try {
+                observation.highCardinalityKeyValue(key, "" + valueSupplier.get());
+            } catch (Exception e) {
+                observation.highCardinalityKeyValue(key, "EXCEPTION: " + e.getMessage());
+            }
+            return this;
+        }
+
     }
 
 }

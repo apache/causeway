@@ -21,6 +21,7 @@ package org.apache.causeway.applib.services.iactnlayer;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationClosure;
 
 /**
  * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
@@ -46,7 +47,8 @@ public record InteractionLayer(
          * WHO is performing this {@link #getInteraction()}, also
          * WHEN and WHERE.
          */
-        InteractionContext interactionContext) {
+        InteractionContext interactionContext,
+        ObservationClosure observationClosure) implements AutoCloseable {
 
     public boolean isRoot() {
         return parent==null;
@@ -66,6 +68,18 @@ public record InteractionLayer(
         return parent!=null
             ? parent.rootLayer()
             : this;
+    }
+
+    @Override
+    public void close() {
+        observationClosure.close();
+    }
+
+    public void closeAll() {
+        close();
+        if(parent!=null) {
+            parent.closeAll();
+        }
     }
 
 }

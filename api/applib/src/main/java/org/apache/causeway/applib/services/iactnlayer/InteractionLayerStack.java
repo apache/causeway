@@ -24,6 +24,9 @@ import java.util.function.Predicate;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationClosure;
+
+import io.micrometer.observation.Observation;
 
 public final class InteractionLayerStack {
 
@@ -38,14 +41,17 @@ public final class InteractionLayerStack {
 
     public InteractionLayer push(
             final Interaction interaction,
-            final InteractionContext interactionContext) {
+            final InteractionContext interactionContext,
+            final Observation observation) {
         var parent = currentLayer().orElse(null);
-        var newLayer = new InteractionLayer(parent, interaction, interactionContext);
+        @SuppressWarnings("resource")
+        var newLayer = new InteractionLayer(parent, interaction, interactionContext, new ObservationClosure().startAndOpenScope(observation));
         threadLocalLayer.set(newLayer);
         return newLayer;
     }
 
     public void clear() {
+        currentLayer().ifPresent(InteractionLayer::closeAll);
         threadLocalLayer.remove();
     }
 
@@ -67,9 +73,11 @@ public final class InteractionLayerStack {
     @Nullable
     public InteractionLayer pop() {
         var current = threadLocalLayer.get();
-        return set(current != null
-                ? current.parent()
-                : null);
+        if(current==null) return null;
+
+        var newTop = current.parent();
+        current.close();
+        return set(newTop);
     }
 
     public void popWhile(final Predicate<InteractionLayer> condition) {
