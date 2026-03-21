@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.runtimeservices.session;
 
-import java.io.File;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,13 +33,10 @@ import org.jspecify.annotations.NonNull;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
-import org.apache.causeway.applib.events.metamodel.MetamodelEvent;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.eventbus.EventBusService;
@@ -51,13 +47,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
-import org.apache.causeway.applib.util.schema.ChangesDtoUtils;
-import org.apache.causeway.applib.util.schema.CommandDtoUtils;
-import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
-import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
-import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -97,9 +87,7 @@ implements
 
     final InteractionLayerStack layerStack = new InteractionLayerStack();
 
-    final EventBusService eventBusService;
     final ObservationProvider observationProvider;
-    final Provider<SpecificationLoader> specificationLoaderProvider;
     final ServiceInjector serviceInjector;
 
     final ClockService clockService;
@@ -111,6 +99,7 @@ implements
 
     final InteractionIdGenerator interactionIdGenerator;
 
+    @SuppressWarnings("exports")
     @Inject
     public InteractionServiceDefault(
             final EventBusService eventBusService,
@@ -123,9 +112,7 @@ implements
             final Provider<CommandPublisher> commandPublisherProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
-        this.eventBusService = eventBusService;
         this.observationProvider = observation.provider(getClass());
-        this.specificationLoaderProvider = specificationLoaderProvider;
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;
@@ -133,58 +120,6 @@ implements
         this.beanFactory = beanFactory;
         this.interactionIdGenerator = interactionIdGenerator;
         this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
-    }
-
-    @EventListener
-    public void init(final ContextRefreshedEvent event) {
-        log.info("Initialising Causeway System");
-        log.info("working directory: {}", new File(".").getAbsolutePath());
-
-        observationProvider.get("Initialising Causeway System")
-        .observe(()->{
-            observationProvider.get("Notify BEFORE_METAMODEL_LOADING Listeners")
-            .observe(()->{
-                eventBusService.post(MetamodelEvent.BEFORE_METAMODEL_LOADING);
-            });
-
-            observationProvider.get("Initialising Causeway Metamodel")
-            .observe(()->{
-                initMetamodel(specificationLoaderProvider.get());
-            });
-
-            observationProvider.get("Notify AFTER_METAMODEL_LOADED Listeners")
-            .observe(()->{
-                eventBusService.post(MetamodelEvent.AFTER_METAMODEL_LOADED);
-            });
-        });
-    }
-
-    //TODO this is a metamodel concern, why is it in runtime services?
-    private void initMetamodel(final SpecificationLoader specificationLoader) {
-
-        var taskList = _ConcurrentTaskList.named("CausewayInteractionFactoryDefault Init")
-                .addRunnable("SpecificationLoader::createMetaModel", specificationLoader::createMetaModel)
-                .addRunnable("ChangesDtoUtils::init", ChangesDtoUtils::init)
-                .addRunnable("InteractionDtoUtils::init", InteractionDtoUtils::init)
-                .addRunnable("InteractionsDtoUtils::init", InteractionsDtoUtils::init)
-                .addRunnable("CommandDtoUtils::init", CommandDtoUtils::init)
-                ;
-
-        taskList.submit(_ConcurrentContext.forkJoin());
-        taskList.await();
-
-        { // log any validation failures, experimental code however, not sure how to best propagate failures
-            var validationResult = specificationLoader.getOrAssessValidationResult();
-            if(validationResult.getNumberOfFailures()==0) {
-                log.info("Validation PASSED");
-            } else {
-                log.error("### Validation FAILED, failure count: {}", validationResult.getNumberOfFailures());
-                validationResult.forEach(failure->{
-                    log.error("# " + failure.message());
-                });
-                //throw _Exceptions.unrecoverable("Validation FAILED");
-            }
-        }
     }
 
     @Override

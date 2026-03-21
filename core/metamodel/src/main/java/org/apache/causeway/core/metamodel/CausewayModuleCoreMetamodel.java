@@ -67,6 +67,7 @@ import org.apache.causeway.core.metamodel.services.grid.GridMarshallerXml;
 import org.apache.causeway.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.causeway.core.metamodel.services.grid.spi.LayoutResourceLoaderDefault;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
+import org.apache.causeway.core.metamodel.services.init.MetamodelInitializer;
 import org.apache.causeway.core.metamodel.services.inject.ServiceInjectorDefault;
 import org.apache.causeway.core.metamodel.services.layout.LayoutServiceDefault;
 import org.apache.causeway.core.metamodel.services.metamodel.MetaModelServiceDefault;
@@ -206,7 +207,10 @@ import io.micrometer.observation.ObservationRegistry;
         LogicalTypeMalformedValidator.class,
 
         // menubar contributions
-        MetamodelInspectMenu.class
+        MetamodelInspectMenu.class,
+
+        //last
+        MetamodelInitializer.class
 })
 public class CausewayModuleCoreMetamodel {
 
