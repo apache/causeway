@@ -61,7 +61,7 @@ import org.apache.causeway.viewer.wicket.ui.components.attributes.AttributeFragm
 import org.apache.causeway.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.causeway.viewer.wicket.ui.pages.obj.DomainObjectPage;
 import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
-import org.apache.causeway.viewer.wicket.viewer.integration.RootRequestMapper;
+import org.apache.causeway.viewer.wicket.viewer.integration.RehydrationHandler;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -349,7 +349,7 @@ public class Configuration_usingWicket {
         @Override
         protected void internalInit() {
             super.internalInit();
-            setRootRequestMapper(new RootRequestMapper(this));
+            getRequestCycleListeners().add(new RehydrationHandler());
         }
 
     }

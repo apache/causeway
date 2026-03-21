@@ -35,11 +35,11 @@ implements IRequestCycleListener {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
 
             if(requestCycle2.millisSinceStart() > 50) { // avoid clutter
-                requestCycle2.observationTag("numberEntitiesLoaded", metricsService::numberEntitiesLoaded);
-                requestCycle2.observationTag("numberEntitiesDirtied", metricsService::numberEntitiesDirtied);
+                requestCycle2.observationClosure.tag("numberEntitiesLoaded", metricsService::numberEntitiesLoaded);
+                requestCycle2.observationClosure.tag("numberEntitiesDirtied", metricsService::numberEntitiesDirtied);
             }
 
-            requestCycle2.observationCloseScopeAndStop();
+            requestCycle2.observationClosure.close();
         }
     }
 

@@ -34,7 +34,7 @@ implements IRequestCycleListener {
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
-            requestCycle2.observationStartAndOpenScope(
+            requestCycle2.observationClosure.startAndOpenScope(
                     observationProvider.get("Apache Wicket Request Cycle"));
         }
     }
@@ -42,7 +42,7 @@ implements IRequestCycleListener {
     @Override
     public IRequestHandler onException(final RequestCycle requestCycle, final Exception ex) {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
-            requestCycle2.onObservationError(ex);
+            requestCycle2.observationClosure.onError(ex);
         }
         return null;
     }

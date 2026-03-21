@@ -210,7 +210,6 @@ implements
                 .await();
 
             setRequestCycleProvider(RequestCycle2::new);
-            //setRootRequestMapper(new RootRequestMapper(this));
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 

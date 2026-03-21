@@ -18,20 +18,15 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.integration;
 
-import java.util.function.Supplier;
-
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationClosure;
-
-import io.micrometer.observation.Observation;
 
 public class RequestCycle2 extends RequestCycle {
 
     final long startTimeNanos;
-    final ObservationClosure observationClosure = new ObservationClosure();
+    public final ObservationClosure observationClosure = new ObservationClosure();
 
     public RequestCycle2(final RequestCycleContext context) {
         super(context);
@@ -40,19 +35,6 @@ public class RequestCycle2 extends RequestCycle {
 
     long millisSinceStart() {
         return (System.nanoTime() - startTimeNanos)/1000_000;
-    }
-
-    void observationStartAndOpenScope(final Observation observation) {
-        observationClosure.startAndOpenScope(observation);
-    }
-    void observationCloseScopeAndStop() {
-        observationClosure.close();
-    }
-    void onObservationError(final Exception ex) {
-        observationClosure.onError(ex);
-    }
-    void observationTag(final String key, @Nullable final Supplier<Object> valueSupplier) {
-        observationClosure.tag(key, valueSupplier);
     }
 
 }
