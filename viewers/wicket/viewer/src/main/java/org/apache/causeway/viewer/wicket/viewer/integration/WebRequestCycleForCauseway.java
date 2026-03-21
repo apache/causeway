@@ -146,7 +146,7 @@ implements
         }
 
         sessionAuthenticator.determineInteractionContext()
-            .ifPresent(interactionService.testSupport()::openInteraction);
+            .ifPresent(interactionService::openInteraction);
     }
 
     @Override

@@ -127,13 +127,15 @@ implements
         return layerStack.size();
     }
 
-    private InteractionLayer openInteraction() {
+    @Override
+    public InteractionLayer openInteraction() {
         return currentInteractionLayer()
                 // or else create an anonymous authentication layer
                 .orElseGet(()->openInteraction(InteractionContextFactory.anonymous()));
     }
 
-    private InteractionLayer openInteraction(final @NonNull InteractionContext interactionContextToUse) {
+    @Override
+    public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContextToUse) {
 
         // check whether we should reuse any current interactionLayer,
         // that is, if current authentication and authToUse are equal
@@ -464,14 +466,6 @@ implements
             interactionService.closeInteractionLayers();
             interactionService.openInteraction(interactionContext);
             callback.accept(model);
-        }
-        @Override
-        public InteractionLayer openInteraction() {
-            return interactionService.openInteraction();
-        }
-        @Override
-        public InteractionLayer openInteraction(@NonNull final InteractionContext interactionContext) {
-            return interactionService.openInteraction(interactionContext);
         }
     }
 

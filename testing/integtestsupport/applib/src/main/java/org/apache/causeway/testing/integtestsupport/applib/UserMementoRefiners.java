@@ -53,7 +53,7 @@ public class UserMementoRefiners implements BeforeEachCallback {
                             for (UserMementoRefiner userMementoRefiner : serviceRegistry.select(UserMementoRefiner.class)) {
                                 user = userMementoRefiner.refine(user);
                             }
-                            interactionService.testSupport().openInteraction(currentInteractionContext.withUser(user));
+                            interactionService.openInteraction(currentInteractionContext.withUser(user));
                         }
                     )
                 )

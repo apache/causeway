@@ -310,7 +310,7 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
                     });
         });
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // given (same user, different target, same day)
         counter2 = counterRepository.findByName("counter-2");

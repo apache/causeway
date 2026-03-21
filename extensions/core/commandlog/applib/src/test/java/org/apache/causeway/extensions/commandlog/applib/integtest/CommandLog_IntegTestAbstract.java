@@ -345,7 +345,7 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
                                 }
                         );
                     });
-            testSupport.openInteraction();
+            interactionService.openInteraction();
 
             // given (same user, different target, same day)
             counter2 = counterRepository.findByName("counter-2");

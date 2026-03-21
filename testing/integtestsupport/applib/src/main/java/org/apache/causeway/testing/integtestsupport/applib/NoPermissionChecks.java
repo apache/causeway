@@ -49,7 +49,7 @@ public class NoPermissionChecks implements BeforeEachCallback {
                 interactionService.currentInteractionContext().ifPresent(
                     currentInteractionContext -> {
                         var sudoUser = currentInteractionContext.getUser().withRoleAdded(SudoService.ACCESS_ALL_ROLE.name());
-                        interactionService.testSupport().openInteraction(currentInteractionContext.withUser(sudoUser));
+                        interactionService.openInteraction(currentInteractionContext.withUser(sudoUser));
                     }
                 )
             );

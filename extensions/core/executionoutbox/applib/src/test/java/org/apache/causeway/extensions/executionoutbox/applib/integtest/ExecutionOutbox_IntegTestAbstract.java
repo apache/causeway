@@ -89,7 +89,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -120,7 +120,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -151,7 +151,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithExecutionPublishingDisabled.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -165,7 +165,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithExecutionPublishingDisabled();
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -179,7 +179,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).setNum(99L);
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -209,7 +209,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrap(counter1).setNum2(99L);
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // then
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
@@ -223,7 +223,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         interactionService.closeInteractionLayers();    // to flush
 
-        testSupport.openInteraction();
+        interactionService.openInteraction();
         List<? extends ExecutionOutboxEntry> all = executionOutboxEntryRepository.findOldest();
 
         ExecutionOutboxEntry executionLogEntry = all.get(0);
@@ -241,7 +241,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
 
         // when we start a new session and lookup from the bookmark
         interactionService.closeInteractionLayers();
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         Optional<Object> cle2IfAny = bookmarkService.lookup(eleBookmarkIfAny.get());
         assertThat(cle2IfAny).isPresent();
@@ -260,7 +260,7 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
         interactionService.closeInteractionLayers();    // to flush
-        testSupport.openInteraction();
+        interactionService.openInteraction();
 
         // when
         List<? extends ExecutionOutboxEntry> executionTarget1User1IfAny = executionOutboxEntryRepository.findOldest();

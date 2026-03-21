@@ -47,12 +47,12 @@ public class CausewayInteractionHandler implements BeforeEachCallback, AfterEach
 
         _Helper
             .getInteractionFactory(extensionContext)
-            .map(InteractionService::testSupport)
-            .ifPresent(testSupport->
+            .ifPresent(interactionService->
                 _Helper
                     .getCustomInteractionContext(extensionContext)
-                    .map(testSupport::openInteraction)
-                    .orElseGet(testSupport::openInteraction));
+                    .ifPresentOrElse(
+                        interactionService::openInteraction,
+                        interactionService::openInteraction));
     }
 
     @Override

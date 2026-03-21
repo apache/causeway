@@ -49,14 +49,14 @@ implements InteractionService {
 
     final InteractionLayerStack layerStack = new InteractionLayerStack();
 
-//    @Override
-    private InteractionLayer openInteraction() {
+    @Override
+    public InteractionLayer openInteraction() {
         final UserMemento userMemento = UserMemento.system();
         return openInteraction(InteractionContext.ofUserWithSystemDefaults(userMemento));
     }
 
-//    @Override
-    private InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
+    @Override
+    public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
         return layerStack.push(interaction, interactionContext, Observation.NOOP);
     }
