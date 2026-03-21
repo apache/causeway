@@ -71,8 +71,8 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.causeway.viewer.wicket.viewer.integration.AuthenticatedWebSessionForCauseway;
 import org.apache.causeway.viewer.wicket.viewer.integration.CausewayResourceSettings;
 import org.apache.causeway.viewer.wicket.viewer.integration.ConverterForObjectAdapter;
+import org.apache.causeway.viewer.wicket.viewer.integration.RehydrationHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.RequestCycle2;
-import org.apache.causeway.viewer.wicket.viewer.integration.RootRequestMapper;
 import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStartHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.TelemetryStopHandler;
 import org.apache.causeway.viewer.wicket.viewer.integration.WebRequestCycleForCauseway;
@@ -210,7 +210,7 @@ implements
                 .await();
 
             setRequestCycleProvider(RequestCycle2::new);
-            setRootRequestMapper(new RootRequestMapper(this));
+            //setRootRequestMapper(new RootRequestMapper(this));
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
@@ -218,6 +218,7 @@ implements
                     .provider(TelemetryStartHandler.class)));
             getRequestCycleListeners().add(new WebRequestCycleForCauseway(metaModelContext, getPageClassRegistry()));
             getRequestCycleListeners().add(new TelemetryStopHandler(metricService));
+            getRequestCycleListeners().add(new RehydrationHandler());
             getRequestCycleListeners().add(new PageRequestHandlerTracker());
 
             //XXX CAUSEWAY-2530, don't recreate expired pages

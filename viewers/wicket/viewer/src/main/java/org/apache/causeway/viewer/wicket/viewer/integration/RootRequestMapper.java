@@ -28,13 +28,16 @@ import org.apache.wicket.request.Request;
 
 import org.apache.causeway.viewer.wicket.ui.pages.PageAbstract;
 
+@Deprecated // was replaced by RehydrationHandler
 public final class RootRequestMapper extends SystemMapper implements IRequestMapper {
 
+    @Deprecated
     public RootRequestMapper(final Application application) {
         super(application);
     }
 
     // intercept AJAX requests and reload view-models so any detached entities are re-fetched
+    @Deprecated
     @Override
     protected IRequestMapper newPageInstanceMapper() {
         return new PageInstanceMapper() {
