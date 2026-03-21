@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -59,17 +58,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-    @Inject CommandLogEntryRepository commandLogEntryRepository;
-    @Inject SudoService sudoService;
-    @Inject ClockService clockService;
-    @Inject InteractionService interactionService;
-    @Inject InteractionLayerTracker interactionLayerTracker;
-    @Inject CounterRepository<? extends Counter> counterRepository;
-    @Inject WrapperFactory wrapperFactory;
-    @Inject BookmarkService bookmarkService;
-    @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
-
-
     @BeforeAll
     static void beforeAll() {
         CausewayPresets.forcePrototyping();
@@ -77,25 +65,23 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
     Counter counter1;
     Counter counter2;
-    private TestSupport<?> testSupport;
 
     @BeforeEach
     void beforeEach() {
-        this.testSupport = interactionService.testSupport();
-        testSupport.nextInteraction(ia->{
-            counterRepository.removeAll();
-            commandLogEntryRepository.removeAll();
+        interactionService.nextInteraction();
 
-            assertThat(counterRepository.find()).isEmpty();
+        counterRepository.removeAll();
+        commandLogEntryRepository.removeAll();
 
-            counter1 = counterRepository.persist(newCounter("counter-1"));
-            counter2 = counterRepository.persist(newCounter("counter-2"));
+        assertThat(counterRepository.find()).isEmpty();
 
-            assertThat(counterRepository.find()).hasSize(2);
+        counter1 = counterRepository.persist(newCounter("counter-1"));
+        counter2 = counterRepository.persist(newCounter("counter-2"));
 
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isEmpty();
-        });
+        assertThat(counterRepository.find()).hasSize(2);
+
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isEmpty();
     }
 
     protected abstract <T extends Counter>  T newCounter(String name);
@@ -105,34 +91,33 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         // when
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-        testSupport.nextInteraction(ia->{
+        interactionService.nextInteraction();
 
-            // then
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isPresent();
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isPresent();
 
-            CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
 
-            assertThat(commandLogEntry.getInteractionId()).isNotNull();
-            assertThat(commandLogEntry.getCompletedAt()).isNotNull();
-            assertThat(commandLogEntry.getDuration()).isNotNull();
-            assertThat(commandLogEntry.getException()).isEqualTo("");
-            assertThat(commandLogEntry.getLogicalMemberIdentifier()).isNotNull();
-            assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#bumpUsingMixin");
-            assertThat(commandLogEntry.getUsername()).isEqualTo("__system");
-            assertThat(commandLogEntry.getResult()).isNotNull();
-            assertThat(commandLogEntry.getResultSummary()).isEqualTo("OK");
-            assertThat(commandLogEntry.getReplayState()).isEqualTo(ReplayState.UNDEFINED);
-            assertThat(commandLogEntry.getReplayStateFailureReason()).isNull();
-            assertThat(commandLogEntry.getTarget()).isNotNull();
-            assertThat(commandLogEntry.getTimestamp()).isNotNull();
-            assertThat(commandLogEntry.getType()).isEqualTo(DomainChangeRecord.ChangeType.COMMAND);
-            assertThat(commandLogEntry.getCommandDto()).isNotNull();
-            CommandDto commandDto = commandLogEntry.getCommandDto();
-            assertThat(commandDto).isNotNull();
-            assertThat(commandDto.getMember()).isInstanceOf(ActionDto.class);
-            assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
-        });
+        assertThat(commandLogEntry.getInteractionId()).isNotNull();
+        assertThat(commandLogEntry.getCompletedAt()).isNotNull();
+        assertThat(commandLogEntry.getDuration()).isNotNull();
+        assertThat(commandLogEntry.getException()).isEqualTo("");
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isNotNull();
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#bumpUsingMixin");
+        assertThat(commandLogEntry.getUsername()).isEqualTo("__system");
+        assertThat(commandLogEntry.getResult()).isNotNull();
+        assertThat(commandLogEntry.getResultSummary()).isEqualTo("OK");
+        assertThat(commandLogEntry.getReplayState()).isEqualTo(ReplayState.UNDEFINED);
+        assertThat(commandLogEntry.getReplayStateFailureReason()).isNull();
+        assertThat(commandLogEntry.getTarget()).isNotNull();
+        assertThat(commandLogEntry.getTimestamp()).isNotNull();
+        assertThat(commandLogEntry.getType()).isEqualTo(DomainChangeRecord.ChangeType.COMMAND);
+        assertThat(commandLogEntry.getCommandDto()).isNotNull();
+        CommandDto commandDto = commandLogEntry.getCommandDto();
+        assertThat(commandDto).isNotNull();
+        assertThat(commandDto.getMember()).isInstanceOf(ActionDto.class);
+        assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
     }
 
     @Test
@@ -140,56 +125,57 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredAction();
-        testSupport.nextInteraction(ia->{
+        interactionService.nextInteraction();
 
-            // then
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isPresent();
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isPresent();
 
-            CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
 
-            assertThat(commandLogEntry.getInteractionId()).isNotNull();
-            assertThat(commandLogEntry.getCompletedAt()).isNotNull();
-            assertThat(commandLogEntry.getDuration()).isNotNull();
-            assertThat(commandLogEntry.getException()).isEqualTo("");
-            assertThat(commandLogEntry.getLogicalMemberIdentifier()).isNotNull();
-            assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#bumpUsingDeclaredAction");
-            assertThat(commandLogEntry.getUsername()).isEqualTo("__system");
-            assertThat(commandLogEntry.getResult()).isNotNull();
-            assertThat(commandLogEntry.getResultSummary()).isEqualTo("OK");
-            assertThat(commandLogEntry.getReplayState()).isEqualTo(ReplayState.UNDEFINED);
-            assertThat(commandLogEntry.getReplayStateFailureReason()).isNull();
-            assertThat(commandLogEntry.getTarget()).isNotNull();
-            assertThat(commandLogEntry.getTimestamp()).isNotNull();
-            assertThat(commandLogEntry.getType()).isEqualTo(DomainChangeRecord.ChangeType.COMMAND);
-            assertThat(commandLogEntry.getCommandDto()).isNotNull();
-            CommandDto commandDto = commandLogEntry.getCommandDto();
-            assertThat(commandDto).isNotNull();
-            assertThat(commandDto.getMember()).isInstanceOf(ActionDto.class);
-            assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
-        });
+        assertThat(commandLogEntry.getInteractionId()).isNotNull();
+        assertThat(commandLogEntry.getCompletedAt()).isNotNull();
+        assertThat(commandLogEntry.getDuration()).isNotNull();
+        assertThat(commandLogEntry.getException()).isEqualTo("");
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isNotNull();
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#bumpUsingDeclaredAction");
+        assertThat(commandLogEntry.getUsername()).isEqualTo("__system");
+        assertThat(commandLogEntry.getResult()).isNotNull();
+        assertThat(commandLogEntry.getResultSummary()).isEqualTo("OK");
+        assertThat(commandLogEntry.getReplayState()).isEqualTo(ReplayState.UNDEFINED);
+        assertThat(commandLogEntry.getReplayStateFailureReason()).isNull();
+        assertThat(commandLogEntry.getTarget()).isNotNull();
+        assertThat(commandLogEntry.getTimestamp()).isNotNull();
+        assertThat(commandLogEntry.getType()).isEqualTo(DomainChangeRecord.ChangeType.COMMAND);
+        assertThat(commandLogEntry.getCommandDto()).isNotNull();
+        CommandDto commandDto = commandLogEntry.getCommandDto();
+        assertThat(commandDto).isNotNull();
+        assertThat(commandDto.getMember()).isInstanceOf(ActionDto.class);
+        assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
     }
 
     @Test
     void invoke_mixin_disabled() {
+
         // when
         wrapperFactory.wrapMixin(Counter_bumpUsingMixinWithCommandPublishingDisabled.class, counter1).act();
-        testSupport.nextInteraction(ia->{
-            // then
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isEmpty();
-        });
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isEmpty();
     }
 
     @Test
     void invoke_direct_disabled() {
+
         // when
         wrapperFactory.wrap(counter1).bumpUsingDeclaredActionWithCommandPublishingDisabled();
-        testSupport.nextInteraction(ia->{
-            // then
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isEmpty();
-        });
+        interactionService.nextInteraction();
+
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isEmpty();
     }
 
     @Test
@@ -197,33 +183,32 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         // when
         wrapperFactory.wrap(counter1).setNum(99L);
-        testSupport.nextInteraction(ia->{
+        interactionService.nextInteraction();
 
-            // then
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isPresent();
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isPresent();
 
-            CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
 
-            assertThat(commandLogEntry.getInteractionId()).isNotNull();
-            assertThat(commandLogEntry.getCompletedAt()).isNotNull();
-            assertThat(commandLogEntry.getDuration()).isNotNull();
-            assertThat(commandLogEntry.getException()).isEqualTo("");
-            assertThat(commandLogEntry.getLogicalMemberIdentifier()).isNotNull();
-            assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#num");
-            assertThat(commandLogEntry.getUsername()).isEqualTo("__system");
-            assertThat(commandLogEntry.getResult()).isNull();
-            assertThat(commandLogEntry.getResultSummary()).isEqualTo("OK (VOID)");
-            assertThat(commandLogEntry.getReplayState()).isEqualTo(ReplayState.UNDEFINED);
-            assertThat(commandLogEntry.getReplayStateFailureReason()).isNull();
-            assertThat(commandLogEntry.getTarget()).isNotNull();
-            assertThat(commandLogEntry.getTimestamp()).isNotNull();
-            assertThat(commandLogEntry.getType()).isEqualTo(DomainChangeRecord.ChangeType.COMMAND);
-            CommandDto commandDto = commandLogEntry.getCommandDto();
-            assertThat(commandDto).isNotNull();
-            assertThat(commandDto.getMember()).isInstanceOf(PropertyDto.class);
-            assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
-        });
+        assertThat(commandLogEntry.getInteractionId()).isNotNull();
+        assertThat(commandLogEntry.getCompletedAt()).isNotNull();
+        assertThat(commandLogEntry.getDuration()).isNotNull();
+        assertThat(commandLogEntry.getException()).isEqualTo("");
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isNotNull();
+        assertThat(commandLogEntry.getLogicalMemberIdentifier()).isEqualTo("commandlog.test.Counter#num");
+        assertThat(commandLogEntry.getUsername()).isEqualTo("__system");
+        assertThat(commandLogEntry.getResult()).isNull();
+        assertThat(commandLogEntry.getResultSummary()).isEqualTo("OK (VOID)");
+        assertThat(commandLogEntry.getReplayState()).isEqualTo(ReplayState.UNDEFINED);
+        assertThat(commandLogEntry.getReplayStateFailureReason()).isNull();
+        assertThat(commandLogEntry.getTarget()).isNotNull();
+        assertThat(commandLogEntry.getTimestamp()).isNotNull();
+        assertThat(commandLogEntry.getType()).isEqualTo(DomainChangeRecord.ChangeType.COMMAND);
+        CommandDto commandDto = commandLogEntry.getCommandDto();
+        assertThat(commandDto).isNotNull();
+        assertThat(commandDto.getMember()).isInstanceOf(PropertyDto.class);
+        assertThat(commandDto.getMember().getLogicalMemberIdentifier()).isEqualTo(commandLogEntry.getLogicalMemberIdentifier());
     }
 
     @Test
@@ -231,271 +216,262 @@ public abstract class CommandLog_IntegTestAbstract extends CausewayIntegrationTe
 
         // when
         wrapperFactory.wrap(counter1).setNum2(99L);
-        testSupport.nextInteraction(ia->{
+        interactionService.closeInteractionLayers();    // to flush
 
-            // then
-            Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
-            assertThat(mostRecentCompleted).isEmpty();
+        interactionService.openInteraction();
 
-        });
+        // then
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
+        assertThat(mostRecentCompleted).isEmpty();
     }
 
     @Test
     void roundtrip_CLE_bookmarks() {
 
-        class Model {
-            CommandDto commandDto;
-            Bookmark cleBookmark;
-        }
-        var testSupport = interactionService.testSupport(new Model());
-
         // given
         wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-        testSupport.nextInteraction(model->{
+        interactionService.nextInteraction();
 
-            CommandLogEntry commandLogEntry = commandLogEntryRepository.findMostRecentCompleted().get();
-            model.commandDto = commandLogEntry.getCommandDto();
+        Optional<? extends CommandLogEntry> mostRecentCompleted = commandLogEntryRepository.findMostRecentCompleted();
 
-            // when
-            Optional<Bookmark> cleBookmarkIfAny = bookmarkService.bookmarkFor(commandLogEntry);
+        CommandLogEntry commandLogEntry = mostRecentCompleted.get();
+        CommandDto commandDto = commandLogEntry.getCommandDto();
 
-            // then
-            assertThat(cleBookmarkIfAny).isPresent();
-            model.cleBookmark = cleBookmarkIfAny.get();
-            String identifier = model.cleBookmark.identifier();
-            if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
-                assertThat(identifier).startsWith("u_");
-                UUID.fromString(identifier.substring("u_".length())); // should not fail, ie check the format is as we expect
-            } else {
-                UUID.fromString(identifier); // should not fail, ie check the format is as we expect
-            }
+        // when
+        Optional<Bookmark> cleBookmarkIfAny = bookmarkService.bookmarkFor(commandLogEntry);
 
-        });
+        // then
+        assertThat(cleBookmarkIfAny).isPresent();
+        Bookmark cleBookmark = cleBookmarkIfAny.get();
+        String identifier = cleBookmark.identifier();
+        if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
+            assertThat(identifier).startsWith("u_");
+            UUID.fromString(identifier.substring("u_".length())); // should not fail, ie check the format is as we expect
+        } else {
+            UUID.fromString(identifier); // should not fail, ie check the format is as we expect
+        }
 
         // when we start a new session and lookup from the bookmark
-        testSupport.nextInteraction(model->{
+        interactionService.nextInteraction();
 
-            Optional<Object> cle2IfAny = bookmarkService.lookup(model.cleBookmark);
-            assertThat(cle2IfAny).isPresent();
+        Optional<Object> cle2IfAny = bookmarkService.lookup(cleBookmarkIfAny.get());
+        assertThat(cle2IfAny).isPresent();
 
-            CommandLogEntry cle2 = (CommandLogEntry) cle2IfAny.get();
-            CommandDto commandDto2 = cle2.getCommandDto();
+        CommandLogEntry cle2 = (CommandLogEntry) cle2IfAny.get();
+        CommandDto commandDto2 = cle2.getCommandDto();
 
-            assertThat(commandDto2).isEqualTo(model.commandDto);
-        });
+        assertThat(commandDto2).isEqualTo(commandDto);
 
     }
 
     @Test
     void test_all_the_repository_methods() {
 
-        class Model {
-            UUID commandTarget1User1Id;
-            UUID commandTarget1User2Id;
-            UUID commandTarget1User1YesterdayId;
-        }
-        var testSupport = interactionService.testSupport(new Model());
-
         // given
         sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
         });
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(model->{
-            // when
-            Optional<? extends CommandLogEntry> commandTarget1User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
+        // when
+        Optional<? extends CommandLogEntry> commandTarget1User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
 
-            // then
-            Assertions.assertThat(commandTarget1User1IfAny).isPresent();
-            var commandTarget1User1 = commandTarget1User1IfAny.get();
-            model.commandTarget1User1Id = commandTarget1User1.getInteractionId();
+        // then
+        Assertions.assertThat(commandTarget1User1IfAny).isPresent();
+        var commandTarget1User1 = commandTarget1User1IfAny.get();
+        var commandTarget1User1Id = commandTarget1User1.getInteractionId();
 
-            // given (different user, same target, same day)
-            counter1 = counterRepository.findByName("counter-1");
-            sudoService.run(
-                    InteractionContext.switchUser(
-                            UserMemento.builder("user-2").build()),
-                    () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
-            );
+        // given (different user, same target, same day)
+        counter1 = counterRepository.findByName("counter-1");
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder("user-2").build()),
+                () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
+        );
+        interactionService.nextInteraction();
+
+        // when
+        Optional<? extends CommandLogEntry> commandTarget1User2IfAny = commandLogEntryRepository.findMostRecentCompleted();
+
+        // then
+        Assertions.assertThat(commandTarget1User2IfAny).isPresent();
+        var commandTarget1User2 = commandTarget1User2IfAny.get();
+        var commandTarget1User2Id = commandTarget1User2.getInteractionId();
+
+        // given (same user, same target, yesterday)
+        counter1 = counterRepository.findByName("counter-1");
+        final UUID[] commandTarget1User1YesterdayIdHolder = new UUID[1];
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder("user-1").build()),
+                () -> {
+                    var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    sudoService.run(
+                            InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
+                            () -> {
+                                wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+                                commandTarget1User1YesterdayIdHolder[0] = interactionLayerTracker.currentInteraction().get().getInteractionId();
+                                interactionService.closeInteractionLayers();    // to flush within changed time...
+                            }
+                    );
+                });
+        interactionService.openInteraction();
+
+        // when, then
+        final UUID commandTarget1User1YesterdayId = commandTarget1User1YesterdayIdHolder[0];
+
+        // given (same user, different target, same day)
+        counter2 = counterRepository.findByName("counter-2");
+        sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
+            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
         });
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(model->{
-            // when
-            Optional<? extends CommandLogEntry> commandTarget1User2IfAny = commandLogEntryRepository.findMostRecentCompleted();
+        // when
+        Optional<? extends CommandLogEntry> commandTarget2User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
 
-            // then
-            Assertions.assertThat(commandTarget1User2IfAny).isPresent();
-            var commandTarget1User2 = commandTarget1User2IfAny.get();
-            model.commandTarget1User2Id = commandTarget1User2.getInteractionId();
+        // then
+        Assertions.assertThat(commandTarget2User1IfAny).isPresent();
+        var commandTarget2User1 = commandTarget2User1IfAny.get();
+        var commandTarget2User1Id = commandTarget2User1.getInteractionId();
 
-            // given (same user, same target, yesterday)
-            counter1 = counterRepository.findByName("counter-1");
-            sudoService.run(
-                    InteractionContext.switchUser(
-                            UserMemento.builder("user-1").build()),
-                    () -> {
-                        var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
-                        sudoService.run(
-                                InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
-                                () -> {
-                                    wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-                                    // when, then
-                                    model.commandTarget1User1YesterdayId = interactionLayerTracker.currentInteraction().get().getInteractionId();
-                                    interactionService.closeInteractionLayers();    // to flush within changed time...
-                                }
-                        );
-                    });
-            interactionService.openInteraction();
+        // when
+        Optional<? extends CommandLogEntry> commandTarget1User1ById = commandLogEntryRepository.findByInteractionId(commandTarget1User1Id);
+        Optional<? extends CommandLogEntry> commandTarget1User2ById = commandLogEntryRepository.findByInteractionId(commandTarget1User2Id);
+        Optional<? extends CommandLogEntry> commandTarget1User1YesterdayById = commandLogEntryRepository.findByInteractionId(commandTarget1User1YesterdayId);
+        Optional<? extends CommandLogEntry> commandTarget2User1ById = commandLogEntryRepository.findByInteractionId(commandTarget2User1Id);
 
-            // given (same user, different target, same day)
-            counter2 = counterRepository.findByName("counter-2");
-            sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
-                wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
-            });
-        });
+        // then
+        Assertions.assertThat(commandTarget1User1ById).isPresent();
+        Assertions.assertThat(commandTarget1User2ById).isPresent();
+        Assertions.assertThat(commandTarget1User1YesterdayById).isPresent();
+        Assertions.assertThat(commandTarget2User1ById).isPresent();
+        Assertions.assertThat(commandTarget2User1ById.get()).isSameAs(commandTarget2User1);
 
-        testSupport.nextInteraction(model->{
+        // given
+        commandTarget1User1 = commandTarget1User1ById.get();
+        commandTarget1User2 = commandTarget1User2ById.get();
+        @SuppressWarnings("unused")
+        var commandTarget1User1Yesterday = commandTarget1User1YesterdayById.get();
+        commandTarget2User1 = commandTarget2User1ById.get();
 
-            var commandTarget1User1Id = model.commandTarget1User1Id;
-            var commandTarget1User2Id = model.commandTarget1User2Id;
-            var commandTarget1User1YesterdayId = model.commandTarget1User1YesterdayId;
+        var target1 = commandTarget1User1.getTarget();
+        var username1 = commandTarget1User1.getUsername();
+        var from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
+        var to = from.plusDays(1);
 
-            // when
-            Optional<? extends CommandLogEntry> commandTarget2User1IfAny = commandLogEntryRepository.findMostRecentCompleted();
+        // when
+        List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findNotYetReplayed();
 
-            // then
-            Assertions.assertThat(commandTarget2User1IfAny).isPresent();
-            var commandTarget2User1 = commandTarget2User1IfAny.get();
-            var commandTarget2User1Id = commandTarget2User1.getInteractionId();
+        // then
+        Assertions.assertThat(notYetReplayed).isEmpty();
 
-            // when
-            Optional<? extends CommandLogEntry> commandTarget1User1ById = commandLogEntryRepository.findByInteractionId(commandTarget1User1Id);
-            Optional<? extends CommandLogEntry> commandTarget1User2ById = commandLogEntryRepository.findByInteractionId(commandTarget1User2Id);
-            Optional<? extends CommandLogEntry> commandTarget1User1YesterdayById = commandLogEntryRepository.findByInteractionId(commandTarget1User1YesterdayId);
-            Optional<? extends CommandLogEntry> commandTarget2User1ById = commandLogEntryRepository.findByInteractionId(commandTarget2User1Id);
+        if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
 
-            // then
-            Assertions.assertThat(commandTarget1User1ById).isPresent();
-            Assertions.assertThat(commandTarget1User2ById).isPresent();
-            Assertions.assertThat(commandTarget1User1YesterdayById).isPresent();
-            Assertions.assertThat(commandTarget2User1ById).isPresent();
-            Assertions.assertThat(commandTarget2User1ById.get()).isSameAs(commandTarget2User1);
+            // fails in JPA; possibly need to get the agent working for dirty tracking.
 
             // given
-            var commandTarget1User1 = commandTarget1User1ById.get();
-            var commandTarget1User2 = commandTarget1User2ById.get();
-            @SuppressWarnings("unused")
-            var commandTarget1User1Yesterday = commandTarget1User1YesterdayById.get();
-            commandTarget2User1 = commandTarget2User1ById.get();
-
-            var target1 = commandTarget1User1.getTarget();
-            var username1 = commandTarget1User1.getUsername();
-            var from = commandTarget1User1.getStartedAt().toLocalDateTime().toLocalDate();
-            var to = from.plusDays(1);
+            commandTarget1User1.setReplayState(ReplayState.PENDING);
 
             // when
-            List<? extends CommandLogEntry> notYetReplayed = commandLogEntryRepository.findNotYetReplayed();
+            List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findNotYetReplayed();
 
             // then
-            Assertions.assertThat(notYetReplayed).isEmpty();
+            Assertions.assertThat(notYetReplayed2).hasSize(1);
+            Assertions.assertThat(notYetReplayed2.get(0).getInteractionId()).isEqualTo(commandTarget1User1.getInteractionId());
+        }
 
-            if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
+        // when
+        List<? extends CommandLogEntry> byFromAndTo = commandLogEntryRepository.findByFromAndTo(from, to);
 
-                // fails in JPA; possibly need to get the agent working for dirty tracking.
+        // then
+        Assertions.assertThat(byFromAndTo).hasSize(3);
+        Assertions.assertThat(byFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
 
-                // given
-                commandTarget1User1.setReplayState(ReplayState.PENDING);
+        // when
+        List<? extends CommandLogEntry> byTarget1AndFromAndTo = commandLogEntryRepository.findByTargetAndFromAndTo(target1, from, to);
 
-                // when
-                List<? extends CommandLogEntry> notYetReplayed2 = commandLogEntryRepository.findNotYetReplayed();
+        // then
+        Assertions.assertThat(byTarget1AndFromAndTo).hasSize(2);
+        Assertions.assertThat(byTarget1AndFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // the more recent
 
-                // then
-                Assertions.assertThat(notYetReplayed2).hasSize(1);
-                Assertions.assertThat(notYetReplayed2.get(0).getInteractionId()).isEqualTo(commandTarget1User1.getInteractionId());
-            }
+        // when
+        List<? extends CommandLogEntry> recentByTargetOfCommand1 = commandLogEntryRepository.findRecentByTarget(target1);
+
+        // then
+        Assertions.assertThat(recentByTargetOfCommand1).hasSize(3);
+        Assertions.assertThat(recentByTargetOfCommand1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> recentByUsername = commandLogEntryRepository.findRecentByUsername(username1);
+
+        // then
+        Assertions.assertThat(recentByUsername).hasSize(3);
+        Assertions.assertThat(recentByUsername.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> byParent = commandLogEntryRepository.findByParent(commandTarget1User1);
+
+        // then // TODO: would need nested executions for this to show up.
+        Assertions.assertThat(byParent).isEmpty();
+
+        // when
+        List<? extends CommandLogEntry> completed = commandLogEntryRepository.findCompleted();
+
+        // then
+        Assertions.assertThat(completed).hasSize(4);
+        Assertions.assertThat(completed.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
+
+        // when
+        List<? extends CommandLogEntry> current = commandLogEntryRepository.findCurrent();
+
+        // then // TODO: would need more sophistication in fixtures to test
+        Assertions.assertThat(current).isEmpty();
+
+        // when
+        List<? extends CommandLogEntry> since = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 3);
+
+        // then
+        Assertions.assertThat(since).hasSize(2);
+        Assertions.assertThat(since.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest first
+
+        // when
+        List<? extends CommandLogEntry> sinceWithBatchSize1 = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 1);
+
+        // then
+        Assertions.assertThat(sinceWithBatchSize1).hasSize(1);
+        Assertions.assertThat(sinceWithBatchSize1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest fist
+
+        // when
+        Optional<? extends CommandLogEntry> mostRecentReplayedIfAny = commandLogEntryRepository.findMostRecentReplayed();
+
+        // then
+        Assertions.assertThat(mostRecentReplayedIfAny).isEmpty();
+
+        if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
+
+            // fails in JPA; possibly need to get the agent working for dirty tracking.
+
+            // given
+            commandTarget1User1.setReplayState(ReplayState.OK);
 
             // when
-            List<? extends CommandLogEntry> byFromAndTo = commandLogEntryRepository.findByFromAndTo(from, to);
+            Optional<? extends CommandLogEntry> mostRecentReplayedIfAny2 = commandLogEntryRepository.findMostRecentReplayed();
 
             // then
-            Assertions.assertThat(byFromAndTo).hasSize(3);
-            Assertions.assertThat(byFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
-
-            // when
-            List<? extends CommandLogEntry> byTarget1AndFromAndTo = commandLogEntryRepository.findByTargetAndFromAndTo(target1, from, to);
-
-            // then
-            Assertions.assertThat(byTarget1AndFromAndTo).hasSize(2);
-            Assertions.assertThat(byTarget1AndFromAndTo.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // the more recent
-
-            // when
-            List<? extends CommandLogEntry> recentByTargetOfCommand1 = commandLogEntryRepository.findRecentByTarget(target1);
-
-            // then
-            Assertions.assertThat(recentByTargetOfCommand1).hasSize(3);
-            Assertions.assertThat(recentByTargetOfCommand1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // the more recent
-
-            // when
-            List<? extends CommandLogEntry> recentByUsername = commandLogEntryRepository.findRecentByUsername(username1);
-
-            // then
-            Assertions.assertThat(recentByUsername).hasSize(3);
-            Assertions.assertThat(recentByUsername.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
-
-            // when
-            List<? extends CommandLogEntry> byParent = commandLogEntryRepository.findByParent(commandTarget1User1);
-
-            // then // TODO: would need nested executions for this to show up.
-            Assertions.assertThat(byParent).isEmpty();
-
-            // when
-            List<? extends CommandLogEntry> completed = commandLogEntryRepository.findCompleted();
-
-            // then
-            Assertions.assertThat(completed).hasSize(4);
-            Assertions.assertThat(completed.get(0).getInteractionId()).isEqualTo(commandTarget2User1.getInteractionId()); // the more recent
-
-            // when
-            List<? extends CommandLogEntry> current = commandLogEntryRepository.findCurrent();
-
-            // then // TODO: would need more sophistication in fixtures to test
-            Assertions.assertThat(current).isEmpty();
-
-            // when
-            List<? extends CommandLogEntry> since = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 3);
-
-            // then
-            Assertions.assertThat(since).hasSize(2);
-            Assertions.assertThat(since.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest first
-
-            // when
-            List<? extends CommandLogEntry> sinceWithBatchSize1 = commandLogEntryRepository.findSince(commandTarget1User1.getInteractionId(), 1);
-
-            // then
-            Assertions.assertThat(sinceWithBatchSize1).hasSize(1);
-            Assertions.assertThat(sinceWithBatchSize1.get(0).getInteractionId()).isEqualTo(commandTarget1User2.getInteractionId()); // oldest fist
-
-            // when
-            Optional<? extends CommandLogEntry> mostRecentReplayedIfAny = commandLogEntryRepository.findMostRecentReplayed();
-
-            // then
-            Assertions.assertThat(mostRecentReplayedIfAny).isEmpty();
-
-            if (causewayBeanTypeRegistry.persistenceStack().isJdo()) {
-
-                // fails in JPA; possibly need to get the agent working for dirty tracking.
-
-                // given
-                commandTarget1User1.setReplayState(ReplayState.OK);
-
-                // when
-                Optional<? extends CommandLogEntry> mostRecentReplayedIfAny2 = commandLogEntryRepository.findMostRecentReplayed();
-
-                // then
-                Assertions.assertThat(mostRecentReplayedIfAny2).isPresent();
-                Assertions.assertThat(mostRecentReplayedIfAny2.get().getInteractionId()).isEqualTo(commandTarget1User1Id);
-            }
-        });
+            Assertions.assertThat(mostRecentReplayedIfAny2).isPresent();
+            Assertions.assertThat(mostRecentReplayedIfAny2.get().getInteractionId()).isEqualTo(commandTarget1User1Id);
+        }
     }
+
+    @Inject CommandLogEntryRepository commandLogEntryRepository;
+    @Inject SudoService sudoService;
+    @Inject ClockService clockService;
+    @Inject InteractionService interactionService;
+    @Inject InteractionLayerTracker interactionLayerTracker;
+    @Inject CounterRepository<? extends Counter> counterRepository;
+    @Inject WrapperFactory wrapperFactory;
+    @Inject BookmarkService bookmarkService;
+    @Inject CausewayBeanTypeRegistry causewayBeanTypeRegistry;
 
 }

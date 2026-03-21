@@ -22,7 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -62,10 +61,7 @@ import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeService
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
 
-import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.Value;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -448,30 +444,6 @@ implements
         commandPublisherProvider.get().complete(command);
 
         interaction.clear();
-    }
-
-    @Value
-    static final class TestSupportImpl<T> implements TestSupport<T> {
-        @Getter @Accessors(fluent = true) final T model;
-        final InteractionServiceDefault interactionService;
-
-        @Override
-        public void nextInteraction(final Consumer<T> callback) {
-            interactionService.closeInteractionLayers();
-            interactionService.openInteraction();
-            callback.accept(model);
-        }
-        @Override
-        public void nextInteraction(final InteractionContext interactionContext, final Consumer<T> callback) {
-            interactionService.closeInteractionLayers();
-            interactionService.openInteraction(interactionContext);
-            callback.accept(model);
-        }
-    }
-
-    @Override
-    public <T> TestSupport<T> testSupport(final T model) {
-        return new TestSupportImpl<>(model, this);
     }
 
 }

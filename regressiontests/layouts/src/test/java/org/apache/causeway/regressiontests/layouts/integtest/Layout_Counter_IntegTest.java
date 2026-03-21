@@ -52,7 +52,6 @@ import org.apache.causeway.applib.layout.LayoutConstants;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.metamodel.MetaModelService;
 import org.apache.causeway.core.config.beans.CausewayBeanTypeRegistry;
 import org.apache.causeway.core.config.presets.CausewayPresets;
@@ -124,15 +123,16 @@ public class Layout_Counter_IntegTest extends CausewayIntegrationTestAbstract {
     }
 
     Bookmark target1;
-    private TestSupport<?> testSupport;
 
     @BeforeEach
     void beforeEach() {
-        this.testSupport = interactionService.testSupport();
-        testSupport.nextInteraction(model->{
-            Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(newCounter("counter-1"));
-            target1 = bookmark.orElseThrow();
-        });
+        interactionService.nextInteraction();
+
+        Optional<Bookmark> bookmark = bookmarkService.bookmarkFor(newCounter("counter-1"));
+        target1 = bookmark.orElseThrow();
+
+        interactionService.nextInteraction();
+
     }
 
     protected Counter newCounter(final String name) {

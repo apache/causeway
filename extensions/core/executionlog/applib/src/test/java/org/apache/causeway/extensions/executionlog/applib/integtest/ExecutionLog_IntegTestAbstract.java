@@ -39,7 +39,6 @@ import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -57,15 +56,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
-    @Inject SudoService sudoService;
-    @Inject ClockService clockService;
-    @Inject InteractionService interactionService;
-    @Inject InteractionLayerTracker interactionLayerTracker;
-    @Inject CounterRepository counterRepository;
-    @Inject WrapperFactory wrapperFactory;
-    @Inject BookmarkService bookmarkService;
-
     @BeforeAll
     static void beforeAll() {
         CausewayPresets.forcePrototyping();
@@ -73,11 +63,10 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
 
     Counter counter1;
     Counter counter2;
-    private TestSupport<?> testSupport;
 
     @BeforeEach
     void beforeEach() {
-        this.testSupport = interactionService.testSupport();
+
         counterRepository.removeAll();
         executionLogEntryRepository.removeAll();
 
@@ -234,28 +223,20 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
         Integer.parseInt(identifier.substring(identifier.indexOf("_")+1)); // should not fail, ie check the format is as we expect
 
         // when we start a new session and lookup from the bookmark
-        testSupport.nextInteraction(model->{
+        interactionService.nextInteraction();
 
-            Optional<Object> cle2IfAny = bookmarkService.lookup(eleBookmarkIfAny.get());
-            assertThat(cle2IfAny).isPresent();
+        Optional<Object> cle2IfAny = bookmarkService.lookup(eleBookmarkIfAny.get());
+        assertThat(cle2IfAny).isPresent();
 
-            ExecutionLogEntry ele2 = (ExecutionLogEntry) cle2IfAny.get();
-            InteractionDto interactionDto2 = ele2.getInteractionDto();
+        ExecutionLogEntry ele2 = (ExecutionLogEntry) cle2IfAny.get();
+        InteractionDto interactionDto2 = ele2.getInteractionDto();
 
-            assertThat(interactionDto2).isEqualTo(interactionDto);
-        });
+        assertThat(interactionDto2).isEqualTo(interactionDto);
 
     }
 
     @Test
     void test_all_the_repository_methods() {
-
-        class Model {
-            UUID executionTarget1User1Id;
-            UUID executionTarget1User2Id;
-            UUID executionTarget1User1YesterdayId;
-        }
-        var testSupport = interactionService.testSupport(new Model());
 
         // given
         sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
@@ -267,10 +248,8 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
 
         // then
         assertThat(executionsForTarget1User1).hasSize(1);
-        {
-            var executionTarget1User1 = executionsForTarget1User1.get(0);
-            testSupport.model().executionTarget1User1Id = executionTarget1User1.getInteractionId();
-        }
+        var executionTarget1User1 = executionsForTarget1User1.get(0);
+        var executionTarget1User1Id = executionTarget1User1.getInteractionId();
 
         // given (different user, same target, same day)
         counter1 = counterRepository.findByName("counter-1");
@@ -279,134 +258,136 @@ public abstract class ExecutionLog_IntegTestAbstract extends CausewayIntegration
                         UserMemento.builder("user-2").build()),
                 () -> wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act()
         );
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(model->{
+        // when
+        List<? extends ExecutionLogEntry> executionsForTarget1User2 = executionLogEntryRepository.findMostRecent(1);
 
-            // when
-            List<? extends ExecutionLogEntry> executionsForTarget1User2 = executionLogEntryRepository.findMostRecent(1);
+        // then
+        assertThat(executionsForTarget1User2).hasSize(1);
+        var executionTarget1User2 = executionsForTarget1User2.get(0);
+        var executionTarget1User2Id = executionTarget1User2.getInteractionId();
 
-            // then
-            assertThat(executionsForTarget1User2).hasSize(1);
-            var executionTarget1User2 = executionsForTarget1User2.get(0);
-            model.executionTarget1User2Id = executionTarget1User2.getInteractionId();
-
-            // given (same user, same target, yesterday)
-            counter1 = counterRepository.findByName("counter-1");
-
-            sudoService.run(
-                    InteractionContext.switchUser(
-                            UserMemento.builder("user-1").build()),
-                    () -> {
-                        var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
-                        sudoService.run(
-                                InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
-                                () -> {
-                                    wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
-                                    // when, then
-                                    model.executionTarget1User1YesterdayId = interactionLayerTracker.currentInteraction().get().getInteractionId();
-                                    interactionService.closeInteractionLayers();    // to flush within changed time...
-                                }
-                        );
-                    });
-        });
-
+        // given (same user, same target, yesterday)
+        counter1 = counterRepository.findByName("counter-1");
+        final UUID[] executionTarget1User1YesterdayIdHolder = new UUID[1];
+        sudoService.run(
+                InteractionContext.switchUser(
+                        UserMemento.builder("user-1").build()),
+                () -> {
+                    var yesterday = clockService.getClock().nowAsLocalDateTime().minusDays(1);
+                    sudoService.run(
+                            InteractionContext.switchClock(VirtualClock.nowAt(yesterday)),
+                            () -> {
+                                wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+                                executionTarget1User1YesterdayIdHolder[0] = interactionLayerTracker.currentInteraction().get().getInteractionId();
+                                interactionService.closeInteractionLayers();    // to flush within changed time...
+                            }
+                    );
+                });
         interactionService.openInteraction();
+
+        // when, then
+        final UUID executionTarget1User1YesterdayId = executionTarget1User1YesterdayIdHolder[0];
 
         // given (same user, different target, same day)
         counter2 = counterRepository.findByName("counter-2");
         sudoService.run(InteractionContext.switchUser(UserMemento.builder("user-1").build()), () -> {
             wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
         });
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(model->{
+        // when
+        List<? extends ExecutionLogEntry> executionTarget2User1IfAny = executionLogEntryRepository.findMostRecent(1);
 
-            var executionTarget1User1Id = model.executionTarget1User1Id;
-            var executionTarget1User2Id = model.executionTarget1User2Id;
-            var executionTarget1User1YesterdayId = model.executionTarget1User1YesterdayId;
+        // then
+        assertThat(executionTarget2User1IfAny).hasSize(1);
+        var executionTarget2User1 = executionTarget2User1IfAny.get(0);
+        var executionTarget2User1Id = executionTarget2User1.getInteractionId();
 
-            // when
-            List<? extends ExecutionLogEntry> executionTarget2User1IfAny = executionLogEntryRepository.findMostRecent(1);
+        // when
+        Optional<? extends ExecutionLogEntry> executionTarget1User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);
+        Optional<? extends ExecutionLogEntry> executionTarget1User2ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User2Id, 0);
+        Optional<? extends ExecutionLogEntry> executionTarget1User1YesterdayById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1YesterdayId, 0);
+        Optional<? extends ExecutionLogEntry> executionTarget2User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget2User1Id, 0);
 
-            // then
-            assertThat(executionTarget2User1IfAny).hasSize(1);
-            var executionTarget2User1 = executionTarget2User1IfAny.get(0);
-            var executionTarget2User1Id = executionTarget2User1.getInteractionId();
+        // then
+        assertThat(executionTarget1User1ById).isPresent();
+        assertThat(executionTarget1User2ById).isPresent();
+        assertThat(executionTarget1User1YesterdayById).isPresent();
+        assertThat(executionTarget2User1ById).isPresent();
+        assertThat(executionTarget2User1ById.get()).isSameAs(executionTarget2User1);
 
-            // when
-            Optional<? extends ExecutionLogEntry> executionTarget1User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1Id, 0);
-            Optional<? extends ExecutionLogEntry> executionTarget1User2ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User2Id, 0);
-            Optional<? extends ExecutionLogEntry> executionTarget1User1YesterdayById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget1User1YesterdayId, 0);
-            Optional<? extends ExecutionLogEntry> executionTarget2User1ById = executionLogEntryRepository.findByInteractionIdAndSequence(executionTarget2User1Id, 0);
+        // given
+        counter1 = counterRepository.findByName("counter-1");
+        executionTarget1User1 = executionTarget1User1ById.get();
+        executionTarget1User2 = executionTarget1User2ById.get();
+        var executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
+        executionTarget2User1 = executionTarget2User1ById.get();
 
-            // then
-            assertThat(executionTarget1User1ById).isPresent();
-            assertThat(executionTarget1User2ById).isPresent();
-            assertThat(executionTarget1User1YesterdayById).isPresent();
-            assertThat(executionTarget2User1ById).isPresent();
-            assertThat(executionTarget2User1ById.get()).isSameAs(executionTarget2User1);
+        var target1 = executionTarget1User1.getTarget();
+        var username1 = executionTarget1User1.getUsername();
+        Timestamp from1 = executionTarget1User1.getStartedAt();
+        Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));
+        var bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
 
-            // given
-            counter1 = counterRepository.findByName("counter-1");
-            var executionTarget1User1 = executionTarget1User1ById.get();
-            var executionTarget1User2 = executionTarget1User2ById.get();
-            var executionTarget1User1Yesterday = executionTarget1User1YesterdayById.get();
-            executionTarget2User1 = executionTarget2User1ById.get();
+        // when
+        List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findRecentByTarget(bookmark1);
 
-            var target1 = executionTarget1User1.getTarget();
-            var username1 = executionTarget1User1.getUsername();
-            Timestamp from1 = executionTarget1User1.getStartedAt();
-            Timestamp to1 = Timestamp.valueOf(from1.toLocalDateTime().plusDays(1));
-            var bookmark1 = bookmarkService.bookmarkForElseFail(counter1);
+        // then
+        assertThat(recentByTarget).hasSize(3);
 
-            // when
-            List<? extends ExecutionLogEntry> recentByTarget = executionLogEntryRepository.findRecentByTarget(bookmark1);
+        // when
+        List<? extends ExecutionLogEntry> byTargetAndTimestampBefore = executionLogEntryRepository.findByTargetAndTimestampBefore(bookmark1, from1);
 
-            // then
-            assertThat(recentByTarget).hasSize(3);
+        // then
+        assertThat(byTargetAndTimestampBefore).hasSize(2); // yesterday, plus cmd1
 
-            // when
-            List<? extends ExecutionLogEntry> byTargetAndTimestampBefore = executionLogEntryRepository.findByTargetAndTimestampBefore(bookmark1, from1);
+        // when
+        List<? extends ExecutionLogEntry> byTargetAndTimestampAfter = executionLogEntryRepository.findByTargetAndTimestampAfter(bookmark1, from1);
 
-            // then
-            assertThat(byTargetAndTimestampBefore).hasSize(2); // yesterday, plus cmd1
+        // then
+        assertThat(byTargetAndTimestampAfter).hasSize(2); // cmd1, 2nd
 
-            // when
-            List<? extends ExecutionLogEntry> byTargetAndTimestampAfter = executionLogEntryRepository.findByTargetAndTimestampAfter(bookmark1, from1);
+        // when
+        List<? extends ExecutionLogEntry> byTargetAndTimestampBetween = executionLogEntryRepository.findByTargetAndTimestampBetween(bookmark1, from1, to1);
 
-            // then
-            assertThat(byTargetAndTimestampAfter).hasSize(2); // cmd1, 2nd
+        // then
+        assertThat(byTargetAndTimestampBetween).hasSize(2); // 1st and 2nd for this target
 
-            // when
-            List<? extends ExecutionLogEntry> byTargetAndTimestampBetween = executionLogEntryRepository.findByTargetAndTimestampBetween(bookmark1, from1, to1);
+        // when
+        List<? extends ExecutionLogEntry> byTimestampBefore = executionLogEntryRepository.findByTimestampBefore(from1);
 
-            // then
-            assertThat(byTargetAndTimestampBetween).hasSize(2); // 1st and 2nd for this target
+        // then
+        assertThat(byTimestampBefore).hasSize(2); // cmd1 plus yesterday
 
-            // when
-            List<? extends ExecutionLogEntry> byTimestampBefore = executionLogEntryRepository.findByTimestampBefore(from1);
+        // when
+        List<? extends ExecutionLogEntry> byTimestampAfter = executionLogEntryRepository.findByTimestampAfter(from1);
 
-            // then
-            assertThat(byTimestampBefore).hasSize(2); // cmd1 plus yesterday
+        // then
+        assertThat(byTimestampAfter).hasSize(3); // cmd1, 2nd, and for other target
 
-            // when
-            List<? extends ExecutionLogEntry> byTimestampAfter = executionLogEntryRepository.findByTimestampAfter(from1);
+        // when
+        List<? extends ExecutionLogEntry> byTimestampBetween = executionLogEntryRepository.findByTimestampBetween(from1, to1);
 
-            // then
-            assertThat(byTimestampAfter).hasSize(3); // cmd1, 2nd, and for other target
+        // then
+        assertThat(byTimestampBetween).hasSize(3); // 1st and 2nd for this target, and other target
 
-            // when
-            List<? extends ExecutionLogEntry> byTimestampBetween = executionLogEntryRepository.findByTimestampBetween(from1, to1);
+        // when
+        List<? extends ExecutionLogEntry> byUsername = executionLogEntryRepository.findRecentByUsername(username1);
 
-            // then
-            assertThat(byTimestampBetween).hasSize(3); // 1st and 2nd for this target, and other target
-
-            // when
-            List<? extends ExecutionLogEntry> byUsername = executionLogEntryRepository.findRecentByUsername(username1);
-
-            // then
-            assertThat(byUsername).hasSize(3);
-        });
+        // then
+        assertThat(byUsername).hasSize(3);
 
     }
+
+    @Inject ExecutionLogEntryRepository executionLogEntryRepository;
+    @Inject SudoService sudoService;
+    @Inject ClockService clockService;
+    @Inject InteractionService interactionService;
+    @Inject InteractionLayerTracker interactionLayerTracker;
+    @Inject CounterRepository counterRepository;
+    @Inject WrapperFactory wrapperFactory;
+    @Inject BookmarkService bookmarkService;
 
 }

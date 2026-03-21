@@ -36,7 +36,6 @@ import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
@@ -61,11 +60,9 @@ public abstract class ExecutionOutbox_IntegTestAbstract extends CausewayIntegrat
 
     Counter counter1;
     Counter counter2;
-    private TestSupport<?> testSupport;
 
     @BeforeEach
     void beforeEach() {
-        this.testSupport = interactionService.testSupport();
         counterRepository.removeAll();
         executionOutboxEntryRepository.removeAll();
 

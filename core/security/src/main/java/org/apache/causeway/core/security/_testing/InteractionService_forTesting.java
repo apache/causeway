@@ -140,9 +140,4 @@ implements InteractionService {
         @Override public Execution<?, ?> getPriorExecution() { return null; }
     }
 
-    @Override
-    public <T> TestSupport<T> testSupport(final T model) {
-        throw new UnsupportedOperationException();
-    }
-
 }

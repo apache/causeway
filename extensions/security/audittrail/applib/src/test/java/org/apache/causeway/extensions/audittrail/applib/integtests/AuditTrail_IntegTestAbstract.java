@@ -31,7 +31,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.apache.causeway.applib.mixins.system.DomainChangeRecord;
 import org.apache.causeway.applib.services.bookmark.BookmarkService;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService.TestSupport;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 import org.apache.causeway.core.config.presets.CausewayPresets;
 import org.apache.causeway.extensions.audittrail.applib.dom.AuditTrailEntry;
@@ -43,8 +42,6 @@ import org.apache.causeway.testing.integtestsupport.applib.CausewayIntegrationTe
 
 public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTestAbstract {
 
-    private TestSupport<?> testSupport;
-
     @BeforeAll
     static void beforeAll() {
         CausewayPresets.forcePrototyping();
@@ -52,15 +49,14 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
 
     @BeforeEach
     void setUp() {
-        this.testSupport = interactionService.testSupport();
         counterRepository.removeAll();
-        testSupport.nextInteraction(model->{
-            auditTrailEntryRepository.removeAll();
-        });
-        testSupport.nextInteraction(model->{
-            assertThat(counterRepository.find()).isEmpty();
-            assertThat(auditTrailEntryRepository.findAll()).isEmpty();
-        });
+        interactionService.nextInteraction();
+
+        auditTrailEntryRepository.removeAll();
+        interactionService.nextInteraction();
+
+        assertThat(counterRepository.find()).isEmpty();
+        assertThat(auditTrailEntryRepository.findAll()).isEmpty();
     }
 
     protected abstract Counter newCounter(String name);
@@ -71,33 +67,32 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
         // when
         var counter1 = counterRepository.persist(newCounter("counter-1"));
         var target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
-        testSupport.nextInteraction(model->{
+        interactionService.nextInteraction();
 
-            // then
-            var entries = auditTrailEntryRepository.findAll();
-            var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-            assertThat(propertyIds).contains("name", "num", "num2");
+        // then
+        var entries = auditTrailEntryRepository.findAll();
+        var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        assertThat(propertyIds).contains("name", "num", "num2");
 
-            var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
-            assertThat(entriesById.get("name"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("counter-1"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
-            assertThat(entriesById.get("num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isNull());
-            assertThat(entriesById.get("num2"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num2"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isNull());
-        });
+        var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        assertThat(entriesById.get("name"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("counter-1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
+        assertThat(entriesById.get("num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isNull());
+        assertThat(entriesById.get("num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("[NEW]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isNull());
     }
 
     @Test
@@ -106,62 +101,55 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
         // given
         var counter1 = counterRepository.persist(newCounter("counter-1"));
         var target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
-        testSupport.nextInteraction(ia->{
-            auditTrailEntryRepository.removeAll();
-        });
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(ia->{
-            assertThat(counterRepository.find()).hasSize(1);
-            assertThat(auditTrailEntryRepository.findAll()).isEmpty();
+        auditTrailEntryRepository.removeAll();
+        interactionService.nextInteraction();
 
-            // when
-            var counter2 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
-            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
-        });
+        assertThat(counterRepository.find()).hasSize(1);
+        assertThat(auditTrailEntryRepository.findAll()).isEmpty();
 
-        testSupport.nextInteraction(ia->{
+        // when
+        counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+        interactionService.nextInteraction();
 
-            // then
-            var entries = auditTrailEntryRepository.findAll();
-            var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-            assertThat(propertyIds).containsExactly("num");
+        // then
+        var entries = auditTrailEntryRepository.findAll();
+        var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        assertThat(propertyIds).containsExactly("num");
 
-            var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
-            assertThat(entriesById.get("num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("1"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
+        var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        assertThat(entriesById.get("num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
 
-            // given
-            auditTrailEntryRepository.removeAll();
+        // given
+        auditTrailEntryRepository.removeAll();
+        interactionService.nextInteraction();
 
-        });
+        // when bump again
+        counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter1).act();
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(ia->{
+        // then
+        entries = auditTrailEntryRepository.findAll();
+        propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        assertThat(propertyIds).containsExactly("num");
 
-            // when bump again
-            var counter2 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
-            wrapperFactory.wrapMixin(Counter_bumpUsingMixin.class, counter2).act();
-        });
+        entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        assertThat(entriesById.get("num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("2"));
 
-        testSupport.nextInteraction(ia->{
-
-            // then
-            var entries = auditTrailEntryRepository.findAll();
-            var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-            assertThat(propertyIds).containsExactly("num");
-
-            var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
-            assertThat(entriesById.get("num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("1"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("2"));
-        });
     }
 
     @Test
@@ -172,44 +160,40 @@ public abstract class AuditTrail_IntegTestAbstract extends CausewayIntegrationTe
         counter1.setNum(1L);
         counter1.setNum2(2L);
         var target1 = bookmarkService.bookmarkFor(counter1).orElseThrow();
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(ia->{
-            auditTrailEntryRepository.removeAll();
-        });
+        auditTrailEntryRepository.removeAll();
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(ia->{
-            // when
-            var counter2 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
-            counterRepository.remove(counter2);
-        });
+        // when
+        counter1 = bookmarkService.lookup(target1, Counter.class).orElseThrow();
+        counterRepository.remove(counter1);
+        interactionService.nextInteraction();
 
-        testSupport.nextInteraction(ia->{
+        // then
+        var entries = auditTrailEntryRepository.findAll();
+        var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
+        assertThat(propertyIds).contains("name", "num", "num2");
 
-            // then
-            var entries = auditTrailEntryRepository.findAll();
-            var propertyIds = entries.stream().map(AuditTrailEntry::getPropertyId).collect(Collectors.toList());
-            assertThat(propertyIds).contains("name", "num", "num2");
-
-            var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
-            assertThat(entriesById.get("name"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("counter-1"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
-            assertThat(entriesById.get("num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("1"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"));
-            assertThat(entriesById.get("num2"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num2"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("2"))
-                    .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"));
-        });
+        var entriesById = entries.stream().collect(Collectors.toMap(AuditTrailEntry::getPropertyId, x -> x));
+        assertThat(entriesById.get("name"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#name"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("counter-1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getInteractionId).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getSequence).isEqualTo(0))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTarget).isEqualTo(target1))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getTimestamp).isNotNull())
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getType).isEqualTo(DomainChangeRecord.ChangeType.AUDIT_ENTRY))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getUsername).isEqualTo("__system"));
+        assertThat(entriesById.get("num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("1"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"));
+        assertThat(entriesById.get("num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getLogicalMemberIdentifier).isEqualTo("audittrail.test.Counter#num2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPreValue).isEqualTo("2"))
+                .satisfies(e -> assertThat(e).extracting(AuditTrailEntry::getPostValue).isEqualTo("[DELETED]"));
 
     }
 

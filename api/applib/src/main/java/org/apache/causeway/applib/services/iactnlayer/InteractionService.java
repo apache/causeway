@@ -19,7 +19,6 @@
 package org.apache.causeway.applib.services.iactnlayer;
 
 import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
 import org.jspecify.annotations.NonNull;
 
@@ -205,36 +204,34 @@ public interface InteractionService extends InteractionLayerTracker {
         return callAnonymousAndCatch(runnable.toCallable());
     }
 
-    public interface TestSupport<T> {
-        T model();
-        /**
-         * Primarily for testing, closes the current interaction and opens a new one.
-         *
-         * <p>
-         *     In tests, this is a good way to simulate multiple interactions within a scenario.  If you use the popular
-         *     given/when/then structure, consider using at the end of each "given" or "when" block.
-         * </p>
-         *
-         * @see #closeInteractionLayers()
-         * @see #openInteraction()
-         * @see #nextInteraction(InteractionContext)
-         */
-        void nextInteraction(final Consumer<T> callback);
-        /**
-         * Primarily for testing, closes the current interaction and opens a new one with the specified
-         * {@link InteractionContext}.
-         *
-         * @see #closeInteractionLayers()
-         * @see #openInteraction(InteractionContext)
-         * @see #nextInteraction()
-         */
-        void nextInteraction(final InteractionContext interactionContext, final Consumer<T> callback);
+    /**
+     * Primarily for testing, closes the current interaction and opens a new one.
+     *
+     * <p>
+     *     In tests, this is a good way to simulate multiple interactions within a scenario.  If you use the popular
+     *     given/when/then structure, consider using at the end of each "given" or "when" block.
+     * </p>
+     *
+     * @see #closeInteractionLayers()
+     * @see #openInteraction()
+     * @see #nextInteraction(InteractionContext)
+     */
+    default InteractionLayer nextInteraction() {
+        closeInteractionLayers();
+        return openInteraction();
     }
 
-    <T> TestSupport<T> testSupport(T model);
-
-    default <T> TestSupport<T> testSupport() {
-        return testSupport(null);
+    /**
+     * Primarily for testing, closes the current interaction and opens a new one with the specified
+     * {@link InteractionContext}.
+     *
+     * @see #closeInteractionLayers()
+     * @see #openInteraction(InteractionContext)
+     * @see #nextInteraction()
+     */
+    default InteractionLayer nextInteraction(final InteractionContext interactionContext) {
+        closeInteractionLayers();
+        return openInteraction(interactionContext);
     }
 
 }
