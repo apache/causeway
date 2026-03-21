@@ -18,8 +18,11 @@
  */
 package org.apache.causeway.viewer.wicket.viewer.integration;
 
+import java.util.function.Supplier;
+
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
+import org.jspecify.annotations.Nullable;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Scope;
@@ -27,8 +30,8 @@ import io.micrometer.observation.Observation.Scope;
 public class RequestCycle2 extends RequestCycle {
 
     final long startTimeNanos;
-    Observation observation;
-    Scope scope;
+    private Observation observation;
+    private Scope scope;
 
     public RequestCycle2(final RequestCycleContext context) {
         super(context);
@@ -39,9 +42,9 @@ public class RequestCycle2 extends RequestCycle {
         return (System.nanoTime() - startTimeNanos)/1000_000;
     }
 
-    void observationStartAndOpenScope() {
+    void observationStartAndOpenScope(final Observation observation) {
         if(observation==null) return;
-        observation.start();
+        this.observation = observation.start();
         this.scope = observation.openScope();
     }
 
@@ -52,6 +55,20 @@ public class RequestCycle2 extends RequestCycle {
             this.scope = null;
         }
         observation.stop();
+    }
+
+    void onObservationError(final Exception ex) {
+        if(observation==null) return;
+        observation.error(ex);
+    }
+
+    void observationTag(final String key, @Nullable final Supplier<Object> valueSupplier) {
+        if(observation==null || valueSupplier == null) return;
+        try {
+            observation.highCardinalityKeyValue(key, "" + valueSupplier.get());
+        } catch (Exception e) {
+            observation.highCardinalityKeyValue(key, "EXCEPTION: " + e.getMessage());
+        }
     }
 
 }

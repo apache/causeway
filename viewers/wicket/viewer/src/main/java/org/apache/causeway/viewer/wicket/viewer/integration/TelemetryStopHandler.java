@@ -32,15 +32,14 @@ implements IRequestCycleListener {
 
     @Override
     public void onEndRequest(final RequestCycle requestCycle) {
-        if (requestCycle instanceof RequestCycle2 requestCycle2
-                && requestCycle2.observation!=null) {
+        if (requestCycle instanceof RequestCycle2 requestCycle2) {
 
             if(requestCycle2.millisSinceStart() > 50) { // avoid clutter
-                requestCycle2.observation.highCardinalityKeyValue("numberEntitiesLoaded", ""+metricsService.numberEntitiesLoaded());
-                requestCycle2.observation.highCardinalityKeyValue("numberEntitiesDirtied", ""+metricsService.numberEntitiesDirtied());
+                requestCycle2.observationTag("numberEntitiesLoaded", metricsService::numberEntitiesLoaded);
+                requestCycle2.observationTag("numberEntitiesDirtied", metricsService::numberEntitiesDirtied);
             }
 
-            requestCycle2.observation.stop();
+            requestCycle2.observationCloseScopeAndStop();
         }
     }
 
