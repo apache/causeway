@@ -54,16 +54,15 @@ import org.apache.causeway.applib.services.exceprecog.ExceptionRecognizerService
 import org.apache.causeway.applib.services.exceprecog.Recognition;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.base._Timing;
-import org.apache.causeway.commons.internal.base._Timing.StopWatch;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
+import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.causeway.viewer.commons.model.error.ExceptionModel;
 import org.apache.causeway.viewer.wicket.model.models.PageType;
@@ -73,7 +72,6 @@ import org.apache.causeway.viewer.wicket.ui.pages.login.WicketSignInPage;
 import org.apache.causeway.viewer.wicket.ui.pages.mmverror.MmvErrorPage;
 import org.apache.causeway.viewer.wicket.ui.panels.PromptFormAbstract;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -84,7 +82,12 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2.0
  */
 @Slf4j
-public class WebRequestCycleForCauseway
+public record WebRequestCycleForCauseway(
+        InteractionService interactionService,
+        PageClassRegistry pageClassRegistry,
+        ExceptionRecognizerService exceptionRecognizerService,
+        SpecificationLoader specificationLoader,
+        SessionAuthenticator sessionAuthenticator)
 implements
     HasMetaModelContext,
     IRequestCycleListener {
@@ -121,17 +124,14 @@ implements
     private static final MetaDataKey<SessionLifecyclePhase> SESSION_LIFECYCLE_PHASE_KEY =
             new MetaDataKey<>() { private static final long serialVersionUID = 1L; };
 
-    @Setter
-    private PageClassRegistry pageClassRegistry;
-
-    private static ThreadLocal<StopWatch> timings = ThreadLocal.withInitial(_Timing::now);
+    public WebRequestCycleForCauseway(final MetaModelContext mmc, final PageClassRegistry pageClassRegistry) {
+        this(mmc.getInteractionService(), pageClassRegistry, mmc.lookupServiceElseFail(ExceptionRecognizerService.class),
+                mmc.getSpecificationLoader(),
+                new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class)));
+    }
 
     @Override
-    public synchronized void onBeginRequest(final RequestCycle requestCycle) {
-
-        if(log.isTraceEnabled()) {
-            log.trace("onBeginRequest in");
-        }
+    public void onBeginRequest(final RequestCycle requestCycle) {
 
         if (!Session.exists()) {
             // Track if session was created from an expired one to notify user of the refresh.
@@ -145,19 +145,8 @@ implements
             return;
         }
 
-        var mmc = MetaModelContext.instanceElseFail();
-        var ic = new SessionAuthenticator(mmc.getInteractionService(), mmc.lookupServiceElseFail(UserService.class))
-              .determineInteractionContext()
-              .orElse(null);
-        RootRequestMapper.X.set(ic);
-
-        if(log.isTraceEnabled()) {
-            log.trace("onBeginRequest out - session about to open");
-        }
-
-        if(log.isDebugEnabled()) {
-            timings.set(_Timing.now());
-        }
+        sessionAuthenticator.determineInteractionContext()
+            .ifPresent(interactionService.testSupport()::openInteraction);
     }
 
     @Override
@@ -182,7 +171,7 @@ implements
         } else if(handler instanceof RenderPageRequestHandler requestHandler) {
 
             // using side-effect free access to MM validation result
-            var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+            var validationResult = specificationLoader().getValidationResult()
             .orElseThrow(()->_Exceptions.illegalState("Application is not fully initialized yet."));
 
             if(validationResult.hasFailures()) {
@@ -217,9 +206,6 @@ implements
             }
         }
 
-        if(log.isTraceEnabled()) {
-            log.trace("onRequestHandlerResolved out");
-        }
     }
 
     /**
@@ -238,41 +224,14 @@ implements
      */
     @Override
     public synchronized void onEndRequest(final RequestCycle requestCycle) {
-
-        if(log.isDebugEnabled()) {
-            var metricsServiceIfAny = getMetaModelContext().lookupService(MetricsService.class);
-            long took = timings.get().getMillis();
-            if(took > 50) {  // avoid too much clutter
-                if(metricsServiceIfAny.isPresent()) {
-                    var metricsService = metricsServiceIfAny.get();
-                    int numberEntitiesLoaded = metricsService.numberEntitiesLoaded();
-                    int numberEntitiesDirtied = metricsService.numberEntitiesDirtied();
-                    if(numberEntitiesLoaded > 0 || numberEntitiesDirtied > 0) {
-                        log.debug("onEndRequest  took: {}ms  numberEntitiesLoaded: {}, numberEntitiesDirtied: {}", took, numberEntitiesLoaded, numberEntitiesDirtied);
-                    }
-                } else {
-                    log.debug("onEndRequest  took: {}ms", took);
-                }
-            }
-        }
-
-    }
-
-    @Override
-    public void onDetach(final RequestCycle requestCycle) {
-        // detach the current @RequestScope, if any
-        IRequestCycleListener.super.onDetach(requestCycle);
+        interactionService.closeInteractionLayers();
     }
 
     @Override
     public IRequestHandler onException(final RequestCycle cycle, final Exception ex) {
 
-        if(log.isDebugEnabled()) {
-            log.debug("onException {}  took: {}ms", ex.getClass().getSimpleName(), timings.get().getMillis());
-        }
-
         // using side-effect free access to MM validation result
-        var validationResult = getMetaModelContext().getSpecificationLoader().getValidationResult()
+        var validationResult = specificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures()) {
@@ -295,8 +254,7 @@ implements
             }
 
             // handle recognized exceptions gracefully also
-            var exceptionRecognizerService = getExceptionRecognizerService();
-            var recognizedIfAny = exceptionRecognizerService.recognize(ex);
+            var recognizedIfAny = exceptionRecognizerService().recognize(ex);
             if(recognizedIfAny.isPresent()) {
                 addWarning(recognizedIfAny.get().toMessage(getMetaModelContext().getTranslationService()));
                 return respondGracefully(cycle);
@@ -397,16 +355,13 @@ implements
         }
 
         // using side-effect free access to MM validation result
-        var validationResult = mmc.getSpecificationLoader().getValidationResult()
+        var validationResult = specificationLoader().getValidationResult()
                 .orElse(null);
         if(validationResult!=null
                 && validationResult.hasFailures())
             return new MmvErrorPage(validationResult.getMessages("[%d] %s"));
 
-        var exceptionRecognizerService = mmc.getServiceRegistry()
-            .lookupServiceElseFail(ExceptionRecognizerService.class);
-
-        final Optional<Recognition> recognition = exceptionRecognizerService
+        final Optional<Recognition> recognition = exceptionRecognizerService()
                 .recognizeFromSelected(
                         Can.<ExceptionRecognizer>of(
                                         pageExpiredExceptionRecognizer,
@@ -461,9 +416,9 @@ implements
      * Matters should improve once CAUSEWAY-299 gets implemented...
      */
     protected boolean isSignedIn() {
-        if(!isInInteraction())
+        if(!interactionService.isInInteraction())
             return false;
-        return getWicketAuthenticatedWebSession().isSignedIn();
+        return AuthenticatedWebSession.get().isSignedIn();
     }
 
     private boolean userHasSessionWithRememberMe(final RequestCycle requestCycle) {
@@ -480,20 +435,6 @@ implements
             }
         }
         return false;
-    }
-
-    // -- DEPENDENCIES
-
-    private ExceptionRecognizerService getExceptionRecognizerService() {
-        return getMetaModelContext().getServiceRegistry().lookupServiceElseFail(ExceptionRecognizerService.class);
-    }
-
-    private boolean isInInteraction() {
-        return getMetaModelContext().getInteractionService().isInInteraction();
-    }
-
-    private AuthenticatedWebSession getWicketAuthenticatedWebSession() {
-        return AuthenticatedWebSession.get();
     }
 
 }

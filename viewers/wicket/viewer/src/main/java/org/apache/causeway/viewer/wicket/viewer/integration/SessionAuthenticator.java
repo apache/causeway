@@ -47,10 +47,11 @@ record SessionAuthenticator(
 
         var interactionContext = session.getInteractionContext();
         if (interactionContext == null) {
-            log.warn("onBeginRequest out - session was not opened (because no authentication)");
+            log.warn("session was not opened (because not authenticated)");
             return Optional.empty();
         }
 
+        // impersonation support
         return Optional.of(
                 userService
                     .lookupImpersonatedUser()
