@@ -28,6 +28,7 @@ import org.springframework.http.server.observation.ServerRequestObservationConte
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
 import org.apache.causeway.core.interaction.session.MessageBrokerImpl;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
@@ -90,7 +91,9 @@ public class CausewayModuleCoreWebapp {
         return new OpenTelemetryServerRequestObservationConvention() {
             @Override
             public String getContextualName(final ServerRequestObservationContext context) {
-                return super.getContextualName(context) + " {TODO}";
+                return "%s (%s)".formatted(
+                        super.getContextualName(context),
+                        _Strings.ellipsifyAtEnd(context.getCarrier().getRequestURI(), 80, "..."));
             }
             @Override
             public KeyValues getHighCardinalityKeyValues(final ServerRequestObservationContext context) {

@@ -40,8 +40,7 @@ implements IRequestCycleListener {
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
             requestCycle2.observationClosure.startAndOpenScope(
-                    observationProvider.get("Apache Wicket Request Cycle")
-                .lowCardinalityKeyValue("ck2", "test2"));
+                    observationProvider.get("Apache Wicket Request Cycle"));
         }
     }
 
