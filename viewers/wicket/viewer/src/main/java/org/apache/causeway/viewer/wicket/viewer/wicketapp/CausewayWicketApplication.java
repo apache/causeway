@@ -21,7 +21,6 @@ package org.apache.causeway.viewer.wicket.viewer.wicketapp;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -213,8 +212,7 @@ implements
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
-            getRequestCycleListeners().add(new TelemetryStartHandler(Objects.requireNonNull(observationInternal)
-                    .provider(TelemetryStartHandler.class)));
+            getRequestCycleListeners().add(new TelemetryStartHandler(observationInternal));
             getRequestCycleListeners().add(new WebRequestCycleForCauseway(metaModelContext, getPageClassRegistry()));
             getRequestCycleListeners().add(new TelemetryStopHandler(metricService));
             getRequestCycleListeners().add(new RehydrationHandler());

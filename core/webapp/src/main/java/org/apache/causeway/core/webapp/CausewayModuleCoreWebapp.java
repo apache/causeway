@@ -23,9 +23,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.http.server.observation.OpenTelemetryServerRequestObservationConvention;
+import org.springframework.http.server.observation.ServerRequestObservationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
 import org.apache.causeway.core.interaction.session.MessageBrokerImpl;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
@@ -36,7 +39,9 @@ import org.apache.causeway.core.webapp.modules.logonlog.WebModuleLogOnExceptionL
 import org.apache.causeway.core.webapp.modules.templresources.WebModuleTemplateResources;
 import org.apache.causeway.core.webapp.webappctx.CausewayWebAppContextInitializer;
 
-@Configuration
+import io.micrometer.common.KeyValues;
+
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleCoreRuntime.class,
@@ -61,7 +66,7 @@ public class CausewayModuleCoreWebapp {
     @Scope(
             value = WebApplicationContext.SCOPE_SESSION,
             proxyMode = ScopedProxyMode.TARGET_CLASS)
-    public MessageBroker sessionScopedMessageBroker() {
+    MessageBroker sessionScopedMessageBroker() {
         return new MessageBrokerImpl();
     }
 
@@ -73,8 +78,27 @@ public class CausewayModuleCoreWebapp {
      * @see <a href="https://stackoverflow.com/a/61431621/56880">https://stackoverflow.com/a/61431621/56880</a>
      */
     @Bean
-    public RequestContextListener requestContextListener() {
+    RequestContextListener requestContextListener() {
         return new RequestContextListener();
+    }
+
+    /**
+     * https://docs.spring.io/spring-boot/reference/actuator/observability.html
+     */
+    @Bean
+    OpenTelemetryServerRequestObservationConvention openTelemetryServerRequestObservationConvention() {
+        return new OpenTelemetryServerRequestObservationConvention() {
+            @Override
+            public String getContextualName(final ServerRequestObservationContext context) {
+                return super.getContextualName(context) + " {TODO}";
+            }
+            @Override
+            public KeyValues getHighCardinalityKeyValues(final ServerRequestObservationContext context) {
+                // Make sure that KeyValues entries are already sorted by name for better performance
+                return KeyValues.of(methodOriginal(context), httpUrl(context),
+                        CausewayObservationInternal.currentThreadId());
+            }
+        };
     }
 
 }

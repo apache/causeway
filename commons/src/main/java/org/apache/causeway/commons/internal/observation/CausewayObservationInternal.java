@@ -28,6 +28,7 @@ import org.springframework.util.StringUtils;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Scope;
 import io.micrometer.observation.ObservationRegistry;
@@ -68,7 +69,7 @@ public record CausewayObservationInternal(
     public Observation createNotStarted(final Class<?> bean, final String name) {
         return Observation.createNotStarted(name, observationRegistry)
                 .lowCardinalityKeyValue("module", module)
-                .highCardinalityKeyValue("bean", bean.getSimpleName());
+                .lowCardinalityKeyValue("bean", bean.getSimpleName());
     }
 
     @FunctionalInterface
@@ -84,7 +85,7 @@ public record CausewayObservationInternal(
      * Helps if start and stop of an {@link Observation} happen in different code locations.
      */
     @Data @Accessors(fluent = true)
-    public static class ObservationClosure implements AutoCloseable {
+    public static final class ObservationClosure implements AutoCloseable {
 
         private Observation observation;
         private Scope scope;
@@ -120,6 +121,12 @@ public record CausewayObservationInternal(
             }
             return this;
         }
+
+    }
+
+    public static KeyValue currentThreadId() {
+        var ct = Thread.currentThread();
+        return KeyValue.of("threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
 
     }
 

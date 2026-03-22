@@ -68,6 +68,7 @@ module org.apache.causeway.commons {
     requires transitive tools.jackson.core;
     requires transitive tools.jackson.databind;
     requires transitive tools.jackson.module.jakarta.xmlbind;
+    requires transitive micrometer.commons;
     requires transitive micrometer.observation;
     requires transitive org.jdom2;
     requires transitive org.jspecify;

@@ -22,6 +22,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 
+import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
 import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationProvider;
 
 /**
@@ -31,11 +32,16 @@ public record TelemetryStartHandler(
         ObservationProvider observationProvider)
 implements IRequestCycleListener {
 
+    public TelemetryStartHandler(final CausewayObservationInternal observationInternal) {
+        this(observationInternal.provider(TelemetryStartHandler.class));
+    }
+
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
             requestCycle2.observationClosure.startAndOpenScope(
-                    observationProvider.get("Apache Wicket Request Cycle"));
+                    observationProvider.get("Apache Wicket Request Cycle")
+                .lowCardinalityKeyValue("ck2", "test2"));
         }
     }
 

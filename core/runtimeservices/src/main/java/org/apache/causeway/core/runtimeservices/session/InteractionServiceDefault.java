@@ -147,10 +147,15 @@ implements
             .map(it->(CausewayInteraction)it)
             .orElseGet(()->new CausewayInteraction(interactionIdGenerator.interactionId()));
 
-        var obs = observationProvider.get("Causeway Layered Interaction")
-                .highCardinalityKeyValue("stackSize", ""+getInteractionLayerCount());
 
+        var obs = observationProvider.get(getInteractionLayerCount()==0
+                ? "Causeway Root Interaction"
+                : "Causeway Nested Interaction");
         var newInteractionLayer = layerStack.push(causewayInteraction, interactionContextToUse, obs);
+
+        if(getInteractionLayerCount()>0) {
+            obs.highCardinalityKeyValue("stackedLayers", ""+getInteractionLayerCount());
+        }
 
         if(isAtTopLevel()) {
             transactionServiceSpring.onOpen(causewayInteraction);

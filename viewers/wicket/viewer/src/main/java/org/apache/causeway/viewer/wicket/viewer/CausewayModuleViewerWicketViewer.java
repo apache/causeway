@@ -43,7 +43,7 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
 /**
  * @since 1.x {@index}
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @Import({
         // Modules
         CausewayModuleViewerWicketUi.class,
@@ -69,9 +69,9 @@ import org.apache.causeway.viewer.wicket.viewer.wicketapp.config.WicketViewerCss
         PageClassRegistryDefault.AutoConfiguration.class,
         PageNavigationServiceDefault.AutoConfiguration.class,
         HintStoreUsingWicketSession.AutoConfiguration.class,
-
 })
 public class CausewayModuleViewerWicketViewer {
 
     public static final String NAMESPACE = "causeway.viewer.wicket";
+
 }
