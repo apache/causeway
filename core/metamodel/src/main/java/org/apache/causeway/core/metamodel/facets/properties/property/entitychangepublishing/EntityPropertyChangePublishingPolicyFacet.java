@@ -34,7 +34,7 @@ import lombok.val;
 public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
 
     /**
-     * Must be one of Publishing.ENABLED or Publishing.DISABLED.
+     * Must be one of {@link Publishing#ENABLED}, {@link Publishing#ENABLED_FOR_UPDATES_ONLY} or {@link Publishing#DISABLED}.
      */
     @NonNull Publishing getEntityChangePublishing();
 
@@ -43,7 +43,7 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
     }
 
     default boolean isPublishingAllowed() {
-        return getEntityChangePublishing() == Publishing.ENABLED;
+        return getEntityChangePublishing() == Publishing.ENABLED || getEntityChangePublishing() == Publishing.ENABLED_FOR_UPDATES_ONLY;
     }
 
     static boolean isExcludedFromPublishing(final @NonNull OneToOneAssociation property) {
@@ -59,7 +59,7 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
                     .map(EntityPropertyChangePublishingPolicyFacet::isPublishingAllowed)
                     .orElse(false);
 
-            //XXX CAUSEWAY-1488, exclude Bob/Clob from property change publishing unless explicitly allowed
+            //XXX CAUSEWAY-1488, exclude Blob/Clob from property change publishing unless explicitly allowed
             return !isExplictlyAllowed;
         }
 

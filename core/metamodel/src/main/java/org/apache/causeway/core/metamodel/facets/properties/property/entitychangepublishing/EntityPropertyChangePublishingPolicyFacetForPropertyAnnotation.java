@@ -35,8 +35,9 @@ extends EntityPropertyChangePublishingPolicyFacetAbstract {
                 .map(Property::entityChangePublishing)
                 // only install facet if policy is explicit ('enabled' or 'disabled')
                 .filter(entityChangePublishing ->
-                    entityChangePublishing == Publishing.ENABLED
-                        || entityChangePublishing == Publishing.DISABLED)
+                    entityChangePublishing == Publishing.ENABLED             ||
+                    entityChangePublishing == Publishing.ENABLED_FOR_UPDATES_ONLY ||
+                    entityChangePublishing == Publishing.DISABLED)
                 .map(entityChangePublishing ->
                     new EntityPropertyChangePublishingPolicyFacetForPropertyAnnotation(entityChangePublishing, holder));
     }

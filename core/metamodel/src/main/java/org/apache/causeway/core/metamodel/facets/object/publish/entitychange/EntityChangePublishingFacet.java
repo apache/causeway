@@ -34,7 +34,7 @@ import lombok.val;
  */
 public interface EntityChangePublishingFacet extends Facet {
 
-    public static boolean isPublishingEnabled(final FacetHolder facetHolder) {
+    static boolean isPublishingEnabled(final FacetHolder facetHolder) {
         if(facetHolder==null) {
             return false;
         }
@@ -50,6 +50,57 @@ public interface EntityChangePublishingFacet extends Facet {
                 && entityChangePublishingFacet.isEnabled();
     }
 
+    static boolean isPublishingEnabledForCreate(final FacetHolder facetHolder) {
+        if(facetHolder==null) {
+            return false;
+        }
+
+        if(facetHolder instanceof ObjectSpecification) {
+            if(!((ObjectSpecification)facetHolder).isEntity()) {
+                return false;
+            }
+        }
+
+        val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+        return entityChangePublishingFacet != null
+                && entityChangePublishingFacet.isEnabledForCreate();
+    }
+
+    static boolean isPublishingEnabledForUpdate(final FacetHolder facetHolder) {
+        if(facetHolder==null) {
+            return false;
+        }
+
+        if(facetHolder instanceof ObjectSpecification) {
+            if(!((ObjectSpecification)facetHolder).isEntity()) {
+                return false;
+            }
+        }
+
+        val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+        return entityChangePublishingFacet != null
+                && entityChangePublishingFacet.isEnabledForUpdate();
+    }
+
+    static boolean isPublishingEnabledForDelete(final FacetHolder facetHolder) {
+        if(facetHolder==null) {
+            return false;
+        }
+
+        if(facetHolder instanceof ObjectSpecification) {
+            if(!((ObjectSpecification)facetHolder).isEntity()) {
+                return false;
+            }
+        }
+
+        val entityChangePublishingFacet = facetHolder.getFacet(EntityChangePublishingFacet.class);
+        return entityChangePublishingFacet != null
+                && entityChangePublishingFacet.isEnabledForDelete();
+    }
+
     boolean isEnabled();
+    boolean isEnabledForCreate();
+    boolean isEnabledForUpdate();
+    boolean isEnabledForDelete();
 
 }

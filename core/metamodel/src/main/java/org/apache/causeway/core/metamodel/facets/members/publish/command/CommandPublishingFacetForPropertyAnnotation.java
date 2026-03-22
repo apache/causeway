@@ -92,6 +92,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     case DISABLED:
                         return new CommandPublishingFacetForPropertyAnnotation.Disabled(processor, holder, servicesInjector);
                     case ENABLED:
+                    case ENABLED_FOR_UPDATES_ONLY:
                         return new CommandPublishingFacetForPropertyAnnotation.Enabled(processor, holder, servicesInjector);
                     default:
                         throw new IllegalStateException(String.format("@Property#commandPublishing '%s' not recognised", publishing));

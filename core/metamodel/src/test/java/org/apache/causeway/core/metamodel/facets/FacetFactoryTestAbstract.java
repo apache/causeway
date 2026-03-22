@@ -124,8 +124,7 @@ implements HasMetaModelContext {
 
     // --
 
-    @Getter(onMethod_ = {@Override})
-    private MetaModelContext metaModelContext;
+    @Getter(onMethod_ = {@Override}) protected MetaModelContext metaModelContext;
 
 
     private MethodRemover_forTesting methodRemover;

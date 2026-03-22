@@ -32,7 +32,7 @@ public class EntityChangePublishingFacetFromConfiguration
 extends EntityChangePublishingFacetAbstract {
 
     public EntityChangePublishingFacetFromConfiguration(final FacetHolder facetHolder, final boolean enabled) {
-        super(facetHolder, enabled);
+        super(facetHolder, enabled, enabled, enabled, enabled);
     }
 
 }

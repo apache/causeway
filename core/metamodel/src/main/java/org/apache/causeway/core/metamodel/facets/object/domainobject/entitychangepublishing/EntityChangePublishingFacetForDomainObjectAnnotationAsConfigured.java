@@ -25,7 +25,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 public class EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured extends EntityChangePublishingFacetForDomainObjectAnnotation {
 
     public EntityChangePublishingFacetForDomainObjectAnnotationAsConfigured(final FacetHolder facetHolder, final boolean enabled) {
-        super(facetHolder, enabled);
+        super(facetHolder, enabled, enabled, enabled, enabled);
     }
 
 }

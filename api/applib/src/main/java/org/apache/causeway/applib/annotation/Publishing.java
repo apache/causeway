@@ -56,6 +56,29 @@ public enum Publishing {
     ENABLED,
 
     /**
+     * Applies only to {@link EntityPropertyChangeSubscriber}, whereby events are published for modifications to the
+     * object, but no events are published for the initial creation of an object.
+     *
+     * <p>
+     * In the case of audit trail extension,
+     * this effectively suppresses all of the "[NEW] -> value" entries that are created for every property of the
+     * entity when it is being created, and also all of the "value -> [DELETED]" entries that are created for every property of the
+     * entity when it is being deleted.
+     * </p>
+     *
+     * <p>
+     *     This variant is intended only where the application code has enough traceability built into the domain
+     *     (perhaps to provide visibility to the end-users) that the technical auditing is overkill.  It will also
+     *     of course reduce the volume of auditing, so improves performance (likely both response times and throughput).
+     * </p>
+     *
+     * <p>
+     * For other subscribers, behaviour is the same as {@link #ENABLED}.
+     * </p>
+     */
+    ENABLED_FOR_UPDATES_ONLY,
+
+    /**
      * Do <b>not</b> publish data triggered by interaction with this object
      * (even if otherwise configured to enable publishing).
      */
