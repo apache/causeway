@@ -47,6 +47,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -153,6 +154,11 @@ implements
                 : "Causeway Nested Interaction");
         var newInteractionLayer = layerStack.push(causewayInteraction, interactionContextToUse, obs);
 
+        obs.highCardinalityKeyValue("user.isImpersonating", "" + interactionContextToUse.getUser().isImpersonating());
+        _Strings.nonEmpty(interactionContextToUse.getUser().multiTenancyToken())
+            .ifPresent(value->obs.highCardinalityKeyValue("user.multiTenancyToken", value));
+        _Strings.nonEmpty(interactionContextToUse.getUser().name())
+            .ifPresent(value->obs.highCardinalityKeyValue("user.name", value));
         if(getInteractionLayerCount()>0) {
             obs.highCardinalityKeyValue("stackedLayers", ""+getInteractionLayerCount());
         }

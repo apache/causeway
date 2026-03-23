@@ -37,6 +37,7 @@ import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -212,9 +213,8 @@ implements InteractionInternal {
             final ClockService clockService,
             final MetricsService metricsService) {
 
-        if(currentExecution == null) {
+        if(currentExecution == null)
             throw new IllegalStateException("No current execution to pop");
-        }
         final Execution<?,?> popped = currentExecution;
 
         var completedAt = clockService.getClock().nowAsJavaSqlTimestamp();
