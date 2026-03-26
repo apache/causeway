@@ -213,6 +213,10 @@ public enum Where {
                 || this == ALL_TABLES;
     }
 
+    public boolean isObjectForms() {
+        return this == OBJECT_FORMS;
+    }
+
     /**
      * Whether this <tt>Where</tt> is a superset of the context <tt>Where</tt> provided.
      *
@@ -224,6 +228,5 @@ public enum Where {
                 || (this.isAlways()
                     && context.isAlways());
     }
-
 
 }

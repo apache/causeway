@@ -25,6 +25,7 @@ import java.util.function.UnaryOperator;
 import org.apache.causeway.applib.layout.component.ActionLayoutData;
 import org.apache.causeway.applib.layout.component.CollectionLayoutData;
 import org.apache.causeway.applib.layout.component.DomainObjectLayoutData;
+import org.apache.causeway.applib.layout.component.HasHidden;
 import org.apache.causeway.applib.layout.component.PropertyLayoutData;
 import org.apache.causeway.applib.layout.grid.bootstrap.BSElement.BSElementVisitor;
 import org.apache.causeway.commons.internal.base._NullSafe;
@@ -48,19 +49,30 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
             // first phase: collect all empty tabs for removal
             bsGrid.visit(new BSElementVisitor() {
 
-                final Stack<Flag> stack = new Stack<Flag>();
+                final Stack<Flag> stack = new Stack<>();
 
                 @Override public void visit(final ActionLayoutData actionLayoutData) {
-                    if(_NullSafe.isEmpty(actionLayoutData.getMetadataError())) keep();
+                    if(_NullSafe.isEmpty(actionLayoutData.getMetadataError())
+                            && !isAlwaysHidden(actionLayoutData)) {
+                        keep();
+                    }
                 }
                 @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
-                    if(_NullSafe.isEmpty(domainObjectLayoutData.getMetadataError())) keep();
+                    if(_NullSafe.isEmpty(domainObjectLayoutData.getMetadataError())) {
+                        keep();
+                    }
                 }
                 @Override public void visit(final PropertyLayoutData propertyLayoutData) {
-                    if(_NullSafe.isEmpty(propertyLayoutData.getMetadataError())) keep();
+                    if(_NullSafe.isEmpty(propertyLayoutData.getMetadataError())
+                            && !isAlwaysHidden(propertyLayoutData)) {
+                        keep();
+                    }
                 }
                 @Override public void visit(final CollectionLayoutData collectionLayoutData) {
-                    if(_NullSafe.isEmpty(collectionLayoutData.getMetadataError())) keep();
+                    if(_NullSafe.isEmpty(collectionLayoutData.getMetadataError())
+                            && !isAlwaysHidden(collectionLayoutData)) {
+                        keep();
+                    }
                 }
 
                 @Override public void enter(final BSTab bsTab) {
@@ -72,6 +84,11 @@ public interface BSGridTransformer extends UnaryOperator<BSGrid> {
                         // collecting empty tabs
                         emptyTabs.add(bsTab);
                     }
+                }
+                private boolean isAlwaysHidden(final HasHidden hasHidden) {
+                    if(hasHidden==null || hasHidden.getHidden()==null) return false;
+                    return hasHidden.getHidden().isAlways()
+                            || hasHidden.getHidden().isObjectForms();
                 }
                 private void keep() {
                     stack.stream().forEach(row->row.keep=true);
