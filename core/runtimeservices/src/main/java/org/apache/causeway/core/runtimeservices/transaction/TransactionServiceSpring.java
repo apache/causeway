@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.transaction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -53,15 +54,16 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.base._NullSafe;
-import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationClosure;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -87,13 +89,16 @@ implements
     private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
     private final Can<PersistenceExceptionTranslator> persistenceExceptionTranslators;
     private final ConfigurableListableBeanFactory configurableListableBeanFactory;
+    private final ObservationProvider observationProvider;
 
     @Inject
     public TransactionServiceSpring(
             final List<PlatformTransactionManager> platformTransactionManagers,
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final Provider<InteractionLayerTracker> interactionLayerTrackerProvider,
-            final ConfigurableListableBeanFactory configurableListableBeanFactory
+            final ConfigurableListableBeanFactory configurableListableBeanFactory,
+            @Qualifier("causeway-runtimeservices")
+            final CausewayObservationIntegration observationIntegration
     ) {
 
         this.platformTransactionManagers = Can.ofCollection(platformTransactionManagers);
@@ -105,6 +110,8 @@ implements
         log.info("PersistenceExceptionTranslators: {}", persistenceExceptionTranslators);
 
         this.interactionLayerTrackerProvider = interactionLayerTrackerProvider;
+
+        this.observationProvider = observationIntegration.provider(getClass());
     }
 
     // -- API
@@ -118,7 +125,7 @@ implements
 
         try {
             TransactionStatus txStatus = platformTransactionManager.getTransaction(def);
-            registerTransactionSynchronizations(txStatus);
+            registerTransactionSynchronizations();
 
             result = Try.call(() -> {
 
@@ -145,9 +152,8 @@ implements
             // return the original failure cause (originating from calling the callable)
             // (so we don't shadow the original failure)
             // return the failure we just caught
-            if (result != null && result.isFailure()) {
+            if (result != null && result.isFailure())
                 return result;
-            }
 
             // otherwise, we thought we had a success, but now we have an exception thrown by either ,
             // the call to rollback or commit above.  We don't need to do anything though; if either of
@@ -159,7 +165,7 @@ implements
         return result;
     }
 
-    private void registerTransactionSynchronizations(final TransactionStatus txStatus) {
+    private void registerTransactionSynchronizations() {
         if (TransactionSynchronizationManager.isSynchronizationActive()) {
             configurableListableBeanFactory.getBeansOfType(TransactionSynchronization.class)
                     .values()
@@ -184,9 +190,8 @@ implements
 
             var translatedEx = translateExceptionIfPossible(ex, txManager);
 
-            if(translatedEx instanceof RuntimeException) {
+            if(translatedEx instanceof RuntimeException)
                 throw ex;
-            }
 
             throw new RuntimeException(ex);
 
@@ -209,11 +214,10 @@ implements
         return currentTransactionStatus()
         .map(txStatus->{
 
-            if(txStatus.isCompleted()) {
+            if(txStatus.isCompleted())
                 return txStatus.isRollbackOnly()
                         ? TransactionState.ABORTED
                         : TransactionState.COMMITTED;
-            }
 
             return txStatus.isRollbackOnly()
                     ? TransactionState.MUST_ABORT
@@ -235,9 +239,8 @@ implements
     private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
             var txManager = ((TransactionTemplate)def).getTransactionManager();
-            if(txManager!=null) {
+            if(txManager!=null)
                 return txManager;
-            }
         }
         return platformTransactionManagers.getSingleton()
                 .orElseThrow(()->
@@ -264,9 +267,8 @@ implements
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_MANDATORY);
 
         // not strictly required, but to prevent stack-trace creation later on
-        if(!TransactionSynchronizationManager.isActualTransactionActive()) {
+        if(!TransactionSynchronizationManager.isActualTransactionActive())
             return Optional.empty();
-        }
 
         // get current transaction else throw an exception
         return Try.call(()->
@@ -278,9 +280,8 @@ implements
 
     private Throwable translateExceptionIfPossible(final Throwable ex, final PlatformTransactionManager txManager) {
 
-        if(ex instanceof DataAccessException) {
+        if(ex instanceof DataAccessException)
             return ex; // nothing to do, already translated
-        }
 
         if(ex instanceof RuntimeException) {
 
@@ -291,9 +292,8 @@ implements
             .findFirst()
             .orElse(null);
 
-            if(translatedEx!=null) {
+            if(translatedEx!=null)
                 return translatedEx;
-            }
 
         }
 
@@ -309,36 +309,43 @@ implements
     public void onOpen(final @NonNull CausewayInteraction interaction) {
 
         txCounter.get().reset();
+        if (platformTransactionManagers.isEmpty()) return;
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
-        if (!platformTransactionManagers.isEmpty()) {
-            var onCloseTasks = _Lists.<CloseTask>newArrayList(platformTransactionManagers.size());
+        var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ObservationClosure());
+        interaction.putAttribute(OnCloseHandle.class, onCloseHandle);
 
-            interaction.putAttribute(OnCloseHandle.class, new OnCloseHandle(onCloseTasks));
+        platformTransactionManagers.forEach(txManager -> {
 
-            platformTransactionManagers.forEach(txManager -> {
+            var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
+            txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
 
-                var txDefn = new TransactionTemplate(txManager); // specify the txManager in question
-                txDefn.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+            var obs = onCloseHandle.observationClosure().startAndOpenScope(observationProvider.get("Transaction"))
+                .observation()
+                .highCardinalityKeyValue("txManager", txManager.getClass().getName());
 
-                // either participate in existing or create new transaction
-                TransactionStatus txStatus = txManager.getTransaction(txDefn);
+            // either participate in existing or create new transaction
+            TransactionStatus txStatus = observationProvider.get("Transaction Creation")
+                    .observe(()->txManager.getTransaction(txDefn));
+            if(!txStatus.isNewTransaction()) {
+                // discard telemetry data when participating in existing transaction
+                obs.getContext().put("micrometer.discard", true);
+                // we are participating in an exiting transaction (or testing), nothing to do
+                return;
+            }
 
-                if(!txStatus.isNewTransaction()) {
-                    // we are participating in an exiting transaction (or testing), nothing to do
-                    return;
-                }
-                registerTransactionSynchronizations(txStatus);
+            registerTransactionSynchronizations();
 
-                // we have created a new transaction, so need to provide a CloseTask
-                onCloseTasks.add(
-                    new CloseTask(
-                        txStatus,
-                        txManager.getClass().getName(), // info to be used for display in case of errors
-                        () -> {
+            // we have created a new transaction, so need to provide a CloseTask
+            onCloseHandle.onCloseTasks().add(
+                new CloseTask(
+                    txStatus,
+                    txManager.getClass().getName(), // info to be used for display in case of errors
+                    ()->observationProvider.get("Transaction Completion")
+                        .observe(() -> {
                             _Xray.txBeforeCompletion(interactionLayerTrackerProvider.get(), "tx: beforeCompletion");
                             final TransactionCompletionStatus event;
                             if (txStatus.isRollbackOnly()) {
@@ -349,13 +356,12 @@ implements
                                 event = TransactionCompletionStatus.COMMITTED;
                             }
                             _Xray.txAfterCompletion(interactionLayerTrackerProvider.get(), String.format("tx: afterCompletion (%s)", event.name()));
-
                             txCounter.get().increment();
-                        }
-                    )
-                );
-            });
-        }
+                        })
+                )
+            );
+        });
+
     }
 
     /**
@@ -397,9 +403,10 @@ implements
             @NonNull ThrowingRunnable runnable) {
     }
 
-    @RequiredArgsConstructor
-    private static class OnCloseHandle {
-        private final @NonNull List<CloseTask> onCloseTasks;
+    private record OnCloseHandle(
+            List<CloseTask> onCloseTasks,
+            ObservationClosure observationClosure) {
+
         void requestRollback() {
             onCloseTasks.forEach(onCloseTask->{
                 onCloseTask.txStatus.setRollbackOnly();
@@ -407,7 +414,6 @@ implements
         }
         void runOnCloseTasks() {
             onCloseTasks.forEach(onCloseTask->{
-
                 try {
                     onCloseTask.runnable().run();
                 } catch(final Throwable ex) {
@@ -419,6 +425,7 @@ implements
                             ex);
                 }
             });
+            observationClosure.close();
         }
     }
 }

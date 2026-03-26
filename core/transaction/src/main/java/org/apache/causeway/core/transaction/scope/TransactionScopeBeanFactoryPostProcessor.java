@@ -32,7 +32,8 @@ public class TransactionScopeBeanFactoryPostProcessor implements BeanFactoryPost
     public static final String SCOPE_NAME = org.apache.causeway.applib.annotation.TransactionScope.SCOPE_NAME;
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+    public void postProcessBeanFactory(@SuppressWarnings("exports") final ConfigurableListableBeanFactory beanFactory)
+            throws BeansException {
         var transactionScope = new StackedTransactionScope();
         beanFactory.registerScope(SCOPE_NAME, transactionScope);
     }

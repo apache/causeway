@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.StringUtils;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import io.micrometer.common.KeyValue;
@@ -84,7 +84,7 @@ public record CausewayObservationIntegration(
     /**
      * Helps if start and stop of an {@link Observation} happen in different code locations.
      */
-    @Data @Accessors(fluent = true)
+    @Getter @Accessors(fluent = true)
     public static final class ObservationClosure implements AutoCloseable {
 
         private Observation observation;
