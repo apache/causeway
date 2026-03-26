@@ -98,8 +98,8 @@ public class CausewayModuleCoreWebapp {
             @Override
             public KeyValues getHighCardinalityKeyValues(final ServerRequestObservationContext context) {
                 // Make sure that KeyValues entries are already sorted by name for better performance
-                return KeyValues.of(methodOriginal(context), httpUrl(context),
-                        CausewayObservationIntegration.currentThreadId());
+                return super.getHighCardinalityKeyValues(context)
+                        .and(CausewayObservationIntegration.currentThreadId());
             }
         };
     }

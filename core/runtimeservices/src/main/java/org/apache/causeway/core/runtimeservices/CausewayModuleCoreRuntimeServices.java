@@ -159,7 +159,7 @@ public class CausewayModuleCoreRuntimeServices {
     @Bean("causeway-runtimeservices")
     public CausewayObservationIntegration causewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationIntegration(observationRegistryOpt, "causeway-runtimeservices");
+        return new CausewayObservationIntegration(observationRegistryOpt, "runtimeservices");
     }
 
 }

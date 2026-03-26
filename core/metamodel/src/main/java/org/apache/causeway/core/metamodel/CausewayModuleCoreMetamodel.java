@@ -272,7 +272,7 @@ public class CausewayModuleCoreMetamodel {
     @Bean("causeway-metamodel")
     public CausewayObservationIntegration causewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationIntegration(observationRegistryOpt, "causeway-metamodel");
+        return new CausewayObservationIntegration(observationRegistryOpt, "metamodel");
     }
 
 }

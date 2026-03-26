@@ -42,6 +42,6 @@ public class CausewayModuleViewerWicketModel {
     @Bean("causeway-wicketviewer")
     public CausewayObservationIntegration causewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationIntegration(observationRegistryOpt, "causeway-wicketviewer");
+        return new CausewayObservationIntegration(observationRegistryOpt, "wicketviewer");
     }
 }

@@ -68,8 +68,8 @@ public record CausewayObservationIntegration(
 
     public Observation createNotStarted(final Class<?> bean, final String name) {
         return Observation.createNotStarted(name, observationRegistry)
-                .lowCardinalityKeyValue("module", module)
-                .lowCardinalityKeyValue("bean", bean.getSimpleName());
+                .lowCardinalityKeyValue("causeway.module", module)
+                .lowCardinalityKeyValue("causeway.bean", bean.getSimpleName());
     }
 
     @FunctionalInterface
