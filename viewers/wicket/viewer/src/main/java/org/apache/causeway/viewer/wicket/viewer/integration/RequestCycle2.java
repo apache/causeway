@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.viewer.integration;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationClosure;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationClosure;
 
 public class RequestCycle2 extends RequestCycle {
 

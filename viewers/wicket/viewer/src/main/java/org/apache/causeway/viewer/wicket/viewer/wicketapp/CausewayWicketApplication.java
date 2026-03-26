@@ -53,7 +53,7 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
@@ -120,7 +120,7 @@ implements
     @Inject private MetricsService metricService;
 
     @Qualifier("causeway-wicketviewer")
-    @Inject private CausewayObservationInternal observationInternal;
+    @Inject private CausewayObservationIntegration observationIntegration;
 
     @Getter(onMethod = @__(@Override))
     @Inject private ComponentFactoryRegistry componentFactoryRegistry;
@@ -212,7 +212,7 @@ implements
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
 
-            getRequestCycleListeners().add(new TelemetryStartHandler(observationInternal));
+            getRequestCycleListeners().add(new TelemetryStartHandler(observationIntegration));
             getRequestCycleListeners().add(new WebRequestCycleForCauseway(metaModelContext, getPageClassRegistry()));
             getRequestCycleListeners().add(new TelemetryStopHandler(metricService));
             getRequestCycleListeners().add(new RehydrationHandler());

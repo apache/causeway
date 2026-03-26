@@ -33,7 +33,7 @@ import org.apache.causeway.core.transaction.CausewayModuleCoreTransaction;
         CausewayModuleCoreInteraction.class,
         CausewayModuleCoreTransaction.class,
 
-        // @Service's
+        // @Service
         XrayInitializerService.class,
 })
 public class CausewayModuleCoreRuntime {

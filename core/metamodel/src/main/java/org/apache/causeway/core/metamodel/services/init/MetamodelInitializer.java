@@ -36,8 +36,8 @@ import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationProvider;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.extern.slf4j.Slf4j;
@@ -54,8 +54,8 @@ public record MetamodelInitializer(
             final EventBusService eventBusService,
             final Provider<SpecificationLoader> specificationLoaderProvider,
             @Qualifier("causeway-metamodel")
-            final CausewayObservationInternal observation) {
-        this(eventBusService, specificationLoaderProvider, observation.provider(MetamodelInitializer.class));
+            final CausewayObservationIntegration observationIntegration) {
+        this(eventBusService, specificationLoaderProvider, observationIntegration.provider(MetamodelInitializer.class));
     }
 
     @EventListener

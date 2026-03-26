@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationClosure;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationClosure;
 
 import io.micrometer.observation.Observation;
 

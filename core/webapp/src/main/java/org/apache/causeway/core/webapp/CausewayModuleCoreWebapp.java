@@ -29,7 +29,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.interaction.session.MessageBrokerImpl;
 import org.apache.causeway.core.metamodel.services.message.MessageBroker;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
@@ -99,7 +99,7 @@ public class CausewayModuleCoreWebapp {
             public KeyValues getHighCardinalityKeyValues(final ServerRequestObservationContext context) {
                 // Make sure that KeyValues entries are already sorted by name for better performance
                 return KeyValues.of(methodOriginal(context), httpUrl(context),
-                        CausewayObservationInternal.currentThreadId());
+                        CausewayObservationIntegration.currentThreadId());
             }
         };
     }

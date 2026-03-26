@@ -21,7 +21,7 @@ package org.apache.causeway.applib.services.iactnlayer;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationClosure;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationClosure;
 
 /**
  * Binds an {@link Interaction} (&quot;what&quot; is being executed) with

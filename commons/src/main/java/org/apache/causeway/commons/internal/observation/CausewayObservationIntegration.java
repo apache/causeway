@@ -45,17 +45,17 @@ import io.micrometer.observation.ObservationRegistry;
  * }
  *  </pre>
  */
-public record CausewayObservationInternal(
+public record CausewayObservationIntegration(
         ObservationRegistry observationRegistry,
         String module) {
 
-    public CausewayObservationInternal(
+    public CausewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt,
             final String module) {
         this(observationRegistryOpt.orElse(ObservationRegistry.NOOP), module);
     }
 
-    public CausewayObservationInternal {
+    public CausewayObservationIntegration {
         observationRegistry = observationRegistry!=null
                 ? observationRegistry
                 : ObservationRegistry.NOOP;
@@ -109,6 +109,11 @@ public record CausewayObservationInternal(
 
         public void onError(final Exception ex) {
             if(observation==null) return;
+            // scope lifecycle terminates before exception handling
+            if(scope!=null) {
+                this.scope.close();
+                this.scope = null;
+            }
             observation.error(ex);
         }
 

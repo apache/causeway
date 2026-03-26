@@ -43,7 +43,7 @@ import org.apache.causeway.applib.value.semantics.ValueSemanticsResolver;
 import org.apache.causeway.commons.functional.Either;
 import org.apache.causeway.commons.functional.Railway;
 import org.apache.causeway.commons.functional.Try;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.commons.semantics.CollectionSemantics;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
@@ -270,9 +270,9 @@ public class CausewayModuleCoreMetamodel {
     }
 
     @Bean("causeway-metamodel")
-    public CausewayObservationInternal causewayObservationInternal(
+    public CausewayObservationIntegration causewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationInternal(observationRegistryOpt, "causeway-metamodel");
+        return new CausewayObservationIntegration(observationRegistryOpt, "causeway-metamodel");
     }
 
 }

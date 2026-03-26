@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.webapp.CausewayModuleCoreWebapp;
 
 import io.micrometer.observation.ObservationRegistry;
@@ -40,8 +40,8 @@ import io.micrometer.observation.ObservationRegistry;
 public class CausewayModuleViewerWicketModel {
 
     @Bean("causeway-wicketviewer")
-    public CausewayObservationInternal causewayObservationInternal(
+    public CausewayObservationIntegration causewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationInternal(observationRegistryOpt, "causeway-wicketviewer");
+        return new CausewayObservationIntegration(observationRegistryOpt, "causeway-wicketviewer");
     }
 }

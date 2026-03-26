@@ -31,7 +31,7 @@ import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.bookmark.HmacAuthority;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.codegen.bytebuddy.CausewayModuleCoreCodegenByteBuddy;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.core.runtimeservices.bookmarks.BookmarkServiceDefault;
@@ -157,9 +157,9 @@ public class CausewayModuleCoreRuntimeServices {
     }
 
     @Bean("causeway-runtimeservices")
-    public CausewayObservationInternal causewayObservationInternal(
+    public CausewayObservationIntegration causewayObservationIntegration(
             final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationInternal(observationRegistryOpt, "causeway-runtimeservices");
+        return new CausewayObservationIntegration(observationRegistryOpt, "causeway-runtimeservices");
     }
 
 }

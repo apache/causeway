@@ -51,8 +51,8 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationProvider;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
@@ -101,7 +101,7 @@ implements
     public InteractionServiceDefault(
             final EventBusService eventBusService,
             @Qualifier("causeway-runtimeservices")
-            final CausewayObservationInternal observation,
+            final CausewayObservationIntegration observationIntegration,
             final Provider<SpecificationLoader> specificationLoaderProvider,
             final ServiceInjector serviceInjector,
             final TransactionServiceSpring transactionServiceSpring,
@@ -109,7 +109,7 @@ implements
             final Provider<CommandPublisher> commandPublisherProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
-        this.observationProvider = observation.provider(getClass());
+        this.observationProvider = observationIntegration.provider(getClass());
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;

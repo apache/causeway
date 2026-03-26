@@ -22,8 +22,8 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal;
-import org.apache.causeway.commons.internal.observation.CausewayObservationInternal.ObservationProvider;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 
 /**
  * @since 4.0
@@ -32,8 +32,8 @@ public record TelemetryStartHandler(
         ObservationProvider observationProvider)
 implements IRequestCycleListener {
 
-    public TelemetryStartHandler(final CausewayObservationInternal observationInternal) {
-        this(observationInternal.provider(TelemetryStartHandler.class));
+    public TelemetryStartHandler(final CausewayObservationIntegration observationIntegration) {
+        this(observationIntegration.provider(TelemetryStartHandler.class));
     }
 
     @Override
