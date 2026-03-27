@@ -24,6 +24,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.viewer.wicket.viewer.CausewayModuleViewerWicketViewer;
 
 /**
  * @since 4.0
@@ -33,7 +34,8 @@ public record TelemetryStartHandler(
 implements IRequestCycleListener {
 
     public TelemetryStartHandler(final CausewayObservationIntegration observationIntegration) {
-        this(observationIntegration.provider(TelemetryStartHandler.class));
+        this(observationIntegration.provider(TelemetryStartHandler.class,
+                CausewayObservationIntegration.withModuleName(CausewayModuleViewerWicketViewer.NAMESPACE)));
     }
 
     @Override

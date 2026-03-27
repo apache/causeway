@@ -20,6 +20,7 @@ package org.apache.causeway.commons.internal.observation;
 
 import java.time.Duration;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -32,9 +33,12 @@ import lombok.experimental.Accessors;
 
 import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
+import io.micrometer.observation.Observation.Context;
 import io.micrometer.observation.Observation.Scope;
 import io.micrometer.observation.ObservationConvention;
 import io.micrometer.observation.ObservationRegistry;
+import io.micrometer.tracing.exporter.FinishedSpan;
+import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
 /**
  * Holder of {@link ObservationRegistry} which comes as a dependency of <i>spring-context</i>.
@@ -49,20 +53,17 @@ import io.micrometer.observation.ObservationRegistry;
  *  </pre>
  */
 public record CausewayObservationIntegration(
-        ObservationRegistry observationRegistry,
-        String module) {
+        ObservationRegistry observationRegistry) {
 
     public CausewayObservationIntegration(
-            final Optional<ObservationRegistry> observationRegistryOpt,
-            final String module) {
-        this(observationRegistryOpt.orElse(ObservationRegistry.NOOP), module);
+            final Optional<ObservationRegistry> observationRegistryOpt) {
+        this(observationRegistryOpt.orElse(ObservationRegistry.NOOP));
     }
 
     public CausewayObservationIntegration {
         observationRegistry = observationRegistry!=null
                 ? observationRegistry
                 : ObservationRegistry.NOOP;
-        module = StringUtils.hasText(module) ? module : "unknown_module";
     }
 
     public boolean isNoop() {
@@ -70,8 +71,7 @@ public record CausewayObservationIntegration(
     }
 
     public Observation createNotStarted(final Class<?> bean, final String name) {
-        return Observation.createNotStarted(name, observationRegistry)
-                .lowCardinalityKeyValue("causeway.module", module)
+        return Observation.createNotStarted(name, Context::new, observationRegistry)
                 .lowCardinalityKeyValue("causeway.bean", bean.getSimpleName());
     }
 
@@ -84,8 +84,14 @@ public record CausewayObservationIntegration(
         return name->createNotStarted(bean, name);
     }
 
-    public ObservationProvider provider(final Class<?> bean, final UnaryOperator<Observation> customizer) {
+    public ObservationProvider provider(final Class<?> bean, final Function<Observation, Observation> customizer) {
         return name->customizer.apply(createNotStarted(bean, name));
+    }
+
+    public static UnaryOperator<Observation> withModuleName(final String moduleName){
+        return obs->StringUtils.hasText(moduleName)
+                ? obs.lowCardinalityKeyValue("causeway.module", moduleName)
+                : obs;
     }
 
     /**
@@ -134,6 +140,11 @@ public record CausewayObservationIntegration(
             return this;
         }
 
+        public void discard() {
+            CausewayObservationIntegration.discard(this.observation);
+            close();
+        }
+
     }
 
     public static KeyValue currentThreadId() {
@@ -141,17 +152,29 @@ public record CausewayObservationIntegration(
         return KeyValue.of("threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
     }
 
+    private static final KeyValue DISCARD_KEY = KeyValue.of("causeway.discard", "");
+
     /**
-     * TODO Has no effect. Cannot filter based on name, when {@link Observation} is already started.
-     * With Micrometer Observation API, it seems there is no way to discard already started Observations.
-     * Perhaps we can prevent those from being sent over the wire later.
+     * Denies span export, in collaboration with a Spring registered {@link DiscardedSpanExportingPredicate}.
      */
     public static void discard(@Nullable final Observation obs) {
         if(obs == null)
             return;
-        obs.contextualName("denied");
+        obs.lowCardinalityKeyValue(DISCARD_KEY);
     }
 
+    /**
+     * Does not allow discarded spans to be exported. Register with Spring (before auto configuration is running).
+     */
+    public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
+        @Override
+        public boolean isExportable(final FinishedSpan span) {
+            return !span.getTags().containsKey(DISCARD_KEY.getKey());
+        }
+    }
+
+    //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
+    // that are way off a base-line; this would require some profiling to establish base-lines
     public record ObservationWithTimeThreshold(Observation delegate, Duration threshold, Timer timer) implements Observation {
         private static class Timer {
             long startNanos;

@@ -46,7 +46,6 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import org.apache.causeway.applib.services.inject.ServiceInjector;
@@ -118,8 +117,6 @@ implements
     @Inject private CausewaySystemEnvironment systemEnvironment;
     @Inject private CausewayConfiguration configuration;
     @Inject private MetricsService metricService;
-
-    @Qualifier("causeway-wicketviewer")
     @Inject private CausewayObservationIntegration observationIntegration;
 
     @Getter(onMethod = @__(@Override))

@@ -23,7 +23,6 @@ import java.io.File;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -38,6 +37,7 @@ import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +53,10 @@ public record MetamodelInitializer(
     public MetamodelInitializer(
             final EventBusService eventBusService,
             final Provider<SpecificationLoader> specificationLoaderProvider,
-            @Qualifier("causeway-metamodel")
             final CausewayObservationIntegration observationIntegration) {
-        this(eventBusService, specificationLoaderProvider, observationIntegration.provider(MetamodelInitializer.class));
+        this(eventBusService, specificationLoaderProvider, observationIntegration
+                .provider(MetamodelInitializer.class,
+                    CausewayObservationIntegration.withModuleName(CausewayModuleCoreMetamodel.NAMESPACE)));
     }
 
     @EventListener

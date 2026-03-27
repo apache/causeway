@@ -100,7 +100,6 @@ implements
     @Inject
     public InteractionServiceDefault(
             final EventBusService eventBusService,
-            @Qualifier("causeway-runtimeservices")
             final CausewayObservationIntegration observationIntegration,
             final Provider<SpecificationLoader> specificationLoaderProvider,
             final ServiceInjector serviceInjector,
@@ -109,7 +108,8 @@ implements
             final Provider<CommandPublisher> commandPublisherProvider,
             final ConfigurableBeanFactory beanFactory,
             final InteractionIdGenerator interactionIdGenerator) {
-        this.observationProvider = observationIntegration.provider(getClass());
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
         this.clockService = clockService;

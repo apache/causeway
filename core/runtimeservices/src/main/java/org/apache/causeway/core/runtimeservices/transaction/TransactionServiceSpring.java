@@ -60,6 +60,7 @@ import org.apache.causeway.commons.internal.observation.CausewayObservationInteg
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationClosure;
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
@@ -97,7 +98,6 @@ implements
             final List<PersistenceExceptionTranslator> persistenceExceptionTranslators,
             final Provider<InteractionLayerTracker> interactionLayerTrackerProvider,
             final ConfigurableListableBeanFactory configurableListableBeanFactory,
-            @Qualifier("causeway-runtimeservices")
             final CausewayObservationIntegration observationIntegration
     ) {
 
@@ -111,7 +111,8 @@ implements
 
         this.interactionLayerTrackerProvider = interactionLayerTrackerProvider;
 
-        this.observationProvider = observationIntegration.provider(getClass());
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreMetamodel.NAMESPACE));
     }
 
     // -- API
@@ -332,7 +333,7 @@ implements
                     .observe(()->txManager.getTransaction(txDefn));
             if(!txStatus.isNewTransaction()) {
                 // discard telemetry data when participating in existing transaction
-                CausewayObservationIntegration.discard(obs);
+                onCloseHandle.observationClosure().discard();
                 // we are participating in an exiting transaction (or testing), nothing to do
                 return;
             }

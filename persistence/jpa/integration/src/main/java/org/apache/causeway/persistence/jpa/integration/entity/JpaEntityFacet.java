@@ -31,7 +31,6 @@ import jakarta.persistence.TypedQuery;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaContext;
 
 import org.apache.causeway.applib.query.AllInstancesQuery;
@@ -53,6 +52,7 @@ import org.apache.causeway.core.metamodel.facets.object.entity.EntityOrmMetadata
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.services.idstringifier.IdStringifierLookupService;
 import org.apache.causeway.persistence.jpa.applib.integration.HasVersion;
+import org.apache.causeway.persistence.jpa.integration.CausewayModulePersistenceJpaIntegration;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -66,7 +66,6 @@ class JpaEntityFacet
     @Inject private JpaContext jpaContext;
     @Inject private IdStringifierLookupService idStringifierLookupService;
     @Inject private OrmMetadataProvider ormMetadataProvider;
-    @Qualifier("causeway-persistence-jpa")
     @Inject private CausewayObservationIntegration observationIntegration;
 
     private final Class<?> entityClass;
@@ -83,8 +82,9 @@ class JpaEntityFacet
         this.primaryKeyType = idStringifierLookupService
                 .primaryKeyTypeFor(entityClass, getPrimaryKeyType());
         var timeThreshold = Duration.ofMillis(2);
-        this.observationProvider = observationIntegration
-                .provider(getClass(), obs->new ObservationWithTimeThreshold(obs, timeThreshold));
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModulePersistenceJpaIntegration.NAMESPACE)
+                .andThen(obs->new ObservationWithTimeThreshold(obs, timeThreshold)));
     }
 
     // -- ENTITY FACET
