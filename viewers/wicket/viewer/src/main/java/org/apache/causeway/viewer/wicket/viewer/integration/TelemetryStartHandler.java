@@ -19,8 +19,10 @@
 package org.apache.causeway.viewer.wicket.viewer.integration;
 
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
@@ -41,8 +43,12 @@ implements IRequestCycleListener {
     @Override
     public synchronized void onBeginRequest(final RequestCycle requestCycle) {
         if (requestCycle instanceof RequestCycle2 requestCycle2) {
+            var name = isAjax(requestCycle.getRequest())
+                    ? "Apache Wicket Request Cycle (AJAX)"
+                    : "Apache Wicket Request Cycle";
+
             requestCycle2.observationClosure.startAndOpenScope(
-                    observationProvider.get("Apache Wicket Request Cycle"));
+                    observationProvider.get(name));
         }
     }
 
@@ -52,6 +58,14 @@ implements IRequestCycleListener {
             requestCycle2.observationClosure.onError(ex);
         }
         return null;
+    }
+
+    // -- HELPER
+
+    private boolean isAjax(final Request request) {
+        return request instanceof WebRequest webRequest
+            ? webRequest.isAjax()
+            : false;
     }
 
 }

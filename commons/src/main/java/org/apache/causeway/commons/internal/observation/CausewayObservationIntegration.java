@@ -42,15 +42,6 @@ import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
 /**
  * Holder of {@link ObservationRegistry} which comes as a dependency of <i>spring-context</i>.
- *
- * @apiNote each Causeway module can have its own, using qualifiers and bean factory methods, e.g.:
- * <pre>
- * @Bean("causeway-metamodel")
- * public CausewayObservationInternal causewayObservationInternal(
- *   Optional<ObservationRegistry> observationRegistryOpt) {
- *   return new CausewayObservationInternal(observationRegistryOpt, "causeway-metamodel");
- * }
- *  </pre>
  */
 public record CausewayObservationIntegration(
         ObservationRegistry observationRegistry) {
@@ -62,8 +53,8 @@ public record CausewayObservationIntegration(
 
     public CausewayObservationIntegration {
         observationRegistry = observationRegistry!=null
-                ? observationRegistry
-                : ObservationRegistry.NOOP;
+            ? observationRegistry
+            : ObservationRegistry.NOOP;
     }
 
     public boolean isNoop() {
@@ -74,6 +65,8 @@ public record CausewayObservationIntegration(
         return Observation.createNotStarted(name, Context::new, observationRegistry)
                 .lowCardinalityKeyValue("causeway.bean", bean.getSimpleName());
     }
+
+    // -- OBSERVATION PROVIDER
 
     @FunctionalInterface
     public interface ObservationProvider {
@@ -90,9 +83,26 @@ public record CausewayObservationIntegration(
 
     public static UnaryOperator<Observation> withModuleName(final String moduleName){
         return obs->StringUtils.hasText(moduleName)
-                ? obs.lowCardinalityKeyValue("causeway.module", moduleName)
+                ? obs.lowCardinalityKeyValue(moduleName(moduleName))
                 : obs;
     }
+
+    // -- COMMON KEY-VALUES
+
+    public static KeyValue currentThreadId() {
+        var ct = Thread.currentThread();
+        return KeyValue.of("causeway.threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
+    }
+
+    public static KeyValue moduleName(final String moduleName) {
+        return KeyValue.of("causeway.module",
+            moduleName.startsWith("causeway.")
+                || moduleName.startsWith("causeway-")
+            ? moduleName.substring(9)
+            : moduleName);
+    }
+
+    // -- OBSERVATION CLOSURE
 
     /**
      * Helps if start and stop of an {@link Observation} happen in different code locations.
@@ -147,10 +157,7 @@ public record CausewayObservationIntegration(
 
     }
 
-    public static KeyValue currentThreadId() {
-        var ct = Thread.currentThread();
-        return KeyValue.of("threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
-    }
+    // -- SPAN EXPORT DISCARDING SUPPORT
 
     private static final KeyValue DISCARD_KEY = KeyValue.of("causeway.discard", "");
 
