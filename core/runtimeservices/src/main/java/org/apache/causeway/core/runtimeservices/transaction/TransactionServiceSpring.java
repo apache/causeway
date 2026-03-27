@@ -332,7 +332,7 @@ implements
                     .observe(()->txManager.getTransaction(txDefn));
             if(!txStatus.isNewTransaction()) {
                 // discard telemetry data when participating in existing transaction
-                obs.getContext().put("micrometer.discard", true);
+                CausewayObservationIntegration.discard(obs);
                 // we are participating in an exiting transaction (or testing), nothing to do
                 return;
             }

@@ -18,8 +18,10 @@
  */
 package org.apache.causeway.commons.internal.observation;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.Nullable;
 
@@ -31,6 +33,7 @@ import lombok.experimental.Accessors;
 import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Scope;
+import io.micrometer.observation.ObservationConvention;
 import io.micrometer.observation.ObservationRegistry;
 
 /**
@@ -79,6 +82,10 @@ public record CausewayObservationIntegration(
 
     public ObservationProvider provider(final Class<?> bean) {
         return name->createNotStarted(bean, name);
+    }
+
+    public ObservationProvider provider(final Class<?> bean, final UnaryOperator<Observation> customizer) {
+        return name->customizer.apply(createNotStarted(bean, name));
     }
 
     /**
@@ -132,7 +139,74 @@ public record CausewayObservationIntegration(
     public static KeyValue currentThreadId() {
         var ct = Thread.currentThread();
         return KeyValue.of("threadId", "%d [%s]".formatted(ct.getId(), ct.getName()));
+    }
 
+    /**
+     * TODO Has no effect. Cannot filter based on name, when {@link Observation} is already started.
+     * With Micrometer Observation API, it seems there is no way to discard already started Observations.
+     * Perhaps we can prevent those from being sent over the wire later.
+     */
+    public static void discard(@Nullable final Observation obs) {
+        if(obs == null)
+            return;
+        obs.contextualName("denied");
+    }
+
+    public record ObservationWithTimeThreshold(Observation delegate, Duration threshold, Timer timer) implements Observation {
+        private static class Timer {
+            long startNanos;
+            void start() { this.startNanos = System.nanoTime(); }
+            long elapsedNanos() { return System.nanoTime() - startNanos; }
+        }
+        public ObservationWithTimeThreshold(final Observation delegate, final Duration threshold) {
+            this(delegate, threshold, new Timer());
+        }
+        @Override public Observation contextualName(@Nullable final String contextualName) {
+            return delegate.contextualName(contextualName);
+        }
+        @Override public Observation parentObservation(@Nullable final Observation parentObservation) {
+            return delegate.parentObservation(parentObservation);
+        }
+        @Override public Observation lowCardinalityKeyValue(final KeyValue keyValue) {
+            return delegate.lowCardinalityKeyValue(keyValue);
+        }
+        @Override public Observation lowCardinalityKeyValue(final String key, final String value) {
+            return delegate.lowCardinalityKeyValue(key, value);
+        }
+        @Override public Observation highCardinalityKeyValue(final KeyValue keyValue) {
+            return delegate.highCardinalityKeyValue(keyValue);
+        }
+        @Override public Observation highCardinalityKeyValue(final String key, final String value) {
+            return delegate.highCardinalityKeyValue(key, value);
+        }
+        @Override public Observation observationConvention(final ObservationConvention<?> observationConvention) {
+            return delegate.observationConvention(observationConvention);
+        }
+        @Override public Observation error(final Throwable error) {
+            return delegate.error(error);
+        }
+        @Override public Observation event(final Event event) {
+            return delegate.event(event);
+        }
+        @Override public Observation start() {
+            timer.start();
+            return delegate.start();
+        }
+        @Override public Context getContext() {
+            return delegate.getContext();
+        }
+        @Override public void stop() {
+            if(timer.elapsedNanos() < threshold.toNanos()) {
+                discard(delegate);
+            }
+            delegate.stop();
+        }
+        @Override public Scope openScope() {
+            return delegate.openScope();
+        }
+        @Override public String toString() {
+            return delegate.toString();
+        }
     }
 
 }

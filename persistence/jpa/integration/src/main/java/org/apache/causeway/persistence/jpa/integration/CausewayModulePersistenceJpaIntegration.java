@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.persistence.jpa.integration;
 
+import java.util.Optional;
 import java.util.Set;
 
 import jakarta.persistence.EntityManager;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.data.jpa.repository.support.DefaultJpaContext;
 
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.runtime.CausewayModuleCoreRuntime;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
 import org.apache.causeway.persistence.jpa.integration.entity.JpaEntityIntegration;
@@ -51,6 +53,8 @@ import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayInteractionDtoConverter;
 import org.apache.causeway.persistence.jpa.integration.typeconverters.schema.v2.CausewayOidDtoConverter;
 import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJpaMetamodel;
+
+import io.micrometer.observation.ObservationRegistry;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
@@ -84,16 +88,27 @@ import org.apache.causeway.persistence.jpa.metamodel.CausewayModulePersistenceJp
         JavaUtilUuidConverter.class,
         OffsetTimeConverterForJpa.class,
         OffsetDateTimeConverterForJpa.class,
-        ZonedDateTimeConverterForJpa.class
-
+        ZonedDateTimeConverterForJpa.class,
 })
 public class CausewayModulePersistenceJpaIntegration {
 
     //TODO close issue https://issues.apache.org/jira/browse/CAUSEWAY-3895 once this can be removed
     @Bean @Primary
-    public JpaContext defaultJpaContextWorkaround(final Set<EntityManager> entityManagers) {
+    JpaContext defaultJpaContextWorkaround(final Set<EntityManager> entityManagers) {
         var setOfOne = Set.of(entityManagers.iterator().next());
         return new DefaultJpaContext(setOfOne);
+    }
+
+    @Bean("causeway-persistence-jpa")
+    CausewayObservationIntegration causewayObservationIntegration(
+            final Optional<ObservationRegistry> observationRegistryOpt) {
+        // has no effect
+//        observationRegistryOpt
+//            .ifPresent(reg->{
+//                reg.observationConfig().observationPredicate((name, context) -> !name.equals("DISCARD"));
+//            });
+
+        return new CausewayObservationIntegration(observationRegistryOpt, "persistence-jpa");
     }
 
 }
