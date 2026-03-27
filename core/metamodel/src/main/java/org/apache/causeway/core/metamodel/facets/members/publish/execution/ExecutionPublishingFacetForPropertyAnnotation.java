@@ -67,66 +67,54 @@ extends ExecutionPublishingFacetAbstract {
         return propertyIfAny
             .map(Property::executionPublishing)
             .filter(publishing -> publishing != Publishing.NOT_SPECIFIED)
-            .map(publishing -> {
-
-                switch (publishing) {
-                    case AS_CONFIGURED:
-                        switch (publishingPolicy) {
-                            case NONE:
-                                return (ExecutionPublishingFacet)new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.None(holder);
-                            case ALL:
-                                return new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.All(holder);
-                            default:
-                                throw new IllegalStateException(String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
-                        }
-                    case DISABLED:
-                        return new ExecutionPublishingFacetForPropertyAnnotation.Disabled(holder);
-                    case ENABLED:
-                        return new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
-                    default:
-                        throw new IllegalStateException(String.format("@Property#executionPublishing '%s' not recognised", publishing));
-                }
-            })
+            .<ExecutionPublishingFacet>map(publishing -> (switch (publishing) {
+            case AS_CONFIGURED -> switch (publishingPolicy) {
+                case NONE -> new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.None(holder);
+                case ALL -> new ExecutionPublishingFacetForPropertyAnnotationAsConfigured.All(holder);
+                default -> throw new IllegalStateException(
+                        String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
+            };
+            case DISABLED -> new ExecutionPublishingFacetForPropertyAnnotation.Disabled(holder);
+            case ENABLED, ENABLED_FOR_UPDATES_ONLY -> new ExecutionPublishingFacetForPropertyAnnotation.Enabled(holder);
+            default -> throw new IllegalStateException(
+                    String.format("@Property#executionPublishing '%s' not recognised", publishing));
+            }))
             .orElseGet(() -> {
                 // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
-                if (representsProperty(holder)) {
+                if (representsProperty(holder))
                     // we are dealing with a property
-                    switch (publishingPolicy) {
-                        case NONE:
-                            return new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);
-                        case ALL:
-                            return new ExecutionPublishingFacetForPropertyFromConfiguration.All(holder);
-                        default:
-                            throw new IllegalStateException(String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
-                    }
-                } else {
+                    return switch (publishingPolicy) {
+                        case NONE -> new ExecutionPublishingFacetForPropertyFromConfiguration.None(holder);
+                        case ALL -> new ExecutionPublishingFacetForPropertyFromConfiguration.All(holder);
+                        default -> throw new IllegalStateException(
+                                String.format("configured property.executionPublishing policy '%s' not recognised", publishingPolicy));
+                    };
+                else {
                     // we are dealing with an action
                     var actionPublishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
-                    switch (actionPublishingPolicy) {
-                        case NONE:
-                            return new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
-                        case IGNORE_QUERY_ONLY:
-                        case IGNORE_SAFE:
-                            return Facets.hasSafeSemantics(holder)
-                                    ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
-                                    : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
-                        case ALL:
-                            return new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
-                        default:
-                            throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", actionPublishingPolicy));
-                    }
+                    return switch (actionPublishingPolicy) {
+                    case NONE -> new ExecutionPublishingFacetForActionFromConfiguration.None(holder);
+                    case IGNORE_QUERY_ONLY, IGNORE_SAFE -> Facets.hasSafeSemantics(holder)
+                                                        ? new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafe(holder)
+                                                        : new ExecutionPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder);
+                    case ALL -> new ExecutionPublishingFacetForActionFromConfiguration.All(holder);
+                    default -> throw new IllegalStateException(
+                            String.format("configured action.executionPublishing policy '%s' not recognised", actionPublishingPolicy));
+                    };
                 }
             });
     }
 
     private static boolean representsProperty(final FacetHolder holder) {
         // a property
-        if (holder instanceof TypedFacetHolder && ((TypedFacetHolder)holder).featureType() == FeatureType.PROPERTY) {
+        if (holder instanceof TypedFacetHolder typedFacetHolder
+                && typedFacetHolder.featureType() == FeatureType.PROPERTY)
             return true;
-        }
         // or a mixin
-        return  holder.containsFacet(ContributingFacet.class) &&
-                holder.getFacet(ContributingFacet.class).contributed() == MixinFacet.Contributing.AS_PROPERTY;
+        return holder.lookupFacet(ContributingFacet.class)
+                .map(ContributingFacet::contributed)
+                .map(MixinFacet.Contributing.AS_PROPERTY::equals)
+                .orElse(false);
     }
 
     public ExecutionPublishingFacetForPropertyAnnotation(final FacetHolder holder) {

@@ -68,7 +68,7 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
 
         return propertyIfAny
             .filter(property -> property.commandPublishing() != Publishing.NOT_SPECIFIED)
-            .map(property -> {
+            .<CommandPublishingFacet>map(property -> {
                 Publishing publishing = property.commandPublishing();
 
                 var processorClass = property.commandDtoProcessor();
@@ -78,64 +78,54 @@ public abstract class CommandPublishingFacetForPropertyAnnotation extends Comman
                     publishing = Publishing.ENABLED;
                 }
 
-                switch (publishing) {
-                    case AS_CONFIGURED:
-                        switch (publishingPolicy) {
-                            case NONE:
-                                return (CommandPublishingFacet)new CommandPublishingFacetForPropertyAnnotationAsConfigured.None(holder, servicesInjector);
-                            case ALL:
-                                return new CommandPublishingFacetForPropertyAnnotationAsConfigured.All(holder, servicesInjector);
-                            default:
-                                throw new IllegalStateException(String.format("configured property.commandpublishing policy '%s' not recognised", publishingPolicy));
-                        }
-                    case DISABLED:
-                        return new CommandPublishingFacetForPropertyAnnotation.Disabled(processor, holder, servicesInjector);
-                    case ENABLED:
-                        return new CommandPublishingFacetForPropertyAnnotation.Enabled(processor, holder, servicesInjector);
-                    default:
-                        throw new IllegalStateException(String.format("@Property#commandPublishing '%s' not recognised", publishing));
-                }
+                return switch (publishing) {
+                    case AS_CONFIGURED -> switch (publishingPolicy) {
+                        case NONE -> new CommandPublishingFacetForPropertyAnnotationAsConfigured.None(holder, servicesInjector);
+                        case ALL -> new CommandPublishingFacetForPropertyAnnotationAsConfigured.All(holder, servicesInjector);
+                        default -> throw new IllegalStateException(
+                                String.format("configured property.commandpublishing policy '%s' not recognised", publishingPolicy));
+                    };
+                    case DISABLED -> new CommandPublishingFacetForPropertyAnnotation.Disabled(processor, holder, servicesInjector);
+                    case ENABLED, ENABLED_FOR_UPDATES_ONLY -> new CommandPublishingFacetForPropertyAnnotation.Enabled(processor, holder, servicesInjector);
+                    default -> throw new IllegalStateException(
+                            String.format("@Property#commandPublishing '%s' not recognised", publishing));
+                };
             })
             .orElseGet(() -> {
                 // there is no publishing facet from either @Action or @Property, so use the appropriate configuration to install a default
-                if (representsProperty(holder)) {
+                if (representsProperty(holder))
                     // we are dealing with a property
-                    switch (publishingPolicy) {
-                        case NONE:
-                            return new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
-                        case ALL:
-                            return new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
-                        default:
-                            throw new IllegalStateException(String.format("configured property.commandPublishing policy '%s' not recognised", publishingPolicy));
-                    }
-                } else {
+                    return switch (publishingPolicy) {
+                        case NONE -> new CommandPublishingFacetForPropertyFromConfiguration.None(holder, servicesInjector);
+                        case ALL -> new CommandPublishingFacetForPropertyFromConfiguration.All(holder, servicesInjector);
+                        default -> throw new IllegalStateException(String.format("configured property.commandPublishing policy '%s' not recognised", publishingPolicy));
+                    };
+                else {
                     // we are dealing with an action
                     var actionPublishingPolicy = ActionConfigOptions.actionCommandPublishingPolicy(configuration);
-                    switch (actionPublishingPolicy) {
-                        case NONE:
-                            return new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
-                        case IGNORE_QUERY_ONLY:
-                        case IGNORE_SAFE:
-                            return Facets.hasSafeSemantics(holder)
-                                    ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
-                                    : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
-                        case ALL:
-                            return new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
-                        default:
-                            throw new IllegalStateException(String.format("configured action.commandPublishing policy '%s' not recognised", actionPublishingPolicy));
-                    }
+                    return switch (actionPublishingPolicy) {
+                        case NONE -> new CommandPublishingFacetForActionFromConfiguration.None(holder, servicesInjector);
+                        case IGNORE_QUERY_ONLY, IGNORE_SAFE -> Facets.hasSafeSemantics(holder)
+                                                            ? new CommandPublishingFacetForActionFromConfiguration.IgnoreSafe(holder, servicesInjector)
+                                                            : new CommandPublishingFacetForActionFromConfiguration.IgnoreSafeYetNot(holder, servicesInjector);
+                        case ALL -> new CommandPublishingFacetForActionFromConfiguration.All(holder, servicesInjector);
+                        default -> throw new IllegalStateException(String.format("configured action.commandPublishing policy '%s' not recognised", actionPublishingPolicy));
+                    };
                 }
             });
+
     }
 
     private static boolean representsProperty(final FacetHolder holder) {
         // a property
-        if (holder instanceof TypedFacetHolder && ((TypedFacetHolder)holder).featureType() == FeatureType.PROPERTY) {
+        if (holder instanceof TypedFacetHolder typedFacetHolder
+                && typedFacetHolder.featureType() == FeatureType.PROPERTY)
             return true;
-        }
         // or a mixin
-        return  holder.containsFacet(ContributingFacet.class) &&
-                holder.getFacet(ContributingFacet.class).contributed() == MixinFacet.Contributing.AS_PROPERTY;
+        return holder.lookupFacet(ContributingFacet.class)
+                .map(ContributingFacet::contributed)
+                .map(MixinFacet.Contributing.AS_PROPERTY::equals)
+                .orElse(false);
     }
 
     CommandPublishingFacetForPropertyAnnotation(

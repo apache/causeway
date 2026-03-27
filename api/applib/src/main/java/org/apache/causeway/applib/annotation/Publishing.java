@@ -45,8 +45,8 @@ public enum Publishing {
      * Publishing of data triggered by interaction with this object
      * should be handled as per the default publishing policy
      * configured in <tt>application.properties</tt>.
-     * <p>
-     * If no publishing policy is configured, then publishing is disabled.
+     *
+     * <p>If no publishing policy is configured, then publishing is disabled.
      */
     AS_CONFIGURED,
 
@@ -54,6 +54,23 @@ public enum Publishing {
      * Do publish data triggered by interaction with this object.
      */
     ENABLED,
+
+    /**
+     * Applies only to {@link EntityPropertyChangeSubscriber}, whereby events are published for modifications to the
+     * object, but no events are published for the initial creation of an object.
+     *
+     * <p>In the case of audit trail extension,
+     * this effectively suppresses all of the "[NEW] -> value" entries that are created for every property of the
+     * entity when it is being created, and also all of the "value -> [DELETED]" entries that are created for every property of the
+     * entity when it is being deleted.
+     *
+     * <p>This variant is intended only where the application code has enough traceability built into the domain
+     * (perhaps to provide visibility to the end-users) that the technical auditing is overkill.  It will also
+     * of course reduce the volume of auditing, so improves performance (likely both response times and throughput).
+     *
+     * <p>For other subscribers, behaviour is the same as {@link #ENABLED}.
+     */
+    ENABLED_FOR_UPDATES_ONLY,
 
     /**
      * Do <b>not</b> publish data triggered by interaction with this object

@@ -18,13 +18,13 @@
  */
 package org.apache.causeway.core.metamodel.facets.properties.property.entitychangepublishing;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.annotation.Publishing;
 import org.apache.causeway.applib.value.Blob;
 import org.apache.causeway.applib.value.Clob;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-
-import org.jspecify.annotations.NonNull;
 
 /**
  * Indicates whether a property should be excluded from entity change publishing (auditing).
@@ -33,7 +33,7 @@ import org.jspecify.annotations.NonNull;
 public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
 
     /**
-     * Must be one of Publishing.ENABLED or Publishing.DISABLED.
+     * Must be one of {@link Publishing#ENABLED}, {@link Publishing#ENABLED_FOR_UPDATES_ONLY} or {@link Publishing#DISABLED}.
      */
     @NonNull Publishing getEntityChangePublishing();
 
@@ -42,7 +42,8 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
     }
 
     default boolean isPublishingAllowed() {
-        return getEntityChangePublishing() == Publishing.ENABLED;
+        return getEntityChangePublishing() == Publishing.ENABLED
+                || getEntityChangePublishing() == Publishing.ENABLED_FOR_UPDATES_ONLY;
     }
 
     static boolean isExcludedFromPublishing(final @NonNull OneToOneAssociation property) {
@@ -58,7 +59,7 @@ public interface EntityPropertyChangePublishingPolicyFacet extends Facet {
                     .map(EntityPropertyChangePublishingPolicyFacet::isPublishingAllowed)
                     .orElse(false);
 
-            //XXX CAUSEWAY-1488, exclude Bob/Clob from property change publishing unless explicitly allowed
+            //XXX CAUSEWAY-1488, exclude Blob/Clob from property change publishing unless explicitly allowed
             return !isExplictlyAllowed;
         }
 
