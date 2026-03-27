@@ -146,6 +146,7 @@ implements MemberExecutorService {
 
         var executionResult = observationProvider.get("Action Invocation (%s)"
                 .formatted(actionExecutor.getOwningAction().getFeatureIdentifier()))
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", actionExecutor.getInteractionInitiatedBy().name())
                 //could also add action's args as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)
             .observe(()->
@@ -249,6 +250,7 @@ implements MemberExecutorService {
 
         var executionResult = observationProvider.get("Property Update (%s)"
                 .formatted(propertyExecutor.getOwningProperty().getFeatureIdentifier()))
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", propertyExecutor.getInteractionInitiatedBy().name())
                 //could also add property's old and new value as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)
             .observe(()->
