@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -34,12 +36,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
- * <p>
- * That is, invoke a domain action or edit a domain property.
+ *
+ * <p>That is, invoke a domain action or edit a domain property.
  *
  * @since 2.0
  */

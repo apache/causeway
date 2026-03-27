@@ -18,9 +18,17 @@
  */
 package org.apache.causeway.core.runtimeservices.executor;
 
-import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
-
 import java.util.Optional;
+
+import jakarta.annotation.Priority;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.inject.Provider;
+
+import org.jspecify.annotations.NonNull;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -29,14 +37,14 @@ import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.applib.services.metrics.MetricsService;
-import org.apache.causeway.applib.services.repository.RepositoryService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
@@ -57,7 +65,6 @@ import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
-import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
@@ -65,16 +72,9 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectMember;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
-import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import jakarta.annotation.Priority;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import jakarta.inject.Provider;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import static org.apache.causeway.core.metamodel.facets.members.publish.command.CommandPublishingFacet.isPublishingEnabled;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -87,24 +87,44 @@ import lombok.extern.slf4j.Slf4j;
 @Named(CausewayModuleCoreRuntimeServices.NAMESPACE + ".MemberExecutorServiceDefault")
 @Priority(PriorityPrecedence.EARLY)
 @Qualifier("Default")
-@RequiredArgsConstructor(onConstructor_ = {@Inject})
 @Slf4j
 public class MemberExecutorServiceDefault
 implements MemberExecutorService {
 
-    private final @Getter InteractionLayerTracker interactionLayerTracker;
-    private final @Getter CausewayConfiguration configuration;
-    private final @Getter ObjectManager objectManager;
-    private final @Getter ClockService clockService;
-    private final @Getter DeadlockRecognizer deadlockRecognizer;
-    private final @Getter ServiceInjector serviceInjector;
-    private final @Getter Provider<MetricsService> metricsServiceProvider;
-    private final @Getter InteractionDtoFactory interactionDtoFactory;
-    private final @Getter Provider<ExecutionPublisher> executionPublisherProvider;
-    private final @Getter MetamodelEventService metamodelEventService;
-    private final @Getter TransactionService transactionService;
-    private final @Getter RepositoryService repositoryService;
+    private final InteractionLayerTracker interactionLayerTracker;
+    private final CausewayConfiguration configuration;
+    private final ObjectManager objectManager;
+    private final ClockService clockService;
+    private final DeadlockRecognizer deadlockRecognizer;
+    private final Provider<MetricsService> metricsServiceProvider;
+    private final InteractionDtoFactory interactionDtoFactory;
+    private final Provider<ExecutionPublisher> executionPublisherProvider;
+    private final TransactionService transactionService;
     private final Provider<CommandPublisher> commandPublisherProvider;
+    private final ObservationProvider observationProvider;
+
+    @Inject
+    MemberExecutorServiceDefault(final InteractionLayerTracker interactionLayerTracker,
+            final CausewayConfiguration configuration, final ObjectManager objectManager, final ClockService clockService,
+            final DeadlockRecognizer deadlockRecognizer,
+            final Provider<MetricsService> metricsServiceProvider, final InteractionDtoFactory interactionDtoFactory,
+            final Provider<ExecutionPublisher> executionPublisherProvider,
+            final TransactionService transactionService,
+            final Provider<CommandPublisher> commandPublisherProvider,
+            final CausewayObservationIntegration observationIntegration) {
+        this.interactionLayerTracker = interactionLayerTracker;
+        this.configuration = configuration;
+        this.objectManager = objectManager;
+        this.clockService = clockService;
+        this.deadlockRecognizer = deadlockRecognizer;
+        this.metricsServiceProvider = metricsServiceProvider;
+        this.interactionDtoFactory = interactionDtoFactory;
+        this.executionPublisherProvider = executionPublisherProvider;
+        this.transactionService = transactionService;
+        this.commandPublisherProvider = commandPublisherProvider;
+        this.observationProvider = observationIntegration.provider(getClass(),
+                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
+    }
 
     private MetricsService metricsService() {
         return metricsServiceProvider.get();
@@ -124,11 +144,16 @@ implements MemberExecutorService {
     public ManagedObject invokeAction(
             final @NonNull ActionExecutor actionExecutor) {
 
-        var executionResult = actionExecutor.getInteractionInitiatedBy().isPassThrough()
+        var executionResult = observationProvider.get("Action Invocation (%s)"
+                .formatted(actionExecutor.getOwningAction().getFeatureIdentifier()))
+                //could also add action's args as tags (but potentially sensitive)
+                //(we do this with Xray, but that is local for debugging only)
+            .observe(()->
+                actionExecutor.getInteractionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     invokeActionInternally(actionExecutor))
-                : getTransactionService().callWithinCurrentTransactionElseCreateNew(()->
-                    invokeActionInternally(actionExecutor));
+                : transactionService.callWithinCurrentTransactionElseCreateNew(()->
+                    invokeActionInternally(actionExecutor)));
 
         return executionResult
                 .valueAsNullableElseFail();
@@ -139,7 +164,7 @@ implements MemberExecutorService {
 
         final ObjectAction owningAction = actionExecutor.getOwningAction();
         final InteractionHead head = actionExecutor.getHead();
-        
+
         final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
         final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
         //            final MethodFacade methodFacade,
@@ -222,12 +247,17 @@ implements MemberExecutorService {
     public ManagedObject setOrClearProperty(
             final @NonNull PropertyModifier propertyExecutor) {
 
-        var executionResult = propertyExecutor.getInteractionInitiatedBy().isPassThrough()
+        var executionResult = observationProvider.get("Property Update (%s)"
+                .formatted(propertyExecutor.getOwningProperty().getFeatureIdentifier()))
+                //could also add property's old and new value as tags (but potentially sensitive)
+                //(we do this with Xray, but that is local for debugging only)
+            .observe(()->
+                propertyExecutor.getInteractionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     setOrClearPropertyInternally(propertyExecutor))
-                : getTransactionService()
+                : transactionService
                     .callWithinCurrentTransactionElseCreateNew(() ->
-                        setOrClearPropertyInternally(propertyExecutor));
+                        setOrClearPropertyInternally(propertyExecutor)));
 
         return executionResult
                 .valueAsNullableElseFail();
@@ -275,18 +305,17 @@ implements MemberExecutorService {
         // TODO: should also sync DTO's 'threw' attribute here...?
 
         var executionExceptionIfAny = priorExecution.getThrew();
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-                ? ((RuntimeException)executionExceptionIfAny)
+        if(executionExceptionIfAny != null)
+            throw executionExceptionIfAny instanceof RuntimeException r
+                ? r
                 : new RuntimeException(executionExceptionIfAny);
-        }
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.getFacetHolder())) {
             executionPublisher().publishPropertyEdit(priorExecution);
         }
 
-        var result = getObjectManager().adapt(targetPojo);
+        var result = objectManager.adapt(targetPojo);
         _Xray.exitInvocation(xrayHandle);
         return result;
     }
@@ -307,21 +336,18 @@ implements MemberExecutorService {
     private void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
-        if(command.getResult() != null) {
+        if(command.getResult() != null)
             // don't trample over any existing result, eg subsequent mixins.
             return;
-        }
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
             return;
-        }
         var entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable()) {
+        if(!entityState.isPersistable())
             return;
-        }
         if(entityState.isHollow()
                 || entityState.isDetached()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
-            getTransactionService().flushTransaction();
+            transactionService.flushTransaction();
         }
         // re-evaluate
         if(!resultAdapter.getEntityState().hasOid()) {
@@ -337,14 +363,12 @@ implements MemberExecutorService {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
             return resultAdapter;
-        }
 
-        if (!getConfiguration().core().metaModel().filterVisibility()
-                || resultAdapter instanceof PackedManagedObject) {
+        if (!configuration.core().metaModel().filterVisibility()
+                || resultAdapter instanceof PackedManagedObject)
             return resultAdapter;
-        }
 
         return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
