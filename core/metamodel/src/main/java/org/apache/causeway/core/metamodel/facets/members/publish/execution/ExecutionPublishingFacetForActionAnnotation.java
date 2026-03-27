@@ -58,34 +58,24 @@ public abstract class ExecutionPublishingFacetForActionAnnotation extends Execut
 
         var publishingPolicy = ActionConfigOptions.actionExecutionPublishingPolicy(configuration);
 
-        return
-        actionsIfAny
-                .filter(action -> action.executionPublishing() != Publishing.NOT_SPECIFIED)
-                .map(Action::executionPublishing)
-                .<ExecutionPublishingFacet>map(publishing -> {
-                    switch (publishing) {
-                        case AS_CONFIGURED:
-                            switch (publishingPolicy) {
-                                case NONE:
-                                    return new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
-                                case IGNORE_QUERY_ONLY:
-                                case IGNORE_SAFE:
-                                    return Facets.hasSafeSemantics(holder)
-                                            ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
-                                            : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
-                                case ALL:
-                                    return new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
-                                default:
-                                    throw new IllegalStateException(String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
-                                }
-                        case DISABLED:
-                            return new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
-                        case ENABLED:
-                            return new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
-                        default:
-                            throw new IllegalStateException(String.format("@Action#executionPublishing '%s' not recognised", publishing));
-                    }
-                });
+        return actionsIfAny
+            .filter(action -> action.executionPublishing() != Publishing.NOT_SPECIFIED)
+            .map(Action::executionPublishing)
+            .<ExecutionPublishingFacet>map(publishing -> (switch (publishing) {
+                case AS_CONFIGURED -> switch (publishingPolicy) {
+                    case NONE -> new ExecutionPublishingFacetForActionAnnotationAsConfigured.None(holder);
+                    case IGNORE_QUERY_ONLY, IGNORE_SAFE -> Facets.hasSafeSemantics(holder)
+                        ? new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafe(holder)
+                        : new ExecutionPublishingFacetForActionAnnotationAsConfigured.IgnoreSafeYetNot(holder);
+                    case ALL -> new ExecutionPublishingFacetForActionAnnotationAsConfigured.All(holder);
+                    default -> throw new IllegalStateException(
+                            String.format("configured action.executionPublishing policy '%s' not recognised", publishingPolicy));
+                };
+                case DISABLED -> new ExecutionPublishingFacetForActionAnnotation.Disabled(holder);
+                case ENABLED, ENABLED_FOR_UPDATES_ONLY -> new ExecutionPublishingFacetForActionAnnotation.Enabled(holder);
+                default -> throw new IllegalStateException(
+                        String.format("@Action#executionPublishing '%s' not recognised", publishing));
+            }));
     }
 
     ExecutionPublishingFacetForActionAnnotation(final FacetHolder holder) {

@@ -39,18 +39,12 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.inject.Provider;
 
-import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
-
-import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
-import org.apache.causeway.schema.chg.v2.ChangesDto;
-import org.apache.causeway.schema.chg.v2.ObjectsDto;
-import org.apache.causeway.schema.common.v2.OidsDto;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.core.Ordered;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -61,6 +55,7 @@ import org.apache.causeway.applib.annotation.EntityChangeKind;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.annotation.TransactionScope;
+import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
@@ -74,10 +69,12 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
+import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
+import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.HasEnlistedEntityPropertyChanges;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PreAndPostValue;
 import org.apache.causeway.core.metamodel.services.objectlifecycle.PropertyChangeRecord;
@@ -88,9 +85,11 @@ import org.apache.causeway.core.transaction.changetracking.EntityChangesPublishe
 import org.apache.causeway.core.transaction.changetracking.EntityPropertyChangePublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 import org.apache.causeway.persistence.commons.CausewayModulePersistenceCommons;
+import org.apache.causeway.schema.chg.v2.ChangesDto;
+import org.apache.causeway.schema.chg.v2.ObjectsDto;
+import org.apache.causeway.schema.common.v2.OidsDto;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -305,21 +304,18 @@ implements
 
     private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
 
-        if (!configuration.isEnabled()) {
+        if (!configuration.isEnabled())
             return true;
-        }
 
-        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec())) {
+        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec()))
             return true; // ignore entities that are not enabled for entity change publishing
-        }
 
         // guard against transient
         if(ManagedObjects.bookmark(entity).isEmpty()) return true;
 
-        if(changes.isMemoized()) {
+        if(changes.isMemoized())
             throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
-        }
 
         return false;
     }
@@ -373,9 +369,8 @@ implements
 
         // a defensive copy of
         var changeKindByEnlistedAdapter = new HashMap<>(this.changeKindByEnlistedAdapter);
-        if(changeKindByEnlistedAdapter.isEmpty()) {
+        if(changeKindByEnlistedAdapter.isEmpty())
             return Optional.empty();
-        }
 
         final Interaction interaction = currentInteraction();
         final int numberEntitiesLoaded1 = numberEntitiesLoaded();
@@ -418,9 +413,8 @@ implements
 
         changeKindByEnlistedEntity.forEach((bookmark, kind)->{
             var oidDto = bookmark.toOidDto();
-            if(oidDto==null) {
+            if(oidDto==null)
                 return;
-            }
             switch(kind) {
                 case CREATE:
                     objectsDto.getCreated().getOid().add(oidDto);
@@ -530,9 +524,9 @@ implements
 
         _Xray.enlistCreated(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) {
+        if (isEntityExcludedForChangePublishing(entity)
+                || !EntityChangePublishingFacet.isPublishingEnabledForCreate(entity.objSpec()))
             return;
-        }
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
@@ -551,9 +545,9 @@ implements
 
         _Xray.enlistUpdating(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) {
+        if (isEntityExcludedForChangePublishing(entity)
+                || !EntityChangePublishingFacet.isPublishingEnabledForUpdate(entity.objSpec()))
             return;
-        }
 
         if(log.isDebugEnabled()) {
             log.debug("enlist entity's property changes for publishing {}", entity);
@@ -588,7 +582,9 @@ implements
 
         _Xray.enlistDeleting(entity, interactionProviderProvider);
 
-        if (isEntityExcludedForChangePublishing(entity)) return;
+        if (isEntityExcludedForChangePublishing(entity)
+                || !EntityChangePublishingFacet.isPublishingEnabledForDelete(entity.objSpec()))
+            return;
 
         suppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);

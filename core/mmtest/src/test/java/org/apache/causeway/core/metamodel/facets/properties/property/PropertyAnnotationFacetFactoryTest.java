@@ -193,9 +193,8 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
             assertEquals(eventTypeOrigin, domainEventFacet.getEventTypeOrigin());
             assertThat(domainEventFacet.getEventType(), CausewayMatchers.classEqualTo(eventType));
 
-            if(facetedMethod.methodFacade().getName().equals("prop")) {
+            if(facetedMethod.methodFacade().getName().equals("prop"))
                 return; // skip further checks, when in a mixed-in scenario
-            }
 
             // then
             var setterFacet = facetedMethod.getFacet(PropertySetterFacet.class);
@@ -669,7 +668,7 @@ class PropertyAnnotationFacetFactoryTest extends FacetFactoryTestAbstract {
                 // when
                 processEntityPropertyChangePublishing(facetFactory, processMethodContext);
                 // then
-                var changePolicyFacet = facetedMethod.getFacet(EntityPropertyChangePublishingPolicyFacet.class);
+                var changePolicyFacet = facetedMethod.lookupFacet(EntityPropertyChangePublishingPolicyFacet.class).orElse(null);
                 assertNotNull(changePolicyFacet);
                 assertTrue(changePolicyFacet.isPublishingVetoed());
                 assertFalse(changePolicyFacet.isPublishingAllowed());
