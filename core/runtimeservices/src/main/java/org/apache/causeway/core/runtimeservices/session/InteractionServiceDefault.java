@@ -47,7 +47,6 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
@@ -148,22 +147,16 @@ implements
             .map(it->(CausewayInteraction)it)
             .orElseGet(()->new CausewayInteraction(interactionIdGenerator.interactionId()));
 
+        final int depth = getInteractionLayerCount();
 
-        var obs = observationProvider.get(getInteractionLayerCount()==0
+        var obs = observationProvider.get(depth == 0
                 ? "Causeway Root Interaction"
                 : "Causeway Nested Interaction");
         var newInteractionLayer = layerStack.push(causewayInteraction, interactionContextToUse, obs);
 
-        obs.highCardinalityKeyValue("user.isImpersonating", "" + interactionContextToUse.getUser().isImpersonating());
-        _Strings.nonEmpty(interactionContextToUse.getUser().multiTenancyToken())
-            .ifPresent(value->obs.highCardinalityKeyValue("user.multiTenancyToken", value));
-        _Strings.nonEmpty(interactionContextToUse.getUser().name())
-            .ifPresent(value->obs.highCardinalityKeyValue("user.name", value));
-        if(getInteractionLayerCount()>0) {
-            obs.highCardinalityKeyValue("stackedLayers", ""+getInteractionLayerCount());
-        }
+        _Observation.addTags(obs, interactionContextToUse, depth);
 
-        if(isAtTopLevel()) {
+        if(depth == 0) {
             transactionServiceSpring.onOpen(causewayInteraction);
             interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         }
@@ -320,7 +313,7 @@ implements
         transactionServiceSpring.requestRollback(interaction);
     }
 
-    private boolean isAtTopLevel() {
+    private boolean isAtRootLevel() {
     	return layerStack.size()==1;
     }
 
@@ -398,7 +391,7 @@ implements
         try {
             layerStack.popWhile(currentLayer->{
                 if(!(layerStack.size()>downToStackSize)) return false;
-                if(isAtTopLevel()) {
+                if(isAtRootLevel()) {
                     // keep the stack unmodified yet, to allow for callbacks to properly operate
                     preInteractionClosed((CausewayInteraction)currentLayer.interaction());
                 }

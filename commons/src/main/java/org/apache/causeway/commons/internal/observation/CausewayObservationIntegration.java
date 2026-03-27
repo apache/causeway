@@ -19,6 +19,10 @@
 package org.apache.causeway.commons.internal.observation;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -27,6 +31,8 @@ import java.util.function.UnaryOperator;
 import org.jspecify.annotations.Nullable;
 
 import org.springframework.util.StringUtils;
+
+import org.apache.causeway.commons.internal.base._Strings;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -100,6 +106,37 @@ public record CausewayObservationIntegration(
                 || moduleName.startsWith("causeway-")
             ? moduleName.substring(9)
             : moduleName);
+    }
+
+    /**
+     * UTC ISO format
+     */
+    public static KeyValue interactionClock(final Instant instant) {
+        return KeyValue.of("causeway.interaction.clock", DateTimeFormatter.ISO_INSTANT.format(instant));
+    }
+    public static KeyValue interactionDepth(final int value) {
+        return KeyValue.of("causeway.interaction.depth", "" + value);
+    }
+    public static KeyValue interactionLanguage(final Locale locale) {
+        return KeyValue.of("causeway.interaction.language", locale.toString());
+    }
+    public static KeyValue interactionNumberFormat(final Locale locale) {
+        return KeyValue.of("causeway.interaction.numberformat", locale.toString());
+    }
+    public static KeyValue interactionTimeFormat(final Locale locale) {
+        return KeyValue.of("causeway.interaction.timeformat", locale.toString());
+    }
+    public static KeyValue interactionTimezone(final ZoneId zone) {
+        return KeyValue.of("causeway.interaction.timezone", zone.getId());
+    }
+    public static KeyValue userName(final @Nullable String value) {
+        return KeyValue.of("causeway.user.name", _Strings.nullToEmpty(value));
+    }
+    public static KeyValue userImpersonating(final boolean value) {
+        return KeyValue.of("causeway.user.impersonating", "" + value);
+    }
+    public static KeyValue userMultiTenancyToken(final @Nullable String value) {
+        return KeyValue.of("causeway.user.multiTenancyToken", _Strings.nullToEmpty(value));
     }
 
     // -- OBSERVATION CLOSURE
