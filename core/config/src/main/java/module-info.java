@@ -48,12 +48,13 @@ module org.apache.causeway.core.config {
     requires transitive micrometer.commons;
     requires transitive micrometer.observation;
     requires transitive micrometer.tracing;
+    requires transitive spring.boot;
     requires spring.aop;
     requires spring.beans;
-    requires transitive spring.boot;
     requires spring.context;
     requires spring.core;
     requires spring.tx;
+    requires spring.boot.autoconfigure;
     requires org.slf4j;
 
     opens org.apache.causeway.core.config to spring.core, org.hibernate.validator;

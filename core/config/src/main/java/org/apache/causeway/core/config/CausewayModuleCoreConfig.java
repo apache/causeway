@@ -34,6 +34,7 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
+import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.DiscardedSpanExportingPredicate;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
@@ -47,6 +48,7 @@ import io.micrometer.observation.ObservationRegistry;
     // Observation configuration
     // needs to happen early, at least before auto configuration gets to run
     DiscardedSpanExportingPredicate.class,
+    CausewayObservationAutoConfiguration.class,
 
     // @Component
     CausewayConfiguration.class,
