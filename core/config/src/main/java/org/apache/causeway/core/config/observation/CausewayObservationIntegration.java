@@ -33,14 +33,13 @@ import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.observation.ObservationClosure;
+import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration.DiscardedSpanExportingPredicate;
 
 import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Context;
 import io.micrometer.observation.ObservationConvention;
 import io.micrometer.observation.ObservationRegistry;
-import io.micrometer.tracing.exporter.FinishedSpan;
-import io.micrometer.tracing.exporter.SpanExportingPredicate;
 
 /**
  * Holder of {@link ObservationRegistry} which comes as a dependency of <i>spring-context</i>.
@@ -141,20 +140,9 @@ public record CausewayObservationIntegration(
      * Denies span export, in collaboration with a Spring registered {@link DiscardedSpanExportingPredicate}.
      */
     public static void discard(@Nullable final Observation obs) {
-        if(obs == null)
-            return;
-        obs.lowCardinalityKeyValue(ObservationClosure.DISCARD_KEY);
+    	ObservationClosure.discard(obs);
     }
 
-    /**
-     * Does not allow discarded spans to be exported. Register with Spring (before auto configuration is running).
-     */
-    public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
-        @Override
-        public boolean isExportable(final FinishedSpan span) {
-            return !span.getTags().containsKey(ObservationClosure.DISCARD_KEY.getKey());
-        }
-    }
 
     //TODO perhaps threshold should not be hardcoded at call site; what we really want is to report Observations
     // that are way off a base-line; this would require some profiling to establish base-lines

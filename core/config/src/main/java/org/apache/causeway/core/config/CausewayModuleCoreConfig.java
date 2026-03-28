@@ -18,8 +18,6 @@
  */
 package org.apache.causeway.core.config;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -35,19 +33,13 @@ import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
 import org.apache.causeway.core.config.observation.CausewayObservationAutoConfiguration;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration.DiscardedSpanExportingPredicate;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
-
-import io.micrometer.observation.ObservationRegistry;
 
 @Configuration(proxyBeanMethods = false)
 @Import({
 
-    // Observation configuration
-    // needs to happen early, at least before auto configuration gets to run
-    DiscardedSpanExportingPredicate.class,
+    // needs to happen early, at least before other auto configuration gets to run
     CausewayObservationAutoConfiguration.class,
 
     // @Component
@@ -102,12 +94,6 @@ public class CausewayModuleCoreConfig {
             _Strings.emptyToNull(emailConfiguration.override().to()),
             _Strings.emptyToNull(emailConfiguration.override().cc()),
             _Strings.emptyToNull(emailConfiguration.override().bcc()));
-    }
-
-    @Bean
-    CausewayObservationIntegration causewayObservationIntegration(
-            final Optional<ObservationRegistry> observationRegistryOpt) {
-        return new CausewayObservationIntegration(observationRegistryOpt);
     }
 
 }
