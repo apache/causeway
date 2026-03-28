@@ -48,6 +48,8 @@ import org.apache.causeway.commons.internal.observation.CausewayObservationInteg
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.MessageTemplate;
+import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
+import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
@@ -102,6 +104,7 @@ implements MemberExecutorService {
     private final TransactionService transactionService;
     private final Provider<CommandPublisher> commandPublisherProvider;
     private final ObservationProvider observationProvider;
+    private final InteractionInternal.Context interactionInternalContext;
 
     @Inject
     MemberExecutorServiceDefault(final InteractionLayerTracker interactionLayerTracker,
@@ -124,6 +127,11 @@ implements MemberExecutorService {
         this.commandPublisherProvider = commandPublisherProvider;
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
+        this.interactionInternalContext = new InteractionInternal.Context(
+                clockService, metricsService(), commandPublisherProvider, deadlockRecognizer,
+                // we are creating an observation provider for CausewayInteraction to use
+                observationIntegration.provider(CausewayInteraction.class,
+                        CausewayObservationIntegration.withModuleName(CausewayModuleCoreInteraction.NAMESPACE)));
     }
 
     private MetricsService metricsService() {
@@ -197,7 +205,7 @@ implements MemberExecutorService {
                         interaction, actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(actionExecutor, actionInvocation, new InteractionInternal.Context(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
+        interaction.execute(actionExecutor, actionInvocation, interactionInternalContext);
 
         // handle any exceptions
         var priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -298,8 +306,7 @@ implements MemberExecutorService {
         var propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        var targetPojo = interaction.execute(propertyModifier, propertyEdit,
-                new InteractionInternal.Context(clockService, metricsService(), commandPublisherProvider.get(), deadlockRecognizer));
+        var targetPojo = interaction.execute(propertyModifier, propertyEdit, interactionInternalContext);
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();

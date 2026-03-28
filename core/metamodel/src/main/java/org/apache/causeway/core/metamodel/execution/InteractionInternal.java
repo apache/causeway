@@ -21,6 +21,8 @@ package org.apache.causeway.core.metamodel.execution;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
+import jakarta.inject.Provider;
+
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.clock.ClockService;
@@ -30,6 +32,7 @@ import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
+import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
@@ -50,8 +53,13 @@ extends Interaction {
     record Context(
             ClockService clockService,
             MetricsService metricsService,
-            CommandPublisher commandPublisher,
-            DeadlockRecognizer deadlockRecognizer) {
+            Provider<CommandPublisher> commandPublisherProvider,
+            DeadlockRecognizer deadlockRecognizer,
+            ObservationProvider observationProvider) {
+
+        public CommandPublisher commandPublisher() {
+            return commandPublisherProvider.get();
+        }
     }
 
     /**
@@ -145,11 +153,10 @@ extends Interaction {
         var priorExecution = getPriorExecution();
         var executionExceptionIfAny = getPriorExecution().getThrew();
         actionInvocation.setThrew(executionExceptionIfAny);
-        if(executionExceptionIfAny != null) {
-            throw executionExceptionIfAny instanceof RuntimeException
-                ? ((RuntimeException)executionExceptionIfAny)
+        if(executionExceptionIfAny != null)
+            throw executionExceptionIfAny instanceof RuntimeException r
+                ? r
                 : new RuntimeException(executionExceptionIfAny);
-        }
         return priorExecution;
     }
 

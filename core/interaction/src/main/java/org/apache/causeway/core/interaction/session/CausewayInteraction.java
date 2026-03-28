@@ -100,13 +100,16 @@ implements InteractionInternal {
             final ActionInvocation actionInvocation,
             final Context context) {
 
-        push(actionInvocation);
-        start(actionInvocation, context);
-        try {
-            return executeInternal(memberExecutor, actionInvocation, context);
-        } finally {
-            popAndComplete(context.clockService(), context.metricsService());
-        }
+        return context.observationProvider().get("Execute Action Invocation")
+            .observe(()->{
+                push(actionInvocation);
+                start(actionInvocation, context);
+                try {
+                    return executeInternal(memberExecutor, actionInvocation, context);
+                } finally {
+                    popAndComplete(context.clockService(), context.metricsService());
+                }
+            });
     }
 
     @Override
@@ -115,13 +118,16 @@ implements InteractionInternal {
             final PropertyEdit propertyEdit,
             final Context context) {
 
-        push(propertyEdit);
-        start(propertyEdit, context);
-        try {
-            return executeInternal(memberExecutor, propertyEdit, context);
-        } finally {
-            popAndComplete(context.clockService(), context.metricsService());
-        }
+        return context.observationProvider().get("Execute Property Edit")
+            .observe(()->{
+                push(propertyEdit);
+                start(propertyEdit, context);
+                try {
+                    return executeInternal(memberExecutor, propertyEdit, context);
+                } finally {
+                    popAndComplete(context.clockService(), context.metricsService());
+                }
+            });
     }
 
     private <T extends Execution<?,?>> Object executeInternal(
@@ -130,7 +136,7 @@ implements InteractionInternal {
             final Context context) {
 
         try {
-            Object result = memberExecutor.execute(execution);
+            Object result = context.observationProvider().get("Member Execution").observe(()->memberExecutor.execute(execution));
             execution.setReturned(result);
             return result;
         } catch (Exception ex) {
