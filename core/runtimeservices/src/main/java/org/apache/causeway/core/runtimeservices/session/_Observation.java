@@ -21,15 +21,15 @@ package org.apache.causeway.core.runtimeservices.session;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.internal.base._Strings;
 
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.interactionClock;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.interactionDepth;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.interactionLanguage;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.interactionNumberFormat;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.interactionTimeFormat;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.interactionTimezone;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.userImpersonating;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.userMultiTenancyToken;
-import static org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.userName;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionClock;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionDepth;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionLanguage;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionNumberFormat;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionTimeFormat;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionTimezone;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.userImpersonating;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.userMultiTenancyToken;
+import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.userName;
 
 import lombok.experimental.UtilityClass;
 

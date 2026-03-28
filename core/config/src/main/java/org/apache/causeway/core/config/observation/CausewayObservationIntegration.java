@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.commons.internal.observation;
+package org.apache.causeway.core.config.observation;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -25,7 +25,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 import org.jspecify.annotations.Nullable;
@@ -33,14 +32,11 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.util.StringUtils;
 
 import org.apache.causeway.commons.internal.base._Strings;
-
-import lombok.Getter;
-import lombok.experimental.Accessors;
+import org.apache.causeway.commons.internal.observation.ObservationClosure;
 
 import io.micrometer.common.KeyValue;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.Observation.Context;
-import io.micrometer.observation.Observation.Scope;
 import io.micrometer.observation.ObservationConvention;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.tracing.exporter.FinishedSpan;
@@ -139,64 +135,7 @@ public record CausewayObservationIntegration(
         return KeyValue.of("causeway.user.multiTenancyToken", _Strings.nullToEmpty(value));
     }
 
-    // -- OBSERVATION CLOSURE
-
-    /**
-     * Helps if start and stop of an {@link Observation} happen in different code locations.
-     */
-    @Getter @Accessors(fluent = true)
-    public static final class ObservationClosure implements AutoCloseable {
-
-        private Observation observation;
-        private Scope scope;
-
-        public ObservationClosure startAndOpenScope(final Observation observation) {
-            if(observation==null) return this;
-            this.observation = observation.start();
-            this.scope = observation.openScope();
-            return this;
-        }
-
-        @Override
-        public void close() {
-            if(observation==null) return;
-            if(scope!=null) {
-                this.scope.close();
-                this.scope = null;
-            }
-            observation.stop();
-        }
-
-        public void onError(final Exception ex) {
-            if(observation==null) return;
-            // scope lifecycle terminates before exception handling
-            if(scope!=null) {
-                this.scope.close();
-                this.scope = null;
-            }
-            observation.error(ex);
-        }
-
-        public ObservationClosure tag(final String key, @Nullable final Supplier<Object> valueSupplier) {
-            if(observation==null || valueSupplier == null) return this;
-            try {
-                observation.highCardinalityKeyValue(key, "" + valueSupplier.get());
-            } catch (Exception e) {
-                observation.highCardinalityKeyValue(key, "EXCEPTION: " + e.getMessage());
-            }
-            return this;
-        }
-
-        public void discard() {
-            CausewayObservationIntegration.discard(this.observation);
-            close();
-        }
-
-    }
-
     // -- SPAN EXPORT DISCARDING SUPPORT
-
-    private static final KeyValue DISCARD_KEY = KeyValue.of("causeway.discard", "");
 
     /**
      * Denies span export, in collaboration with a Spring registered {@link DiscardedSpanExportingPredicate}.
@@ -204,7 +143,7 @@ public record CausewayObservationIntegration(
     public static void discard(@Nullable final Observation obs) {
         if(obs == null)
             return;
-        obs.lowCardinalityKeyValue(DISCARD_KEY);
+        obs.lowCardinalityKeyValue(ObservationClosure.DISCARD_KEY);
     }
 
     /**
@@ -213,7 +152,7 @@ public record CausewayObservationIntegration(
     public record DiscardedSpanExportingPredicate() implements SpanExportingPredicate {
         @Override
         public boolean isExportable(final FinishedSpan span) {
-            return !span.getTags().containsKey(DISCARD_KEY.getKey());
+            return !span.getTags().containsKey(ObservationClosure.DISCARD_KEY.getKey());
         }
     }
 

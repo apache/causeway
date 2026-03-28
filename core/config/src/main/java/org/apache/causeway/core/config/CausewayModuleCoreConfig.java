@@ -27,8 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import org.apache.causeway.commons.internal.base._Strings;
-import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
-import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.DiscardedSpanExportingPredicate;
 import org.apache.causeway.core.config.applib.RestfulPathProvider;
 import org.apache.causeway.core.config.beans.CausewayBeanFactoryPostProcessor;
 import org.apache.causeway.core.config.converters.PatternsConverter;
@@ -36,6 +34,8 @@ import org.apache.causeway.core.config.datasources.DataSourceIntrospectionServic
 import org.apache.causeway.core.config.environment.CausewayLocaleInitializer;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.config.environment.CausewayTimeZoneInitializer;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.DiscardedSpanExportingPredicate;
 import org.apache.causeway.core.config.validators.PatternOptionalStringConstraintValidator;
 import org.apache.causeway.core.config.viewer.web.WebAppContextPath;
 

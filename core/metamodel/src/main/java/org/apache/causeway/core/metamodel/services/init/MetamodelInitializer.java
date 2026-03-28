@@ -35,8 +35,8 @@ import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionsDtoUtils;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentContext;
 import org.apache.causeway.commons.internal.concurrent._ConcurrentTaskList;
-import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration;
-import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 

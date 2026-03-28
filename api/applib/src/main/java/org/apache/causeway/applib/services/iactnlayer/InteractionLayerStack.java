@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.commons.internal.observation.CausewayObservationIntegration.ObservationClosure;
+import org.apache.causeway.commons.internal.observation.ObservationClosure;
 
 import io.micrometer.observation.Observation;
 
@@ -45,7 +45,9 @@ public final class InteractionLayerStack {
             final Observation observation) {
         var parent = currentLayer().orElse(null);
         @SuppressWarnings("resource")
-        var newLayer = new InteractionLayer(parent, interaction, interactionContext, new ObservationClosure().startAndOpenScope(observation));
+        var newLayer = new InteractionLayer(parent, interaction, interactionContext,
+        		// on-close callback
+        		new ObservationClosure().startAndOpenScope(observation)::close);
         threadLocalLayer.set(newLayer);
         return newLayer;
     }
