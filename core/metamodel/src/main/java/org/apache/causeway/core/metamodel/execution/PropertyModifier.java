@@ -142,6 +142,10 @@ implements
     @Override
     public Object execute(final PropertyEdit currentExecution) {
 
+    	//TODO do appropriate observations ... 
+    	var executionContext = ((InteractionInternal)currentExecution.getInteraction())
+    			.executionContext();
+    	
         // update the current execution with the DTO (memento)
         //
         // but ... no point in attempting this if no bookmark is yet available.

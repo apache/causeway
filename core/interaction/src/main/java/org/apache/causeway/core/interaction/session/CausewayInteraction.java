@@ -27,33 +27,50 @@ import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CausewayInteraction
 implements InteractionInternal {
 
-    public CausewayInteraction(final @NonNull UUID interactionId) {
+	public CausewayInteraction(
+    		final @NonNull ExecutionContext executionContext) {
+		this(executionContext, executionContext.idGenerator().interactionId());
+	}
+	
+    private CausewayInteraction(
+    		final @NonNull ExecutionContext executionContext,
+    		final @NonNull UUID interactionId) {
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
+        this.executionContext = executionContext;
         this.command = new Command(interactionId);
+        this.observationProvider = executionContext.observationProvider(getClass(), 
+        		CausewayModuleCoreInteraction.NAMESPACE);
         if(log.isDebugEnabled()) {
             log.debug("new CausewayInteraction id={}", interactionId);
         }
     }
+    
+    private final ObservationProvider observationProvider;
 
+    @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
+    private final ExecutionContext executionContext;
+    
     @Getter(onMethod_ = {@Override})
     private final Command command;
 
@@ -97,17 +114,16 @@ implements InteractionInternal {
     @Override
     public Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
-            final ActionInvocation actionInvocation,
-            final Context context) {
+            final ActionInvocation actionInvocation) {
 
-        return context.observationProvider().get("Execute Action Invocation")
+        return observationProvider.get("Execute Action Invocation")
             .observe(()->{
                 push(actionInvocation);
-                start(actionInvocation, context);
+                start(actionInvocation);
                 try {
-                    return executeInternal(memberExecutor, actionInvocation, context);
+                    return executeInternal(memberExecutor, actionInvocation);
                 } finally {
-                    popAndComplete(context.clockService(), context.metricsService());
+                    popAndComplete();
                 }
             });
     }
@@ -115,28 +131,27 @@ implements InteractionInternal {
     @Override
     public Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
-            final PropertyEdit propertyEdit,
-            final Context context) {
+            final PropertyEdit propertyEdit) {
 
-        return context.observationProvider().get("Execute Property Edit")
+        return observationProvider.get("Execute Property Edit")
             .observe(()->{
                 push(propertyEdit);
-                start(propertyEdit, context);
+                start(propertyEdit);
                 try {
-                    return executeInternal(memberExecutor, propertyEdit, context);
+                    return executeInternal(memberExecutor, propertyEdit);
                 } finally {
-                    popAndComplete(context.clockService(), context.metricsService());
+                    popAndComplete();
                 }
             });
     }
 
     private <T extends Execution<?,?>> Object executeInternal(
             final MemberExecutor<T> memberExecutor,
-            final T execution,
-            final Context context) {
+            final T execution) {
 
         try {
-            Object result = context.observationProvider().get("Member Execution").observe(()->memberExecutor.execute(execution));
+            Object result = observationProvider.get("executeInternal")
+            		.observe(()->memberExecutor.execute(execution));
             execution.setReturned(result);
             return result;
         } catch (Exception ex) {
@@ -146,7 +161,7 @@ implements InteractionInternal {
             // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
             // WrapperFactory utilizing async calls
 
-            if(context.deadlockRecognizer().isDeadlock(ex)) {
+            if(executionContext.deadlockRecognizer().isDeadlock(ex)) {
                 if(log.isDebugEnabled()) {
                     log.debug("failed to execute an interaction due to a deadlock", ex);
                 } else if(log.isInfoEnabled()) {
@@ -194,17 +209,16 @@ implements InteractionInternal {
     }
 
     private void start(
-            final Execution<?,?> execution,
-            final Context context) {
+            final Execution<?,?> execution) {
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
         // to have been set on the current execution).
-        var startedAt = execution.start(context.clockService(), context.metricsService());
+        var startedAt = execution.start(executionContext.clockService(), executionContext.metricsService());
         if(getCommand().getStartedAt() == null) {
             getCommand().updater().setStartedAt(startedAt);
             getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
-        context.commandPublisher().start(getCommand());
+        executionContext.commandPublisher().start(getCommand());
     }
 
     /**
@@ -215,19 +229,21 @@ implements InteractionInternal {
      * from the stack of events held by the command.
      * </p>
      */
-    private Execution<?,?> popAndComplete(
-            final ClockService clockService,
-            final MetricsService metricsService) {
+    private Execution<?,?> popAndComplete() {
 
         if(currentExecution == null)
             throw new IllegalStateException("No current execution to pop");
         final Execution<?,?> popped = currentExecution;
+        
 
-        var completedAt = clockService.getClock().nowAsJavaSqlTimestamp();
-        popped.setCompletedAt(completedAt, metricsService);
+        return observationProvider.get("popAndComplete")
+        	.observe(()->{
+        		var completedAt = executionContext.clockService().getClock().nowAsJavaSqlTimestamp();
+                popped.setCompletedAt(completedAt, executionContext.metricsService());
 
-        moveCurrentTo(currentExecution.getParent());
-        return popped;
+                moveCurrentTo(currentExecution.getParent());
+                return popped;		
+        	});
     }
 
     private void moveCurrentTo(final Execution<?,?> newExecution) {

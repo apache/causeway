@@ -47,6 +47,7 @@ import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.CausewayModuleCoreConfig;
 import org.apache.causeway.core.config.environment.CausewaySystemEnvironment;
 import org.apache.causeway.core.metamodel.context.MetaModelContextFactory;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.facets.object.logicaltype.LogicalTypeMalformedValidator;
 import org.apache.causeway.core.metamodel.inspect.CausewayModuleCoreMetamodelMixins;
 import org.apache.causeway.core.metamodel.inspect.model.MetamodelInspectMenu;
@@ -183,6 +184,7 @@ import org.apache.causeway.core.security.CausewayModuleCoreSecurity;
         // @Service's
         ColumnOrderTxtFileServiceDefault.class,
         ExceptionRecognizerForRecoverableException.class,
+        ExecutionContext.class,
         GridMarshallerXml.class,
         GridServiceDefault.class,
         IdStringifierLookupService.class,

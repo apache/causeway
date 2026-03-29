@@ -18,7 +18,7 @@
  *
  */
 
-package org.apache.causeway.core.runtimeservices.session;
+package org.apache.causeway.core.runtimeservices.ia.id;
 
 import java.util.UUID;
 
@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.core.metamodel.execution.InteractionIdGenerator;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.extern.slf4j.Slf4j;

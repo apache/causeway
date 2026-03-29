@@ -21,20 +21,13 @@ package org.apache.causeway.core.metamodel.execution;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
-import jakarta.inject.Provider;
-
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
-import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
-import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 /**
  * @since 2.0
@@ -49,18 +42,8 @@ extends Interaction {
     interface MemberExecutor<T extends Execution<?,?>> {
         Object execute(final T currentExecution);
     }
-
-    record Context(
-            ClockService clockService,
-            MetricsService metricsService,
-            Provider<CommandPublisher> commandPublisherProvider,
-            DeadlockRecognizer deadlockRecognizer,
-            ObservationProvider observationProvider) {
-
-        public CommandPublisher commandPublisher() {
-            return commandPublisherProvider.get();
-        }
-    }
+    
+    ExecutionContext executionContext();
 
     /**
      * Use the provided {@link MemberExecutor} to invoke an action, with the provided
@@ -73,8 +56,7 @@ extends Interaction {
      */
     Object execute(
             final MemberExecutor<ActionInvocation> memberExecutor,
-            final ActionInvocation actionInvocation,
-            final Context context);
+            final ActionInvocation actionInvocation);
 
     /**
      * Use the provided {@link MemberExecutor} to edit a property, with the provided
@@ -87,8 +69,7 @@ extends Interaction {
      */
     Object execute(
             final MemberExecutor<PropertyEdit> memberExecutor,
-            final PropertyEdit propertyEdit,
-            final Context context);
+            final PropertyEdit propertyEdit);
 
     /**
      * Numbers the executions (an action invocation or property edit) within

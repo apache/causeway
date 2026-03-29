@@ -55,10 +55,10 @@ import org.apache.causeway.schema.common.v2.OidsDto;
  *
  * <p>
  * The design of this service is similar to
- * {@link org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault}.
+ * {@link org.apache.causeway.core.runtimeservices.ia.dto.InteractionDtoFactoryDefault}.
  * </p>
  *
- * @see org.apache.causeway.core.runtimeservices.interaction.InteractionDtoFactoryDefault
+ * @see org.apache.causeway.core.runtimeservices.ia.dto.InteractionDtoFactoryDefault
  *
  * @since 2.0
  */

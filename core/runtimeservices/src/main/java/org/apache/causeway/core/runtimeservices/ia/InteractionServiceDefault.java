@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.session;
+package org.apache.causeway.core.runtimeservices.ia;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -38,7 +38,6 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.eventbus.EventBusService;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
@@ -55,8 +54,9 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
+import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
-import org.apache.causeway.core.metamodel.specloader.SpecificationLoader;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
 import org.apache.causeway.core.security.authentication.InteractionContextFactory;
@@ -81,41 +81,32 @@ implements
     InteractionService,
     InteractionLayerTracker {
 
-    final InteractionLayerStack layerStack = new InteractionLayerStack();
+    private final InteractionLayerStack layerStack = new InteractionLayerStack();
 
-    final ObservationProvider observationProvider;
-    final ServiceInjector serviceInjector;
-
-    final ClockService clockService;
-    final Provider<CommandPublisher> commandPublisherProvider;
-    final ConfigurableBeanFactory beanFactory;
-
-    final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
-    final TransactionServiceSpring transactionServiceSpring;
-
-    final InteractionIdGenerator interactionIdGenerator;
+    private final ObservationProvider observationProvider;
+    private final ServiceInjector serviceInjector;
+    private final Provider<CommandPublisher> commandPublisherProvider;
+    private final InteractionScopeLifecycleHandler interactionScopeLifecycleHandler;
+    private final TransactionServiceSpring transactionServiceSpring;
+    private final ExecutionContext executionContext;
 
     @SuppressWarnings("exports")
     @Inject
     public InteractionServiceDefault(
-            final EventBusService eventBusService,
-            final CausewayObservationIntegration observationIntegration,
-            final Provider<SpecificationLoader> specificationLoaderProvider,
-            final ServiceInjector serviceInjector,
+    		final ConfigurableBeanFactory beanFactory,
+    		final ServiceInjector serviceInjector,
             final TransactionServiceSpring transactionServiceSpring,
             final ClockService clockService,
             final Provider<CommandPublisher> commandPublisherProvider,
-            final ConfigurableBeanFactory beanFactory,
-            final InteractionIdGenerator interactionIdGenerator) {
-        this.observationProvider = observationIntegration.provider(getClass(),
-                CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
+            final ExecutionContext executionContext,
+            final CausewayObservationIntegration observationIntegration) {
+    	this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
         this.serviceInjector = serviceInjector;
         this.transactionServiceSpring = transactionServiceSpring;
-        this.clockService = clockService;
         this.commandPublisherProvider = commandPublisherProvider;
-        this.beanFactory = beanFactory;
-        this.interactionIdGenerator = interactionIdGenerator;
-        this.interactionScopeLifecycleHandler = InteractionScopeBeanFactoryPostProcessor.lookupScope(beanFactory);
+        this.executionContext = executionContext;
+        this.observationProvider = observationIntegration.provider(getClass(),
+        		CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
 
     @Override
@@ -142,22 +133,22 @@ implements
             // we are done, just return the stack's top
             return currentInteractionLayerElseFail();
 
-        var causewayInteraction = currentInteractionLayer()
+        var interaction = currentInteractionLayer()
             .map(InteractionLayer::interaction)
-            .map(it->(CausewayInteraction)it)
-            .orElseGet(()->new CausewayInteraction(interactionIdGenerator.interactionId()));
+            .map(InteractionInternal.class::cast)
+            .orElseGet(()->new CausewayInteraction(executionContext));
 
         final int depth = getInteractionLayerCount();
 
         var obs = observationProvider.get(depth == 0
                 ? "Causeway Root Interaction"
                 : "Causeway Nested Interaction");
-        var newInteractionLayer = layerStack.push(causewayInteraction, interactionContextToUse, obs);
+        var newInteractionLayer = layerStack.push(interaction, interactionContextToUse, obs);
 
         _Observation.addTags(obs, interactionContextToUse, depth);
 
         if(depth == 0) {
-            transactionServiceSpring.onOpen(causewayInteraction);
+            transactionServiceSpring.onOpen(interaction);
             interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         }
 
@@ -439,7 +430,7 @@ implements
                     :
                         // this could arise as the result of calling InteractionService#nextInteraction within an action
                         // the best we can do is to use the current time
-                        clockService.getClock().nowAsJavaSqlTimestamp();
+                        executionContext.clockService().getClock().nowAsJavaSqlTimestamp();
 
             command.updater().setCompletedAt(completedAt);
         }

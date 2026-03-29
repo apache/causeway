@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
@@ -52,7 +54,6 @@ import org.apache.causeway.core.metamodel.spec.feature.ObjectActionParameter;
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -93,18 +94,12 @@ implements
     @Getter(onMethod_={@Override})
     private final @NonNull MetaModelContext metaModelContext;
 
-    @Getter
-    private final @NonNull FacetHolder facetHolder;
-    @Getter
-    private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
-    @Getter
-    private final @NonNull ObjectAction owningAction;
-    @Getter
-    private final @NonNull MethodFacade method;
-    @Getter
-    private final @NonNull InteractionHead head;
-    @Getter
-    private final @NonNull Can<ManagedObject> arguments;
+    @Getter private final @NonNull FacetHolder facetHolder;
+    @Getter private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
+    @Getter private final @NonNull ObjectAction owningAction;
+    @Getter private final @NonNull MethodFacade method;
+    @Getter private final @NonNull InteractionHead head;
+    @Getter private final @NonNull Can<ManagedObject> arguments;
 
     private final ActionInvocationFacetAbstract actionInvocationFacetAbstract;
 
@@ -128,6 +123,10 @@ implements
     @SneakyThrows
     @Override
     public Object execute(final ActionInvocation currentExecution) {
+    	
+    	//TODO do appropriate observations ... 
+    	var executionContext = ((InteractionInternal)currentExecution.getInteraction())
+    			.executionContext();
 
         // update the current execution with the DTO (memento)
         //

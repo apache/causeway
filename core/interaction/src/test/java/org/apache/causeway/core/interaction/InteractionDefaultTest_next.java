@@ -26,12 +26,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
+import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 
 class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        var interaction = new CausewayInteraction(UUID.randomUUID());
+    	var context = new ExecutionContext(null, null, null, null, UUID::randomUUID, null);
+    	
+    	var interaction = new CausewayInteraction(context);
 
         assertThat(interaction.getThenIncrementExecutionSequence(), is(0));
         assertThat(interaction.getThenIncrementExecutionSequence(), is(1));

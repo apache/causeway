@@ -61,6 +61,7 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
+import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
@@ -302,12 +303,12 @@ implements
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, sets up
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, sets up
      * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
      *
      * @param interaction The {@link CausewayInteraction} object representing the current interaction.
      */
-    public void onOpen(final @NonNull CausewayInteraction interaction) {
+    public void onOpen(final @NonNull InteractionInternal interaction) {
 
         txCounter.get().reset();
         if (platformTransactionManagers.isEmpty()) return;
@@ -366,7 +367,7 @@ implements
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, if
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, if
      * {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)}
      * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
      * (or their various overloads) result in an exception.
@@ -379,7 +380,7 @@ implements
     }
 
     /**
-     * For use only by {@link org.apache.causeway.core.runtimeservices.session.InteractionServiceDefault}, to close the
+     * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, to close the
      * transaction initially set up in {@link #onOpen(CausewayInteraction)} against all configured
      * {@link PlatformTransactionManager}s.
      *

@@ -23,11 +23,11 @@ import java.util.UUID;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
+import org.apache.causeway.core.metamodel.execution.InteractionIdGenerator;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.causeway.core.runtimeservices.session.InteractionIdGenerator;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 
 public record CommandRecord(

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.runtimeservices.interaction;
+package org.apache.causeway.core.runtimeservices.ia.dto;
 
 import java.util.List;
 
