@@ -177,12 +177,8 @@ implements
     @SneakyThrows
     private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
         // invoke method
-    	return observationProvider.get("Execute Domain Action Method")
-			//.highCardinalityKeyValue(CausewayObservationIntegration.interactionMethod(method))
-    		.observeChecked(()->{
-    			var resultPojo = invokeMethodElseFromCache(method, head, arguments);
-    	        return getServiceInjector().injectServicesInto(resultPojo);			
-    		});
+		var resultPojo = invokeMethodElseFromCache(method, head, arguments);
+        return getServiceInjector().injectServicesInto(resultPojo);			
     }
 
     // -- HELPER
@@ -208,24 +204,34 @@ implements
             final Can<ManagedObject> arguments)
                     throws IllegalAccessException, InvocationTargetException {
 
+    	final Object targetPojo = targetPojo();
         final Object[] executionParameters = MmUnwrapUtils.multipleAsArray(arguments);
-        final Object targetPojo = Objects.requireNonNull(
+
+        return isSafeAndRequestCacheable()
+    		? observationProvider.get("Consulting QueryResultsCache")
+				.observe(()->executionContext.queryResultsCache()
+	        		.execute(
+                        ()->invoke(method, targetPojo, executionParameters),
+                        targetPojo.getClass(), 
+                        method.getName(), 
+                        _Arrays.combineWithExplicitType(Object.class, executionParameters, targetPojo)))
+        	: invoke(method, targetPojo, executionParameters);
+    }
+    
+    public Object invoke(
+            final MethodFacade methodFacade, 
+            final Object targetPojo, 
+            final Object ... executionParameters) {
+    	return observationProvider.get("Invoke Action Method")
+			.observe(()->CanonicalInvoker.invoke(method, targetPojo, executionParameters));
+    } 	
+
+    private Object targetPojo() {
+    	return Objects.requireNonNull(
                 MmUnwrapUtils.single(head.target()),
                 ()->"Could not extract pojo, that this invocation is targeted at.");
-
-        if(isSafeAndRequestCacheable()) {
-            final Object[] targetPojoPlusExecutionParameters = 
-            		_Arrays.combineWithExplicitType(Object.class, executionParameters, targetPojo);
-            return executionContext.queryResultsCache()
-        		.execute(
-                    ()->CanonicalInvoker.invoke(method, targetPojo, executionParameters),
-                    targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
-
-        } else {
-            return CanonicalInvoker.invoke(method, targetPojo, executionParameters);
-        }
     }
-
+    
 	private boolean isSafeAndRequestCacheable() {
 		final boolean cacheable = facetHolder.lookupFacet(ActionSemanticsFacet.class)
         		.map(ActionSemanticsFacet::value)
