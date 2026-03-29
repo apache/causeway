@@ -24,9 +24,13 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.metrics.MetricsService;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.facets.DomainEventHelper;
 import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
+import org.apache.causeway.core.metamodel.services.events.MetamodelEventService;
+import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 
 import io.micrometer.observation.Observation;
@@ -38,10 +42,22 @@ public record ExecutionContext(
         Provider<CommandPublisher> commandPublisherProvider,
         DeadlockRecognizer deadlockRecognizer,
 		InteractionIdGenerator idGenerator,
-		CausewayObservationIntegration observationIntegration) {
+		CausewayObservationIntegration observationIntegration,
+		
+		Provider<InteractionDtoFactory> interactionDtoFactoryProvider,
+		MetamodelEventService metamodelEventService,
+		QueryResultsCache queryResultsCache) {
 
     public CommandPublisher commandPublisher() {
         return commandPublisherProvider.get();
+    }
+    
+    public DomainEventHelper domainEventHelper() {
+    	return new DomainEventHelper(metamodelEventService);
+    }
+    
+    public InteractionDtoFactory interactionDtoFactory() {
+    	return interactionDtoFactoryProvider.get();
     }
     
     public MetricsService metricsService() {

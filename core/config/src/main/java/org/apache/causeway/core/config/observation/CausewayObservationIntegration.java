@@ -102,7 +102,7 @@ public record CausewayObservationIntegration(
             ? moduleName.substring(9)
             : moduleName);
     }
-
+    
     /**
      * UTC ISO format
      */
@@ -115,6 +115,9 @@ public record CausewayObservationIntegration(
     public static KeyValue interactionLanguage(final Locale locale) {
         return KeyValue.of("causeway.interaction.language", locale.toString());
     }
+//    public static KeyValue interactionMethod(@NonNull MethodFacade method) {
+//		return KeyValue.of("causeway.interaction.method", method.getName());
+//	}
     public static KeyValue interactionNumberFormat(final Locale locale) {
         return KeyValue.of("causeway.interaction.numberformat", locale.toString());
     }

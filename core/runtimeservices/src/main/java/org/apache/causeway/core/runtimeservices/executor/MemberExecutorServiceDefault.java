@@ -94,7 +94,6 @@ implements MemberExecutorService {
     private final InteractionLayerTracker interactionLayerTracker;
     private final CausewayConfiguration configuration;
     private final ObjectManager objectManager;
-    private final Provider<MetricsService> metricsServiceProvider;
     private final InteractionDtoFactory interactionDtoFactory;
     private final Provider<ExecutionPublisher> executionPublisherProvider;
     private final TransactionService transactionService;
@@ -103,9 +102,9 @@ implements MemberExecutorService {
 
     @Inject
     MemberExecutorServiceDefault(final InteractionLayerTracker interactionLayerTracker,
-            final CausewayConfiguration configuration, final ObjectManager objectManager,
-            final DeadlockRecognizer deadlockRecognizer,
-            final Provider<MetricsService> metricsServiceProvider, final InteractionDtoFactory interactionDtoFactory,
+            final CausewayConfiguration configuration, 
+            final ObjectManager objectManager,
+            final InteractionDtoFactory interactionDtoFactory,
             final Provider<ExecutionPublisher> executionPublisherProvider,
             final TransactionService transactionService,
             final Provider<CommandPublisher> commandPublisherProvider,
@@ -113,17 +112,12 @@ implements MemberExecutorService {
         this.interactionLayerTracker = interactionLayerTracker;
         this.configuration = configuration;
         this.objectManager = objectManager;
-        this.metricsServiceProvider = metricsServiceProvider;
         this.interactionDtoFactory = interactionDtoFactory;
         this.executionPublisherProvider = executionPublisherProvider;
         this.transactionService = transactionService;
         this.commandPublisherProvider = commandPublisherProvider;
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
-    }
-
-    private MetricsService metricsService() {
-        return metricsServiceProvider.get();
     }
 
     private ExecutionPublisher executionPublisher() {

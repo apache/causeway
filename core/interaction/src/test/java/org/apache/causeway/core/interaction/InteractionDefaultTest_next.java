@@ -32,7 +32,8 @@ class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-    	var context = new ExecutionContext(null, null, null, null, UUID::randomUUID, null);
+    	var context = new ExecutionContext(null, null, null, null, UUID::randomUUID, null,
+    			null, null, null);
     	
     	var interaction = new CausewayInteraction(context);
 
