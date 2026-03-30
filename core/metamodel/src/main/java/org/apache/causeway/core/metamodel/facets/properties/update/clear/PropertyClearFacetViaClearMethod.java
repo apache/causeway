@@ -20,6 +20,8 @@ package org.apache.causeway.core.metamodel.facets.properties.update.clear;
 
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
+
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
@@ -31,7 +33,6 @@ import org.apache.causeway.core.metamodel.object.MmInvokeUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
 
 public class PropertyClearFacetViaClearMethod
 extends PropertyClearFacetAbstract
@@ -39,7 +40,7 @@ implements ImperativeFacet {
 
     @Getter(onMethod_ = {@Override}) private final @NonNull Can<MethodFacade> methods;
 
-    public PropertyClearFacetViaClearMethod(final ResolvedMethod method, final FacetHolder holder) {
+    public PropertyClearFacetViaClearMethod(int dummy, final ResolvedMethod method, final FacetHolder holder) {
         super(holder);
         this.methods = ImperativeFacet.singleRegularMethod(method);
     }

@@ -41,14 +41,21 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
-public final class PropertyModifier
+public record PropertyModifier(
+	    ExecutionContext executionContext,
+	    FacetHolder facetHolder,
+	    ModificationVariant executionVariant,
+	    InteractionInitiatedBy interactionInitiatedBy,
+	    InteractionHead head,
+	    OneToOneAssociation owningProperty,
+	    ManagedObject newValue,
+	    PropertyOrCollectionAccessorFacet getterFacet,
+	    PropertySetterFacet setterFacet,
+	    PropertyClearFacet clearFacet,
+	    PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract)
 implements
     HasMetaModelContext,
     InteractionInternal.MemberExecutor<PropertyEdit> {
@@ -62,13 +69,14 @@ implements
             // property specifics
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
+            final @NonNull PropertySetterFacet setterFacet,
             final @NonNull PropertyClearFacet clearFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
         var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
         return new PropertyModifier(
         		facetHolder.lookupServiceElseFail(ExecutionContext.class), facetHolder,
                 ModificationVariant.CLEAR, interactionInitiatedBy, head,
-                owningProperty, emptyValueAdapter, getterFacet, null, clearFacet,
+                owningProperty, emptyValueAdapter, getterFacet, setterFacet, clearFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
     }
 
@@ -91,7 +99,7 @@ implements
 
     // -- ENUMS
 
-    public static enum ModificationVariant {
+    public enum ModificationVariant {
         /** clearing a property */
         CLEAR,
         /** setting a property (to a new value) */
@@ -100,31 +108,7 @@ implements
         public boolean isSet() { return this == SET; }
     }
 
-    // -- CONSTRUCTION
-
-    public MetaModelContext getMetaModelContext() {
-    	return facetHolder.getMetaModelContext();
-    }
-
-    @Getter private final @NonNull ExecutionContext executionContext;
-    @Getter private final @NonNull FacetHolder facetHolder;
-    private final @NonNull ModificationVariant executionVariant;
-    @Getter private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
-    @Getter private final @NonNull InteractionHead head;
-    @Getter private final @NonNull OneToOneAssociation owningProperty;
-    @Getter private final @NonNull ManagedObject newValue;
-
-    // -- REFACTOR ...
-    private final PropertyOrCollectionAccessorFacet getterFacet;
-    private final PropertySetterFacet setterFacet; // either this
-    private final PropertyClearFacet clearFacet; // or that
-    private final PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract;
-
-    private boolean isPostable() {
-        return propertySetterOrClearFacetForDomainEventAbstract.isPostable();
-    }
-
-    // --
+    @Override public MetaModelContext getMetaModelContext() { return facetHolder.getMetaModelContext(); }
 
     @Override
     public Object execute(final PropertyEdit currentExecution) {
@@ -207,7 +191,8 @@ implements
      * which might have been modified during EXECUTING phase (event polling).
      */
     public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValue) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
+        if(executionVariant.isClear() 
+        		&& ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
             clearFacet.clearProperty(
                     owningProperty, head.target(), interactionInitiatedBy);
         } else {
@@ -218,6 +203,10 @@ implements
 
     // -- HELPER
 
+    private boolean isPostable() {
+    	return propertySetterOrClearFacetForDomainEventAbstract.isPostable();
+    }
+    
     private final <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
         return uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType());
     }

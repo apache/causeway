@@ -92,12 +92,13 @@ public interface MemberExecutorService {
             // property specifics
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
+            final @NonNull PropertySetterFacet setterFacet,
             final @NonNull PropertyClearFacet clearFacet,
             final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
 
         var propertyExecutor = PropertyModifier.forPropertyClear(
                 facetHolder, interactionInitiatedBy, head,
-                owningProperty, getterFacet, clearFacet,
+                owningProperty, getterFacet, setterFacet, clearFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
         return setOrClearProperty(propertyExecutor);
     }

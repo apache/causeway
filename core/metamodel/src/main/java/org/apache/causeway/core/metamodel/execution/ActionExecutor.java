@@ -52,13 +52,18 @@ import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
-@RequiredArgsConstructor
-//@Slf4j
-public final class ActionExecutor
+public record ActionExecutor(
+	    ExecutionContext executionContext,
+	    FacetHolder facetHolder,
+	    InteractionInitiatedBy interactionInitiatedBy,
+	    ObjectAction owningAction,
+	    MethodFacade method,
+	    InteractionHead head,
+	    Can<ManagedObject> arguments,
+	    ActionInvocationFacetAbstract actionInvocationFacetAbstract,
+	    ObservationProvider observationProvider)
 implements
     HasMetaModelContext,
     InteractionInternal.MemberExecutor<ActionInvocation> {
@@ -91,21 +96,7 @@ implements
         		executionContext.observationProvider(ActionExecutor.class, CausewayModuleCoreMetamodel.NAMESPACE));
     }
 
-    // -- CONSTRUCTION
-    
-    @Override
-	public MetaModelContext getMetaModelContext() { return facetHolder.getMetaModelContext(); }
-
-    private final @NonNull ExecutionContext executionContext;
-    @Getter private final @NonNull FacetHolder facetHolder;
-    @Getter private final @NonNull InteractionInitiatedBy interactionInitiatedBy;
-    @Getter private final @NonNull ObjectAction owningAction;
-    @Getter private final @NonNull MethodFacade method;
-    @Getter private final @NonNull InteractionHead head;
-    @Getter private final @NonNull Can<ManagedObject> arguments;
-
-    private final ActionInvocationFacetAbstract actionInvocationFacetAbstract;
-    private final ObservationProvider observationProvider; 
+    @Override public MetaModelContext getMetaModelContext() { return facetHolder.getMetaModelContext(); }
     
     @SneakyThrows
     @Override
@@ -172,7 +163,6 @@ implements
             return resultPojo;
         }
     }
-
 
     @SneakyThrows
     private Object executeWithoutEvents(final Can<ManagedObject> arguments) {

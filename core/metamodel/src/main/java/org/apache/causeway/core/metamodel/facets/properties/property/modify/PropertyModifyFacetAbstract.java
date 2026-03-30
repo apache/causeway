@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 
 import java.util.function.BiConsumer;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
@@ -38,8 +39,6 @@ import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
-import org.jspecify.annotations.NonNull;
-
 /**
  * Handles modifications for (non-mixed-in) properties and accompanied {@link PropertyDomainEvent}(s).
  */
@@ -53,7 +52,7 @@ implements
 
     private final @NonNull PropertyOrCollectionAccessorFacet getterFacet;
     private final @Nullable PropertySetterFacet setterFacet; // either this
-    private final @Nullable PropertyClearFacet clearFacet; // or that
+    private final @Nullable PropertyClearFacet clearFacet; // or that //FIXME ditch clearing support
     private final @NonNull MemberExecutorService memberExecutorService;
 
     protected PropertyModifyFacetAbstract(
@@ -80,7 +79,7 @@ implements
         final InteractionHead head = InteractionHead.regular(targetAdapter);
 
         return memberExecutorService.clearProperty(facetHolder(), interactionInitiatedBy,
-                head, owningProperty, getterFacet, clearFacet, this);
+                head, owningProperty, getterFacet, setterFacet, clearFacet, this);
     }
 
     @Override

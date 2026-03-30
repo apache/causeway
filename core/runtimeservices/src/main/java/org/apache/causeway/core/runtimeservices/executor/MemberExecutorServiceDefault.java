@@ -31,13 +31,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
-import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
@@ -64,7 +62,6 @@ import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.object.MmVisibilityUtils;
 import org.apache.causeway.core.metamodel.object.PackedManagedObject;
 import org.apache.causeway.core.metamodel.objectmanager.ObjectManager;
-import org.apache.causeway.core.metamodel.services.deadlock.DeadlockRecognizer;
 import org.apache.causeway.core.metamodel.services.ixn.InteractionDtoFactory;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.metamodel.services.publishing.ExecutionPublisher;
@@ -135,12 +132,12 @@ implements MemberExecutorService {
             final @NonNull ActionExecutor actionExecutor) {
 
         var executionResult = observationProvider.get("Action Invocation (%s)"
-                .formatted(actionExecutor.getOwningAction().getFeatureIdentifier()))
-                .lowCardinalityKeyValue("causeway.execution.initiatedBy", actionExecutor.getInteractionInitiatedBy().name())
+                .formatted(actionExecutor.owningAction().getFeatureIdentifier()))
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", actionExecutor.interactionInitiatedBy().name())
                 //could also add action's args as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)
             .observe(()->
-                actionExecutor.getInteractionInitiatedBy().isPassThrough()
+                actionExecutor.interactionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     invokeActionInternally(actionExecutor))
                 : transactionService.callWithinCurrentTransactionElseCreateNew(()->
@@ -153,17 +150,15 @@ implements MemberExecutorService {
     private ManagedObject invokeActionInternally(
             final ActionExecutor actionExecutor) {
 
-        final ObjectAction owningAction = actionExecutor.getOwningAction();
-        final InteractionHead head = actionExecutor.getHead();
+        final ObjectAction owningAction = actionExecutor.owningAction();
+        final InteractionHead head = actionExecutor.head();
 
-        final Can<ManagedObject> argumentAdapters = actionExecutor.getArguments();
-        final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.getInteractionInitiatedBy();
-        //            final MethodFacade methodFacade,
-        //            final ActionExecutorFactory actionExecutorFactory,
-        final FacetHolder facetHolder = actionExecutor.getFacetHolder();
+        final Can<ManagedObject> argumentAdapters = actionExecutor.arguments();
+        final InteractionInitiatedBy interactionInitiatedBy = actionExecutor.interactionInitiatedBy();
+        final FacetHolder facetHolder = actionExecutor.facetHolder();
 
         if(interactionInitiatedBy.isPassThrough()) {
-            var resultPojo = invokeMethodPassThrough(actionExecutor.getMethod(), head, argumentAdapters);
+            var resultPojo = invokeMethodPassThrough(actionExecutor.method(), head, argumentAdapters);
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
@@ -239,12 +234,12 @@ implements MemberExecutorService {
             final @NonNull PropertyModifier propertyExecutor) {
 
         var executionResult = observationProvider.get("Property Update (%s)"
-                .formatted(propertyExecutor.getOwningProperty().getFeatureIdentifier()))
-                .lowCardinalityKeyValue("causeway.execution.initiatedBy", propertyExecutor.getInteractionInitiatedBy().name())
+                .formatted(propertyExecutor.owningProperty().getFeatureIdentifier()))
+                .lowCardinalityKeyValue("causeway.execution.initiatedBy", propertyExecutor.interactionInitiatedBy().name())
                 //could also add property's old and new value as tags (but potentially sensitive)
                 //(we do this with Xray, but that is local for debugging only)
             .observe(()->
-                propertyExecutor.getInteractionInitiatedBy().isPassThrough()
+                propertyExecutor.interactionInitiatedBy().isPassThrough()
                 ? Try.call(()->
                     setOrClearPropertyInternally(propertyExecutor))
                 : transactionService
@@ -258,32 +253,34 @@ implements MemberExecutorService {
     private ManagedObject setOrClearPropertyInternally(
             final @NonNull PropertyModifier propertyModifier) {
 
-        final InteractionHead head = propertyModifier.getHead();
+        final InteractionHead head = propertyModifier.head();
 
         var domainObject = head.target();
 
-        if(propertyModifier.getInteractionInitiatedBy().isPassThrough()) {
+        if(propertyModifier.interactionInitiatedBy().isPassThrough()) {
             /* directly access property setter to prevent triggering of domain events
              * or change tracking, eg. when called in the context of serialization */
-            propertyModifier.executeClearOrSetWithoutEvents(propertyModifier.getNewValue());
+            propertyModifier.executeClearOrSetWithoutEvents(propertyModifier.newValue());
             return domainObject;
         }
 
         var interaction = getInteractionElseFail();
         var command = interaction.getCommand();
-        if( command==null ) return domainObject;
+        if( command==null ) {
+			return domainObject;
+		}
 
-        var owningProperty = propertyModifier.getOwningProperty();
+        var owningProperty = propertyModifier.owningProperty();
 
-        prepareCommandForPublishing(command, head, owningProperty, propertyModifier.getFacetHolder());
+        prepareCommandForPublishing(command, head, owningProperty, propertyModifier.facetHolder());
 
-        var xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.getNewValue());
+        var xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.newValue());
 
         var propertyId = owningProperty.getFeatureIdentifier();
 
         var targetManagedObject = head.target();
         var target = MmUnwrapUtils.single(targetManagedObject);
-        var argValuePojo = MmUnwrapUtils.single(propertyModifier.getNewValue());
+        var argValuePojo = MmUnwrapUtils.single(propertyModifier.newValue());
 
         var propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
 
@@ -296,13 +293,14 @@ implements MemberExecutorService {
         // TODO: should also sync DTO's 'threw' attribute here...?
 
         var executionExceptionIfAny = priorExecution.getThrew();
-        if(executionExceptionIfAny != null)
-            throw executionExceptionIfAny instanceof RuntimeException r
+        if(executionExceptionIfAny != null) {
+			throw executionExceptionIfAny instanceof RuntimeException r
                 ? r
                 : new RuntimeException(executionExceptionIfAny);
+		}
 
         // publish (if not a contributed association, query-only mixin)
-        if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.getFacetHolder())) {
+        if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.facetHolder())) {
             executionPublisher().publishPropertyEdit(priorExecution);
         }
 
@@ -327,14 +325,17 @@ implements MemberExecutorService {
     private void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
-        if(command.getResult() != null)
-            // don't trample over any existing result, eg subsequent mixins.
+        if(command.getResult() != null) {
+			// don't trample over any existing result, eg subsequent mixins.
             return;
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
-            return;
+		}
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+			return;
+		}
         var entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable())
-            return;
+        if(!entityState.isPersistable()) {
+			return;
+		}
         if(entityState.isHollow()
                 || entityState.isDetached()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
@@ -354,12 +355,14 @@ implements MemberExecutorService {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
-            return resultAdapter;
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
+			return resultAdapter;
+		}
 
         if (!configuration.core().metaModel().filterVisibility()
-                || resultAdapter instanceof PackedManagedObject)
-            return resultAdapter;
+                || resultAdapter instanceof PackedManagedObject) {
+			return resultAdapter;
+		}
 
         return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
