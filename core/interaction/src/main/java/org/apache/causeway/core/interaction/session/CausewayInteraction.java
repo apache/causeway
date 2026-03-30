@@ -32,6 +32,7 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 
@@ -110,18 +111,36 @@ implements InteractionInternal {
     	start(execution);
     	try {
     		return callable.call();
+    	} catch (Exception ex) {
+            //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
+            // we rather print all of them, no matter whether recognized or not later on
+            // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
+            // WrapperFactory utilizing async calls
+
+            if(executionContext().deadlockRecognizer().isDeadlock(ex)) {
+                if(log.isDebugEnabled()) {
+                    log.debug("failed to execute an interaction due to a deadlock", ex);
+                } else if(log.isInfoEnabled()) {
+                    log.info("failed to execute an interaction due to a deadlock");
+                }
+            } else {
+                if(log.isErrorEnabled()) {
+                    log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
+                }
+            }
+
+            getCurrentExecution().setThrew(ex);
+            
+            // propagate (as in previous design); caller will need to trap and decide
+            throw ex;
     	} finally {
     		popAndComplete();
     	}
     }
 
     /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
      * Push a new {@link org.apache.causeway.applib.events.domain.AbstractDomainEvent}
      * onto the stack of events held by the command.
-     * </p>
      */
     private Execution<?,?> push(final Execution<?,?> execution) {
 
@@ -150,16 +169,11 @@ implements InteractionInternal {
             getCommand().updater().setStartedAt(startedAt);
             getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
-        executionContext.commandPublisher().start(getCommand());
     }
 
     /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     *
-     * <p>
      * Pops the top-most  {@link org.apache.causeway.applib.events.domain.ActionDomainEvent}
      * from the stack of events held by the command.
-     * </p>
      */
     private Execution<?,?> popAndComplete() {
 

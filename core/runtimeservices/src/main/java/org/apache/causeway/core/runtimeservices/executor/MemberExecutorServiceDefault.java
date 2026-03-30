@@ -119,6 +119,10 @@ implements MemberExecutorService {
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
+    
+    private CommandPublisher commandPublisher() {
+        return commandPublisherProvider.get();
+    }
 
     private ExecutionPublisher executionPublisher() {
         return executionPublisherProvider.get();
@@ -333,7 +337,7 @@ implements MemberExecutorService {
         observationProvider.get("Execute Action Invocation")
   	      .observe(()->
   	          interaction.execute(actionInvocation, ()->
-  			      executeInternal(interaction, actionExecutor, actionInvocation)));
+  			      executeInternal(interaction.getCommand(), actionExecutor, actionInvocation)));
     }
     
     /**
@@ -351,46 +355,17 @@ implements MemberExecutorService {
       return observationProvider.get("Execute Property Edit")
 	      .observe(()->
 	          interaction.execute(propertyEdit, ()->
-			      executeInternal(interaction, propertyModifier, propertyEdit)));
+			      executeInternal(interaction.getCommand(), propertyModifier, propertyEdit)));
 	}
     
     private <E extends Execution<?,?>> Object executeInternal(
-    		final InteractionInternal interaction,
+    		final Command command,
             final Function<E, Object> memberExecutor,
             final E execution) {
-
-        try {
-            Object result = observationProvider.get("executeInternal")
-            		.observe(()->memberExecutor.apply(execution));
-            execution.setReturned(result);
-            return result;
-        } catch (Exception ex) {
-
-            //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
-            // we rather print all of them, no matter whether recognized or not later on
-            // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
-            // WrapperFactory utilizing async calls
-
-            if(interaction.executionContext().deadlockRecognizer().isDeadlock(ex)) {
-                if(log.isDebugEnabled()) {
-                    log.debug("failed to execute an interaction due to a deadlock", ex);
-                } else if(log.isInfoEnabled()) {
-                    log.info("failed to execute an interaction due to a deadlock");
-                }
-            } else {
-                if(log.isErrorEnabled()) {
-                    log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
-                }
-            }
-
-            // just because an exception has thrown, does not mean it is that significant;
-            // it could be that it is recognized by an ExceptionRecognizer and is not severe
-            // eg. unique index violation in the DB
-            interaction.getCurrentExecution().setThrew(ex);
-
-            // propagate (as in previous design); caller will need to trap and decide
-            throw ex;
-        }
+    	commandPublisher().start(command);
+        Object result = memberExecutor.apply(execution);
+        execution.setReturned(result);
+        return result;
     }
 
 	@SneakyThrows
