@@ -141,6 +141,7 @@ identified
         <jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
         <jakarta.inject-api.version>2.0.1.MR</jakarta.inject-api.version>
         <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
+        <jakarta.persistence-api.version>3.2.0</jakarta.persistence-api.version> <!--overriding Spring-->
 
         <jbcrypt.version>0.4</jbcrypt.version>
         <jboss-jaxrs-api_2.1_spec.version>2.0.2.Final</jboss-jaxrs-api_2.1_spec.version>
@@ -1577,6 +1578,11 @@ identified
                 <artifactId>stax2-api</artifactId>
                 <version>4.2.2</version>
             </dependency>
+            <dependency>
+			    <groupId>jakarta.persistence</groupId>
+			    <artifactId>jakarta.persistence-api</artifactId>
+			    <version>${jakarta.persistence-api.version}</version> 
+		    </dependency>
             <dependency>
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>org.eclipse.persistence.jpa</artifactId>
