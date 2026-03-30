@@ -22,18 +22,8 @@ import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
-import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
-import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
-import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 
 /**
  * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
@@ -55,71 +45,9 @@ public interface MemberExecutorService {
     ManagedObject setOrClearProperty(
             @NonNull PropertyModifier propertyExecutor);
 
-    // -- SHORTCUTS
-
-    default InteractionInternal getInteractionIfAny() {
-        return getInteraction().orElse(null);
-    }
-
     default InteractionInternal getInteractionElseFail() {
         return getInteraction().orElseThrow(()->_Exceptions
                 .unrecoverable("needs an InteractionSession on current thread"));
-    }
-
-    default ManagedObject invokeAction(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // action specifics
-            final @NonNull Can<ManagedObject> argumentAdapters,
-            final @NonNull ObjectAction owningAction,
-            final @NonNull ActionInvocationFacetAbstract actionInvocationFacetAbstract) {
-        var actionExecutor = ActionExecutor.forAction(
-                facetHolder,
-                interactionInitiatedBy,
-                head,
-                argumentAdapters,
-                owningAction,
-                actionInvocationFacetAbstract);
-        return invokeAction(actionExecutor);
-    }
-
-    default ManagedObject clearProperty(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // property specifics
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
-
-    	var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
-        return setProperty(facetHolder, 
-        		interactionInitiatedBy, 
-        		head, emptyValueAdapter, 
-        		owningProperty, 
-        		getterFacet, setterFacet, 
-        		propertySetterOrClearFacetForDomainEventAbstract);
-    }
-
-    default ManagedObject setProperty(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // property specifics
-            final @NonNull ManagedObject newValueAdapter,
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
-
-        var propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
-                interactionInitiatedBy, head, newValueAdapter,
-                owningProperty, getterFacet, setterFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
-
-        return setOrClearProperty(propertyExecutor);
     }
 
 }

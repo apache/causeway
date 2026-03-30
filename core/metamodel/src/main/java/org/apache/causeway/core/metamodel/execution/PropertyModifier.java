@@ -25,9 +25,9 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
+import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
+import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
@@ -46,68 +46,36 @@ import lombok.extern.slf4j.Slf4j;
 public record PropertyModifier(
 	    ExecutionContext executionContext,
 	    FacetHolder facetHolder,
-	    ModificationVariant executionVariant,
 	    InteractionInitiatedBy interactionInitiatedBy,
 	    InteractionHead head,
 	    OneToOneAssociation owningProperty,
 	    ManagedObject newValue,
 	    PropertyOrCollectionAccessorFacet getterFacet,
 	    PropertySetterFacet setterFacet,
-	    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract)
+	    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract,
+	    ObservationProvider observationProvider)
 implements
-    HasMetaModelContext,
     InteractionInternal.MemberExecutor<PropertyEdit> {
 
     // -- FACTORIES
 
-	@Deprecated
-    public static PropertyModifier forPropertyClear(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            // property specifics
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
-        var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
-        return new PropertyModifier(
-        		facetHolder.lookupServiceElseFail(ExecutionContext.class), facetHolder,
-                ModificationVariant.CLEAR, interactionInitiatedBy, head,
-                owningProperty, emptyValueAdapter, getterFacet, setterFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
+	public static PropertyModifier forProperty(
+		    FacetHolder facetHolder,
+		    InteractionInitiatedBy interactionInitiatedBy,
+		    InteractionHead head,
+		    OneToOneAssociation owningProperty,
+		    ManagedObject newValue,
+		    PropertyOrCollectionAccessorFacet getterFacet,
+		    PropertySetterFacet setterFacet,
+		    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
+		var executionContext = facetHolder.lookupServiceElseFail(ExecutionContext.class);
+        return new PropertyModifier(executionContext, 
+        		facetHolder, interactionInitiatedBy, 
+        		head, owningProperty, newValue, getterFacet, setterFacet, 
+        		propertySetterOrClearFacetForDomainEventAbstract, 
+        		executionContext.observationProvider(PropertyModifier.class, CausewayModuleCoreMetamodel.NAMESPACE));
     }
-
-    public static PropertyModifier forPropertySet(
-            final @NonNull FacetHolder facetHolder,
-            final @NonNull InteractionInitiatedBy interactionInitiatedBy,
-            final @NonNull InteractionHead head,
-            final @NonNull ManagedObject newValueAdapter,
-            // property specifics
-            final @NonNull OneToOneAssociation owningProperty,
-            final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
-            final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
-        return new PropertyModifier(
-        		facetHolder.lookupServiceElseFail(ExecutionContext.class), facetHolder,
-                ModificationVariant.SET, interactionInitiatedBy, head,
-                owningProperty, newValueAdapter, getterFacet, setterFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
-    }
-
-    // -- ENUMS
-
-    public enum ModificationVariant {
-        /** clearing a property */
-        CLEAR,
-        /** setting a property (to a new value) */
-        SET;
-        public boolean isClear() { return this == CLEAR; }
-        public boolean isSet() { return this == SET; }
-    }
-
-    @Override public MetaModelContext getMetaModelContext() { return facetHolder.getMetaModelContext(); }
-
+	
     @Override
     public Object execute(final PropertyEdit currentExecution) {
     	
@@ -184,7 +152,7 @@ implements
 
     /**
      * Executes the change using underlying setter or getter facets, without triggering any events.
-     * <p>
+     * 
      * @implNote Reassesses whether this is a clear or a set operation, based on actual {@code newValue},
      * which might have been modified during EXECUTING phase (event polling).
      */

@@ -22,6 +22,7 @@ import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
@@ -53,8 +54,11 @@ extends ActionInvocationFacetAbstract {
             final Can<ManagedObject> argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        return memberExecutorService.invokeAction(facetHolder(), interactionInitiatedBy,
-                head, argumentAdapters, owningAction, this);
+    	var executor = ActionExecutor.forAction(
+    			facetHolder(), interactionInitiatedBy, head,
+    			argumentAdapters, owningAction, this);
+    	
+        return memberExecutorService.invokeAction(executor);
     }
 
 }

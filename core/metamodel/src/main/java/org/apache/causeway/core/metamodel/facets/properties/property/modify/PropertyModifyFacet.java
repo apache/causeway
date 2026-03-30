@@ -25,6 +25,7 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
+import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
@@ -77,9 +78,12 @@ implements
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final InteractionHead head = InteractionHead.regular(targetAdapter);
-        return memberExecutorService.setProperty(facetHolder(), interactionInitiatedBy,
-                head, newValueAdapter, owningProperty, getterFacet, setterFacet, this);
+        var modifier = PropertyModifier.forProperty(
+        		facetHolder(),
+        		interactionInitiatedBy, InteractionHead.regular(targetAdapter), owningProperty,
+        		newValueAdapter, getterFacet, setterFacet, this);
+        return memberExecutorService
+        		.setOrClearProperty(modifier);
     }
 
     @Override
