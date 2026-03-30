@@ -355,7 +355,7 @@ implements MemberExecutorService {
       return observationProvider.get("Execute Property Edit")
 	      .observe(()->
 	          interaction.execute(propertyEdit, ()->
-			      executeInternal(interaction.getCommand(), propertyModifier, propertyEdit)));
+	        	  executeInternal(interaction.getCommand(), propertyModifier, propertyEdit)));
 	}
     
     private <E extends Execution<?,?>> Object executeInternal(

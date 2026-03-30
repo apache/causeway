@@ -43,6 +43,9 @@ import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Handles Domain Events EXECUTING and EXECUTED.
+ */
 @Slf4j
 public record PropertyModifier(
 	    ExecutionContext executionContext,

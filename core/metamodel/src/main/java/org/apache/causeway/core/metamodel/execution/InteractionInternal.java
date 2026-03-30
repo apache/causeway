@@ -42,16 +42,12 @@ extends Interaction {
      * Numbers the executions (an action invocation or property edit) within
      * a given {@link Interaction}.
      *
-     * <p>
-     * Each {@link Interaction} is initiated by an execution of action
+     * <p> Each {@link Interaction} is initiated by an execution of action
      * invocation or a property edit.  Thereafter there could be multiple
      * other executions as the result of nested calls using the
      * {@link WrapperFactory}.
-     * </p>
      *
-     * <p>
-     * Another possible reason is support for bulk action invocations.
-     * </p>
+     * <p> Another possible reason is support for bulk action invocations.
      *
      * @see Interaction
      * @see WrapperFactory
@@ -71,12 +67,10 @@ extends Interaction {
     /**
      * Numbers the transactions within a given {@link Interaction}.
      *
-     * <p>
-     * Each {@link Interaction} is executed within the context of a transaction, but
+     * <p>Each {@link Interaction} is executed within the context of a transaction, but
      * the (occasionally) the transaction may be committed and a new one
      * started as the result of the domain object using the
      * {@link org.apache.causeway.applib.services.xactn.TransactionService}.
-     * </p>
      *
      * @see Interaction
      * @see org.apache.causeway.applib.services.xactn.TransactionService

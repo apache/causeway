@@ -29,6 +29,7 @@ import org.apache.causeway.applib.annotation.SemanticsOf;
 import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
+import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -38,8 +39,6 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
-import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -55,6 +54,9 @@ import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.SneakyThrows;
 
+/**
+ * Handles Domain Events EXECUTING and EXECUTED.
+ */
 public record ActionExecutor(
 	    ExecutionContext executionContext,
 	    FacetHolder facetHolder,
@@ -65,8 +67,7 @@ public record ActionExecutor(
 	    Can<ManagedObject> arguments,
 	    ActionInvocationFacetAbstract actionInvocationFacetAbstract,
 	    ObservationProvider observationProvider)
-implements Function<ActionInvocation, Object>,
-    HasMetaModelContext {
+implements Function<ActionInvocation, Object> {
 
     // -- FACTORIES
 
@@ -96,8 +97,6 @@ implements Function<ActionInvocation, Object>,
         		executionContext.observationProvider(ActionExecutor.class, CausewayModuleCoreMetamodel.NAMESPACE));
     }
 
-    @Override public MetaModelContext getMetaModelContext() { return facetHolder.getMetaModelContext(); }
-    
     @Override
 	@SneakyThrows
     public Object apply(final ActionInvocation currentExecution) {
@@ -228,6 +227,10 @@ implements Function<ActionInvocation, Object>,
         		.map(SemanticsOf::isSafeAndRequestCacheable)
         		.orElse(false);
 		return cacheable;
+	}
+	
+	private ServiceInjector getServiceInjector() {
+		return facetHolder().getServiceInjector();
 	}
 
     private static Can<ManagedObject> updateArguments(
