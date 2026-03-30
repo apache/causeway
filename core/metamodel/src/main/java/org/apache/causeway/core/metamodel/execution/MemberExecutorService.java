@@ -28,8 +28,7 @@ import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -93,14 +92,15 @@ public interface MemberExecutorService {
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyClearFacet clearFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
 
-        var propertyExecutor = PropertyModifier.forPropertyClear(
-                facetHolder, interactionInitiatedBy, head,
-                owningProperty, getterFacet, setterFacet, clearFacet,
-                propertySetterOrClearFacetForDomainEventAbstract);
-        return setOrClearProperty(propertyExecutor);
+    	var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
+        return setProperty(facetHolder, 
+        		interactionInitiatedBy, 
+        		head, emptyValueAdapter, 
+        		owningProperty, 
+        		getterFacet, setterFacet, 
+        		propertySetterOrClearFacetForDomainEventAbstract);
     }
 
     default ManagedObject setProperty(
@@ -112,7 +112,7 @@ public interface MemberExecutorService {
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
 
         var propertyExecutor = PropertyModifier.forPropertySet(facetHolder,
                 interactionInitiatedBy, head, newValueAdapter,

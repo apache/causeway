@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.facets.properties.property.modify;
 import java.util.function.BiConsumer;
 
 import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.events.domain.PropertyDomainEvent;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
@@ -31,10 +30,7 @@ import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.DomainEventFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.DomainEventHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearingAccessor;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySettingAccessor;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
@@ -42,31 +38,27 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 /**
  * Handles modifications for (non-mixed-in) properties and accompanied {@link PropertyDomainEvent}(s).
  */
-public abstract class PropertyModifyFacetAbstract
+public final class PropertyModifyFacet
 extends DomainEventFacetAbstract<PropertyDomainEvent<?, ?>>
 implements
-    PropertyClearingAccessor,
-    PropertySettingAccessor {
+	PropertySetterFacet {
 
     // -- CONSTRUCTION
 
     private final @NonNull PropertyOrCollectionAccessorFacet getterFacet;
-    private final @Nullable PropertySetterFacet setterFacet; // either this
-    private final @Nullable PropertyClearFacet clearFacet; // or that //FIXME ditch clearing support
+    private final @NonNull PropertySetterFacet setterFacet;
     private final @NonNull MemberExecutorService memberExecutorService;
 
-    protected PropertyModifyFacetAbstract(
+    public PropertyModifyFacet(
             final Class<? extends Facet> facetType,
             final DomainEventHolder<PropertyDomainEvent<?, ?>> domainEventHolder,
             final PropertyOrCollectionAccessorFacet getterFacet,
             final PropertySetterFacet setterFacet,
-            final PropertyClearFacet clearFacet,
             final FacetHolder holder) {
 
         super(facetType, domainEventHolder, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
-        this.clearFacet = clearFacet;
         this.memberExecutorService = getServiceRegistry().lookupServiceElseFail(MemberExecutorService.class);
     }
 
@@ -75,11 +67,8 @@ implements
             final OneToOneAssociation owningProperty,
             final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        final InteractionHead head = InteractionHead.regular(targetAdapter);
-
-        return memberExecutorService.clearProperty(facetHolder(), interactionInitiatedBy,
-                head, owningProperty, getterFacet, setterFacet, clearFacet, this);
+        var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
+        return setProperty(owningProperty, targetAdapter, emptyValueAdapter, interactionInitiatedBy);
     }
 
     @Override
@@ -88,9 +77,7 @@ implements
             final ManagedObject targetAdapter,
             final ManagedObject newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
         final InteractionHead head = InteractionHead.regular(targetAdapter);
-
         return memberExecutorService.setProperty(facetHolder(), interactionInitiatedBy,
                 head, newValueAdapter, owningProperty, getterFacet, setterFacet, this);
     }
@@ -99,12 +86,7 @@ implements
     public void visitAttributes(final BiConsumer<String, Object> visitor) {
         super.visitAttributes(visitor);
         visitor.accept("getterFacet", getterFacet);
-        if(setterFacet!=null) {
-            visitor.accept("setterFacet", setterFacet);
-        }
-        if(clearFacet!=null) {
-            visitor.accept("clearFacet", clearFacet);
-        }
+        visitor.accept("setterFacet", setterFacet);
     }
 
 }

@@ -45,13 +45,11 @@ import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.M
 import org.apache.causeway.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByNullableAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.causeway.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
 import org.apache.causeway.core.metamodel.facets.properties.property.snapshot.SnapshotExcludeFacetForPropertyAnnotation;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.specloader.validator.ValidationFailureUtils;
 
@@ -135,7 +133,9 @@ extends FacetFactoryAbstract {
                 || (processMethodContext.isMixinMain()
                         && propertyIfAny.isPresent());
 
-        if(!isProperty) return; // bale out if method is not representing a property (no matter mixed-in or not)
+        if(!isProperty) {
+			return; // bale out if method is not representing a property (no matter mixed-in or not)
+		}
 
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
@@ -154,21 +154,13 @@ extends FacetFactoryAbstract {
 
             holder.lookupFacet(PropertySetterFacet.class)
             .ifPresent(setterFacet->
-                    /* lazily binds the event-type to the propertyDomainEventFacet,
+                    /* binds the event-type to the propertyDomainEventFacet,
                      * such that any changes to the latter during post processing
                      * are reflected here as well
                      */
-                    addFacet(new PropertyModifyFacetForSetting(
+                    addFacet(new PropertyModifyFacet(
+                    		PropertySetterFacet.class,
                             propertyDomainEventFacet, getterFacet, setterFacet, holder)));
-
-            holder.lookupFacet(PropertyClearFacet.class)
-            .ifPresent(clearFacet->
-                    /* lazily binds the event-type to the propertyDomainEventFacet,
-                     * such that any changes to the latter during post processing
-                     * are reflected here as well
-                     */
-                    addFacet(new PropertyModifyFacetForClearing(
-                            propertyDomainEventFacet, getterFacet, clearFacet, holder)));
         });
 
     }

@@ -30,8 +30,7 @@ import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetAbstract;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
+import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
@@ -54,14 +53,14 @@ public record PropertyModifier(
 	    ManagedObject newValue,
 	    PropertyOrCollectionAccessorFacet getterFacet,
 	    PropertySetterFacet setterFacet,
-	    PropertyClearFacet clearFacet,
-	    PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract)
+	    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract)
 implements
     HasMetaModelContext,
     InteractionInternal.MemberExecutor<PropertyEdit> {
 
     // -- FACTORIES
 
+	@Deprecated
     public static PropertyModifier forPropertyClear(
             final @NonNull FacetHolder facetHolder,
             final @NonNull InteractionInitiatedBy interactionInitiatedBy,
@@ -70,13 +69,12 @@ implements
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyClearFacet clearFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
         var emptyValueAdapter = ManagedObject.empty(owningProperty.getElementType());
         return new PropertyModifier(
         		facetHolder.lookupServiceElseFail(ExecutionContext.class), facetHolder,
                 ModificationVariant.CLEAR, interactionInitiatedBy, head,
-                owningProperty, emptyValueAdapter, getterFacet, setterFacet, clearFacet,
+                owningProperty, emptyValueAdapter, getterFacet, setterFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
     }
 
@@ -89,11 +87,11 @@ implements
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull PropertyOrCollectionAccessorFacet getterFacet,
             final @NonNull PropertySetterFacet setterFacet,
-            final @NonNull PropertyModifyFacetAbstract propertySetterOrClearFacetForDomainEventAbstract) {
+            final @NonNull PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract) {
         return new PropertyModifier(
         		facetHolder.lookupServiceElseFail(ExecutionContext.class), facetHolder,
                 ModificationVariant.SET, interactionInitiatedBy, head,
-                owningProperty, newValueAdapter, getterFacet, setterFacet, null,
+                owningProperty, newValueAdapter, getterFacet, setterFacet,
                 propertySetterOrClearFacetForDomainEventAbstract);
     }
 
@@ -191,9 +189,8 @@ implements
      * which might have been modified during EXECUTING phase (event polling).
      */
     public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValue) {
-        if(executionVariant.isClear() 
-        		&& ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
-            clearFacet.clearProperty(
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
+        	setterFacet.clearProperty(
                     owningProperty, head.target(), interactionInitiatedBy);
         } else {
             setterFacet.setProperty(

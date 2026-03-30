@@ -9434,25 +9434,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setSampleProperty" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperFullyImpl.setSampleProperty(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -10578,25 +10569,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setValue" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperGenericAbstract$Impl.setValue(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -11678,25 +11660,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setValue" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperGenericInterface$Impl.setValue(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -12803,25 +12776,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setJavaLocalDate" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperLayoutOnPropertyWithLombok.setJavaLocalDate(java.time.LocalDate)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -13831,25 +13795,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setSampleProperty" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberInheritanceAbstract.setSampleProperty(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -13934,25 +13889,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setSamplePropertyOverride" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberInheritanceUsingAbstract.setSamplePropertyOverride(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -15282,25 +15228,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setSamplePropertyOverride" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberInheritanceUsingInterface.setSamplePropertyOverride(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -19612,25 +19549,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setMyProp" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberSupport.setMyProp(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -19722,25 +19650,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setMyPropWithMeta" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberSupport.setMyPropWithMeta(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -23423,25 +23342,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setEmail" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery$WhenAnnotationOptional.setEmail(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -24774,25 +24684,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setEmail" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery$WhenAnnotationRequired.setEmail(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -26129,25 +26030,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setEmail" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="protected void org.apache.causeway.testdomain.model.good.ProperMemberSupportDiscovery$WhenEncapsulationEnabled.setEmail(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -35844,25 +35736,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setDisableProperty" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ProperPrefixedMember.setDisableProperty(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -38374,25 +38257,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setPropWithPrivateAccessors" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="public void org.apache.causeway.testdomain.model.good.ViewModelWithAnnotationOptionalUsingPrivateSupport.setPropWithPrivateAccessors(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
@@ -39546,25 +39420,16 @@
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForClearing">
-                        <mml:attr name="clearFacet" value="org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod"/>
-                        <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
-                        <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForClearing"/>
-                        <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
-                        <mml:attr name="isPostable" value="true"/>
-                        <mml:attr name="precedence" value="DEFAULT"/>
-                    </mml:facet>
                     <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod">
                         <mml:attr name="facet" value="PropertyInitializationFacetViaSetterMethod"/>
                         <mml:attr name="intent.setPropWithPrivateAccessors" value="MODIFY_PROPERTY"/>
                         <mml:attr name="methods" value="private void org.apache.causeway.testdomain.model.good.ViewModelWithEncapsulatedMembers.setPropWithPrivateAccessors(java.lang.String)"/>
                         <mml:attr name="precedence" value="DEFAULT"/>
                     </mml:facet>
-                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacetForSetting">
+                    <mml:facet id="org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet" fqcn="org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet">
                         <mml:attr name="eventType" value="org.apache.causeway.applib.events.domain.PropertyDomainEvent.Default"/>
                         <mml:attr name="eventTypeOrigin" value="DEFAULT"/>
-                        <mml:attr name="facet" value="PropertyModifyFacetForSetting"/>
+                        <mml:attr name="facet" value="PropertyModifyFacet"/>
                         <mml:attr name="getterFacet" value="org.apache.causeway.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessor"/>
                         <mml:attr name="isPostable" value="true"/>
                         <mml:attr name="precedence" value="DEFAULT"/>

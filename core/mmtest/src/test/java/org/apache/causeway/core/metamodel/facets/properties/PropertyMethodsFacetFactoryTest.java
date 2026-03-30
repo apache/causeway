@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.apache.causeway.commons.internal.reflection._GenericResolver.ResolvedMethod;
 import org.apache.causeway.core.metamodel.facetapi.Facet;
 import org.apache.causeway.core.metamodel.facets.FacetFactoryTestAbstract;
+import org.apache.causeway.core.metamodel.facets.ImperativeFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacet;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethodFactory;
@@ -47,8 +48,6 @@ import org.apache.causeway.core.metamodel.facets.properties.defaults.PropertyDef
 import org.apache.causeway.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethod;
 import org.apache.causeway.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
 import org.apache.causeway.core.metamodel.facets.properties.update.PropertySetterFacetFactory;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
-import org.apache.causeway.core.metamodel.facets.properties.update.clear.PropertyClearFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacet;
 import org.apache.causeway.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.causeway.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -158,11 +157,11 @@ extends FacetFactoryTestAbstract {
             // when
             facetFactory.process(processMethodContext);
             // then
-            final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
+            final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
             assertNotNull(facet);
-            assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
-            var propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
-            assertMethodEqualsFirstIn(propertySetterMethod, propertyClearFacet);
+            assertTrue(facet instanceof ImperativeFacet);
+            var propertyModifyFacet = (ImperativeFacet) facet;
+            assertMethodEqualsFirstIn(propertySetterMethod, propertyModifyFacet);
         });
     }
 
