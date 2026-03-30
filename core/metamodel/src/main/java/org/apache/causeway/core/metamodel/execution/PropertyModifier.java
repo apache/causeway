@@ -19,6 +19,7 @@
 package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
@@ -53,9 +54,9 @@ public record PropertyModifier(
 	    PropertyOrCollectionAccessorFacet getterFacet,
 	    PropertySetterFacet setterFacet,
 	    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract,
-	    ObservationProvider observationProvider)
-implements
-    InteractionInternal.MemberExecutor<PropertyEdit> {
+	    ObservationProvider observationProvider) 
+implements Function<PropertyEdit, Object> {
+	
 
     // -- FACTORIES
 
@@ -77,7 +78,7 @@ implements
     }
 	
     @Override
-    public Object execute(final PropertyEdit currentExecution) {
+	public Object apply(final PropertyEdit currentExecution) {
     	
         // update the current execution with the DTO (memento)
         //

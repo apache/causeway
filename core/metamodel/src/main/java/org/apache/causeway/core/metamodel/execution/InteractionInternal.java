@@ -18,7 +18,6 @@
  */
 package org.apache.causeway.core.metamodel.execution;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.jspecify.annotations.NonNull;
@@ -34,41 +33,31 @@ import org.apache.causeway.applib.services.wrapper.WrapperFactory;
  */
 public interface InteractionInternal
 extends Interaction {
-
-    /**
-     * (Modeled after {@link Callable}), is the implementation
-     * by which the framework actually performs the interaction.
-     */
-    interface MemberExecutor<T extends Execution<?,?>> {
-        Object execute(final T currentExecution);
-    }
-    
+   
     ExecutionContext executionContext();
 
     /**
-     * Use the provided {@link MemberExecutor} to invoke an action, with the provided
-     * {@link ActionInvocation} capturing
-     * the details of said action.
-     * <p>
-     * Because this both pushes an {@link Execution} to
+     * Use the provided {@link ActionExecutor} to invoke an action, with the provided
+     * {@link ActionInvocation} capturing the details of said action.
+     * 
+     * <p> Because this both pushes an {@link Execution} to
      * represent the action invocation and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     Object execute(
-            final MemberExecutor<ActionInvocation> memberExecutor,
+            final ActionExecutor memberExecutor,
             final ActionInvocation actionInvocation);
 
     /**
-     * Use the provided {@link MemberExecutor} to edit a property, with the provided
-     * {@link PropertyEdit}
-     * capturing the details of said property edit.
-     * <p>
-     * Because this both pushes an {@link Execution} to
+     * Use the provided {@link PropertyModifier} to edit a property, with the provided
+     * {@link PropertyEdit} capturing the details of said property edit.
+     * 
+     * <p> Because this both pushes an {@link Execution} to
      * represent the property edit and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     Object execute(
-            final MemberExecutor<PropertyEdit> memberExecutor,
+            final PropertyModifier memberExecutor,
             final PropertyEdit propertyEdit);
 
     /**
@@ -134,10 +123,11 @@ extends Interaction {
         var priorExecution = getPriorExecution();
         var executionExceptionIfAny = getPriorExecution().getThrew();
         actionInvocation.setThrew(executionExceptionIfAny);
-        if(executionExceptionIfAny != null)
-            throw executionExceptionIfAny instanceof RuntimeException r
+        if(executionExceptionIfAny != null) {
+			throw executionExceptionIfAny instanceof RuntimeException r
                 ? r
                 : new RuntimeException(executionExceptionIfAny);
+		}
         return priorExecution;
     }
 

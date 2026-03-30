@@ -43,5 +43,4 @@ extends Execution<PropertyEditDto, PropertyDomainEvent<?, ?>> {
         this.newValue = newValue;
     }
 
-    // ...
 }

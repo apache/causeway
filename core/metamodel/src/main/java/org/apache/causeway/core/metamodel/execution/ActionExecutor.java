@@ -21,6 +21,7 @@ package org.apache.causeway.core.metamodel.execution;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
@@ -64,9 +65,8 @@ public record ActionExecutor(
 	    Can<ManagedObject> arguments,
 	    ActionInvocationFacetAbstract actionInvocationFacetAbstract,
 	    ObservationProvider observationProvider)
-implements
-    HasMetaModelContext,
-    InteractionInternal.MemberExecutor<ActionInvocation> {
+implements Function<ActionInvocation, Object>,
+    HasMetaModelContext {
 
     // -- FACTORIES
 
@@ -98,9 +98,9 @@ implements
 
     @Override public MetaModelContext getMetaModelContext() { return facetHolder.getMetaModelContext(); }
     
-    @SneakyThrows
     @Override
-    public Object execute(final ActionInvocation currentExecution) {
+	@SneakyThrows
+    public Object apply(final ActionInvocation currentExecution) {
 
     	observationProvider.get("Setting Execution DTO (Attempt)")
     		.observe(()->{

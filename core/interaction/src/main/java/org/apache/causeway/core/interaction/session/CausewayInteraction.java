@@ -36,8 +36,10 @@ import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
+import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -113,7 +115,7 @@ implements InteractionInternal {
 
     @Override
     public Object execute(
-            final MemberExecutor<ActionInvocation> memberExecutor,
+            final ActionExecutor memberExecutor,
             final ActionInvocation actionInvocation) {
 
         return observationProvider.get("Execute Action Invocation")
@@ -130,7 +132,7 @@ implements InteractionInternal {
 
     @Override
     public Object execute(
-            final MemberExecutor<PropertyEdit> memberExecutor,
+            final PropertyModifier memberExecutor,
             final PropertyEdit propertyEdit) {
 
         return observationProvider.get("Execute Property Edit")
@@ -146,12 +148,12 @@ implements InteractionInternal {
     }
 
     private <T extends Execution<?,?>> Object executeInternal(
-            final MemberExecutor<T> memberExecutor,
+            final Function<T, Object> memberExecutor,
             final T execution) {
 
         try {
             Object result = observationProvider.get("executeInternal")
-            		.observe(()->memberExecutor.execute(execution));
+            		.observe(()->memberExecutor.apply(execution));
             execution.setReturned(result);
             return result;
         } catch (Exception ex) {
@@ -231,8 +233,9 @@ implements InteractionInternal {
      */
     private Execution<?,?> popAndComplete() {
 
-        if(currentExecution == null)
-            throw new IllegalStateException("No current execution to pop");
+        if(currentExecution == null) {
+			throw new IllegalStateException("No current execution to pop");
+		}
         final Execution<?,?> popped = currentExecution;
         
 
