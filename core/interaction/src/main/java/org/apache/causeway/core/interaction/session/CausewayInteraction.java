@@ -22,27 +22,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
 import org.apache.causeway.applib.services.command.Command;
-import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
-import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.commons.internal.base._Casts;
 import org.apache.causeway.commons.internal.collections._Lists;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
-import org.apache.causeway.core.interaction.CausewayModuleCoreInteraction;
-import org.apache.causeway.core.metamodel.execution.ActionExecutor;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
 import org.apache.causeway.core.metamodel.execution.InteractionInternal;
-import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,15 +56,11 @@ implements InteractionInternal {
         this.startedAtSystemNanos = System.nanoTime(); // used to measure time periods, so not using ClockService here
         this.executionContext = executionContext;
         this.command = new Command(interactionId);
-        this.observationProvider = executionContext.observationProvider(getClass(), 
-        		CausewayModuleCoreInteraction.NAMESPACE);
         if(log.isDebugEnabled()) {
             log.debug("new CausewayInteraction id={}", interactionId);
         }
     }
     
-    private final ObservationProvider observationProvider;
-
     @Getter(onMethod_ = {@Override}) @Accessors(fluent = true)
     private final ExecutionContext executionContext;
     
@@ -113,76 +104,15 @@ implements InteractionInternal {
         executionGraphs.clear();
     }
 
-    @Override
-    public Object execute(
-            final ActionExecutor memberExecutor,
-            final ActionInvocation actionInvocation) {
-
-        return observationProvider.get("Execute Action Invocation")
-            .observe(()->{
-                push(actionInvocation);
-                start(actionInvocation);
-                try {
-                    return executeInternal(memberExecutor, actionInvocation);
-                } finally {
-                    popAndComplete();
-                }
-            });
-    }
-
-    @Override
-    public Object execute(
-            final PropertyModifier memberExecutor,
-            final PropertyEdit propertyEdit) {
-
-        return observationProvider.get("Execute Property Edit")
-            .observe(()->{
-                push(propertyEdit);
-                start(propertyEdit);
-                try {
-                    return executeInternal(memberExecutor, propertyEdit);
-                } finally {
-                    popAndComplete();
-                }
-            });
-    }
-
-    private <T extends Execution<?,?>> Object executeInternal(
-            final Function<T, Object> memberExecutor,
-            final T execution) {
-
-        try {
-            Object result = observationProvider.get("executeInternal")
-            		.observe(()->memberExecutor.apply(execution));
-            execution.setReturned(result);
-            return result;
-        } catch (Exception ex) {
-
-            //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
-            // we rather print all of them, no matter whether recognized or not later on
-            // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
-            // WrapperFactory utilizing async calls
-
-            if(executionContext.deadlockRecognizer().isDeadlock(ex)) {
-                if(log.isDebugEnabled()) {
-                    log.debug("failed to execute an interaction due to a deadlock", ex);
-                } else if(log.isInfoEnabled()) {
-                    log.info("failed to execute an interaction due to a deadlock");
-                }
-            } else {
-                if(log.isErrorEnabled()) {
-                    log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
-                }
-            }
-
-            // just because an exception has thrown, does not mean it is that significant;
-            // it could be that it is recognized by an ExceptionRecognizer and is not severe
-            // eg. unique index violation in the DB
-            getCurrentExecution().setThrew(ex);
-
-            // propagate (as in previous design); caller will need to trap and decide
-            throw ex;
-        }
+    @Override @SneakyThrows
+    public <E extends Execution<?,?>, R> R execute(final E execution, Callable<R> callable) {
+    	push(execution);
+    	start(execution);
+    	try {
+    		return callable.call();
+    	} finally {
+    		popAndComplete();
+    	}
     }
 
     /**
@@ -237,16 +167,12 @@ implements InteractionInternal {
 			throw new IllegalStateException("No current execution to pop");
 		}
         final Execution<?,?> popped = currentExecution;
-        
 
-        return observationProvider.get("popAndComplete")
-        	.observe(()->{
-        		var completedAt = executionContext.clockService().getClock().nowAsJavaSqlTimestamp();
-                popped.setCompletedAt(completedAt, executionContext.metricsService());
+		var completedAt = executionContext.clockService().getClock().nowAsJavaSqlTimestamp();
+        popped.setCompletedAt(completedAt, executionContext.metricsService());
 
-                moveCurrentTo(currentExecution.getParent());
-                return popped;		
-        	});
+        moveCurrentTo(currentExecution.getParent());
+        return popped;		
     }
 
     private void moveCurrentTo(final Execution<?,?> newExecution) {

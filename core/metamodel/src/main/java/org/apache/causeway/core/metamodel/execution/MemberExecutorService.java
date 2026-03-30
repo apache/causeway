@@ -18,15 +18,12 @@
  */
 package org.apache.causeway.core.metamodel.execution;
 
-import java.util.Optional;
-
 import org.jspecify.annotations.NonNull;
 
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
- * Used by ActionInvocationFacets and PropertySetterOrClearFacets to submit their executions.
+ * Used by ActionInvocationFacets and PropertyModifyFacets to submit their executions.
  *
  * <p>That is, invoke a domain action or edit a domain property.
  *
@@ -34,20 +31,10 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  */
 public interface MemberExecutorService {
 
-    /**
-     * Optionally, the currently active {@link InteractionInternal} for the calling thread.
-     */
-    Optional<InteractionInternal> getInteraction();
-
     ManagedObject invokeAction(
             @NonNull ActionExecutor actionExecutor);
 
     ManagedObject setOrClearProperty(
             @NonNull PropertyModifier propertyExecutor);
-
-    default InteractionInternal getInteractionElseFail() {
-        return getInteraction().orElseThrow(()->_Exceptions
-                .unrecoverable("needs an InteractionSession on current thread"));
-    }
 
 }

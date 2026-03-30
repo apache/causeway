@@ -18,6 +18,7 @@
  */
 package org.apache.causeway.core.metamodel.execution;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.LongAdder;
 
 import org.jspecify.annotations.NonNull;
@@ -25,7 +26,6 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.wrapper.WrapperFactory;
 
 /**
@@ -35,30 +35,8 @@ public interface InteractionInternal
 extends Interaction {
    
     ExecutionContext executionContext();
-
-    /**
-     * Use the provided {@link ActionExecutor} to invoke an action, with the provided
-     * {@link ActionInvocation} capturing the details of said action.
-     * 
-     * <p> Because this both pushes an {@link Execution} to
-     * represent the action invocation and then pops it, that completed
-     * execution is accessible at {@link Interaction#getPriorExecution()}.
-     */
-    Object execute(
-            final ActionExecutor memberExecutor,
-            final ActionInvocation actionInvocation);
-
-    /**
-     * Use the provided {@link PropertyModifier} to edit a property, with the provided
-     * {@link PropertyEdit} capturing the details of said property edit.
-     * 
-     * <p> Because this both pushes an {@link Execution} to
-     * represent the property edit and then pops it, that completed
-     * execution is accessible at {@link Interaction#getPriorExecution()}.
-     */
-    Object execute(
-            final PropertyModifier memberExecutor,
-            final PropertyEdit propertyEdit);
+    
+    <E extends Execution<?,?>, R> R execute(final E execution, Callable<R> callable);
 
     /**
      * Numbers the executions (an action invocation or property edit) within

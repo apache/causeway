@@ -28,7 +28,7 @@ import org.apache.causeway.commons.having.HasTypeSpecificAttributes;
  * Represents an action invocation or property modification, resulting in some
  * state change of the system.  It captures not only the target object and
  * arguments passed, but also builds up the call-graph, and captures metrics,
- * eg for profiling.
+ * e.g. for profiling.
  *
  * <p>
  *     The `Interaction` can be used to obtain the  {@link Command} object

@@ -19,6 +19,7 @@
 package org.apache.causeway.core.runtimeservices.executor;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -34,6 +35,7 @@ import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.iactn.Execution;
+import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -41,6 +43,7 @@ import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Lists;
+import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.reflection._MethodFacades.MethodFacade;
 import org.apache.causeway.core.config.CausewayConfiguration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
@@ -121,11 +124,15 @@ implements MemberExecutorService {
         return executionPublisherProvider.get();
     }
 
-    @Override
-    public Optional<InteractionInternal> getInteraction() {
+    private Optional<InteractionInternal> interaction() {
         return interactionLayerTracker.currentInteraction()
                 .map(InteractionInternal.class::cast);
     }
+
+    private InteractionInternal interactionElseFail() {
+    	return interaction().orElseThrow(()->_Exceptions
+    			.unrecoverable("needs an InteractionSession on current thread"));
+    }    
 
     @Override
     public ManagedObject invokeAction(
@@ -162,7 +169,7 @@ implements MemberExecutorService {
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
-        var interaction = getInteractionElseFail();
+        var interaction = interactionElseFail();
 
         prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
 
@@ -182,7 +189,7 @@ implements MemberExecutorService {
                         interaction, actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        interaction.execute(actionExecutor, actionInvocation);
+        execute(interaction, actionExecutor, actionInvocation);
 
         // handle any exceptions
         var priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
@@ -229,7 +236,7 @@ implements MemberExecutorService {
         return result;
     }
 
-    @Override
+	@Override
     public ManagedObject setOrClearProperty(
             final @NonNull PropertyModifier propertyExecutor) {
 
@@ -264,7 +271,7 @@ implements MemberExecutorService {
             return domainObject;
         }
 
-        var interaction = getInteractionElseFail();
+        var interaction = interactionElseFail();
         var command = interaction.getCommand();
         if( command==null ) {
 			return domainObject;
@@ -285,7 +292,7 @@ implements MemberExecutorService {
         var propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        var targetPojo = interaction.execute(propertyModifier, propertyEdit);
+        var targetPojo = execute(interaction, propertyModifier, propertyEdit);
 
         // handle any exceptions
         final Execution<?, ?> priorExecution = interaction.getPriorExecution();
@@ -311,7 +318,82 @@ implements MemberExecutorService {
 
     // -- HELPER
 
-    @SneakyThrows
+    /**
+     * Use the provided {@link ActionExecutor} to invoke an action, with the provided
+     * {@link ActionInvocation} capturing the details of said action.
+     * 
+     * <p> Because this both pushes an {@link Execution} to
+     * represent the action invocation and then pops it, that completed
+     * execution is accessible at {@link Interaction#getPriorExecution()}.
+     */
+    private void execute(
+    		InteractionInternal interaction, 
+    		ActionExecutor actionExecutor,
+    		ActionInvocation actionInvocation) {
+        observationProvider.get("Execute Action Invocation")
+  	      .observe(()->
+  	          interaction.execute(actionInvocation, ()->
+  			      executeInternal(interaction, actionExecutor, actionInvocation)));
+    }
+    
+    /**
+     * Use the provided {@link PropertyModifier} to edit a property, with the provided
+     * {@link PropertyEdit} capturing the details of said property edit.
+     * 
+     * <p> Because this both pushes an {@link Execution} to
+     * represent the property edit and then pops it, that completed
+     * execution is accessible at {@link Interaction#getPriorExecution()}.
+     */
+    private Object execute(
+    		InteractionInternal interaction, 
+    		PropertyModifier propertyModifier,
+			PropertyEdit propertyEdit) {
+      return observationProvider.get("Execute Property Edit")
+	      .observe(()->
+	          interaction.execute(propertyEdit, ()->
+			      executeInternal(interaction, propertyModifier, propertyEdit)));
+	}
+    
+    private <E extends Execution<?,?>> Object executeInternal(
+    		final InteractionInternal interaction,
+            final Function<E, Object> memberExecutor,
+            final E execution) {
+
+        try {
+            Object result = observationProvider.get("executeInternal")
+            		.observe(()->memberExecutor.apply(execution));
+            execution.setReturned(result);
+            return result;
+        } catch (Exception ex) {
+
+            //TODO there is an issue with exceptions getting swallowed, unless this is fixed,
+            // we rather print all of them, no matter whether recognized or not later on
+            // examples are IllegalArgument- or NullPointer- exceptions being swallowed when using the
+            // WrapperFactory utilizing async calls
+
+            if(interaction.executionContext().deadlockRecognizer().isDeadlock(ex)) {
+                if(log.isDebugEnabled()) {
+                    log.debug("failed to execute an interaction due to a deadlock", ex);
+                } else if(log.isInfoEnabled()) {
+                    log.info("failed to execute an interaction due to a deadlock");
+                }
+            } else {
+                if(log.isErrorEnabled()) {
+                    log.error("failed to execute an interaction", _Exceptions.getRootCause(ex).orElse(null));
+                }
+            }
+
+            // just because an exception has thrown, does not mean it is that significant;
+            // it could be that it is recognized by an ExceptionRecognizer and is not severe
+            // eg. unique index violation in the DB
+            interaction.getCurrentExecution().setThrew(ex);
+
+            // propagate (as in previous design); caller will need to trap and decide
+            throw ex;
+        }
+    }
+
+	@SneakyThrows
     private Object invokeMethodPassThrough(
             final MethodFacade methodFacade,
             final InteractionHead head,
