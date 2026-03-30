@@ -45,6 +45,7 @@
 			</exclusions>
 		</dependency>
 		
+		<!-- Source: https://mvnrepository.com/artifact/org.eclipse.persistence/org.eclipse.persistence.asm -->
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
@@ -54,6 +55,10 @@
 					<artifactId>asm</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
 		</dependency>
         <dependency>
         	<!-- provides jakarta.el.* -->
