@@ -169,6 +169,7 @@ implements InteractionInternal {
             getCommand().updater().setStartedAt(startedAt);
             getCommand().updater().setPublishingPhase(Command.CommandPublishingPhase.STARTED);
         }
+        executionContext.commandPublisher().start(command);
     }
 
     /**

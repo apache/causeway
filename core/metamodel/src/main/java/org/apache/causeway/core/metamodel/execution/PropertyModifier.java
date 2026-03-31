@@ -19,7 +19,6 @@
 package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
@@ -29,6 +28,7 @@ import org.apache.causeway.applib.services.iactn.PropertyEdit;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService.MemberExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.causeway.core.metamodel.facets.properties.property.modify.PropertyModifyFacet;
@@ -38,13 +38,15 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.causeway.schema.ixn.v2.PropertyEditDto;
 
 import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Handles Domain Events EXECUTING and EXECUTED.
+ * Handles Domain Events EXECUTING and EXECUTED for Property Edits.
+ * EXECUTING has potential to change the new Property value. 
  */
 @Slf4j
 public record PropertyModifier(
@@ -58,8 +60,7 @@ public record PropertyModifier(
 	    PropertySetterFacet setterFacet,
 	    PropertyModifyFacet propertySetterOrClearFacetForDomainEventAbstract,
 	    ObservationProvider observationProvider) 
-implements Function<PropertyEdit, Object> {
-	
+implements MemberExecutor<PropertyEdit> {
 
     // -- FACTORIES
 
@@ -80,8 +81,14 @@ implements Function<PropertyEdit, Object> {
         		executionContext.observationProvider(PropertyModifier.class, CausewayModuleCoreMetamodel.NAMESPACE));
     }
 	
-    @Override
-	public Object apply(final PropertyEdit currentExecution) {
+	@Override
+	public Object executeWithExecutingEvents(final PropertyEdit currentExecution) {
+		Object result = doExecuteWithExecutingEvents(currentExecution);
+		currentExecution.setReturned(result);
+        return result;
+	}
+	
+	private Object doExecuteWithExecutingEvents(final PropertyEdit currentExecution) {
     	
         // update the current execution with the DTO (memento)
         //
@@ -93,9 +100,7 @@ implements Function<PropertyEdit, Object> {
         var ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
 
         if (ownerHasBookmark) {
-            var propertyEditDto = executionContext.interactionDtoFactory()
-            		.asPropertyEditDto(owningProperty, head, newValue);
-            currentExecution.setDto(propertyEditDto);
+            currentExecution.setDto(executionDto());
         }
 
         if(!isPostable()) {
@@ -108,14 +113,17 @@ implements Function<PropertyEdit, Object> {
         var oldValuePojo = getterFacet.getAssociationValueAsPojo(head.target(), interactionInitiatedBy);
         var newValuePojo = MmUnwrapUtils.single(newValue);
 
-        var propertyDomainEvent = executionContext.domainEventHelper()
+        final var executingEvent = observationProvider.get("Domain Event EXECUTING") 
+    		.observe(()->
+        		executionContext.domainEventHelper()
         		.postEventForProperty(
                     AbstractDomainEvent.Phase.EXECUTING,
                     getEventType(), null,
                     propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
-                    oldValuePojo, newValuePojo);
+                    oldValuePojo, newValuePojo)
+			);
 
-        var newValuePojoPossiblyUpdated = propertyDomainEvent.getNewValue();
+        var newValuePojoPossiblyUpdated = executingEvent.getNewValue();
         var isValueModifiedByEvent = !Objects.equals(newValuePojoPossiblyUpdated, newValuePojo);
 
         final ManagedObject newValueAfterEventPolling =
@@ -125,7 +133,7 @@ implements Function<PropertyEdit, Object> {
                         : newValue;
 
         // set event onto the execution
-        currentExecution.setEvent(propertyDomainEvent);
+        currentExecution.setEvent(executingEvent);
 
         // invoke method
         executeClearOrSetWithoutEvents(newValueAfterEventPolling);
@@ -133,25 +141,22 @@ implements Function<PropertyEdit, Object> {
         // reading the actual value from the target object, playing it safe...
         var actualNewValue = getterFacet.getAssociationValueAsPojo(head.target(), interactionInitiatedBy);
         if (!Objects.equals(oldValuePojo, actualNewValue)) {
-
-            // ... post the executed event
-        	executionContext.domainEventHelper()
-        		.postEventForProperty(
-                    AbstractDomainEvent.Phase.EXECUTED,
-                    getEventType(),
-                    uncheckedCast(propertyDomainEvent),
-                    propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
-                    oldValuePojo, actualNewValue);
+        	observationProvider.get("Domain Event EXECUTED")
+	        	.observe(()->
+		            // ... post the executed event
+		        	executionContext.domainEventHelper()
+		        		.postEventForProperty(
+		                    AbstractDomainEvent.Phase.EXECUTED,
+		                    getEventType(),
+		                    uncheckedCast(executingEvent),
+		                    propertySetterOrClearFacetForDomainEventAbstract.facetHolder(), head,
+		                    oldValuePojo, actualNewValue)
+        		);
         }
 
         // with action invocations, we inject services in the returned pojo at this point.
         // for property sets, though, there's no need, as we're just returning the targetPojo itself
         return head.target().getPojo();
-
-        //
-        // REVIEW: the corresponding action has a whole bunch of error handling here.
-        // we probably should do something similar...
-        //
     }
 
     /**
@@ -161,13 +166,16 @@ implements Function<PropertyEdit, Object> {
      * which might have been modified during EXECUTING phase (event polling).
      */
     public void executeClearOrSetWithoutEvents(final @NonNull ManagedObject newValue) {
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
-        	setterFacet.clearProperty(
-                    owningProperty, head.target(), interactionInitiatedBy);
-        } else {
-            setterFacet.setProperty(
-                    owningProperty, head.target(), newValue, interactionInitiatedBy);
-        }
+    	observationProvider.get("Invoke Property Setter")
+	    	.observe(()->{
+		        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(newValue)) {
+		        	setterFacet.clearProperty(
+		                    owningProperty, head.target(), interactionInitiatedBy);
+		        } else {
+		            setterFacet.setProperty(
+		                    owningProperty, head.target(), newValue, interactionInitiatedBy);
+		        }
+	    	});
     }
 
     // -- HELPER
@@ -178,6 +186,11 @@ implements Function<PropertyEdit, Object> {
     
     private final <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
         return uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType());
+    }
+    
+    private PropertyEditDto executionDto() {
+    	return executionContext.interactionDtoFactory()
+        		.asPropertyEditDto(owningProperty, head, newValue);
     }
 
 }

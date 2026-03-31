@@ -19,7 +19,6 @@
 package org.apache.causeway.core.runtimeservices.executor;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -119,24 +118,6 @@ implements MemberExecutorService {
         this.observationProvider = observationIntegration.provider(getClass(),
                 CausewayObservationIntegration.withModuleName(CausewayModuleCoreRuntimeServices.NAMESPACE));
     }
-    
-    private CommandPublisher commandPublisher() {
-        return commandPublisherProvider.get();
-    }
-
-    private ExecutionPublisher executionPublisher() {
-        return executionPublisherProvider.get();
-    }
-
-    private Optional<InteractionInternal> interaction() {
-        return interactionLayerTracker.currentInteraction()
-                .map(InteractionInternal.class::cast);
-    }
-
-    private InteractionInternal interactionElseFail() {
-    	return interaction().orElseThrow(()->_Exceptions
-    			.unrecoverable("needs an InteractionSession on current thread"));
-    }    
 
     @Override
     public ManagedObject invokeAction(
@@ -360,10 +341,10 @@ implements MemberExecutorService {
     
     private <E extends Execution<?,?>> Object executeInternal(
     		final Command command,
-            final Function<E, Object> memberExecutor,
+            final MemberExecutor<E> memberExecutor,
             final E execution) {
-    	commandPublisher().start(command);
-        Object result = memberExecutor.apply(execution);
+    	
+        Object result = memberExecutor.executeWithExecutingEvents(execution);
         execution.setReturned(result);
         return result;
     }
@@ -442,7 +423,24 @@ implements MemberExecutorService {
             command.updater().setPublishingPhase(Command.CommandPublishingPhase.READY);
         }
 
-        commandPublisherProvider.get().ready(command);
+        commandPublisher().ready(command);
     }
 
+    private CommandPublisher commandPublisher() {
+    	return commandPublisherProvider.get();
+    }
+    
+    private ExecutionPublisher executionPublisher() {
+    	return executionPublisherProvider.get();
+    }
+    
+    private Optional<InteractionInternal> interaction() {
+    	return interactionLayerTracker.currentInteraction()
+    			.map(InteractionInternal.class::cast);
+    }
+    
+    private InteractionInternal interactionElseFail() {
+    	return interaction().orElseThrow(()->_Exceptions
+    			.unrecoverable("needs an InteractionSession on current thread"));
+    }    
 }

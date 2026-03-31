@@ -21,7 +21,6 @@ package org.apache.causeway.core.metamodel.execution;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
@@ -30,6 +29,7 @@ import org.apache.causeway.applib.events.domain.AbstractDomainEvent;
 import org.apache.causeway.applib.events.domain.ActionDomainEvent;
 import org.apache.causeway.applib.services.iactn.ActionInvocation;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
+import org.apache.causeway.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
 import org.apache.causeway.commons.internal.collections._Arrays;
@@ -39,6 +39,7 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.causeway.core.metamodel.execution.MemberExecutorService.MemberExecutor;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.causeway.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -55,7 +56,10 @@ import static org.apache.causeway.commons.internal.base._Casts.uncheckedCast;
 import lombok.SneakyThrows;
 
 /**
- * Handles Domain Events EXECUTING and EXECUTED.
+ * Handles Domain Events EXECUTING and EXECUTED for Action Invocations,
+ * which have potential to change action arguments and return results.
+ * 
+ * <p>In addition supports {@link QueryResultsCache} lookups.
  */
 public record ActionExecutor(
 	    ExecutionContext executionContext,
@@ -67,7 +71,7 @@ public record ActionExecutor(
 	    Can<ManagedObject> arguments,
 	    ActionInvocationFacetAbstract actionInvocationFacetAbstract,
 	    ObservationProvider observationProvider)
-implements Function<ActionInvocation, Object> {
+implements MemberExecutor<ActionInvocation> {
 
     // -- FACTORIES
 
@@ -97,18 +101,21 @@ implements Function<ActionInvocation, Object> {
         		executionContext.observationProvider(ActionExecutor.class, CausewayModuleCoreMetamodel.NAMESPACE));
     }
 
-    @Override
+	@Override
+    public Object executeWithExecutingEvents(final ActionInvocation currentExecution) {
+		Object result = doExecuteWithExecutingEvents(currentExecution);
+		currentExecution.setReturned(result);
+        return result;
+	}
+	
 	@SneakyThrows
-    public Object apply(final ActionInvocation currentExecution) {
+    private Object doExecuteWithExecutingEvents(final ActionInvocation currentExecution) {
 
-    	observationProvider.get("Setting Execution DTO (Attempt)")
-    		.observe(()->{
-    			// update the current execution with the DTO (memento)
-    			// but ... no point in attempting this if no bookmark is yet available.
-    			// this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
-		        ManagedObjects.bookmark(head.owner())
-		        	.ifPresent(ownerBookmark->currentExecution.setDto(executionDto()));
-    		});
+		// update the current execution with the DTO (memento)
+		// but ... no point in attempting this if no bookmark is yet available.
+		// this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
+        ManagedObjects.bookmark(head.owner())
+        	.ifPresent(ownerBookmark->currentExecution.setDto(executionDto()));
 
         if(!isPostable()) {
         	// don't emit domain events
@@ -116,8 +123,7 @@ implements Function<ActionInvocation, Object> {
         }
 
         // ... post the EXECUTING event
-        final ActionDomainEvent<?> event = observationProvider.get("Domain Event EXECUTING")
-    		//.highCardinalityKeyValue(CausewayObservationIntegration.interactionMethod(method))
+        final var executingEvent = observationProvider.get("Domain Event EXECUTING")
     		.observe(()->
         		executionContext.domainEventHelper()
 		    		.postEventForAction(
@@ -128,49 +134,48 @@ implements Function<ActionInvocation, Object> {
 		                null)
     		);
 
-        final Can<ManagedObject> argsForInvocation = event != null
+        final Can<ManagedObject> argsForInvocation = executingEvent != null
             // the event handlers may have updated the argument themselves
             ? updateArguments(
                     owningAction.getParameters(),
                     arguments,
-                    event.getArguments())
+                    executingEvent.getArguments())
             : arguments;
 
         // set event onto the execution
-        currentExecution.setEvent(event);
+        currentExecution.setEvent(executingEvent);
 
         // invoke method
         var resultPojo = executeWithoutEvents(argsForInvocation);
 
-        if (event != null) {
+        if (executingEvent != null) {
         	return observationProvider.get("Domain Event EXECUTED")
-        		//.highCardinalityKeyValue(CausewayObservationIntegration.interactionMethod(method))
         		.observe(()->{
 		            // ... post the EXECUTED event
 		        	executionContext.domainEventHelper()
 		        		.postEventForAction(
 		                    AbstractDomainEvent.Phase.EXECUTED,
-		                    event,
+		                    executingEvent,
 		                    owningAction, owningAction, head, argsForInvocation,
 		                    resultPojo);
 		
-		        	return event.getReturnValue() == resultPojo
+		        	return executingEvent.getReturnValue() == resultPojo
 		        			? resultPojo
-							: getServiceInjector().injectServicesInto(event.getReturnValue());
+							: serviceInjector().injectServicesInto(executingEvent.getReturnValue());
 		        });
         } else {
             return resultPojo;
         }
     }
 
+    // -- HELPER
+    
     @SneakyThrows
     private Object executeWithoutEvents(final Can<ManagedObject> arguments) {
         // invoke method
 		var resultPojo = invokeMethodElseFromCache(method, head, arguments);
-        return getServiceInjector().injectServicesInto(resultPojo);			
+        return serviceInjector().injectServicesInto(resultPojo);			
     }
-
-    // -- HELPER
     
     private boolean isPostable() {
     	// when mixed-in prop/coll always returns false
@@ -207,7 +212,7 @@ implements Function<ActionInvocation, Object> {
         	: invoke(method, targetPojo, executionParameters);
     }
     
-    public Object invoke(
+    private Object invoke(
             final MethodFacade methodFacade, 
             final Object targetPojo, 
             final Object ... executionParameters) {
@@ -229,7 +234,7 @@ implements Function<ActionInvocation, Object> {
 		return cacheable;
 	}
 	
-	private ServiceInjector getServiceInjector() {
+	private ServiceInjector serviceInjector() {
 		return facetHolder().getServiceInjector();
 	}
 

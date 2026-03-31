@@ -20,6 +20,7 @@ package org.apache.causeway.core.metamodel.execution;
 
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 
 /**
@@ -30,6 +31,15 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * @since 2.0
  */
 public interface MemberExecutorService {
+	
+	sealed interface MemberExecutor<E extends Execution<?, ?>> 
+	permits ActionExecutor, PropertyModifier{
+		/**
+		 * Handles Domain Events EXECUTING and EXECUTED,
+		 * which have potential to change action arguments and return results. 
+		 */
+		Object executeWithExecutingEvents(E execution);
+	}
 
     ManagedObject invokeAction(
             @NonNull ActionExecutor actionExecutor);
