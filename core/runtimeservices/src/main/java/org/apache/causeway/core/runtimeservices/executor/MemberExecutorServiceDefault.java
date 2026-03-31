@@ -318,7 +318,7 @@ implements MemberExecutorService {
         observationProvider.get("Execute Action Invocation")
   	      .observe(()->
   	          interaction.execute(actionInvocation, ()->
-  			      executeInternal(interaction.getCommand(), actionExecutor, actionInvocation)));
+  	              actionExecutor.executeWithExecutingEvents(actionInvocation)));
     }
     
     /**
@@ -336,18 +336,8 @@ implements MemberExecutorService {
       return observationProvider.get("Execute Property Edit")
 	      .observe(()->
 	          interaction.execute(propertyEdit, ()->
-	        	  executeInternal(interaction.getCommand(), propertyModifier, propertyEdit)));
+	          	propertyModifier.executeWithExecutingEvents(propertyEdit)));
 	}
-    
-    private <E extends Execution<?,?>> Object executeInternal(
-    		final Command command,
-            final MemberExecutor<E> memberExecutor,
-            final E execution) {
-    	
-        Object result = memberExecutor.executeWithExecutingEvents(execution);
-        execution.setReturned(result);
-        return result;
-    }
 
 	@SneakyThrows
     private Object invokeMethodPassThrough(

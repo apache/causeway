@@ -1,0 +1,102 @@
+= Member Execution
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+[source,java]
+.MemberExecutorService
+----
+ManagedObject invokeAction(ActionExecutor actionExecutor);
+ManagedObject setOrClearProperty(PropertyModifier propertyModifier);
+----
+
+[source,java]
+.MemberExecutor
+----
+sealed interface MemberExecutor<E extends Execution<?, ?>> 
+permits ActionExecutor, PropertyModifier{
+	/**
+	 * Handles Domain Events EXECUTING and EXECUTED,
+	 * which have potential to change action arguments and return results. 
+	 */
+	Object executeWithExecutingEvents(E execution);
+}
+----
+
+.TODO
+----
+Command Publishing
+Execution Publishing
+----
+
+== Action Invocation
+
+[plantuml,fig-action-execution,svg]
+.Action Execution Code Flow
+----
+@startuml
+
+boundary UIEvent as "Some UI Event"
+participant MemberExecutorService
+participant ActionExecutor
+participant QueryResultsCache
+boundary EventListener as "Execution Listeners"
+
+UIEvent -> MemberExecutorService: invokeAction(ActionExecutor)\n\
+via Facets
+
+MemberExecutorService -> MemberExecutorService: create ActionInvocation\n\
+that extends Execution<?,?>
+
+MemberExecutorService -> ActionExecutor: executeWithExecutingEvents(ActionInvocation)
+
+ActionExecutor -> EventListener: EXECUTING
+ActionExecutor <-- EventListener: optionally modified\n Action Params
+
+alt caching is applicable
+	ActionExecutor -> QueryResultsCache: consult
+	ActionExecutor <-- QueryResultsCache: optionally cached result
+else not cached
+	ActionExecutor -> ActionExecutor: execute Action method
+end 
+
+ActionExecutor -> EventListener: EXECUTED\n\
+sends the Action result
+
+ActionExecutor <-- EventListener: optionally modified\n Action Result
+
+MemberExecutorService <-- ActionExecutor: returns Action result pojo
+
+@enduml
+----
+
+== Property Editing
+
+[plantuml,fig-property-editing,svg]
+.Property Editing Code Flow
+----
+@startuml
+
+boundary UIEvent as "Some UI Event"
+participant MemberExecutorService
+participant PropertyModifier
+boundary EventListener as "Execution Listeners"
+
+UIEvent -> MemberExecutorService: setOrClearProperty(PropertyModifier)\n\
+via Facets
+
+MemberExecutorService -> MemberExecutorService: create PropertyEdit\n\
+that extends Execution<?,?>
+
+MemberExecutorService -> PropertyModifier: executeWithExecutingEvents(PropertyEdit)
+
+PropertyModifier -> EventListener: EXECUTING
+PropertyModifier <-- EventListener: optionally modified\n new Property value 
+
+PropertyModifier -> EventListener: EXECUTED\n\
+sends the actual new Property value\n\
+(just a notification)
+
+MemberExecutorService <-- PropertyModifier: returns Property owning pojo
+
+@enduml
+----
