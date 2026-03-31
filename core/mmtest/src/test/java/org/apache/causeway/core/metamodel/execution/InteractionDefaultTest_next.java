@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.interaction;
+package org.apache.causeway.core.metamodel.execution;
 
 import java.util.UUID;
 
@@ -25,13 +25,10 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.core.metamodel.execution.ExecutionContext;
-import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
-
 class InteractionDefaultTest_next {
 
     @Test
-    public void test() {
+    void test() {
     	var context = new ExecutionContext(null, null, null, null, UUID::randomUUID, null,
     			null, null, null);
     	

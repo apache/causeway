@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.layer;
+package org.apache.causeway.core.metamodel.execution;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +45,9 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptio
 public record InteractionLayer(
         @Nullable InteractionLayer parent,
         /**
-         * Current thread's {@link InteractionCarrier} : WHAT is being executed
+         * Carries an {@link Interaction} through its life-cycle.
          */
         InteractionCarrier interactionCarrier,
-
         /**
          * WHO is performing this {@link #getInteraction()}, also
          * WHEN and WHERE.
@@ -58,7 +57,6 @@ public record InteractionLayer(
          * @since 4.0
          */
         List<Runnable> onCloseListeners) {
-	
 	
 	public InteractionLayer(
 	        @Nullable InteractionLayer parent,

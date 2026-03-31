@@ -16,27 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.layer;
+package org.apache.causeway.core.metamodel.execution;
 
-import java.util.function.Function;
+import java.util.concurrent.Callable;
 
+import org.apache.causeway.applib.services.command.Command;
+import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 
+/**
+ * Carries an {@link Interaction} through its life-cycle.
+ * 
+ * @since 4.0
+ */
 public interface InteractionCarrier {
 
 	Interaction interaction();
+
+	int nextExecutionSequence();
+	int nextTransactionSequence();
+
+	<E extends Execution<?, ?>, R> R execute(E execution, Callable<R> callable);
 	
-	default <T> T putAttribute(Class<? super T> type, T value) {
-		return interaction().putAttribute(type, value);
-	}
-	default <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
-		return interaction().computeAttributeIfAbsent(type, mappingFunction);
-	}
-	default <T> T getAttribute(Class<T> type) {
-		return interaction().getAttribute(type);
-	}
-	default void removeAttribute(Class<?> type) {
-		interaction().removeAttribute(type);
-	}
+	// -- SHORTCUT
 	
+	default Command command() { return interaction().getCommand(); }
+	 
 }

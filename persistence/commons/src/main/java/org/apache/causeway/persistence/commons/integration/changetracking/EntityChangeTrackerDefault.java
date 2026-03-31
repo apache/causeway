@@ -68,9 +68,9 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -387,7 +387,7 @@ implements
         // such that cannot enlist on top of it
         final int numberEntityPropertiesModified = memoizeChangesIfRequired().dirtiedProperties.size();
 
-        var interactionId = interactionCarrier.getInteraction().getInteractionId();
+        var interactionId = interactionCarrier.interaction().getInteractionId();
         final int nextTransactionSequence = interactionCarrier.nextTransactionSequence();
 
         // side-effect: it locks the result for this transaction,
@@ -472,8 +472,8 @@ implements
 
     // -- DEPENDENCIES
 
-    private InteractionCarrierDefault interactionCarrier() {
-        return (InteractionCarrierDefault) interactionTrackerProvider.get()
+    private InteractionCarrier interactionCarrier() {
+        return interactionTrackerProvider.get()
         		.currentInteractionCarrierElseFail();
     }
 

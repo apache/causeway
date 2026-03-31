@@ -45,6 +45,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.applib.services.xactn.TransactionService;
@@ -59,8 +60,7 @@ import org.apache.causeway.commons.internal.observation.ObservationClosure;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
@@ -312,9 +312,9 @@ implements
      * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, sets up
      * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link InteractionCarrier} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void onOpen(final @NonNull InteractionCarrier interactionCarrier) {
+    public void onOpen(final @NonNull Interaction interaction) {
 
         txCounter.get().reset();
         if (platformTransactionManagers.isEmpty()) {
@@ -326,7 +326,7 @@ implements
         }
 
         var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ObservationClosure());
-        interactionCarrier.putAttribute(OnCloseHandle.class, onCloseHandle);
+        interaction.putAttribute(OnCloseHandle.class, onCloseHandle);
 
         platformTransactionManagers.forEach(txManager -> {
 
@@ -380,27 +380,27 @@ implements
      * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
      * (or their various overloads) result in an exception.
      *
-     * @param interaction The {@link InteractionCarrier} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void requestRollback(final @NonNull InteractionCarrier interactionCarrier) {
-        Optional.ofNullable(interactionCarrier.getAttribute(OnCloseHandle.class))
+    public void requestRollback(final @NonNull Interaction interaction) {
+        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                 .ifPresent(OnCloseHandle::requestRollback);
     }
 
     /**
      * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, to close the
-     * transaction initially set up in {@link #onOpen(InteractionCarrier)} against all configured
+     * transaction initially set up in {@link #onOpen(Interaction)} against all configured
      * {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link InteractionCarrier} object representing the current interaction.
+     * @param interaction The {@link Interaction} object representing the current interaction.
      */
-    public void onClose(final @NonNull InteractionCarrier interactionCarrier) {
+    public void onClose(final @NonNull Interaction interaction) {
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
         }
 
         if (!platformTransactionManagers.isEmpty()) {
-            Optional.ofNullable(interactionCarrier.getAttribute(OnCloseHandle.class))
+            Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
                     .ifPresent(OnCloseHandle::runOnCloseTasks);
         }
 

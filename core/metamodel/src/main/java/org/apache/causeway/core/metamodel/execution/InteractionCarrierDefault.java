@@ -26,16 +26,12 @@ import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Carries an {@link Interaction} through its lifecycle.
- */
 @Slf4j
-public record InteractionCarrierDefault(
+record InteractionCarrierDefault(
 		SimpleInteraction interaction,
 		LongAdder executionSequence,
 		LongAdder transactionSequence) 
@@ -47,10 +43,12 @@ implements InteractionCarrier {
 	
 	public UUID interactionId() { return interaction.getInteractionId(); }
 	public ExecutionContext executionContext() { return interaction.executionContext(); }
+	@Override
 	public Command command() { return interaction.command(); }
 	public Interaction getInteraction() { return interaction; }
 	
 	@SneakyThrows
+	@Override 
     public <E extends Execution<?,?>, R> R execute(final E execution, Callable<R> callable) {
     	push(execution);
     	start(execution);
@@ -95,7 +93,8 @@ implements InteractionCarrier {
      * 
      * @see #nextTransactionSequence()
      */
-    public int nextExecutionSequence() {
+    @Override
+	public int nextExecutionSequence() {
     	executionSequence().increment();
         return executionSequence().intValue() - 1;
     }
@@ -114,7 +113,8 @@ implements InteractionCarrier {
      * @see org.apache.causeway.applib.services.xactn.TransactionService
      * @see #nextExecutionSequence()
      */
-    public int nextTransactionSequence() {
+    @Override
+	public int nextTransactionSequence() {
     	transactionSequence().increment();
         return transactionSequence().intValue() - 1;
     }

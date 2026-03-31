@@ -32,15 +32,13 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayer;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerStack;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionLayer;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerStack;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-
-import io.micrometer.observation.Observation;
 
 /**
  * A pass-through implementation, free of side-effects,
@@ -69,12 +67,15 @@ implements InteractionService, InteractionLayerTracker {
     private InteractionLayer openInteractionLayer(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
         var interactionCarrier = new InteractionCarrier() {
-			@Override public Interaction interaction() {
-				return interaction;
+			@Override public Interaction interaction() { return interaction; }
+			@Override public int nextExecutionSequence() { return 0; }
+			@Override public int nextTransactionSequence() { return 0; }
+			@SneakyThrows @Override 
+			public <E extends Execution<?, ?>, R> R execute(E execution, Callable<R> callable) {
+				return callable.call();
 			}
 		};
-        
-        return layerStack.push(interactionCarrier, interactionContext, Observation.NOOP);
+        return layerStack.pushForTesting(interactionCarrier, interactionContext);
     }
 
     @Override

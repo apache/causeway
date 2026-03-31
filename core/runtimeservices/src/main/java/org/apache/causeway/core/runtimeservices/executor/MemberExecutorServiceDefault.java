@@ -50,13 +50,13 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Messa
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
-import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
 import org.apache.causeway.core.metamodel.facets.members.publish.execution.ExecutionPublishingFacet;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
 import org.apache.causeway.core.metamodel.object.MmEntityUtils;
@@ -176,7 +176,7 @@ implements MemberExecutorService {
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         execute(interactionCarrier, actionExecutor, actionInvocation);
         
-        final var priorExecution = interactionCarrier.getInteraction().getPriorExecution();
+        final var priorExecution = interactionCarrier.interaction().getPriorExecution();
 
         // throws if there was any exception in prior execution
         var executionExceptionIfAny = priorExecution.getThrew();
@@ -285,7 +285,7 @@ implements MemberExecutorService {
         var targetPojo = execute(interactionCarrier, propertyModifier, propertyEdit);
 
         // handle any exceptions
-        var priorExecution = interactionCarrier.getInteraction().getPriorExecution();
+        var priorExecution = interactionCarrier.interaction().getPriorExecution();
         var executionExceptionIfAny = priorExecution.getThrew();
         if(executionExceptionIfAny != null) {
 			throw executionExceptionIfAny instanceof RuntimeException rex
@@ -314,7 +314,7 @@ implements MemberExecutorService {
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     private void execute(
-    		InteractionCarrierDefault carrier, 
+    		InteractionCarrier carrier, 
     		ActionExecutor actionExecutor,
     		ActionInvocation actionInvocation) {
         observationProvider.get("Execute Action Invocation")
@@ -334,7 +334,7 @@ implements MemberExecutorService {
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     private Object execute(
-    		InteractionCarrierDefault carrier, 
+    		InteractionCarrier carrier, 
     		PropertyModifier propertyModifier,
 			PropertyEdit propertyEdit) {
     	
@@ -431,12 +431,11 @@ implements MemberExecutorService {
     	return executionPublisherProvider.get();
     }
     
-    private Optional<InteractionCarrierDefault> interactionCarrier() {
-    	return interactionLayerTracker.currentInteractionCarrier()
-    			.map(InteractionCarrierDefault.class::cast);
+    private Optional<InteractionCarrier> interactionCarrier() {
+    	return interactionLayerTracker.currentInteractionCarrier();
     }
     
-    private InteractionCarrierDefault interactionCarrierElseFail() {
+    private InteractionCarrier interactionCarrierElseFail() {
     	return interactionCarrier().orElseThrow(()->_Exceptions
     			.unrecoverable("needs an InteractionSession on current thread"));
     }    

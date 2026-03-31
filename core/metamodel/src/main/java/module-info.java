@@ -74,7 +74,6 @@ open module org.apache.causeway.core.metamodel {
     exports org.apache.causeway.core.metamodel.facets.value.semantics;
 
     exports org.apache.causeway.core.metamodel.interactions;
-    exports org.apache.causeway.core.metamodel.interactions.layer;
     exports org.apache.causeway.core.metamodel.interactions.acc;
     exports org.apache.causeway.core.metamodel.interactions.managed;
     exports org.apache.causeway.core.metamodel.interactions.use;

@@ -23,7 +23,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.springframework.stereotype.Service;
 
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.security.authentication.logout.LogoutHandler;
 
 import lombok.RequiredArgsConstructor;

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.layer;
+package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Optional;
 

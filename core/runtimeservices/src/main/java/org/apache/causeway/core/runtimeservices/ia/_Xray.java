@@ -22,7 +22,7 @@ import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayer;
+import org.apache.causeway.core.metamodel.execution.InteractionLayer;
 import org.apache.causeway.core.security.util.XrayUtil;
 
 //@Slf4j

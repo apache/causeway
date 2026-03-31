@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.metamodel.interactions.layer;
+package org.apache.causeway.core.metamodel.execution;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -39,18 +39,29 @@ public final class InteractionLayerStack {
     public Optional<InteractionLayer> currentLayer() {
         return Optional.ofNullable(threadLocalLayer.get());
     }
-
+    
     public InteractionLayer push(
-            final InteractionCarrier interactionCarrier,
+            final ExecutionContext executionContext,
             final InteractionContext interactionContext,
             final Observation observation) {
         var parent = currentLayer().orElse(null);
+        var interactionCarrier = currentLayer()
+                .map(InteractionLayer::interactionCarrier)
+                .orElseGet(()->new InteractionCarrierDefault(executionContext));
+        
         @SuppressWarnings("resource")
         var newLayer = new InteractionLayer(parent, interactionCarrier, interactionContext)
         	.addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
         threadLocalLayer.set(newLayer);
         return newLayer;
     }
+    
+	public InteractionLayer pushForTesting(InteractionCarrier interactionCarrier, InteractionContext interactionContext) {
+        var parent = currentLayer().orElse(null);
+        var newLayer = new InteractionLayer(parent, interactionCarrier, interactionContext);
+        threadLocalLayer.set(newLayer);
+        return newLayer;
+	}
 
     public void clear() {
     	try {

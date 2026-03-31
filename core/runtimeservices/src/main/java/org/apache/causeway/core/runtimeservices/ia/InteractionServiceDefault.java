@@ -50,10 +50,9 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayer;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerStack;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
+import org.apache.causeway.core.metamodel.execution.InteractionLayer;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerStack;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
@@ -140,21 +139,17 @@ implements
             return currentInteractionLayerElseFail();
 		}
 
-        var interactionCarrier = currentInteractionLayer()
-            .map(InteractionLayer::interactionCarrier)
-            .orElseGet(()->new org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault(executionContext));
-
         final int depth = getInteractionLayerCount();
 
         var obs = observationProvider.get(depth == 0
                 ? "Causeway Root Interaction"
                 : "Causeway Nested Interaction");
-        var newInteractionLayer = layerStack.push(interactionCarrier, interactionContextToUse, obs);
+        var newInteractionLayer = layerStack.push(executionContext, interactionContextToUse, obs);
 
         _Observation.addTags(obs, interactionContextToUse, depth);
 
         if(depth == 0) {
-            transactionServiceSpring.onOpen(interactionCarrier);
+            transactionServiceSpring.onOpen(newInteractionLayer.interaction());
             interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         }
 
@@ -307,7 +302,7 @@ implements
             return;
         }
         var interactionCarrier = layerStack.peek().rootLayer().interactionCarrier();
-        transactionServiceSpring.requestRollback(interactionCarrier);
+        transactionServiceSpring.requestRollback(interactionCarrier.interaction());
     }
 
     private boolean isAtRootLevel() {
@@ -315,7 +310,7 @@ implements
     }
 
     @SneakyThrows
-    private void preInteractionClosed(final InteractionCarrier interactionCarrier) {
+    private void preInteractionClosed(final Interaction interaction) {
 
         Throwable flushException = null;
 
@@ -356,13 +351,13 @@ implements
                 } catch (Throwable e) {
                     //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
                     flushException = e;
-                    transactionServiceSpring.requestRollback(interactionCarrier);
+                    transactionServiceSpring.requestRollback(interaction);
                 }
             }
             // the net effect of this is to call either txManager.rollback(txStatus) or txManager.commit(txStatus) depending upon
             // whether txStatus.setRollbackOnly(...) was ever called.
             // anything has called setRollbackOnly so far.
-            transactionServiceSpring.onClose(interactionCarrier);
+            transactionServiceSpring.onClose(interaction);
         }
 
         // cleanup the InteractionScope (Spring scope)
@@ -396,7 +391,7 @@ implements
 				}
                 if(isAtRootLevel()) {
                     // keep the stack unmodified yet, to allow for callbacks to properly operate
-                    preInteractionClosed(currentLayer.interactionCarrier());
+                    preInteractionClosed(currentLayer.interactionCarrier().interaction());
                 }
                 _Xray.closeInteractionLayer(currentLayer);
                 return true;

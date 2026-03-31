@@ -25,9 +25,9 @@ import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
-import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
 import org.apache.causeway.core.metamodel.spec.feature.ObjectAction;
@@ -39,7 +39,7 @@ final class _Xray {
 
     static SequenceHandle enterActionInvocation(
             final @NonNull InteractionLayerTracker iaTracker,
-            final @NonNull InteractionCarrierDefault interactionCarrier,
+            final @NonNull InteractionCarrier interactionCarrier,
             final @NonNull ObjectAction owningAction,
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters) {
@@ -63,7 +63,7 @@ final class _Xray {
 
     public static SequenceHandle enterPropertyEdit(
             final @NonNull InteractionLayerTracker iaTracker,
-            final @NonNull InteractionCarrierDefault interactionCarrier,
+            final @NonNull InteractionCarrier interactionCarrier,
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head,
             final @NonNull ManagedObject newValueAdapter) {
@@ -81,7 +81,7 @@ final class _Xray {
 
     private static SequenceHandle enterInvocation(
             final @NonNull InteractionLayerTracker iaTracker,
-            final InteractionCarrierDefault interactionCarrier,
+            final InteractionCarrier interactionCarrier,
             final String participantLabel,
             final String enteringLabel) {
 
