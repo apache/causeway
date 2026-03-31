@@ -28,6 +28,7 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
@@ -58,7 +59,13 @@ implements InteractionService {
     @Override
     public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
-        return layerStack.push(interaction, interactionContext, Observation.NOOP);
+        var interactionCarrier = new InteractionCarrier() {
+			@Override public Interaction interaction() {
+				return interaction;
+			}
+		};
+        
+        return layerStack.push(interactionCarrier, interactionContext, Observation.NOOP);
     }
 
     @Override

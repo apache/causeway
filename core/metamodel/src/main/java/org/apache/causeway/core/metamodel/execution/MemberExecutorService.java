@@ -38,7 +38,7 @@ public interface MemberExecutorService {
 		 * Handles Domain Events EXECUTING and EXECUTED,
 		 * which have potential to change action arguments and return results. 
 		 */
-		Object executeWithExecutingEvents(E execution);
+		Object executeWithExecutingEvents(int executionSequence, E execution);
 	}
 
     ManagedObject invokeAction(

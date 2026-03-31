@@ -39,6 +39,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
@@ -48,14 +49,11 @@ import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.internal.debug._Probe;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
@@ -129,26 +127,26 @@ implements
         var reuseCurrentLayer = currentInteractionContext()
                 .map(currentInteractionContext -> Objects.equals(currentInteractionContext, interactionContextToUse))
                 .orElse(false);
-        if(reuseCurrentLayer)
-            // we are done, just return the stack's top
+        if(reuseCurrentLayer) {
+			// we are done, just return the stack's top
             return currentInteractionLayerElseFail();
+		}
 
-        var interaction = currentInteractionLayer()
-            .map(InteractionLayer::interaction)
-            .map(InteractionInternal.class::cast)
-            .orElseGet(()->new CausewayInteraction(executionContext));
+        var interactionCarrier = currentInteractionLayer()
+            .map(InteractionLayer::interactionCarrier)
+            .orElseGet(()->new org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault(executionContext));
 
         final int depth = getInteractionLayerCount();
 
         var obs = observationProvider.get(depth == 0
                 ? "Causeway Root Interaction"
                 : "Causeway Nested Interaction");
-        var newInteractionLayer = layerStack.push(interaction, interactionContextToUse, obs);
+        var newInteractionLayer = layerStack.push(interactionCarrier, interactionContextToUse, obs);
 
         _Observation.addTags(obs, interactionContextToUse, depth);
 
         if(depth == 0) {
-            transactionServiceSpring.onOpen(interaction);
+            transactionServiceSpring.onOpen(interactionCarrier);
             interactionScopeLifecycleHandler.onTopLevelInteractionOpened();
         }
 
@@ -300,8 +298,8 @@ implements
                     cause.getMessage());
             return;
         }
-        var interaction = (CausewayInteraction) layerStack.peek().rootLayer().interaction();
-        transactionServiceSpring.requestRollback(interaction);
+        var interactionCarrier = layerStack.peek().rootLayer().interactionCarrier();
+        transactionServiceSpring.requestRollback(interactionCarrier);
     }
 
     private boolean isAtRootLevel() {
@@ -309,7 +307,7 @@ implements
     }
 
     @SneakyThrows
-    private void preInteractionClosed(final CausewayInteraction interaction) {
+    private void preInteractionClosed(final InteractionCarrier interactionCarrier) {
 
         Throwable flushException = null;
 
@@ -350,19 +348,19 @@ implements
                 } catch (Throwable e) {
                     //[CAUSEWAY-3262] if flush fails rethrow later, when interaction was closed ...
                     flushException = e;
-                    transactionServiceSpring.requestRollback(interaction);
+                    transactionServiceSpring.requestRollback(interactionCarrier);
                 }
             }
             // the net effect of this is to call either txManager.rollback(txStatus) or txManager.commit(txStatus) depending upon
             // whether txStatus.setRollbackOnly(...) was ever called.
             // anything has called setRollbackOnly so far.
-            transactionServiceSpring.onClose(interaction);
+            transactionServiceSpring.onClose(interactionCarrier);
         }
 
         // cleanup the InteractionScope (Spring scope)
         interactionScopeLifecycleHandler.onTopLevelInteractionPreDestroy();
         interactionScopeLifecycleHandler.onTopLevelInteractionClosed();
-        interaction.close(); // do this last
+        //interactionCarrier.close(); // do this last
 
         if(flushException!=null) {
             throw flushException;
@@ -370,8 +368,12 @@ implements
     }
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
-        if(layerStack.isEmpty()) return;
-        if(downToStackSize<0) throw new IllegalArgumentException("required non-negative");
+        if(layerStack.isEmpty()) {
+			return;
+		}
+        if(downToStackSize<0) {
+			throw new IllegalArgumentException("required non-negative");
+		}
 
         log.debug("about to close interaction stack down to size {} (interactionId={}, total-layers-on-stack={}, {})",
                 downToStackSize,
@@ -381,10 +383,12 @@ implements
 
         try {
             layerStack.popWhile(currentLayer->{
-                if(!(layerStack.size()>downToStackSize)) return false;
+                if(!(layerStack.size()>downToStackSize)) {
+					return false;
+				}
                 if(isAtRootLevel()) {
                     // keep the stack unmodified yet, to allow for callbacks to properly operate
-                    preInteractionClosed((CausewayInteraction)currentLayer.interaction());
+                    preInteractionClosed(currentLayer.interactionCarrier());
                 }
                 _Xray.closeInteractionLayer(currentLayer);
                 return true;
@@ -399,14 +403,6 @@ implements
         }
     }
 
-    private CausewayInteraction getInternalInteractionElseFail() {
-        var interaction = currentInteractionElseFail();
-        if(interaction instanceof CausewayInteraction)
-            return (CausewayInteraction) interaction;
-        throw _Exceptions.unrecoverable("the framework does not recognize "
-                + "this implementation of an Interaction: %s", interaction.getClass().getName());
-    }
-
     // -- HELPER - COMMAND COMPLETION
 
     /**
@@ -415,7 +411,8 @@ implements
     @Programmatic
     public void completeAndPublishCurrentCommand() {
 
-        var interaction = getInternalInteractionElseFail();
+    	var interactionCarrier = currentInteractionCarrierElseFail();
+        var interaction = interactionCarrier.interaction();
         var command = interaction.getCommand();
 
         if(command.getStartedAt() != null && command.getCompletedAt() == null) {
@@ -437,8 +434,6 @@ implements
 
         command.updater().setPublishingPhase(Command.CommandPublishingPhase.COMPLETED);
         commandPublisherProvider.get().complete(command);
-
-        interaction.clear();
     }
 
 }

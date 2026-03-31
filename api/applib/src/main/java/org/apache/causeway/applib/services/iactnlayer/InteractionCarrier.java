@@ -16,33 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.iactn;
+package org.apache.causeway.applib.services.iactnlayer;
 
-import java.util.List;
+import java.util.function.Function;
 
-import org.apache.causeway.applib.Identifier;
-import org.apache.causeway.applib.events.domain.ActionDomainEvent;
-import org.apache.causeway.schema.common.v2.InteractionType;
-import org.apache.causeway.schema.ixn.v2.ActionInvocationDto;
+import org.apache.causeway.applib.services.iactn.Interaction;
 
-import lombok.Getter;
+public interface InteractionCarrier {
 
-/**
- * @since 1.x {@index}
- */
-public class ActionInvocation
-extends Execution<ActionInvocationDto, ActionDomainEvent<?>> {
-
-    @Getter
-    private final List<Object> args;
-
-    public ActionInvocation(
-            final Interaction interaction,
-            final Identifier memberId,
-            final Object target,
-            final List<Object> args) {
-        super(interaction, InteractionType.ACTION_INVOCATION, memberId, target);
-        this.args = args;
-    }
- 
+	Interaction interaction();
+	
+	default <T> T putAttribute(Class<? super T> type, T value) {
+		return interaction().putAttribute(type, value);
+	}
+	default <T> T computeAttributeIfAbsent(Class<? super T> type, Function<Class<?>, ? extends T> mappingFunction) {
+		return interaction().computeAttributeIfAbsent(type, mappingFunction);
+	}
+	default <T> T getAttribute(Class<T> type) {
+		return interaction().getAttribute(type);
+	}
+	default void removeAttribute(Class<?> type) {
+		interaction().removeAttribute(type);
+	}
+	
 }

@@ -18,10 +18,14 @@
  */
 package org.apache.causeway.applib.services.iactnlayer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.commons.functional.Try;
+import org.apache.causeway.commons.internal.base._NullSafe;
+import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
 
 /**
  * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
@@ -39,9 +43,9 @@ import org.apache.causeway.commons.functional.Try;
 public record InteractionLayer(
         @Nullable InteractionLayer parent,
         /**
-         * Current thread's {@link Interaction} : WHAT is being executed
+         * Current thread's {@link InteractionCarrier} : WHAT is being executed
          */
-        Interaction interaction,
+        InteractionCarrier interactionCarrier,
 
         /**
          * WHO is performing this {@link #getInteraction()}, also
@@ -51,8 +55,25 @@ public record InteractionLayer(
         /**
          * @since 4.0
          */
-        Runnable onCloseCallback) implements AutoCloseable {
+        List<Runnable> onCloseListeners) {
+	
+	
+	public InteractionLayer(
+	        @Nullable InteractionLayer parent,
+	        InteractionCarrier interactionCarrier,
+	        InteractionContext interactionContext) {
+		this(parent, interactionCarrier, interactionContext, new ArrayList<>());
+	}
+	
+	public InteractionLayer addOnCloseListener(Runnable listener) {
+		onCloseListeners.add(listener);
+		return this;
+	}
 
+	public Interaction interaction() {
+		return interactionCarrier.interaction();
+	}
+	
     public boolean isRoot() {
         return parent==null;
     }
@@ -72,16 +93,24 @@ public record InteractionLayer(
             ? parent.rootLayer()
             : this;
     }
-
-    @Override
-    public void close() {
-    	Try.run(onCloseCallback::run); // ignores exceptions
+    
+    public void close(FirstExceptionCollector exCollector) {
+    	if(_NullSafe.isEmpty(onCloseListeners)) {
+			return;
+		}
+    	for(var listener : onCloseListeners) {
+    		try {
+    			listener.run();
+    		} catch (Exception e) {
+    			exCollector.collect(e);
+			}
+    	}
     }
 
-    public void closeAll() {
-        close();
+    public void closeAll(FirstExceptionCollector exCollector) {
+        close(exCollector);
         if(parent!=null) {
-            parent.closeAll();
+            parent.closeAll(exCollector);
         }
     }
 

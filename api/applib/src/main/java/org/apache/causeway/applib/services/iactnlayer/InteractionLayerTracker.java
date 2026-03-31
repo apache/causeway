@@ -67,6 +67,21 @@ extends InteractionProvider {
         return currentInteractionLayer()
                 .map(InteractionLayer::interactionContext);
     }
+    
+    // -- INTERACTION CARRIER
+    
+    /**
+     * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()}
+     * (if within an {@link InteractionLayer}).
+     */
+    default Optional<InteractionCarrier> currentInteractionCarrier(){
+    	return currentInteractionLayer()
+    	        .map(InteractionLayer::interactionCarrier);
+    }
+    default InteractionCarrier currentInteractionCarrierElseFail(){
+    	return currentInteractionLayerElseFail()
+    			.interactionCarrier();
+    }
 
     // -- INTERACTION
 
@@ -76,8 +91,8 @@ extends InteractionProvider {
      */
     @Override
     default Optional<Interaction> currentInteraction(){
-    	return currentInteractionLayer()
-    	        .map(InteractionLayer::interaction);
+    	return currentInteractionCarrier()
+    	        .map(InteractionCarrier::interaction);
     }
 
 }

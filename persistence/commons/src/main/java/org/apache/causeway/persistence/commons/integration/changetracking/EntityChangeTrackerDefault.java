@@ -58,7 +58,7 @@ import org.apache.causeway.applib.annotation.TransactionScope;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.metrics.MetricsService;
 import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
 import org.apache.causeway.applib.services.publishing.spi.EntityPropertyChange;
@@ -69,7 +69,7 @@ import org.apache.causeway.commons.internal.collections._Maps;
 import org.apache.causeway.commons.internal.collections._Sets;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.core.config.CausewayConfiguration;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
 import org.apache.causeway.core.metamodel.facets.object.publish.entitychange.EntityChangePublishingFacet;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -126,7 +126,7 @@ implements
     public EntityChangeTrackerDefault(
             final EntityPropertyChangePublisher entityPropertyChangePublisher,
             final EntityChangesPublisher entityChangesPublisher,
-            final Provider<InteractionProvider> interactionProviderProvider,
+            final Provider<InteractionLayerTracker> interactionProviderProvider,
             final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService) {
 
         if(log.isDebugEnabled()) {
@@ -136,7 +136,7 @@ implements
 
         this.entityPropertyChangePublisher = entityPropertyChangePublisher;
         this.entityChangesPublisher = entityChangesPublisher;
-        this.interactionProviderProvider = interactionProviderProvider;
+        this.interactionTrackerProvider = interactionProviderProvider;
         this.preAndPostValueEvaluatorService = preAndPostValueEvaluatorService;
     }
 
@@ -148,7 +148,7 @@ implements
 
     private final EntityPropertyChangePublisher entityPropertyChangePublisher;
     private final EntityChangesPublisher entityChangesPublisher;
-    private final Provider<InteractionProvider> interactionProviderProvider;
+    private final Provider<InteractionLayerTracker> interactionTrackerProvider;
     private final PreAndPostValueEvaluatorService preAndPostValueEvaluatorService;
 
     /**
@@ -263,7 +263,7 @@ implements
     public void destroy() {
 
         if(log.isDebugEnabled()) {
-            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            var interactionId = interactionTrackerProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.destroy xactn={} interactionId={} thread={}", transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -304,28 +304,33 @@ implements
 
     private boolean isEntityExcludedForChangePublishing(final ManagedObject entity) {
 
-        if (!configuration.isEnabled())
-            return true;
+        if (!configuration.isEnabled()) {
+			return true;
+		}
 
-        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec()))
-            return true; // ignore entities that are not enabled for entity change publishing
+        if(!EntityChangePublishingFacet.isPublishingEnabled(entity.objSpec())) {
+			return true; // ignore entities that are not enabled for entity change publishing
+		}
 
         // guard against transient
-        if(ManagedObjects.bookmark(entity).isEmpty()) return true;
+        if(ManagedObjects.bookmark(entity).isEmpty()) {
+			return true;
+		}
 
-        if(changes.isMemoized())
-            throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
+        if(changes.isMemoized()) {
+			throw _Exceptions.illegalState("Cannot enlist additional changes for auditing, "
                     + "since changedObjectPropertiesRef was already prepared (memoized) for auditing.");
+		}
 
         return false;
     }
 
     @Override
     public void beforeCommit(final boolean readOnly) {
-        _Xray.publish(this, interactionProviderProvider);
+        _Xray.publish(this, interactionTrackerProvider);
 
         if(log.isDebugEnabled()) {
-            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            var interactionId = interactionTrackerProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.beforeCommit(readOnly={}) xactn={} interactionId={} thread={}", readOnly, transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -340,7 +345,7 @@ implements
     public void afterCompletion(final int status) {
 
         if(log.isDebugEnabled()) {
-            var interactionId = interactionProviderProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
+            var interactionId = interactionTrackerProvider.get().currentInteraction().map(Interaction::getInteractionId).orElse(null);
             log.debug("EntityChangeTrackerDefault.afterCompletion(status={}) xactn={} interactionId={} thread={}", decodeStatus(status), transactionCounter.get(), interactionId, Thread.currentThread().getName());
         }
 
@@ -348,18 +353,20 @@ implements
     }
 
     private static String decodeStatus(final int status) {
-        if (status == STATUS_COMMITTED) return "STATUS_COMMITTED";
-        if (status == STATUS_ROLLED_BACK) return "STATUS_ROLLED_BACK";
-        if (status == STATUS_UNKNOWN) return "STATUS_UNKNOWN";
+        if (status == STATUS_COMMITTED) {
+			return "STATUS_COMMITTED";
+		}
+        if (status == STATUS_ROLLED_BACK) {
+			return "STATUS_ROLLED_BACK";
+		}
+        if (status == STATUS_UNKNOWN) {
+			return "STATUS_UNKNOWN";
+		}
         return status + " [not recognised]";
     }
 
     private void enableCommandPublishing() {
-        var alreadySet = persistentChangesEncountered.getAndSet(true);
-        if(!alreadySet) {
-            // has side effects
-            var command = currentInteraction().getCommand();
-        }
+        persistentChangesEncountered.getAndSet(true);
     }
 
     @Override
@@ -369,28 +376,29 @@ implements
 
         // a defensive copy of
         var changeKindByEnlistedAdapter = new HashMap<>(this.changeKindByEnlistedAdapter);
-        if(changeKindByEnlistedAdapter.isEmpty())
-            return Optional.empty();
+        if(changeKindByEnlistedAdapter.isEmpty()) {
+			return Optional.empty();
+		}
 
-        final Interaction interaction = currentInteraction();
+        final var interactionCarrier = interactionCarrier();
         final int numberEntitiesLoaded1 = numberEntitiesLoaded();
 
         // this code path has side-effects, it locks the result for this transaction,
         // such that cannot enlist on top of it
         final int numberEntityPropertiesModified = memoizeChangesIfRequired().dirtiedProperties.size();
 
-        var interactionId = interaction.getInteractionId();
-        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementTransactionSequence();
+        var interactionId = interactionCarrier.getInteraction().getInteractionId();
+        final int nextTransactionSequence = interactionCarrier.nextTransactionSequence();
 
         // side-effect: it locks the result for this transaction,
         // such that cannot enlist on top of it
         var changingEntities = (EntityChanges) new _SimpleChangingEntities(
-                interactionId, nextEventSequence,
+                interactionId, nextTransactionSequence,
                 userName, timestamp,
                 numberEntitiesLoaded1,
                 numberEntityPropertiesModified,
                 () -> newDto(
-                        interactionId, nextEventSequence,
+                        interactionId, nextTransactionSequence,
                         userName, timestamp,
                         numberEntitiesLoaded1,
                         numberEntityPropertiesModified,
@@ -413,8 +421,9 @@ implements
 
         changeKindByEnlistedEntity.forEach((bookmark, kind)->{
             var oidDto = bookmark.toOidDto();
-            if(oidDto==null)
-                return;
+            if(oidDto==null) {
+				return;
+			}
             switch(kind) {
                 case CREATE:
                     objectsDto.getCreated().getOid().add(oidDto);
@@ -463,8 +472,9 @@ implements
 
     // -- DEPENDENCIES
 
-    Interaction currentInteraction() {
-        return interactionProviderProvider.get().currentInteractionElseFail();
+    private InteractionCarrierDefault interactionCarrier() {
+        return (InteractionCarrierDefault) interactionTrackerProvider.get()
+        		.currentInteractionCarrierElseFail();
     }
 
     // -- HELPER
@@ -522,11 +532,12 @@ implements
     @Override
     public void enlistCreated(final ManagedObject entity) {
 
-        _Xray.enlistCreated(entity, interactionProviderProvider);
+        _Xray.enlistCreated(entity, interactionTrackerProvider);
 
         if (isEntityExcludedForChangePublishing(entity)
-                || !EntityChangePublishingFacet.isPublishingEnabledForCreate(entity.objSpec()))
-            return;
+                || !EntityChangePublishingFacet.isPublishingEnabledForCreate(entity.objSpec())) {
+			return;
+		}
 
         log.debug("enlist entity's property changes for publishing {}", entity);
 
@@ -543,11 +554,12 @@ implements
             final ManagedObject entity,
             final @Nullable Function<ManagedObject, Can<PropertyChangeRecord>> propertyChangeRecordSupplier) {
 
-        _Xray.enlistUpdating(entity, interactionProviderProvider);
+        _Xray.enlistUpdating(entity, interactionTrackerProvider);
 
         if (isEntityExcludedForChangePublishing(entity)
-                || !EntityChangePublishingFacet.isPublishingEnabledForUpdate(entity.objSpec()))
-            return;
+                || !EntityChangePublishingFacet.isPublishingEnabledForUpdate(entity.objSpec())) {
+			return;
+		}
 
         if(log.isDebugEnabled()) {
             log.debug("enlist entity's property changes for publishing {}", entity);
@@ -580,11 +592,12 @@ implements
     @Override
     public void enlistDeleting(final ManagedObject entity) {
 
-        _Xray.enlistDeleting(entity, interactionProviderProvider);
+        _Xray.enlistDeleting(entity, interactionTrackerProvider);
 
         if (isEntityExcludedForChangePublishing(entity)
-                || !EntityChangePublishingFacet.isPublishingEnabledForDelete(entity.objSpec()))
-            return;
+                || !EntityChangePublishingFacet.isPublishingEnabledForDelete(entity.objSpec())) {
+			return;
+		}
 
         suppressAutoFlushIfRequired(() -> {
             final boolean enlisted = enlistForChangeKindPublishing(entity, EntityChangeKind.DELETE);
@@ -607,7 +620,7 @@ implements
      */
     @Override
     public void incrementLoaded(final ManagedObject entity) {
-        _Xray.recognizeLoaded(entity, interactionProviderProvider);
+        _Xray.recognizeLoaded(entity, interactionTrackerProvider);
         numberEntitiesLoaded.increment();
     }
 

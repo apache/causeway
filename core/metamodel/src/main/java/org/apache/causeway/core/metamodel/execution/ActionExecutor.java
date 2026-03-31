@@ -102,20 +102,24 @@ implements MemberExecutor<ActionInvocation> {
     }
 
 	@Override
-    public Object executeWithExecutingEvents(final ActionInvocation currentExecution) {
-		Object result = doExecuteWithExecutingEvents(currentExecution);
+    public Object executeWithExecutingEvents(
+    		final int executionSequence,
+    		final ActionInvocation currentExecution) {
+		Object result = doExecuteWithExecutingEvents(executionSequence, currentExecution);
 		currentExecution.setReturned(result);
         return result;
 	}
 	
 	@SneakyThrows
-    private Object doExecuteWithExecutingEvents(final ActionInvocation currentExecution) {
+    private Object doExecuteWithExecutingEvents(
+    		final int executionSequence,
+    		final ActionInvocation currentExecution) {
 
 		// update the current execution with the DTO (memento)
 		// but ... no point in attempting this if no bookmark is yet available.
 		// this logic is for symmetry with PropertyModifier, which has a scenario where this might occur.
         ManagedObjects.bookmark(head.owner())
-        	.ifPresent(ownerBookmark->currentExecution.setDto(executionDto()));
+        	.ifPresent(ownerBookmark->currentExecution.setDto(executionDto(executionSequence)));
 
         if(!isPostable()) {
         	// don't emit domain events
@@ -182,9 +186,9 @@ implements MemberExecutor<ActionInvocation> {
     	return actionInvocationFacetAbstract.isPostable();
     }
     
-    private ActionInvocationDto executionDto() {
+    private ActionInvocationDto executionDto(int executionSequence) {
     	return executionContext.interactionDtoFactory()
-    			.asActionInvocationDto(owningAction, head, arguments);
+    			.asActionInvocationDto(executionSequence, owningAction, head, arguments);
     }
     
     private final Class<? extends ActionDomainEvent<?>> getEventType() {

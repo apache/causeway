@@ -20,12 +20,13 @@ package org.apache.causeway.core.runtimeservices.executor;
 
 import java.util.stream.Collectors;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.MmUnwrapUtils;
@@ -34,13 +35,11 @@ import org.apache.causeway.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.causeway.core.security.util.XrayUtil;
 import org.apache.causeway.core.security.util.XrayUtil.SequenceHandle;
 
-import org.jspecify.annotations.NonNull;
-
 final class _Xray {
 
     static SequenceHandle enterActionInvocation(
             final @NonNull InteractionLayerTracker iaTracker,
-            final @NonNull InteractionInternal interaction,
+            final @NonNull InteractionCarrierDefault interactionCarrier,
             final @NonNull ObjectAction owningAction,
             final @NonNull InteractionHead head,
             final @NonNull Can<ManagedObject> argumentAdapters) {
@@ -59,12 +58,12 @@ final class _Xray {
                         .map(obj->"" + obj)
                         .collect(Collectors.joining(",\n  ")));
 
-        return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
+        return enterInvocation(iaTracker, interactionCarrier, participantLabel, enteringLabel);
     }
 
     public static SequenceHandle enterPropertyEdit(
             final @NonNull InteractionLayerTracker iaTracker,
-            final @NonNull InteractionInternal interaction,
+            final @NonNull InteractionCarrierDefault interactionCarrier,
             final @NonNull OneToOneAssociation owningProperty,
             final @NonNull InteractionHead head,
             final @NonNull ManagedObject newValueAdapter) {
@@ -77,12 +76,12 @@ final class _Xray {
         var enteringLabel = String.format("property edit -> '%s'",
                 MmUnwrapUtils.single(newValueAdapter));
 
-        return enterInvocation(iaTracker, interaction, participantLabel, enteringLabel);
+        return enterInvocation(iaTracker, interactionCarrier, participantLabel, enteringLabel);
     }
 
     private static SequenceHandle enterInvocation(
             final @NonNull InteractionLayerTracker iaTracker,
-            final InteractionInternal interaction,
+            final InteractionCarrierDefault interactionCarrier,
             final String participantLabel,
             final String enteringLabel) {
 

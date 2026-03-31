@@ -28,14 +28,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
-import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.applib.util.schema.CommandDtoUtils;
 import org.apache.causeway.applib.util.schema.InteractionDtoUtils;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.internal.assertions._Assert;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.metamodel.interactions.InteractionHead;
 import org.apache.causeway.core.metamodel.object.ManagedObject;
 import org.apache.causeway.core.metamodel.object.ManagedObjects;
@@ -72,20 +69,17 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Inject private CommandDtoFactory commandDtoServiceInternal;
     @Inject private SchemaValueMarshaller valueMarshaller;
-    @Inject private jakarta.inject.Provider<InteractionProvider> interactionProviderProvider;
     @Inject private UserService userService;
 
     @Override
     public ActionInvocationDto asActionInvocationDto(
+    		final int executionSequence,
             final ObjectAction objectAction,
             final InteractionHead head,
             final Can<ManagedObject> argumentAdapters) {
 
         _Assert.assertEquals(objectAction.getParameterCount(), argumentAdapters.size(),
                 "action's parameter count and provided argument count must match");
-
-        var interaction = interactionProviderProvider.get().currentInteractionElseFail();
-        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         var owner = head.owner();
 
@@ -99,10 +93,9 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
 
         return InteractionDtoUtils.newActionInvocation(
-                nextEventSequence, targetBookmark,
+        		executionSequence, targetBookmark,
                 actionDto.getLogicalMemberIdentifier(),
-                parameterDtos, currentUser
-                );
+                parameterDtos, currentUser);
     }
 
     @Override
@@ -124,14 +117,12 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
 
     @Override
     public PropertyEditDto asPropertyEditDto(
+    		final int executionSequence,
             final OneToOneAssociation property,
             final InteractionHead interactionHead,
             final ManagedObject newValueAdapterIfAny) {
 
         ManagedObject targetAdapter = interactionHead.owner();
-
-        final Interaction interaction = interactionProviderProvider.get().currentInteractionElseFail();
-        final int nextEventSequence = ((InteractionInternal) interaction).getThenIncrementExecutionSequence();
 
         // transient/detached entities have no bookmark, fail early
         var targetBookmark = ManagedObjects.bookmarkElseFail(targetAdapter);
@@ -143,7 +134,7 @@ public class InteractionDtoFactoryDefault implements InteractionDtoFactory {
         final ValueWithTypeDto newValue = propertyDto.getNewValue();
 
         return InteractionDtoUtils.newPropertyEdit(
-                nextEventSequence, targetBookmark,
+        		executionSequence, targetBookmark,
                 propertyDto.getLogicalMemberIdentifier(),
                 newValue, currentUser
                 );

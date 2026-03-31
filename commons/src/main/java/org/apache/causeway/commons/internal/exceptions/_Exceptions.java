@@ -29,6 +29,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.commons.collections.Can;
@@ -37,7 +38,7 @@ import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.commons.io.TextUtils;
 
-import org.jspecify.annotations.NonNull;
+import lombok.SneakyThrows;
 
 /**
  * <h1>- internal use only -</h1>
@@ -484,5 +485,26 @@ public final class _Exceptions {
         }
 
     }
+    
+    public static class FirstExceptionCollector {
+    	private Exception firstException = null;
+    	public void collect(Exception ex) {
+    		if(firstException==null) {
+				this.firstException = ex;
+			}
+    	}
+    	@SneakyThrows
+    	public void rethrow() {
+    		if(hasException())
+    			throw firstException;
+    	}
+		public boolean hasException() {
+			return firstException!=null;
+		}
+    }
+
+	public static FirstExceptionCollector firstExceptionCollector() {
+		return new FirstExceptionCollector();
+	}
 
 }

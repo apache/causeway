@@ -25,8 +25,8 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
 
 class InteractionDefaultTest_next {
 
@@ -35,15 +35,15 @@ class InteractionDefaultTest_next {
     	var context = new ExecutionContext(null, null, null, null, UUID::randomUUID, null,
     			null, null, null);
     	
-    	var interaction = new CausewayInteraction(context);
+    	var interaction = new InteractionCarrierDefault(context);
 
-        assertThat(interaction.getThenIncrementExecutionSequence(), is(0));
-        assertThat(interaction.getThenIncrementExecutionSequence(), is(1));
-        assertThat(interaction.getThenIncrementTransactionSequence(), is(0));
-        assertThat(interaction.getThenIncrementTransactionSequence(), is(1));
-        assertThat(interaction.getThenIncrementExecutionSequence(), is(2));
-        assertThat(interaction.getThenIncrementTransactionSequence(), is(2));
-        assertThat(interaction.getThenIncrementTransactionSequence(), is(3));
+        assertThat(interaction.nextExecutionSequence(), is(0));
+        assertThat(interaction.nextExecutionSequence(), is(1));
+        assertThat(interaction.nextTransactionSequence(), is(0));
+        assertThat(interaction.nextTransactionSequence(), is(1));
+        assertThat(interaction.nextExecutionSequence(), is(2));
+        assertThat(interaction.nextTransactionSequence(), is(2));
+        assertThat(interaction.nextTransactionSequence(), is(3));
     }
 
 }

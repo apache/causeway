@@ -82,13 +82,17 @@ implements MemberExecutor<PropertyEdit> {
     }
 	
 	@Override
-	public Object executeWithExecutingEvents(final PropertyEdit currentExecution) {
-		Object result = doExecuteWithExecutingEvents(currentExecution);
+	public Object executeWithExecutingEvents(
+			final int executionSequence, 
+			final PropertyEdit currentExecution) {
+		Object result = doExecuteWithExecutingEvents(executionSequence, currentExecution);
 		currentExecution.setReturned(result);
         return result;
 	}
 	
-	private Object doExecuteWithExecutingEvents(final PropertyEdit currentExecution) {
+	private Object doExecuteWithExecutingEvents(
+			final int executionSequence,
+			final PropertyEdit currentExecution) {
     	
         // update the current execution with the DTO (memento)
         //
@@ -100,7 +104,7 @@ implements MemberExecutor<PropertyEdit> {
         var ownerHasBookmark = ManagedObjects.bookmark(ownerAdapter).isPresent();
 
         if (ownerHasBookmark) {
-            currentExecution.setDto(executionDto());
+            currentExecution.setDto(executionDto(executionSequence));
         }
 
         if(!isPostable()) {
@@ -188,9 +192,9 @@ implements MemberExecutor<PropertyEdit> {
         return uncheckedCast(propertySetterOrClearFacetForDomainEventAbstract.getEventType());
     }
     
-    private PropertyEditDto executionDto() {
+    private PropertyEditDto executionDto(int executionSequence) {
     	return executionContext.interactionDtoFactory()
-        		.asPropertyEditDto(owningProperty, head, newValue);
+        		.asPropertyEditDto(executionSequence, owningProperty, head, newValue);
     }
 
 }

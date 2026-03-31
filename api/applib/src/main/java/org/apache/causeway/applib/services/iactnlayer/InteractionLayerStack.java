@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
 import org.apache.causeway.commons.internal.observation.ObservationClosure;
 
 import io.micrometer.observation.Observation;
@@ -40,21 +40,28 @@ public final class InteractionLayerStack {
     }
 
     public InteractionLayer push(
-            final Interaction interaction,
+            final InteractionCarrier interactionCarrier,
             final InteractionContext interactionContext,
             final Observation observation) {
         var parent = currentLayer().orElse(null);
         @SuppressWarnings("resource")
-        var newLayer = new InteractionLayer(parent, interaction, interactionContext,
-        		// on-close callback
-        		new ObservationClosure().startAndOpenScope(observation)::close);
+        var newLayer = new InteractionLayer(parent, interactionCarrier, interactionContext)
+        	.addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
         threadLocalLayer.set(newLayer);
         return newLayer;
     }
 
     public void clear() {
-        currentLayer().ifPresent(InteractionLayer::closeAll);
-        threadLocalLayer.remove();
+    	try {
+    		var layer = peek();
+	    	if(layer!=null) {
+	    		var exColl = new FirstExceptionCollector();
+	            layer.closeAll(exColl);
+	            exColl.rethrow();
+	    	}
+    	} finally {
+    		threadLocalLayer.remove();
+    	}
     }
 
     public boolean isEmpty() {
@@ -63,8 +70,8 @@ public final class InteractionLayerStack {
 
     public int size() {
         return currentLayer()
-                .map(InteractionLayer::totalLayerCount)
-                .orElse(0);
+            .map(InteractionLayer::totalLayerCount)
+            .orElse(0);
     }
 
     @Nullable
@@ -75,16 +82,29 @@ public final class InteractionLayerStack {
     @Nullable
     public InteractionLayer pop() {
         var current = threadLocalLayer.get();
-        if(current==null) return null;
+        if(current==null) {
+			return null;
+		}
 
         var newTop = current.parent();
-        current.close();
+        
+        var exColl = new FirstExceptionCollector();
+        current.close(exColl);
+        if(exColl.hasException()) {
+        	// close the entire stack, only then re-throw
+        	current.closeAll(exColl);
+        	threadLocalLayer.remove();
+        	exColl.rethrow();
+        }
+        
         return set(newTop);
     }
 
     public void popWhile(final Predicate<InteractionLayer> condition) {
         while(!isEmpty()) {
-            if(!condition.test(peek())) return;
+            if(!condition.test(peek())) {
+				return;
+			}
             pop();
         }
     }

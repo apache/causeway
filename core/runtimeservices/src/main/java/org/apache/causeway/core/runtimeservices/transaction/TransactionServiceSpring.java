@@ -45,6 +45,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.xactn.TransactionId;
@@ -59,9 +60,7 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions;
 import org.apache.causeway.commons.internal.observation.ObservationClosure;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration;
 import org.apache.causeway.core.config.observation.CausewayObservationIntegration.ObservationProvider;
-import org.apache.causeway.core.interaction.session.CausewayInteraction;
 import org.apache.causeway.core.metamodel.CausewayModuleCoreMetamodel;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
 import org.apache.causeway.core.runtime.flushmgmt.FlushMgmt;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.events.TransactionCompletionStatus;
@@ -154,8 +153,9 @@ implements
             // return the original failure cause (originating from calling the callable)
             // (so we don't shadow the original failure)
             // return the failure we just caught
-            if (result != null && result.isFailure())
-                return result;
+            if (result != null && result.isFailure()) {
+				return result;
+			}
 
             // otherwise, we thought we had a success, but now we have an exception thrown by either ,
             // the call to rollback or commit above.  We don't need to do anything though; if either of
@@ -192,8 +192,9 @@ implements
 
             var translatedEx = translateExceptionIfPossible(ex, txManager);
 
-            if(translatedEx instanceof RuntimeException)
-                throw ex;
+            if(translatedEx instanceof RuntimeException) {
+				throw ex;
+			}
 
             throw new RuntimeException(ex);
 
@@ -216,10 +217,11 @@ implements
         return currentTransactionStatus()
         .map(txStatus->{
 
-            if(txStatus.isCompleted())
-                return txStatus.isRollbackOnly()
+            if(txStatus.isCompleted()) {
+				return txStatus.isRollbackOnly()
                         ? TransactionState.ABORTED
                         : TransactionState.COMMITTED;
+			}
 
             return txStatus.isRollbackOnly()
                     ? TransactionState.MUST_ABORT
@@ -241,8 +243,9 @@ implements
     private PlatformTransactionManager transactionManagerForElseFail(final TransactionDefinition def) {
         if(def instanceof TransactionTemplate) {
             var txManager = ((TransactionTemplate)def).getTransactionManager();
-            if(txManager!=null)
-                return txManager;
+            if(txManager!=null) {
+				return txManager;
+			}
         }
         return platformTransactionManagers.getSingleton()
                 .orElseThrow(()->
@@ -269,8 +272,9 @@ implements
         txTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_MANDATORY);
 
         // not strictly required, but to prevent stack-trace creation later on
-        if(!TransactionSynchronizationManager.isActualTransactionActive())
-            return Optional.empty();
+        if(!TransactionSynchronizationManager.isActualTransactionActive()) {
+			return Optional.empty();
+		}
 
         // get current transaction else throw an exception
         return Try.call(()->
@@ -282,8 +286,9 @@ implements
 
     private Throwable translateExceptionIfPossible(final Throwable ex, final PlatformTransactionManager txManager) {
 
-        if(ex instanceof DataAccessException)
-            return ex; // nothing to do, already translated
+        if(ex instanceof DataAccessException) {
+			return ex; // nothing to do, already translated
+		}
 
         if(ex instanceof RuntimeException) {
 
@@ -294,8 +299,9 @@ implements
             .findFirst()
             .orElse(null);
 
-            if(translatedEx!=null)
-                return translatedEx;
+            if(translatedEx!=null) {
+				return translatedEx;
+			}
 
         }
 
@@ -306,19 +312,21 @@ implements
      * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, sets up
      * the initial transaction automatically against all available {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link InteractionCarrier} object representing the current interaction.
      */
-    public void onOpen(final @NonNull InteractionInternal interaction) {
+    public void onOpen(final @NonNull InteractionCarrier interactionCarrier) {
 
         txCounter.get().reset();
-        if (platformTransactionManagers.isEmpty()) return;
+        if (platformTransactionManagers.isEmpty()) {
+			return;
+		}
 
         if (log.isDebugEnabled()) {
             log.debug("opening on {}", _Probe.currentThreadId());
         }
 
         var onCloseHandle = new OnCloseHandle(new ArrayList<>(platformTransactionManagers.size()), new ObservationClosure());
-        interaction.putAttribute(OnCloseHandle.class, onCloseHandle);
+        interactionCarrier.putAttribute(OnCloseHandle.class, onCloseHandle);
 
         platformTransactionManagers.forEach(txManager -> {
 
@@ -372,27 +380,27 @@ implements
      * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
      * (or their various overloads) result in an exception.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link InteractionCarrier} object representing the current interaction.
      */
-    public void requestRollback(final @NonNull CausewayInteraction interaction) {
-        Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
+    public void requestRollback(final @NonNull InteractionCarrier interactionCarrier) {
+        Optional.ofNullable(interactionCarrier.getAttribute(OnCloseHandle.class))
                 .ifPresent(OnCloseHandle::requestRollback);
     }
 
     /**
      * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, to close the
-     * transaction initially set up in {@link #onOpen(CausewayInteraction)} against all configured
+     * transaction initially set up in {@link #onOpen(InteractionCarrier)} against all configured
      * {@link PlatformTransactionManager}s.
      *
-     * @param interaction The {@link CausewayInteraction} object representing the current interaction.
+     * @param interaction The {@link InteractionCarrier} object representing the current interaction.
      */
-    public void onClose(final @NonNull CausewayInteraction interaction) {
+    public void onClose(final @NonNull InteractionCarrier interactionCarrier) {
         if (log.isDebugEnabled()) {
             log.debug("closing on {}", _Probe.currentThreadId());
         }
 
         if (!platformTransactionManagers.isEmpty()) {
-            Optional.ofNullable(interaction.getAttribute(OnCloseHandle.class))
+            Optional.ofNullable(interactionCarrier.getAttribute(OnCloseHandle.class))
                     .ifPresent(OnCloseHandle::runOnCloseTasks);
         }
 

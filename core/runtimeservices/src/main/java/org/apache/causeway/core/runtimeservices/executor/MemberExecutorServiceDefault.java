@@ -51,7 +51,7 @@ import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.Messa
 import org.apache.causeway.core.metamodel.commons.CanonicalInvoker;
 import org.apache.causeway.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.causeway.core.metamodel.execution.ActionExecutor;
-import org.apache.causeway.core.metamodel.execution.InteractionInternal;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrierDefault;
 import org.apache.causeway.core.metamodel.execution.MemberExecutorService;
 import org.apache.causeway.core.metamodel.execution.PropertyModifier;
 import org.apache.causeway.core.metamodel.facetapi.FacetHolder;
@@ -154,11 +154,11 @@ implements MemberExecutorService {
             return facetHolder.getObjectManager().adapt(resultPojo);
         }
 
-        var interaction = interactionElseFail();
+        var interactionCarrier = interactionCarrierElseFail();
 
-        prepareCommandForPublishing(interaction.getCommand(), head, owningAction, facetHolder);
+        prepareCommandForPublishing(interactionCarrier.command(), head, owningAction, facetHolder);
 
-        var xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interaction, owningAction, head, argumentAdapters);
+        var xrayHandle = _Xray.enterActionInvocation(interactionLayerTracker, interactionCarrier, owningAction, head, argumentAdapters);
 
         var actionId = owningAction.getFeatureIdentifier();
         log.debug("about to invoke action {}", actionId);
@@ -171,13 +171,21 @@ implements MemberExecutorService {
                 .collect(_Lists.toUnmodifiable());
 
         var actionInvocation = new ActionInvocation(
-                        interaction, actionId, targetPojo, argumentPojos);
+        		interactionCarrier.interaction(), actionId, targetPojo, argumentPojos);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        execute(interaction, actionExecutor, actionInvocation);
+        execute(interactionCarrier, actionExecutor, actionInvocation);
+        
+        final var priorExecution = interactionCarrier.getInteraction().getPriorExecution();
 
-        // handle any exceptions
-        var priorExecution = interaction.getPriorExecutionOrThrowIfAnyException(actionInvocation);
+        // throws if there was any exception in prior execution
+        var executionExceptionIfAny = priorExecution.getThrew();
+        if(executionExceptionIfAny != null) {
+        	actionInvocation.setThrew(executionExceptionIfAny);
+			throw executionExceptionIfAny instanceof RuntimeException rex
+                ? rex
+                : new RuntimeException(executionExceptionIfAny);
+        }
 
         var returnedPojo = priorExecution.getReturned();
         var returnedAdapter = objectManager.adapt(
@@ -209,7 +217,7 @@ implements MemberExecutorService {
         .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
-        setCommandResultIfEntity(interaction.getCommand(), returnedAdapter);
+        setCommandResultIfEntity(interactionCarrier.command(), returnedAdapter);
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(facetHolder)) {
@@ -256,17 +264,14 @@ implements MemberExecutorService {
             return domainObject;
         }
 
-        var interaction = interactionElseFail();
-        var command = interaction.getCommand();
-        if( command==null ) {
-			return domainObject;
-		}
+        var interactionCarrier = interactionCarrierElseFail();
+        var command = interactionCarrier.command();
 
         var owningProperty = propertyModifier.owningProperty();
 
         prepareCommandForPublishing(command, head, owningProperty, propertyModifier.facetHolder());
 
-        var xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interaction, owningProperty, head, propertyModifier.newValue());
+        var xrayHandle = _Xray.enterPropertyEdit(interactionLayerTracker, interactionCarrier, owningProperty, head, propertyModifier.newValue());
 
         var propertyId = owningProperty.getFeatureIdentifier();
 
@@ -274,20 +279,17 @@ implements MemberExecutorService {
         var target = MmUnwrapUtils.single(targetManagedObject);
         var argValuePojo = MmUnwrapUtils.single(propertyModifier.newValue());
 
-        var propertyEdit = new PropertyEdit(interaction, propertyId, target, argValuePojo);
+        var propertyEdit = new PropertyEdit(interactionCarrier.interaction(), propertyId, target, argValuePojo);
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
-        var targetPojo = execute(interaction, propertyModifier, propertyEdit);
+        var targetPojo = execute(interactionCarrier, propertyModifier, propertyEdit);
 
         // handle any exceptions
-        final Execution<?, ?> priorExecution = interaction.getPriorExecution();
-
-        // TODO: should also sync DTO's 'threw' attribute here...?
-
+        var priorExecution = interactionCarrier.getInteraction().getPriorExecution();
         var executionExceptionIfAny = priorExecution.getThrew();
         if(executionExceptionIfAny != null) {
-			throw executionExceptionIfAny instanceof RuntimeException r
-                ? r
+			throw executionExceptionIfAny instanceof RuntimeException rex
+                ? rex
                 : new RuntimeException(executionExceptionIfAny);
 		}
 
@@ -312,13 +314,15 @@ implements MemberExecutorService {
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     private void execute(
-    		InteractionInternal interaction, 
+    		InteractionCarrierDefault carrier, 
     		ActionExecutor actionExecutor,
     		ActionInvocation actionInvocation) {
         observationProvider.get("Execute Action Invocation")
   	      .observe(()->
-  	          interaction.execute(actionInvocation, ()->
-  	              actionExecutor.executeWithExecutingEvents(actionInvocation)));
+  	          carrier.execute(actionInvocation, ()->
+  	              actionExecutor.executeWithExecutingEvents(
+  	            		  carrier.nextExecutionSequence(), 
+  	            		  actionInvocation)));
     }
     
     /**
@@ -330,13 +334,16 @@ implements MemberExecutorService {
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     private Object execute(
-    		InteractionInternal interaction, 
+    		InteractionCarrierDefault carrier, 
     		PropertyModifier propertyModifier,
 			PropertyEdit propertyEdit) {
+    	
       return observationProvider.get("Execute Property Edit")
 	      .observe(()->
-	          interaction.execute(propertyEdit, ()->
-	          	propertyModifier.executeWithExecutingEvents(propertyEdit)));
+	      	  carrier.execute(propertyEdit, ()->
+	          	propertyModifier.executeWithExecutingEvents(
+	          			carrier.nextExecutionSequence(),
+	          			propertyEdit)));
 	}
 
 	@SneakyThrows
@@ -424,13 +431,13 @@ implements MemberExecutorService {
     	return executionPublisherProvider.get();
     }
     
-    private Optional<InteractionInternal> interaction() {
-    	return interactionLayerTracker.currentInteraction()
-    			.map(InteractionInternal.class::cast);
+    private Optional<InteractionCarrierDefault> interactionCarrier() {
+    	return interactionLayerTracker.currentInteractionCarrier()
+    			.map(InteractionCarrierDefault.class::cast);
     }
     
-    private InteractionInternal interactionElseFail() {
-    	return interaction().orElseThrow(()->_Exceptions
+    private InteractionCarrierDefault interactionCarrierElseFail() {
+    	return interactionCarrier().orElseThrow(()->_Exceptions
     			.unrecoverable("needs an InteractionSession on current thread"));
     }    
 }

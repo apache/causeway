@@ -62,7 +62,8 @@ public interface InteractionDtoFactory {
      * @see PropertyEditDto
      */
     ActionInvocationDto asActionInvocationDto(
-            ObjectAction objectAction,
+    		int executionSequence,
+    		ObjectAction objectAction,
             InteractionHead head,
             Can<ManagedObject> argumentAdapters);
 
@@ -83,8 +84,10 @@ public interface InteractionDtoFactory {
      * @see ActionInvocationDto
      */
     PropertyEditDto asPropertyEditDto(
+    		int executionSequence,
             OneToOneAssociation property,
-            InteractionHead interactionHead, ManagedObject newValueAdapterIfAny);
+            InteractionHead interactionHead, 
+            ManagedObject newValueAdapterIfAny);
 
     /**
      * Called by the framework to attach the result of an action invocation
