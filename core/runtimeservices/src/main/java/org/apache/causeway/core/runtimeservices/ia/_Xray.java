@@ -18,11 +18,11 @@
  */
 package org.apache.causeway.core.runtimeservices.ia;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayDataModel;
 import org.apache.causeway.commons.internal.debug.xray.XrayModel.ThreadMemento;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayer;
 import org.apache.causeway.core.security.util.XrayUtil;
 
 //@Slf4j
@@ -30,8 +30,9 @@ final class _Xray {
 
     static void newInteractionLayer(final InteractionLayer afterEnter) {
 
-        if(!XrayUi.isXrayEnabled())
-            return;
+        if(!XrayUi.isXrayEnabled()) {
+			return;
+		}
 
         // make defensive copies, so can use in another thread
         final int authStackSize = afterEnter.totalLayerCount();
@@ -85,8 +86,9 @@ final class _Xray {
 
     public static void closeInteractionLayer(final InteractionLayer beforeClose) {
 
-        if(!XrayUi.isXrayEnabled())
-            return;
+        if(!XrayUi.isXrayEnabled()) {
+			return;
+		}
 
         final int authStackSize = beforeClose.totalLayerCount();
         var interactionId = beforeClose.interaction().getInteractionId();

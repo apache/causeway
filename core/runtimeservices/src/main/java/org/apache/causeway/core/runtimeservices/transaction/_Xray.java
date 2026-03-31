@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.core.runtimeservices.transaction;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.commons.internal.debug._XrayEvent;
 import org.apache.causeway.commons.internal.debug.xray.XrayUi;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 import org.apache.causeway.core.security.util.XrayUtil;
 
 final class _Xray {

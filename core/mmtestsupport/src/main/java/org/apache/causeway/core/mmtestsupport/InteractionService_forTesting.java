@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.core.security._testing;
+package org.apache.causeway.core.mmtestsupport;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,14 +28,14 @@ import org.jspecify.annotations.NonNull;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayer;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerStack;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -50,15 +50,23 @@ public class InteractionService_forTesting
 implements InteractionService, InteractionLayerTracker {
 
     final InteractionLayerStack layerStack = new InteractionLayerStack();
-
+    
     @Override
-    public InteractionLayer openInteraction() {
-        final UserMemento userMemento = UserMemento.system();
-        return openInteraction(InteractionContext.ofUserWithSystemDefaults(userMemento));
+    public Interaction openInteraction() {
+        return openInteractionLayer().interaction();
     }
 
     @Override
-    public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContext) {
+    public Interaction openInteraction(final @NonNull InteractionContext interactionContext) {
+    	return openInteractionLayer(interactionContext).interaction();
+    }
+
+    private InteractionLayer openInteractionLayer() {
+        final UserMemento userMemento = UserMemento.system();
+        return openInteractionLayer(InteractionContext.ofUserWithSystemDefaults(userMemento));
+    }
+
+    private InteractionLayer openInteractionLayer(final @NonNull InteractionContext interactionContext) {
         final Interaction interaction = new Interaction_forTesting();
         var interactionCarrier = new InteractionCarrier() {
 			@Override public Interaction interaction() {

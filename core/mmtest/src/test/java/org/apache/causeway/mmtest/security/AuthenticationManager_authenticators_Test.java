@@ -16,53 +16,57 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.security.authentication.standard;
+package org.apache.causeway.mmtest.security;
 
 import java.util.Collections;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.core.security._testing.InteractionService_forTesting;
+import org.apache.causeway.applib.exceptions.unrecoverable.NoAuthenticatorException;
+import org.apache.causeway.core.mmtestsupport.InteractionService_forTesting;
 import org.apache.causeway.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.causeway.core.security.authentication.manager.AuthenticationManager;
 import org.apache.causeway.core.security.authentication.standard.RandomCodeGeneratorDefault;
-import org.apache.causeway.security.AuthenticatorsForTesting;
 
-class StandardAuthenticationManager_AuthenticationTest {
+class AuthenticationManager_authenticators_Test {
 
     private AuthenticationManager authenticationManager;
 
-    @BeforeEach
-    public void setUp() throws Exception {
+    @Test
+    public void shouldNotBeAbleToAuthenticateWithNoAuthenticators() throws Exception {
+
+        assertThrows(NoAuthenticatorException.class, ()->{
+
+            authenticationManager = new AuthenticationManager(
+                    Collections.emptyList(),
+                    new InteractionService_forTesting(),
+                    new RandomCodeGeneratorDefault(),
+                    Optional.empty(),
+                    Collections.emptyList());
+            authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
+
+        });
+    }
+
+    @Test
+    public void shouldBeAbleToUseAuthenticators() throws Exception {
+
+        var auth = AuthenticatorsForTesting.authenticatorAllwaysValid();
 
         authenticationManager = new AuthenticationManager(
-                Collections.singletonList(AuthenticatorsForTesting.authenticatorValidForFoo()),
+                Collections.singletonList(auth),
                 new InteractionService_forTesting(),
                 new RandomCodeGeneratorDefault(),
                 Optional.empty(),
                 Collections.emptyList());
-    }
-
-    @Test
-    public void newlyCreatedAuthenticationShouldBeValid() throws Exception {
-        final AuthenticationRequestPassword request = new AuthenticationRequestPassword("foo", "bar");
-        final InteractionContext authentication = authenticationManager.authenticate(request);
-
-        assertThat(authenticationManager.isSessionValid(authentication), is(true));
-    }
-
-    @Test
-    public void newlyCreatedAuthentication_whenUnauthorizedUser_shouldBeRejected() throws Exception {
-        final AuthenticationRequestPassword request = new AuthenticationRequestPassword("me", "pass");
-        final InteractionContext authentication = authenticationManager.authenticate(request);
-
-        assertThat(authenticationManager.isSessionValid(authentication), is(false));
+        assertThat(authenticationManager.getAuthenticators().size(), is(1));
+        assertThat(authenticationManager.getAuthenticators().getElseFail(0), is(sameInstance(auth)));
     }
 
 }

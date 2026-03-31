@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.LongAdder;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
@@ -62,7 +63,7 @@ public interface InteractionService extends InteractionProvider {
      *
      * @see #openInteraction(InteractionContext)
      */
-    InteractionLayer openInteraction();
+    Interaction openInteraction();
 
     /**
      * Returns a new or reused {@link InteractionLayer} that is a holder of the {@link InteractionContext}
@@ -84,7 +85,7 @@ public interface InteractionService extends InteractionProvider {
      * equals that of the given one, as an optimization, no new layer is pushed onto the stack;
      * instead the current one is returned
      */
-    InteractionLayer openInteraction(
+    Interaction openInteraction(
             @NonNull InteractionContext interactionContext);
 
     /**
@@ -217,7 +218,7 @@ public interface InteractionService extends InteractionProvider {
      * @see #openInteraction()
      * @see #nextInteraction(InteractionContext)
      */
-    default InteractionLayer nextInteraction() {
+    default Interaction nextInteraction() {
         closeInteractionLayers();
         return openInteraction();
     }
@@ -230,7 +231,7 @@ public interface InteractionService extends InteractionProvider {
      * @see #openInteraction(InteractionContext)
      * @see #nextInteraction()
      */
-    default InteractionLayer nextInteraction(final InteractionContext interactionContext) {
+    default Interaction nextInteraction(final InteractionContext interactionContext) {
         closeInteractionLayers();
         return openInteraction(interactionContext);
     }

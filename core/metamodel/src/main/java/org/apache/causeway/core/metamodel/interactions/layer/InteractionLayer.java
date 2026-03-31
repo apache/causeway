@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.iactnlayer;
+package org.apache.causeway.core.metamodel.interactions.layer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,8 @@ import java.util.List;
 import org.jspecify.annotations.Nullable;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
 

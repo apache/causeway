@@ -18,7 +18,6 @@
  */
 module org.apache.causeway.security.api {
     exports org.apache.causeway.core.security;
-    exports org.apache.causeway.core.security._testing;
     exports org.apache.causeway.core.security.authentication.fixtures;
     exports org.apache.causeway.core.security.authentication.login;
     exports org.apache.causeway.core.security.authentication.logout;
@@ -31,16 +30,17 @@ module org.apache.causeway.security.api {
     exports org.apache.causeway.core.security.authorization;
     exports org.apache.causeway.core.security.util;
 
+    requires static lombok;
     requires jakarta.annotation;
     requires java.desktop;
     requires jakarta.inject;
-    requires static lombok;
     requires org.apache.causeway.applib;
     requires org.apache.causeway.commons;
     requires org.apache.causeway.schema;
+    requires org.apache.causeway.core.config;
     requires spring.beans;
     requires spring.context;
     requires spring.core;
     requires spring.tx;
-    requires org.apache.causeway.core.config;
+	
 }

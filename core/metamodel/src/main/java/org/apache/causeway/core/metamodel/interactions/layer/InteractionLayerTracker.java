@@ -16,12 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.iactnlayer;
+package org.apache.causeway.core.metamodel.interactions.layer;
 
 import java.util.Optional;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 
 /**

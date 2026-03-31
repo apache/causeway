@@ -26,23 +26,24 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.clock.ClockService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.publishing.spi.EntityChanges;
 import org.apache.causeway.applib.services.publishing.spi.EntityChangesSubscriber;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.commons.having.HasEnabling;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.transaction.changetracking.EntityChangesPublisher;
 import org.apache.causeway.core.transaction.changetracking.HasEnlistedEntityChanges;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**

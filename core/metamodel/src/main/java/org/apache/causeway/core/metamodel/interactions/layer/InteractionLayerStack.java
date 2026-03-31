@@ -16,13 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.iactnlayer;
+package org.apache.causeway.core.metamodel.interactions.layer;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.jspecify.annotations.Nullable;
 
+import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
 import org.apache.causeway.commons.internal.observation.ObservationClosure;
 

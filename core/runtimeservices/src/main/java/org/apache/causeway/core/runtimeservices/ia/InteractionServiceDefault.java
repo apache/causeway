@@ -39,11 +39,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.services.clock.ClockService;
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.inject.ServiceInjector;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
@@ -54,6 +50,10 @@ import org.apache.causeway.core.config.observation.CausewayObservationIntegratio
 import org.apache.causeway.core.interaction.scope.InteractionScopeBeanFactoryPostProcessor;
 import org.apache.causeway.core.interaction.scope.InteractionScopeLifecycleHandler;
 import org.apache.causeway.core.metamodel.execution.ExecutionContext;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionCarrier;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayer;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerStack;
+import org.apache.causeway.core.metamodel.interactions.layer.InteractionLayerTracker;
 import org.apache.causeway.core.metamodel.services.publishing.CommandPublisher;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 import org.apache.causeway.core.runtimeservices.transaction.TransactionServiceSpring;
@@ -113,14 +113,22 @@ implements
     }
 
     @Override
-    public InteractionLayer openInteraction() {
-        return currentInteractionLayer()
-                // or else create an anonymous authentication layer
-                .orElseGet(()->openInteraction(InteractionContextFactory.anonymous()));
+    public Interaction openInteraction() {
+        return openInteractionLayer().interaction();
     }
 
     @Override
-    public InteractionLayer openInteraction(final @NonNull InteractionContext interactionContextToUse) {
+    public Interaction openInteraction(final @NonNull InteractionContext interactionContextToUse) {
+    	return openInteractionLayer(interactionContextToUse).interaction();
+    }
+    
+    private InteractionLayer openInteractionLayer() {
+        return currentInteractionLayer()
+                // or else create an anonymous authentication layer
+                .orElseGet(()->openInteractionLayer(InteractionContextFactory.anonymous()));
+    }
+
+    private InteractionLayer openInteractionLayer(final @NonNull InteractionContext interactionContextToUse) {
 
         // check whether we should reuse any current interactionLayer,
         // that is, if current authentication and authToUse are equal

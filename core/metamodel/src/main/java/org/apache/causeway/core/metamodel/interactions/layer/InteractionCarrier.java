@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.iactnlayer;
+package org.apache.causeway.core.metamodel.interactions.layer;
 
 import java.util.function.Function;
 
