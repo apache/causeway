@@ -34,7 +34,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
  * Provides a mechanism to execute a {@link Command}.
  *
  * @see org.apache.causeway.applib.services.iactnlayer.InteractionService
- * @see org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker
+ * @see org.apache.causeway.applib.services.iactnlayer.InteractionProvider
  *
  * @since 1.x {@index}
  */

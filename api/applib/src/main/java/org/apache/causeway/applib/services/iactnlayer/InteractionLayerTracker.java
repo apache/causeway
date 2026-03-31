@@ -59,7 +59,7 @@ extends InteractionProvider {
     // -- INTERACTION CONTEXT
 
     /**
-     * Returns the {@link InteractionContext} wrapped by the {@link #currentInteractionLayer()}
+     * Returns the {@link InteractionContext} held by the {@link #currentInteractionLayer()}
      * (if within an {@link InteractionLayer}).
      */
     @Override
@@ -71,7 +71,7 @@ extends InteractionProvider {
     // -- INTERACTION CARRIER
     
     /**
-     * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()}
+     * Returns the {@link InteractionCarrier} held by the {@link #currentInteractionLayer()}
      * (if within an {@link InteractionLayer}).
      */
     default Optional<InteractionCarrier> currentInteractionCarrier(){
@@ -86,7 +86,7 @@ extends InteractionProvider {
     // -- INTERACTION
 
     /**
-     * Returns the {@link Interaction} wrapped by the {@link #currentInteractionLayer()}
+     * Returns the {@link Interaction} held by the {@link #currentInteractionLayer()}
      * (if within an {@link InteractionLayer}).
      */
     @Override

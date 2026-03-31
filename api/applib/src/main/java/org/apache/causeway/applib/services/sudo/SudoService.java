@@ -26,19 +26,20 @@ import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
+import org.jspecify.annotations.NonNull;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.RoleMemento;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 
-import org.jspecify.annotations.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -60,7 +61,7 @@ import lombok.RequiredArgsConstructor;
  * </p>
  *
  * @see InteractionService
- * @see InteractionLayerTracker
+ * @see InteractionProvider
  *
  * @since 1.x revised for 2.0 {@index}
  */
@@ -82,7 +83,7 @@ public class SudoService {
                     "Sudo, can view and use all object members.");
 
     private final InteractionService interactionService;
-    private final InteractionLayerTracker interactionLayerTracker;
+    private final InteractionProvider interactionProvider;
     private final List<SudoServiceListener> sudoListeners;
 
     /**
@@ -96,8 +97,7 @@ public class SudoService {
             final @NonNull UnaryOperator<InteractionContext> sudoMapper,
             final @NonNull Callable<T> callable) {
 
-        var currentInteractionLayer = interactionLayerTracker.currentInteractionLayerElseFail();
-        var currentInteractionContext = currentInteractionLayer.interactionContext();
+        var currentInteractionContext = interactionProvider.currentInteractionContextElseFail();
         var sudoInteractionContext = sudoMapper.apply(currentInteractionContext);
 
         try {

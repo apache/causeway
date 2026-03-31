@@ -32,6 +32,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionCarrier;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayer;
 import org.apache.causeway.applib.services.iactnlayer.InteractionLayerStack;
+import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
@@ -46,7 +47,7 @@ import io.micrometer.observation.Observation;
  * in support of simple JUnit tests.
  */
 public class InteractionService_forTesting
-implements InteractionService {
+implements InteractionService, InteractionLayerTracker {
 
     final InteractionLayerStack layerStack = new InteractionLayerStack();
 

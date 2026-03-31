@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 
 import org.jspecify.annotations.NonNull;
 
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 
@@ -50,10 +51,10 @@ import org.apache.causeway.commons.functional.Try;
  * </p>
  *
  * @see org.apache.causeway.applib.services.sudo.SudoService
- * @see InteractionLayerTracker
+ * @see InteractionProvider
  * @since 2.x {@index}
  */
-public interface InteractionService extends InteractionLayerTracker {
+public interface InteractionService extends InteractionProvider {
 
     /**
      * If present, reuses the current top level {@link InteractionLayer}, otherwise creates a new

@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.clock.VirtualClock;
+import org.apache.causeway.applib.services.iactn.InteractionProvider;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionLayerTracker;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,10 +50,10 @@ public class ClockService {
 
     static final String LOGICAL_TYPE_NAME = CausewayModuleApplib.NAMESPACE + ".ClockService";
 
-    private final Provider<InteractionLayerTracker> interactionLayerTrackerProvider;
+    private final Provider<InteractionProvider> interactionProviderProvider;
 
     public VirtualClock getClock() {
-        return interactionLayerTrackerProvider.get().currentInteractionContext()
+        return interactionProviderProvider.get().currentInteractionContext()
                 .map(InteractionContext::getClock)
                 .orElseGet(VirtualClock::system);
     }
