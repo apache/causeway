@@ -42,26 +42,32 @@ import lombok.extern.slf4j.Slf4j;
 record SimpleInteraction(
 		ExecutionContext executionContext,
 		UUID interactionId,
-		Command command,
+		Command command, // shared with parent if any
 		Map<Class<?>, Object> attributes,
 		List<Execution<?,?>> executionGraphs,
 		Execution<?, ?>[] executionBuffer,
 		AtomicBoolean closed) implements Interaction {
 
+    /**
+     * To be used for root layers, when we need a new {@link Command}
+     */
 	SimpleInteraction(
 			final ExecutionContext executionContext) {
-		this(executionContext, executionContext.idGenerator().interactionId());
+		this(executionContext, new Command(executionContext.idGenerator().interactionId()));
 	}
 
+	/**
+	 * To be used for parented layers, so the {@link Command} can be shared
+	 */
 	SimpleInteraction(
-			final ExecutionContext executionContext,
-			final UUID interactionId) {
-		this(executionContext, interactionId, new Command(interactionId),
-				new HashMap<>(), // not thread-safe
-				new ArrayList<>(),
-				new Execution<?, ?>[2],
-				new AtomicBoolean(false));
-	}
+            final ExecutionContext executionContext,
+            final Command command) {
+	    this(executionContext, command.getInteractionId(), command,
+                new HashMap<>(), // not thread-safe
+                new ArrayList<>(),
+                new Execution<?, ?>[2],
+                new AtomicBoolean(false));
+    }
 
 	@Override public UUID getInteractionId() { return interactionId; }
 	@Override public Command getCommand() { return command; }

@@ -52,23 +52,6 @@ public final class InteractionLayerStack {
             final InteractionContext interactionContext,
             final Observation observation) {
         var parent = currentLayer().orElse(null);
-        var interactionCarrier = currentLayer()
-                .map(InteractionLayer::interactionCarrier)
-                .orElseGet(()->new InteractionCarrierDefault(executionContext));
-
-        @SuppressWarnings("resource")
-        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)
-            .addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
-        threadLocalLayer.set(newLayer);
-        return newLayer;
-    }
-
-    //FIXME
-    public InteractionLayer push2(
-            final ExecutionContext executionContext,
-            final InteractionContext interactionContext,
-            final Observation observation) {
-        var parent = currentLayer().orElse(null);
         var interactionCarrier = new InteractionCarrierDefault(executionContext);
         @SuppressWarnings("resource")
         var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)

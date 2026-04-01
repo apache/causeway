@@ -23,6 +23,8 @@ import java.util.List;
 
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.util.Assert;
+
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
@@ -30,10 +32,10 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptio
 import org.apache.causeway.core.metamodel.execution.InteractionCarrier.InteractionCarrierForTesting;
 
 /**
- * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
- * an {@link InteractionContext} (&quot;who&quot; is executing, &quot;when&quot; and &quot;where&quot;).
+ * Binds an {@link Interaction} (WHAT is being executed) with
+ * an {@link InteractionContext} (WHO is executing, WHEN and WHERE).
  *
- * <p> {@link InteractionLayer}s are so called because they may be nested (held in a stack).  For example the
+ * <p> {@link InteractionLayer}s are so called because they may be nested (held in a stack). For example the
  * {@link org.apache.causeway.applib.services.sudo.SudoService} creates a new temporary layer with a different
  * {@link InteractionContext#getUser() user}, while fixtures that mock the clock switch out the
  * {@link InteractionContext#getClock() clock}.
@@ -62,11 +64,15 @@ public record InteractionLayer(
 	        @Nullable final InteractionLayer parent,
 	        final InteractionContext interactionContext,
 	        final InteractionCarrier interactionCarrier) {
-		this(parent, interactionContext, interactionCarrier, new ArrayList<>());
-		//FIXME
-//		if(parent!=null) {
-//		    Assert.isTrue(!(this.interactionCarrier == parent.interactionCarrier), "Illegal Argument: carriers cannot be shared");
-//		}
+		this(parent, interactionContext,
+    		        parent!=null
+    		            && parent.interactionCarrier instanceof InteractionCarrierDefault parentCarrierDefault
+    	            ? parentCarrierDefault.childCarrier() // shared command
+                    : interactionCarrier,
+                new ArrayList<>());
+		if(parent!=null) {
+		    Assert.isTrue(!(this.interactionCarrier == parent.interactionCarrier), "Illegal Argument: carriers cannot be shared");
+		}
 	}
 
 	public InteractionLayer addOnCloseListener(final Runnable listener) {
@@ -118,14 +124,16 @@ public record InteractionLayer(
     	}
     	onCloseListeners.clear();
     	// do this last
-    	if(interactionCarrier instanceof InteractionCarrierDefault interactionCarrierDefault) {
+    	if(interactionCarrier instanceof InteractionCarrierDefault carrierDefault) {
     	    try {
-    	        //FIXME interactionCarrierDefault.onLayerClosing();
+    	        carrierDefault.onLayerClosing();
     	    } catch (Exception e) {
     	        exCollector.collect(e);
     	    }
+    	} else {
+    	    ((InteractionCarrierForTesting) interactionCarrier).close();
     	}
-    	//FIXME Assert.isTrue(isClosed(), ()->"Illegal State: closed state not propagated");
+    	Assert.isTrue(isClosed(), ()->"Illegal State: closed state not propagated");
     }
 
     public void closeAll(final FirstExceptionCollector exCollector) {

@@ -47,6 +47,18 @@ implements InteractionCarrier {
 	Interaction getInteraction() { return interaction; }
 	boolean isClosed() { return interaction.isClosed(); }
 
+	/**
+	 * Creates a new {@link InteractionCarrier} that is parented by this one.
+	 *
+	 * <p>The {@link Command} is a shared instance.
+	 * @param interactionContext
+	 */
+	InteractionCarrier childCarrier() {
+        return new InteractionCarrierDefault(
+                new SimpleInteraction(executionContext(), command()),
+                executionSequence, transactionSequence);
+    }
+
 	@SneakyThrows
 	@Override
     public <E extends Execution<?,?>, R> R execute(final E execution, final Callable<R> callable) {
@@ -128,7 +140,7 @@ implements InteractionCarrier {
         return transactionSequence().intValue() - 1;
     }
 
-    private void onLayerClosing() {
+    void onLayerClosing() {
         if(isClosed())
             return;
         interaction.close();
