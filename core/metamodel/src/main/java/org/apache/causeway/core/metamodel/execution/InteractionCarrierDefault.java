@@ -34,22 +34,25 @@ import lombok.extern.slf4j.Slf4j;
 record InteractionCarrierDefault(
 		SimpleInteraction interaction,
 		LongAdder executionSequence,
-		LongAdder transactionSequence) 
+		LongAdder transactionSequence)
 implements InteractionCarrier {
-	
-	public InteractionCarrierDefault(ExecutionContext executionContext) {
+
+	public InteractionCarrierDefault(final ExecutionContext executionContext) {
 		this(new SimpleInteraction(executionContext), new LongAdder(), new LongAdder());
 	}
-	
-	public UUID interactionId() { return interaction.getInteractionId(); }
-	public ExecutionContext executionContext() { return interaction.executionContext(); }
-	@Override
-	public Command command() { return interaction.command(); }
-	public Interaction getInteraction() { return interaction; }
-	
+
+	UUID interactionId() { return interaction.getInteractionId(); }
+	ExecutionContext executionContext() { return interaction.executionContext(); }
+	@Override public Command command() { return interaction.command(); }
+	Interaction getInteraction() { return interaction; }
+	boolean isClosed() { return interaction.isClosed(); }
+
 	@SneakyThrows
-	@Override 
-    public <E extends Execution<?,?>, R> R execute(final E execution, Callable<R> callable) {
+	@Override
+    public <E extends Execution<?,?>, R> R execute(final E execution, final Callable<R> callable) {
+	    if(isClosed()) {
+            throw new IllegalStateException("Cannot execute, as was already closed");
+	    }
     	push(execution);
     	start(execution);
     	try {
@@ -73,35 +76,38 @@ implements InteractionCarrier {
             }
 
             interaction.getCurrentExecution().setThrew(ex);
-            
+
             // propagate (as in previous design); caller will need to trap and decide
             throw ex;
     	} finally {
     		popAndComplete();
     	}
     }
-	
+
     /**
      * Generates sequence of numbers for executions.
-     * 
+     *
      * <p>Numbers the transactions within a given {@link Interaction}.
      *
      * <p>Each {@link Interaction} is executed within the context of a transaction, but
      * the (occasionally) the transaction may be committed and a new one
      * started as the result of the domain object using the
      * {@link org.apache.causeway.applib.services.xactn.TransactionService}.
-     * 
+     *
+     * @throws IllegalStateException if closed
      * @see #nextTransactionSequence()
      */
     @Override
 	public int nextExecutionSequence() {
+        if(isClosed())
+            throw new IllegalStateException("Cannot calculate next ExecutionSequence, as was already closed");
     	executionSequence().increment();
         return executionSequence().intValue() - 1;
     }
 
     /**
      * Generates sequence of numbers for transactions.
-     * 
+     *
      * <p>Numbers the transactions within a given {@link Interaction}.
      *
      * <p>Each {@link Interaction} is executed within the context of a transaction, but
@@ -109,23 +115,32 @@ implements InteractionCarrier {
      * started as the result of the domain object using the
      * {@link org.apache.causeway.applib.services.xactn.TransactionService}.
      *
+     * @throws IllegalStateException if closed
      * @see Interaction
      * @see org.apache.causeway.applib.services.xactn.TransactionService
      * @see #nextExecutionSequence()
      */
     @Override
 	public int nextTransactionSequence() {
+        if(isClosed())
+            throw new IllegalStateException("Cannot calculate next TransactionSequence, as was already closed");
     	transactionSequence().increment();
         return transactionSequence().intValue() - 1;
     }
-	
+
+    private void onLayerClosing() {
+        if(isClosed())
+            return;
+        interaction.close();
+    }
+
 	// -- HELPER
-	
-	private <E extends Execution<?,?>> void push(E execution) {
+
+	private <E extends Execution<?,?>> void push(final E execution) {
 		interaction.push(execution);
 	}
-	
-	private <E extends Execution<?,?>> void start(E execution) {
+
+	private <E extends Execution<?,?>> void start(final E execution) {
 		var startedAt = execution.start(executionContext().clockService(), executionContext().metricsService());
         // set the startedAt (and update command if this is the top-most member execution)
         // (this isn't done within Interaction#execute(...) because it requires the DTO
@@ -136,13 +151,13 @@ implements InteractionCarrier {
         }
         executionContext().commandPublisher().start(command());
 	}
-	
+
 	private Execution<?,?> popAndComplete() {
 		final Execution<?,?> popped = interaction.pop();
 		popped.setCompletedAt(
-        		executionContext().clockService().getClock().nowAsJavaSqlTimestamp(), 
+        		executionContext().clockService().getClock().nowAsJavaSqlTimestamp(),
         		executionContext().metricsService());
 		return popped;
 	}
-	
+
 }

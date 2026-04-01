@@ -19,17 +19,22 @@
 package org.apache.causeway.core.metamodel.execution;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
 import org.apache.causeway.applib.services.iactn.Interaction;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier.InteractionCarrierForTesting;
+
+import lombok.SneakyThrows;
 
 /**
  * Carries an {@link Interaction} through its life-cycle.
- * 
+ *
  * @since 4.0
  */
-public interface InteractionCarrier {
+public sealed interface InteractionCarrier
+permits InteractionCarrierDefault, InteractionCarrierForTesting {
 
 	Interaction interaction();
 
@@ -37,9 +42,25 @@ public interface InteractionCarrier {
 	int nextTransactionSequence();
 
 	<E extends Execution<?, ?>, R> R execute(E execution, Callable<R> callable);
-	
+
 	// -- SHORTCUT
-	
+
 	default Command command() { return interaction().getCommand(); }
-	 
+
+	// -- TESTING
+
+	record InteractionCarrierForTesting(Interaction interaction, AtomicBoolean closed) implements InteractionCarrier {
+	    public InteractionCarrierForTesting(final Interaction interaction) {
+	        this(interaction, new AtomicBoolean(false));
+	    }
+	    @Override public int nextExecutionSequence() { return 0; }
+	    @Override public int nextTransactionSequence() { return 0; }
+	    void close() { closed.set(true); }
+	    boolean isClosed() { return closed.get(); }
+	    @SneakyThrows @Override
+	    public <E extends Execution<?, ?>, R> R execute(final E execution, final Callable<R> callable) {
+	        return callable.call();
+	    }
+	}
+
 }

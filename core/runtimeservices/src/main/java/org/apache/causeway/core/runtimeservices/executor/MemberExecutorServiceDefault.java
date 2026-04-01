@@ -101,7 +101,7 @@ implements MemberExecutorService {
 
     @Inject
     MemberExecutorServiceDefault(final InteractionLayerTracker interactionLayerTracker,
-            final CausewayConfiguration configuration, 
+            final CausewayConfiguration configuration,
             final ObjectManager objectManager,
             final InteractionDtoFactory interactionDtoFactory,
             final Provider<ExecutionPublisher> executionPublisherProvider,
@@ -175,7 +175,7 @@ implements MemberExecutorService {
 
         // sets up startedAt and completedAt on the execution, also manages the execution call graph
         execute(interactionCarrier, actionExecutor, actionInvocation);
-        
+
         final var priorExecution = interactionCarrier.interaction().getPriorExecution();
 
         // throws if there was any exception in prior execution
@@ -193,28 +193,28 @@ implements MemberExecutorService {
 
         // assert has bookmark, unless non-scalar
         ManagedObjects.asScalarNonEmpty(returnedAdapter)
-        .filter(scalarNonEmpty->!scalarNonEmpty.specialization().isOther()) // don't care
-        // if its a transient entity, flush the current transaction, so we get an OID
-        .filter(scalarNonEmpty->{
-            MmEntityUtils.ifHasNoOidThenFlush(scalarNonEmpty);
-            return true;
-        })
-        .ifPresent(scalarNonEmpty->{
-            _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
-                var returnTypeSpec = scalarNonEmpty.objSpec();
-                var violation = returnTypeSpec.isEntity()
-                        ? MessageTemplate.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
-                        : MessageTemplate.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;
-                return violation.builder()
-                    .addVariablesFor(actionId)
-                    .addVariable("returnTypeSpec", returnTypeSpec.toString())
-                    .buildMessage();
+            .filter(scalarNonEmpty->!scalarNonEmpty.specialization().isOther()) // don't care
+            // if its a transient entity, flush the current transaction, so we get an OID
+            .filter(scalarNonEmpty->{
+                MmEntityUtils.ifHasNoOidThenFlush(scalarNonEmpty);
+                return true;
+            })
+            .ifPresent(scalarNonEmpty->{
+                _Assert.assertTrue(scalarNonEmpty.getBookmark().isPresent(), ()->{
+                    var returnTypeSpec = scalarNonEmpty.objSpec();
+                    var violation = returnTypeSpec.isEntity()
+                            ? MessageTemplate.ACTION_METHOD_RETURNING_TRANSIENT_ENTITY_NOT_ALLOWED
+                            : MessageTemplate.ACTION_METHOD_RETURNING_NON_BOOKMARKABLE_OBJECT_NOT_ALLOWED;
+                    return violation.builder()
+                        .addVariablesFor(actionId)
+                        .addVariable("returnTypeSpec", returnTypeSpec.toString())
+                        .buildMessage();
+                });
             });
-        });
 
         // sync DTO with result
         interactionDtoFactory
-        .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
+            .updateResult((ActionInvocationDto)priorExecution.getDto(), owningAction, returnedAdapter);
 
         // update Command (if required)
         setCommandResultIfEntity(interactionCarrier.command(), returnedAdapter);
@@ -287,11 +287,10 @@ implements MemberExecutorService {
         // handle any exceptions
         var priorExecution = interactionCarrier.interaction().getPriorExecution();
         var executionExceptionIfAny = priorExecution.getThrew();
-        if(executionExceptionIfAny != null) {
-			throw executionExceptionIfAny instanceof RuntimeException rex
+        if(executionExceptionIfAny != null)
+            throw executionExceptionIfAny instanceof RuntimeException rex
                 ? rex
                 : new RuntimeException(executionExceptionIfAny);
-		}
 
         // publish (if not a contributed association, query-only mixin)
         if (ExecutionPublishingFacet.isPublishingEnabled(propertyModifier.facetHolder())) {
@@ -308,36 +307,36 @@ implements MemberExecutorService {
     /**
      * Use the provided {@link ActionExecutor} to invoke an action, with the provided
      * {@link ActionInvocation} capturing the details of said action.
-     * 
+     *
      * <p> Because this both pushes an {@link Execution} to
      * represent the action invocation and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     private void execute(
-    		InteractionCarrier carrier, 
-    		ActionExecutor actionExecutor,
-    		ActionInvocation actionInvocation) {
+    		final InteractionCarrier carrier,
+    		final ActionExecutor actionExecutor,
+    		final ActionInvocation actionInvocation) {
         observationProvider.get("Execute Action Invocation")
   	      .observe(()->
   	          carrier.execute(actionInvocation, ()->
   	              actionExecutor.executeWithExecutingEvents(
-  	            		  carrier.nextExecutionSequence(), 
+  	            		  carrier.nextExecutionSequence(),
   	            		  actionInvocation)));
     }
-    
+
     /**
      * Use the provided {@link PropertyModifier} to edit a property, with the provided
      * {@link PropertyEdit} capturing the details of said property edit.
-     * 
+     *
      * <p> Because this both pushes an {@link Execution} to
      * represent the property edit and then pops it, that completed
      * execution is accessible at {@link Interaction#getPriorExecution()}.
      */
     private Object execute(
-    		InteractionCarrier carrier, 
-    		PropertyModifier propertyModifier,
-			PropertyEdit propertyEdit) {
-    	
+    		final InteractionCarrier carrier,
+    		final PropertyModifier propertyModifier,
+			final PropertyEdit propertyEdit) {
+
       return observationProvider.get("Execute Property Edit")
 	      .observe(()->
 	      	  carrier.execute(propertyEdit, ()->
@@ -360,17 +359,14 @@ implements MemberExecutorService {
     private void setCommandResultIfEntity(
             final Command command,
             final ManagedObject resultAdapter) {
-        if(command.getResult() != null) {
-			// don't trample over any existing result, eg subsequent mixins.
+        if(command.getResult() != null)
+            // don't trample over any existing result, eg subsequent mixins.
             return;
-		}
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-			return;
-		}
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
+            return;
         var entityState = resultAdapter.getEntityState();
-        if(!entityState.isPersistable()) {
-			return;
-		}
+        if(!entityState.isPersistable())
+            return;
         if(entityState.isHollow()
                 || entityState.isDetached()) {
             // ensure that any still-to-be-persisted adapters get persisted to DB.
@@ -390,14 +386,12 @@ implements MemberExecutorService {
             final ManagedObject resultAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter)) {
-			return resultAdapter;
-		}
+        if(ManagedObjects.isNullOrUnspecifiedOrEmpty(resultAdapter))
+            return resultAdapter;
 
         if (!configuration.core().metaModel().filterVisibility()
-                || resultAdapter instanceof PackedManagedObject) {
-			return resultAdapter;
-		}
+                || resultAdapter instanceof PackedManagedObject)
+            return resultAdapter;
 
         return MmVisibilityUtils.isVisible(resultAdapter, interactionInitiatedBy)
                 ? resultAdapter
@@ -426,17 +420,17 @@ implements MemberExecutorService {
     private CommandPublisher commandPublisher() {
     	return commandPublisherProvider.get();
     }
-    
+
     private ExecutionPublisher executionPublisher() {
     	return executionPublisherProvider.get();
     }
-    
+
     private Optional<InteractionCarrier> interactionCarrier() {
     	return interactionLayerTracker.currentInteractionCarrier();
     }
-    
+
     private InteractionCarrier interactionCarrierElseFail() {
     	return interactionCarrier().orElseThrow(()->_Exceptions
     			.unrecoverable("needs an InteractionSession on current thread"));
-    }    
+    }
 }

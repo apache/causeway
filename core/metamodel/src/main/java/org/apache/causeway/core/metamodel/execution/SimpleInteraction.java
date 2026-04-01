@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 import org.apache.causeway.applib.services.command.Command;
@@ -34,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Captures {@link Execution} sequences and their parent child relation ship.
- * 
+ *
  * @since 4.0
  */
 @Slf4j
@@ -44,40 +45,40 @@ record SimpleInteraction(
 		Command command,
 		Map<Class<?>, Object> attributes,
 		List<Execution<?,?>> executionGraphs,
-		Execution<?, ?>[] executionBuffer) implements Interaction {
-	
+		Execution<?, ?>[] executionBuffer,
+		AtomicBoolean closed) implements Interaction {
+
 	SimpleInteraction(
-			ExecutionContext executionContext) {
+			final ExecutionContext executionContext) {
 		this(executionContext, executionContext.idGenerator().interactionId());
 	}
-	
+
 	SimpleInteraction(
-			ExecutionContext executionContext,
-			UUID interactionId) {
-		this(executionContext, interactionId, new Command(interactionId), 
+			final ExecutionContext executionContext,
+			final UUID interactionId) {
+		this(executionContext, interactionId, new Command(interactionId),
 				new HashMap<>(), // not thread-safe
 				new ArrayList<>(),
-				new Execution<?, ?>[2]);
+				new Execution<?, ?>[2],
+				new AtomicBoolean(false));
 	}
 
 	@Override public UUID getInteractionId() { return interactionId; }
 	@Override public Command getCommand() { return command; }
-	
-	@Override
-	public Execution<?, ?> getCurrentExecution() {
-		return executionBuffer[0];
-	}
-	
-	@Override
-	public Execution<?, ?> getPriorExecution() {
-		return executionBuffer[1];
-	}
+	@Override public Execution<?, ?> getCurrentExecution() { return executionBuffer[0]; }
+	@Override public Execution<?, ?> getPriorExecution() { return executionBuffer[1]; }
+
+	boolean isClosed() { return closed().get(); }
 
     /**
      * Push a new {@link org.apache.causeway.applib.events.domain.AbstractDomainEvent}
      * onto the stack of events held by the command.
+     *
+     * @throws IllegalStateException if closed
      */
 	<E extends Execution<?,?>> E push(final E execution) {
+	    if(isClosed())
+            throw new IllegalStateException("Cannot push, as was already closed");
 		if(getCurrentExecution() == null) {
             // new root-level execution
 			executionGraphs.add(execution);
@@ -88,26 +89,45 @@ record SimpleInteraction(
         // advance buffer
         return next(execution);
 	}
-	
+
+	/**
+     * @throws IllegalStateException if closed or no current execution to pop
+     */
 	Execution<?,?> pop() {
+	    if(isClosed())
+	        throw new IllegalStateException("Cannot pop, as was already closed");
 		final Execution<?,?> popped = getCurrentExecution();
-		if(popped == null) {
-			throw new IllegalStateException("No current execution to pop");
-		}
+		if(popped == null)
+            throw new IllegalStateException("No current execution to pop");
         // advance buffer
         next(popped.getParent());
         return popped;
 	}
-	
+
+	/**
+	 * Marks closed, clears all {@link Execution} references and clears the attribute map.
+	 */
+	void close() {
+	    closed.set(true);
+	    executionBuffer[0] = null;
+	    executionBuffer[1] = null;
+	    executionGraphs.clear();
+	    attributes.clear();
+	}
+
     // -- ATTRIBUTES
 
     @Override
     public <T> T putAttribute(final Class<? super T> type, final T value) {
+        if(isClosed())
+            throw new IllegalStateException("Cannot put an attribute, as was already closed");
         return _Casts.uncheckedCast(attributes.put(type, value));
     }
 
     @Override
     public <T> T computeAttributeIfAbsent(final Class<? super T> type, final Function<Class<?>, ? extends T> mappingFunction) {
+        if(isClosed())
+            throw new IllegalStateException("Cannot compute an attribute, as was already closed");
         return _Casts.uncheckedCast(attributes.computeIfAbsent(type, mappingFunction));
     }
 
@@ -120,16 +140,9 @@ record SimpleInteraction(
     public void removeAttribute(final Class<?> type) {
         attributes.remove(type);
     }
-//    
-//    void clear() {
-//    	executionBuffer[0] = null;
-//		executionBuffer[1] = null;
-//		executionGraphs.clear();
-//		attributes.clear();
-//    }
-    
+
     // -- HELPER
-    
+
 	private <E extends Execution<?,?>> E next(final E execution) {
 		executionBuffer[1] = executionBuffer[0];
 		executionBuffer[0] = execution;

@@ -32,7 +32,7 @@ import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
-import org.apache.causeway.core.metamodel.execution.InteractionCarrier;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier.InteractionCarrierForTesting;
 import org.apache.causeway.core.metamodel.execution.InteractionLayer;
 import org.apache.causeway.core.metamodel.execution.InteractionLayerStack;
 import org.apache.causeway.core.metamodel.execution.InteractionLayerTracker;
@@ -48,7 +48,7 @@ public class InteractionService_forTesting
 implements InteractionService, InteractionLayerTracker {
 
     final InteractionLayerStack layerStack = new InteractionLayerStack();
-    
+
     @Override
     public Interaction openInteraction() {
         return openInteractionLayer().interaction();
@@ -65,17 +65,8 @@ implements InteractionService, InteractionLayerTracker {
     }
 
     private InteractionLayer openInteractionLayer(final @NonNull InteractionContext interactionContext) {
-        final Interaction interaction = new Interaction_forTesting();
-        var interactionCarrier = new InteractionCarrier() {
-			@Override public Interaction interaction() { return interaction; }
-			@Override public int nextExecutionSequence() { return 0; }
-			@Override public int nextTransactionSequence() { return 0; }
-			@SneakyThrows @Override 
-			public <E extends Execution<?, ?>, R> R execute(E execution, Callable<R> callable) {
-				return callable.call();
-			}
-		};
-        return layerStack.pushForTesting(interactionCarrier, interactionContext);
+        return layerStack.pushForTesting(interactionContext,
+                new InteractionCarrierForTesting(new Interaction_forTesting()));
     }
 
     @Override
@@ -110,7 +101,7 @@ implements InteractionService, InteractionLayerTracker {
             openInteraction(interactionContext);
             return callable.call();
         } finally {
-            layerStack.pop();
+            layerStack.popAndClose();
         }
     }
 
@@ -120,7 +111,7 @@ implements InteractionService, InteractionLayerTracker {
             openInteraction(interactionContext);
             runnable.run();
         } finally {
-            layerStack.pop();
+            layerStack.popAndClose();
         }
     }
 
@@ -130,7 +121,7 @@ implements InteractionService, InteractionLayerTracker {
             openInteraction();
             runnable.run();
         } finally {
-            layerStack.pop();
+            layerStack.popAndClose();
         }
     }
 
@@ -140,7 +131,7 @@ implements InteractionService, InteractionLayerTracker {
             openInteraction();
             return callable.call();
         } finally {
-            layerStack.pop();
+            layerStack.popAndClose();
         }
     }
 

@@ -120,7 +120,7 @@ implements
     public Interaction openInteraction(final @NonNull InteractionContext interactionContextToUse) {
     	return openInteractionLayer(interactionContextToUse).interaction();
     }
-    
+
     private InteractionLayer openInteractionLayer() {
         return currentInteractionLayer()
                 // or else create an anonymous authentication layer
@@ -134,10 +134,9 @@ implements
         var reuseCurrentLayer = currentInteractionContext()
                 .map(currentInteractionContext -> Objects.equals(currentInteractionContext, interactionContextToUse))
                 .orElse(false);
-        if(reuseCurrentLayer) {
-			// we are done, just return the stack's top
+        if(reuseCurrentLayer)
+            // we are done, just return the stack's top
             return currentInteractionLayerElseFail();
-		}
 
         final int depth = getInteractionLayerCount();
 
@@ -371,12 +370,10 @@ implements
     }
 
     private void closeInteractionLayerStackDownToStackSize(final int downToStackSize) {
-        if(layerStack.isEmpty()) {
-			return;
-		}
-        if(downToStackSize<0) {
-			throw new IllegalArgumentException("required non-negative");
-		}
+        if(layerStack.isEmpty())
+            return;
+        if(downToStackSize<0)
+            throw new IllegalArgumentException("required non-negative");
 
         log.debug("about to close interaction stack down to size {} (interactionId={}, total-layers-on-stack={}, {})",
                 downToStackSize,
@@ -386,9 +383,8 @@ implements
 
         try {
             layerStack.popWhile(currentLayer->{
-                if(!(layerStack.size()>downToStackSize)) {
-					return false;
-				}
+                if(layerStack.size()<=downToStackSize)
+                    return false;
                 if(isAtRootLevel()) {
                     // keep the stack unmodified yet, to allow for callbacks to properly operate
                     preInteractionClosed(currentLayer.interactionCarrier().interaction());

@@ -26,8 +26,8 @@ import org.jspecify.annotations.Nullable;
 import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.iactnlayer.InteractionService;
-import org.apache.causeway.commons.internal.base._NullSafe;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
+import org.apache.causeway.core.metamodel.execution.InteractionCarrier.InteractionCarrierForTesting;
 
 /**
  * Binds an {@link Interaction} (&quot;what&quot; is being executed) with
@@ -45,27 +45,31 @@ import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptio
 public record InteractionLayer(
         @Nullable InteractionLayer parent,
         /**
-         * Carries an {@link Interaction} through its life-cycle.
-         */
-        InteractionCarrier interactionCarrier,
-        /**
          * WHO is performing this {@link #getInteraction()}, also
          * WHEN and WHERE.
          */
         InteractionContext interactionContext,
         /**
+         * Carries an {@link Interaction} through its life-cycle.
+         */
+        InteractionCarrier interactionCarrier,
+        /**
          * @since 4.0
          */
         List<Runnable> onCloseListeners) {
-	
+
 	public InteractionLayer(
-	        @Nullable InteractionLayer parent,
-	        InteractionCarrier interactionCarrier,
-	        InteractionContext interactionContext) {
-		this(parent, interactionCarrier, interactionContext, new ArrayList<>());
+	        @Nullable final InteractionLayer parent,
+	        final InteractionContext interactionContext,
+	        final InteractionCarrier interactionCarrier) {
+		this(parent, interactionContext, interactionCarrier, new ArrayList<>());
+		//FIXME
+//		if(parent!=null) {
+//		    Assert.isTrue(!(this.interactionCarrier == parent.interactionCarrier), "Illegal Argument: carriers cannot be shared");
+//		}
 	}
-	
-	public InteractionLayer addOnCloseListener(Runnable listener) {
+
+	public InteractionLayer addOnCloseListener(final Runnable listener) {
 		onCloseListeners.add(listener);
 		return this;
 	}
@@ -73,7 +77,7 @@ public record InteractionLayer(
 	public Interaction interaction() {
 		return interactionCarrier.interaction();
 	}
-	
+
     public boolean isRoot() {
         return parent==null;
     }
@@ -93,11 +97,18 @@ public record InteractionLayer(
             ? parent.rootLayer()
             : this;
     }
-    
-    public void close(FirstExceptionCollector exCollector) {
-    	if(_NullSafe.isEmpty(onCloseListeners)) {
-			return;
-		}
+
+    boolean isClosed() {
+        return interactionCarrier instanceof InteractionCarrierDefault carrierDefault
+            ? carrierDefault.isClosed()
+            : ((InteractionCarrierForTesting) interactionCarrier).isClosed();
+    }
+
+    void close(final FirstExceptionCollector exCollector) {
+        if(isClosed()) {
+            onCloseListeners.clear(); // just in case
+            return;
+        }
     	for(var listener : onCloseListeners) {
     		try {
     			listener.run();
@@ -105,9 +116,19 @@ public record InteractionLayer(
     			exCollector.collect(e);
 			}
     	}
+    	onCloseListeners.clear();
+    	// do this last
+    	if(interactionCarrier instanceof InteractionCarrierDefault interactionCarrierDefault) {
+    	    try {
+    	        //FIXME interactionCarrierDefault.onLayerClosing();
+    	    } catch (Exception e) {
+    	        exCollector.collect(e);
+    	    }
+    	}
+    	//FIXME Assert.isTrue(isClosed(), ()->"Illegal State: closed state not propagated");
     }
 
-    public void closeAll(FirstExceptionCollector exCollector) {
+    public void closeAll(final FirstExceptionCollector exCollector) {
         close(exCollector);
         if(parent!=null) {
             parent.closeAll(exCollector);

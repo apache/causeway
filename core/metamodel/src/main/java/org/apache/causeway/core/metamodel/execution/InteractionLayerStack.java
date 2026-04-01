@@ -23,6 +23,8 @@ import java.util.function.Predicate;
 
 import org.jspecify.annotations.Nullable;
 
+import org.springframework.util.Assert;
+
 import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
 import org.apache.causeway.commons.internal.observation.ObservationClosure;
@@ -37,9 +39,14 @@ public final class InteractionLayerStack {
     private final ThreadLocal<InteractionLayer> threadLocalLayer = new ThreadLocal<>();
 
     public Optional<InteractionLayer> currentLayer() {
-        return Optional.ofNullable(threadLocalLayer.get());
+        return Optional.ofNullable(threadLocalLayer.get())
+            //sanity check
+            .filter(layer->{
+                Assert.isTrue(!layer.isClosed(), ()->"Invalid State: found closed layer on ThreadLocal");
+                return true;
+            });
     }
-    
+
     public InteractionLayer push(
             final ExecutionContext executionContext,
             final InteractionContext interactionContext,
@@ -48,18 +55,32 @@ public final class InteractionLayerStack {
         var interactionCarrier = currentLayer()
                 .map(InteractionLayer::interactionCarrier)
                 .orElseGet(()->new InteractionCarrierDefault(executionContext));
-        
+
         @SuppressWarnings("resource")
-        var newLayer = new InteractionLayer(parent, interactionCarrier, interactionContext)
-        	.addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
+        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)
+            .addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
         threadLocalLayer.set(newLayer);
         return newLayer;
     }
-    
-	public InteractionLayer pushForTesting(InteractionCarrier interactionCarrier, InteractionContext interactionContext) {
+
+    //FIXME
+    public InteractionLayer push2(
+            final ExecutionContext executionContext,
+            final InteractionContext interactionContext,
+            final Observation observation) {
         var parent = currentLayer().orElse(null);
-        var newLayer = new InteractionLayer(parent, interactionCarrier, interactionContext);
-        threadLocalLayer.set(newLayer);
+        var interactionCarrier = new InteractionCarrierDefault(executionContext);
+        @SuppressWarnings("resource")
+        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier)
+        	.addOnCloseListener(new ObservationClosure().startAndOpenScope(observation)::close);
+        set(newLayer);
+        return newLayer;
+    }
+
+	public InteractionLayer pushForTesting(final InteractionContext interactionContext, final InteractionCarrier interactionCarrier) {
+        var parent = currentLayer().orElse(null);
+        var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier);
+        set(newLayer);
         return newLayer;
 	}
 
@@ -91,33 +112,28 @@ public final class InteractionLayerStack {
         return threadLocalLayer.get();
     }
 
-    @Nullable
-    public InteractionLayer pop() {
-        var current = threadLocalLayer.get();
-        if(current==null) {
-			return null;
-		}
+    public void popAndClose() {
+        var popped = threadLocalLayer.get();
+        if(popped==null)
+            return;
 
-        var newTop = current.parent();
-        
         var exColl = new FirstExceptionCollector();
-        current.close(exColl);
+        popped.close(exColl);
         if(exColl.hasException()) {
         	// close the entire stack, only then re-throw
-        	current.closeAll(exColl);
+        	popped.closeAll(exColl);
         	threadLocalLayer.remove();
         	exColl.rethrow();
         }
-        
-        return set(newTop);
+
+        set(popped.parent());
     }
 
     public void popWhile(final Predicate<InteractionLayer> condition) {
         while(!isEmpty()) {
-            if(!condition.test(peek())) {
-				return;
-			}
-            pop();
+            if(!condition.test(peek()))
+                return;
+            popAndClose();
         }
     }
 
@@ -125,6 +141,7 @@ public final class InteractionLayerStack {
 
     private InteractionLayer set(@Nullable final InteractionLayer layer) {
         if(layer != null) {
+            Assert.isTrue(!layer.isClosed(), ()->"Illegal Argument: cannot push closed layer to ThreadLocal");
             threadLocalLayer.set(layer);
         } else {
             threadLocalLayer.remove();
