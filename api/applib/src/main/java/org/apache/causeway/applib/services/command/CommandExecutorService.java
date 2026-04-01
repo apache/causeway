@@ -25,7 +25,7 @@ import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.jaxb.JavaSqlXMLGregorianCalendarMarshalling;
 import org.apache.causeway.applib.services.bookmark.Bookmark;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.functional.Try;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
@@ -33,7 +33,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 /**
  * Provides a mechanism to execute a {@link Command}.
  *
- * @see org.apache.causeway.applib.services.iactnlayer.InteractionService
+ * @see org.apache.causeway.applib.services.iactn.InteractionService
  * @see org.apache.causeway.applib.services.iactnlayer.InteractionProvider
  *
  * @since 1.x {@index}
@@ -41,7 +41,7 @@ import org.apache.causeway.schema.cmd.v2.CommandDto;
 public interface CommandExecutorService {
 
     /**
-     * Determines the {@link org.apache.causeway.applib.services.iactnlayer.InteractionContext} (the &quot;who&quot;
+     * Determines the {@link org.apache.causeway.applib.services.iactn.InteractionContext} (the &quot;who&quot;
      * &quot;when&quot; and &quot;where&quot;) within which the {@link Command} should be executed.
      *
      * @since 1.x {@index}

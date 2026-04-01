@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+
 class InteractionContext_combine_Test {
 
     @Test

@@ -26,7 +26,7 @@ import org.apache.causeway.applib.annotation.Programmatic;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.ascii.AsciiIdentifierService;
 import org.apache.causeway.applib.services.i18n.TranslationContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Common.Application;

@@ -26,8 +26,8 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions.FirstExceptionCollector;
 import org.apache.causeway.core.metamodel.execution.InteractionCarrier.InteractionCarrierForTesting;
 

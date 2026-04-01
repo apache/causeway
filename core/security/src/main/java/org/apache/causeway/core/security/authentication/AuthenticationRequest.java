@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 
 /**

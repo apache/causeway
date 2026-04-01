@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import org.jspecify.annotations.Nullable;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.schema.cmd.v2.CommandDto;
 

@@ -28,8 +28,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.clock.VirtualClock;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 
 import lombok.RequiredArgsConstructor;
 

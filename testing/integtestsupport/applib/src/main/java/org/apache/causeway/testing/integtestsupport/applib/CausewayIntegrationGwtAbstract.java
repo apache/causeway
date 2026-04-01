@@ -22,7 +22,7 @@ import java.util.concurrent.Callable;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.functional.ThrowingRunnable;
 import org.apache.causeway.commons.functional.Try;
 

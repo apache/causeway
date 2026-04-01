@@ -46,7 +46,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.services.iactn.Interaction;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.xactn.TransactionId;
 import org.apache.causeway.applib.services.xactn.TransactionService;
 import org.apache.causeway.applib.services.xactn.TransactionState;
@@ -376,8 +376,8 @@ implements
 
     /**
      * For use only by {@link org.apache.causeway.core.runtimeservices.ia.InteractionServiceDefault}, if
-     * {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#run(InteractionContext, ThrowingRunnable)}
-     * or {@link org.apache.causeway.applib.services.iactnlayer.InteractionService#call(InteractionContext, Callable)}
+     * {@link org.apache.causeway.applib.services.iactn.InteractionService#run(InteractionContext, ThrowingRunnable)}
+     * or {@link org.apache.causeway.applib.services.iactn.InteractionService#call(InteractionContext, Callable)}
      * (or their various overloads) result in an exception.
      *
      * @param interaction The {@link Interaction} object representing the current interaction.

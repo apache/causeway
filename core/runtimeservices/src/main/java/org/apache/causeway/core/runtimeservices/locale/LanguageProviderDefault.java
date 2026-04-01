@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
 import org.apache.causeway.applib.locale.UserLocale;
 import org.apache.causeway.applib.services.i18n.LanguageProvider;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.core.runtimeservices.CausewayModuleCoreRuntimeServices;
 
 import lombok.RequiredArgsConstructor;

@@ -34,7 +34,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * There are two main responsibilities:
  * <ul>
  * <li>Wraps up a target object, parameters and a
- * {@link org.apache.causeway.applib.services.iactnlayer.InteractionContext}.
+ * {@link org.apache.causeway.applib.services.iactn.InteractionContext}.
  * Defining this as a separate interface makes for a more stable API</li>
  * <li>Acts as a factory for the corresponding {@link InteractionEvent} (more on
  * this below).</li>
@@ -46,7 +46,7 @@ import org.apache.causeway.core.metamodel.object.ManagedObject;
  * code-smell. However, it is required because the {@link InteractionContext
  * context} hierarchy is internal to the framework (with references to
  * {@link ManagedObject}s,
- * {@link org.apache.causeway.applib.services.iactnlayer.InteractionContext}s and so forth), whereas
+ * {@link org.apache.causeway.applib.services.iactn.InteractionContext}s and so forth), whereas
  * the {@link InteractionEvent event} hierarchy is part of AppLib, that is
  * public API.
  *

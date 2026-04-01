@@ -20,8 +20,8 @@ package org.apache.causeway.viewer.wicket.viewer.integration;
 
 import java.util.Optional;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.user.UserService;
 import org.apache.causeway.commons.internal.exceptions._Exceptions;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.causeway.core.runtimeservices.ia;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.internal.base._Strings;
 
 import static org.apache.causeway.core.config.observation.CausewayObservationIntegration.interactionClock;

@@ -18,9 +18,9 @@
  */
 package org.apache.causeway.applib.services.sudo;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
-
 import org.jspecify.annotations.NonNull;
+
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 
 /**
  * Allows the {@link SudoService} to notify other {@link org.springframework.stereotype.Service}s or

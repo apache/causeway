@@ -24,7 +24,7 @@ import java.util.Optional;
 import org.apache.wicket.request.Request;
 import org.mockito.Mockito;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.registry.ServiceRegistry;
 import org.apache.causeway.applib.services.session.SessionSubscriber;
 import org.apache.causeway.core.metamodel.context.MetaModelContext;

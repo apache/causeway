@@ -30,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.springframework.util.SerializationUtils;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 
 public abstract class EncodabilityContractTest {

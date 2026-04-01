@@ -33,8 +33,8 @@ import org.springframework.stereotype.Service;
 
 import org.apache.causeway.applib.CausewayModuleApplib;
 import org.apache.causeway.applib.annotation.PriorityPrecedence;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.iactn.InteractionProvider;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
 import org.apache.causeway.applib.services.keyvaluestore.KeyValueSessionStore;
 import org.apache.causeway.applib.services.sudo.SudoService;
 import org.apache.causeway.commons.internal.assertions._Assert;
@@ -65,7 +65,7 @@ import lombok.RequiredArgsConstructor;
  * </p>
  *
  * @see org.apache.causeway.applib.services.iactnlayer.InteractionProvider
- * @see org.apache.causeway.applib.services.iactnlayer.InteractionContext
+ * @see org.apache.causeway.applib.services.iactn.InteractionContext
  * @see SudoService
  * @see ImpersonateMenu
  *

@@ -77,7 +77,6 @@ module org.apache.causeway.applib {
     exports org.apache.causeway.applib.services.homepage;
     exports org.apache.causeway.applib.services.i18n;
     exports org.apache.causeway.applib.services.iactn;
-    exports org.apache.causeway.applib.services.iactnlayer;
     exports org.apache.causeway.applib.services.inject;
     exports org.apache.causeway.applib.services.jaxb;
     exports org.apache.causeway.applib.services.keyvaluestore;

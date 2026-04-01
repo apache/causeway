@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 import org.springframework.boot.health.contributor.Health;
 
 import org.apache.causeway.applib.services.health.HealthCheckService;
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 
 @ExtendWith(MockitoExtension.class)
 class HealthIndicatorUsingHealthCheckServiceTest {

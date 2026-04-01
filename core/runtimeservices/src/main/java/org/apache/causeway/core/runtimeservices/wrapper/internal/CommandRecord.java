@@ -20,7 +20,7 @@ package org.apache.causeway.core.runtimeservices.wrapper.internal;
 
 import java.util.UUID;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.commons.collections.Can;
 import org.apache.causeway.core.metamodel.context.HasMetaModelContext;
 import org.apache.causeway.core.metamodel.execution.InteractionIdGenerator;

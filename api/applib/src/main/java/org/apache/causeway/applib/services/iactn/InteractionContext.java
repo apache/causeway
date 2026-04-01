@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.causeway.applib.services.iactnlayer;
+package org.apache.causeway.applib.services.iactn;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.applib.services.iactn.Interaction;
 import org.apache.causeway.applib.services.user.UserMemento;
 
 import lombok.AccessLevel;

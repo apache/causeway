@@ -21,7 +21,7 @@ package org.apache.causeway.viewer.wicket.ui.pages.accmngt;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 
-import org.apache.causeway.applib.services.iactnlayer.InteractionService;
+import org.apache.causeway.applib.services.iactn.InteractionService;
 import org.apache.causeway.applib.services.userreg.UserRegistrationService;
 import org.apache.causeway.viewer.wicket.ui.validation.ValidatorBase;
 

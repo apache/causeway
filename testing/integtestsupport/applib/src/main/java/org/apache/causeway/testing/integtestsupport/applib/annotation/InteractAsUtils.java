@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import org.apache.causeway.applib.clock.VirtualClock;
 import org.apache.causeway.applib.locale.UserLocale;
-import org.apache.causeway.applib.services.iactnlayer.InteractionContext;
+import org.apache.causeway.applib.services.iactn.InteractionContext;
 import org.apache.causeway.applib.services.user.UserMemento;
 import org.apache.causeway.commons.internal.base._Strings;
 import org.apache.causeway.core.config.progmodel.ProgrammingModelConstants.DateTimeFormat;
