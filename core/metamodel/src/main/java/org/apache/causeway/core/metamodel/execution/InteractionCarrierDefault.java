@@ -50,8 +50,7 @@ implements InteractionCarrier {
 	/**
 	 * Creates a new {@link InteractionCarrier} that is parented by this one.
 	 *
-	 * <p>The {@link Command} is a shared instance.
-	 * @param interactionContext
+	 * <p>The {@link Command} is a shared instance. And so are the counters.
 	 */
 	InteractionCarrier childCarrier() {
         return new InteractionCarrierDefault(
