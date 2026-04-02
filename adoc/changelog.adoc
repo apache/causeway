@@ -1,7 +1,14 @@
+= April 2016
+
+🐞 Bug Fixes
+
+- [Wicket Viewer] Table Column Sorting to be only enabled if Comparable https://issues.apache.org/jira/browse/CAUSEWAY-3985[CAUSEWAY-3985]
+
 = Mar 2016
 
 🐞 Bug Fixes
 
+- [Wicket Viewer] Hide Tabs when content is permanently hidden https://issues.apache.org/jira/browse/CAUSEWAY-3983[CAUSEWAY-3983] 
 - [Wicket Viewer] Table Row Actions Redirect might fail if behind Reverse Proxy https://issues.apache.org/jira/browse/CAUSEWAY-3976[CAUSEWAY-3976]
 - [Commons] Internal OneShot Util may deadlock https://issues.apache.org/jira/browse/CAUSEWAY-3972[CAUSEWAY-3972] (potentially preventing App from startup)
 - Switching between Layout Variants may result in Members staying hidden 
