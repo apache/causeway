@@ -60,7 +60,9 @@ public final class InteractionLayerStack {
         return newLayer;
     }
 
-	public InteractionLayer pushForTesting(final InteractionContext interactionContext, final InteractionCarrier interactionCarrier) {
+	public InteractionLayer pushForTesting(
+	        final InteractionContext interactionContext,
+	        final InteractionCarrier interactionCarrier) {
         var parent = currentLayer().orElse(null);
         var newLayer = new InteractionLayer(parent, interactionContext, interactionCarrier);
         set(newLayer);

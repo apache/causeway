@@ -32,7 +32,7 @@ import org.apache.causeway.commons.having.HasTypeSpecificAttributes;
  *
  * <p>The `Interaction` can be used to obtain the  {@link Command} object
  * representing the top-level invocation action/property edit.
- * 
+ *
  * <p>The distinction between {@link Command} and this object is perhaps
  * subtle: the former represents the intention to invoke an action/edit a
  * property, whereas this represents the actual invocation/edit itself.
@@ -60,7 +60,9 @@ extends
      * consequence of the interaction.
      */
     @Override
-    UUID getInteractionId();
+    default UUID getInteractionId() {
+        return getCommand().getInteractionId();
+    }
 
     /**
      * Represents the <i>intention</i> to perform this interaction.

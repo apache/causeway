@@ -136,7 +136,7 @@ public record InteractionLayer(
     	Assert.isTrue(isClosed(), ()->"Illegal State: closed state not propagated");
     }
 
-    public void closeAll(final FirstExceptionCollector exCollector) {
+    void closeAll(final FirstExceptionCollector exCollector) {
         close(exCollector);
         if(parent!=null) {
             parent.closeAll(exCollector);

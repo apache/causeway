@@ -137,13 +137,12 @@ implements InteractionService, InteractionLayerTracker {
 
     @RequiredArgsConstructor
     static class Interaction_forTesting implements Interaction {
-        private final UUID uuid = UUID.randomUUID();
+        private final Command command = new Command(UUID.randomUUID());
         @Override public <T> T putAttribute(final Class<? super T> type, final T value) { return null; }
         @Override public <T> T computeAttributeIfAbsent(final Class<? super T> type, final Function<Class<?>, ? extends T> mappingFunction) { return null; }
         @Override public <T> T getAttribute(final Class<T> type) { return null; }
         @Override public void removeAttribute(final Class<?> type) { }
-        @Override public UUID getInteractionId() { return uuid; }
-        @Override public Command getCommand() { return null; }
+        @Override public Command getCommand() { return command; }
         @Override public Execution<?, ?> getCurrentExecution() { return null; }
         @Override public Execution<?, ?> getPriorExecution() { return null; }
     }

@@ -104,3 +104,67 @@ MemberExecutorService <-- PropertyModifier: returns Property owning pojo
 
 @enduml
 ----
+
+== Stacked Interaction
+
+[plantuml,fig-interaction-participants,svg]
+.Interaction Participants
+----
+@startuml
+
+class ExecutionContext <<service>> {
+    clockService: ClockService
+    queryResultsCache: QueryResultsCache
+    commandPublisher: CommandPublisher  
+    ...
+    {static} threadLocalCarrier: ThreadLocal<InteractionCarrier>
+}
+
+class ExecutionState {
+    command: Command
+    executionSequence: LongAdder
+    transactionSequence: LongAdder
+    <<init>>(ExecutionContext)
+}
+
+class InteractionLayer {
+    @Nullable parent: InteractionLayer
+    interactionContext: InteractionContext
+    interactionCarrier: InteractionCarrier
+    onCloseListeners: List<Runnable>
+    close()
+    closeAll() 
+}
+
+class InteractionLayerStack {
+    threadLocalLayer: ThreadLocal<InteractionLayer>
+    push(.., InteractionContext, ..)
+}
+
+class InteractionCarrier {
+    executionContext ExecutionContext
+    push(.., InteractionContext, ..)
+}
+
+interface Interaction {
+    getCommand(): Command
+    getCurrentExecution(): Execution
+    getPriorExecution() Execution
+    attributes(): Map
+}
+
+interface InteractionService <<service>> {
+    openInteraction(InteractionContext): Interaction
+    closeInteractionLayers()
+    isInInteraction(): boolean
+    ...
+}
+
+InteractionService -> InteractionCarrier
+
+hide empty members
+
+@enduml
+----
+
+

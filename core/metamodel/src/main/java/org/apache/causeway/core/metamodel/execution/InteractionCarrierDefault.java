@@ -20,7 +20,6 @@ package org.apache.causeway.core.metamodel.execution;
 
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.causeway.applib.services.command.Command;
 import org.apache.causeway.applib.services.iactn.Execution;
@@ -33,17 +32,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 record InteractionCarrierDefault(
 		SimpleInteraction interaction,
-		LongAdder executionSequence,
-		LongAdder transactionSequence)
+		ExecutionState executionState)
 implements InteractionCarrier {
 
 	public InteractionCarrierDefault(final ExecutionContext executionContext) {
-		this(new SimpleInteraction(executionContext), new LongAdder(), new LongAdder());
+		this(new ExecutionState(executionContext));
 	}
 
+	public InteractionCarrierDefault(final ExecutionState executionState) {
+        this(new SimpleInteraction(executionState), executionState);
+    }
+
 	UUID interactionId() { return interaction.getInteractionId(); }
-	ExecutionContext executionContext() { return interaction.executionContext(); }
-	@Override public Command command() { return interaction.command(); }
+	ExecutionContext executionContext() { return executionState.executionContext(); }
+	@Override public Command command() { return executionState.command(); }
 	Interaction getInteraction() { return interaction; }
 	boolean isClosed() { return interaction.isClosed(); }
 
@@ -53,9 +55,7 @@ implements InteractionCarrier {
 	 * <p>The {@link Command} is a shared instance. And so are the counters.
 	 */
 	InteractionCarrier childCarrier() {
-        return new InteractionCarrierDefault(
-                new SimpleInteraction(executionContext(), command()),
-                executionSequence, transactionSequence);
+        return new InteractionCarrierDefault(executionState);
     }
 
 	@SneakyThrows
@@ -112,8 +112,8 @@ implements InteractionCarrier {
 	public int nextExecutionSequence() {
         if(isClosed())
             throw new IllegalStateException("Cannot calculate next ExecutionSequence, as was already closed");
-    	executionSequence().increment();
-        return executionSequence().intValue() - 1;
+        executionState.executionSequence().increment();
+        return executionState.executionSequence().intValue() - 1;
     }
 
     /**
@@ -135,8 +135,8 @@ implements InteractionCarrier {
 	public int nextTransactionSequence() {
         if(isClosed())
             throw new IllegalStateException("Cannot calculate next TransactionSequence, as was already closed");
-    	transactionSequence().increment();
-        return transactionSequence().intValue() - 1;
+        executionState.transactionSequence().increment();
+        return executionState.transactionSequence().intValue() - 1;
     }
 
     void onLayerClosing() {

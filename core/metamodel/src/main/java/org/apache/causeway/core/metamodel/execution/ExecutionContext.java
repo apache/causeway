@@ -43,28 +43,29 @@ public record ExecutionContext(
         DeadlockRecognizer deadlockRecognizer,
 		InteractionIdGenerator idGenerator,
 		CausewayObservationIntegration observationIntegration,
-		
+
 		Provider<InteractionDtoFactory> interactionDtoFactoryProvider,
 		MetamodelEventService metamodelEventService,
 		QueryResultsCache queryResultsCache) {
 
+
     public CommandPublisher commandPublisher() {
         return commandPublisherProvider.get();
     }
-    
+
     public DomainEventHelper domainEventHelper() {
     	return new DomainEventHelper(metamodelEventService);
     }
-    
+
     public InteractionDtoFactory interactionDtoFactory() {
     	return interactionDtoFactoryProvider.get();
     }
-    
+
     public MetricsService metricsService() {
     	return metricsServiceProvider.get();
     }
-    
-    public ObservationProvider observationProvider(Class<?> participant, String moduleName) {
+
+    public ObservationProvider observationProvider(final Class<?> participant, final String moduleName) {
     	return observationIntegration!=null
     		? observationIntegration.provider(participant,
                         CausewayObservationIntegration.withModuleName(moduleName))

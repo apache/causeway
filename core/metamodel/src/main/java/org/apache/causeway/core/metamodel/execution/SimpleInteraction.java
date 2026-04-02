@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
@@ -40,9 +39,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 record SimpleInteraction(
-		ExecutionContext executionContext,
-		UUID interactionId,
-		Command command, // shared with parent if any
+        ExecutionState executionState, // shared with parent if any
 		Map<Class<?>, Object> attributes,
 		List<Execution<?,?>> executionGraphs,
 		Execution<?, ?>[] executionBuffer,
@@ -52,25 +49,15 @@ record SimpleInteraction(
      * To be used for root layers, when we need a new {@link Command}
      */
 	SimpleInteraction(
-			final ExecutionContext executionContext) {
-		this(executionContext, new Command(executionContext.idGenerator().interactionId()));
-	}
-
-	/**
-	 * To be used for parented layers, so the {@link Command} can be shared
-	 */
-	SimpleInteraction(
-            final ExecutionContext executionContext,
-            final Command command) {
-	    this(executionContext, command.getInteractionId(), command,
+			final ExecutionState executionState) {
+		this(executionState,
                 new HashMap<>(), // not thread-safe
                 new ArrayList<>(),
                 new Execution<?, ?>[2],
                 new AtomicBoolean(false));
-    }
+	}
 
-	@Override public UUID getInteractionId() { return interactionId; }
-	@Override public Command getCommand() { return command; }
+	@Override public Command getCommand() { return executionState.command(); }
 	@Override public Execution<?, ?> getCurrentExecution() { return executionBuffer[0]; }
 	@Override public Execution<?, ?> getPriorExecution() { return executionBuffer[1]; }
 
