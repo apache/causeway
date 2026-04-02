@@ -40,11 +40,11 @@ extends AssociationColumnAbstract {
     		final ObjectSpecification elementType,
             final EntityCollectionModel.Variant collectionVariant,
             final IModel<String> columnNameModel,
-            final String sortProperty,
             final String propertyId,
+            final Optional<String> sortable,
             final String parentTypeName,
             final Optional<String> describedAs) {
-        super(elementType, collectionVariant, columnNameModel, sortProperty, propertyId, parentTypeName, describedAs);
+        super(elementType, collectionVariant, columnNameModel, sortable.orElse(null), propertyId, parentTypeName, describedAs);
     }
 
     @Override

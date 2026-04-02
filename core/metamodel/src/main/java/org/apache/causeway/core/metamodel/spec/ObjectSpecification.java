@@ -457,6 +457,18 @@ extends
     default boolean isAbstract() {
         return getBeanSort().isAbstract();
     }
+    
+    /**
+    * Whether {@link #getCorrespondingClass()} implements {@link Comparable}
+    * or has ordering (primitives, strings and enums).
+    */
+    default boolean isComparableOrOrdered() {
+        var cls = getCorrespondingClass();
+        return Comparable.class.isAssignableFrom(cls)
+                || cls.isPrimitive()
+                || cls.equals(String.class)
+                || cls.isEnum();
+    }
 
     /**
      * Includes abstract types that have {@link EntityFacet}.

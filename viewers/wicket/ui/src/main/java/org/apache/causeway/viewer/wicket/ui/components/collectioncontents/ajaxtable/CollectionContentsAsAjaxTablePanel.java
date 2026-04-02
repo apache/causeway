@@ -20,6 +20,7 @@ package org.apache.causeway.viewer.wicket.ui.components.collectioncontents.ajaxt
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.causeway.commons.internal.collections._Lists;
 import org.apache.causeway.core.config.CausewayConfiguration.Viewer.Wicket;
@@ -179,13 +180,16 @@ implements CollectionCountProvider {
     private SingularColumn createSingularColumn(final OneToOneAssociation property) {
         val collectionModel = getModel();
         final String parentTypeName = property.getDeclaringType().logicalTypeName();
+        final Optional<String> sortable = property.getElementType().isComparableOrOrdered()
+	        ? Optional.of(property.getId())
+	        : Optional.empty(); /*not sortable*/
 
         return new SingularColumn(
         		collectionModel.getElementType(),
                 collectionModel.getVariant(),
                 Model.of(property.getCanonicalFriendlyName()),
                 property.getId(),
-                property.getId(),
+                sortable,
                 parentTypeName,
                 property.getCanonicalDescription());
     }
@@ -198,7 +202,6 @@ implements CollectionCountProvider {
         		collectionModel.getElementType(),
                 collectionModel.getVariant(),
                 Model.of(collection.getCanonicalFriendlyName()),
-                collection.getId(),
                 collection.getId(),
                 parentTypeName,
                 collection.getCanonicalDescription(),
