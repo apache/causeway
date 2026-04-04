@@ -225,6 +225,35 @@ The default is to enable (show) the text icon (if in prototyping mode).
 
 
 |
+[[causeway.viewer.wicket.file-upload.disabled-preview-mime-types]]
+causeway.viewer.wicket.file-upload. +
+disabled-preview-mime-types
+
+|  text/csv
+| Some mime types can trigger unwanted download behavior, dependent on browser and or OS settings.
+
+We have seen CSV files causing issues, so we disallow those by default. @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewMimeTypes
+
+
+|
+[[causeway.viewer.wicket.file-upload.disabled-preview-types]]
+causeway.viewer.wicket.file-upload. +
+disabled-preview-types
+
+|  object
+| If left empty, the default allows ++[++'image', 'html', 'text', 'video', 'audio', 'flash', 'object'++]++, where 'object' enables fallback behavior. We remove this here. @see https://plugins.krajee.com/file-input/plugin-options#disabledPreviewTypes
+
+
+|
+[[causeway.viewer.wicket.file-upload.show-preview]]
+causeway.viewer.wicket.file-upload. +
+show-preview
+
+|  true
+| If `false` disables the file upload preview frame entirely.
+
+
+|
 [[causeway.viewer.wicket.js]]
 causeway.viewer.wicket.js
 
