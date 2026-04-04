@@ -615,7 +615,7 @@ Directory: /testing/specsupport/applib
 io.cucumber:cucumber-java:jar:<managed> +
 io.cucumber:cucumber-junit-platform-engine:jar:<managed> +
 io.cucumber:cucumber-spring:jar:<managed> +
-io.cucumber:messages:jar:30.1.0 +
+io.cucumber:messages:jar:32.2.0 +
 org.apache.causeway.testing:causeway-testing-fakedata-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-fixtures-applib:jar:<managed> +
 org.apache.causeway.testing:causeway-testing-integtestsupport-applib:jar:<managed> +
@@ -2256,6 +2256,7 @@ org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.persistence:causeway-persistence-jpa-integration:jar:<managed> +
 org.apache.tomcat.embed:tomcat-embed-el:jar:<managed> +
 org.eclipse.persistence:org.eclipse.persistence.jpa:jar:<managed> +
+org.ow2.asm:asm:jar:<managed> +
 org.springframework.boot:spring-boot-starter-data-jpa:jar:<managed> +
 ****
 
@@ -2599,8 +2600,8 @@ org.apache.causeway.core:causeway-core-internaltestsupport:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.core:causeway-core-webapp:jar:<managed> +
-org.apache.shiro:shiro-core:jar:2.0.2 +
-org.apache.shiro:shiro-web:jar:2.0.2 +
+org.apache.shiro:shiro-core:jar:<managed> +
+org.apache.shiro:shiro-web:jar:<managed> +
 ****
 
 .Document Index Entries
@@ -2802,7 +2803,8 @@ Directory: /viewers/commons/model
 ****
 org.apache.causeway.core:causeway-core-runtime:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-commons-applib:jar:<managed> +
-org.webjars:font-awesome:jar:7.0.1 +
+org.webjars:font-awesome:jar:7.2.0 +
+org.webjars:webjars-locator-core:jar:<managed> +
 ****
 
 |Apache Causeway Commons - Prism
@@ -5235,7 +5237,7 @@ Directory: /extensions/vw/pdfjs/wicket/integration
 ****
 org.apache.causeway.extensions:causeway-extensions-pdfjs-applib:jar:<managed> +
 org.apache.causeway.viewer:causeway-viewer-wicket-ui:jar:<managed> +
-org.webjars.npm:pdfjs-dist:jar:5.4.394 +
+org.webjars.npm:pdfjs-dist:jar:5.5.207 +
 ****
 
 .Document Index Entries
@@ -7289,7 +7291,7 @@ Directory: /regressiontests/config
 ----
 |.Dependencies
 ****
-com.icegreen:greenmail-junit5:jar:2.1.7 +
+com.icegreen:greenmail-junit5:jar:2.1.8 +
 org.apache.causeway.core:causeway-core-runtimeservices:jar:<managed> +
 org.apache.causeway.regressiontests:causeway-regressiontests-base:jar:<managed> +
 ****
