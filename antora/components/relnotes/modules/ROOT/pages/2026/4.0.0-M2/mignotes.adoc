@@ -1,0 +1,169 @@
+= Migrating from 3.x to 4.0.0-M2
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:page-partial:
+
+Upgrade Summary:
+
+. stay at *Java 17* baseline (as _Spring_ does; however, JRuby 10.x as used for AsciiDoc extensions requires Java 21+ runtime)
+. upgrade to *Jackson 3* (as _Spring_ does)
+. upgrade to *JUnit 6* (as _Spring_ does)
+. *Shiro* support removed ✅
+. *JDO* support removed ✅
+. *Joda* time support removed ✅
+. *RestEasy* integration removed ✅
+. Causeway now uses *slf4j* (instead of _log4j_) ✅
+. Migrate build requirements to *Maven 4* ✅
+
+Optional to come with `4.0.0` or later 
+
+. Removal of *rest-client* artifact in favor of Spring's RestClient
+. Removal of *encrypt-jbcrypt* artifact 
+
+== Configuration
+
+Some presets for the _Spring Configuration_ have been removed
+
+[cols="m", options="header"]
+.org.apache.causeway.core.config.presets.CausewayPresets
+|===
+
+| Removals
+
+| CausewayPresets.Datanucleus*
+
+| CausewayPresets.*Log4j
+
+|===
+
+== Applib
+
+Removal of Interaction-Layer related classes from applib. (Motivation: Layering is an implementation choice, which should not be exposed as API.)
+
+- `InteractionLayerTracker` was relocated to metamodel (removed from applib).
+- `InteractionService` and `InteractionContext` were relocated from `..iactnlayer..` to `..iactn..`
+
+== RestEasy Integration Removed
+
+The Restful Objects viewer no longer has a dependency on JBoss RestEasy, instead using Spring REST APIs.
+As a consequence, the name of the Maven artifact and Spring configuration module have changed, as well as some configurations.
+
+* In your Maven `pom.xml`
++
+remove:
++
+[source,xml]
+.Maven
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-restfulobjects-jaxrsresteasy</artifactId>
+</dependency>
+----
++
+and use instead:
++
+[source,xml]
+.Maven
+----
+<dependency>
+    <groupId>org.apache.causeway.viewer</groupId>
+    <artifactId>causeway-viewer-restfulobjects-viewer</artifactId>
+</dependency>
+----
+
+* in your `AppManifest` (`@Import` statements):
++
+replace:
++
+[source,java]
+.Spring bean import
+----
+@Import({
+    //..
+    CausewayModuleViewerRestfulObjectsJaxrsResteasy.class,
+    // ...
+})
+----
++
+instead with:
++
+[source,java]
+.Spring bean import
+----
+@Import({
+    //..
+    CausewayModuleViewerRestfulObjectsViewer.class,
+    // ...
+})
+----
+
+* in your `application.yaml` configuration properties, change the config properties that configures the servlet-context relative path prefix for the _Restful Objects Viewer_
++
+replace:
++
+[source,yaml]
+.application.yaml (Spring configuration properties)
+----
+resteasy:
+  jaxrs:
+    defaultPath: /restful
+----
++
+replace with:
++
+[source,yaml]
+.application.yaml (Spring configuration properties)
+----
+causeway:
+  viewer:
+    restfulobjects:
+      basePath: /restful
+----
++
+
+
+== Immutable Configuration
+
+`CausewayConfiguration` was refactored using Java records over regular classes,
+in effect all accessors have been renamed, stripping any `get` or `is` prefixes.
+`CausewayConfiguration` is now immutable.
+
+== ErrorDetails
+
+`ErrorDetails` as used by the `ErrorReportingService` has been converted from a class to a record.
+(In effect all accessors have been renamed, stripping any `get` or `is` prefixes)
+
+== Object Icon Support (Experimental)
+
+WARNING: This is a _Programming Model_/_API_ draft. It might receive some polishing till final `4.0.0`.  
+
+Object support method `FontAwesomeLayers iconFaLayers()` has been replaced by `IconResource icon(IconSize iconSize)`,
+which also supports image data embedding and supersedes `String iconName()`.
+However, `String iconName()` is still supported for backward compatibility.
+
+With `IconSize` defined as
+
+[source,java]
+----
+public enum IconSize {
+    /**
+     * as used for the object detail page header (along the object's title)
+     */
+    LARGE,
+    /**
+     * as used for table data, properties and tree nodes
+     */
+    MEDIUM,
+    /**
+     * as used for choice drop downs (single- and multi-choice)
+     */
+    SMALL
+}
+----
+
+`TitleService` method
+`String iconNameOf(final Object domainObject)` was replaced by
+ `IconResource iconOf(Object domainObject, IconSize iconSize)`.
+
+Likewise `IconUiEvent` was updated to reflect the new programming model.
