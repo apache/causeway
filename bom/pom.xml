@@ -166,7 +166,7 @@ identified
         see also
         org.apache.causeway.viewer.wicket.ui.components.scalars.datepicker.MomentJsReference -->
 
-        <ognl.version>3.4.10</ognl.version>
+        <ognl.version>3.4.11</ognl.version>
 
         <pdfbox.version>3.0.7</pdfbox.version>
         <picocontainer.version>2.15.2</picocontainer.version>
